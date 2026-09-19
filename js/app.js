@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency.';
-var APP_VERSION = 'beta 0.1 · build 2026-09-19f';
+var APP_VERSION = 'beta 0.1 · build 2026-09-19g';
 
 /* ================= 2. STORAGE ================= */
 var LS_KEY = 'opossumfoot.v1';
@@ -298,9 +298,25 @@ function findSpecies(name) {
   return null;
 }
 
+/* Human-readable catch disposition. 'kept' = harvested/dead, 'kept-alive' =
+   held live, 'released' = let go. Logs saved before any disposition existed
+   are treated as 'kept'. */
+function dispLabel(d) {
+  if (d === 'released') return 'Released';
+  if (d === 'kept-alive') return 'Kept alive';
+  return 'Kept';
+}
+
+function dispBadge(d) {
+  if (d === 'released') return ' <span class="badge released">released</span>';
+  if (d === 'kept-alive') return ' <span class="badge alive">kept alive</span>';
+  return '';
+}
+
 /* total KEPT count logged for a species in a season year.
-   Released animals never count toward bag limits.
-   Logs saved before the kept/released field existed have no disposition
+   Released animals never count toward bag limits; kept and kept-alive do
+   (an animal held alive is still in possession).
+   Logs saved before the disposition field existed have no disposition
    and are treated as kept (backward compatible). */
 function speciesSeasonTotal(name, seasonYear) {
   var n = 0;
@@ -595,7 +611,7 @@ function renderSetLogs(s) {
   $('sd-logs').innerHTML = logs.map(function (l) {
     return '<div class="log-row"><div class="lr-top"><span class="lr-species">' + esc(l.species) +
       '</span><span class="lr-count">×' + esc(l.count) + '</span>' +
-      (l.disposition === 'released' ? ' <span class="badge released">released</span>' : '') + '</div>' +
+      dispBadge(l.disposition) + '</div>' +
       '<div class="dim">' + esc(fmtDate(l.date)) + (l.notes ? ' · ' + esc(l.notes) : '') + '</div></div>';
   }).join('');
 }
@@ -685,7 +701,7 @@ function renderLogWarnings() {
   var lt = limitText(info.limits);
   if (lt) {
     var sy = seasonYearOf($('log-date').value || todayISO());
-    /* Bag limits count kept animals only — released animals don't count. */
+    /* Bag limits count kept animals only — kept and kept-alive count, released doesn't. */
     var keptTotal = speciesSeasonTotal(logSpecies, sy);
     var add = (logDisposition === 'released') ? 0 : logCount;
     var total = keptTotal + add;
@@ -704,7 +720,7 @@ function renderLogWarnings() {
 
 function saveLog() {
   if (!logSpecies) { toast('Pick a species first.'); return; }
-  if (!logDisposition) { toast('Kept or released? Pick one before saving.'); return; }
+  if (!logDisposition) { toast('Kept, kept alive, or released — pick one before saving.'); return; }
   var s = getSet(logSetId);
   var date = $('log-date').value || todayISO();
   var log = {
@@ -724,7 +740,7 @@ function saveLog() {
   Store.save();
   closeSheets();
   renderHistory(); renderTotals();
-  toast('Logged ' + log.count + ' ' + logSpecies + ' (' + logDisposition + ')' + (s ? ' at ' + s.name : '') + '.');
+  toast('Logged ' + log.count + ' ' + logSpecies + ' (' + dispLabel(logDisposition) + ')' + (s ? ' at ' + s.name : '') + '.');
 }
 
 /* ================= 9. VOICE ================= */
@@ -887,7 +903,7 @@ function renderHistory() {
     if (sy !== lastSY) { html += '<div class="season-group-head">Season ' + esc(sy) + '</div>'; lastSY = sy; }
     html += '<div class="log-row"><div class="lr-top"><span class="lr-species">' + esc(l.species) +
       '</span><span class="lr-count">×' + esc(l.count) + '</span>' +
-      (l.disposition === 'released' ? ' <span class="badge released">released</span>' : '') + '</div>' +
+      dispBadge(l.disposition) + '</div>' +
       '<div class="dim">' + esc(fmtDate(l.date)) + ' · ' + esc(l.setName || '') +
       ((l.bait || l.lure) ? ' · ' + esc([l.bait, l.lure].filter(Boolean).join(' / ')) : '') +
       (l.notes ? '<br>' + esc(l.notes) : '') + '</div></div>';
@@ -911,15 +927,17 @@ function renderTotals() {
   logs.forEach(function (l) {
     var y = l.seasonYear || seasonYearOf(l.date);
     if (y !== sy) return;
-    var c = l.count * 1 || 0, rel = (l.disposition === 'released');
-    bySpecies[l.species] = bySpecies[l.species] || { kept: 0, released: 0 };
-    bySite[l.setName || '(deleted set)'] = bySite[l.setName || '(deleted set)'] || { kept: 0, released: 0 };
-    if (rel) { bySpecies[l.species].released += c; bySite[l.setName || '(deleted set)'].released += c; }
-    else { bySpecies[l.species].kept += c; bySite[l.setName || '(deleted set)'].kept += c; }
+    var c = l.count * 1 || 0, d = l.disposition || 'kept';
+    bySpecies[l.species] = bySpecies[l.species] || { kept: 0, alive: 0, released: 0 };
+    bySite[l.setName || '(deleted set)'] = bySite[l.setName || '(deleted set)'] || { kept: 0, alive: 0, released: 0 };
+    var bucket = (d === 'released') ? 'released' : (d === 'kept-alive' ? 'alive' : 'kept');
+    bySpecies[l.species][bucket] += c; bySite[l.setName || '(deleted set)'][bucket] += c;
   });
   function rows(obj) {
-    return Object.keys(obj).sort(function (a, b) { return (obj[b].kept + obj[b].released) - (obj[a].kept + obj[a].released); }).map(function (k) {
+    function tot(o) { return o.kept + o.alive + o.released; }
+    return Object.keys(obj).sort(function (a, b) { return tot(obj[b]) - tot(obj[a]); }).map(function (k) {
       return '<div class="rowline"><span>' + esc(k) +
+        (obj[k].alive ? '<span class="dim"> · ' + obj[k].alive + ' kept alive</span>' : '') +
         (obj[k].released ? '<span class="dim"> · ' + obj[k].released + ' released</span>' : '') +
         '</span><span class="big-num">' + obj[k].kept + '</span></div>';
     }).join('');
@@ -1031,7 +1049,7 @@ function exportCatches() {
   var rows = [['Date', 'Season', 'Set', 'Species', 'Count', 'Disposition', 'Trap type', 'Bait', 'Lure', 'County', 'Latitude', 'Longitude', 'Notes']];
   Store.data.logs.slice().sort(function (a, b) { return a.date < b.date ? -1 : 1; }).forEach(function (l) {
     rows.push([l.date, l.seasonYear || seasonYearOf(l.date), l.setName, l.species, l.count,
-      l.disposition || 'kept', l.trapType, l.bait, l.lure, l.county, l.lat, l.lng, l.notes]);
+      dispLabel(l.disposition), l.trapType, l.bait, l.lure, l.county, l.lat, l.lng, l.notes]);
   });
   downloadCSV('opossum-foot-catches-' + todayISO() + '.csv', rows);
   toast('Catches CSV downloaded.');
