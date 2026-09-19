@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Opossum Foot</title>
+<meta name="description" content="Opossum Foot — a pocket trapping notebook. Your spots never leave your phone.">
+<meta name="theme-color" content="#141810">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Opossum Foot">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<!-- ============ SPLASH ============ -->
+<div id="view-splash" class="view active">
+  <img src="assets/logo.png" alt="Opossum Foot logo — opossum footprint">
+  <h1>Opossum Foot</h1>
+  <p>A pocket trapping notebook.</p>
+  <p class="loading" id="splash-status">Loading…</p>
+</div>
+
+<!-- ============ ONBOARDING: pick state ============ -->
+<div id="view-onboard" class="view">
+  <div class="onboard-card">
+    <img src="assets/logo.png" alt="Opossum Foot logo">
+    <h2>Which state are you trapping in?</h2>
+    <p>We'll load that state's season reminders. You can change it anytime in Settings — handy near state lines.</p>
+    <button class="btn-secondary" id="btn-gps-state" type="button">📍 Use my location</button>
+    <div class="dim" id="gps-state-result" style="margin:8px 0 4px; min-height:20px;"></div>
+    <label class="field" for="onboard-state">Trapping state</label>
+    <select id="onboard-state"></select>
+    <div style="height:18px"></div>
+    <button class="btn-primary" id="btn-start" type="button">Start trapping</button>
+  </div>
+</div>
+
+<!-- ============ MAIN ============ -->
+<div id="view-main" class="view">
+
+  <div id="county-banner" class="unknown">
+    <div class="cb-county" id="cb-county">County unknown</div>
+    <div class="cb-state" id="cb-state">Tap ◎ to locate</div>
+  </div>
+  <div id="state-alert"><span id="state-alert-text"></span><button class="btn-small btn-ghost" id="btn-switch-state" type="button">Switch</button></div>
+  <div id="offline-banner">You're offline. The app still works — map areas you've already viewed will render; new areas need a connection.</div>
+  <div id="pin-hint">Tap the map to place your set pin.</div>
+
+  <!-- MAP PANE -->
+  <div id="pane-map" class="pane active">
+    <div id="map"></div>
+    <div class="map-fabs">
+      <button class="fab secondary" id="btn-locate" type="button" aria-label="Locate me">◎</button>
+      <button class="fab secondary" id="btn-drop-pin" type="button" aria-label="Drop a pin">📍</button>
+      <button class="fab" id="btn-add-gps" type="button" aria-label="Add set at my location">＋</button>
+    </div>
+  </div>
+
+  <!-- HISTORY PANE -->
+  <div id="pane-history" class="pane">
+    <div class="pane-head"><h2>History</h2><p>Every catch, newest first.</p></div>
+    <div class="scroll" id="history-list"></div>
+  </div>
+
+  <!-- TOTALS PANE -->
+  <div id="pane-totals" class="pane">
+    <div class="pane-head"><h2>Season totals</h2><p id="totals-sub">Your numbers for the season.</p></div>
+    <div class="scroll" id="totals-body"></div>
+  </div>
+
+  <!-- SEASONS PANE -->
+  <div id="pane-seasons" class="pane">
+    <div class="pane-head"><h2 id="seasons-title">Season reminders</h2><p id="seasons-sub"></p></div>
+    <div class="scroll">
+      <div class="warnbox" id="seasons-disclaimer"></div>
+      <input type="search" id="seasons-search" placeholder="Search species…" aria-label="Search species">
+      <div style="height:10px"></div>
+      <div id="seasons-list"></div>
+    </div>
+  </div>
+
+  <!-- LICENSES PANE -->
+  <div id="pane-licenses" class="pane">
+    <div class="pane-head"><h2>License wallet</h2><p>Photos of your licenses, kept on this phone only.</p></div>
+    <div class="scroll">
+      <button class="btn-secondary" id="btn-add-license" type="button">📷 Add license photo</button>
+      <input type="file" id="license-input" class="hidden-file" accept="image/*" capture="environment" multiple>
+      <div class="lic-grid" id="license-grid"></div>
+    </div>
+  </div>
+
+  <!-- SETTINGS PANE -->
+  <div id="pane-settings" class="pane">
+    <div class="pane-head"><h2>Settings</h2><p>Opossum Foot beta.</p></div>
+    <div class="scroll">
+      <div class="card">
+        <h3>Trapping state</h3>
+        <label class="field" for="settings-state">State</label>
+        <select id="settings-state"></select>
+        <div style="height:10px"></div>
+        <button class="btn-secondary" id="btn-change-state" type="button">Change state</button>
+      </div>
+      <div class="card">
+        <h3>Your privacy</h3>
+        <p><strong>Your spots never leave your phone.</strong></p>
+        <p class="dim">Opossum Foot has no account, no login, and no cloud. Every set, catch, photo, and voice memo is stored only in this phone's browser storage. Nothing you enter is sent anywhere — the only network traffic is map tiles and the app's own files.</p>
+        <p class="dim"><strong>The honest catch:</strong> because there's no cloud backup, a lost phone, a wiped phone, or clearing this browser's data can destroy your records. Export a CSV backup regularly — that's your safety net.</p>
+      </div>
+      <div class="card">
+        <h3>About</h3>
+        <div class="rowline"><img src="assets/logo.png" class="about-logo" alt="Opossum Foot logo"><div><strong>Opossum Foot</strong><br><span class="dim">Beta · a pocket trapping notebook</span></div></div>
+        <p class="dim">No accounts. No cloud. No analytics. No ads.<br>Season reminders are reminders only — always verify with your state agency.</p>
+      </div>
+      <div class="card">
+        <h3>Backup</h3>
+        <p class="dim">Download your data as CSV. Keep a copy somewhere safe.</p>
+        <div class="sheet-actions">
+          <button class="btn-secondary" id="btn-export-catches" type="button">⬇ Export catches (CSV)</button>
+          <button class="btn-secondary" id="btn-export-sets" type="button">⬇ Export sets (CSV)</button>
+        </div>
+      </div>
+      <div class="card">
+        <h3 style="color:#f0a49c">Danger zone</h3>
+        <button class="btn-danger" id="btn-erase" type="button" style="width:100%">Erase all Opossum Foot data on this phone</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB BAR -->
+  <nav id="tabbar">
+    <button type="button" data-tab="map" class="active"><span class="ti">🗺</span>Map</button>
+    <button type="button" data-tab="history"><span class="ti">📒</span>History</button>
+    <button type="button" data-tab="totals"><span class="ti">📊</span>Totals</button>
+    <button type="button" data-tab="seasons"><span class="ti">🦡</span>Seasons</button>
+    <button type="button" data-tab="licenses"><span class="ti">🪪</span>Licenses</button>
+    <button type="button" data-tab="settings"><span class="ti">⚙</span>Settings</button>
+  </nav>
+</div>
+
+<!-- ============ SHEETS ============ -->
+<div id="scrim"></div>
+
+<!-- ADD / EDIT SET -->
+<div id="sheet-setform" class="sheet">
+  <div class="sheet-grab"></div>
+  <div class="sheet-head"><h2 id="setform-title">New set</h2><button class="sheet-x" data-close type="button">×</button></div>
+  <div class="sheet-body">
+    <div class="dim" id="setform-coords"></div>
+    <label class="field" for="sf-name">Set name</label>
+    <input type="text" id="sf-name" placeholder="e.g. Creek crossing" autocomplete="off">
+    <label class="field" for="sf-type">Trap type</label>
+    <select id="sf-type">
+      <option>Foothold</option><option>Bodygrip / Conibear</option><option>Snare</option>
+      <option>Cage live trap</option><option>Colony trap</option><option>Dog-proof</option><option>Other</option>
+    </select>
+    <label class="field" for="sf-bait">Bait</label>
+    <input type="text" id="sf-bait" placeholder="e.g. sardines" autocomplete="off">
+    <label class="field" for="sf-lure">Lure</label>
+    <input type="text" id="sf-lure" placeholder="e.g. gland lure" autocomplete="off">
+    <label class="field" for="sf-status">Status</label>
+    <select id="sf-status">
+      <option value="active">Active</option><option value="fresh">Fresh (just set)</option>
+      <option value="sprung">Sprung</option><option value="pulled">Pulled</option>
+    </select>
+    <label class="field" for="sf-date">Date set</label>
+    <input type="date" id="sf-date">
+    <label class="field" for="sf-notes">Notes</label>
+    <textarea id="sf-notes" placeholder="Anything worth remembering…"></textarea>
+    <div class="btn-row" style="margin-top:8px">
+      <button class="btn-small btn-secondary" id="btn-voice-setnotes" type="button">🎤 Voice → notes</button>
+    </div>
+    <div class="voice-preview" id="voice-setnotes-preview"></div>
+    <div class="sheet-actions">
+      <button class="btn-primary" id="btn-save-set" type="button">Save set</button>
+    </div>
+  </div>
+</div>
+
+<!-- SET DETAIL -->
+<div id="sheet-setdetail" class="sheet">
+  <div class="sheet-grab"></div>
+  <div class="sheet-head"><h2 id="sd-name">Set</h2><button class="sheet-x" data-close type="button">×</button></div>
+  <div class="sheet-body">
+    <div id="sd-badges" style="margin-bottom:6px"></div>
+    <dl class="kv" id="sd-fields"></dl>
+    <div class="sheet-actions">
+      <button class="btn-primary" id="btn-sd-log" type="button">＋ Log a catch</button>
+    </div>
+    <h3 style="margin:18px 0 6px">Voice memos</h3>
+    <div id="sd-memos"></div>
+    <div class="btn-row" style="margin-top:8px">
+      <button class="btn-small btn-secondary" id="btn-sd-memo" type="button">🎤 Record memo</button>
+    </div>
+    <h3 style="margin:18px 0 6px">Catches at this set</h3>
+    <div id="sd-logs"></div>
+    <div class="sheet-actions">
+      <div class="btn-row">
+        <button class="btn-secondary" id="btn-sd-edit" type="button">Edit set</button>
+        <button class="btn-danger" id="btn-sd-delete" type="button">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- LOG A CATCH -->
+<div id="sheet-log" class="sheet">
+  <div class="sheet-grab"></div>
+  <div class="sheet-head"><h2>Log a catch</h2><button class="sheet-x" data-close type="button">×</button></div>
+  <div class="sheet-body">
+    <div class="dim" id="log-setline"></div>
+    <div id="log-warnings"></div>
+    <label class="field">Species</label>
+    <input type="search" id="log-species-search" placeholder="Search species…" autocomplete="off" aria-label="Search species">
+    <div style="height:8px"></div>
+    <div id="log-species-list" style="max-height:280px; overflow-y:auto; -webkit-overflow-scrolling:touch;"></div>
+    <label class="field">Count</label>
+    <div class="stepper">
+      <button type="button" id="log-count-minus" aria-label="Fewer">−</button>
+      <div class="count" id="log-count">1</div>
+      <button type="button" id="log-count-plus" aria-label="More">＋</button>
+    </div>
+    <label class="field" for="log-date">Date</label>
+    <input type="date" id="log-date">
+    <label class="field" for="log-notes">Notes</label>
+    <textarea id="log-notes" placeholder="Optional…"></textarea>
+    <div class="btn-row" style="margin-top:8px">
+      <button class="btn-small btn-secondary" id="btn-voice-lognotes" type="button">🎤 Voice → notes</button>
+    </div>
+    <div class="voice-preview" id="voice-lognotes-preview"></div>
+    <div class="sheet-actions">
+      <button class="btn-primary" id="btn-save-log" type="button">Save catch</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ MODAL ============ -->
+<div id="modal"><div class="modal-card" id="modal-card"></div></div>
+
+<div id="toast"></div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="js/season-data.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

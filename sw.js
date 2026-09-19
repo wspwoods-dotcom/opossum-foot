@@ -1,0 +1,107 @@
+/* Opossum Foot — service worker
+ * Caches the app shell so the app opens and works offline.
+ * Map tiles are cached opportunistically (bounded) as the user views them.
+ * No user data ever passes through here — sets/catches live in
+ * localStorage/IndexedDB on the device only.
+ */
+var SHELL_CACHE = 'opossum-foot-shell-v1';
+var TILE_CACHE = 'opossum-foot-tiles-v1';
+var MAX_TILES = 400;
+
+var SHELL = [
+  './',
+  './index.html',
+  './css/styles.css',
+  './js/app.js',
+  './js/season-data.js',
+  './manifest.json',
+  './assets/logo.png',
+  './assets/icon-192.png',
+  './assets/icon-512.png',
+  './assets/apple-touch-icon.png',
+  './assets/favicon.png'
+];
+
+var TILE_HOSTS = [
+  'basemaps.cartocdn.com',
+  'server.arcgisonline.com',
+  'tile.opentopomap.org'
+];
+
+function isTileRequest(url) {
+  return TILE_HOSTS.some(function (h) { return url.indexOf(h) !== -1; });
+}
+
+self.addEventListener('install', function (event) {
+  event.waitUntil(
+    caches.open(SHELL_CACHE).then(function (cache) {
+      return cache.addAll(SHELL);
+    }).then(function () { return self.skipWaiting(); })
+  );
+});
+
+self.addEventListener('activate', function (event) {
+  event.waitUntil(
+    caches.keys().then(function (keys) {
+      return Promise.all(keys.map(function (k) {
+        if (k !== SHELL_CACHE && k !== TILE_CACHE) return caches.delete(k);
+      }));
+    }).then(function () { return self.clients.claim(); })
+  );
+});
+
+function trimTiles() {
+  caches.open(TILE_CACHE).then(function (cache) {
+    cache.keys().then(function (keys) {
+      if (keys.length > MAX_TILES) {
+        /* delete oldest first (cache.keys() returns in insertion order) */
+        var extra = keys.slice(0, keys.length - MAX_TILES);
+        extra.forEach(function (k) { cache.delete(k); });
+      }
+    });
+  });
+}
+
+self.addEventListener('fetch', function (event) {
+  var req = event.request;
+  if (req.method !== 'GET') return;
+  var url = req.url;
+
+  /* tiles: cache-first, then network, bounded cache */
+  if (isTileRequest(url)) {
+    event.respondWith(
+      caches.open(TILE_CACHE).then(function (cache) {
+        return cache.match(req).then(function (hit) {
+          if (hit) return hit;
+          return fetch(req).then(function (res) {
+            if (res && res.ok) {
+              cache.put(req, res.clone());
+              trimTiles();
+            }
+            return res;
+          }).catch(function () { return hit; });
+        });
+      })
+    );
+    return;
+  }
+
+  /* app shell + embedded data: cache-first, network fallback */
+  if (url.indexOf(self.location.origin) === 0 || url.indexOf('file:') === 0) {
+    event.respondWith(
+      caches.match(req).then(function (hit) {
+        return hit || fetch(req).then(function (res) {
+          if (res && res.ok) {
+            var copy = res.clone();
+            caches.open(SHELL_CACHE).then(function (cache) { cache.put(req, copy); });
+          }
+          return res;
+        }).catch(function () {
+          /* offline and not cached: serve the app shell for navigations */
+          if (req.mode === 'navigate') return caches.match('./index.html');
+        });
+      })
+    );
+  }
+  /* CDN libraries (Leaflet) and geocoding APIs: network only, no caching of user-adjacent data */
+});
