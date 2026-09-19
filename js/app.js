@@ -396,7 +396,7 @@ function checkStateMismatch(info) {
 }
 
 /* ================= 6. MAP ================= */
-var map = null, markersLayer = null, gpsMarker = null, dropPinMode = false;
+var map = null, markersLayer = null, gpsMarker = null, gpsCircle = null, dropPinMode = false;
 var lastFix = null;
 
 function initMap() {
@@ -454,13 +454,20 @@ function locateMe() {
   if (!('geolocation' in navigator)) { toast('This device has no GPS.'); return; }
   toast('Getting your location…');
   navigator.geolocation.getCurrentPosition(function (pos) {
-    lastFix = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+    var acc = Math.round(pos.coords.accuracy || 0);
+    lastFix = { lat: pos.coords.latitude, lng: pos.coords.longitude, acc: acc };
     if (map) {
-      map.flyTo([lastFix.lat, lastFix.lng], 15, { duration: 1 });
+      map.flyTo([lastFix.lat, lastFix.lng], 17, { duration: 1 });
       if (gpsMarker) gpsMarker.setLatLng([lastFix.lat, lastFix.lng]);
       else gpsMarker = L.marker([lastFix.lat, lastFix.lng],
         { icon: L.divIcon({ className: '', html: '<div class="gps-dot"></div>', iconSize: [18, 18], iconAnchor: [9, 9] }), interactive: false }).addTo(map);
+      if (gpsCircle) gpsCircle.setLatLng([lastFix.lat, lastFix.lng]).setRadius(Math.max(acc, 1));
+      else gpsCircle = L.circle([lastFix.lat, lastFix.lng],
+        { radius: Math.max(acc, 1), color: '#2f8ff0', weight: 1, opacity: 0.6, fillColor: '#2f8ff0', fillOpacity: 0.15, interactive: false }).addTo(map);
     }
+    toast(acc > 50
+      ? 'Coarse fix (±' + acc + ' m) — step outside, or check Precise Location for Safari.'
+      : 'Located (±' + acc + ' m).');
     reverseGeocode(lastFix.lat, lastFix.lng).then(function (info) {
       setCountyBanner(info);
       checkStateMismatch(info);
@@ -468,7 +475,7 @@ function locateMe() {
     });
   }, function () {
     toast('Could not get a GPS fix. Check location permission.');
-  }, { enableHighAccuracy: true, timeout: 15000, maximumAge: 60000 });
+  }, { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 });
 }
 
 /* ================= 7. SETS ================= */
