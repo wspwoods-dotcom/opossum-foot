@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency.';
-var APP_VERSION = 'beta 0.1 · build 2026-09-19k';
+var APP_VERSION = 'beta 0.1 · build 2026-09-19l';
 
 /* ================= 2. STORAGE ================= */
 var LS_KEY = 'opossumfoot.v1';
@@ -454,8 +454,7 @@ function initMap() {
 
   map.on('click', function (e) {
     if (dropPinMode) {
-      setDropPinMode(false);
-      openSetForm({ lat: e.latlng.lat, lng: e.latlng.lng });
+      startPlacePin(e.latlng);
     }
   });
   refreshMarkers();
@@ -482,8 +481,31 @@ function refreshMarkers() {
 
 function setDropPinMode(on) {
   dropPinMode = on;
+  if (on) cancelPlacePin();
   $('pin-hint').classList.toggle('show', on);
   $('btn-drop-pin').classList.toggle('active-mode', on);
+}
+
+/* Draggable placement pin: GPS gets you close, your finger dials it in. */
+var placeMarker = null;
+function placeIcon() {
+  return L.divIcon({
+    className: '',
+    html: '<div class="pin pin-place"></div>',
+    iconSize: [36, 36], iconAnchor: [18, 18]
+  });
+}
+function startPlacePin(latlng) {
+  if (!map) return;
+  setDropPinMode(false);
+  cancelPlacePin();
+  placeMarker = L.marker(latlng, { draggable: true, icon: placeIcon() }).addTo(map);
+  map.panTo(latlng);
+  $('place-bar').classList.add('show');
+}
+function cancelPlacePin() {
+  if (placeMarker && map) { try { map.removeLayer(placeMarker); } catch (e) {} placeMarker = null; }
+  var bar = $('place-bar'); if (bar) bar.classList.remove('show');
 }
 
 var locateWatch = null, locateTimer = null, locateLastToast = 0;
@@ -1302,8 +1324,15 @@ function wireUp() {
       toast('No GPS fix yet — tap ◎ first, or drop a pin.');
       return;
     }
-    openSetForm({ lat: lastFix.lat, lng: lastFix.lng });
+    startPlacePin({ lat: lastFix.lat, lng: lastFix.lng });
   };
+  $('btn-place-ok').onclick = function () {
+    if (!placeMarker) return;
+    var ll = placeMarker.getLatLng();
+    cancelPlacePin();
+    openSetForm({ lat: ll.lat, lng: ll.lng });
+  };
+  $('btn-place-cancel').onclick = cancelPlacePin;
   $('btn-switch-state').onclick = function () {
     switchTab('settings');
     toast('Change your trapping state below.');
