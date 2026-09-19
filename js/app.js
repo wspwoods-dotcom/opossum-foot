@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency.';
-var APP_VERSION = 'beta 0.1 · build 2026-09-19i';
+var APP_VERSION = 'beta 0.1 · build 2026-09-19j';
 
 /* ================= 2. STORAGE ================= */
 var LS_KEY = 'opossumfoot.v1';
@@ -1131,11 +1131,7 @@ function renderLicenses() {
       if (!licURLs[p.id]) licURLs[p.id] = URL.createObjectURL(p.blob);
       img.src = licURLs[p.id];
       img.alt = 'License photo';
-      img.onclick = function () {
-        showModal('<img src="' + licURLs[p.id] + '" style="width:100%;border-radius:8px" alt="License photo">' +
-          '<button class="btn-secondary" id="m-close" type="button" style="width:100%;margin-top:10px">Close</button>');
-        $('m-close').onclick = closeModal;
-      };
+      img.onclick = function () { openLicenseDetail(p); };
       var del = document.createElement('button');
       del.type = 'button'; del.textContent = '×'; del.setAttribute('aria-label', 'Delete photo');
       del.onclick = function (e) {
@@ -1148,9 +1144,40 @@ function renderLicenses() {
         });
       };
       item.appendChild(img); item.appendChild(del);
+      if (p.link) {
+        var badge = document.createElement('span');
+        badge.className = 'lic-link';
+        badge.textContent = '🔗 site linked';
+        item.appendChild(badge);
+      }
       grid.appendChild(item);
     });
   });
+}
+
+/* Tap a license photo: view it, open its linked site, or attach/change the link. */
+function openLicenseDetail(p) {
+  var link = p.link || '';
+  var html = '<img src="' + licURLs[p.id] + '" style="width:100%;border-radius:8px" alt="License photo">';
+  if (link) {
+    html += '<a class="btn-primary" style="display:block;text-align:center;margin-top:10px;text-decoration:none" href="' +
+      esc(link) + '" target="_blank" rel="noopener">Open license site ↗</a>';
+  }
+  html += '<label class="field" for="m-lic-link" style="margin-top:12px">Link to license site (e.g. DNR)</label>' +
+    '<input id="m-lic-link" type="url" inputmode="url" placeholder="https://…" value="' + esc(link) + '" autocomplete="off">' +
+    '<div class="btn-row" style="margin-top:10px"><button class="btn-secondary" id="m-lic-save" type="button">Save link</button>' +
+    '<button class="btn-secondary" id="m-close" type="button">Close</button></div>';
+  showModal(html);
+  $('m-close').onclick = closeModal;
+  $('m-lic-save').onclick = function () {
+    var v = $('m-lic-link').value.trim();
+    if (v && !/^[a-zA-Z][a-zA-Z0-9+.-]*:\/\//.test(v)) v = 'https://' + v;
+    p.link = v;
+    IDB.put('photos', p).then(function () {
+      closeModal(); renderLicenses();
+      toast(v ? 'License link saved.' : 'License link removed.');
+    });
+  };
 }
 
 /* ================= 12. CSV EXPORT / ERASE ================= */
