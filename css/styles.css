@@ -127,6 +127,10 @@ input:focus, select:focus, textarea:focus, button:focus-visible { outline: 2px s
 #offline-banner.show { display: block; }
 #pin-hint { background: var(--accent); color: var(--accent-ink); display: none; }
 #pin-hint.show { display: block; }
+#place-bar { flex: 0 0 auto; z-index: 500; display: none; align-items: center; justify-content: center; gap: 10px; padding: 10px 14px; font-size: 15px; font-weight: 600; background: #1d2a12; color: #fff; border-bottom: 1px solid var(--line); }
+#place-bar.show { display: flex; }
+.pin-place { background: #ff9f1c; animation: pinpulse 1.4s infinite; }
+@keyframes pinpulse { 0% { box-shadow: 0 0 0 0 rgba(255,159,28,.65); } 70% { box-shadow: 0 0 0 16px rgba(255,159,28,0); } 100% { box-shadow: 0 0 0 0 rgba(255,159,28,0); } }
 
 /* ---------- map ---------- */
 #pane-map { background: #0c0f08; }
