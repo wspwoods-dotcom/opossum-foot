@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency.';
-var APP_VERSION = 'beta 0.1 · build 2026-09-19h';
+var APP_VERSION = 'beta 0.1 · build 2026-09-19i';
 
 /* ================= 2. STORAGE ================= */
 var LS_KEY = 'opossumfoot.v1';
@@ -487,15 +487,33 @@ function setDropPinMode(on) {
 }
 
 var locateWatch = null, locateTimer = null, locateLastToast = 0;
+var locateState = 'idle'; /* idle | acquiring | following */
+var followLastPan = 0;
 
 function stopLocateWatch() {
   if (locateWatch !== null) { try { navigator.geolocation.clearWatch(locateWatch); } catch (e) {} locateWatch = null; }
   if (locateTimer) { clearTimeout(locateTimer); locateTimer = null; }
 }
 
+/* Dragging the map breaks follow mode — the user has taken the wheel. */
+function hookFollowDrag() {
+  if (map && !map._followDragHooked) {
+    map._followDragHooked = true;
+    map.on('dragstart', function () { if (locateState === 'following') stopFollow(true); });
+  }
+}
+
+function stopFollow(silent) {
+  stopLocateWatch();
+  locateState = 'idle';
+  var b = $('btn-locate'); if (b) b.classList.remove('active-mode');
+  if (lastFix) lastFix.at = 0; /* next tap takes a fresh fix, not follow */
+  if (!silent) toast('Follow off.');
+}
+
 /* Draw the GPS dot/circle for a fix. On the final fix, also zoom + county. */
 function drawFix(fix, final) {
-  lastFix = { lat: fix.lat, lng: fix.lng, acc: fix.acc };
+  lastFix = { lat: fix.lat, lng: fix.lng, acc: fix.acc, at: Date.now() };
   if (map) {
     if (gpsMarker) gpsMarker.setLatLng([fix.lat, fix.lng]);
     else gpsMarker = L.marker([fix.lat, fix.lng],
@@ -510,9 +528,9 @@ function drawFix(fix, final) {
     }
   }
   if (final) {
-    toast(fix.acc > 50
+    toast((fix.acc > 50
       ? 'Coarse fix (±' + fix.acc + ' m) — step into the open, or check Precise Location for Safari.'
-      : 'Located (±' + fix.acc + ' m).');
+      : 'Located (±' + fix.acc + ' m).') + ' Tap ◎ again to follow.');
     reverseGeocode(fix.lat, fix.lng).then(function (info) {
       setCountyBanner(info);
       checkStateMismatch(info);
@@ -521,15 +539,27 @@ function drawFix(fix, final) {
   }
 }
 
+/* One fresh fix from the follow-mode watch: move the dot, glide the map. */
+function onFollowFix(pos) {
+  var c = pos.coords || {};
+  if (typeof c.latitude !== 'number' || typeof c.longitude !== 'number') return;
+  var ageMs = Date.now() - (pos.timestamp || 0);
+  if (ageMs > 30000 || ageMs < 0) return; /* stale cached fix — ignore it */
+  var acc = (typeof c.accuracy === 'number' && isFinite(c.accuracy)) ? Math.round(c.accuracy) : 9999;
+  drawFix({ lat: c.latitude, lng: c.longitude, acc: acc }, false);
+  var now = Date.now();
+  if (map && now - followLastPan > 1500) { followLastPan = now; map.panTo([c.latitude, c.longitude], { animate: true }); }
+}
+
 /* Field-grade locate: watch the GPS for up to 20 seconds, throw away stale
    cached fixes (a phone will happily hand back the last fix from somewhere
    you used to be), and settle on the most accurate fresh fix. */
-function locateMe() {
-  if (!('geolocation' in navigator)) { toast('This device has no GPS.'); return; }
-  stopLocateWatch();
+function startAcquire() {
+  locateState = 'acquiring';
   var best = null, finished = false;
   toast('Acquiring GPS… hold still a moment.');
   locateLastToast = Date.now();
+  hookFollowDrag();
 
   function consider(pos) {
     var c = pos.coords || {};
@@ -552,6 +582,7 @@ function locateMe() {
     if (finished) return;
     finished = true;
     stopLocateWatch();
+    locateState = 'idle';
     if (!best) { toast('No fresh GPS fix — move into open sky and try again.'); return; }
     drawFix(best, true);
   }
@@ -563,11 +594,36 @@ function locateMe() {
       if (best && best.acc <= 8) finish(); /* good enough — stop early */
     }, function () {
       if (!best && !finished) {
-        finished = true; stopLocateWatch();
+        finished = true; stopLocateWatch(); locateState = 'idle';
         toast('Could not get a GPS fix. Check location permission.');
       }
     }, { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 });
   } catch (e) { finish(); }
+}
+
+/* ◎ button: tap to locate, tap again to follow, tap again to stop.
+   Dragging the map also stops follow. */
+function locateMe() {
+  if (!('geolocation' in navigator)) { toast('This device has no GPS.'); return; }
+  if (locateState === 'following') { stopFollow(); return; }
+  if (locateState === 'acquiring') {
+    stopLocateWatch(); locateState = 'idle'; toast('Cancelled.'); return;
+  }
+  if (lastFix && (Date.now() - (lastFix.at || 0) < 120000)) {
+    hookFollowDrag();
+    locateState = 'following';
+    var b = $('btn-locate'); if (b) b.classList.add('active-mode');
+    followLastPan = 0;
+    stopLocateWatch();
+    toast('Following you — tap ◎ again to stop.');
+    try {
+      locateWatch = navigator.geolocation.watchPosition(onFollowFix, function () {
+        if (locateState === 'following') { stopFollow(true); toast('Lost GPS signal.'); }
+      }, { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 });
+    } catch (e) { stopFollow(true); }
+    return;
+  }
+  startAcquire();
 }
 
 /* ================= 7. SETS ================= */
