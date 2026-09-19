@@ -298,11 +298,14 @@ function findSpecies(name) {
   return null;
 }
 
-/* total count logged for a species in a season year */
+/* total KEPT count logged for a species in a season year.
+   Released animals never count toward bag limits.
+   Logs saved before the kept/released field existed have no disposition
+   and are treated as kept (backward compatible). */
 function speciesSeasonTotal(name, seasonYear) {
   var n = 0;
   Store.data.logs.forEach(function (l) {
-    if (l.species === name && seasonYearOf(l.date) === seasonYear) n += (l.count * 1 || 0);
+    if (l.species === name && seasonYearOf(l.date) === seasonYear && l.disposition !== 'released') n += (l.count * 1 || 0);
   });
   return n;
 }
@@ -562,7 +565,8 @@ function renderSetLogs(s) {
   if (!logs.length) { $('sd-logs').innerHTML = '<p class="dim">No catches logged at this set yet.</p>'; return; }
   $('sd-logs').innerHTML = logs.map(function (l) {
     return '<div class="log-row"><div class="lr-top"><span class="lr-species">' + esc(l.species) +
-      '</span><span class="lr-count">×' + esc(l.count) + '</span></div>' +
+      '</span><span class="lr-count">×' + esc(l.count) + '</span>' +
+      (l.disposition === 'released' ? ' <span class="badge released">released</span>' : '') + '</div>' +
       '<div class="dim">' + esc(fmtDate(l.date)) + (l.notes ? ' · ' + esc(l.notes) : '') + '</div></div>';
   }).join('');
 }
@@ -584,15 +588,18 @@ function deleteSet(id) {
 }
 
 /* ================= 8. CATCH LOGGING ================= */
-var logSetId = null, logSpecies = null, logCount = 1;
+var logSetId = null, logSpecies = null, logCount = 1, logDisposition = null;
 
 function openLogSheet(setId) {
   var s = getSet(setId);
   if (!s) return;
-  logSetId = setId; logSpecies = null; logCount = 1;
+  logSetId = setId; logSpecies = null; logCount = 1; logDisposition = null;
   $('log-setline').innerHTML = '<strong>' + esc(s.name) + '</strong>' +
+    (s.trapType ? ' · ' + esc(s.trapType) : '') +
     ((s.bait || s.lure) ? ' · ' + esc([s.bait, s.lure].filter(Boolean).join(' / ')) : '');
   $('log-count').textContent = '1';
+  var dispBtns = document.querySelectorAll('#log-disposition button');
+  for (var d = 0; d < dispBtns.length; d++) dispBtns[d].classList.remove('selected');
   $('log-date').value = todayISO();
   $('log-notes').value = '';
   $('log-species-search').value = '';
@@ -649,25 +656,33 @@ function renderLogWarnings() {
   var lt = limitText(info.limits);
   if (lt) {
     var sy = seasonYearOf($('log-date').value || todayISO());
-    var total = speciesSeasonTotal(logSpecies, sy) + logCount;
+    /* Bag limits count kept animals only — released animals don't count. */
+    var keptTotal = speciesSeasonTotal(logSpecies, sy);
+    var add = (logDisposition === 'released') ? 0 : logCount;
+    var total = keptTotal + add;
     var over = info.limits.season_bag && total >= info.limits.season_bag;
     html += '<div class="warnbox' + (over ? ' red' : '') + '">' +
       '<div class="wb-title">Bag limit reminder</div>' +
       esc(d.state_name) + ' data lists: ' + esc(lt) + '. ' +
-      'With this entry you would be at <strong>' + total + '</strong> for ' + esc(logSpecies) +
-      ' this season (' + esc(sy) + ').<div class="reminder-tag">' + esc(REMINDER_LINE) + '</div></div>';
+      'Kept ' + esc(logSpecies) + ' this season (' + esc(sy) + '): <strong>' + keptTotal + '</strong>' +
+      (logDisposition === 'released'
+        ? '. This entry is marked released, so it does not count toward the limit.'
+        : ' — with this entry you would be at <strong>' + total + '</strong>.') +
+      '<div class="reminder-tag">' + esc(REMINDER_LINE) + '</div></div>';
   }
   box.innerHTML = html;
 }
 
 function saveLog() {
   if (!logSpecies) { toast('Pick a species first.'); return; }
+  if (!logDisposition) { toast('Kept or released? Pick one before saving.'); return; }
   var s = getSet(logSetId);
   var date = $('log-date').value || todayISO();
   var log = {
     id: uid('l'), setId: logSetId,
     setName: s ? s.name : '(deleted set)',
     species: logSpecies, count: logCount * 1 || 1,
+    disposition: logDisposition,
     date: date, seasonYear: seasonYearOf(date),
     bait: s ? (s.bait || '') : '', lure: s ? (s.lure || '') : '',
     trapType: s ? (s.trapType || '') : '',
@@ -680,7 +695,7 @@ function saveLog() {
   Store.save();
   closeSheets();
   renderHistory(); renderTotals();
-  toast('Logged ' + log.count + ' ' + logSpecies + (s ? ' at ' + s.name : '') + '.');
+  toast('Logged ' + log.count + ' ' + logSpecies + ' (' + logDisposition + ')' + (s ? ' at ' + s.name : '') + '.');
 }
 
 /* ================= 9. VOICE ================= */
@@ -842,7 +857,8 @@ function renderHistory() {
     var sy = l.seasonYear || seasonYearOf(l.date);
     if (sy !== lastSY) { html += '<div class="season-group-head">Season ' + esc(sy) + '</div>'; lastSY = sy; }
     html += '<div class="log-row"><div class="lr-top"><span class="lr-species">' + esc(l.species) +
-      '</span><span class="lr-count">×' + esc(l.count) + '</span></div>' +
+      '</span><span class="lr-count">×' + esc(l.count) + '</span>' +
+      (l.disposition === 'released' ? ' <span class="badge released">released</span>' : '') + '</div>' +
       '<div class="dim">' + esc(fmtDate(l.date)) + ' · ' + esc(l.setName || '') +
       ((l.bait || l.lure) ? ' · ' + esc([l.bait, l.lure].filter(Boolean).join(' / ')) : '') +
       (l.notes ? '<br>' + esc(l.notes) : '') + '</div></div>';
@@ -866,13 +882,17 @@ function renderTotals() {
   logs.forEach(function (l) {
     var y = l.seasonYear || seasonYearOf(l.date);
     if (y !== sy) return;
-    bySpecies[l.species] = (bySpecies[l.species] || 0) + (l.count * 1 || 0);
-    var site = l.setName || '(deleted set)';
-    bySite[site] = (bySite[site] || 0) + (l.count * 1 || 0);
+    var c = l.count * 1 || 0, rel = (l.disposition === 'released');
+    bySpecies[l.species] = bySpecies[l.species] || { kept: 0, released: 0 };
+    bySite[l.setName || '(deleted set)'] = bySite[l.setName || '(deleted set)'] || { kept: 0, released: 0 };
+    if (rel) { bySpecies[l.species].released += c; bySite[l.setName || '(deleted set)'].released += c; }
+    else { bySpecies[l.species].kept += c; bySite[l.setName || '(deleted set)'].kept += c; }
   });
   function rows(obj) {
-    return Object.keys(obj).sort(function (a, b) { return obj[b] - obj[a]; }).map(function (k) {
-      return '<div class="rowline"><span>' + esc(k) + '</span><span class="big-num">' + obj[k] + '</span></div>';
+    return Object.keys(obj).sort(function (a, b) { return (obj[b].kept + obj[b].released) - (obj[a].kept + obj[a].released); }).map(function (k) {
+      return '<div class="rowline"><span>' + esc(k) +
+        (obj[k].released ? '<span class="dim"> · ' + obj[k].released + ' released</span>' : '') +
+        '</span><span class="big-num">' + obj[k].kept + '</span></div>';
     }).join('');
   }
   box.innerHTML =
@@ -979,10 +999,10 @@ function renderLicenses() {
 /* ================= 12. CSV EXPORT / ERASE ================= */
 function exportCatches() {
   if (!Store.data.logs.length) { toast('No catches to export yet.'); return; }
-  var rows = [['Date', 'Season', 'Set', 'Species', 'Count', 'Trap type', 'Bait', 'Lure', 'County', 'Latitude', 'Longitude', 'Notes']];
+  var rows = [['Date', 'Season', 'Set', 'Species', 'Count', 'Disposition', 'Trap type', 'Bait', 'Lure', 'County', 'Latitude', 'Longitude', 'Notes']];
   Store.data.logs.slice().sort(function (a, b) { return a.date < b.date ? -1 : 1; }).forEach(function (l) {
     rows.push([l.date, l.seasonYear || seasonYearOf(l.date), l.setName, l.species, l.count,
-      l.trapType, l.bait, l.lure, l.county, l.lat, l.lng, l.notes]);
+      l.disposition || 'kept', l.trapType, l.bait, l.lure, l.county, l.lat, l.lng, l.notes]);
   });
   downloadCSV('opossum-foot-catches-' + todayISO() + '.csv', rows);
   toast('Catches CSV downloaded.');
@@ -1121,6 +1141,16 @@ function wireUp() {
 
   /* log sheet */
   $('log-species-search').oninput = function () { renderSpeciesList(this.value); };
+  var dispBtns = document.querySelectorAll('#log-disposition button');
+  for (var db = 0; db < dispBtns.length; db++) {
+    dispBtns[db].onclick = (function (b) {
+      return function () {
+        logDisposition = b.getAttribute('data-disp');
+        for (var k = 0; k < dispBtns.length; k++) dispBtns[k].classList.toggle('selected', dispBtns[k] === b);
+        renderLogWarnings();
+      };
+    })(dispBtns[db]);
+  }
   $('log-count-minus').onclick = function () { if (logCount > 1) { logCount--; $('log-count').textContent = logCount; renderLogWarnings(); } };
   $('log-count-plus').onclick = function () { if (logCount < 99) { logCount++; $('log-count').textContent = logCount; renderLogWarnings(); } };
   $('log-date').onchange = renderLogWarnings;
