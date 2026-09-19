@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency.';
-var APP_VERSION = 'beta 0.1';
+var APP_VERSION = 'beta 0.1 · build 2026-09-19f';
 
 /* ================= 2. STORAGE ================= */
 var LS_KEY = 'opossumfoot.v1';
@@ -340,6 +340,26 @@ function reverseGeocode(lat, lng) {
     });
   });
 }
+
+/* Retry county lookup for sets saved while offline, once we're back online. */
+var backfillRunning = false;
+function backfillCounties() {
+  if (backfillRunning || !navigator.onLine || !Store.data) return;
+  var missing = Store.data.sets.filter(function (s) { return !s.county && s.lat != null && s.lng != null; });
+  if (!missing.length) return;
+  backfillRunning = true;
+  var i = 0;
+  (function next() {
+    if (i >= missing.length) { backfillRunning = false; return; }
+    var s = missing[i++];
+    try {
+      reverseGeocode(s.lat, s.lng).then(function (info) {
+        if (info && info.county) { s.county = info.county; Store.save(); }
+        setTimeout(next, 800);
+      }, function () { setTimeout(next, 800); });
+    } catch (e) { setTimeout(next, 800); }
+  })();
+}
 function parseBigDataCloud(j) {
   var county = null, stateName = j.principalSubdivision || null, stateCode = null;
   if (j.principalSubdivisionCode) {
@@ -457,7 +477,9 @@ function locateMe() {
     var acc = Math.round(pos.coords.accuracy || 0);
     lastFix = { lat: pos.coords.latitude, lng: pos.coords.longitude, acc: acc };
     if (map) {
-      map.flyTo([lastFix.lat, lastFix.lng], 17, { duration: 1 });
+      /* tighter zoom on a good fix, wider view when the fix is coarse */
+      var zl = acc <= 10 ? 20 : acc <= 25 ? 19 : acc <= 60 ? 18 : acc <= 150 ? 17 : 16;
+      map.flyTo([lastFix.lat, lastFix.lng], zl, { duration: 1 });
       if (gpsMarker) gpsMarker.setLatLng([lastFix.lat, lastFix.lng]);
       else gpsMarker = L.marker([lastFix.lat, lastFix.lng],
         { icon: L.divIcon({ className: '', html: '<div class="gps-dot"></div>', iconSize: [18, 18], iconAnchor: [9, 9] }), interactive: false }).addTo(map);
@@ -1118,6 +1140,7 @@ function wireUp() {
 
   /* map buttons */
   $('btn-locate').onclick = locateMe;
+  var bs = $('build-stamp'); if (bs) bs.textContent = APP_VERSION;
   $('btn-drop-pin').onclick = function () { setDropPinMode(!dropPinMode); };
   $('btn-add-gps').onclick = function () {
     if (!lastFix) {
@@ -1208,11 +1231,12 @@ function wireUp() {
   for (var k = 0; k < xs.length; k++) xs[k].onclick = function () { Voice.stop(); closeSheets(); };
   $('modal').onclick = function (e) { if (e.target === $('modal')) closeModal(); };
 
-  /* offline banner */
+  /* offline banner + county backfill when service returns */
   function net() { $('offline-banner').classList.toggle('show', !navigator.onLine); }
-  window.addEventListener('online', net);
+  window.addEventListener('online', function () { net(); backfillCounties(); });
   window.addEventListener('offline', net);
   net();
+  backfillCounties();
 }
 
 /* ================= 16. BOOT ================= */
