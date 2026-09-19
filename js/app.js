@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency.';
-var APP_VERSION = 'beta 0.1 · build 2026-09-19l';
+var APP_VERSION = 'beta 0.1 · build 2026-09-19m';
 
 /* ================= 2. STORAGE ================= */
 var LS_KEY = 'opossumfoot.v1';
@@ -1396,8 +1396,8 @@ function wireUp() {
   };
 
   /* settings */
-  $('btn-change-state').onclick = function () {
-    var code = $('settings-state').value;
+  $('settings-state').onchange = function () {
+    var code = this.value;
     if (!code || code === Store.data.state) return;
     Store.data.state = code;
     Store.save();
