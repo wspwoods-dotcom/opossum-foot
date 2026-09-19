@@ -405,13 +405,13 @@ function initMap() {
     $('map').innerHTML = '<div class="empty"><div class="big">🗺</div>The map library could not load.<br>Check your connection and reopen.</div>';
     return;
   }
-  map = L.map('map', { zoomControl: true, attributionControl: true }).setView([39.5, -98.35], 4);
+  map = L.map('map', { zoomControl: true, attributionControl: true, maxZoom: 22 }).setView([39.5, -98.35], 4);
   var street = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
-    { maxZoom: 20, attribution: '© OpenStreetMap contributors © CARTO' });
+    { maxZoom: 22, maxNativeZoom: 20, attribution: '© OpenStreetMap contributors © CARTO' });
   var satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-    { maxZoom: 19, attribution: 'Imagery © Esri' });
+    { maxZoom: 22, maxNativeZoom: 19, attribution: 'Imagery © Esri' });
   var topo = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
-    { maxZoom: 17, attribution: '© OpenTopoMap © OpenStreetMap contributors' });
+    { maxZoom: 22, maxNativeZoom: 17, attribution: '© OpenTopoMap © OpenStreetMap contributors' });
   satellite.addTo(map);
   L.control.layers({ 'Street': street, 'Satellite': satellite, 'Topo': topo }, null, { position: 'topright' }).addTo(map);
   markersLayer = L.layerGroup().addTo(map);
