@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency.';
-var APP_VERSION = 'beta 0.1 · build 2026-09-19g';
+var APP_VERSION = 'beta 0.1 · build 2026-09-19h';
 
 /* ================= 2. STORAGE ================= */
 var LS_KEY = 'opossumfoot.v1';
@@ -486,34 +486,88 @@ function setDropPinMode(on) {
   $('btn-drop-pin').classList.toggle('active-mode', on);
 }
 
-function locateMe() {
-  if (!('geolocation' in navigator)) { toast('This device has no GPS.'); return; }
-  toast('Getting your location…');
-  navigator.geolocation.getCurrentPosition(function (pos) {
-    var acc = Math.round(pos.coords.accuracy || 0);
-    lastFix = { lat: pos.coords.latitude, lng: pos.coords.longitude, acc: acc };
-    if (map) {
+var locateWatch = null, locateTimer = null, locateLastToast = 0;
+
+function stopLocateWatch() {
+  if (locateWatch !== null) { try { navigator.geolocation.clearWatch(locateWatch); } catch (e) {} locateWatch = null; }
+  if (locateTimer) { clearTimeout(locateTimer); locateTimer = null; }
+}
+
+/* Draw the GPS dot/circle for a fix. On the final fix, also zoom + county. */
+function drawFix(fix, final) {
+  lastFix = { lat: fix.lat, lng: fix.lng, acc: fix.acc };
+  if (map) {
+    if (gpsMarker) gpsMarker.setLatLng([fix.lat, fix.lng]);
+    else gpsMarker = L.marker([fix.lat, fix.lng],
+      { icon: L.divIcon({ className: '', html: '<div class="gps-dot"></div>', iconSize: [18, 18], iconAnchor: [9, 9] }), interactive: false }).addTo(map);
+    if (gpsCircle) gpsCircle.setLatLng([fix.lat, fix.lng]).setRadius(Math.max(fix.acc, 1));
+    else gpsCircle = L.circle([fix.lat, fix.lng],
+      { radius: Math.max(fix.acc, 1), color: '#2f8ff0', weight: 1, opacity: 0.6, fillColor: '#2f8ff0', fillOpacity: 0.15, interactive: false }).addTo(map);
+    if (final) {
       /* tighter zoom on a good fix, wider view when the fix is coarse */
-      var zl = acc <= 10 ? 20 : acc <= 25 ? 19 : acc <= 60 ? 18 : acc <= 150 ? 17 : 16;
-      map.flyTo([lastFix.lat, lastFix.lng], zl, { duration: 1 });
-      if (gpsMarker) gpsMarker.setLatLng([lastFix.lat, lastFix.lng]);
-      else gpsMarker = L.marker([lastFix.lat, lastFix.lng],
-        { icon: L.divIcon({ className: '', html: '<div class="gps-dot"></div>', iconSize: [18, 18], iconAnchor: [9, 9] }), interactive: false }).addTo(map);
-      if (gpsCircle) gpsCircle.setLatLng([lastFix.lat, lastFix.lng]).setRadius(Math.max(acc, 1));
-      else gpsCircle = L.circle([lastFix.lat, lastFix.lng],
-        { radius: Math.max(acc, 1), color: '#2f8ff0', weight: 1, opacity: 0.6, fillColor: '#2f8ff0', fillOpacity: 0.15, interactive: false }).addTo(map);
+      var zl = fix.acc <= 10 ? 20 : fix.acc <= 25 ? 19 : fix.acc <= 60 ? 18 : fix.acc <= 150 ? 17 : 16;
+      map.flyTo([fix.lat, fix.lng], zl, { duration: 1 });
     }
-    toast(acc > 50
-      ? 'Coarse fix (±' + acc + ' m) — step outside, or check Precise Location for Safari.'
-      : 'Located (±' + acc + ' m).');
-    reverseGeocode(lastFix.lat, lastFix.lng).then(function (info) {
+  }
+  if (final) {
+    toast(fix.acc > 50
+      ? 'Coarse fix (±' + fix.acc + ' m) — step into the open, or check Precise Location for Safari.'
+      : 'Located (±' + fix.acc + ' m).');
+    reverseGeocode(fix.lat, fix.lng).then(function (info) {
       setCountyBanner(info);
       checkStateMismatch(info);
       if (!info.county) toast('Located — county lookup failed. You are responsible for knowing your county.');
     });
-  }, function () {
-    toast('Could not get a GPS fix. Check location permission.');
-  }, { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 });
+  }
+}
+
+/* Field-grade locate: watch the GPS for up to 20 seconds, throw away stale
+   cached fixes (a phone will happily hand back the last fix from somewhere
+   you used to be), and settle on the most accurate fresh fix. */
+function locateMe() {
+  if (!('geolocation' in navigator)) { toast('This device has no GPS.'); return; }
+  stopLocateWatch();
+  var best = null, finished = false;
+  toast('Acquiring GPS… hold still a moment.');
+  locateLastToast = Date.now();
+
+  function consider(pos) {
+    var c = pos.coords || {};
+    if (typeof c.latitude !== 'number' || typeof c.longitude !== 'number') return;
+    var ageMs = Date.now() - (pos.timestamp || 0);
+    if (ageMs > 30000 || ageMs < 0) return; /* stale cached fix — ignore it */
+    var acc = (typeof c.accuracy === 'number' && isFinite(c.accuracy)) ? Math.round(c.accuracy) : 9999;
+    if (!best || acc < best.acc) {
+      best = { lat: c.latitude, lng: c.longitude, acc: acc };
+      drawFix(best, false);
+      var now = Date.now();
+      if (now - locateLastToast > 2000) {
+        locateLastToast = now;
+        toast('Acquiring GPS… ±' + acc + ' m' + (acc > 50 ? ' — still settling' : ''));
+      }
+    }
+  }
+
+  function finish() {
+    if (finished) return;
+    finished = true;
+    stopLocateWatch();
+    if (!best) { toast('No fresh GPS fix — move into open sky and try again.'); return; }
+    drawFix(best, true);
+  }
+
+  locateTimer = setTimeout(finish, 20000);
+  try {
+    locateWatch = navigator.geolocation.watchPosition(function (pos) {
+      consider(pos);
+      if (best && best.acc <= 8) finish(); /* good enough — stop early */
+    }, function () {
+      if (!best && !finished) {
+        finished = true; stopLocateWatch();
+        toast('Could not get a GPS fix. Check location permission.');
+      }
+    }, { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 });
+  } catch (e) { finish(); }
 }
 
 /* ================= 7. SETS ================= */
