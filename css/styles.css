@@ -176,6 +176,7 @@ input:focus, select:focus, textarea:focus, button:focus-visible { outline: 2px s
 .badge.status-sprung { background: #3d2c10; color: #f5cf7a; }
 .badge.status-pulled { background: #2a2a2a; color: #bdbdbd; }
 .badge.released { background: #2a2a2a; color: #bdbdbd; border: 1px solid #4a4a4a; }
+.badge.alive { background: #1d3a1d; color: #9ed69a; border: 1px solid #3f6b3a; }
 .req { color: var(--red); }
 .seg { display: flex; gap: 8px; margin: 2px 0 14px; }
 .seg button { flex: 1; padding: 13px; border-radius: 10px; border: 1px solid var(--line); background: var(--panel); color: var(--ink); font-size: 16px; font-weight: 600; }
