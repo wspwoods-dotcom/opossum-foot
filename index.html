@@ -46,20 +46,20 @@
 
   <div id="county-banner" class="unknown">
     <div class="cb-county" id="cb-county">County unknown</div>
-    <div class="cb-state" id="cb-state">Tap ◎ to locate</div>
+    <div class="cb-state" id="cb-state">Tap the crosshair to locate</div>
   </div>
   <div id="state-alert"><span id="state-alert-text"></span><button class="btn-small btn-ghost" id="btn-switch-state" type="button">Switch</button></div>
   <div id="offline-banner">You're offline. The app still works — map areas you've already viewed will render; new areas need a connection.</div>
   <div id="pin-hint">Tap the map to place your set pin.</div>
-  <div id="place-bar"><span>Drag the pin onto the exact spot.</span><button class="btn-small btn-primary" id="btn-place-ok" type="button">✓ Looks right</button><button class="btn-small btn-ghost" id="btn-place-cancel" type="button">✕</button></div>
+  <div id="place-bar"><span>Drag the pin onto the exact spot.</span><button class="btn-small btn-primary" id="btn-place-ok" type="button"><img class="pb-ic" src="assets/icons/check.png" alt="">Looks right</button><button class="btn-small btn-ghost" id="btn-place-cancel" type="button" aria-label="Cancel"><img class="pb-ic" src="assets/icons/x.png" alt=""></button></div>
 
   <!-- MAP PANE -->
   <div id="pane-map" class="pane active">
     <div id="map"></div>
     <div class="map-fabs">
-      <button class="fab secondary" id="btn-locate" type="button" aria-label="Locate me">◎</button>
-      <button class="fab secondary" id="btn-drop-pin" type="button" aria-label="Drop a pin">📍</button>
-      <button class="fab" id="btn-add-gps" type="button" aria-label="Add set at my location">＋</button>
+      <button class="fab secondary" id="btn-locate" type="button" aria-label="Locate me"><img src="assets/icons/crosshair.png" alt=""></button>
+      <button class="fab secondary" id="btn-drop-pin" type="button" aria-label="Drop a pin"><img src="assets/icons/mappin.png" alt=""></button>
+      <button class="fab" id="btn-add-gps" type="button" aria-label="Add set at my location"><img src="assets/icons/plus.png" alt=""></button>
     </div>
   </div>
 
@@ -92,7 +92,7 @@
     <div class="scroll">
       <button class="btn-secondary" id="btn-add-license" type="button">📷 Add license photo</button>
       <p class="dim" style="margin:8px 0 0">Tap a photo to view it — or attach its website link, like the DNR page where you bought it.</p>
-      <input type="file" id="license-input" class="hidden-file" accept="image/*" capture="environment" multiple>
+      <input type="file" id="license-input" class="hidden-file" accept="image/*" multiple>
       <div class="lic-grid" id="license-grid"></div>
     </div>
   </div>
@@ -136,12 +136,12 @@
 
   <!-- TAB BAR -->
   <nav id="tabbar">
-    <button type="button" data-tab="map" class="active"><span class="ti">🗺</span>Map</button>
-    <button type="button" data-tab="history"><span class="ti">📒</span>History</button>
-    <button type="button" data-tab="totals"><span class="ti">📊</span>Totals</button>
-    <button type="button" data-tab="seasons"><span class="ti">🦡</span>Seasons</button>
-    <button type="button" data-tab="licenses"><span class="ti">🪪</span>Licenses</button>
-    <button type="button" data-tab="settings"><span class="ti">⚙</span>Settings</button>
+    <button type="button" data-tab="map" class="active"><img class="ti-img" src="assets/icons/compass.png" alt="">Map</button>
+    <button type="button" data-tab="history"><img class="ti-img" src="assets/icons/logbook.png" alt="">History</button>
+    <button type="button" data-tab="totals"><img class="ti-img" src="assets/icons/barchart.png" alt="">Totals</button>
+    <button type="button" data-tab="seasons"><img class="ti-img" src="assets/species/opossum.png" alt="">Seasons</button>
+    <button type="button" data-tab="licenses"><img class="ti-img" src="assets/icons/idcard.png" alt="">Licenses</button>
+    <button type="button" data-tab="settings"><img class="ti-img" src="assets/icons/gear.png" alt="">Settings</button>
   </nav>
 </div>
 

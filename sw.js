@@ -35,7 +35,17 @@ var SHELL = [
   './assets/species/wolf.png',
   './assets/species/spotted-skunk.png',
   './assets/species/otter.png',
-  './assets/species/bobcat.png'
+  './assets/species/bobcat.png',
+  './assets/icons/compass.png',
+  './assets/icons/logbook.png',
+  './assets/icons/barchart.png',
+  './assets/icons/idcard.png',
+  './assets/icons/gear.png',
+  './assets/icons/crosshair.png',
+  './assets/icons/mappin.png',
+  './assets/icons/plus.png',
+  './assets/icons/check.png',
+  './assets/icons/x.png'
 ];
 
 var TILE_HOSTS = [
