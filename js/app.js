@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency.';
-var APP_VERSION = 'beta 0.1 · build 2026-09-19o';
+var APP_VERSION = 'beta 0.1 · build 2026-09-19p';
 
 /* ================= 2. STORAGE ================= */
 var LS_KEY = 'opossumfoot.v1';
@@ -448,8 +448,18 @@ function initMap() {
     { maxZoom: 22, maxNativeZoom: 19, attribution: 'Imagery © Esri' });
   var topo = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
     { maxZoom: 22, maxNativeZoom: 17, attribution: '© OpenTopoMap © OpenStreetMap contributors' });
-  satellite.addTo(map);
-  L.control.layers({ 'Street': street, 'Satellite': satellite, 'Topo': topo }, null, { position: 'topright' }).addTo(map);
+  /* Esri reference overlays: roads + place labels, drawn over imagery/topo */
+  var esriRef = function (svc) {
+    return L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/' + svc + '/MapServer/tile/{z}/{y}/{x}',
+      { maxZoom: 22, maxNativeZoom: 19, attribution: '© Esri' });
+  };
+  var roads = esriRef('Reference/World_Transportation');
+  var labels = esriRef('Reference/World_Boundaries_and_Places');
+  var streetL = L.layerGroup([street]);
+  var satL = L.layerGroup([satellite, labels, roads]);
+  var topoL = L.layerGroup([topo, roads]);
+  satL.addTo(map);
+  L.control.layers({ 'Street': streetL, 'Satellite': satL, 'Topo': topoL }, null, { position: 'topright' }).addTo(map);
   markersLayer = L.layerGroup().addTo(map);
 
   map.on('click', function (e) {
