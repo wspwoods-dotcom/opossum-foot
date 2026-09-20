@@ -67,6 +67,14 @@ button, .btn {
 .btn-primary { background: var(--accent); color: var(--accent-ink); width: 100%; }
 .btn-secondary { background: var(--panel); color: var(--ink); border: 1px solid var(--line); width: 100%; }
 .btn-ghost { background: transparent; color: var(--accent); border: 1px solid var(--accent); }
+/* Prominent official-regulations link at the top of the Seasons tab. */
+.regs-link {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  margin: 12px 0; padding: 14px 18px; min-height: var(--tap);
+  border-radius: var(--radius); background: var(--accent); color: var(--accent-ink);
+  font-weight: 700; font-size: 16px; text-decoration: none; text-align: center;
+}
+.regs-link .dim { color: var(--accent-ink); opacity: 0.75; font-weight: 600; }
 .btn-danger { background: #3a1f1b; color: #f0a49c; border: 1px solid #6e2f28; }
 .btn-small { min-height: 44px; font-size: 15px; padding: 8px 14px; width: auto; }
 button:disabled { opacity: .45; }
