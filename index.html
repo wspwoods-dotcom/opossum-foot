@@ -161,7 +161,7 @@
           <button class="btn-secondary" id="btn-export-catches" type="button">⬇ Export catches (CSV)</button>
           <button class="btn-secondary" id="btn-export-sets" type="button">⬇ Export sets (CSV)</button>
           <button class="btn-secondary" id="btn-import" type="button">⬆ Import data (JSON)</button>
-          <input type="file" id="import-file" accept=".json,application/json" style="display:none">
+          <input type="file" id="import-file" class="hidden-file" accept=".json,application/json">
         </div>
       </div>
       <div class="card">
@@ -254,7 +254,7 @@
     <div class="btn-row" style="margin-top:8px">
       <button class="btn-small btn-secondary" id="btn-sd-photo" type="button">📷 Add photo</button>
     </div>
-    <input type="file" id="sd-photo-input" accept="image/*" capture="environment" style="display:none">
+    <input type="file" id="sd-photo-input" class="hidden-file" accept="image/*" capture="environment">
     <h3 style="margin:18px 0 6px">Catches at this set</h3>
     <div id="sd-logs"></div>
     <div class="sheet-actions">
@@ -301,7 +301,7 @@
     <div class="btn-row" style="margin-top:8px">
       <button class="btn-small btn-secondary" id="btn-log-photo" type="button">📷 Add photo</button>
     </div>
-    <input type="file" id="log-photo-input" accept="image/*" capture="environment" style="display:none">
+    <input type="file" id="log-photo-input" class="hidden-file" accept="image/*" capture="environment">
     <div class="sheet-actions">
       <button class="btn-primary" id="btn-save-log" type="button">Save catch</button>
     </div>
