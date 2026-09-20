@@ -108,9 +108,19 @@
         <p class="dim" style="margin-top:8px">Changing the state takes effect immediately.</p>
       </div>
       <div class="card">
+        <h3>Features</h3>
+        <label class="checkline"><input type="checkbox" id="settings-weather"> Auto-record weather</label>
+        <p class="dim" style="margin:6px 0 12px">Looks up the current temperature, wind, and precipitation for each set location and attaches it to new sets and catches. Sends the set's coordinates to Open-Meteo, a free weather service — the one exception to "nothing leaves your phone." Needs a data connection; nothing is recorded when you're offline.</p>
+        <label class="checkline"><input type="checkbox" id="settings-voice"> Voice entry &amp; memos</label>
+        <p class="dim" style="margin:6px 0 12px">Dictate notes and record voice memos on your sets.</p>
+        <label class="checkline"><input type="checkbox" id="settings-licenses"> License wallet</label>
+        <p class="dim" style="margin:6px 0 12px">Keep your license photos in the app.</p>
+        <button class="btn-secondary" id="btn-features-reset" type="button">Reset features to defaults</button>
+      </div>
+      <div class="card">
         <h3>Your privacy</h3>
         <p><strong>Your spots never leave your phone.</strong></p>
-        <p class="dim">Opossum Foot has no account, no login, and no cloud. Every set, catch, photo, and voice memo is stored only in this phone's browser storage. Nothing you enter is sent anywhere — the only network traffic is map tiles and the app's own files.</p>
+        <p class="dim">Opossum Foot has no account, no login, and no cloud. Every set, catch, photo, and voice memo is stored only in this phone's browser storage. Nothing you enter is sent anywhere — the only network traffic is map tiles, the app's own files, and weather lookups, but only if you turn weather on in Settings.</p>
         <p class="dim"><strong>The honest catch:</strong> because there's no cloud backup, a lost phone, a wiped phone, or clearing this browser's data can destroy your records. Export a CSV backup regularly — that's your safety net.</p>
       </div>
       <div class="card">
@@ -200,7 +210,7 @@
     <div class="sheet-actions">
       <button class="btn-primary" id="btn-sd-log" type="button">＋ Log a catch</button>
     </div>
-    <h3 style="margin:18px 0 6px">Voice memos</h3>
+    <h3 style="margin:18px 0 6px" id="sd-memos-head">Voice memos</h3>
     <div id="sd-memos"></div>
     <div class="btn-row" style="margin-top:8px">
       <button class="btn-small btn-secondary" id="btn-sd-memo" type="button">🎤 Record memo</button>
