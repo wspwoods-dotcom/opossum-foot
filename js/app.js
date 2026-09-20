@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency.';
-var APP_VERSION = 'beta 0.1 · build 2026-09-20v';
+var APP_VERSION = 'beta 0.1 · build 2026-09-20w';
 
 /* ================= 2. STORAGE ================= */
 var LS_KEY = 'opossumfoot.v1';
@@ -501,6 +501,113 @@ function fetchWeather(lat, lng, cb) {
   setTimeout(function () { finish(null); }, 8000); /* never hang a save on weather */
 }
 
+/* ---- weather tab ---- */
+var weatherTabBusy = false;
+function weatherEmoji(c) {
+  c = c * 1;
+  if (c === 0) return '☀️';
+  if (c <= 3) return '⛅';
+  if (c <= 48) return '🌫️';
+  if (c <= 67) return '🌧️';
+  if (c <= 77) return '❄️';
+  if (c <= 82) return '🌦️';
+  if (c <= 86) return '🌨️';
+  return '⛈️';
+}
+function hourLabel(iso) {
+  var h = parseInt(iso.slice(11, 13), 10);
+  var ap = h >= 12 ? 'p' : 'a';
+  h = h % 12; if (h === 0) h = 12;
+  return h + ap;
+}
+function timeAgo(ts) {
+  var m = Math.round((Date.now() - ts) / 60000);
+  if (m < 1) return 'just now';
+  if (m < 60) return m + ' min ago';
+  return Math.round(m / 60) + ' hr ago';
+}
+function getTabFix(cb) {
+  if (typeof lastFix !== 'undefined' && lastFix && lastFix.lat != null) { cb(lastFix); return; }
+  if (!navigator.geolocation) { cb(null); return; }
+  var done = false;
+  function fin(f) { if (!done) { done = true; cb(f); } }
+  try {
+    navigator.geolocation.getCurrentPosition(
+      function (p) { fin({ lat: p.coords.latitude, lng: p.coords.longitude }); },
+      function () { fin(null); },
+      { timeout: 8000, maximumAge: 600000 });
+  } catch (e) { fin(null); }
+  setTimeout(function () { fin(null); }, 9000);
+}
+function paintWeather(j, staleNote) {
+  var c = j.current, now = $('weather-now');
+  if (!c) { now.innerHTML = '<p class="dim">No weather data.</p>'; return; }
+  var hi = (j.daily && j.daily.temperature_2m_max) ? Math.round(j.daily.temperature_2m_max[0]) : null;
+  var lo = (j.daily && j.daily.temperature_2m_min) ? Math.round(j.daily.temperature_2m_min[0]) : null;
+  var h = '<div class="wx-temp">' + weatherEmoji(c.weather_code) + ' ' + Math.round(c.temperature_2m) + '°F</div>' +
+    '<div class="wx-cond">' + esc(weatherCodeText(c.weather_code)) + ' · feels like ' + Math.round(c.apparent_temperature) + '°F</div>' +
+    '<div class="wx-meta">Wind ' + windCompass(c.wind_direction_10m) + ' ' + Math.round(c.wind_speed_10m) + ' mph' +
+    ' · Humidity ' + c.relative_humidity_2m + '%' +
+    (c.precipitation > 0 ? ' · ' + c.precipitation.toFixed(2) + ' in precip' : '') +
+    (hi != null ? ' · High ' + hi + '° / Low ' + lo + '°' : '') + '</div>';
+  now.innerHTML = h;
+  var rows = '', times = j.hourly.time, idx = 0;
+  for (var i = 0; i < times.length; i++) if (times[i] <= c.time) idx = i;
+  for (var k = 1; k <= 12 && idx + k < times.length; k++) {
+    var t = idx + k;
+    rows += '<div class="wx-hour"><span>' + hourLabel(times[t]) + '</span><span>' + weatherEmoji(j.hourly.weather_code[t]) + '</span>' +
+      '<span>' + Math.round(j.hourly.temperature_2m[t]) + '°F</span><span class="dim">' + j.hourly.precipitation_probability[t] + '% precip</span></div>';
+  }
+  $('weather-hourly').innerHTML = rows || '<p class="dim">No hourly data.</p>';
+  $('weather-updated').textContent = staleNote || 'Updated just now · Open-Meteo';
+}
+function showCachedWeather(msg) {
+  var c = Store.data.weatherTabCache;
+  if (c && c.payload && c.payload.current) {
+    paintWeather(c.payload, msg + ' Showing last update from ' + timeAgo(c.at) + '.');
+  } else {
+    $('weather-now').innerHTML = '<p class="dim">' + esc(msg) + '</p>';
+    $('weather-hourly').innerHTML = '';
+    $('weather-updated').textContent = '';
+  }
+}
+function renderWeatherTab() {
+  if (weatherTabBusy) return;
+  weatherTabBusy = true;
+  $('weather-now').innerHTML = '<p class="dim">Loading weather…</p>';
+  $('weather-hourly').innerHTML = '';
+  getTabFix(function (fix) {
+    if (!fix) {
+      weatherTabBusy = false;
+      $('weather-loc').textContent = 'Location unavailable.';
+      showCachedWeather('No location fix yet — open the Map tab and tap the crosshair, then come back.');
+      return;
+    }
+    $('weather-loc').textContent = 'Near ' + fix.lat.toFixed(3) + ', ' + fix.lng.toFixed(3);
+    var url = 'https://api.open-meteo.com/v1/forecast?latitude=' + fix.lat.toFixed(4) + '&longitude=' + fix.lng.toFixed(4) +
+      '&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m,wind_direction_10m,precipitation' +
+      '&hourly=temperature_2m,precipitation_probability,weather_code' +
+      '&daily=temperature_2m_max,temperature_2m_min' +
+      '&temperature_unit=fahrenheit&wind_speed_unit=mph&precipitation_unit=inch&timezone=auto&forecast_days=2';
+    var done = false;
+    function finish(j) {
+      if (done) return; done = true;
+      weatherTabBusy = false;
+      if (j && j.current) {
+        Store.data.weatherTabCache = { at: Date.now(), payload: j };
+        Store.save();
+        paintWeather(j, null);
+      } else {
+        showCachedWeather("Couldn't reach the weather service.");
+      }
+    }
+    try {
+      fetch(url).then(function (r) { return r.json(); }).then(finish).catch(function () { finish(null); });
+    } catch (e) { finish(null); }
+    setTimeout(function () { finish(null); }, 10000);
+  });
+}
+
 /* ---- feature toggles ---- */
 function applyFeatureToggles() {
   var vOn = Store.data.voiceOn !== false;
@@ -513,6 +620,10 @@ function applyFeatureToggles() {
   var tab = document.querySelector('#tabbar button[data-tab="licenses"]');
   if (tab) tab.style.display = lOn ? '' : 'none';
   if (!lOn && $('pane-licenses') && $('pane-licenses').classList.contains('active')) switchTab('map');
+  var wOn = !!Store.data.weatherOn;
+  var wtab = document.querySelector('#tabbar button[data-tab="weather"]');
+  if (wtab) wtab.style.display = wOn ? '' : 'none';
+  if (!wOn && $('pane-weather') && $('pane-weather').classList.contains('active')) switchTab('map');
 }
 
 /* ================= 6. MAP ================= */
@@ -1389,6 +1500,7 @@ function switchTab(name) {
   if (name === 'totals') renderTotals();
   if (name === 'seasons') renderSeasons($('seasons-search').value);
   if (name === 'licenses') renderLicenses();
+  if (name === 'weather') renderWeatherTab();
 }
 
 /* ================= 14. ONBOARDING ================= */
@@ -1412,8 +1524,8 @@ function enterMain() {
   $('settings-weather').checked = !!Store.data.weatherOn;
   $('settings-weather').onchange = function () {
     Store.data.weatherOn = this.checked;
-    Store.save();
-    toast(this.checked ? 'Weather auto-record is on.' : 'Weather auto-record is off.');
+    Store.save(); applyFeatureToggles();
+    toast(this.checked ? 'Weather is on — tab and auto-record.' : 'Weather is off.');
   };
   $('settings-voice').checked = Store.data.voiceOn !== false;
   $('settings-voice').onchange = function () {
@@ -1434,6 +1546,7 @@ function enterMain() {
     applyFeatureToggles();
     toast('Features reset to defaults.');
   };
+  $('btn-weather-refresh').onclick = function () { renderWeatherTab(); };
   applyFeatureToggles();
 }
 
