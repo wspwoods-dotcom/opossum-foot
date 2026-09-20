@@ -66,7 +66,13 @@
   <!-- HISTORY PANE -->
   <div id="pane-history" class="pane">
     <div class="pane-head"><h2>History</h2><p>Every catch, newest first.</p></div>
-    <div class="scroll" id="history-list"></div>
+    <div class="scroll">
+      <div id="hist-summary" class="hist-summary"></div>
+      <input type="search" id="history-search" placeholder="Search species, sets, notes…" aria-label="Search history">
+      <div class="chip-row" id="hist-disp-chips"></div>
+      <div class="chip-row" id="hist-species-chips"></div>
+      <div id="history-list"></div>
+    </div>
   </div>
 
   <!-- TOTALS PANE -->
