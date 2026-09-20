@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency.';
-var APP_VERSION = 'beta 0.1 · build 2026-09-19q';
+var APP_VERSION = 'beta 0.1 · build 2026-09-19r';
 
 /* ================= 2. STORAGE ================= */
 var LS_KEY = 'opossumfoot.v1';
@@ -438,7 +438,7 @@ function setCountyBanner(info) {
   } else {
     banner.classList.add('unknown');
     $('cb-county').textContent = 'County unknown';
-    $('cb-state').textContent = 'Tap ◎ to locate';
+    $('cb-state').textContent = 'Tap the crosshair to locate';
   }
 }
 
@@ -588,7 +588,7 @@ function drawFix(fix, final) {
   if (final) {
     toast((fix.acc > 50
       ? 'Coarse fix (±' + fix.acc + ' m) — step into the open, or check Precise Location for Safari.'
-      : 'Located (±' + fix.acc + ' m).') + ' Tap ◎ again to follow.');
+      : 'Located (±' + fix.acc + ' m).') + ' Tap the crosshair again to follow.');
     reverseGeocode(fix.lat, fix.lng).then(function (info) {
       setCountyBanner(info);
       checkStateMismatch(info);
@@ -673,7 +673,7 @@ function locateMe() {
     var b = $('btn-locate'); if (b) b.classList.add('active-mode');
     followLastPan = 0;
     stopLocateWatch();
-    toast('Following you — tap ◎ again to stop.');
+    toast('Following you — tap the crosshair again to stop.');
     try {
       locateWatch = navigator.geolocation.watchPosition(onFollowFix, function () {
         if (locateState === 'following') { stopFollow(true); toast('Lost GPS signal.'); }
@@ -1357,7 +1357,7 @@ function wireUp() {
   $('btn-drop-pin').onclick = function () { setDropPinMode(!dropPinMode); };
   $('btn-add-gps').onclick = function () {
     if (!lastFix) {
-      toast('No GPS fix yet — tap ◎ first, or drop a pin.');
+      toast('No GPS fix yet — tap the crosshair first, or drop a pin.');
       return;
     }
     startPlacePin({ lat: lastFix.lat, lng: lastFix.lng });
