@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency.';
-var APP_VERSION = 'beta 0.1 · build 2026-09-20t';
+var APP_VERSION = 'beta 0.1 · build 2026-09-20v';
 
 /* ================= 2. STORAGE ================= */
 var LS_KEY = 'opossumfoot.v1';
@@ -75,6 +75,9 @@ var Store = {
     }
     if (!Array.isArray(this.data.sets)) this.data.sets = [];
     if (!Array.isArray(this.data.logs)) this.data.logs = [];
+    if (typeof this.data.weatherOn !== 'boolean') this.data.weatherOn = false;
+    if (typeof this.data.voiceOn !== 'boolean') this.data.voiceOn = true;
+    if (typeof this.data.licensesOn !== 'boolean') this.data.licensesOn = true;
   },
   save: function () {
     try {
@@ -457,6 +460,61 @@ function checkStateMismatch(info) {
   }
 }
 
+/* ---- weather (Open-Meteo, keyless, US units) ---- */
+function weatherCodeText(c) {
+  c = c * 1;
+  if (c === 0) return 'Clear';
+  if (c <= 3) return 'Partly cloudy';
+  if (c <= 48) return 'Fog';
+  if (c <= 57) return 'Drizzle';
+  if (c <= 67) return 'Rain';
+  if (c <= 77) return 'Snow';
+  if (c <= 82) return 'Showers';
+  if (c <= 86) return 'Snow showers';
+  return 'Thunderstorm';
+}
+function windCompass(deg) {
+  var dirs = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
+  return dirs[Math.round(((deg % 360) + 360) % 360 / 45) % 8];
+}
+function weatherText(w) {
+  if (!w) return '—';
+  var t = Math.round(w.temp) + '°F · ' + windCompass(w.windDir) + ' ' + Math.round(w.windSpeed) + ' mph';
+  if (w.precip > 0) t += ' · ' + w.precip.toFixed(2) + ' in precip';
+  return weatherCodeText(w.code) + ' · ' + t;
+}
+function fetchWeather(lat, lng, cb) {
+  if (!Store.data.weatherOn || lat == null || lng == null) { cb(null); return; }
+  var url = 'https://api.open-meteo.com/v1/forecast?latitude=' + lat.toFixed(4) + '&longitude=' + lng.toFixed(4) +
+    '&current=temperature_2m,precipitation,weather_code,wind_speed_10m,wind_direction_10m' +
+    '&temperature_unit=fahrenheit&wind_speed_unit=mph&precipitation_unit=inch&timezone=auto';
+  var done = false;
+  function finish(w) { if (!done) { done = true; cb(w); } }
+  try {
+    fetch(url).then(function (r) { return r.json(); }).then(function (j) {
+      var c = j && j.current;
+      if (!c) { finish(null); return; }
+      finish({ temp: c.temperature_2m, precip: c.precipitation, code: c.weather_code,
+        windSpeed: c.wind_speed_10m, windDir: c.wind_direction_10m, at: c.time });
+    }).catch(function () { finish(null); });
+  } catch (e) { finish(null); }
+  setTimeout(function () { finish(null); }, 8000); /* never hang a save on weather */
+}
+
+/* ---- feature toggles ---- */
+function applyFeatureToggles() {
+  var vOn = Store.data.voiceOn !== false;
+  ['btn-voice-setnotes', 'voice-setnotes-preview', 'btn-voice-lognotes', 'voice-lognotes-preview',
+   'btn-sd-memo', 'sd-memos-head', 'sd-memos'].forEach(function (id) {
+    var el = $(id);
+    if (el) el.style.display = vOn ? '' : 'none';
+  });
+  var lOn = Store.data.licensesOn !== false;
+  var tab = document.querySelector('#tabbar button[data-tab="licenses"]');
+  if (tab) tab.style.display = lOn ? '' : 'none';
+  if (!lOn && $('pane-licenses') && $('pane-licenses').classList.contains('active')) switchTab('map');
+}
+
 /* ================= 6. MAP ================= */
 var map = null, markersLayer = null, gpsMarker = null, gpsCircle = null, dropPinMode = false;
 var lastFix = null;
@@ -777,6 +835,12 @@ function saveSetForm() {
     reverseGeocode(ns.lat, ns.lng).then(function (info) {
       if (info.county) { ns.county = info.county; Store.save(); }
     });
+    /* weather lookup in background */
+    fetchWeather(ns.lat, ns.lng, function (w) {
+      if (!w) return;
+      ns.weather = w; Store.save();
+      if (typeof detailSetId !== 'undefined' && detailSetId === ns.id) openSetDetail(ns.id);
+    });
     if (map) map.flyTo([ns.lat, ns.lng], Math.max(map.getZoom(), 14), { duration: 0.8 });
   }
 }
@@ -797,6 +861,7 @@ function openSetDetail(id) {
     '<dt>Lure</dt><dd>' + esc(s.lure || '—') + '</dd>' +
     '<dt>Date set</dt><dd>' + esc(fmtDate(s.dateSet)) + '</dd>' +
     '<dt>Location</dt><dd>' + s.lat.toFixed(5) + ', ' + s.lng.toFixed(5) + '</dd>' +
+    '<dt>Weather</dt><dd>' + esc(weatherText(s.weather)) + '</dd>' +
     (s.notes ? '<dt>Notes</dt><dd>' + esc(s.notes) + '</dd>' : '');
   renderSetLogs(s);
   renderMemos(s.id);
@@ -943,6 +1008,11 @@ function saveLog() {
   closeSheets();
   renderHistory(); renderTotals();
   toast('Logged ' + log.count + ' ' + logSpecies + ' (' + dispLabel(logDisposition) + ')' + (s ? ' at ' + s.name : '') + '.');
+  /* weather snapshot in background */
+  if (s) fetchWeather(s.lat, s.lng, function (w) {
+    if (!w) return;
+    log.weather = w; Store.save();
+  });
 }
 
 /* ================= 9. VOICE ================= */
@@ -1275,19 +1345,19 @@ function openLicenseDetail(p) {
 /* ================= 12. CSV EXPORT / ERASE ================= */
 function exportCatches() {
   if (!Store.data.logs.length) { toast('No catches to export yet.'); return; }
-  var rows = [['Date', 'Season', 'Set', 'Species', 'Count', 'Disposition', 'Set type', 'Trap type', 'Bait', 'Lure', 'County', 'Latitude', 'Longitude', 'Notes']];
+  var rows = [['Date', 'Season', 'Set', 'Species', 'Count', 'Disposition', 'Set type', 'Trap type', 'Weather', 'Bait', 'Lure', 'County', 'Latitude', 'Longitude', 'Notes']];
   Store.data.logs.slice().sort(function (a, b) { return a.date < b.date ? -1 : 1; }).forEach(function (l) {
     rows.push([l.date, l.seasonYear || seasonYearOf(l.date), l.setName, l.species, l.count,
-      dispLabel(l.disposition), l.setType, l.trapType, l.bait, l.lure, l.county, l.lat, l.lng, l.notes]);
+      dispLabel(l.disposition), l.setType, l.trapType, weatherText(l.weather), l.bait, l.lure, l.county, l.lat, l.lng, l.notes]);
   });
   downloadCSV('opossum-foot-catches-' + todayISO() + '.csv', rows);
   toast('Catches CSV downloaded.');
 }
 function exportSets() {
   if (!Store.data.sets.length) { toast('No sets to export yet.'); return; }
-  var rows = [['Name', 'Latitude', 'Longitude', 'County', 'Set type', 'Trap type', 'Bait', 'Lure', 'Status', 'Date set', 'Notes']];
+  var rows = [['Name', 'Latitude', 'Longitude', 'County', 'Set type', 'Trap type', 'Weather', 'Bait', 'Lure', 'Status', 'Date set', 'Notes']];
   Store.data.sets.forEach(function (s) {
-    rows.push([s.name, s.lat, s.lng, s.county, s.setType, s.trapType, s.bait, s.lure, s.status, s.dateSet, s.notes]);
+    rows.push([s.name, s.lat, s.lng, s.county, s.setType, s.trapType, weatherText(s.weather), s.bait, s.lure, s.status, s.dateSet, s.notes]);
   });
   downloadCSV('opossum-foot-sets-' + todayISO() + '.csv', rows);
   toast('Sets CSV downloaded.');
@@ -1339,6 +1409,32 @@ function enterMain() {
   switchTab('map');
   renderHistory(); renderTotals(); renderSeasons(''); renderLicenses();
   buildStateSelect($('settings-state'), Store.data.state);
+  $('settings-weather').checked = !!Store.data.weatherOn;
+  $('settings-weather').onchange = function () {
+    Store.data.weatherOn = this.checked;
+    Store.save();
+    toast(this.checked ? 'Weather auto-record is on.' : 'Weather auto-record is off.');
+  };
+  $('settings-voice').checked = Store.data.voiceOn !== false;
+  $('settings-voice').onchange = function () {
+    Store.data.voiceOn = this.checked;
+    Store.save(); applyFeatureToggles();
+    toast(this.checked ? 'Voice entry is on.' : 'Voice entry is off.');
+  };
+  $('settings-licenses').checked = Store.data.licensesOn !== false;
+  $('settings-licenses').onchange = function () {
+    Store.data.licensesOn = this.checked;
+    Store.save(); applyFeatureToggles();
+    toast(this.checked ? 'License wallet is on.' : 'License wallet is off.');
+  };
+  $('btn-features-reset').onclick = function () {
+    Store.data.weatherOn = false; Store.data.voiceOn = true; Store.data.licensesOn = true;
+    Store.save();
+    $('settings-weather').checked = false; $('settings-voice').checked = true; $('settings-licenses').checked = true;
+    applyFeatureToggles();
+    toast('Features reset to defaults.');
+  };
+  applyFeatureToggles();
 }
 
 function gpsPreselect() {
