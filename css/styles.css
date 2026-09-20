@@ -280,3 +280,10 @@ input:focus, select:focus, textarea:focus, button:focus-visible { outline: 2px s
 .about-logo { width: 72px; height: 72px; border-radius: 16px; }
 .checkline { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 16px; }
 .checkline input[type=checkbox] { width: 22px; height: 22px; accent-color: var(--accent); }
+
+/* ---- weather tab ---- */
+.wx-temp { font-size: 32px; font-weight: 800; }
+.wx-cond { margin-top: 4px; font-size: 16px; font-weight: 600; }
+.wx-meta { margin-top: 8px; font-size: 14px; color: var(--muted); line-height: 1.5; }
+.wx-hour { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 9px 0; border-bottom: 1px solid var(--line); font-size: 15px; }
+.wx-hour:last-child { border-bottom: none; }
