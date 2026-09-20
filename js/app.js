@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency.';
-var APP_VERSION = 'beta 0.1 · build 2026-09-20an';
+var APP_VERSION = 'beta 0.1 · build 2026-09-20ao';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -136,7 +136,7 @@ function seedDemoStore() {
     L('l-demo-03', 's-demo-02', 'Opossum', 1, 'released', '2026-11-18', 'Young one — let it walk.'),
     L('l-demo-04', 's-demo-08', 'Red fox', 1, 'released', '2026-11-19', 'Released.'),
     L('l-demo-05', 's-demo-05', 'Beaver', 1, 'kept', '2026-11-20', 'Dam crossing set.'),
-    L('l-demo-06', 's-demo-10', 'Striped skunk', 1, 'kept alive', '2026-11-21', 'For essence collection.')
+    L('l-demo-06', 's-demo-10', 'Striped skunk', 1, 'kept-alive', '2026-11-21', 'For essence collection.')
   ];
   Store.data = {
     onboarded: true, state: 'IA', weatherOn: false, voiceOn: true, licensesOn: true,
