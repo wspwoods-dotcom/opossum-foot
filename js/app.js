@@ -61,7 +61,11 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency.';
-var APP_VERSION = 'beta 0.1 · build 2026-09-20al';
+var APP_VERSION = 'beta 0.1 · build 2026-09-20am';
+/* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
+   screenshots and in-person demos. Never touches existing data. */
+var DEMO = /[?&]demo=1\b/.test(location.search);
+var DEMO_ACTIVE = false;
 
 /* ================= 2. STORAGE ================= */
 var LS_KEY = 'opossumfoot.v1';
@@ -88,10 +92,95 @@ var Store = {
   }
 };
 
+/* ================= 2b. DEMO MODE (?demo=1) =================
+   Seeds fictional data for screenshots / in-person demos. Only runs when the
+   store is completely empty, so it can never overwrite real trap data. */
+function seedDemoStore() {
+  var now = Date.now();
+  function S(id, name, lat, lng, trapType, setType, bait, lure, status, dateSet, notes, extra) {
+    var s = {
+      id: id, name: name, lat: lat, lng: lng, county: 'Prairie County',
+      trapType: trapType, setType: setType, bait: bait, lure: lure,
+      status: status, dateSet: dateSet, notes: notes || '', createdAt: now
+    };
+    if (extra) for (var k in extra) s[k] = extra[k];
+    return s;
+  }
+  var sets = [
+    S('s-demo-01', 'Creek bend', 41.7231, -95.3812, '1.5 coil-spring', 'Dirt hole', 'Sweet corn', 'Raccoon gland lure', 'active', '2026-11-14', 'Good coon sign along the bank.'),
+    S('s-demo-02', 'Fence corner', 41.7187, -95.3744, 'Dog-proof', 'Post set', 'Cat food', '', 'active', '2026-11-14', ''),
+    S('s-demo-03', 'Culvert east', 41.7290, -95.3698, '220 body-grip', 'Trail set', '', 'Beaver castor', 'fresh', '2026-11-20', 'Fresh chew on the north side.'),
+    S('s-demo-04', 'Timber edge', 41.7152, -95.3901, '1.75 coil-spring', 'Flat set', '', 'Canine gland lure', 'active', '2026-11-15', 'Coyote scat on the field road.'),
+    S('s-demo-05', 'Pond dam', 41.7355, -95.3777, '330 body-grip', 'Dam crossover', '', 'Beaver castor', 'sprung', '2026-11-16', 'Sprung empty — reset with fresh castor.'),
+    S('s-demo-06', 'Brush pile', 41.7108, -95.3662, 'Live cage trap', 'Blind set', 'Sardines', '', 'fresh', '2026-11-21', ''),
+    S('s-demo-07', 'Old barn', 41.7266, -95.3945, 'Dog-proof', 'Post set', 'Fish oil', 'Raccoon lure', 'pulled', '2026-11-10', 'Pulled — landowner request.', { datePulled: '2026-11-18' }),
+    S('s-demo-08', 'Ditch crossing', 41.7133, -95.3830, '1.5 coil-spring', 'Trail set', '', 'Red fox urine', 'active', '2026-11-15', ''),
+    S('s-demo-09', 'Walnut grove', 41.7319, -95.3888, 'Snare', 'Trail set', '', '', 'fresh', '2026-11-22', ''),
+    S('s-demo-10', 'Pasture gate', 41.7077, -95.3721, 'Dog-proof', 'Bucket set', 'Honey bun', 'Cherry lure', 'sprung', '2026-11-12', '')
+  ];
+  function L(id, setId, species, count, disposition, date, notes) {
+    var s = null;
+    for (var i = 0; i < sets.length; i++) if (sets[i].id === setId) s = sets[i];
+    return {
+      id: id, setId: setId, setName: s ? s.name : '(deleted set)',
+      species: species, count: count, disposition: disposition, date: date, seasonYear: 2026,
+      bait: s ? s.bait : '', lure: s ? s.lure : '', trapType: s ? s.trapType : '',
+      setType: s ? s.setType : '', county: s ? s.county : '',
+      lat: s ? s.lat : null, lng: s ? s.lng : null,
+      notes: notes || '', createdAt: now
+    };
+  }
+  var logs = [
+    L('l-demo-01', 's-demo-01', 'Raccoon', 2, 'kept', '2026-11-16', 'Big boar, good fur.'),
+    L('l-demo-02', 's-demo-04', 'Coyote', 1, 'kept', '2026-11-17', 'Caught at first light.'),
+    L('l-demo-03', 's-demo-02', 'Opossum', 1, 'released', '2026-11-18', 'Young one — let it walk.'),
+    L('l-demo-04', 's-demo-08', 'Red fox', 1, 'released', '2026-11-19', 'Released.'),
+    L('l-demo-05', 's-demo-05', 'Beaver', 1, 'kept', '2026-11-20', 'Dam crossing set.'),
+    L('l-demo-06', 's-demo-10', 'Striped skunk', 1, 'kept alive', '2026-11-21', 'For essence collection.')
+  ];
+  Store.data = {
+    onboarded: true, state: 'IA', weatherOn: false, voiceOn: true, licensesOn: true,
+    sets: sets, logs: logs
+  };
+  Store.save();
+}
+function demoSilentWav(sec) {
+  var sr = 8000, n = sr * sec, buf = new ArrayBuffer(44 + n * 2), v = new DataView(buf);
+  function ws(o, s) { for (var i = 0; i < s.length; i++) v.setUint8(o + i, s.charCodeAt(i)); }
+  ws(0, 'RIFF'); v.setUint32(4, 36 + n * 2, true); ws(8, 'WAVE'); ws(12, 'fmt ');
+  v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, 1, true);
+  v.setUint32(24, sr, true); v.setUint32(28, sr * 2, true); v.setUint16(32, 2, true);
+  v.setUint16(34, 16, true); ws(36, 'data'); v.setUint32(40, n * 2, true);
+  return new Blob([buf], { type: 'audio/wav' });
+}
+function seedDemoIDB() {
+  var c = document.createElement('canvas'); c.width = 640; c.height = 400;
+  var g = c.getContext('2d');
+  g.fillStyle = '#1d2b1f'; g.fillRect(0, 0, 640, 400);
+  g.strokeStyle = '#c9a227'; g.lineWidth = 10; g.strokeRect(14, 14, 612, 372);
+  g.fillStyle = '#c9a227'; g.font = 'bold 34px sans-serif'; g.textAlign = 'center';
+  g.fillText('SAMPLE — NOT A REAL LICENSE', 320, 70);
+  g.fillStyle = '#f2f2f2'; g.font = '28px sans-serif';
+  g.fillText('Iowa Fur Harvester License', 320, 130);
+  g.fillText('2026-2027 Season', 320, 170);
+  g.font = '24px sans-serif'; g.textAlign = 'left';
+  g.fillText('Name:  JOHN DOE', 60, 240);
+  g.fillText('County:  Prairie (fictional)', 60, 285);
+  g.fillText('Lic #:  SAMPLE-0000', 60, 330);
+  c.toBlob(function (lic) {
+    IDB.put('memos', {
+      id: 'm-demo-01', setId: 's-demo-01', mime: 'audio/wav', blob: demoSilentWav(2),
+      createdAt: Date.now(),
+      transcript: 'Checked the creek bend sets this morning. Both DPs firing, reset the sprung one at the pasture gate.'
+    }).catch(function () { /* noop */ });
+    if (lic) IDB.put('photos', { id: 'p-demo-lic', name: 'sample-license.png', blob: lic, createdAt: Date.now() })
+      .catch(function () { /* noop */ });
+  }, 'image/png');
+}
+
 var IDB = {
   db: null,
-  open: function () {
-    var self = this;
+  open: function () {    var self = this;
     return new Promise(function (resolve) {
       if (!('indexedDB' in window)) { resolve(false); return; }
       var req = indexedDB.open('opossumfoot', 1);
@@ -693,6 +782,12 @@ function initMap() {
   });
   refreshMarkers();
   fitMapToState();
+  if (DEMO_ACTIVE) {
+    /* frame the fictional trapline and blur the tiles for screenshots */
+    map.fitBounds([[41.700, -95.400], [41.740, -95.360]], { padding: [30, 30] });
+    var tp = document.querySelector('.leaflet-tile-pane');
+    if (tp) tp.style.filter = 'blur(7px)';
+  }
 }
 
 function setIcon(set) {
@@ -2249,13 +2344,21 @@ function wireUp() {
 /* ================= 16. BOOT ================= */
 function boot() {
   Store.load();
+  /* demo mode: seed fictional data only on a completely fresh install */
+  if (DEMO && Store.data.sets.length === 0 && Store.data.logs.length === 0) {
+    seedDemoStore();
+    DEMO_ACTIVE = true;
+    document.body.classList.add('demo-shot');
+  }
   buildStateSelect($('onboard-state'), Store.data.state);
   wireUp();
   IDB.open().then(function () {
+    if (DEMO_ACTIVE) seedDemoIDB();
     $('splash-status').textContent = 'Ready.';
     setTimeout(function () {
       if (Store.data.onboarded && Store.data.state && stateData()) enterMain();
       else showView('view-onboard');
+      if (DEMO_ACTIVE) toast('Demo mode — fictional data.');
     }, 700);
   });
   /* service worker: http(s) only — skipped on file:// */
