@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency.';
-var APP_VERSION = 'beta 0.1 · build 2026-09-19r';
+var APP_VERSION = 'beta 0.1 · build 2026-09-19s';
 
 /* ================= 2. STORAGE ================= */
 var LS_KEY = 'opossumfoot.v1';
@@ -695,6 +695,7 @@ function openSetForm(coords, setId) {
   $('sf-name').value = s ? s.name : '';
   $('sf-name').placeholder = s ? '' : 'e.g. Set ' + (Store.data.sets.length + 1);
   $('sf-type').value = s ? s.trapType : 'Foothold';
+  $('sf-settype').value = s ? (s.setType || 'Dirt hole') : 'Dirt hole';
   $('sf-bait').value = s ? (s.bait || '') : '';
   $('sf-lure').value = s ? (s.lure || '') : '';
   $('sf-status').value = s ? s.status : 'active';
@@ -719,6 +720,7 @@ function saveSetForm() {
     if (!s) { closeSheets(); return; }
     s.name = name;
     s.trapType = $('sf-type').value;
+    s.setType = $('sf-settype').value;
     s.bait = $('sf-bait').value.trim();
     s.lure = $('sf-lure').value.trim();
     s.status = $('sf-status').value;
@@ -733,6 +735,7 @@ function saveSetForm() {
       id: uid('s'), name: name,
       lat: pendingCoords.lat, lng: pendingCoords.lng, county: null,
       trapType: $('sf-type').value,
+      setType: $('sf-settype').value,
       bait: $('sf-bait').value.trim(), lure: $('sf-lure').value.trim(),
       status: $('sf-status').value,
       dateSet: $('sf-date').value || todayISO(),
@@ -761,6 +764,7 @@ function openSetDetail(id) {
     (s.county ? '<span class="badge yearround">' + esc(s.county) + ' Co.</span>' : '');
   $('sd-fields').innerHTML =
     '<dt>Trap</dt><dd>' + esc(s.trapType) + '</dd>' +
+    '<dt>Set type</dt><dd>' + esc(s.setType || '—') + '</dd>' +
     '<dt>Bait</dt><dd>' + esc(s.bait || '—') + '</dd>' +
     '<dt>Lure</dt><dd>' + esc(s.lure || '—') + '</dd>' +
     '<dt>Date set</dt><dd>' + esc(fmtDate(s.dateSet)) + '</dd>' +
@@ -808,6 +812,7 @@ function openLogSheet(setId) {
   if (!s) return;
   logSetId = setId; logSpecies = null; logCount = 1; logDisposition = null;
   $('log-setline').innerHTML = '<strong>' + esc(s.name) + '</strong>' +
+    (s.setType ? ' · ' + esc(s.setType) : '') +
     (s.trapType ? ' · ' + esc(s.trapType) : '') +
     ((s.bait || s.lure) ? ' · ' + esc([s.bait, s.lure].filter(Boolean).join(' / ')) : '');
   $('log-count').textContent = '1';
@@ -899,6 +904,7 @@ function saveLog() {
     date: date, seasonYear: seasonYearOf(date),
     bait: s ? (s.bait || '') : '', lure: s ? (s.lure || '') : '',
     trapType: s ? (s.trapType || '') : '',
+    setType: s ? (s.setType || '') : '',
     county: s ? (s.county || '') : '',
     lat: s ? s.lat : null, lng: s ? s.lng : null,
     notes: $('log-notes').value.trim(),
@@ -1241,19 +1247,19 @@ function openLicenseDetail(p) {
 /* ================= 12. CSV EXPORT / ERASE ================= */
 function exportCatches() {
   if (!Store.data.logs.length) { toast('No catches to export yet.'); return; }
-  var rows = [['Date', 'Season', 'Set', 'Species', 'Count', 'Disposition', 'Trap type', 'Bait', 'Lure', 'County', 'Latitude', 'Longitude', 'Notes']];
+  var rows = [['Date', 'Season', 'Set', 'Species', 'Count', 'Disposition', 'Set type', 'Trap type', 'Bait', 'Lure', 'County', 'Latitude', 'Longitude', 'Notes']];
   Store.data.logs.slice().sort(function (a, b) { return a.date < b.date ? -1 : 1; }).forEach(function (l) {
     rows.push([l.date, l.seasonYear || seasonYearOf(l.date), l.setName, l.species, l.count,
-      dispLabel(l.disposition), l.trapType, l.bait, l.lure, l.county, l.lat, l.lng, l.notes]);
+      dispLabel(l.disposition), l.setType, l.trapType, l.bait, l.lure, l.county, l.lat, l.lng, l.notes]);
   });
   downloadCSV('opossum-foot-catches-' + todayISO() + '.csv', rows);
   toast('Catches CSV downloaded.');
 }
 function exportSets() {
   if (!Store.data.sets.length) { toast('No sets to export yet.'); return; }
-  var rows = [['Name', 'Latitude', 'Longitude', 'County', 'Trap type', 'Bait', 'Lure', 'Status', 'Date set', 'Notes']];
+  var rows = [['Name', 'Latitude', 'Longitude', 'County', 'Set type', 'Trap type', 'Bait', 'Lure', 'Status', 'Date set', 'Notes']];
   Store.data.sets.forEach(function (s) {
-    rows.push([s.name, s.lat, s.lng, s.county, s.trapType, s.bait, s.lure, s.status, s.dateSet, s.notes]);
+    rows.push([s.name, s.lat, s.lng, s.county, s.setType, s.trapType, s.bait, s.lure, s.status, s.dateSet, s.notes]);
   });
   downloadCSV('opossum-foot-sets-' + todayISO() + '.csv', rows);
   toast('Sets CSV downloaded.');
