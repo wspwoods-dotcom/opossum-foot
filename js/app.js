@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency.';
-var APP_VERSION = 'beta 0.1 · build 2026-09-20ae';
+var APP_VERSION = 'beta 0.1 · build 2026-09-20af';
 
 /* ================= 2. STORAGE ================= */
 var LS_KEY = 'opossumfoot.v1';
@@ -613,7 +613,8 @@ function renderWeatherTab() {
 function applyFeatureToggles() {
   var vOn = Store.data.voiceOn !== false;
   ['btn-voice-setnotes', 'voice-setnotes-preview', 'btn-voice-lognotes', 'voice-lognotes-preview',
-   'btn-sd-memo', 'sd-memos-head', 'sd-memos'].forEach(function (id) {
+   'btn-sd-memo', 'sd-memos-head', 'sd-memos',
+   'sd-notes-head', 'sd-notes', 'btn-voice-sdnotes', 'voice-sdnotes-preview'].forEach(function (id) {
     var el = $(id);
     if (el) el.style.display = vOn ? '' : 'none';
   });
@@ -973,12 +974,29 @@ function openSetDetail(id) {
     '<dt>Lure</dt><dd>' + esc(s.lure || '—') + '</dd>' +
     '<dt>Date set</dt><dd>' + esc(fmtDate(s.dateSet)) + '</dd>' +
     '<dt>Location</dt><dd>' + s.lat.toFixed(5) + ', ' + s.lng.toFixed(5) + '</dd>' +
-    '<dt>Weather</dt><dd>' + esc(weatherText(s.weather)) + '</dd>' +
-    (s.notes ? '<dt>Notes</dt><dd>' + esc(s.notes) + '</dd>' : '');
+    '<dt>Weather</dt><dd>' + esc(weatherText(s.weather)) + '</dd>';
   renderSetLogs(s);
   renderMemos(s.id);
+  $('sd-notes').value = s.notes || '';
+  $('voice-sdnotes-preview').classList.remove('show');
+  $('voice-sdnotes-preview').innerHTML = '';
   $('btn-sd-memo').innerHTML = '🎤 Record memo';
   openSheet('sheet-setdetail');
+}
+
+/* set-detail notes: textarea edits and voice/memo transcripts land in s.notes */
+function saveDetailNotes() {
+  var s = getSet(detailSetId);
+  if (!s) return;
+  s.notes = $('sd-notes').value.trim();
+  Store.save();
+}
+function appendTranscriptToSetNotes(setId, tr) {
+  var s = getSet(setId);
+  if (!s || !tr) return;
+  s.notes = (s.notes ? s.notes.replace(/\s+$/, '') + ' ' : '') + tr;
+  Store.save();
+  if (setId === detailSetId && $('sd-notes')) $('sd-notes').value = s.notes;
 }
 
 function renderSetLogs(s) {
@@ -1211,13 +1229,15 @@ var Memo = {
         stream.getTracks().forEach(function (t) { t.stop(); });
         var blob = new Blob(self.chunks, { type: self._mime || 'audio/mp4' });
         if (!blob.size) { toast('Empty recording — nothing saved.'); return; }
+        var memoTranscript = (self._transcript || '').trim();
         IDB.put('memos', {
           id: uid('m'), setId: self.targetSetId, mime: blob.type,
           blob: blob, createdAt: Date.now(),
-          transcript: (self._transcript || '').trim()
+          transcript: memoTranscript
         }).then(function () {
+          appendTranscriptToSetNotes(self.targetSetId, memoTranscript);
           renderMemos(self.targetSetId);
-          toast('Voice memo saved.');
+          toast(memoTranscript ? 'Voice memo saved — transcript added to notes.' : 'Voice memo saved.');
         }).catch(function () { toast('Could not save the memo.'); });
       };
       rec.start();
@@ -1875,6 +1895,14 @@ function wireUp() {
   $('btn-sd-edit').onclick = function () { openSetForm(null, detailSetId); };
   $('btn-sd-delete').onclick = function () { deleteSet(detailSetId); };
   $('btn-sd-memo').onclick = function () { Memo.toggle(detailSetId, $('btn-sd-memo')); };
+  $('sd-notes').onchange = saveDetailNotes;
+  $('btn-voice-sdnotes').onclick = function () {
+    var ta = $('sd-notes');
+    Voice.start($('voice-sdnotes-preview'), function (t) {
+      ta.value = (ta.value ? ta.value.replace(/\s+$/, '') + ' ' : '') + t;
+      saveDetailNotes();
+    });
+  };
 
   /* log sheet */
   $('log-species-search').oninput = function () { renderSpeciesList(this.value); };
