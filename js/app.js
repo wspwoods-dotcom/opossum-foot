@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency.';
-var APP_VERSION = 'beta 0.1 · build 2026-09-20am';
+var APP_VERSION = 'beta 0.1 · build 2026-09-20an';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -107,23 +107,23 @@ function seedDemoStore() {
     return s;
   }
   var sets = [
-    S('s-demo-01', 'Creek bend', 41.7231, -95.3812, '1.5 coil-spring', 'Dirt hole', 'Sweet corn', 'Raccoon gland lure', 'active', '2026-11-14', 'Good coon sign along the bank.'),
-    S('s-demo-02', 'Fence corner', 41.7187, -95.3744, 'Dog-proof', 'Post set', 'Cat food', '', 'active', '2026-11-14', ''),
-    S('s-demo-03', 'Culvert east', 41.7290, -95.3698, '220 body-grip', 'Trail set', '', 'Beaver castor', 'fresh', '2026-11-20', 'Fresh chew on the north side.'),
-    S('s-demo-04', 'Timber edge', 41.7152, -95.3901, '1.75 coil-spring', 'Flat set', '', 'Canine gland lure', 'active', '2026-11-15', 'Coyote scat on the field road.'),
-    S('s-demo-05', 'Pond dam', 41.7355, -95.3777, '330 body-grip', 'Dam crossover', '', 'Beaver castor', 'sprung', '2026-11-16', 'Sprung empty — reset with fresh castor.'),
-    S('s-demo-06', 'Brush pile', 41.7108, -95.3662, 'Live cage trap', 'Blind set', 'Sardines', '', 'fresh', '2026-11-21', ''),
-    S('s-demo-07', 'Old barn', 41.7266, -95.3945, 'Dog-proof', 'Post set', 'Fish oil', 'Raccoon lure', 'pulled', '2026-11-10', 'Pulled — landowner request.', { datePulled: '2026-11-18' }),
-    S('s-demo-08', 'Ditch crossing', 41.7133, -95.3830, '1.5 coil-spring', 'Trail set', '', 'Red fox urine', 'active', '2026-11-15', ''),
-    S('s-demo-09', 'Walnut grove', 41.7319, -95.3888, 'Snare', 'Trail set', '', '', 'fresh', '2026-11-22', ''),
-    S('s-demo-10', 'Pasture gate', 41.7077, -95.3721, 'Dog-proof', 'Bucket set', 'Honey bun', 'Cherry lure', 'sprung', '2026-11-12', '')
+    S('s-demo-01', 'Creek bend', 41.8800, -95.1500, '1.5 coil-spring', 'Dirt hole', 'Sweet corn', 'Raccoon gland lure', 'active', '2026-11-14', 'Good coon sign along the bank.'),
+    S('s-demo-02', 'Fence corner', 41.8200, -95.3200, 'Dog-proof', 'Post set', 'Cat food', '', 'active', '2026-11-14', ''),
+    S('s-demo-03', 'Culvert east', 41.7500, -95.1200, '220 body-grip', 'Trail set', '', 'Beaver castor', 'fresh', '2026-11-20', 'Fresh chew on the north side.'),
+    S('s-demo-04', 'Timber edge', 41.6800, -95.4800, '1.75 coil-spring', 'Flat set', '', 'Canine gland lure', 'active', '2026-11-15', 'Coyote scat on the field road.'),
+    S('s-demo-05', 'Pond dam', 41.9100, -95.4000, '330 body-grip', 'Dam crossover', '', 'Beaver castor', 'sprung', '2026-11-16', 'Sprung empty — reset with fresh castor.'),
+    S('s-demo-06', 'Brush pile', 41.6200, -95.2500, 'Live cage trap', 'Blind set', 'Sardines', '', 'fresh', '2026-11-21', ''),
+    S('s-demo-07', 'Old barn', 41.7300, -95.5200, 'Dog-proof', 'Post set', 'Fish oil', 'Raccoon lure', 'pulled', '2026-11-10', 'Pulled — landowner request.', { datePulled: '2026-11-18' }),
+    S('s-demo-08', 'Ditch crossing', 41.6600, -95.3300, '1.5 coil-spring', 'Trail set', '', 'Red fox urine', 'active', '2026-11-15', ''),
+    S('s-demo-09', 'Walnut grove', 41.8400, -95.4700, 'Snare', 'Trail set', '', '', 'fresh', '2026-11-22', ''),
+    S('s-demo-10', 'Pasture gate', 41.6000, -95.1800, 'Dog-proof', 'Bucket set', 'Honey bun', 'Cherry lure', 'sprung', '2026-11-12', '')
   ];
   function L(id, setId, species, count, disposition, date, notes) {
     var s = null;
     for (var i = 0; i < sets.length; i++) if (sets[i].id === setId) s = sets[i];
     return {
       id: id, setId: setId, setName: s ? s.name : '(deleted set)',
-      species: species, count: count, disposition: disposition, date: date, seasonYear: 2026,
+      species: species, count: count, disposition: disposition, date: date, seasonYear: '2026-27',
       bait: s ? s.bait : '', lure: s ? s.lure : '', trapType: s ? s.trapType : '',
       setType: s ? s.setType : '', county: s ? s.county : '',
       lat: s ? s.lat : null, lng: s ? s.lng : null,
