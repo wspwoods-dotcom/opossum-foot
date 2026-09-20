@@ -86,19 +86,23 @@ self.addEventListener('fetch', function (event) {
     return;
   }
 
-  /* app shell + embedded data: cache-first, network fallback */
+  /* app shell: network-first, cache fallback.
+   * Online loads always fetch the newest code; the cache is only a fallback
+   * for offline use. This ends stale-code lock-in: no more manual cache bumps. */
   if (url.indexOf(self.location.origin) === 0 || url.indexOf('file:') === 0) {
     event.respondWith(
-      caches.match(req).then(function (hit) {
-        return hit || fetch(req).then(function (res) {
-          if (res && res.ok) {
-            var copy = res.clone();
-            caches.open(SHELL_CACHE).then(function (cache) { cache.put(req, copy); });
-          }
-          return res;
-        }).catch(function () {
+      fetch(req).then(function (res) {
+        if (res && res.ok) {
+          var copy = res.clone();
+          caches.open(SHELL_CACHE).then(function (cache) { cache.put(req, copy); });
+        }
+        return res;
+      }).catch(function () {
+        return caches.match(req).then(function (hit) {
+          if (hit) return hit;
           /* offline and not cached: serve the app shell for navigations */
           if (req.mode === 'navigate') return caches.match('./index.html');
+          throw new Error('offline and not cached: ' + url);
         });
       })
     );
