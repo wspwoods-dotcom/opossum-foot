@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency.';
-var APP_VERSION = 'beta 0.1 · build 2026-09-20y';
+var APP_VERSION = 'beta 0.1 · build 2026-09-20z';
 
 /* ================= 2. STORAGE ================= */
 var LS_KEY = 'opossumfoot.v1';
@@ -1271,27 +1271,119 @@ function renderMemos(setId) {
 }
 
 /* ================= 10. HISTORY / TOTALS / SEASONS ================= */
+var histUI = { q: '', disp: 'all', sp: 'all', collapsed: {}, expanded: {}, defaultsSet: false };
+var DOWS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+var MONS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+function dayLabel(iso) {
+  var p = (iso || '').split('-');
+  if (p.length !== 3) return iso || '';
+  var d = new Date(p[0] * 1, p[1] * 1 - 1, p[2] * 1);
+  return DOWS[d.getDay()] + ', ' + MONS[d.getMonth()] + ' ' + (p[2] * 1);
+}
+function dispOf(l) { return l.disposition || 'kept'; }
+
+function renderHistChips(logs) {
+  var dc = $('hist-disp-chips');
+  var defs = [['all', 'All'], ['kept', 'Kept'], ['kept-alive', 'Kept alive'], ['released', 'Released']];
+  dc.innerHTML = defs.map(function (d) {
+    return '<button type="button" class="chip' + (histUI.disp === d[0] ? ' on' : '') + '" data-disp="' + d[0] + '">' + d[1] + '</button>';
+  }).join('');
+  var sc = $('hist-species-chips');
+  var seen = {};
+  logs.forEach(function (l) { if (l.species) seen[l.species] = true; });
+  var sps = Object.keys(seen).sort();
+  var html = '<button type="button" class="chip' + (histUI.sp === 'all' ? ' on' : '') + '" data-sp="all">All species</button>';
+  sps.forEach(function (s) {
+    html += '<button type="button" class="chip' + (histUI.sp === s ? ' on' : '') + '" data-sp="' + esc(s) + '">' + esc(s) + '</button>';
+  });
+  sc.innerHTML = html;
+}
+
+function renderHistSummary(logs) {
+  var el = $('hist-summary');
+  if (!logs.length) { el.innerHTML = ''; return; }
+  var years = {};
+  logs.forEach(function (l) { years[l.seasonYear || seasonYearOf(l.date)] = true; });
+  var sy = Object.keys(years).sort().reverse()[0];
+  var catches = 0, released = 0, sps = {};
+  logs.forEach(function (l) {
+    if ((l.seasonYear || seasonYearOf(l.date)) !== sy) return;
+    var c = l.count * 1 || 0;
+    catches += c;
+    if (dispOf(l) === 'released') released += c;
+    if (l.species) sps[l.species] = true;
+  });
+  el.innerHTML = '<strong>Season ' + esc(sy) + '</strong><span class="dim"> · ' + catches +
+    ' catch' + (catches === 1 ? '' : 'es') + ' · ' + Object.keys(sps).length +
+    ' species · ' + released + ' released</span>';
+}
+
 function renderHistory() {
   var box = $('history-list');
   var logs = Store.data.logs.slice().sort(function (a, b) {
     if (a.date !== b.date) return a.date < b.date ? 1 : -1;
     return b.createdAt - a.createdAt;
   });
+  renderHistChips(logs);
+  renderHistSummary(logs);
   if (!logs.length) {
     box.innerHTML = '<div class="empty"><div class="big">📒</div>No catches logged yet.<br>Tap a set pin on the map to log your first catch.</div>';
     return;
   }
-  var html = '', lastSY = null;
-  logs.forEach(function (l) {
+  var f = histUI, q = f.q.toLowerCase();
+  var list = logs.filter(function (l) {
+    if (f.disp !== 'all' && dispOf(l) !== f.disp) return false;
+    if (f.sp !== 'all' && l.species !== f.sp) return false;
+    if (q) {
+      var hay = ((l.species || '') + ' ' + (l.setName || '') + ' ' + (l.notes || '')).toLowerCase();
+      if (hay.indexOf(q) === -1) return false;
+    }
+    return true;
+  });
+  if (!list.length) {
+    box.innerHTML = '<div class="empty"><div class="big">🔍</div>No catches match those filters.</div>';
+    return;
+  }
+  /* Default-collapse day groups older than 7 days (once per session). */
+  if (!f.defaultsSet) {
+    var cutoff = new Date(); cutoff.setDate(cutoff.getDate() - 7);
+    var seenDays = {};
+    list.forEach(function (l) {
+      if (!l.date || seenDays[l.date]) return; seenDays[l.date] = true;
+      var p = l.date.split('-');
+      if (new Date(p[0] * 1, p[1] * 1 - 1, p[2] * 1) < cutoff) f.collapsed[l.date] = true;
+    });
+    f.defaultsSet = true;
+  }
+  var html = '', lastSY = null, curDay = null;
+  list.forEach(function (l) {
     var sy = l.seasonYear || seasonYearOf(l.date);
-    if (sy !== lastSY) { html += '<div class="season-group-head">Season ' + esc(sy) + '</div>'; lastSY = sy; }
-    html += '<div class="log-row"><div class="lr-top"><span class="lr-species">' + esc(l.species) +
+    if (sy !== lastSY) {
+      if (curDay !== null) { html += '</div>'; curDay = null; }
+      html += '<div class="season-group-head">Season ' + esc(sy) + '</div>';
+      lastSY = sy;
+    }
+    if (l.date !== curDay) {
+      if (curDay !== null) html += '</div>';
+      var dayCatches = 0;
+      list.forEach(function (m) { if (m.date === l.date && (m.seasonYear || seasonYearOf(m.date)) === sy) dayCatches += (m.count * 1 || 0); });
+      var shut = !!f.collapsed[l.date];
+      html += '<div class="day-group"><button type="button" class="day-head" data-day="' + esc(l.date) + '">' +
+        esc(dayLabel(l.date)) + ' <span class="dim">· ' + dayCatches + ' catch' + (dayCatches === 1 ? '' : 'es') + '</span>' +
+        '<span class="chev">' + (shut ? '▸' : '▾') + '</span></button>' +
+        '<div class="day-body"' + (shut ? ' hidden' : '') + '>';
+      curDay = l.date;
+    }
+    var expanded = !!f.expanded[l.createdAt];
+    html += '<div class="log-row' + (expanded ? ' expanded' : '') + '" data-log="' + l.createdAt + '">' +
+      '<div class="lr-top"><span class="lr-species">' + esc(l.species) +
       '</span><span class="lr-count">×' + esc(l.count) + '</span>' +
       dispBadge(l.disposition) + '</div>' +
-      '<div class="dim">' + esc(fmtDate(l.date)) + ' · ' + esc(l.setName || '') +
-      ((l.bait || l.lure) ? ' · ' + esc([l.bait, l.lure].filter(Boolean).join(' / ')) : '') +
-      (l.notes ? '<br>' + esc(l.notes) : '') + '</div></div>';
+      '<div class="dim">' + esc(l.setName || '') +
+      ((l.bait || l.lure) ? ' · ' + esc([l.bait, l.lure].filter(Boolean).join(' / ')) : '') + '</div>' +
+      (l.notes ? '<div class="lr-notes">' + esc(l.notes) + '</div>' : '') + '</div>';
   });
+  if (curDay !== null) html += '</div>';
   box.innerHTML = html;
 }
 
@@ -1658,6 +1750,31 @@ function wireUp() {
 
   /* seasons search */
   $('seasons-search').oninput = function () { renderSeasons(this.value); };
+
+  /* history filters */
+  $('history-search').oninput = function () { histUI.q = this.value; renderHistory(); };
+  $('pane-history').addEventListener('click', function (e) {
+    var chip = e.target.closest ? e.target.closest('.chip') : null;
+    if (chip) {
+      if (chip.hasAttribute('data-disp')) histUI.disp = chip.getAttribute('data-disp');
+      if (chip.hasAttribute('data-sp')) histUI.sp = chip.getAttribute('data-sp');
+      renderHistory();
+      return;
+    }
+    var dh = e.target.closest ? e.target.closest('.day-head') : null;
+    if (dh) {
+      var d = dh.getAttribute('data-day');
+      histUI.collapsed[d] = !histUI.collapsed[d];
+      renderHistory();
+      return;
+    }
+    var row = e.target.closest ? e.target.closest('.log-row') : null;
+    if (row && row.getAttribute('data-log')) {
+      var k = row.getAttribute('data-log');
+      histUI.expanded[k] = !histUI.expanded[k];
+      row.classList.toggle('expanded', !!histUI.expanded[k]);
+    }
+  });
 
   /* licenses */
   $('btn-add-license').onclick = function () { $('license-input').click(); };
