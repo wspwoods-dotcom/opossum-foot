@@ -97,6 +97,21 @@
     </div>
   </div>
 
+  <!-- WEATHER PANE -->
+  <div id="pane-weather" class="pane">
+    <div class="pane-head"><h2>Weather</h2><p id="weather-loc">Current conditions where you are.</p></div>
+    <div class="scroll">
+      <div class="card" id="weather-now"><p class="dim">Loading…</p></div>
+      <h3 style="margin:4px 0 6px">Next 12 hours</h3>
+      <div class="card" id="weather-hourly" style="padding:6px 14px"></div>
+      <div class="btn-row">
+        <button class="btn-secondary" id="btn-weather-refresh" type="button">↻ Refresh</button>
+      </div>
+      <p class="dim" id="weather-updated" style="margin-top:8px"></p>
+      <p class="dim">Location is sent to Open-Meteo, a free weather service, each time this tab loads. Coordinates are rounded; nothing is stored by them.</p>
+    </div>
+  </div>
+
   <!-- SETTINGS PANE -->
   <div id="pane-settings" class="pane">
     <div class="pane-head"><h2>Settings</h2><p>Opossum Foot beta.</p></div>
@@ -109,8 +124,8 @@
       </div>
       <div class="card">
         <h3>Features</h3>
-        <label class="checkline"><input type="checkbox" id="settings-weather"> Auto-record weather</label>
-        <p class="dim" style="margin:6px 0 12px">Looks up the current temperature, wind, and precipitation for each set location and attaches it to new sets and catches. Sends the set's coordinates to Open-Meteo, a free weather service — the one exception to "nothing leaves your phone." Needs a data connection; nothing is recorded when you're offline.</p>
+        <label class="checkline"><input type="checkbox" id="settings-weather"> Weather (tab + auto-record)</label>
+        <p class="dim" style="margin:6px 0 12px">Shows a Weather tab with current conditions and the next 12 hours, and attaches weather to new sets and catches. Sends the set's coordinates to Open-Meteo, a free weather service — the one exception to "nothing leaves your phone." Needs a data connection; nothing is recorded when you're offline.</p>
         <label class="checkline"><input type="checkbox" id="settings-voice"> Voice entry &amp; memos</label>
         <p class="dim" style="margin:6px 0 12px">Dictate notes and record voice memos on your sets.</p>
         <label class="checkline"><input type="checkbox" id="settings-licenses"> License wallet</label>
@@ -151,6 +166,7 @@
     <button type="button" data-tab="totals"><img class="ti-img" src="assets/icons/barchart.png" alt="">Totals</button>
     <button type="button" data-tab="seasons"><img class="ti-img" src="assets/species/opossum.png" alt="">Seasons</button>
     <button type="button" data-tab="licenses"><img class="ti-img" src="assets/icons/idcard.png" alt="">Licenses</button>
+    <button type="button" data-tab="weather"><span class="ti">🌤️</span>Weather</button>
     <button type="button" data-tab="settings"><img class="ti-img" src="assets/icons/gear.png" alt="">Settings</button>
   </nav>
 </div>
