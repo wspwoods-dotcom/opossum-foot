@@ -95,13 +95,13 @@ input:focus, select:focus, textarea:focus, button:focus-visible { outline: 2px s
   border-top: 1px solid var(--line);
   padding-bottom: env(safe-area-inset-bottom);
 }
-
 #tabbar button {
   flex: 1 1 0; min-width: 0; background: none; border: none; border-radius: 0;
   color: var(--muted); font-size: 10px; font-weight: 600; text-align: center;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   gap: 2px; min-height: 0; padding: 8px 2px;
-}#tabbar button .ti { font-size: 22px; line-height: 1; }
+}
+#tabbar button .ti { font-size: 22px; line-height: 1; }
 #tabbar button.active { color: var(--accent); }
 
 /* ---------- county banner (LOUD) ---------- */
@@ -250,9 +250,11 @@ input:focus, select:focus, textarea:focus, button:focus-visible { outline: 2px s
 .lic-link { position: absolute; left: 6px; bottom: 6px; background: rgba(0,0,0,.65); color: #fff; border-radius: 20px; padding: 4px 10px; font-size: 12px; pointer-events: none; }
 
 /* ---------- memos / audio ---------- */
-.memo-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--line); }
+.memo-card { padding: 8px 0; border-bottom: 1px solid var(--line); }
+.memo-row { display: flex; align-items: center; gap: 10px; }
 .memo-row audio { flex: 1; min-width: 0; height: 40px; }
 .memo-row .dim { white-space: nowrap; }
+.memo-transcript { margin: 6px 0 0; font-size: 14px; line-height: 1.45; }
 .rec-indicator { display: inline-block; width: 12px; height: 12px; border-radius: 50%; background: var(--red); margin-right: 8px; animation: blink 1s infinite; }
 @keyframes blink { 50% { opacity: .25; } }
 
@@ -282,6 +284,8 @@ input:focus, select:focus, textarea:focus, button:focus-visible { outline: 2px s
 /* ---- history filters ---- */
 .hist-summary { font-size: 15px; margin: 4px 0 10px; }
 #history-search { margin-bottom: 8px; }
+.seg.compact { margin: 2px 0 10px; }
+.seg.compact button { padding: 8px; font-size: 14px; }
 .chip-row { display: flex; gap: 6px; overflow-x: auto; padding: 2px 0 8px; -webkit-overflow-scrolling: touch; }
 .chip-row::-webkit-scrollbar { display: none; }
 .chip { flex: 0 0 auto; font-size: 13px; font-weight: 600; padding: 6px 12px; border-radius: 999px;
@@ -294,6 +298,16 @@ input:focus, select:focus, textarea:focus, button:focus-visible { outline: 2px s
 .lr-notes { font-size: 14px; color: var(--muted); margin-top: 4px;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .log-row.expanded .lr-notes { white-space: normal; }
+.sp-group { border: 1px solid var(--line); border-radius: 12px; margin-bottom: 8px; overflow: hidden; }
+.sp-head { display: flex; align-items: center; gap: 8px; width: 100%; text-align: left;
+  background: var(--panel); border: none; border-radius: 0; color: var(--text);
+  padding: 12px; min-height: 0; cursor: pointer; }
+.sp-name { font-weight: 700; font-size: 16px; }
+.sp-total { font-weight: 800; color: var(--accent); font-size: 17px; margin-left: auto; }
+.sp-head .chev { color: var(--muted); }
+.sp-sub { padding: 0 12px 10px; }
+.sp-body { border-top: 1px solid var(--line); padding: 0 12px; }
+.sp-body .log-row:last-child { border-bottom: none; }
 .about-logo { width: 72px; height: 72px; border-radius: 16px; }
 .checkline { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 16px; }
 .checkline input[type=checkbox] { width: 22px; height: 22px; accent-color: var(--accent); }
@@ -304,3 +318,14 @@ input:focus, select:focus, textarea:focus, button:focus-visible { outline: 2px s
 .wx-meta { margin-top: 8px; font-size: 14px; color: var(--muted); line-height: 1.5; }
 .wx-hour { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 9px 0; border-bottom: 1px solid var(--line); font-size: 15px; }
 .wx-hour:last-child { border-bottom: none; }
+
+/* ---- centered page furniture (all tabs) ---- */
+.pane-head { text-align: center; }
+.hist-summary { text-align: center; }
+.chip-row { justify-content: safe center; }
+.card h3 { text-align: center; }
+.season-group-head { text-align: center; }
+.warnbox { text-align: center; }
+#pane-licenses .scroll > p.dim { text-align: center; }
+#pane-weather .scroll > h3, #pane-weather .scroll > p.dim { text-align: center; }
+#pane-weather #weather-now { text-align: center; }
