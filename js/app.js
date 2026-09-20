@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency.';
-var APP_VERSION = 'beta 0.1 · build 2026-09-19p';
+var APP_VERSION = 'beta 0.1 · build 2026-09-19q';
 
 /* ================= 2. STORAGE ================= */
 var LS_KEY = 'opossumfoot.v1';
@@ -244,6 +244,32 @@ function stateData() {
 function stateEntry(code) {
   for (var i = 0; i < STATES.length; i++) if (STATES[i].code === code) return STATES[i];
   return null;
+}
+
+/* Species silhouette icons (assets/species/<slug>.png). Keyed by common_name
+ * so any state sharing the name gets the icon; unknown names render no icon. */
+var SPECIES_ICONS = {
+  'American badger': 'badger',
+  'Virginia opossum': 'opossum',
+  'Striped skunk': 'striped-skunk',
+  'Red fox': 'red-fox',
+  'Gray fox': 'gray-fox',
+  'American mink': 'mink',
+  'Muskrat': 'muskrat',
+  'Weasel': 'weasel',
+  'Groundhog (woodchuck)': 'groundhog',
+  'Raccoon': 'raccoon',
+  'American beaver': 'beaver',
+  'Coyote': 'coyote',
+  'Gray (timber) wolf': 'wolf',
+  'Spotted skunk (civet cat)': 'spotted-skunk',
+  'North American river otter': 'otter',
+  'Bobcat': 'bobcat'
+};
+function speciesIcon(name, cls) {
+  var slug = SPECIES_ICONS[name];
+  if (!slug) return '';
+  return '<img class="' + (cls || 'sp-icon') + '" src="assets/species/' + slug + '.png" alt="" onerror="this.style.display=\'none\'">';
 }
 function parseISODate(s) {
   var p = s.split('-');
@@ -810,7 +836,7 @@ function renderSpeciesList(filter) {
   box.innerHTML = list.map(function (sp) {
     var info = speciesSeasonInfo(sp);
     return '<button type="button" class="species-row' + (logSpecies === sp.common_name ? ' selected' : '') +
-      '" data-sp="' + esc(sp.common_name) + '">' +
+      '" data-sp="' + esc(sp.common_name) + '">' + speciesIcon(sp.common_name) +
       '<span class="sp-name">' + esc(sp.common_name) +
       (sp.scientific_name ? '<span class="sci">' + esc(sp.scientific_name) + '</span>' : '') + '</span>' +
       '<span class="badge ' + info.badgeClass + '">' + info.badge + '</span></button>';
@@ -1105,7 +1131,7 @@ function renderSeasons(filter) {
   });
   $('seasons-list').innerHTML = list.map(function (sp) {
     var info = speciesSeasonInfo(sp);
-    return '<button type="button" class="species-row" data-sp="' + esc(sp.common_name) + '">' +
+    return '<button type="button" class="species-row" data-sp="' + esc(sp.common_name) + '">' + speciesIcon(sp.common_name) +
       '<span class="sp-name">' + esc(sp.common_name) +
       (sp.scientific_name ? '<span class="sci">' + esc(sp.scientific_name) + '</span>' : '') + '</span>' +
       '<span class="badge ' + info.badgeClass + '">' + info.badge + '</span></button>';
@@ -1121,7 +1147,7 @@ function showSpeciesDetail(name) {
   if (!sp) return;
   var info = speciesSeasonInfo(sp);
   var d = stateData();
-  var html = '<h3>' + esc(sp.common_name) + '</h3>';
+  var html = '<div style="display:flex;align-items:center;gap:12px">' + speciesIcon(name, 'sp-icon-lg') + '<h3 style="margin:0">' + esc(sp.common_name) + '</h3></div>';
   if (sp.scientific_name) html += '<p class="dim" style="font-style:italic;margin-top:-8px">' + esc(sp.scientific_name) + '</p>';
   html += '<p><span class="badge ' + info.badgeClass + '">' + info.badge + '</span></p>';
   (sp.seasons || []).forEach(function (s) {
