@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency.';
-var APP_VERSION = 'beta 0.1 · build 2026-09-20af';
+var APP_VERSION = 'beta 0.1 · build 2026-09-20ag';
 
 /* ================= 2. STORAGE ================= */
 var LS_KEY = 'opossumfoot.v1';
@@ -704,6 +704,7 @@ function setIcon(set) {
 }
 
 function refreshMarkers() {
+  updateCheckBanner();
   if (!map || !markersLayer) return;
   markersLayer.clearLayers();
   Store.data.sets.forEach(function (s) {
@@ -925,6 +926,8 @@ function saveSetForm() {
     s.status = $('sf-status').value;
     s.dateSet = $('sf-date').value || todayISO();
     s.notes = $('sf-notes').value.trim();
+    if (s.status === 'pulled' && !s.datePulled) s.datePulled = todayISO();
+    if (s.status !== 'pulled' && s.datePulled) delete s.datePulled;
     Store.save(); refreshMarkers();
     closeSheets(); openSetDetail(s.id);
     toast('Set updated.');
@@ -939,8 +942,9 @@ function saveSetForm() {
       status: $('sf-status').value,
       dateSet: $('sf-date').value || todayISO(),
       notes: $('sf-notes').value.trim(),
-      createdAt: Date.now()
+      createdAt: Date.now(), lastChecked: Date.now()
     };
+    if (ns.status === 'pulled') ns.datePulled = ns.dateSet;
     Store.data.sets.push(ns);
     Store.save(); refreshMarkers(); closeSheets();
     toast('Set saved.');
@@ -975,7 +979,11 @@ function openSetDetail(id) {
     '<dt>Date set</dt><dd>' + esc(fmtDate(s.dateSet)) + '</dd>' +
     '<dt>Location</dt><dd>' + s.lat.toFixed(5) + ', ' + s.lng.toFixed(5) + '</dd>' +
     '<dt>Weather</dt><dd>' + esc(weatherText(s.weather)) + '</dd>';
-  renderSetLogs(s);
+  renderCheckSection(s);
+  loadSetPhotos(s.id, function (setPhotos, byLog) {
+    renderSetPhotos(setPhotos);
+    renderSetLogs(s, byLog);
+  });
   renderMemos(s.id);
   $('sd-notes').value = s.notes || '';
   $('voice-sdnotes-preview').classList.remove('show');
@@ -999,16 +1007,30 @@ function appendTranscriptToSetNotes(setId, tr) {
   if (setId === detailSetId && $('sd-notes')) $('sd-notes').value = s.notes;
 }
 
-function renderSetLogs(s) {
+function renderSetLogs(s, byLog) {
   var logs = Store.data.logs.filter(function (l) { return l.setId === s.id; })
     .sort(function (a, b) { return b.date < a.date ? -1 : 1; });
   if (!logs.length) { $('sd-logs').innerHTML = '<p class="dim">No catches logged at this set yet.</p>'; return; }
   $('sd-logs').innerHTML = logs.map(function (l) {
+    var ph = ((byLog && byLog[l.id]) || []).map(function (p) {
+      return '<img class="photo-thumb sm" data-ph="' + p.id + '" src="' + photoURL(p) + '" alt="Catch photo">';
+    }).join('');
     return '<div class="log-row"><div class="lr-top"><span class="lr-species">' + esc(l.species) +
       '</span><span class="lr-count">×' + esc(l.count) + '</span>' +
       dispBadge(l.disposition) + '</div>' +
-      '<div class="dim">' + esc(fmtDate(l.date)) + (l.notes ? ' · ' + esc(l.notes) : '') + '</div></div>';
+      '<div class="dim">' + esc(fmtDate(l.date)) + (l.notes ? ' · ' + esc(l.notes) : '') + '</div>' +
+      (l.weather ? '<div class="dim">🌤 ' + esc(weatherText(l.weather)) + '</div>' : '') +
+      (ph ? '<div class="log-photos">' + ph + '</div>' : '') + '</div>';
   }).join('');
+  var imgs = $('sd-logs').querySelectorAll('img[data-ph]');
+  for (var i = 0; i < imgs.length; i++) {
+    imgs[i].onclick = function () {
+      var p = photoById[this.getAttribute('data-ph')];
+      if (p) openPhotoViewer(p, function () {
+        loadSetPhotos(detailSetId, function (sp, bl) { renderSetPhotos(sp); renderSetLogs(getSet(detailSetId), bl); });
+      });
+    };
+  }
 }
 
 function deleteSet(id) {
@@ -1022,18 +1044,22 @@ function deleteSet(id) {
     'Delete', function () {
       Store.data.sets = Store.data.sets.filter(function (x) { return x.id !== id; });
       Store.data.logs.forEach(function (l) { if (l.setId === id) l.setDeleted = true; });
+      IDB.all('photos').then(function (all) {
+        all.forEach(function (p) { if (p.setId === id) IDB.del('photos', p.id); });
+      }).catch(function () { /* noop */ });
       Store.save(); refreshMarkers(); closeSheets();
       toast('Set deleted.');
     });
 }
 
 /* ================= 8. CATCH LOGGING ================= */
-var logSetId = null, logSpecies = null, logCount = 1, logDisposition = null;
+var logSetId = null, logSpecies = null, logCount = 1, logDisposition = null, pendingLogPhotos = [];
 
 function openLogSheet(setId) {
   var s = getSet(setId);
   if (!s) return;
-  logSetId = setId; logSpecies = null; logCount = 1; logDisposition = null;
+  logSetId = setId; logSpecies = null; logCount = 1; logDisposition = null; pendingLogPhotos = [];
+  renderPendingLogPhotos();
   $('log-setline').innerHTML = '<strong>' + esc(s.name) + '</strong>' +
     (s.setType ? ' · ' + esc(s.setType) : '') +
     (s.trapType ? ' · ' + esc(s.trapType) : '') +
@@ -1051,6 +1077,25 @@ function openLogSheet(setId) {
   openSheet('sheet-log');
 }
 
+function renderPendingLogPhotos() {
+  var box = $('log-photos');
+  if (!box) return;
+  box.innerHTML = '';
+  pendingLogPhotos.forEach(function (ph, i) {
+    var img = document.createElement('img');
+    img.className = 'photo-thumb'; img.alt = 'Catch photo';
+    img.src = URL.createObjectURL(ph.blob);
+    img.title = 'Tap to remove';
+    img.onclick = (function (idx, url) {
+      return function () {
+        URL.revokeObjectURL(url);
+        pendingLogPhotos.splice(idx, 1);
+        renderPendingLogPhotos();
+      };
+    })(i, img.src);
+    box.appendChild(img);
+  });
+}
 function renderSpeciesList(filter) {
   var d = stateData();
   var box = $('log-species-list');
@@ -1134,7 +1179,16 @@ function saveLog() {
     createdAt: Date.now()
   };
   Store.data.logs.push(log);
+  if (s) s.lastChecked = Date.now(); /* logging a catch counts as checking the set */
   Store.save();
+  pendingLogPhotos.forEach(function (ph) {
+    IDB.put('photos', {
+      id: uid('p'), setId: log.setId, logId: log.id, blob: ph.blob,
+      mime: ph.blob.type || 'image/jpeg',
+      lat: s ? s.lat : null, lng: s ? s.lng : null, createdAt: Date.now()
+    }).catch(function () { /* noop */ });
+  });
+  pendingLogPhotos = [];
   closeSheets();
   renderHistory(); renderTotals();
   toast('Logged ' + log.count + ' ' + logSpecies + ' (' + dispLabel(logDisposition) + ')' + (s ? ' at ' + s.name : '') + '.');
@@ -1202,6 +1256,178 @@ var Voice = {
     try { if (this.rec) this.rec.stop(); } catch (e) { /* noop */ }
   }
 };
+
+/* --- trap-check timers, scorecard, set/catch photos (build ag) --- */
+var CHECK_HOURS = { IA: 24, IN: 24, CO: 24, WA: 24, OR: 48, UT: 48, CT: 24 };
+function checkHours() {
+  var o = parseInt(Store.data.checkHoursOverride, 10);
+  if (o > 0 && o < 1000) return o;
+  return CHECK_HOURS[Store.data.state] || 24;
+}
+function trapNights(s) {
+  var start = new Date((s.dateSet || todayISO()) + 'T12:00:00').getTime();
+  var end = s.datePulled ? new Date(s.datePulled + 'T12:00:00').getTime() : Date.now();
+  if (isNaN(start)) start = Date.now();
+  if (isNaN(end) || end < start) end = start;
+  return Math.max(1, Math.round((end - start) / 86400000));
+}
+/* ms until the next legal check; negative = overdue; null = never recorded */
+function checkDueInMs(s) {
+  if (!s.lastChecked) return null;
+  return s.lastChecked + checkHours() * 3600000 - Date.now();
+}
+function fmtDur(ms) {
+  var m = Math.max(0, Math.round(ms / 60000));
+  if (m < 60) return m + 'm';
+  var h = Math.floor(m / 60);
+  if (h < 48) return h + 'h' + ((m % 60) ? ' ' + (m % 60) + 'm' : '');
+  return Math.floor(h / 24) + 'd ' + (h % 24) + 'h';
+}
+function markSetChecked(id) {
+  var s = getSet(id);
+  if (!s) return;
+  s.lastChecked = Date.now();
+  Store.save();
+  renderCheckSection(s);
+  updateCheckBanner();
+  toast('Checked — timer restarted.');
+}
+function renderCheckSection(s) {
+  var box = $('sd-check');
+  if (!box) return;
+  var d = stateData();
+  var rule = 'Legal check every ' + checkHours() + 'h' + (d ? ' (' + d.state_name + ')' : '') + ' — reminder only.';
+  if (s.status === 'pulled') {
+    box.innerHTML = '<div class="dim">' + esc(rule) + '</div><div class="dim" style="margin-top:6px">Set is pulled — no checks needed.</div>';
+    return;
+  }
+  var due = checkDueInMs(s);
+  var html = '<div class="dim">' + esc(rule) + '</div>';
+  if (due === null) {
+    html += '<div style="margin-top:6px">No check recorded yet. Tap <strong>✓ Mark checked</strong> after you run this set.</div>';
+  } else if (due < 0) {
+    html += '<div class="check-bad" style="margin-top:6px">⚠ Overdue by ' + esc(fmtDur(-due)) + ' — run this set.</div>' +
+      '<div class="dim">Last checked ' + esc(fmtDur(Date.now() - s.lastChecked)) + ' ago.</div>';
+  } else {
+    html += '<div style="margin-top:6px">Last checked ' + esc(fmtDur(Date.now() - s.lastChecked)) + ' ago · due in <strong>' + esc(fmtDur(due)) + '</strong>.</div>';
+  }
+  box.innerHTML = html;
+}
+function updateCheckBanner() {
+  var b = $('check-banner');
+  if (!b) return;
+  var win = 6 * 3600000, due = [], over = 0;
+  Store.data.sets.forEach(function (s) {
+    if (s.status === 'pulled') return;
+    var d = checkDueInMs(s);
+    if (d === null) return;
+    if (d < 0) { over++; due.push(s); }
+    else if (d < win) due.push(s);
+  });
+  if (!due.length) { b.classList.remove('show'); b.onclick = null; return; }
+  b.innerHTML = over
+    ? '⚠ ' + over + ' set' + (over > 1 ? 's' : '') + ' overdue for a check'
+    : '⏳ ' + due.length + ' set' + (due.length > 1 ? 's' : '') + ' due within 6h';
+  b.classList.add('show');
+  b.onclick = function () { openDueList(due); };
+}
+function openDueList(due) {
+  due.sort(function (a, b) { return (checkDueInMs(a) || 0) - (checkDueInMs(b) || 0); });
+  var html = '<h3>Checks due</h3>' + due.map(function (s) {
+    var d = checkDueInMs(s);
+    var label = (d !== null && d < 0)
+      ? '<span class="check-bad">overdue ' + esc(fmtDur(-d)) + '</span>'
+      : 'due in ' + esc(fmtDur(d || 0));
+    return '<button type="button" class="species-row" data-due-set="' + s.id + '">' +
+      '<span class="sp-name">' + esc(s.name) + '</span><span class="dim">' + label + '</span></button>';
+  }).join('') +
+    '<div class="btn-row" style="margin-top:10px"><button class="btn-secondary" id="m-close" type="button">Close</button></div>';
+  showModal(html);
+  $('m-close').onclick = closeModal;
+  var btns = document.querySelectorAll('[data-due-set]');
+  for (var i = 0; i < btns.length; i++) {
+    btns[i].onclick = function () {
+      var id = this.getAttribute('data-due-set');
+      closeModal(); openSetDetail(id);
+    };
+  }
+}
+
+/* --- set & catch photos (stored as blobs in IndexedDB, same store as licenses) --- */
+var photoURLs = {}, photoById = {};
+function photoURL(p) {
+  if (!photoURLs[p.id]) photoURLs[p.id] = URL.createObjectURL(p.blob);
+  return photoURLs[p.id];
+}
+function downscalePhoto(file, cb) {
+  var url = URL.createObjectURL(file);
+  var img = new Image();
+  img.onload = function () {
+    try {
+      var max = 1600, w = img.width, h = img.height;
+      if (Math.max(w, h) > max) { var r = max / Math.max(w, h); w = Math.round(w * r); h = Math.round(h * r); }
+      var c = document.createElement('canvas');
+      c.width = w; c.height = h;
+      c.getContext('2d').drawImage(img, 0, 0, w, h);
+      URL.revokeObjectURL(url);
+      if (c.toBlob) c.toBlob(function (b) { cb(b || file); }, 'image/jpeg', 0.85);
+      else cb(file);
+    } catch (e) { URL.revokeObjectURL(url); cb(file); }
+  };
+  img.onerror = function () { URL.revokeObjectURL(url); cb(file); };
+  img.src = url;
+}
+function loadSetPhotos(setId, cb) {
+  IDB.all('photos').then(function (all) {
+    var setPhotos = [], byLog = {};
+    photoById = {};
+    all.forEach(function (p) {
+      if (p.setId !== setId) return;
+      photoById[p.id] = p;
+      if (p.logId) { (byLog[p.logId] = byLog[p.logId] || []).push(p); }
+      else setPhotos.push(p);
+    });
+    setPhotos.sort(function (a, b) { return b.createdAt - a.createdAt; });
+    cb(setPhotos, byLog);
+  }).catch(function () { cb([], {}); });
+}
+function renderSetPhotos(list) {
+  var box = $('sd-photos');
+  if (!box) return;
+  box.innerHTML = '';
+  list.forEach(function (p) {
+    var img = document.createElement('img');
+    img.className = 'photo-thumb'; img.alt = 'Set photo'; img.src = photoURL(p);
+    img.onclick = function () {
+      openPhotoViewer(p, function () {
+        loadSetPhotos(detailSetId, function (sp, bl) {
+          renderSetPhotos(sp); renderSetLogs(getSet(detailSetId), bl);
+        });
+      });
+    };
+    box.appendChild(img);
+  });
+}
+function openPhotoViewer(p, onDelete) {
+  var when = '';
+  try { when = new Date(p.createdAt).toLocaleString(); } catch (e) { /* noop */ }
+  showModal('<img src="' + photoURL(p) + '" style="width:100%;border-radius:8px" alt="Photo">' +
+    (when ? '<div class="dim" style="margin-top:6px;text-align:center">' + esc(when) + '</div>' : '') +
+    '<div class="btn-row" style="margin-top:10px"><button class="btn-danger" id="m-ph-del" type="button">Delete</button>' +
+    '<button class="btn-secondary" id="m-close" type="button">Close</button></div>');
+  $('m-close').onclick = closeModal;
+  $('m-ph-del').onclick = function () {
+    confirmModal('Delete this photo?', 'It will be removed from this phone.', 'Delete', function () {
+      IDB.del('photos', p.id).then(function () {
+        if (photoURLs[p.id]) { URL.revokeObjectURL(photoURLs[p.id]); delete photoURLs[p.id]; }
+        delete photoById[p.id];
+        closeModal();
+        if (onDelete) onDelete();
+        toast('Photo deleted.');
+      });
+    });
+  };
+}
 
 /* --- voice memos via MediaRecorder, stored as blobs in IndexedDB --- */
 var Memo = {
@@ -1337,7 +1563,7 @@ function renderMemos(setId) {
 }
 
 /* ================= 10. HISTORY / TOTALS / SEASONS ================= */
-var histUI = { q: '', disp: 'all', view: 'date', collapsed: {}, expanded: {}, spOpen: {}, defaultsSet: false };
+var histUI = { q: '', disp: 'all', view: 'date', scoreBy: 'lure', collapsed: {}, expanded: {}, spOpen: {}, defaultsSet: false };
 var DOWS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 var MONS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 function dayLabel(iso) {
@@ -1386,7 +1612,8 @@ function logRowHtml(l, showDate) {
     '</span><span class="lr-count">×' + esc(l.count) + '</span>' +
     dispBadge(l.disposition) + '</div>' +
     (meta ? '<div class="dim">' + meta + '</div>' : '') +
-    (l.notes ? '<div class="lr-notes">' + esc(l.notes) + '</div>' : '') + '</div>';
+    (l.notes ? '<div class="lr-notes">' + esc(l.notes) + '</div>' : '') +
+    (l.weather ? '<div class="dim">🌤 ' + esc(weatherText(l.weather)) + '</div>' : '') + '</div>';
 }
 
 function renderHistByDate(list) {
@@ -1495,7 +1722,51 @@ function renderHistory() {
     box.innerHTML = '<div class="empty"><div class="big">🔍</div>No catches match those filters.</div>';
     return;
   }
-  box.innerHTML = (f.view === 'species') ? renderHistBySpecies(list) : renderHistByDate(list);
+  box.innerHTML = (f.view === 'species') ? renderHistBySpecies(list)
+    : (f.view === 'scorecard') ? renderScorecard()
+    : renderHistByDate(list);
+}
+
+/* Bait & lure scorecard: catch per trap-night, grouped by each set's current bait/lure. */
+function renderScorecard() {
+  var by = histUI.scoreBy || 'lure';
+  var groups = {};
+  function grp(key) {
+    var k = key || '';
+    if (!groups[k]) groups[k] = { name: k || '(none)', nights: 0, catches: 0, nsets: 0 };
+    return groups[k];
+  }
+  Store.data.sets.forEach(function (s) {
+    var g = grp(by === 'lure' ? s.lure : s.bait);
+    g.nights += trapNights(s);
+    g.nsets++;
+  });
+  Store.data.logs.forEach(function (l) {
+    var s = l.setId ? getSet(l.setId) : null;
+    var key = s ? (by === 'lure' ? s.lure : s.bait)
+                : (by === 'lure' ? (l.lure || '') : (l.bait || ''));
+    grp(key).catches += (l.count * 1 || 0);
+  });
+  var rows = Object.keys(groups).map(function (k) { return groups[k]; });
+  rows.sort(function (a, b) {
+    var ra = a.nights ? a.catches / a.nights : 0;
+    var rb = b.nights ? b.catches / b.nights : 0;
+    return rb - ra;
+  });
+  var html = '<div class="seg compact" style="margin-bottom:10px">' +
+    '<button type="button" data-scoreby="lure"' + (by === 'lure' ? ' class="selected"' : '') + '>By lure</button>' +
+    '<button type="button" data-scoreby="bait"' + (by === 'bait' ? ' class="selected"' : '') + '>By bait</button></div>';
+  if (!Store.data.sets.length) {
+    return html + '<div class="empty"><div class="big">🎯</div>No sets yet — the scorecard fills in as you trap.</div>';
+  }
+  html += '<p class="dim">All-time catch per trap-night, grouped by each set\'s current ' + (by === 'lure' ? 'lure' : 'bait') + '.</p>';
+  html += rows.map(function (g) {
+    var rate = g.nights ? (g.catches / g.nights) : 0;
+    return '<div class="sc-row"><span class="sc-name">' + esc(g.name) + '</span>' +
+      '<span class="dim">' + g.catches + ' caught · ' + g.nights + ' nights · ' + g.nsets + ' set' + (g.nsets === 1 ? '' : 's') + '</span>' +
+      '<span class="sc-rate"><strong>' + rate.toFixed(2) + '</strong>/night</span></div>';
+  }).join('');
+  return html;
 }
 
 function renderTotals() {
@@ -1595,6 +1866,7 @@ var licURLs = {};
 function renderLicenses() {
   var grid = $('license-grid');
   IDB.all('photos').then(function (all) {
+    all = all.filter(function (p) { return !p.setId && !p.logId; }); /* license wallet only */
     all.sort(function (a, b) { return b.createdAt - a.createdAt; });
     grid.innerHTML = '';
     if (!all.length) {
@@ -1783,7 +2055,7 @@ function showView(id) {
 function enterMain() {
   showView('view-main');
   switchTab('map');
-  renderHistory(); renderTotals(); renderSeasons(''); renderLicenses();
+  renderHistory(); renderTotals(); renderSeasons(''); renderLicenses(); updateCheckBanner();
   buildStateSelect($('settings-state'), Store.data.state);
   $('settings-weather').checked = !!Store.data.weatherOn;
   $('settings-weather').onchange = function () {
@@ -1798,6 +2070,14 @@ function enterMain() {
     toast(this.checked ? 'Voice entry is on.' : 'Voice entry is off.');
   };
   $('settings-licenses').checked = Store.data.licensesOn !== false;
+  $('settings-checkhours').value = Store.data.checkHoursOverride || '';
+  $('settings-checkhours').onchange = function () {
+    var v = parseInt(this.value, 10);
+    Store.data.checkHoursOverride = (v > 0) ? v : null;
+    Store.save();
+    updateCheckBanner();
+    toast('Trap-check interval updated.');
+  };
   $('settings-licenses').onchange = function () {
     Store.data.licensesOn = this.checked;
     Store.save(); applyFeatureToggles();
@@ -1895,6 +2175,24 @@ function wireUp() {
   $('btn-sd-edit').onclick = function () { openSetForm(null, detailSetId); };
   $('btn-sd-delete').onclick = function () { deleteSet(detailSetId); };
   $('btn-sd-memo').onclick = function () { Memo.toggle(detailSetId, $('btn-sd-memo')); };
+  $('btn-sd-check').onclick = function () { markSetChecked(detailSetId); };
+  $('btn-sd-photo').onclick = function () { $('sd-photo-input').click(); };
+  $('sd-photo-input').onchange = function () {
+    var f = this.files[0];
+    this.value = '';
+    if (!f || !detailSetId) return;
+    var s = getSet(detailSetId);
+    if (!s) return;
+    downscalePhoto(f, function (blob) {
+      IDB.put('photos', {
+        id: uid('p'), setId: s.id, blob: blob, mime: blob.type || 'image/jpeg',
+        lat: s.lat, lng: s.lng, createdAt: Date.now()
+      }).then(function () {
+        loadSetPhotos(s.id, function (sp) { renderSetPhotos(sp); });
+        toast('Photo added to ' + s.name + '.');
+      }).catch(function () { toast('Could not save that photo.'); });
+    });
+  };
   $('sd-notes').onchange = saveDetailNotes;
   $('btn-voice-sdnotes').onclick = function () {
     var ta = $('sd-notes');
@@ -1926,6 +2224,16 @@ function wireUp() {
       ta.value = (ta.value ? ta.value.replace(/\s+$/, '') + ' ' : '') + t;
     });
   };
+  $('btn-log-photo').onclick = function () { $('log-photo-input').click(); };
+  $('log-photo-input').onchange = function () {
+    var f = this.files[0];
+    this.value = '';
+    if (!f) return;
+    downscalePhoto(f, function (blob) {
+      pendingLogPhotos.push({ blob: blob });
+      renderPendingLogPhotos();
+    });
+  };
 
   /* seasons search */
   $('seasons-search').oninput = function () { renderSeasons(this.value); };
@@ -1936,6 +2244,12 @@ function wireUp() {
     var segBtn = e.target.closest ? e.target.closest('#hist-view-seg button') : null;
     if (segBtn) {
       histUI.view = segBtn.getAttribute('data-view');
+      renderHistory();
+      return;
+    }
+    var sbBtn = e.target.closest ? e.target.closest('[data-scoreby]') : null;
+    if (sbBtn) {
+      histUI.scoreBy = sbBtn.getAttribute('data-scoreby');
       renderHistory();
       return;
     }
