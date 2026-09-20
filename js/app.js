@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency.';
-var APP_VERSION = 'beta 0.1 · build 2026-09-20x';
+var APP_VERSION = 'beta 0.1 · build 2026-09-20y';
 
 /* ================= 2. STORAGE ================= */
 var LS_KEY = 'opossumfoot.v1';
@@ -416,6 +416,7 @@ function parseBigDataCloud(j) {
     var i;
     for (i = 0; i < admins.length; i++) if (admins[i].adminLevel === 6) { county = admins[i].name; break; }
     if (!county) for (i = 0; i < admins.length; i++) if (admins[i].adminLevel === 4) { county = admins[i].name; break; }
+    if (county) county = county.replace(/\s+County$/i, '');
   } catch (e) { /* keep nulls */ }
   return { county: county, stateName: stateName, stateCode: stateCode };
 }
