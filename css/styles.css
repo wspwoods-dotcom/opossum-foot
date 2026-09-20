@@ -341,3 +341,7 @@ input:focus, select:focus, textarea:focus, button:focus-visible { outline: 2px s
 .sc-row { display: flex; align-items: baseline; gap: 10px; padding: 10px 2px; border-bottom: 1px solid var(--line); }
 .sc-name { font-weight: 600; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
 .sc-rate { font-size: 14px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+/* ---- equal-width History disposition filter chips (build ai) ---- */
+#hist-disp-chips { overflow-x: visible; justify-content: stretch; }
+#hist-disp-chips .chip { flex: 1 1 0; min-width: 0; text-align: center; padding: 10px 4px; font-size: 14px; }
