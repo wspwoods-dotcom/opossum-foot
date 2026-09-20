@@ -345,3 +345,10 @@ input:focus, select:focus, textarea:focus, button:focus-visible { outline: 2px s
 /* ---- equal-width History disposition filter chips (build ai) ---- */
 #hist-disp-chips { overflow-x: visible; justify-content: stretch; }
 #hist-disp-chips .chip { flex: 1 1 0; min-width: 0; text-align: center; padding: 10px 4px; font-size: 14px; }
+
+/* ---- demo mode phone framing (build am, ?demo=1 only) ---- */
+body.demo-shot { background: #05070a; }
+body.demo-shot #view-splash,
+body.demo-shot #view-onboard,
+body.demo-shot #view-main { max-width: 430px; margin-left: auto; margin-right: auto; }
+body.demo-shot #view-main { box-shadow: 0 0 80px rgba(0,0,0,.65); min-height: 100dvh; }
