@@ -4,7 +4,7 @@
  * No user data ever passes through here — sets/catches live in
  * localStorage/IndexedDB on the device only.
  */
-var SHELL_CACHE = 'opossum-foot-shell-v5';
+var SHELL_CACHE = 'opossum-foot-shell-v7';
 var TILE_CACHE = 'opossum-foot-tiles-v1';
 var MAX_TILES = 400;
 
@@ -17,7 +17,8 @@ var SHELL = [
   './manifest.json',
   './assets/logo.png',
   './assets/icon-192.png',
-  './assets/icon-512.png',  './assets/apple-touch-icon.png',
+  './assets/icon-512.png',
+  './assets/apple-touch-icon.png',
   './assets/favicon.png',
   './assets/species/badger.png',
   './assets/species/opossum.png',

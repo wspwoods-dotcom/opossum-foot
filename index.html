@@ -68,9 +68,12 @@
     <div class="pane-head"><h2>History</h2><p>Every catch, newest first.</p></div>
     <div class="scroll">
       <div id="hist-summary" class="hist-summary"></div>
+      <div class="seg compact" id="hist-view-seg">
+        <button type="button" data-view="date">By date</button>
+        <button type="button" data-view="species">By species</button>
+      </div>
       <input type="search" id="history-search" placeholder="Search species, sets, notes…" aria-label="Search history">
       <div class="chip-row" id="hist-disp-chips"></div>
-      <div class="chip-row" id="hist-species-chips"></div>
       <div id="history-list"></div>
     </div>
   </div>
@@ -131,9 +134,9 @@
       <div class="card">
         <h3>Features</h3>
         <label class="checkline"><input type="checkbox" id="settings-weather"> Weather (tab + auto-record)</label>
-        <p class="dim" style="margin:6px 0 12px">Shows a Weather tab with current conditions and the next 12 hours, and attaches weather to new sets and catches. Sends the set's coordinates to Open-Meteo, a free weather service — the one exception to "nothing leaves your phone." Needs a data connection; nothing is recorded when you're offline.</p>
+        <p class="dim" style="margin:6px 0 12px">Shows a Weather tab with current conditions and the next 12 hours, and attaches weather to new sets and catches. Sends the set's coordinates to Open-Meteo, a free weather service — one of two exceptions to "nothing leaves your phone" (the other is voice transcription, below). Needs a data connection; nothing is recorded when you're offline.</p>
         <label class="checkline"><input type="checkbox" id="settings-voice"> Voice entry &amp; memos</label>
-        <p class="dim" style="margin:6px 0 12px">Dictate notes and record voice memos on your sets.</p>
+        <p class="dim" style="margin:6px 0 12px">Dictate notes and record voice memos on your sets. Live transcription uses your phone's built-in speech recognition and needs a connection — your words are transcribed by that service, not on this phone. Recordings and transcripts are stored only in this phone's browser storage.</p>
         <label class="checkline"><input type="checkbox" id="settings-licenses"> License wallet</label>
         <p class="dim" style="margin:6px 0 12px">Keep your license photos in the app.</p>
         <button class="btn-secondary" id="btn-features-reset" type="button">Reset features to defaults</button>
@@ -141,7 +144,7 @@
       <div class="card">
         <h3>Your privacy</h3>
         <p><strong>Your spots never leave your phone.</strong></p>
-        <p class="dim">Opossum Foot has no account, no login, and no cloud. Every set, catch, photo, and voice memo is stored only in this phone's browser storage. Nothing you enter is sent anywhere — the only network traffic is map tiles, the app's own files, and weather lookups, but only if you turn weather on in Settings.</p>
+        <p class="dim">Opossum Foot has no account, no login, and no cloud. Every set, catch, photo, and voice memo is stored only in this phone's browser storage. Nothing you enter is stored anywhere else — the only network traffic is map tiles, the app's own files, weather lookups (only if you turn weather on), and live voice transcription (only when you tap the microphone and have a connection).</p>
         <p class="dim"><strong>The honest catch:</strong> because there's no cloud backup, a lost phone, a wiped phone, or clearing this browser's data can destroy your records. Export a CSV backup regularly — that's your safety net.</p>
       </div>
       <div class="card">
