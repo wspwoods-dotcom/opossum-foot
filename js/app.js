@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency.';
-var APP_VERSION = 'beta 0.1 · build 2026-09-20ak';
+var APP_VERSION = 'beta 0.1 · build 2026-09-20al';
 
 /* ================= 2. STORAGE ================= */
 var LS_KEY = 'opossumfoot.v1';
@@ -1083,16 +1083,30 @@ function renderPendingLogPhotos() {
     var img = document.createElement('img');
     img.className = 'photo-thumb'; img.alt = 'Catch photo';
     img.src = URL.createObjectURL(ph.blob);
-    img.title = 'Tap to remove';
-    img.onclick = (function (idx, url) {
-      return function () {
-        URL.revokeObjectURL(url);
-        pendingLogPhotos.splice(idx, 1);
-        renderPendingLogPhotos();
-      };
-    })(i, img.src);
+    img.title = 'Tap to enlarge';
+    img.onclick = (function (idx) {
+      return function () { openPendingPhotoViewer(idx); };
+    })(i);
     box.appendChild(img);
   });
+}
+/* Viewer for a catch photo that hasn't been saved yet: tap enlarges,
+   removal is an explicit choice inside the viewer. */
+function openPendingPhotoViewer(idx) {
+  var ph = pendingLogPhotos[idx];
+  if (!ph) return;
+  var url = URL.createObjectURL(ph.blob);
+  showModal('<img src="' + url + '" style="width:100%;border-radius:8px" alt="Catch photo">' +
+    '<div class="btn-row" style="margin-top:10px"><button class="btn-danger" id="m-ph-del" type="button">Remove</button>' +
+    '<button class="btn-secondary" id="m-close" type="button">Close</button></div>');
+  $('m-close').onclick = function () { URL.revokeObjectURL(url); closeModal(); };
+  $('m-ph-del').onclick = function () {
+    confirmModal('Remove this photo?', 'It will not be saved with this catch.', 'Remove', function () {
+      URL.revokeObjectURL(url);
+      pendingLogPhotos.splice(idx, 1);
+      renderPendingLogPhotos();
+    });
+  };
 }
 function renderSpeciesList(filter) {
   var d = stateData();
