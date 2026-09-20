@@ -261,7 +261,14 @@ input:focus, select:focus, textarea:focus, button:focus-visible { outline: 2px s
 /* ---------- misc ---------- */
 .empty { text-align: center; color: var(--faint); padding: 40px 20px; }
 .empty .big { font-size: 44px; margin-bottom: 10px; }
-.hidden-file { display: none; }
+.hidden-file { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+
+/* ---------- map-screen silhouette icons (build r) ---------- */
+#tabbar button .ti-img { width: 24px; height: 24px; object-fit: contain; filter: invert(1); opacity: .8; }
+#tabbar button.active .ti-img { opacity: 1; }
+.fab img { width: 30px; height: 30px; object-fit: contain; display: block; }
+.fab.secondary img { filter: invert(1); }
+#place-bar .pb-ic { width: 18px; height: 18px; object-fit: contain; filter: invert(1); vertical-align: -3px; margin-right: 6px; }
 .kv { display: grid; grid-template-columns: 110px 1fr; gap: 6px 10px; font-size: 15px; margin: 10px 0; }
 .kv dt { color: var(--muted); }
 .kv dd { margin: 0; }
