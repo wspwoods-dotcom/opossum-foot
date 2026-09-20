@@ -19,7 +19,23 @@ var SHELL = [
   './assets/icon-192.png',
   './assets/icon-512.png',
   './assets/apple-touch-icon.png',
-  './assets/favicon.png'
+  './assets/favicon.png',
+  './assets/species/badger.png',
+  './assets/species/opossum.png',
+  './assets/species/striped-skunk.png',
+  './assets/species/red-fox.png',
+  './assets/species/gray-fox.png',
+  './assets/species/mink.png',
+  './assets/species/muskrat.png',
+  './assets/species/weasel.png',
+  './assets/species/groundhog.png',
+  './assets/species/raccoon.png',
+  './assets/species/beaver.png',
+  './assets/species/coyote.png',
+  './assets/species/wolf.png',
+  './assets/species/spotted-skunk.png',
+  './assets/species/otter.png',
+  './assets/species/bobcat.png'
 ];
 
 var TILE_HOSTS = [
