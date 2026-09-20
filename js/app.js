@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency.';
-var APP_VERSION = 'beta 0.1 · build 2026-09-20ac';
+var APP_VERSION = 'beta 0.1 · build 2026-09-20ae';
 
 /* ================= 2. STORAGE ================= */
 var LS_KEY = 'opossumfoot.v1';
@@ -1213,7 +1213,8 @@ var Memo = {
         if (!blob.size) { toast('Empty recording — nothing saved.'); return; }
         IDB.put('memos', {
           id: uid('m'), setId: self.targetSetId, mime: blob.type,
-          blob: blob, createdAt: Date.now()
+          blob: blob, createdAt: Date.now(),
+          transcript: (self._transcript || '').trim()
         }).then(function () {
           renderMemos(self.targetSetId);
           toast('Voice memo saved.');
@@ -1222,14 +1223,47 @@ var Memo = {
       rec.start();
       self.recorder = rec; self.recording = true; self.targetSetId = setId;
       btn.innerHTML = '<span class="rec-indicator"></span>Stop recording';
+      /* live transcription alongside the recording (needs a connection; the
+         audio keeps recording regardless) */
+      self._transcript = '';
+      self._recog = null;
+      if (Voice.supported()) {
+        try {
+          var RCtor = window.SpeechRecognition || window.webkitSpeechRecognition;
+          var rg = new RCtor();
+          rg.lang = 'en-US'; rg.interimResults = false; rg.continuous = true;
+          rg.onresult = function (ev) {
+            for (var i = ev.resultIndex; i < ev.results.length; i++) {
+              if (ev.results[i].isFinal) self._transcript += ev.results[i][0].transcript + ' ';
+            }
+          };
+          rg.onerror = function () { self._recog = null; /* offline — audio keeps recording */ };
+          rg.start();
+          self._recog = rg;
+        } catch (e) { self._recog = null; }
+      }
     }).catch(function () {
       toast('Microphone permission was denied.');
     });
   },
   stop: function (btn) {
+    var self = this;
     this.recording = false;
-    try { if (this.recorder) this.recorder.stop(); } catch (e) { /* noop */ }
     if (btn) btn.textContent = '🎤 Record memo';
+    /* let the transcription deliver its final words before the recorder stops */
+    var done = false;
+    function fin() {
+      if (done) return; done = true;
+      try { if (self.recorder) self.recorder.stop(); } catch (e) { /* noop */ }
+    }
+    var rg = this._recog; this._recog = null;
+    if (rg) {
+      rg.onend = fin;
+      try { rg.stop(); } catch (e) { fin(); }
+      setTimeout(fin, 2000);
+    } else {
+      fin();
+    }
   }
 };
 
@@ -1242,6 +1276,8 @@ function renderMemos(setId) {
     if (!memos.length) { box.innerHTML = '<p class="dim">No memos yet.</p>'; return; }
     box.innerHTML = '';
     memos.forEach(function (m) {
+      var wrap = document.createElement('div');
+      wrap.className = 'memo-card';
       var row = document.createElement('div');
       row.className = 'memo-row';
       var audio = document.createElement('audio');
@@ -1265,13 +1301,23 @@ function renderMemos(setId) {
         });
       };
       row.appendChild(audio); row.appendChild(when); row.appendChild(del);
-      box.appendChild(row);
+      wrap.appendChild(row);
+      var tr = document.createElement('p');
+      if (m.transcript) {
+        tr.className = 'memo-transcript';
+        tr.textContent = '\u201C' + m.transcript + '\u201D';
+      } else {
+        tr.className = 'memo-transcript dim';
+        tr.textContent = '\uD83C\uDFA4 audio only \u2014 no transcript';
+      }
+      wrap.appendChild(tr);
+      box.appendChild(wrap);
     });
   });
 }
 
 /* ================= 10. HISTORY / TOTALS / SEASONS ================= */
-var histUI = { q: '', disp: 'all', sp: 'all', collapsed: {}, expanded: {}, defaultsSet: false };
+var histUI = { q: '', disp: 'all', view: 'date', collapsed: {}, expanded: {}, spOpen: {}, defaultsSet: false };
 var DOWS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 var MONS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 function dayLabel(iso) {
@@ -1282,21 +1328,12 @@ function dayLabel(iso) {
 }
 function dispOf(l) { return l.disposition || 'kept'; }
 
-function renderHistChips(logs) {
+function renderHistChips() {
   var dc = $('hist-disp-chips');
   var defs = [['all', 'All'], ['kept', 'Kept'], ['kept-alive', 'Kept alive'], ['released', 'Released']];
   dc.innerHTML = defs.map(function (d) {
     return '<button type="button" class="chip' + (histUI.disp === d[0] ? ' on' : '') + '" data-disp="' + d[0] + '">' + d[1] + '</button>';
   }).join('');
-  var sc = $('hist-species-chips');
-  var seen = {};
-  logs.forEach(function (l) { if (l.species) seen[l.species] = true; });
-  var sps = Object.keys(seen).sort();
-  var html = '<button type="button" class="chip' + (histUI.sp === 'all' ? ' on' : '') + '" data-sp="all">All species</button>';
-  sps.forEach(function (s) {
-    html += '<button type="button" class="chip' + (histUI.sp === s ? ' on' : '') + '" data-sp="' + esc(s) + '">' + esc(s) + '</button>';
-  });
-  sc.innerHTML = html;
 }
 
 function renderHistSummary(logs) {
@@ -1318,32 +1355,22 @@ function renderHistSummary(logs) {
     ' species · ' + released + ' released</span>';
 }
 
-function renderHistory() {
-  var box = $('history-list');
-  var logs = Store.data.logs.slice().sort(function (a, b) {
-    if (a.date !== b.date) return a.date < b.date ? 1 : -1;
-    return b.createdAt - a.createdAt;
-  });
-  renderHistChips(logs);
-  renderHistSummary(logs);
-  if (!logs.length) {
-    box.innerHTML = '<div class="empty"><div class="big">📒</div>No catches logged yet.<br>Tap a set pin on the map to log your first catch.</div>';
-    return;
-  }
-  var f = histUI, q = f.q.toLowerCase();
-  var list = logs.filter(function (l) {
-    if (f.disp !== 'all' && dispOf(l) !== f.disp) return false;
-    if (f.sp !== 'all' && l.species !== f.sp) return false;
-    if (q) {
-      var hay = ((l.species || '') + ' ' + (l.setName || '') + ' ' + (l.notes || '')).toLowerCase();
-      if (hay.indexOf(q) === -1) return false;
-    }
-    return true;
-  });
-  if (!list.length) {
-    box.innerHTML = '<div class="empty"><div class="big">🔍</div>No catches match those filters.</div>';
-    return;
-  }
+/* One log entry row. showDate adds the day label (used in the By-species view). */
+function logRowHtml(l, showDate) {
+  var expanded = !!histUI.expanded[l.createdAt];
+  var meta = (showDate ? esc(dayLabel(l.date)) : '') +
+    ((l.setName || '') ? (showDate ? ' · ' : '') + esc(l.setName) : '') +
+    ((l.bait || l.lure) ? ' · ' + esc([l.bait, l.lure].filter(Boolean).join(' / ')) : '');
+  return '<div class="log-row' + (expanded ? ' expanded' : '') + '" data-log="' + l.createdAt + '">' +
+    '<div class="lr-top"><span class="lr-species">' + esc(l.species) +
+    '</span><span class="lr-count">×' + esc(l.count) + '</span>' +
+    dispBadge(l.disposition) + '</div>' +
+    (meta ? '<div class="dim">' + meta + '</div>' : '') +
+    (l.notes ? '<div class="lr-notes">' + esc(l.notes) + '</div>' : '') + '</div>';
+}
+
+function renderHistByDate(list) {
+  var f = histUI;
   /* Default-collapse day groups older than 7 days (once per session). */
   if (!f.defaultsSet) {
     var cutoff = new Date(); cutoff.setDate(cutoff.getDate() - 7);
@@ -1374,17 +1401,81 @@ function renderHistory() {
         '<div class="day-body"' + (shut ? ' hidden' : '') + '>';
       curDay = l.date;
     }
-    var expanded = !!f.expanded[l.createdAt];
-    html += '<div class="log-row' + (expanded ? ' expanded' : '') + '" data-log="' + l.createdAt + '">' +
-      '<div class="lr-top"><span class="lr-species">' + esc(l.species) +
-      '</span><span class="lr-count">×' + esc(l.count) + '</span>' +
-      dispBadge(l.disposition) + '</div>' +
-      '<div class="dim">' + esc(l.setName || '') +
-      ((l.bait || l.lure) ? ' · ' + esc([l.bait, l.lure].filter(Boolean).join(' / ')) : '') + '</div>' +
-      (l.notes ? '<div class="lr-notes">' + esc(l.notes) + '</div>' : '') + '</div>';
+    html += logRowHtml(l, false);
   });
   if (curDay !== null) html += '</div>';
-  box.innerHTML = html;
+  return html;
+}
+
+function renderHistBySpecies(list) {
+  var f = histUI;
+  var groups = {};
+  list.forEach(function (l) {
+    var sp = l.species || 'Unknown';
+    var g = groups[sp] || (groups[sp] = { logs: [], kept: 0, alive: 0, released: 0, total: 0 });
+    var c = l.count * 1 || 0;
+    g.logs.push(l); g.total += c;
+    var d = dispOf(l);
+    if (d === 'released') g.released += c;
+    else if (d === 'kept-alive') g.alive += c;
+    else g.kept += c;
+  });
+  var names = Object.keys(groups).sort(function (a, b) { return groups[b].total - groups[a].total; });
+  var html = '';
+  names.forEach(function (sp) {
+    var g = groups[sp], open = !!f.spOpen[sp];
+    var parts = [];
+    if (g.kept) parts.push(g.kept + ' kept');
+    if (g.alive) parts.push(g.alive + ' kept alive');
+    if (g.released) parts.push(g.released + ' released');
+    html += '<div class="sp-group"><button type="button" class="sp-head" data-sp="' + esc(sp) + '">' +
+      '<span class="sp-name">' + esc(sp) + '</span>' +
+      '<span class="sp-total">×' + g.total + '</span>' +
+      '<span class="chev">' + (open ? '▾' : '▸') + '</span></button>' +
+      '<div class="dim sp-sub">' + esc(parts.join(' · ') || 'no catches') + '</div>';
+    if (open) {
+      html += '<div class="sp-body">';
+      g.logs.forEach(function (l) { html += logRowHtml(l, true); });
+      html += '</div>';
+    }
+    html += '</div>';
+  });
+  return html;
+}
+
+function renderHistory() {
+  var box = $('history-list');
+  var logs = Store.data.logs.slice().sort(function (a, b) {
+    if (a.date !== b.date) return a.date < b.date ? 1 : -1;
+    return b.createdAt - a.createdAt;
+  });
+  renderHistChips();
+  renderHistSummary(logs);
+  var seg = $('hist-view-seg');
+  if (seg) {
+    var btns = seg.querySelectorAll('button');
+    for (var i = 0; i < btns.length; i++) {
+      btns[i].classList.toggle('selected', btns[i].getAttribute('data-view') === histUI.view);
+    }
+  }
+  if (!logs.length) {
+    box.innerHTML = '<div class="empty"><div class="big">📒</div>No catches logged yet.<br>Tap a set pin on the map to log your first catch.</div>';
+    return;
+  }
+  var f = histUI, q = f.q.toLowerCase();
+  var list = logs.filter(function (l) {
+    if (f.disp !== 'all' && dispOf(l) !== f.disp) return false;
+    if (q) {
+      var hay = ((l.species || '') + ' ' + (l.setName || '') + ' ' + (l.notes || '')).toLowerCase();
+      if (hay.indexOf(q) === -1) return false;
+    }
+    return true;
+  });
+  if (!list.length) {
+    box.innerHTML = '<div class="empty"><div class="big">🔍</div>No catches match those filters.</div>';
+    return;
+  }
+  box.innerHTML = (f.view === 'species') ? renderHistBySpecies(list) : renderHistByDate(list);
 }
 
 function renderTotals() {
@@ -1814,10 +1905,22 @@ function wireUp() {
   /* history filters */
   $('history-search').oninput = function () { histUI.q = this.value; renderHistory(); };
   $('pane-history').addEventListener('click', function (e) {
+    var segBtn = e.target.closest ? e.target.closest('#hist-view-seg button') : null;
+    if (segBtn) {
+      histUI.view = segBtn.getAttribute('data-view');
+      renderHistory();
+      return;
+    }
     var chip = e.target.closest ? e.target.closest('.chip') : null;
     if (chip) {
       if (chip.hasAttribute('data-disp')) histUI.disp = chip.getAttribute('data-disp');
-      if (chip.hasAttribute('data-sp')) histUI.sp = chip.getAttribute('data-sp');
+      renderHistory();
+      return;
+    }
+    var spHead = e.target.closest ? e.target.closest('.sp-head') : null;
+    if (spHead) {
+      var s = spHead.getAttribute('data-sp');
+      histUI.spOpen[s] = !histUI.spOpen[s];
       renderHistory();
       return;
     }
