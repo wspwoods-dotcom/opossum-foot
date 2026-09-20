@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency.';
-var APP_VERSION = 'beta 0.1 · build 2026-09-20ao';
+var APP_VERSION = 'beta 0.1 · build 2026-09-20ap';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -1834,6 +1834,16 @@ function renderSeasons(filter) {
   $('seasons-title').textContent = 'Season reminders — ' + d.state_name;
   $('seasons-sub').textContent = d.season_year + ' season year' + (entry && entry.provisional ? ' · data provisional' : '');
   $('seasons-disclaimer').innerHTML = '<div class="wb-title">⚠ ' + esc(REMINDER_LINE) + '</div>' + esc(d.disclaimer || '');
+  var rl = $('seasons-regs');
+  if (d.regs_url) {
+    rl.hidden = false;
+    rl.href = d.regs_url;
+    rl.innerHTML = '📄 Official ' + esc(d.state_name) + ' trapping regulations' +
+      (d.regs_kind === 'page' ? ' <span class="dim">(agency site)</span>' : ' <span class="dim">(PDF)</span>');
+  } else {
+    rl.hidden = true;
+    rl.removeAttribute('href');
+  }
   var q = (filter || '').toLowerCase();
   var list = d.species.filter(function (sp) {
     return !q || sp.common_name.toLowerCase().indexOf(q) !== -1;
@@ -1926,12 +1936,22 @@ function renderLicenses() {
 /* Tap a license photo: view it, open its linked site, or attach/change the link. */
 function openLicenseDetail(p) {
   var link = p.link || '';
+  var d = stateData();
+  /* Official state license vendor is automatic — no typing needed.
+     A per-photo custom link still overrides it when set. */
+  var officialUrl = (!link && d && d.license_url) ? d.license_url : '';
+  var btnUrl = link || officialUrl;
   var html = '<img src="' + licURLs[p.id] + '" style="width:100%;border-radius:8px" alt="License photo">';
-  if (link) {
+  if (btnUrl) {
+    var btnLabel = link ? 'Open license site ↗'
+      : 'Official ' + esc(d.state_name) + ' license site ↗';
     html += '<a class="btn-primary" style="display:block;text-align:center;margin-top:10px;text-decoration:none" href="' +
-      esc(link) + '" target="_blank" rel="noopener">Open license site ↗</a>';
+      esc(btnUrl) + '" target="_blank" rel="noopener">' + btnLabel + '</a>';
+    if (!link && d.license_note) {
+      html += '<p class="dim" style="margin-top:8px">' + esc(d.license_note) + '</p>';
+    }
   }
-  html += '<label class="field" for="m-lic-link" style="margin-top:12px">Link to license site (e.g. DNR)</label>' +
+  html += '<label class="field" for="m-lic-link" style="margin-top:12px">Custom link (optional — overrides the official site above)</label>' +
     '<input id="m-lic-link" type="url" inputmode="url" placeholder="https://…" value="' + esc(link) + '" autocomplete="off">' +
     '<div class="btn-row" style="margin-top:10px"><button class="btn-secondary" id="m-lic-save" type="button">Save link</button>' +
     '<button class="btn-secondary" id="m-close" type="button">Close</button></div>';
