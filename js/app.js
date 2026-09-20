@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency.';
-var APP_VERSION = 'beta 0.1 · build 2026-09-20ag';
+var APP_VERSION = 'beta 0.1 · build 2026-09-20ah';
 
 /* ================= 2. STORAGE ================= */
 var LS_KEY = 'opossumfoot.v1';
@@ -704,7 +704,6 @@ function setIcon(set) {
 }
 
 function refreshMarkers() {
-  updateCheckBanner();
   if (!map || !markersLayer) return;
   markersLayer.clearLayers();
   Store.data.sets.forEach(function (s) {
@@ -942,7 +941,7 @@ function saveSetForm() {
       status: $('sf-status').value,
       dateSet: $('sf-date').value || todayISO(),
       notes: $('sf-notes').value.trim(),
-      createdAt: Date.now(), lastChecked: Date.now()
+      createdAt: Date.now()
     };
     if (ns.status === 'pulled') ns.datePulled = ns.dateSet;
     Store.data.sets.push(ns);
@@ -979,7 +978,6 @@ function openSetDetail(id) {
     '<dt>Date set</dt><dd>' + esc(fmtDate(s.dateSet)) + '</dd>' +
     '<dt>Location</dt><dd>' + s.lat.toFixed(5) + ', ' + s.lng.toFixed(5) + '</dd>' +
     '<dt>Weather</dt><dd>' + esc(weatherText(s.weather)) + '</dd>';
-  renderCheckSection(s);
   loadSetPhotos(s.id, function (setPhotos, byLog) {
     renderSetPhotos(setPhotos);
     renderSetLogs(s, byLog);
@@ -1179,7 +1177,6 @@ function saveLog() {
     createdAt: Date.now()
   };
   Store.data.logs.push(log);
-  if (s) s.lastChecked = Date.now(); /* logging a catch counts as checking the set */
   Store.save();
   pendingLogPhotos.forEach(function (ph) {
     IDB.put('photos', {
@@ -1257,100 +1254,13 @@ var Voice = {
   }
 };
 
-/* --- trap-check timers, scorecard, set/catch photos (build ag) --- */
-var CHECK_HOURS = { IA: 24, IN: 24, CO: 24, WA: 24, OR: 48, UT: 48, CT: 24 };
-function checkHours() {
-  var o = parseInt(Store.data.checkHoursOverride, 10);
-  if (o > 0 && o < 1000) return o;
-  return CHECK_HOURS[Store.data.state] || 24;
-}
+/* --- scorecard helpers (build ah) --- */
 function trapNights(s) {
   var start = new Date((s.dateSet || todayISO()) + 'T12:00:00').getTime();
   var end = s.datePulled ? new Date(s.datePulled + 'T12:00:00').getTime() : Date.now();
   if (isNaN(start)) start = Date.now();
   if (isNaN(end) || end < start) end = start;
   return Math.max(1, Math.round((end - start) / 86400000));
-}
-/* ms until the next legal check; negative = overdue; null = never recorded */
-function checkDueInMs(s) {
-  if (!s.lastChecked) return null;
-  return s.lastChecked + checkHours() * 3600000 - Date.now();
-}
-function fmtDur(ms) {
-  var m = Math.max(0, Math.round(ms / 60000));
-  if (m < 60) return m + 'm';
-  var h = Math.floor(m / 60);
-  if (h < 48) return h + 'h' + ((m % 60) ? ' ' + (m % 60) + 'm' : '');
-  return Math.floor(h / 24) + 'd ' + (h % 24) + 'h';
-}
-function markSetChecked(id) {
-  var s = getSet(id);
-  if (!s) return;
-  s.lastChecked = Date.now();
-  Store.save();
-  renderCheckSection(s);
-  updateCheckBanner();
-  toast('Checked — timer restarted.');
-}
-function renderCheckSection(s) {
-  var box = $('sd-check');
-  if (!box) return;
-  var d = stateData();
-  var rule = 'Legal check every ' + checkHours() + 'h' + (d ? ' (' + d.state_name + ')' : '') + ' — reminder only.';
-  if (s.status === 'pulled') {
-    box.innerHTML = '<div class="dim">' + esc(rule) + '</div><div class="dim" style="margin-top:6px">Set is pulled — no checks needed.</div>';
-    return;
-  }
-  var due = checkDueInMs(s);
-  var html = '<div class="dim">' + esc(rule) + '</div>';
-  if (due === null) {
-    html += '<div style="margin-top:6px">No check recorded yet. Tap <strong>✓ Mark checked</strong> after you run this set.</div>';
-  } else if (due < 0) {
-    html += '<div class="check-bad" style="margin-top:6px">⚠ Overdue by ' + esc(fmtDur(-due)) + ' — run this set.</div>' +
-      '<div class="dim">Last checked ' + esc(fmtDur(Date.now() - s.lastChecked)) + ' ago.</div>';
-  } else {
-    html += '<div style="margin-top:6px">Last checked ' + esc(fmtDur(Date.now() - s.lastChecked)) + ' ago · due in <strong>' + esc(fmtDur(due)) + '</strong>.</div>';
-  }
-  box.innerHTML = html;
-}
-function updateCheckBanner() {
-  var b = $('check-banner');
-  if (!b) return;
-  var win = 6 * 3600000, due = [], over = 0;
-  Store.data.sets.forEach(function (s) {
-    if (s.status === 'pulled') return;
-    var d = checkDueInMs(s);
-    if (d === null) return;
-    if (d < 0) { over++; due.push(s); }
-    else if (d < win) due.push(s);
-  });
-  if (!due.length) { b.classList.remove('show'); b.onclick = null; return; }
-  b.innerHTML = over
-    ? '⚠ ' + over + ' set' + (over > 1 ? 's' : '') + ' overdue for a check'
-    : '⏳ ' + due.length + ' set' + (due.length > 1 ? 's' : '') + ' due within 6h';
-  b.classList.add('show');
-  b.onclick = function () { openDueList(due); };
-}
-function openDueList(due) {
-  due.sort(function (a, b) { return (checkDueInMs(a) || 0) - (checkDueInMs(b) || 0); });
-  var html = '<h3>Checks due</h3>' + due.map(function (s) {
-    var d = checkDueInMs(s);
-    var label = (d !== null && d < 0)
-      ? '<span class="check-bad">overdue ' + esc(fmtDur(-d)) + '</span>'
-      : 'due in ' + esc(fmtDur(d || 0));
-    return '<button type="button" class="species-row" data-due-set="' + s.id + '">' +
-      '<span class="sp-name">' + esc(s.name) + '</span><span class="dim">' + label + '</span></button>';
-  }).join('') +
-    '<div class="btn-row" style="margin-top:10px"><button class="btn-secondary" id="m-close" type="button">Close</button></div>';
-  showModal(html);
-  $('m-close').onclick = closeModal;
-  var btns = document.querySelectorAll('[data-due-set]');
-  for (var i = 0; i < btns.length; i++) {
-    btns[i].onclick = function () {
-      var id = this.getAttribute('data-due-set');
-      closeModal(); openSetDetail(id);
-    };
-  }
 }
 
 /* --- set & catch photos (stored as blobs in IndexedDB, same store as licenses) --- */
@@ -2055,7 +1965,7 @@ function showView(id) {
 function enterMain() {
   showView('view-main');
   switchTab('map');
-  renderHistory(); renderTotals(); renderSeasons(''); renderLicenses(); updateCheckBanner();
+  renderHistory(); renderTotals(); renderSeasons(''); renderLicenses();
   buildStateSelect($('settings-state'), Store.data.state);
   $('settings-weather').checked = !!Store.data.weatherOn;
   $('settings-weather').onchange = function () {
@@ -2070,14 +1980,6 @@ function enterMain() {
     toast(this.checked ? 'Voice entry is on.' : 'Voice entry is off.');
   };
   $('settings-licenses').checked = Store.data.licensesOn !== false;
-  $('settings-checkhours').value = Store.data.checkHoursOverride || '';
-  $('settings-checkhours').onchange = function () {
-    var v = parseInt(this.value, 10);
-    Store.data.checkHoursOverride = (v > 0) ? v : null;
-    Store.save();
-    updateCheckBanner();
-    toast('Trap-check interval updated.');
-  };
   $('settings-licenses').onchange = function () {
     Store.data.licensesOn = this.checked;
     Store.save(); applyFeatureToggles();
@@ -2175,7 +2077,6 @@ function wireUp() {
   $('btn-sd-edit').onclick = function () { openSetForm(null, detailSetId); };
   $('btn-sd-delete').onclick = function () { deleteSet(detailSetId); };
   $('btn-sd-memo').onclick = function () { Memo.toggle(detailSetId, $('btn-sd-memo')); };
-  $('btn-sd-check').onclick = function () { markSetChecked(detailSetId); };
   $('btn-sd-photo').onclick = function () { $('sd-photo-input').click(); };
   $('sd-photo-input').onchange = function () {
     var f = this.files[0];
