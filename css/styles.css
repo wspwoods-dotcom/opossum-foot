@@ -195,6 +195,9 @@ input:focus, select:focus, textarea:focus, button:focus-visible { outline: 2px s
 .species-row .sp-name { flex: 1; }
 .species-row .sp-name .sci { display: block; font-size: 13px; color: var(--faint); font-style: italic; font-weight: 400; }
 .species-row.selected { border-color: var(--accent); background: #2c2413; }
+/* Species silhouettes are black-on-transparent; invert to light-on-dark theme. */
+.sp-icon { width: 40px; height: 40px; object-fit: contain; flex: none; filter: invert(1); }
+.sp-icon-lg { width: 56px; height: 56px; object-fit: contain; flex: none; filter: invert(1); }
 
 .stepper { display: flex; align-items: center; gap: 14px; margin: 8px 0; }
 .stepper button { width: 60px; height: 60px; border-radius: 50%; font-size: 28px; padding: 0; min-height: 0; background: var(--panel); color: var(--ink); border: 1px solid var(--line); }
