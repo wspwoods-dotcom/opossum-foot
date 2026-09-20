@@ -186,6 +186,7 @@ input:focus, select:focus, textarea:focus, button:focus-visible { outline: 2px s
 .seg { display: flex; gap: 8px; margin: 2px 0 14px; }
 .seg button { flex: 1; padding: 13px; border-radius: 10px; border: 1px solid var(--line); background: var(--panel); color: var(--ink); font-size: 16px; font-weight: 600; }
 .seg button.selected { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+#log-disposition button { white-space: nowrap; font-size: 15px; padding: 13px 6px; }
 
 .warnbox { background: #3d2c10; border: 1px solid #6b4d1c; color: #f5cf7a; border-radius: var(--radius); padding: 12px 14px; margin: 12px 0; font-size: 15px; }
 .warnbox.red { background: #3a1f1b; border-color: #6e2f28; color: #f0a49c; }
@@ -329,3 +330,14 @@ input:focus, select:focus, textarea:focus, button:focus-visible { outline: 2px s
 #pane-licenses .scroll > p.dim { text-align: center; }
 #pane-weather .scroll > h3, #pane-weather .scroll > p.dim { text-align: center; }
 #pane-weather #weather-now { text-align: center; }
+
+/* build ag: scorecard, trap-check, photos */
+.photo-strip { display: flex; gap: 8px; overflow-x: auto; padding: 6px 2px; }
+.photo-strip:empty { display: none; }
+.photo-thumb { width: 76px; height: 76px; object-fit: cover; border-radius: 10px; flex: 0 0 auto; border: 1px solid var(--line); }
+.photo-thumb.sm { width: 48px; height: 48px; border-radius: 8px; }
+.log-photos { display: flex; gap: 6px; margin-top: 6px; }
+#pane-map { position: relative; }
+.sc-row { display: flex; align-items: baseline; gap: 10px; padding: 10px 2px; border-bottom: 1px solid var(--line); }
+.sc-name { font-weight: 600; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.sc-rate { font-size: 14px; font-variant-numeric: tabular-nums; white-space: nowrap; }
