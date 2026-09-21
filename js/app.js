@@ -891,21 +891,45 @@ function drawFix(fix, final) {
   }
 }
 
-/* One fresh fix from the follow-mode watch: move the dot, glide the map. */
+/* One fresh fix from the follow-mode watch: move the dot on every fix, and
+   recenter the map only once the dot drifts out of the inner view — no glide
+   animation, so the map tracks instead of lagging behind. Transient GPS
+   errors never kill follow; only a permission denial does. */
+var followErrs = 0;
 function onFollowFix(pos) {
   var c = pos.coords || {};
   if (typeof c.latitude !== 'number' || typeof c.longitude !== 'number') return;
   var ageMs = Date.now() - (pos.timestamp || 0);
   if (ageMs > 30000 || ageMs < 0) return; /* stale cached fix — ignore it */
+  followErrs = 0;
   var acc = (typeof c.accuracy === 'number' && isFinite(c.accuracy)) ? Math.round(c.accuracy) : 9999;
   drawFix({ lat: c.latitude, lng: c.longitude, acc: acc }, false);
-  var now = Date.now();
-  if (map && now - followLastPan > 1500) { followLastPan = now; map.panTo([c.latitude, c.longitude], { animate: true }); }
+  if (map) {
+    var pt = map.latLngToContainerPoint([c.latitude, c.longitude]);
+    var size = map.getSize();
+    if (Math.abs(pt.x - size.x / 2) > size.x * 0.28 ||
+        Math.abs(pt.y - size.y / 2) > size.y * 0.28) {
+      map.panTo([c.latitude, c.longitude], { animate: false });
+    }
+  }
+}
+function onFollowError(err) {
+  if (locateState !== 'following') return;
+  if (err && err.code === 1) {
+    stopFollow(true);
+    toast('Location permission denied — follow stopped.');
+    return;
+  }
+  /* iOS fires transient timeouts under tree cover and in dips — ride them out */
+  followErrs++;
+  if (followErrs >= 3) { followErrs = 0; toast('GPS signal weak — still trying.'); }
 }
 
-/* Field-grade locate: watch the GPS for up to 20 seconds, throw away stale
-   cached fixes (a phone will happily hand back the last fix from somewhere
-   you used to be), and settle on the most accurate fresh fix. */
+/* Field-grade locate: watch the GPS for up to 45 seconds (a cold iPhone radio
+   often needs 30-60 s for its first high-accuracy fix — 20 s was giving up
+   early), throw away stale cached fixes, and settle on the most accurate
+   fresh fix. Transient errors while the radio warms up are ignored; only a
+   permission denial ends the attempt early. */
 function startAcquire() {
   locateState = 'acquiring';
   var best = null, finished = false;
@@ -939,17 +963,19 @@ function startAcquire() {
     drawFix(best, true);
   }
 
-  locateTimer = setTimeout(finish, 20000);
+  locateTimer = setTimeout(finish, 45000);
   try {
     locateWatch = navigator.geolocation.watchPosition(function (pos) {
       consider(pos);
       if (best && best.acc <= 8) finish(); /* good enough — stop early */
-    }, function () {
-      if (!best && !finished) {
+    }, function (err) {
+      /* transient iOS timeouts while the radio warms up are normal — keep
+       * waiting; only a permission denial ends the attempt early. */
+      if (err && err.code === 1 && !best && !finished) {
         finished = true; stopLocateWatch(); locateState = 'idle';
-        toast('Could not get a GPS fix. Check location permission.');
+        toast('Location permission denied. Allow it in Settings and try again.');
       }
-    }, { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 });
+    }, { enableHighAccuracy: true, timeout: 45000, maximumAge: 0 });
   } catch (e) { finish(); }
 }
 
@@ -969,9 +995,8 @@ function locateMe() {
     stopLocateWatch();
     toast('Following you — tap the crosshair again to stop.');
     try {
-      locateWatch = navigator.geolocation.watchPosition(onFollowFix, function () {
-        if (locateState === 'following') { stopFollow(true); toast('Lost GPS signal.'); }
-      }, { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 });
+      locateWatch = navigator.geolocation.watchPosition(onFollowFix, onFollowError,
+        { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 });
     } catch (e) { stopFollow(true); }
     return;
   }
