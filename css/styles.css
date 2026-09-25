@@ -28,6 +28,7 @@
 html, body {
   margin: 0; padding: 0;
   height: 100%;
+  overflow: hidden;
   background: var(--bg);
   color: var(--ink);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -35,6 +36,16 @@ html, body {
   line-height: 1.45;
   overscroll-behavior-y: none;
 }
+/* Pin the document itself in place (standard PWA boilerplate): only the
+   inner .scroll panes and sheet bodies ever move. Stops iOS from dragging
+   the whole page — tab bar included — up over dead space. */
+body {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%;
+}
+/* Don't let an inner scroller chain its overscroll out to the document. */
+.scroll, .sheet-body, .modal-card { overscroll-behavior-y: contain; }
 
 /* ---------- views ---------- */
 .view { display: none; height: 100%; height: 100dvh; }
