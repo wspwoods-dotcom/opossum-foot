@@ -60,8 +60,8 @@ var STATES = [
   { code: "WI", name: "Wisconsin", file: "wisconsin-2026-27.json", provisional: false },
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
-var REMINDER_LINE = 'Reminder only — always verify with your state agency.';
-var APP_VERSION = 'beta 0.1 · build 2026-09-24aw';
+var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
+var APP_VERSION = 'beta 0.1 · build 2026-09-24az';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -69,6 +69,8 @@ var DEMO_ACTIVE = false;
 
 /* ================= 2. STORAGE ================= */
 var LS_KEY = 'opossumfoot.v1';
+/* Pre-trap-lines backup: the exact store shape before the lines migration ran. */
+var BACKUP_KEY = 'opossumFootBackupPreLines';
 
 var Store = {
   data: null,
@@ -77,11 +79,17 @@ var Store = {
     if (!this.data || typeof this.data !== 'object') {
       this.data = { onboarded: false, state: null, sets: [], logs: [] };
     }
+    migrateLines(this.data);
     if (!Array.isArray(this.data.sets)) this.data.sets = [];
     if (!Array.isArray(this.data.logs)) this.data.logs = [];
     if (typeof this.data.weatherOn !== 'boolean') this.data.weatherOn = false;
     if (typeof this.data.voiceOn !== 'boolean') this.data.voiceOn = true;
     if (typeof this.data.licensesOn !== 'boolean') this.data.licensesOn = true;
+    if (typeof this.data.seasonsOn !== 'boolean') this.data.seasonsOn = true;
+    /* New-set field visibility toggles — all default on. */
+    var sfDef = { traptype: true, settype: true, bait: true, lure: true, notes: true };
+    if (!this.data.setFields || typeof this.data.setFields !== 'object') this.data.setFields = {};
+    for (var sfk in sfDef) if (typeof this.data.setFields[sfk] !== 'boolean') this.data.setFields[sfk] = true;
   },
   save: function () {
     try {
@@ -92,6 +100,75 @@ var Store = {
   }
 };
 
+/* ================= 2a. TRAP LINES =================
+   Each line is a self-contained trapping context: { id, name, state }.
+   Sets and logs carry lineId; the old global trapping state now lives on
+   the active line. Migration is bulletproof: the exact pre-migration store
+   is backed up to BACKUP_KEY first, then every set/log is assigned to a
+   line that exists — no record is ever orphaned. Runs idempotently on
+   every load. */
+function lineById(d, id) {
+  if (!d || !Array.isArray(d.lines)) return null;
+  for (var i = 0; i < d.lines.length; i++) {
+    if (d.lines[i] && d.lines[i].id === id) return d.lines[i];
+  }
+  return null;
+}
+function newLineId() {
+  return 'line-' + Date.now().toString(36) + Math.floor(Math.random() * 1296).toString(36);
+}
+function migrateLines(d) {
+  if (!d || typeof d !== 'object') return;
+  if (!Array.isArray(d.lines)) {
+    try { localStorage.setItem(BACKUP_KEY, JSON.stringify(d)); } catch (e) { /* backup is best-effort; migration still runs */ }
+  }
+  if (!Array.isArray(d.sets)) d.sets = [];
+  if (!Array.isArray(d.logs)) d.logs = [];
+  if (!Array.isArray(d.lines) || d.lines.length === 0) {
+    d.lines = [{ id: 'line-1', name: 'Line 1', state: (typeof d.state === 'string' && d.state) ? d.state : null }];
+  }
+  /* Normalize: every line gets a unique id, a name, and a state slot. */
+  var seen = {};
+  d.lines.forEach(function (ln, i) {
+    if (!ln || typeof ln !== 'object') { d.lines[i] = ln = {}; }
+    if (typeof ln.id !== 'string' || !ln.id || seen[ln.id]) ln.id = (i === 0 ? 'line-1' : newLineId());
+    seen[ln.id] = true;
+    if (typeof ln.name !== 'string' || !ln.name) ln.name = 'Line ' + (i + 1);
+    if (typeof ln.state !== 'string') ln.state = null;
+  });
+  var firstId = d.lines[0].id;
+  if (!lineById(d, d.activeLineId)) d.activeLineId = firstId;
+  /* Assign every set/log to a line that exists. Untagged records and records
+     pointing at a vanished line land on the first line — never orphaned. */
+  d.sets.forEach(function (s) { if (!s || !lineById(d, s.lineId)) s.lineId = firstId; });
+  d.logs.forEach(function (l) { if (!l || !lineById(d, l.lineId)) l.lineId = firstId; });
+}
+/* Active-line accessors — every view filters through these, so Map, History,
+   Totals, Seasons, Licenses, and CSV export all follow the active line. */
+function activeLine() {
+  var d = Store.data;
+  return lineById(d, d.activeLineId) || (d.lines && d.lines[0]) || null;
+}
+function activeLineId() { var l = activeLine(); return l ? l.id : null; }
+function activeStateCode() { var l = activeLine(); return (l && l.state) || null; }
+function activeSets() {
+  var id = activeLineId(), out = [];
+  Store.data.sets.forEach(function (s) { if (s.lineId === id) out.push(s); });
+  return out;
+}
+function activeLogs() {
+  var id = activeLineId(), out = [];
+  Store.data.logs.forEach(function (l) { if (l.lineId === id) out.push(l); });
+  return out;
+}
+/* Safe filename slug from the active line's name. */
+function lineFileSlug() {
+  var l = activeLine();
+  var s = l ? String(l.name || '').toLowerCase().replace(/[^a-z0-9]+/g, '-') : '';
+  s = s.replace(/^-+|-+$/g, '');
+  return s || 'line';
+}
+
 /* ================= 2b. DEMO MODE (?demo=1) =================
    Seeds fictional data for screenshots / in-person demos. Only runs when the
    store is completely empty, so it can never overwrite real trap data. */
@@ -101,7 +178,8 @@ function seedDemoStore() {
     var s = {
       id: id, name: name, lat: lat, lng: lng, county: 'Prairie County',
       trapType: trapType, setType: setType, bait: bait, lure: lure,
-      status: status, dateSet: dateSet, notes: notes || '', createdAt: now
+      status: status, dateSet: dateSet, notes: notes || '', createdAt: now,
+      lineId: 'line-1'
     };
     if (extra) for (var k in extra) s[k] = extra[k];
     return s;
@@ -127,7 +205,7 @@ function seedDemoStore() {
       bait: s ? s.bait : '', lure: s ? s.lure : '', trapType: s ? s.trapType : '',
       setType: s ? s.setType : '', county: s ? s.county : '',
       lat: s ? s.lat : null, lng: s ? s.lng : null,
-      notes: notes || '', createdAt: now
+      notes: notes || '', createdAt: now, lineId: 'line-1'
     };
   }
   var logs = [
@@ -139,7 +217,10 @@ function seedDemoStore() {
     L('l-demo-06', 's-demo-10', 'Striped skunk', 1, 'kept-alive', '2026-11-21', 'For essence collection.')
   ];
   Store.data = {
-    onboarded: true, state: 'IA', weatherOn: false, voiceOn: true, licensesOn: true,
+    onboarded: true, state: 'IA', weatherOn: false, voiceOn: true, licensesOn: true, seasonsOn: true,
+    setFields: { traptype: true, settype: true, bait: true, lure: true, notes: true },
+    lines: [{ id: 'line-1', name: 'Line 1', state: 'IA' }],
+    activeLineId: 'line-1',
     sets: sets, logs: logs
   };
   Store.save();
@@ -328,7 +409,7 @@ function downloadCSV(filename, rows) {
 
 /* ================= 4. SEASON DATA ================= */
 function stateData() {
-  var code = Store.data.state;
+  var code = activeStateCode();
   if (!code) return null;
   var all = window.OPOSSUM_FOOT_SEASON_DATA || {};
   return all[code] || null;
@@ -362,7 +443,7 @@ var DOMESTIC_REMINDERS = {
    the state-specific reminder when one exists, else the generic line. */
 function domesticNotes() {
   var base = 'Domestic animals (cats, dogs, etc.) are not regulated game species — no season or bag limit applies. ';
-  var r = DOMESTIC_REMINDERS[Store.data.state];
+  var r = DOMESTIC_REMINDERS[activeStateCode()];
   return base + (r || 'Some states require trappers to report domestic-animal catches; check your state regulations.');
 }
 function stateSpecies() {
@@ -469,10 +550,8 @@ function dispLabel(d) {
 }
 
 function dispBadge(d) {
-  if (d === 'released') return ' <span class="badge released">released</span>';
-  if (d === 'kept-alive') return ' <span class="badge alive">kept alive</span>';
-  if (d === 'transported') return ' <span class="badge transported">transported/released</span>';
-  return '';
+  var cls = d === 'released' ? 'released' : d === 'kept-alive' ? 'alive' : d === 'transported' ? 'transported' : 'kept';
+  return ' <span class="badge ' + cls + '">' + esc(dispLabel(d)) + '</span>';
 }
 
 /* total KEPT count logged for a species in a season year.
@@ -482,7 +561,7 @@ function dispBadge(d) {
    and are treated as kept (backward compatible). */
 function speciesSeasonTotal(name, seasonYear) {
   var n = 0;
-  Store.data.logs.forEach(function (l) {
+  activeLogs().forEach(function (l) {
     if (!l.otherType && l.species === name && seasonYearOf(l.date) === seasonYear && l.disposition !== 'released' && l.disposition !== 'transported') n += (l.count * 1 || 0);
   });
   return n;
@@ -523,7 +602,7 @@ function reverseGeocode(lat, lng) {
 var backfillRunning = false;
 function backfillCounties() {
   if (backfillRunning || !navigator.onLine || !Store.data) return;
-  var missing = Store.data.sets.filter(function (s) { return !s.county && s.lat != null && s.lng != null; });
+  var missing = activeSets().filter(function (s) { return !s.county && s.lat != null && s.lng != null; });
   if (!missing.length) return;
   backfillRunning = true;
   var i = 0;
@@ -582,12 +661,13 @@ function setCountyBanner(info) {
 /* Warn when the GPS fix is in a different state than the trapping state. */
 function checkStateMismatch(info) {
   var bar = $('state-alert');
-  if (info && info.stateCode && Store.data.state && info.stateCode !== Store.data.state) {
-    var here = null, sel = stateEntry(Store.data.state);
+  var tcode = activeStateCode();
+  if (info && info.stateCode && tcode && info.stateCode !== tcode) {
+    var here = null, sel = stateEntry(tcode);
     for (var i = 0; i < STATES.length; i++) if (STATES[i].code === info.stateCode) here = STATES[i];
     $('state-alert-text').textContent =
       'You appear to be in ' + (here ? here.name : info.stateCode) +
-      ', but your trapping state is ' + (sel ? sel.name : Store.data.state) + '.';
+      ', but your trapping state is ' + (sel ? sel.name : tcode) + '.';
     bar.classList.add('show');
   } else {
     bar.classList.remove('show');
@@ -759,6 +839,20 @@ function applyFeatureToggles() {
   var wtab = document.querySelector('#tabbar button[data-tab="weather"]');
   if (wtab) wtab.style.display = wOn ? '' : 'none';
   if (!wOn && $('pane-weather') && $('pane-weather').classList.contains('active')) switchTab('map');
+  var sOn = Store.data.seasonsOn !== false;
+  var stab = document.querySelector('#tabbar button[data-tab="seasons"]');
+  if (stab) stab.style.display = sOn ? '' : 'none';
+  if (!sOn && $('pane-seasons') && $('pane-seasons').classList.contains('active')) switchTab('map');
+}
+
+/* ---- new-set field toggles ---- */
+var SET_FIELD_IDS = { traptype: 'setfield-traptype', settype: 'setfield-settype', bait: 'setfield-bait', lure: 'setfield-lure', notes: 'setfield-notes' };
+function setFieldOn(key) { return !Store.data.setFields || Store.data.setFields[key] !== false; }
+function applySetFieldToggles() {
+  for (var key in SET_FIELD_IDS) {
+    var el = $(SET_FIELD_IDS[key]);
+    if (el) el.style.display = setFieldOn(key) ? '' : 'none';
+  }
 }
 
 /* ================= 6. MAP ================= */
@@ -788,7 +882,7 @@ var STATE_BOUNDS = {
 
 function fitMapToState() {
   if (!map || typeof L === 'undefined') return;
-  var b = STATE_BOUNDS[Store.data.state];
+  var b = STATE_BOUNDS[activeStateCode()];
   if (b) map.fitBounds([[b[0], b[1]], [b[2], b[3]]], { padding: [16, 16] });
 }
 
@@ -846,7 +940,7 @@ function setIcon(set) {
 function refreshMarkers() {
   if (!map || !markersLayer) return;
   markersLayer.clearLayers();
-  Store.data.sets.forEach(function (s) {
+  activeSets().forEach(function (s) {
     if (!mapStatusFilter[normStatus(s.status)]) return;
     var m = L.marker([s.lat, s.lng], { icon: setIcon(s), title: s.name });
     m.on('click', function () { openSetDetail(s.id); });
@@ -1058,7 +1152,7 @@ function openSetForm(coords, setId) {
   var s = setId ? getSet(setId) : null;
   $('setform-title').textContent = s ? 'Edit set' : 'New set';
   $('sf-name').value = s ? s.name : '';
-  $('sf-name').placeholder = s ? '' : 'e.g. Set ' + (Store.data.sets.length + 1);
+  $('sf-name').placeholder = s ? '' : 'e.g. Set ' + (activeSets().length + 1);
   $('sf-type').value = s ? s.trapType : 'Foothold';
   $('sf-settype').value = s ? (s.setType || 'Dirt hole') : 'Dirt hole';
   $('sf-bait').value = s ? (s.bait || '') : '';
@@ -1068,6 +1162,8 @@ function openSetForm(coords, setId) {
   $('sf-notes').value = s ? (s.notes || '') : '';
   $('voice-setnotes-preview').classList.remove('show');
   $('voice-setnotes-preview').innerHTML = '';
+  hideSetFormError();
+  applySetFieldToggles();
   var c = s ? { lat: s.lat, lng: s.lng } : coords;
   $('setform-coords').textContent = c ? (c.lat.toFixed(5) + ', ' + c.lng.toFixed(5)) : '';
   openSheet('sheet-setform');
@@ -1078,8 +1174,42 @@ function getSet(id) {
   return null;
 }
 
+/* Inline validation message on the New/Edit set sheet. Set name, Status, and
+   Date set are required — the save is blocked until all three have values. */
+function showSetFormError(msg) {
+  var el = $('setform-error');
+  if (!el) { toast(msg); return; }
+  el.textContent = msg;
+  el.classList.add('show');
+  el.scrollIntoView({ block: 'nearest' });
+}
+function hideSetFormError() {
+  var el = $('setform-error');
+  if (el) { el.textContent = ''; el.classList.remove('show'); }
+}
+
+/* Inline validation message on the Log-a-catch sheet. Entry type (Catch vs
+   Other event) and disposition are both required. */
+function showLogFormError(msg) {
+  var el = $('logform-error');
+  if (!el) { toast(msg); return; }
+  el.textContent = msg;
+  el.classList.add('show');
+  el.scrollIntoView({ block: 'nearest' });
+}
+function hideLogFormError() {
+  var el = $('logform-error');
+  if (el) { el.textContent = ''; el.classList.remove('show'); }
+}
+
 function saveSetForm() {
-  var name = $('sf-name').value.trim() || ('Set ' + (Store.data.sets.length + 1));
+  var name = $('sf-name').value.trim();
+  var status = $('sf-status').value;
+  var dateSet = $('sf-date').value;
+  if (!name) { showSetFormError('Set name is required — give this set a name.'); return; }
+  if (!status) { showSetFormError('Status is required — pick one.'); return; }
+  if (!dateSet) { showSetFormError('Date set is required — pick the date.'); return; }
+  hideSetFormError();
   if (editingSetId) {
     var s = getSet(editingSetId);
     if (!s) { closeSheets(); return; }
@@ -1088,8 +1218,8 @@ function saveSetForm() {
     s.setType = $('sf-settype').value;
     s.bait = $('sf-bait').value.trim();
     s.lure = $('sf-lure').value.trim();
-    s.status = $('sf-status').value;
-    s.dateSet = $('sf-date').value || todayISO();
+    s.status = status;
+    s.dateSet = dateSet;
     s.notes = $('sf-notes').value.trim();
     if (s.status === 'pulled' && !s.datePulled) s.datePulled = todayISO();
     if (s.status !== 'pulled' && s.datePulled) delete s.datePulled;
@@ -1104,12 +1234,13 @@ function saveSetForm() {
       trapType: $('sf-type').value,
       setType: $('sf-settype').value,
       bait: $('sf-bait').value.trim(), lure: $('sf-lure').value.trim(),
-      status: $('sf-status').value,
-      dateSet: $('sf-date').value || todayISO(),
+      status: status,
+      dateSet: dateSet,
       notes: $('sf-notes').value.trim(),
       createdAt: Date.now()
     };
     if (ns.status === 'pulled') ns.datePulled = ns.dateSet;
+    ns.lineId = activeLineId();
     Store.data.sets.push(ns);
     Store.save(); refreshMarkers(); closeSheets();
     toast('Set saved.');
@@ -1240,18 +1371,29 @@ function deleteSet(id) {
 var logSetId = null, logSpecies = null, logCount = 1, logDisposition = null, pendingLogPhotos = [];
 
 /* Catch-log "Other event" (build au): non-catch events recorded on a set.
-   otherType is one of 'sprung' | 'non-native' | 'domestic' | 'fur' |
-   'animal-part', null/absent for normal catches. Other events are events,
-   not catches: they never change the set's trap status and are excluded
-   from Totals and the bait/lure scorecard. */
-var logEventType = 'catch', logOtherType = 'sprung';
-var OTHER_LABELS = { 'sprung': 'Sprung', 'non-native': 'Non-native animal', 'non-game': 'Non-game animal', 'domestic': 'Domestic animal', 'fur': 'Fur', 'animal-part': 'Animal part' };
+   otherType is one of 'sprung' | 'non-native' | 'non-game' | 'domestic' |
+   'fur' | 'animal-part', null/absent for normal catches. Other events are
+   events, not catches: they never change the set's trap status and are
+   excluded from Totals and the bait/lure scorecard.
+   Log-sheet entry state: logEventType starts unchosen (null) and
+   logDisposition starts null — both are REQUIRED and the trapper must pick
+   them explicitly before saving. logOtherType keeps its 'sprung' default. */
+var logEventType = null, logOtherType = 'sprung';
+var OTHER_LABELS = { 'sprung': 'Sprung', 'non-native': 'Non-native animal', 'non-game': 'Non-game animal', 'domestic': 'Domestic animal', 'fur': 'Fur', 'animal-part': 'Animal part', 'other': 'Other' };
+
+/* Notes placeholder nudge: the catch-all 'Other' subtype gets a descriptive
+   prompt; every other subtype keeps the plain default. Notes stay optional. */
+var LOG_NOTES_PLACEHOLDER_DEFAULT = 'Optional…';
+var LOG_NOTES_PLACEHOLDER_OTHER = 'Describe what happened…';
+function updateLogNotesPlaceholder() {
+  $('log-notes').placeholder = (logOtherType === 'other') ? LOG_NOTES_PLACEHOLDER_OTHER : LOG_NOTES_PLACEHOLDER_DEFAULT;
+}
 
 function openLogSheet(setId) {
   var s = getSet(setId);
   if (!s) return;
   logSetId = setId; logSpecies = null; logCount = 1; logDisposition = null; pendingLogPhotos = [];
-  logEventType = 'catch'; logOtherType = 'sprung';
+  logEventType = null; logOtherType = 'sprung';
   renderPendingLogPhotos();
   $('log-setline').innerHTML = '<strong>' + esc(s.name) + '</strong>' +
     (s.setType ? ' · ' + esc(s.setType) : '') +
@@ -1265,7 +1407,9 @@ function openLogSheet(setId) {
   $('log-species-search').value = '';
   $('log-species-free').value = '';
   $('log-othertype').value = 'sprung';
-  setLogEventType('catch');
+  updateLogNotesPlaceholder();
+  setLogEventType(null);
+  hideLogFormError();
   $('log-warnings').innerHTML = '';
   $('voice-lognotes-preview').classList.remove('show');
   $('voice-lognotes-preview').innerHTML = '';
@@ -1273,10 +1417,10 @@ function openLogSheet(setId) {
   openSheet('sheet-log');
 }
 
-/* Event-type toggle at the top of the Log-a-catch sheet. "Catch" is the
-   current behavior; "Other" reveals the subtype dropdown and swaps the
-   species picker for optional free text. Disposition buttons stay visible
-   in both modes. */
+/* Event-type toggle at the top of the Log-a-catch sheet. Neither option starts
+   selected — the trapper must choose Catch or Other event explicitly.
+   "Other" reveals the subtype dropdown and swaps the species picker for
+   optional free text. Disposition buttons stay visible in both modes. */
 function setLogEventType(t) {
   logEventType = t;
   var evBtns = document.querySelectorAll('#log-eventtype button');
@@ -1286,6 +1430,7 @@ function setLogEventType(t) {
   $('log-species-other').hidden = !other;
   $('log-other-row').hidden = !other;
   $('btn-save-log').textContent = other ? 'Save event' : 'Save catch';
+  hideLogFormError();
   renderLogWarnings();
 }
 
@@ -1339,16 +1484,37 @@ function renderSpeciesList(filter) {
       '" data-sp="' + esc(sp.common_name) + '">' + speciesIcon(sp.common_name) +
       '<span class="sp-name">' + esc(sp.common_name) +
       (sp.scientific_name ? '<span class="sci">' + esc(sp.scientific_name) + '</span>' : '') + '</span>' +
-      '<span class="badge ' + info.badgeClass + '">' + info.badge + '</span></button>';
+      '<span class="badge ' + info.badgeClass + '">' + info.badge + '</span>' +
+      (sp.domestic ? '<span class="sp-icon sp-help" data-help="1">?</span>' : '') + '</button>';
   }).join('');
   var btns = box.querySelectorAll('.species-row');
   for (var i = 0; i < btns.length; i++) {
-    btns[i].onclick = function () {
+    btns[i].onclick = function (e) {
+      var t = e && e.target;
+      if (t && t.getAttribute && t.getAttribute('data-help')) {
+        e.stopPropagation();
+        showSpeciesDetail(this.getAttribute('data-sp'));
+        return;
+      }
       logSpecies = this.getAttribute('data-sp');
       renderSpeciesList($('log-species-search').value);
       renderLogWarnings();
     };
   }
+}
+
+/* County/city-level variation: species.county_notes, or any season zone with
+   area_type 'counties'. Returns detail text, or '' when no county variation. */
+function countyRuleText(sp) {
+  if (sp.county_notes) return sp.county_notes;
+  var names = [];
+  (sp.seasons || []).forEach(function (s) {
+    (s.zones || []).forEach(function (z) {
+      if (z.area_type === 'counties' && z.zone_name && names.indexOf(z.zone_name) < 0) names.push(z.zone_name);
+    });
+  });
+  if (!names.length) return '';
+  return 'County-based zones apply: ' + names.join('; ') + '.';
 }
 
 /* Warnings inform — they never block saving. */
@@ -1363,8 +1529,15 @@ function renderLogWarnings() {
   var d = stateData();
   var html = '';
   if (sp.domestic) {
-    html += '<div class="warnbox"><div class="wb-title">🐾 Domestic animal.</div>' +
+    html += '<div class="warnbox"><div class="wb-title">Domestic animal.</div>' +
       esc(domesticNotes()) +
+      '<div class="reminder-tag">' + esc(REMINDER_LINE) + '</div></div>';
+  }
+  var countyDetail = countyRuleText(sp);
+  if (countyDetail) {
+    html += '<div class="warnbox"><div class="wb-title">📍 County/city rules apply to ' + esc(sp.common_name) +
+      ' in ' + esc(d.state_name) + '.</div>' +
+      esc(countyDetail) + ' Check your local ordinances.' +
       '<div class="reminder-tag">' + esc(REMINDER_LINE) + '</div></div>';
   }
   if (!info.inSeason) {
@@ -1395,10 +1568,12 @@ function renderLogWarnings() {
 }
 
 function saveLog() {
+  if (!logEventType) { showLogFormError('Choose Catch or Other event.'); return; }
   var isOther = (logEventType === 'other');
   var species = isOther ? $('log-species-free').value.trim() : logSpecies;
-  if (!isOther && !species) { toast('Pick a species first.'); return; }
-  if (!logDisposition) { toast('Pick a disposition before saving — kept, kept alive, released, or transported/released.'); return; }
+  if (!isOther && !species) { showLogFormError('Pick a species first.'); return; }
+  if (!logDisposition) { showLogFormError('Choose a disposition — Dispatched, Kept alive, Released, or Transported/Released.'); return; }
+  hideLogFormError();
   var s = getSet(logSetId);
   var date = $('log-date').value || todayISO();
   var log = {
@@ -1417,6 +1592,7 @@ function saveLog() {
     notes: $('log-notes').value.trim(),
     createdAt: Date.now()
   };
+  log.lineId = activeLineId();
   Store.data.logs.push(log);
   Store.save();
   pendingLogPhotos.forEach(function (ph) {
@@ -1795,7 +1971,7 @@ function dimLabel(def, v) {
 }
 function dimValues(def) {
   var seen = {}, out = [];
-  Store.data.logs.forEach(function (l) {
+  activeLogs().forEach(function (l) {
     var v = dimValue(l, def);
     if (!seen[v]) { seen[v] = true; out.push(v); }
   });
@@ -1814,7 +1990,7 @@ function dimPass(val, sel) {
    draw from this, so the CSV always matches the on-screen report. */
 function histFilteredLogs() {
   var f = histUI, q = f.q.toLowerCase();
-  return Store.data.logs.slice().sort(function (a, b) {
+  return activeLogs().slice().sort(function (a, b) {
     if (a.date !== b.date) return a.date < b.date ? 1 : -1;
     return b.createdAt - a.createdAt;
   }).filter(function (l) {
@@ -2002,7 +2178,7 @@ function renderHistBySpecies(list) {
 
 function renderHistory() {
   var box = $('history-list');
-  var logs = Store.data.logs;
+  var logs = activeLogs();
   renderHistChips();
   renderHistDimChips();
   renderHistFilterBar();
@@ -2038,12 +2214,12 @@ function renderScorecard() {
     if (!groups[k]) groups[k] = { name: k || '(none)', nights: 0, catches: 0, nsets: 0 };
     return groups[k];
   }
-  Store.data.sets.forEach(function (s) {
+  activeSets().forEach(function (s) {
     var g = grp(by === 'lure' ? s.lure : s.bait);
     g.nights += trapNights(s);
     g.nsets++;
   });
-  Store.data.logs.forEach(function (l) {
+  activeLogs().forEach(function (l) {
     if (l.otherType) return; /* Other events never inflate catch-per-trap-night rates */
     var s = l.setId ? getSet(l.setId) : null;
     var key = s ? (by === 'lure' ? s.lure : s.bait)
@@ -2059,7 +2235,7 @@ function renderScorecard() {
   var html = '<div class="seg compact" style="margin-bottom:10px">' +
     '<button type="button" data-scoreby="lure"' + (by === 'lure' ? ' class="selected"' : '') + '>By lure</button>' +
     '<button type="button" data-scoreby="bait"' + (by === 'bait' ? ' class="selected"' : '') + '>By bait</button></div>';
-  if (!Store.data.sets.length) {
+  if (!activeSets().length) {
     return html + '<div class="empty"><div class="big">🎯</div>No sets yet — the scorecard fills in as you trap.</div>';
   }
   html += '<p class="dim">All-time catch per trap-night, grouped by each set\'s current ' + (by === 'lure' ? 'lure' : 'bait') + '.</p>';
@@ -2074,7 +2250,7 @@ function renderScorecard() {
 
 function renderTotals() {
   var box = $('totals-body');
-  var logs = Store.data.logs;
+  var logs = activeLogs();
   if (!logs.length) {
     box.innerHTML = '<div class="empty"><div class="big">📊</div>Nothing to total yet.</div>';
     return;
@@ -2112,7 +2288,7 @@ function renderTotals() {
 
 function renderSeasons(filter) {
   var d = stateData();
-  var entry = stateEntry(Store.data.state);
+  var entry = stateEntry(activeStateCode());
   if (!d) {
     $('seasons-list').innerHTML = '<p class="dim">No season data loaded.</p>';
     return;
@@ -2182,7 +2358,14 @@ var licURLs = {};
 function renderLicenses() {
   var grid = $('license-grid');
   IDB.all('photos').then(function (all) {
-    all = all.filter(function (p) { return !p.setId && !p.logId; }); /* license wallet only */
+    /* License wallet is per trap line. Photos saved before lines existed
+       have no lineId and belong to the first line. */
+    var lid = activeLineId();
+    var firstId = (Store.data.lines && Store.data.lines[0] && Store.data.lines[0].id) || null;
+    all = all.filter(function (p) {
+      if (p.setId || p.logId) return false; /* license wallet only */
+      return (p.lineId || firstId) === lid;
+    });
     all.sort(function (a, b) { return b.createdAt - a.createdAt; });
     grid.innerHTML = '';
     if (!all.length) {
@@ -2257,7 +2440,7 @@ function openLicenseDetail(p) {
 
 /* ================= 12. CSV EXPORT / ERASE ================= */
 function exportCatches() {
-  var total = Store.data.logs.length;
+  var total = activeLogs().length;
   if (!total) { toast('No catches to export yet.'); return; }
   /* Same shared filter as the on-screen History report: the CSV always
      matches exactly what the filtered view shows. */
@@ -2272,16 +2455,16 @@ function exportCatches() {
       dispLabel(l.disposition), l.setType, l.trapType, weatherText(l.weather), l.bait, l.lure, l.county, l.lat, l.lng, l.notes]);
   });
   var filt = filtersActive();
-  downloadCSV('opossum-foot-catches-' + todayISO() + (filt ? '-filtered' : '') + '.csv', rows);
+  downloadCSV('opossum-foot-catches-' + lineFileSlug() + '-' + todayISO() + (filt ? '-filtered' : '') + '.csv', rows);
   toast('Catches CSV downloaded (' + list.length + (list.length === total ? '' : ' of ' + total) + ').');
 }
 function exportSets() {
-  if (!Store.data.sets.length) { toast('No sets to export yet.'); return; }
+  if (!activeSets().length) { toast('No sets to export yet.'); return; }
   var rows = [['Name', 'Latitude', 'Longitude', 'County', 'Set type', 'Trap type', 'Weather', 'Bait', 'Lure', 'Status', 'Date set', 'Notes']];
-  Store.data.sets.forEach(function (s) {
+  activeSets().forEach(function (s) {
     rows.push([s.name, s.lat, s.lng, s.county, s.setType, s.trapType, weatherText(s.weather), s.bait, s.lure, s.status, s.dateSet, s.notes]);
   });
-  downloadCSV('opossum-foot-sets-' + todayISO() + '.csv', rows);
+  downloadCSV('opossum-foot-sets-' + lineFileSlug() + '-' + todayISO() + '.csv', rows);
   toast('Sets CSV downloaded.');
 }
 /* Import a JSON file previously exported from Opossum Foot
@@ -2312,6 +2495,7 @@ function importDataFile(file) {
         status: normStatus(s.status),
         dateSet: s.dateSet || todayISO(),
         notes: s.notes || '',
+        lineId: activeLineId(),
         createdAt: s.createdAt || Date.now()
       };
       haveSetIds[c.id] = true;
@@ -2332,13 +2516,15 @@ function importDataFile(file) {
         county: l.county || '',
         lat: (l.lat == null ? null : +l.lat), lng: (l.lng == null ? null : +l.lng),
         notes: l.notes || '',
+        lineId: activeLineId(),
         createdAt: l.createdAt || Date.now()
       };
       haveLogIds[c.id] = true;
       Store.data.logs.push(c); nLogs++;
     });
-    if (!Store.data.state && data.state) Store.data.state = data.state;
-    if (!Store.data.onboarded && Store.data.state) Store.data.onboarded = true;
+    var al = activeLine();
+    if (al && !al.state && data.state) al.state = data.state;
+    if (!Store.data.onboarded && activeStateCode()) Store.data.onboarded = true;
     Store.save();
     refreshMarkers(); renderHistory(); renderTotals();
     toast('Imported ' + nSets + ' sets and ' + nLogs + ' logs.');
@@ -2373,6 +2559,156 @@ function switchTab(name) {
   if (name === 'seasons') renderSeasons($('seasons-search').value);
   if (name === 'licenses') renderLicenses();
   if (name === 'weather') renderWeatherTab();
+  if (name === 'lines') renderLines();
+}
+
+/* ================= 13b. TRAP LINES UI =================
+   One line active at a time; every view follows it via the activeSets() /
+   activeLogs() / activeStateCode() accessors. */
+function refreshForLine() {
+  /* history filters belong to the old line's data — reset so a stale
+     species or date filter can't show a confusing empty report */
+  histUI.q = ''; histUI.disp = 'all'; histUI.from = ''; histUI.to = '';
+  histUI.fSetType = []; histUI.fTrapType = []; histUI.fLure = []; histUI.fBait = []; histUI.fStatus = [];
+  histUI.collapsed = {}; histUI.expanded = {}; histUI.spOpen = {}; histUI.defaultsSet = false;
+  var hs = $('history-search'); if (hs) hs.value = '';
+  refreshMarkers();
+  renderHistory();
+  renderTotals();
+  renderSeasons($('seasons-search') ? $('seasons-search').value : '');
+  renderLicenses();
+  renderMapStatusFilters();
+  buildStateSelect($('settings-state'), activeStateCode());
+  renderSettingsLineName();
+  renderLineBar();
+  fitMapToState();
+}
+function renderSettingsLineName() {
+  var el = $('settings-line-name');
+  if (el) { var l = activeLine(); el.textContent = l ? l.name : ''; }
+}
+function renderLineBar() {
+  var el = $('line-bar-name');
+  if (el) { var l = activeLine(); el.textContent = l ? l.name : ''; }
+}
+function activateLine(id) {
+  var d = Store.data;
+  var ln = lineById(d, id);
+  if (!ln || d.activeLineId === id) return;
+  d.activeLineId = id;
+  Store.save();
+  refreshForLine();
+  renderLines();
+  toast('Active line: ' + ln.name + '.');
+}
+function renderLines() {
+  var box = $('lines-list');
+  if (!box) return;
+  var d = Store.data;
+  var lid = activeLineId();
+  box.innerHTML = d.lines.map(function (ln) {
+    var nSets = 0, nLogs = 0;
+    d.sets.forEach(function (s) { if (s.lineId === ln.id) nSets++; });
+    d.logs.forEach(function (l) { if (l.lineId === ln.id) nLogs++; });
+    var st = stateEntry(ln.state);
+    return '<div class="line-row' + (ln.id === lid ? ' active' : '') + '" data-line="' + esc(ln.id) + '">' +
+      '<button type="button" class="line-main" data-act="switch">' +
+      '<span class="line-name">' + esc(ln.name) + '</span>' +
+      '<span class="dim">' + esc(st ? st.name : 'No state set') + ' · ' + nSets + ' set' + (nSets === 1 ? '' : 's') +
+      ' · ' + nLogs + ' catch' + (nLogs === 1 ? '' : 'es') + '</span>' +
+      (ln.id === lid ? '<span class="badge alive">Active</span>' : '') +
+      '</button>' +
+      '<button type="button" class="btn-small btn-secondary line-edit" data-act="edit">Edit</button>' +
+      '</div>';
+  }).join('');
+  var rows = box.querySelectorAll('.line-row');
+  for (var i = 0; i < rows.length; i++) {
+    (function (row) {
+      var id = row.getAttribute('data-line');
+      row.querySelector('[data-act="switch"]').onclick = function () { activateLine(id); };
+      row.querySelector('[data-act="edit"]').onclick = function () { showLineEditModal(id); };
+    })(rows[i]);
+  }
+}
+function showAddLineModal() {
+  showModal(
+    '<h3>New trap line</h3>' +
+    '<label class="field" for="m-line-name">Line name</label>' +
+    '<input type="text" id="m-line-name" maxlength="40" placeholder="e.g. River bottoms">' +
+    '<label class="field" for="m-line-state" style="margin-top:10px">Trapping state</label>' +
+    '<select id="m-line-state"></select>' +
+    '<div class="btn-row" style="margin-top:14px"><button class="btn-secondary" id="m-cancel" type="button">Cancel</button>' +
+    '<button class="btn-primary" id="m-ok" type="button">Add line</button></div>'
+  );
+  buildStateSelect($('m-line-state'), activeStateCode());
+  $('m-cancel').onclick = closeModal;
+  $('m-ok').onclick = function () {
+    var name = $('m-line-name').value.trim();
+    if (!name) { toast('Give the line a name.'); return; }
+    var code = $('m-line-state').value;
+    if (!code) { toast('Pick the trapping state for this line.'); return; }
+    var ln = { id: newLineId(), name: name, state: code };
+    Store.data.lines.push(ln);
+    closeModal();
+    activateLine(ln.id);
+  };
+  setTimeout(function () { var el = $('m-line-name'); if (el) el.focus(); }, 60);
+}
+function showLineEditModal(id) {
+  var ln = lineById(Store.data, id);
+  if (!ln) return;
+  showModal(
+    '<h3>Edit trap line</h3>' +
+    '<label class="field" for="m-line-name">Line name</label>' +
+    '<input type="text" id="m-line-name" maxlength="40" value="' + esc(ln.name) + '">' +
+    '<label class="field" for="m-line-state" style="margin-top:10px">Trapping state</label>' +
+    '<select id="m-line-state"></select>' +
+    '<div class="btn-row" style="margin-top:14px"><button class="btn-secondary" id="m-cancel" type="button">Cancel</button>' +
+    '<button class="btn-secondary" id="m-del" type="button">Delete</button>' +
+    '<button class="btn-primary" id="m-ok" type="button">Save</button></div>'
+  );
+  buildStateSelect($('m-line-state'), ln.state);
+  $('m-cancel').onclick = closeModal;
+  $('m-ok').onclick = function () {
+    var name = $('m-line-name').value.trim();
+    if (!name) { toast('Give the line a name.'); return; }
+    var code = $('m-line-state').value;
+    if (!code) { toast('Pick the trapping state for this line.'); return; }
+    ln.name = name;
+    ln.state = code;
+    Store.save();
+    closeModal();
+    renderLines();
+    renderSettingsLineName();
+    renderLineBar();
+    if (id === Store.data.activeLineId) { renderSeasons($('seasons-search').value); fitMapToState(); }
+    toast('Line saved.');
+  };
+  $('m-del').onclick = function () { closeModal(); deleteLine(id); };
+}
+function deleteLine(id) {
+  var d = Store.data;
+  var ln = lineById(d, id);
+  if (!ln) return;
+  if (d.lines.length <= 1) { toast('You need at least one trap line.'); return; }
+  var nSets = 0, nLogs = 0;
+  d.sets.forEach(function (s) { if (s.lineId === id) nSets++; });
+  d.logs.forEach(function (l) { if (l.lineId === id) nLogs++; });
+  if (nSets || nLogs) {
+    toast('\u201C' + ln.name + '\u201D still has ' + nSets + ' set' + (nSets === 1 ? '' : 's') +
+      ' and ' + nLogs + ' catch' + (nLogs === 1 ? '' : 'es') + ' \u2014 empty it first.');
+    return;
+  }
+  confirmModal('Delete \u201C' + esc(ln.name) + '\u201D?',
+    'The empty line will be removed. This cannot be undone.',
+    'Delete line', function () {
+      d.lines = d.lines.filter(function (x) { return x.id !== id; });
+      if (d.activeLineId === id) d.activeLineId = d.lines[0].id;
+      Store.save();
+      refreshForLine();
+      renderLines();
+      toast('Line deleted.');
+    });
 }
 
 /* ================= 14. ONBOARDING ================= */
@@ -2393,7 +2729,9 @@ function enterMain() {
   switchTab('map');
   renderHistory(); renderTotals(); renderSeasons(''); renderLicenses();
   renderMapStatusFilters();
-  buildStateSelect($('settings-state'), Store.data.state);
+  buildStateSelect($('settings-state'), activeStateCode());
+  renderSettingsLineName();
+  renderLineBar();
   $('settings-weather').checked = !!Store.data.weatherOn;
   $('settings-weather').onchange = function () {
     Store.data.weatherOn = this.checked;
@@ -2412,11 +2750,31 @@ function enterMain() {
     Store.save(); applyFeatureToggles();
     toast(this.checked ? 'License wallet is on.' : 'License wallet is off.');
   };
+  $('settings-seasons').checked = Store.data.seasonsOn !== false;
+  $('settings-seasons').onchange = function () {
+    Store.data.seasonsOn = this.checked;
+    Store.save(); applyFeatureToggles();
+    toast(this.checked ? 'Seasons tab is on.' : 'Seasons tab is off.');
+  };
+  var sfKeys = ['traptype', 'settype', 'bait', 'lure', 'notes'];
+  sfKeys.forEach(function (key) {
+    var cb = $('settings-sf-' + key);
+    if (!cb) return;
+    cb.checked = setFieldOn(key);
+    cb.onchange = function () {
+      Store.data.setFields[key] = this.checked;
+      Store.save(); applySetFieldToggles();
+    };
+  });
   $('btn-features-reset').onclick = function () {
     Store.data.weatherOn = false; Store.data.voiceOn = true; Store.data.licensesOn = true;
+    Store.data.seasonsOn = true;
+    Store.data.setFields = { traptype: true, settype: true, bait: true, lure: true, notes: true };
     Store.save();
     $('settings-weather').checked = false; $('settings-voice').checked = true; $('settings-licenses').checked = true;
-    applyFeatureToggles();
+    $('settings-seasons').checked = true;
+    sfKeys.forEach(function (key) { var cb = $('settings-sf-' + key); if (cb) cb.checked = true; });
+    applyFeatureToggles(); applySetFieldToggles();
     toast('Features reset to defaults.');
   };
   $('btn-weather-refresh').onclick = function () { renderWeatherTab(); };
@@ -2455,7 +2813,8 @@ function wireUp() {
   $('btn-start').onclick = function () {
     var code = $('onboard-state').value;
     if (!code) { toast('Pick your trapping state first.'); return; }
-    Store.data.state = code;
+    var al0 = activeLine();
+    if (al0) al0.state = code;
     Store.data.onboarded = true;
     Store.save();
     enterMain();
@@ -2466,6 +2825,10 @@ function wireUp() {
   for (var i = 0; i < tabs.length; i++) {
     tabs[i].onclick = (function (t) { return function () { switchTab(t.getAttribute('data-tab')); }; })(tabs[i]);
   }
+
+  /* active line bar -> jump to Lines tab */
+  var lb = $('line-bar');
+  if (lb) lb.onclick = function () { switchTab('lines'); };
 
   /* map buttons */
   $('btn-locate').onclick = locateMe;
@@ -2538,6 +2901,7 @@ function wireUp() {
       return function () {
         logDisposition = b.getAttribute('data-disp');
         for (var k = 0; k < dispBtns.length; k++) dispBtns[k].classList.toggle('selected', dispBtns[k] === b);
+        hideLogFormError();
         renderLogWarnings();
       };
     })(dispBtns[db]);
@@ -2551,7 +2915,7 @@ function wireUp() {
       return function () { setLogEventType(b.getAttribute('data-ev')); };
     })(evBtns[eb]);
   }
-  $('log-othertype').onchange = function () { logOtherType = this.value; };
+  $('log-othertype').onchange = function () { logOtherType = this.value; updateLogNotesPlaceholder(); };
   $('log-date').onchange = renderLogWarnings;
   $('btn-save-log').onclick = saveLog;
   $('btn-voice-lognotes').onclick = function () {
@@ -2638,7 +3002,7 @@ function wireUp() {
     var done = 0;
     for (var i = 0; i < files.length; i++) {
       (function (f) {
-        IDB.put('photos', { id: uid('p'), name: f.name, blob: f, createdAt: Date.now() })
+        IDB.put('photos', { id: uid('p'), name: f.name, blob: f, lineId: activeLineId(), createdAt: Date.now() })
           .then(function () { done++; if (done === files.length) { renderLicenses(); toast('License photo saved on this phone.'); } })
           .catch(function () { toast('Could not save that photo.'); });
       })(files[i]);
@@ -2649,8 +3013,9 @@ function wireUp() {
   /* settings */
   $('settings-state').onchange = function () {
     var code = this.value;
-    if (!code || code === Store.data.state) return;
-    Store.data.state = code;
+    var al = activeLine();
+    if (!code || !al || code === al.state) return;
+    al.state = code;
     Store.save();
     renderSeasons('');
     fitMapToState();
@@ -2665,6 +3030,9 @@ function wireUp() {
     this.value = '';
   };
   $('btn-erase').onclick = eraseAll;
+
+  /* trap lines */
+  $('btn-add-line').onclick = showAddLineModal;
 
   /* sheets + modal */
   $('scrim').onclick = function () { Voice.stop(); closeSheets(); };
@@ -2689,13 +3057,13 @@ function boot() {
     DEMO_ACTIVE = true;
     document.body.classList.add('demo-shot');
   }
-  buildStateSelect($('onboard-state'), Store.data.state);
+  buildStateSelect($('onboard-state'), activeStateCode());
   wireUp();
   IDB.open().then(function () {
     if (DEMO_ACTIVE) seedDemoIDB();
     $('splash-status').textContent = 'Ready.';
     setTimeout(function () {
-      if (Store.data.onboarded && Store.data.state && stateData()) enterMain();
+      if (Store.data.onboarded && activeStateCode() && stateData()) enterMain();
       else showView('view-onboard');
       if (DEMO_ACTIVE) toast('Demo mode — fictional data.');
     }, 700);
