@@ -55,6 +55,7 @@
 
   <!-- MAP PANE -->
   <div id="pane-map" class="pane active">
+    <div id="map-status-filters" class="chip-row map-status-filters" aria-label="Filter sets by status"></div>
     <div id="map"></div>
     <div class="map-fabs">
       <button class="fab secondary" id="btn-locate" type="button" aria-label="Locate me"><img src="assets/icons/crosshair.png" alt=""></button>
@@ -223,6 +224,7 @@
     <select id="sf-status">
       <option value="active">Active</option><option value="fresh">Fresh (just set)</option>
       <option value="sprung">Sprung</option><option value="pulled">Pulled</option>
+      <option value="other">Other</option>
     </select>
     <label class="field" for="sf-date">Date set</label>
     <input type="date" id="sf-date">
@@ -244,6 +246,16 @@
   <div class="sheet-head"><h2 id="sd-name">Set</h2><button class="sheet-x" data-close type="button">×</button></div>
   <div class="sheet-body">
     <div id="sd-badges" style="margin-bottom:6px"></div>
+    <div class="status-row">
+      <label class="field" for="sd-status">Status</label>
+      <select id="sd-status">
+        <option value="active">Active</option>
+        <option value="fresh">Fresh (just set)</option>
+        <option value="sprung">Sprung</option>
+        <option value="pulled">Pulled</option>
+        <option value="other">Other</option>
+      </select>
+    </div>
     <dl class="kv" id="sd-fields"></dl>
     <div class="sheet-actions">
       <button class="btn-primary" id="btn-sd-log" type="button">＋ Log a catch</button>
