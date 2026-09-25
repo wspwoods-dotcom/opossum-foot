@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency.';
-var APP_VERSION = 'beta 0.1 · build 2026-09-24av';
+var APP_VERSION = 'beta 0.1 · build 2026-09-24aw';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -346,6 +346,25 @@ var DOMESTIC_ANIMAL = {
   seasons: [],
   notes: 'Not a regulated game species — always loggable, no season or bag limit. Some states require trappers to report domestic-animal catches; check your state regulations.'
 };
+/* Per-state domestic-animal reminders, verified against official state docs.
+   Only these six states have domestic-specific rules worth surfacing;
+   every other state keeps the generic check-your-regulations line.
+   Reminders only — never legal authority. */
+var DOMESTIC_REMINDERS = {
+  'MT': 'Montana: report any domestic animal caught to FWP within 24 hours; release uninjured animals before leaving the trap site. Dog captures go to the FWP regional office.',
+  'GA': 'Georgia: carry a choke stick (or similar) while tending traps and use it to release domestic animals. Selling a trapped dog or cat\'s fur is illegal.',
+  'HI': 'Hawaii (residential zones): check any trapped dog or cat for ID and report to county animal control immediately.',
+  'NH': 'New Hampshire: an injury to a licensed dog at large must be reported to the town/city on its tag, and to the owner if known.',
+  'MS': 'Mississippi (wild-hog cage traps): release all nontarget wild or domestic animals immediately upon detection.',
+  'WV': 'West Virginia (wildlife damage-control agents in municipalities): release captured pets to the owner, at the capture site, or to county officials.'
+};
+/* Full domestic-animal notes line for the active state: base explainer plus
+   the state-specific reminder when one exists, else the generic line. */
+function domesticNotes() {
+  var base = 'Domestic animals (cats, dogs, etc.) are not regulated game species — no season or bag limit applies. ';
+  var r = DOMESTIC_REMINDERS[Store.data.state];
+  return base + (r || 'Some states require trappers to report domestic-animal catches; check your state regulations.');
+}
 function stateSpecies() {
   var d = stateData();
   if (!d) return [];
@@ -439,14 +458,14 @@ function findSpecies(name) {
   return null;
 }
 
-/* Human-readable catch disposition. 'kept' = harvested/dead, 'kept-alive' =
+/* Human-readable catch disposition. 'kept' = dispatched (killed), 'kept-alive' =
    held live, 'released' = let go, 'transported' = transported and released
    elsewhere. Logs saved before any disposition existed are treated as 'kept'. */
 function dispLabel(d) {
   if (d === 'released') return 'Released';
   if (d === 'kept-alive') return 'Kept alive';
   if (d === 'transported') return 'Transported/Released';
-  return 'Kept';
+  return 'Dispatched';
 }
 
 function dispBadge(d) {
@@ -1226,7 +1245,7 @@ var logSetId = null, logSpecies = null, logCount = 1, logDisposition = null, pen
    not catches: they never change the set's trap status and are excluded
    from Totals and the bait/lure scorecard. */
 var logEventType = 'catch', logOtherType = 'sprung';
-var OTHER_LABELS = { 'sprung': 'Sprung', 'non-native': 'Non-native animal', 'domestic': 'Domestic animal', 'fur': 'Fur', 'animal-part': 'Animal part' };
+var OTHER_LABELS = { 'sprung': 'Sprung', 'non-native': 'Non-native animal', 'non-game': 'Non-game animal', 'domestic': 'Domestic animal', 'fur': 'Fur', 'animal-part': 'Animal part' };
 
 function openLogSheet(setId) {
   var s = getSet(setId);
@@ -1343,6 +1362,11 @@ function renderLogWarnings() {
   var info = speciesSeasonInfo(sp);
   var d = stateData();
   var html = '';
+  if (sp.domestic) {
+    html += '<div class="warnbox"><div class="wb-title">🐾 Domestic animal.</div>' +
+      esc(domesticNotes()) +
+      '<div class="reminder-tag">' + esc(REMINDER_LINE) + '</div></div>';
+  }
   if (!info.inSeason) {
     html += '<div class="warnbox' + (sp.season_status === 'closed' ? ' red' : '') + '">' +
       '<div class="wb-title">⚠ ' + esc(sp.common_name) + ' — ' + esc(info.badge) + '.</div>' +
@@ -1361,7 +1385,7 @@ function renderLogWarnings() {
     html += '<div class="warnbox' + (over ? ' red' : '') + '">' +
       '<div class="wb-title">Bag limit reminder</div>' +
       esc(d.state_name) + ' data lists: ' + esc(lt) + '. ' +
-      'Kept ' + esc(logSpecies) + ' this season (' + esc(sy) + '): <strong>' + keptTotal + '</strong>' +
+      'Dispatched ' + esc(logSpecies) + ' this season (' + esc(sy) + '): <strong>' + keptTotal + '</strong>' +
       (notCounted
         ? '. This entry is marked ' + esc(dispLabel(logDisposition).toLowerCase()) + ', so it does not count toward the limit.'
         : ' — with this entry you would be at <strong>' + total + '</strong>.') +
@@ -1848,7 +1872,7 @@ function clearHistFilters() {
 
 function renderHistChips() {
   var dc = $('hist-disp-chips');
-  var defs = [['all', 'All'], ['kept', 'Kept'], ['kept-alive', 'Kept alive'], ['released', 'Released'], ['transported', 'Transported/Released']];
+  var defs = [['all', 'All'], ['kept', 'Dispatched'], ['kept-alive', 'Kept alive'], ['released', 'Released'], ['transported', 'Transported/Released']];
   dc.innerHTML = defs.map(function (d) {
     return '<button type="button" class="chip' + (histUI.disp === d[0] ? ' on' : '') + '" data-disp="' + d[0] + '">' + d[1] + '</button>';
   }).join('');
@@ -2145,7 +2169,8 @@ function showSpeciesDetail(name) {
   if ((sp.permit_requirements || []).length) {
     html += '<p><strong>Permits:</strong> ' + esc(sp.permit_requirements.join('; ')) + '</p>';
   }
-  if (sp.notes) html += '<p class="dim">' + esc(sp.notes) + '</p>';
+  if (sp.domestic) html += '<p class="dim">' + esc(domesticNotes()) + '</p>';
+  else if (sp.notes) html += '<p class="dim">' + esc(sp.notes) + '</p>';
   html += '<p class="reminder-tag">' + esc(REMINDER_LINE) + ' ' + esc(d.disclaimer || '') + '</p>';
   html += '<button class="btn-secondary" id="m-close" type="button" style="width:100%;margin-top:10px">Close</button>';
   showModal(html);
