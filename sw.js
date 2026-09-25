@@ -4,7 +4,7 @@
  * No user data ever passes through here — sets/catches live in
  * localStorage/IndexedDB on the device only.
  */
-var SHELL_CACHE = 'opossum-foot-shell-v34';
+var SHELL_CACHE = 'opossum-foot-shell-v35';
 var TILE_CACHE = 'opossum-foot-tiles-v1';
 var MAX_TILES = 400;
 
@@ -13,6 +13,7 @@ var SHELL = [
   './index.html',
   './css/styles.css',
   './js/app.js',
+  './js/guide-content.js',
   './js/season-data.js',
   './manifest.json',
   './assets/logo.png',

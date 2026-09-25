@@ -193,6 +193,14 @@
         <p class="dim">Build <span id="build-stamp">—</span></p>
       </div>
       <div class="card">
+        <h3>Help &amp; legal</h3>
+        <p class="dim" style="margin:0 0 8px">The trapper's guide to the app, and the legal notices.</p>
+        <div class="sheet-actions">
+          <button class="btn-secondary" id="btn-guide" type="button">📖 Trapper's guide</button>
+          <button class="btn-secondary" id="btn-legal" type="button">⚖ Legal notices</button>
+        </div>
+      </div>
+      <div class="card">
         <h3>Backup</h3>
         <p class="dim">Download your data as CSV. Keep a copy somewhere safe.</p>
         <div class="sheet-actions">
@@ -400,6 +408,15 @@
   </div>
 </div>
 
+<!-- GUIDE / LEGAL SHEET -->
+<div id="sheet-guide" class="sheet">
+  <div class="sheet-grab"></div>
+  <div class="sheet-head"><h2 id="guide-title">Guide</h2><button class="sheet-x" data-close type="button">×</button></div>
+  <div class="sheet-body">
+    <div id="guide-body" class="guide-body"></div>
+  </div>
+</div>
+
 <!-- ============ MODAL ============ -->
 <div id="modal"><div class="modal-card" id="modal-card"></div></div>
 
@@ -407,6 +424,7 @@
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="js/season-data.js"></script>
+<script src="js/guide-content.js"></script>
 <script src="js/app.js"></script>
 </body>
 </html>
