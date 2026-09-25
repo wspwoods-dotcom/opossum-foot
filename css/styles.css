@@ -161,7 +161,6 @@ input:focus, select:focus, textarea:focus, button:focus-visible { outline: 2px s
 /* set pins */
 .pin { width: 30px; height: 30px; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 2px 8px rgba(0,0,0,.6); }
 .pin-active { background: #4caf50; }
-.pin-fresh { background: #5b8dd9; }
 .pin-sprung { background: #d19a2f; }
 .pin-pulled { background: #8a8a8a; }
 .pin-other { background: #9b59d0; }
@@ -199,7 +198,6 @@ input:focus, select:focus, textarea:focus, button:focus-visible { outline: 2px s
 .badge.closed { background: #3a1f1b; color: #f0a49c; border: 1px solid #6e2f28; }
 .badge.yearround { background: #16283d; color: #9cc0ee; border: 1px solid #2f4d6e; }
 .badge.status-active { background: #1d3a1d; color: #9ed69a; }
-.badge.status-fresh { background: #16283d; color: #9cc0ee; }
 .badge.status-sprung { background: #3d2c10; color: #f5cf7a; }
 .badge.status-pulled { background: #2a2a2a; color: #bdbdbd; }
 .badge.status-other { background: #2e1d3d; color: #cfa9ee; }
