@@ -354,6 +354,14 @@ input:focus, select:focus, textarea:focus, button:focus-visible { outline: 2px s
 #hist-disp-chips { overflow-x: visible; justify-content: stretch; }
 #hist-disp-chips .chip { flex: 1 1 0; min-width: 0; text-align: center; padding: 10px 4px; font-size: 14px; }
 
+/* ---- History report filters (build aq) ---- */
+#hist-filters-toggle { width: 100%; margin: 4px 0 8px; }
+#hist-filters-toggle #hist-filters-count { margin-left: 6px; }
+#hist-filters { border: 1px solid var(--line); border-radius: 12px; padding: 4px 12px 12px; margin-bottom: 10px; }
+#hist-filters .dim-label { font-size: 13px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .6px; margin: 12px 0 2px; }
+#hist-filters .btn-row > div { min-width: 0; }
+#hist-filters-clear { width: 100%; margin-top: 10px; }
+
 /* ---- demo mode phone framing (build am, ?demo=1 only) ---- */
 body.demo-shot { background: #05070a; }
 body.demo-shot #view-splash,
