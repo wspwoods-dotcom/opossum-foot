@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency.';
-var APP_VERSION = 'beta 0.1 · build 2026-09-24ar';
+var APP_VERSION = 'beta 0.1 · build 2026-09-24as';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -754,7 +754,8 @@ function initMap() {
     $('map').innerHTML = '<div class="empty"><div class="big">🗺</div>The map library could not load.<br>Check your connection and reopen.</div>';
     return;
   }
-  map = L.map('map', { zoomControl: true, attributionControl: true, maxZoom: 22 }).setView([39.5, -98.35], 4);
+  map = L.map('map', { zoomControl: false, attributionControl: true, maxZoom: 22 }).setView([39.5, -98.35], 4);
+  L.control.zoom({ position: 'bottomleft' }).addTo(map);
   var street = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}',
     { maxZoom: 22, maxNativeZoom: 19, attribution: '© Esri, HERE, Garmin, © OpenStreetMap contributors' });
   var satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
@@ -772,7 +773,7 @@ function initMap() {
   var satL = L.layerGroup([satellite, labels, roads]);
   var topoL = L.layerGroup([topo, roads]);
   satL.addTo(map);
-  L.control.layers({ 'Street': streetL, 'Satellite': satL, 'Topo': topoL }, null, { position: 'topright' }).addTo(map);
+  L.control.layers({ 'Street': streetL, 'Satellite': satL, 'Topo': topoL }, null, { position: 'bottomleft' }).addTo(map);
   markersLayer = L.layerGroup().addTo(map);
 
   map.on('click', function (e) {
