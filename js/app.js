@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency.';
-var APP_VERSION = 'beta 0.1 · build 2026-09-24as';
+var APP_VERSION = 'beta 0.1 · build 2026-09-24at';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -109,13 +109,13 @@ function seedDemoStore() {
   var sets = [
     S('s-demo-01', 'Creek bend', 41.8800, -95.1500, '1.5 coil-spring', 'Dirt hole', 'Sweet corn', 'Raccoon gland lure', 'active', '2026-11-14', 'Good coon sign along the bank.'),
     S('s-demo-02', 'Fence corner', 41.8200, -95.3200, 'Dog-proof', 'Post set', 'Cat food', '', 'active', '2026-11-14', ''),
-    S('s-demo-03', 'Culvert east', 41.7500, -95.1200, '220 body-grip', 'Trail set', '', 'Beaver castor', 'fresh', '2026-11-20', 'Fresh chew on the north side.'),
+    S('s-demo-03', 'Culvert east', 41.7500, -95.1200, '220 body-grip', 'Trail set', '', 'Beaver castor', 'active', '2026-11-20', 'Fresh chew on the north side.'),
     S('s-demo-04', 'Timber edge', 41.6800, -95.4800, '1.75 coil-spring', 'Flat set', '', 'Canine gland lure', 'active', '2026-11-15', 'Coyote scat on the field road.'),
     S('s-demo-05', 'Pond dam', 41.9100, -95.4000, '330 body-grip', 'Dam crossover', '', 'Beaver castor', 'sprung', '2026-11-16', 'Sprung empty — reset with fresh castor.'),
-    S('s-demo-06', 'Brush pile', 41.6200, -95.2500, 'Live cage trap', 'Blind set', 'Sardines', '', 'fresh', '2026-11-21', ''),
+    S('s-demo-06', 'Brush pile', 41.6200, -95.2500, 'Live cage trap', 'Blind set', 'Sardines', '', 'active', '2026-11-21', ''),
     S('s-demo-07', 'Old barn', 41.7300, -95.5200, 'Dog-proof', 'Post set', 'Fish oil', 'Raccoon lure', 'pulled', '2026-11-10', 'Pulled — landowner request.', { datePulled: '2026-11-18' }),
     S('s-demo-08', 'Ditch crossing', 41.6600, -95.3300, '1.5 coil-spring', 'Trail set', '', 'Red fox urine', 'active', '2026-11-15', ''),
-    S('s-demo-09', 'Walnut grove', 41.8400, -95.4700, 'Snare', 'Trail set', '', '', 'fresh', '2026-11-22', ''),
+    S('s-demo-09', 'Walnut grove', 41.8400, -95.4700, 'Snare', 'Trail set', '', '', 'active', '2026-11-22', ''),
     S('s-demo-10', 'Pasture gate', 41.6000, -95.1800, 'Dog-proof', 'Bucket set', 'Honey bun', 'Cherry lure', 'sprung', '2026-11-12', '')
   ];
   function L(id, setId, species, count, disposition, date, notes) {
@@ -1642,21 +1642,22 @@ function dayLabel(iso) {
 function dispOf(l) { return l.disposition || 'kept'; }
 
 /* ---------- Trap status (build ar) ----------
-   The canonical status list is final: Active, Fresh, Sprung, Pulled, Other.
+   The canonical status list: Active, Sprung, Pulled, Other.
    Status is manual-only: it changes only when the user picks a new value
    (New/Edit set form, or the status control on the set-detail sheet at
    check time). Logging a catch or recording a Sprung event NEVER changes
    a set's status — no code path below may set s.status automatically. */
-var STATUS_VALUES = ['active', 'fresh', 'sprung', 'pulled', 'other'];
-var STATUS_LABELS = { active: 'Active', fresh: 'Fresh', sprung: 'Sprung', pulled: 'Pulled', other: 'Other' };
+var STATUS_VALUES = ['active', 'sprung', 'pulled', 'other'];
+var STATUS_LABELS = { active: 'Active', sprung: 'Sprung', pulled: 'Pulled', other: 'Other' };
 function statusLabel(v) { return STATUS_LABELS[normStatus(v)] || 'Other'; }
 /* Map any saved status value onto the canonical five. Legacy/unknown
    values are never dropped — they land in the closest bucket. */
 function normStatus(v) {
   var s = (v === null || v === undefined) ? '' : String(v).toLowerCase().trim();
-  if (s === 'active' || s === 'fresh' || s === 'sprung' || s === 'pulled' || s === 'other') return s;
+  if (s === 'active' || s === 'sprung' || s === 'pulled' || s === 'other') return s;
+  if (s === 'fresh') return 'active'; /* Fresh retired in build at — old Fresh sets read as Active */
   if (s === 'set' || s === 'live' || s === 'open' || s === 'working') return 'active';
-  if (s === 'new' || s === 'just set' || s === 'just-set' || s === 'freshly set') return 'fresh';
+  if (s === 'new' || s === 'just set' || s === 'just-set' || s === 'freshly set') return 'active';
   if (s === 'tripped' || s === 'fired' || s === 'sprung-empty' || s === 'sprung empty' || s === 'empty') return 'sprung';
   if (s === 'removed' || s === 'inactive' || s === 'closed' || s === 'retired' || s === 'gone') return 'pulled';
   if (s === '') return 'active'; /* pre-status sets defaulted to active */
@@ -1664,7 +1665,7 @@ function normStatus(v) {
 }
 /* Map-view status filters: independent multi-select toggles. Several can be
    on at once; a set shows when its current status is toggled on. */
-var mapStatusFilter = { active: true, fresh: true, sprung: true, pulled: true, other: true };
+var mapStatusFilter = { active: true, sprung: true, pulled: true, other: true };
 function renderMapStatusFilters() {
   var host = $('map-status-filters');
   if (!host) return;
