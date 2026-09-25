@@ -125,6 +125,26 @@ input:focus, select:focus, textarea:focus, button:focus-visible { outline: 2px s
 #county-banner .cb-state { font-size: 13px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-top: 1px; }
 #county-banner.unknown .cb-county { color: var(--faint); font-size: 16px; letter-spacing: .5px; }
 
+/* ---------- active trap line bar (persistent) ---------- */
+#line-bar {
+  flex: 0 0 auto; z-index: 500;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  width: 100%;
+  background: #10150c;
+  border: 0; border-bottom: 1px solid var(--line);
+  padding: 8px 12px;
+  color: var(--ink);
+  font-size: 14px; font-weight: 700; letter-spacing: .3px;
+  cursor: pointer;
+  font-family: inherit;
+}
+#line-bar .lb-tag {
+  font-size: 11px; font-weight: 600; color: var(--muted);
+  text-transform: uppercase; letter-spacing: 1.5px;
+}
+#line-bar-name { color: var(--accent); max-width: 60vw; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#line-bar .lb-go { color: var(--faint); font-size: 18px; line-height: 1; }
+
 #state-alert, #offline-banner, #pin-hint {
   flex: 0 0 auto; z-index: 500;
   padding: 10px 14px; font-size: 15px; font-weight: 600; text-align: center;
@@ -204,6 +224,7 @@ input:focus, select:focus, textarea:focus, button:focus-visible { outline: 2px s
 .badge.released { background: #2a2a2a; color: #bdbdbd; border: 1px solid #4a4a4a; }
 .badge.alive { background: #1d3a1d; color: #9ed69a; border: 1px solid #3f6b3a; }
 .badge.transported { background: #16283d; color: #9cc0ee; border: 1px solid #2f4d6e; }
+.badge.kept { background: #3d2c10; color: #f5cf7a; border: 1px solid #6b4d1c; }
 .badge.other-ev { background: #2e1d3d; color: #cfa9ee; border: 1px solid #5a3a6e; }
 .req { color: var(--red); }
 .seg { display: flex; gap: 8px; margin: 2px 0 14px; }
@@ -213,6 +234,8 @@ input:focus, select:focus, textarea:focus, button:focus-visible { outline: 2px s
 
 .warnbox { background: #3d2c10; border: 1px solid #6b4d1c; color: #f5cf7a; border-radius: var(--radius); padding: 12px 14px; margin: 12px 0; font-size: 15px; }
 .warnbox.red { background: #3a1f1b; border-color: #6e2f28; color: #f0a49c; }
+.form-error { display: none; color: #f0a49c; font-weight: 700; font-size: 15px; margin: 10px 0 2px; }
+.form-error.show { display: block; }
 .warnbox .wb-title { font-weight: 800; margin-bottom: 4px; }
 .reminder-tag { font-size: 13px; color: var(--muted); font-style: italic; margin-top: 8px; }
 
@@ -223,6 +246,7 @@ input:focus, select:focus, textarea:focus, button:focus-visible { outline: 2px s
 /* Species silhouettes are black-on-transparent; invert to light-on-dark theme. */
 .sp-icon { width: 40px; height: 40px; object-fit: contain; flex: none; filter: invert(1); }
 .sp-icon-lg { width: 56px; height: 56px; object-fit: contain; flex: none; filter: invert(1); }
+.sp-icon.sp-help { display: inline-flex; align-items: center; justify-content: center; filter: none; border: 2px solid currentColor; border-radius: 50%; font-weight: 700; font-size: 22px; line-height: 1; cursor: pointer; }
 
 .stepper { display: flex; align-items: center; gap: 14px; margin: 8px 0; }
 .stepper button { width: 60px; height: 60px; border-radius: 50%; font-size: 28px; padding: 0; min-height: 0; background: var(--panel); color: var(--ink); border: 1px solid var(--line); }
@@ -293,6 +317,15 @@ input:focus, select:focus, textarea:focus, button:focus-visible { outline: 2px s
 /* ---------- map-screen silhouette icons (build r) ---------- */
 #tabbar button .ti-img { width: 24px; height: 24px; object-fit: contain; filter: invert(1); opacity: .8; }
 #tabbar button.active .ti-img { opacity: 1; }
+#tabbar button .ti-svg { filter: none; }
+
+/* ---- trap lines ---- */
+.line-row { display: flex; gap: 8px; align-items: stretch; margin-bottom: 8px; border: 1px solid var(--line); border-radius: 12px; padding: 4px; }
+.line-row.active { border-color: var(--accent); }
+.line-main { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: flex-start; gap: 4px; background: none; border: none; color: var(--text); text-align: left; padding: 10px 12px; cursor: pointer; }
+.line-name { font-size: 16px; font-weight: 800; }
+.line-row .badge { margin-top: 2px; }
+.line-edit { align-self: center; flex: none; }
 .fab img { width: 30px; height: 30px; object-fit: contain; display: block; }
 .fab.secondary img { filter: invert(1); }
 #place-bar .pb-ic { width: 18px; height: 18px; object-fit: contain; filter: invert(1); vertical-align: -3px; margin-right: 6px; }
@@ -316,7 +349,7 @@ input:focus, select:focus, textarea:focus, button:focus-visible { outline: 2px s
   border: 1px solid var(--line); background: transparent; color: var(--text); }
 .chip.on { background: var(--accent); border-color: var(--accent); color: #fff; }
 .day-head { display: flex; align-items: center; gap: 6px; width: 100%; text-align: left;
-  background: none; border: none; color: var(--text); font-size: 15px; font-weight: 800;
+  background: none; border: none; color: var(--accent); font-size: 15px; font-weight: 800;
   padding: 12px 0 4px; cursor: pointer; }
 .day-head .chev { margin-left: auto; color: var(--muted); }
 .lr-notes { font-size: 14px; color: var(--muted); margin-top: 4px;
@@ -365,9 +398,9 @@ input:focus, select:focus, textarea:focus, button:focus-visible { outline: 2px s
 .sc-name { font-weight: 600; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
 .sc-rate { font-size: 14px; font-variant-numeric: tabular-nums; white-space: nowrap; }
 
-/* ---- equal-width History disposition filter chips (build ai) ---- */
-#hist-disp-chips { overflow-x: visible; justify-content: stretch; }
-#hist-disp-chips .chip { flex: 1 1 0; min-width: 0; text-align: center; padding: 10px 4px; font-size: 14px; }
+/* ---- equal-size History disposition filter chips, scrollable row ---- */
+#hist-disp-chips { overflow-x: auto; justify-content: flex-start; }
+#hist-disp-chips .chip { flex: 0 0 auto; width: 172px; text-align: center; padding: 10px 8px; font-size: 13px; white-space: nowrap; }
 
 /* ---- History report filters (build aq) ---- */
 #hist-filters-toggle { width: 100%; margin: 4px 0 8px; }
