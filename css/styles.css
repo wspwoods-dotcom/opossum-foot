@@ -203,6 +203,8 @@ input:focus, select:focus, textarea:focus, button:focus-visible { outline: 2px s
 .badge.status-other { background: #2e1d3d; color: #cfa9ee; }
 .badge.released { background: #2a2a2a; color: #bdbdbd; border: 1px solid #4a4a4a; }
 .badge.alive { background: #1d3a1d; color: #9ed69a; border: 1px solid #3f6b3a; }
+.badge.transported { background: #16283d; color: #9cc0ee; border: 1px solid #2f4d6e; }
+.badge.other-ev { background: #2e1d3d; color: #cfa9ee; border: 1px solid #5a3a6e; }
 .req { color: var(--red); }
 .seg { display: flex; gap: 8px; margin: 2px 0 14px; }
 .seg button { flex: 1; padding: 13px; border-radius: 10px; border: 1px solid var(--line); background: var(--panel); color: var(--ink); font-size: 16px; font-weight: 600; }
