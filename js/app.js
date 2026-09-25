@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency.';
-var APP_VERSION = 'beta 0.1 · build 2026-09-20ap';
+var APP_VERSION = 'beta 0.1 · build 2026-09-23aq';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -1607,7 +1607,8 @@ function renderMemos(setId) {
 }
 
 /* ================= 10. HISTORY / TOTALS / SEASONS ================= */
-var histUI = { q: '', disp: 'all', view: 'date', scoreBy: 'lure', collapsed: {}, expanded: {}, spOpen: {}, defaultsSet: false };
+var histUI = { q: '', disp: 'all', view: 'date', scoreBy: 'lure', collapsed: {}, expanded: {}, spOpen: {}, defaultsSet: false,
+  filtersOpen: false, from: '', to: '', fSetType: [], fTrapType: [], fLure: [], fBait: [], fStatus: [] };
 var DOWS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 var MONS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 function dayLabel(iso) {
@@ -1617,6 +1618,108 @@ function dayLabel(iso) {
   return DOWS[d.getDay()] + ', ' + MONS[d.getMonth()] + ' ' + (p[2] * 1);
 }
 function dispOf(l) { return l.disposition || 'kept'; }
+
+/* ---------- History report filters (build aq) ----------
+   One filter state object (histUI.from/to/fSetType/fTrapType/fLure/fBait/fStatus)
+   feeds BOTH the on-screen History report and the CSV export: what the screen
+   shows is what the file holds. Status values are built dynamically from the
+   data — never hardcoded — since the canonical status list is not final. */
+var STATUS_LABELS = { active: 'Active', fresh: 'Fresh', sprung: 'Sprung', pulled: 'Pulled' };
+function logStatus(l) {
+  var s = l.setId ? getSet(l.setId) : null;
+  return s ? (s.status || '') : '';
+}
+var DIM_DEFS = [
+  { key: 'fSetType', field: 'setType', label: 'Set type' },
+  { key: 'fTrapType', field: 'trapType', label: 'Trap type' },
+  { key: 'fLure', field: 'lure', label: 'Lure' },
+  { key: 'fBait', field: 'bait', label: 'Bait' },
+  { key: 'fStatus', field: '__status', label: 'Trap status' }
+];
+function dimValue(l, def) {
+  return def.field === '__status' ? logStatus(l) : (l[def.field] || '');
+}
+function dimLabel(def, v) {
+  if (!v) return def.field === '__status' ? '(deleted set)' : '(none)';
+  if (def.field === '__status') return STATUS_LABELS[v] || v;
+  return v;
+}
+function dimValues(def) {
+  var seen = {}, out = [];
+  Store.data.logs.forEach(function (l) {
+    var v = dimValue(l, def);
+    if (!seen[v]) { seen[v] = true; out.push(v); }
+  });
+  out.sort(function (a, b) {
+    var la = dimLabel(def, a).toLowerCase(), lb = dimLabel(def, b).toLowerCase();
+    return la < lb ? -1 : (la > lb ? 1 : 0);
+  });
+  return out;
+}
+function dimPass(val, sel) {
+  if (!sel || !sel.length) return true;
+  return sel.indexOf(val || '') !== -1;
+}
+/* The single shared filter: every current History filter (search, disposition,
+   date range, dimensions) applies here. renderHistory and exportCatches both
+   draw from this, so the CSV always matches the on-screen report. */
+function histFilteredLogs() {
+  var f = histUI, q = f.q.toLowerCase();
+  return Store.data.logs.slice().sort(function (a, b) {
+    if (a.date !== b.date) return a.date < b.date ? 1 : -1;
+    return b.createdAt - a.createdAt;
+  }).filter(function (l) {
+    if (f.disp !== 'all' && dispOf(l) !== f.disp) return false;
+    if (f.from && l.date < f.from) return false;
+    if (f.to && l.date > f.to) return false;
+    for (var i = 0; i < DIM_DEFS.length; i++) {
+      if (!dimPass(dimValue(l, DIM_DEFS[i]), f[DIM_DEFS[i].key])) return false;
+    }
+    if (q) {
+      var hay = ((l.species || '') + ' ' + (l.setName || '') + ' ' + (l.notes || '')).toLowerCase();
+      if (hay.indexOf(q) === -1) return false;
+    }
+    return true;
+  });
+}
+function countActiveFilters() {
+  var f = histUI, n = 0;
+  if (f.from) n++;
+  if (f.to) n++;
+  n += f.fSetType.length + f.fTrapType.length + f.fLure.length + f.fBait.length + f.fStatus.length;
+  return n;
+}
+function filtersActive() { return countActiveFilters() > 0; }
+function renderHistDimChips() {
+  var host = $('hist-dim-filters');
+  if (!host) return;
+  host.innerHTML = DIM_DEFS.map(function (def) {
+    var vals = dimValues(def);
+    if (!vals.length) return '';
+    var sel = histUI[def.key];
+    return '<div class="dim-label">' + esc(def.label) + '</div>' +
+      '<div class="chip-row">' + vals.map(function (v) {
+        return '<button type="button" class="chip' + (sel.indexOf(v) !== -1 ? ' on' : '') +
+          '" data-fdim="' + esc(def.key) + '" data-fval="' + esc(v) + '">' +
+          esc(dimLabel(def, v)) + '</button>';
+      }).join('') + '</div>';
+  }).join('');
+}
+function renderHistFilterBar() {
+  var tgl = $('hist-filters-toggle'), panel = $('hist-filters');
+  if (!tgl || !panel) return;
+  panel.hidden = !histUI.filtersOpen;
+  var n = countActiveFilters();
+  var cnt = $('hist-filters-count');
+  if (cnt) cnt.textContent = n ? ' · ' + n + ' active' : '';
+  var fr = $('hist-from'), to = $('hist-to');
+  if (fr && fr.value !== histUI.from) fr.value = histUI.from;
+  if (to && to.value !== histUI.to) to.value = histUI.to;
+}
+function clearHistFilters() {
+  histUI.from = ''; histUI.to = '';
+  histUI.fSetType = []; histUI.fTrapType = []; histUI.fLure = []; histUI.fBait = []; histUI.fStatus = [];
+}
 
 function renderHistChips() {
   var dc = $('hist-disp-chips');
@@ -1736,12 +1839,10 @@ function renderHistBySpecies(list) {
 
 function renderHistory() {
   var box = $('history-list');
-  var logs = Store.data.logs.slice().sort(function (a, b) {
-    if (a.date !== b.date) return a.date < b.date ? 1 : -1;
-    return b.createdAt - a.createdAt;
-  });
+  var logs = Store.data.logs;
   renderHistChips();
-  renderHistSummary(logs);
+  renderHistDimChips();
+  renderHistFilterBar();
   var seg = $('hist-view-seg');
   if (seg) {
     var btns = seg.querySelectorAll('button');
@@ -1750,24 +1851,18 @@ function renderHistory() {
     }
   }
   if (!logs.length) {
+    renderHistSummary([]);
     box.innerHTML = '<div class="empty"><div class="big">📒</div>No catches logged yet.<br>Tap a set pin on the map to log your first catch.</div>';
     return;
   }
-  var f = histUI, q = f.q.toLowerCase();
-  var list = logs.filter(function (l) {
-    if (f.disp !== 'all' && dispOf(l) !== f.disp) return false;
-    if (q) {
-      var hay = ((l.species || '') + ' ' + (l.setName || '') + ' ' + (l.notes || '')).toLowerCase();
-      if (hay.indexOf(q) === -1) return false;
-    }
-    return true;
-  });
+  var list = histFilteredLogs();
+  renderHistSummary(list);
   if (!list.length) {
     box.innerHTML = '<div class="empty"><div class="big">🔍</div>No catches match those filters.</div>';
     return;
   }
-  box.innerHTML = (f.view === 'species') ? renderHistBySpecies(list)
-    : (f.view === 'scorecard') ? renderScorecard()
+  box.innerHTML = (histUI.view === 'species') ? renderHistBySpecies(list)
+    : (histUI.view === 'scorecard') ? renderScorecard()
     : renderHistByDate(list);
 }
 
@@ -1995,14 +2090,20 @@ function openLicenseDetail(p) {
 
 /* ================= 12. CSV EXPORT / ERASE ================= */
 function exportCatches() {
-  if (!Store.data.logs.length) { toast('No catches to export yet.'); return; }
+  var total = Store.data.logs.length;
+  if (!total) { toast('No catches to export yet.'); return; }
+  /* Same shared filter as the on-screen History report: the CSV always
+     matches exactly what the filtered view shows. */
+  var list = histFilteredLogs().slice().sort(function (a, b) { return a.date < b.date ? -1 : 1; });
+  if (!list.length) { toast('No catches match the current filters.'); return; }
   var rows = [['Date', 'Season', 'Set', 'Species', 'Count', 'Disposition', 'Set type', 'Trap type', 'Weather', 'Bait', 'Lure', 'County', 'Latitude', 'Longitude', 'Notes']];
-  Store.data.logs.slice().sort(function (a, b) { return a.date < b.date ? -1 : 1; }).forEach(function (l) {
+  list.forEach(function (l) {
     rows.push([l.date, l.seasonYear || seasonYearOf(l.date), l.setName, l.species, l.count,
       dispLabel(l.disposition), l.setType, l.trapType, weatherText(l.weather), l.bait, l.lure, l.county, l.lat, l.lng, l.notes]);
   });
-  downloadCSV('opossum-foot-catches-' + todayISO() + '.csv', rows);
-  toast('Catches CSV downloaded.');
+  var filt = filtersActive();
+  downloadCSV('opossum-foot-catches-' + todayISO() + (filt ? '-filtered' : '') + '.csv', rows);
+  toast('Catches CSV downloaded (' + list.length + (list.length === total ? '' : ' of ' + total) + ').');
 }
 function exportSets() {
   if (!Store.data.sets.length) { toast('No sets to export yet.'); return; }
@@ -2295,7 +2396,20 @@ function wireUp() {
 
   /* history filters */
   $('history-search').oninput = function () { histUI.q = this.value; renderHistory(); };
+  $('hist-filters-toggle').onclick = function () { histUI.filtersOpen = !histUI.filtersOpen; renderHistory(); };
+  $('hist-filters-clear').onclick = function () { clearHistFilters(); renderHistory(); };
+  $('hist-from').onchange = function () { histUI.from = this.value; renderHistory(); };
+  $('hist-to').onchange = function () { histUI.to = this.value; renderHistory(); };
   $('pane-history').addEventListener('click', function (e) {
+    var fchip = e.target.closest ? e.target.closest('[data-fdim]') : null;
+    if (fchip) {
+      var fkey = fchip.getAttribute('data-fdim'), fval = fchip.getAttribute('data-fval');
+      var farr = histUI[fkey];
+      var fix = farr.indexOf(fval);
+      if (fix === -1) farr.push(fval); else farr.splice(fix, 1);
+      renderHistory();
+      return;
+    }
     var segBtn = e.target.closest ? e.target.closest('#hist-view-seg button') : null;
     if (segBtn) {
       histUI.view = segBtn.getAttribute('data-view');
