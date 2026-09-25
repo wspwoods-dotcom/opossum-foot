@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency.';
-var APP_VERSION = 'beta 0.1 · build 2026-09-24at';
+var APP_VERSION = 'beta 0.1 · build 2026-09-24av';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -333,6 +333,24 @@ function stateData() {
   var all = window.OPOSSUM_FOOT_SEASON_DATA || {};
   return all[code] || null;
 }
+/* "Domestic animal" (cats, dogs, etc.) is appended to every state's species
+   list programmatically — never hand-edited into the 50 state records.
+   It is NOT a regulated species: always loggable, exempt from season checks
+   and bag limits. */
+var DOMESTIC_ANIMAL = {
+  common_name: 'Domestic animal',
+  scientific_name: '',
+  keywords: 'cat dog pet puppy kitten livestock',
+  domestic: true,
+  season_status: 'exempt',
+  seasons: [],
+  notes: 'Not a regulated game species — always loggable, no season or bag limit. Some states require trappers to report domestic-animal catches; check your state regulations.'
+};
+function stateSpecies() {
+  var d = stateData();
+  if (!d) return [];
+  return d.species.concat([DOMESTIC_ANIMAL]);
+}
 function stateEntry(code) {
   for (var i = 0; i < STATES.length; i++) if (STATES[i].code === code) return STATES[i];
   return null;
@@ -371,6 +389,12 @@ function parseISODate(s) {
 /* Returns { inSeason, badge, badgeClass, label, limits, seasonNote }.
    NEVER blocks logging — the app warns, it does not forbid. */
 function speciesSeasonInfo(sp, refDate) {
+  /* Domestic animal is not a regulated species — always loggable, never
+     flagged out-of-season, never triggers a season reminder. */
+  if (sp.domestic || sp.season_status === 'exempt') {
+    return { inSeason: true, badge: 'Not regulated', badgeClass: 'yearround', limits: null,
+      seasonNote: 'Domestic animals (cats, dogs, etc.) are not regulated game species — no season or bag limit applies. Some states require reporting a domestic-animal catch; check your state regulations.' };
+  }
   var today = refDate ? parseISODate(refDate) : new Date();
   today.setHours(0, 0, 0, 0);
   var res = { inSeason: false, badge: 'Out of season', badgeClass: 'outseason', limits: null, seasonNote: '' };
@@ -408,38 +432,39 @@ function speciesSeasonInfo(sp, refDate) {
 }
 
 function findSpecies(name) {
-  var d = stateData();
-  if (!d) return null;
-  for (var i = 0; i < d.species.length; i++) {
-    if (d.species[i].common_name === name) return d.species[i];
+  var list = stateSpecies();
+  for (var i = 0; i < list.length; i++) {
+    if (list[i].common_name === name) return list[i];
   }
   return null;
 }
 
 /* Human-readable catch disposition. 'kept' = harvested/dead, 'kept-alive' =
-   held live, 'released' = let go. Logs saved before any disposition existed
-   are treated as 'kept'. */
+   held live, 'released' = let go, 'transported' = transported and released
+   elsewhere. Logs saved before any disposition existed are treated as 'kept'. */
 function dispLabel(d) {
   if (d === 'released') return 'Released';
   if (d === 'kept-alive') return 'Kept alive';
+  if (d === 'transported') return 'Transported/Released';
   return 'Kept';
 }
 
 function dispBadge(d) {
   if (d === 'released') return ' <span class="badge released">released</span>';
   if (d === 'kept-alive') return ' <span class="badge alive">kept alive</span>';
+  if (d === 'transported') return ' <span class="badge transported">transported/released</span>';
   return '';
 }
 
 /* total KEPT count logged for a species in a season year.
-   Released animals never count toward bag limits; kept and kept-alive do
-   (an animal held alive is still in possession).
+   Released and transported/released animals never count toward bag limits;
+   kept and kept-alive do (an animal held alive is still in possession).
    Logs saved before the disposition field existed have no disposition
    and are treated as kept (backward compatible). */
 function speciesSeasonTotal(name, seasonYear) {
   var n = 0;
   Store.data.logs.forEach(function (l) {
-    if (l.species === name && seasonYearOf(l.date) === seasonYear && l.disposition !== 'released') n += (l.count * 1 || 0);
+    if (!l.otherType && l.species === name && seasonYearOf(l.date) === seasonYear && l.disposition !== 'released' && l.disposition !== 'transported') n += (l.count * 1 || 0);
   });
   return n;
 }
@@ -1195,10 +1220,19 @@ function deleteSet(id) {
 /* ================= 8. CATCH LOGGING ================= */
 var logSetId = null, logSpecies = null, logCount = 1, logDisposition = null, pendingLogPhotos = [];
 
+/* Catch-log "Other event" (build au): non-catch events recorded on a set.
+   otherType is one of 'sprung' | 'non-native' | 'domestic' | 'fur' |
+   'animal-part', null/absent for normal catches. Other events are events,
+   not catches: they never change the set's trap status and are excluded
+   from Totals and the bait/lure scorecard. */
+var logEventType = 'catch', logOtherType = 'sprung';
+var OTHER_LABELS = { 'sprung': 'Sprung', 'non-native': 'Non-native animal', 'domestic': 'Domestic animal', 'fur': 'Fur', 'animal-part': 'Animal part' };
+
 function openLogSheet(setId) {
   var s = getSet(setId);
   if (!s) return;
   logSetId = setId; logSpecies = null; logCount = 1; logDisposition = null; pendingLogPhotos = [];
+  logEventType = 'catch'; logOtherType = 'sprung';
   renderPendingLogPhotos();
   $('log-setline').innerHTML = '<strong>' + esc(s.name) + '</strong>' +
     (s.setType ? ' · ' + esc(s.setType) : '') +
@@ -1210,11 +1244,30 @@ function openLogSheet(setId) {
   $('log-date').value = todayISO();
   $('log-notes').value = '';
   $('log-species-search').value = '';
+  $('log-species-free').value = '';
+  $('log-othertype').value = 'sprung';
+  setLogEventType('catch');
   $('log-warnings').innerHTML = '';
   $('voice-lognotes-preview').classList.remove('show');
   $('voice-lognotes-preview').innerHTML = '';
   renderSpeciesList('');
   openSheet('sheet-log');
+}
+
+/* Event-type toggle at the top of the Log-a-catch sheet. "Catch" is the
+   current behavior; "Other" reveals the subtype dropdown and swaps the
+   species picker for optional free text. Disposition buttons stay visible
+   in both modes. */
+function setLogEventType(t) {
+  logEventType = t;
+  var evBtns = document.querySelectorAll('#log-eventtype button');
+  for (var i = 0; i < evBtns.length; i++) evBtns[i].classList.toggle('selected', evBtns[i].getAttribute('data-ev') === t);
+  var other = (t === 'other');
+  $('log-species-catch').hidden = other;
+  $('log-species-other').hidden = !other;
+  $('log-other-row').hidden = !other;
+  $('btn-save-log').textContent = other ? 'Save event' : 'Save catch';
+  renderLogWarnings();
 }
 
 function renderPendingLogPhotos() {
@@ -1255,9 +1308,10 @@ function renderSpeciesList(filter) {
   var box = $('log-species-list');
   if (!d) { box.innerHTML = '<p class="dim">No season data loaded.</p>'; return; }
   var q = (filter || '').toLowerCase();
-  var list = d.species.filter(function (sp) {
+  var list = stateSpecies().filter(function (sp) {
     return !q || sp.common_name.toLowerCase().indexOf(q) !== -1 ||
-      (sp.scientific_name || '').toLowerCase().indexOf(q) !== -1;
+      (sp.scientific_name || '').toLowerCase().indexOf(q) !== -1 ||
+      (sp.keywords || '').toLowerCase().indexOf(q) !== -1;
   });
   if (!list.length) { box.innerHTML = '<p class="dim">No species match.</p>'; return; }
   box.innerHTML = list.map(function (sp) {
@@ -1282,6 +1336,7 @@ function renderSpeciesList(filter) {
 function renderLogWarnings() {
   var box = $('log-warnings');
   box.innerHTML = '';
+  if (logEventType === 'other') return; /* bag limits don't apply to Other events */
   if (!logSpecies) return;
   var sp = findSpecies(logSpecies);
   if (!sp) return;
@@ -1296,17 +1351,19 @@ function renderLogWarnings() {
   var lt = limitText(info.limits);
   if (lt) {
     var sy = seasonYearOf($('log-date').value || todayISO());
-    /* Bag limits count kept animals only — kept and kept-alive count, released doesn't. */
+    /* Bag limits count kept animals only — kept and kept-alive count;
+       released and transported/released don't. */
     var keptTotal = speciesSeasonTotal(logSpecies, sy);
-    var add = (logDisposition === 'released') ? 0 : logCount;
+    var notCounted = (logDisposition === 'released' || logDisposition === 'transported');
+    var add = notCounted ? 0 : logCount;
     var total = keptTotal + add;
     var over = info.limits.season_bag && total >= info.limits.season_bag;
     html += '<div class="warnbox' + (over ? ' red' : '') + '">' +
       '<div class="wb-title">Bag limit reminder</div>' +
       esc(d.state_name) + ' data lists: ' + esc(lt) + '. ' +
       'Kept ' + esc(logSpecies) + ' this season (' + esc(sy) + '): <strong>' + keptTotal + '</strong>' +
-      (logDisposition === 'released'
-        ? '. This entry is marked released, so it does not count toward the limit.'
+      (notCounted
+        ? '. This entry is marked ' + esc(dispLabel(logDisposition).toLowerCase()) + ', so it does not count toward the limit.'
         : ' — with this entry you would be at <strong>' + total + '</strong>.') +
       '<div class="reminder-tag">' + esc(REMINDER_LINE) + '</div></div>';
   }
@@ -1314,14 +1371,18 @@ function renderLogWarnings() {
 }
 
 function saveLog() {
-  if (!logSpecies) { toast('Pick a species first.'); return; }
-  if (!logDisposition) { toast('Kept, kept alive, or released — pick one before saving.'); return; }
+  var isOther = (logEventType === 'other');
+  var species = isOther ? $('log-species-free').value.trim() : logSpecies;
+  if (!isOther && !species) { toast('Pick a species first.'); return; }
+  if (!logDisposition) { toast('Pick a disposition before saving — kept, kept alive, released, or transported/released.'); return; }
   var s = getSet(logSetId);
   var date = $('log-date').value || todayISO();
   var log = {
     id: uid('l'), setId: logSetId,
     setName: s ? s.name : '(deleted set)',
-    species: logSpecies, count: logCount * 1 || 1,
+    species: species || '',
+    otherType: isOther ? logOtherType : null,
+    count: logCount * 1 || 1,
     disposition: logDisposition,
     date: date, seasonYear: seasonYearOf(date),
     bait: s ? (s.bait || '') : '', lure: s ? (s.lure || '') : '',
@@ -1344,7 +1405,12 @@ function saveLog() {
   pendingLogPhotos = [];
   closeSheets();
   renderHistory(); renderTotals();
-  toast('Logged ' + log.count + ' ' + logSpecies + ' (' + dispLabel(logDisposition) + ')' + (s ? ' at ' + s.name : '') + '.');
+  toast(isOther
+    ? 'Logged ' + (OTHER_LABELS[logOtherType] || 'Other event') + (species ? ' — ' + species : '') + ' (' + dispLabel(logDisposition) + ')' + (s ? ' at ' + s.name : '') + '.'
+    : 'Logged ' + log.count + ' ' + species + ' (' + dispLabel(logDisposition) + ')' + (s ? ' at ' + s.name : '') + '.');
+  /* INVARIANT: saving a log — catch or Other event — NEVER changes the
+     set's trap status. Status is manual-only: no s.status assignment
+     exists in saveLog or any log code path. */
   /* weather snapshot in background */
   if (s) fetchWeather(s.lat, s.lng, function (w) {
     if (!w) return;
@@ -1782,7 +1848,7 @@ function clearHistFilters() {
 
 function renderHistChips() {
   var dc = $('hist-disp-chips');
-  var defs = [['all', 'All'], ['kept', 'Kept'], ['kept-alive', 'Kept alive'], ['released', 'Released']];
+  var defs = [['all', 'All'], ['kept', 'Kept'], ['kept-alive', 'Kept alive'], ['released', 'Released'], ['transported', 'Transported/Released']];
   dc.innerHTML = defs.map(function (d) {
     return '<button type="button" class="chip' + (histUI.disp === d[0] ? ' on' : '') + '" data-disp="' + d[0] + '">' + d[1] + '</button>';
   }).join('');
@@ -1796,6 +1862,7 @@ function renderHistSummary(logs) {
   var sy = Object.keys(years).sort().reverse()[0];
   var catches = 0, released = 0, sps = {};
   logs.forEach(function (l) {
+    if (l.otherType) return; /* events are not catches */
     if ((l.seasonYear || seasonYearOf(l.date)) !== sy) return;
     var c = l.count * 1 || 0;
     catches += c;
@@ -1807,15 +1874,25 @@ function renderHistSummary(logs) {
     ' species · ' + released + ' released</span>';
 }
 
-/* One log entry row. showDate adds the day label (used in the By-species view). */
+/* One log entry row. showDate adds the day label (used in the By-species view).
+   Other events show their subtype label (plus a badge when free-text
+   species was entered) so they're distinguishable from catches. */
 function logRowHtml(l, showDate) {
   var expanded = !!histUI.expanded[l.createdAt];
   var meta = (showDate ? esc(dayLabel(l.date)) : '') +
     ((l.setName || '') ? (showDate ? ' · ' : '') + esc(l.setName) : '') +
     ((l.bait || l.lure) ? ' · ' + esc([l.bait, l.lure].filter(Boolean).join(' / ')) : '');
+  var title;
+  if (l.otherType) {
+    var ol = OTHER_LABELS[l.otherType] || 'Other event';
+    title = '<span class="lr-species">' + esc(l.species || ol) + '</span>' +
+      (l.species ? ' <span class="badge other-ev">' + esc(ol) + '</span>' : '');
+  } else {
+    title = '<span class="lr-species">' + esc(l.species) + '</span>';
+  }
   return '<div class="log-row' + (expanded ? ' expanded' : '') + '" data-log="' + l.createdAt + '">' +
-    '<div class="lr-top"><span class="lr-species">' + esc(l.species) +
-    '</span><span class="lr-count">×' + esc(l.count) + '</span>' +
+    '<div class="lr-top">' + title +
+    '<span class="lr-count">×' + esc(l.count) + '</span>' +
     dispBadge(l.disposition) + '</div>' +
     (meta ? '<div class="dim">' + meta + '</div>' : '') +
     (l.notes ? '<div class="lr-notes">' + esc(l.notes) + '</div>' : '') +
@@ -1864,13 +1941,15 @@ function renderHistBySpecies(list) {
   var f = histUI;
   var groups = {};
   list.forEach(function (l) {
-    var sp = l.species || 'Unknown';
-    var g = groups[sp] || (groups[sp] = { logs: [], kept: 0, alive: 0, released: 0, total: 0 });
+    /* Other events group under their subtype label, not a species. */
+    var sp = l.otherType ? (OTHER_LABELS[l.otherType] || 'Other event') : (l.species || 'Unknown');
+    var g = groups[sp] || (groups[sp] = { logs: [], kept: 0, alive: 0, released: 0, transported: 0, total: 0 });
     var c = l.count * 1 || 0;
     g.logs.push(l); g.total += c;
     var d = dispOf(l);
     if (d === 'released') g.released += c;
     else if (d === 'kept-alive') g.alive += c;
+    else if (d === 'transported') g.transported += c;
     else g.kept += c;
   });
   var names = Object.keys(groups).sort(function (a, b) { return groups[b].total - groups[a].total; });
@@ -1881,6 +1960,7 @@ function renderHistBySpecies(list) {
     if (g.kept) parts.push(g.kept + ' kept');
     if (g.alive) parts.push(g.alive + ' kept alive');
     if (g.released) parts.push(g.released + ' released');
+    if (g.transported) parts.push(g.transported + ' transported/released');
     html += '<div class="sp-group"><button type="button" class="sp-head" data-sp="' + esc(sp) + '">' +
       '<span class="sp-name">' + esc(sp) + '</span>' +
       '<span class="sp-total">×' + g.total + '</span>' +
@@ -1940,6 +2020,7 @@ function renderScorecard() {
     g.nsets++;
   });
   Store.data.logs.forEach(function (l) {
+    if (l.otherType) return; /* Other events never inflate catch-per-trap-night rates */
     var s = l.setId ? getSet(l.setId) : null;
     var key = s ? (by === 'lure' ? s.lure : s.bait)
                 : (by === 'lure' ? (l.lure || '') : (l.bait || ''));
@@ -1981,20 +2062,22 @@ function renderTotals() {
   $('totals-sub').textContent = 'Season ' + sy + ' · ' + logs.length + ' log entries all-time.';
   var bySpecies = {}, bySite = {};
   logs.forEach(function (l) {
+    if (l.otherType) return; /* Other events are events, not catches — excluded from Totals */
     var y = l.seasonYear || seasonYearOf(l.date);
     if (y !== sy) return;
     var c = l.count * 1 || 0, d = l.disposition || 'kept';
-    bySpecies[l.species] = bySpecies[l.species] || { kept: 0, alive: 0, released: 0 };
-    bySite[l.setName || '(deleted set)'] = bySite[l.setName || '(deleted set)'] || { kept: 0, alive: 0, released: 0 };
-    var bucket = (d === 'released') ? 'released' : (d === 'kept-alive' ? 'alive' : 'kept');
+    bySpecies[l.species] = bySpecies[l.species] || { kept: 0, alive: 0, released: 0, transported: 0 };
+    bySite[l.setName || '(deleted set)'] = bySite[l.setName || '(deleted set)'] || { kept: 0, alive: 0, released: 0, transported: 0 };
+    var bucket = (d === 'released') ? 'released' : (d === 'kept-alive' ? 'alive' : (d === 'transported' ? 'transported' : 'kept'));
     bySpecies[l.species][bucket] += c; bySite[l.setName || '(deleted set)'][bucket] += c;
   });
   function rows(obj) {
-    function tot(o) { return o.kept + o.alive + o.released; }
+    function tot(o) { return o.kept + o.alive + o.released + o.transported; }
     return Object.keys(obj).sort(function (a, b) { return tot(obj[b]) - tot(obj[a]); }).map(function (k) {
       return '<div class="rowline"><span>' + esc(k) +
         (obj[k].alive ? '<span class="dim"> · ' + obj[k].alive + ' kept alive</span>' : '') +
         (obj[k].released ? '<span class="dim"> · ' + obj[k].released + ' released</span>' : '') +
+        (obj[k].transported ? '<span class="dim"> · ' + obj[k].transported + ' transported/released</span>' : '') +
         '</span><span class="big-num">' + obj[k].kept + '</span></div>';
     }).join('');
   }
@@ -2024,7 +2107,7 @@ function renderSeasons(filter) {
     rl.removeAttribute('href');
   }
   var q = (filter || '').toLowerCase();
-  var list = d.species.filter(function (sp) {
+  var list = stateSpecies().filter(function (sp) {
     return !q || sp.common_name.toLowerCase().indexOf(q) !== -1;
   });
   $('seasons-list').innerHTML = list.map(function (sp) {
@@ -2157,7 +2240,10 @@ function exportCatches() {
   if (!list.length) { toast('No catches match the current filters.'); return; }
   var rows = [['Date', 'Season', 'Set', 'Species', 'Count', 'Disposition', 'Set type', 'Trap type', 'Weather', 'Bait', 'Lure', 'County', 'Latitude', 'Longitude', 'Notes']];
   list.forEach(function (l) {
-    rows.push([l.date, l.seasonYear || seasonYearOf(l.date), l.setName, l.species, l.count,
+    /* Other events with no species entered show the subtype label in the
+       Species column — no format change needed. */
+    var spCol = (l.otherType && !l.species) ? (OTHER_LABELS[l.otherType] || 'Other event') : l.species;
+    rows.push([l.date, l.seasonYear || seasonYearOf(l.date), l.setName, spCol, l.count,
       dispLabel(l.disposition), l.setType, l.trapType, weatherText(l.weather), l.bait, l.lure, l.county, l.lat, l.lng, l.notes]);
   });
   var filt = filtersActive();
@@ -2213,6 +2299,7 @@ function importDataFile(file) {
         setId: l.setId || null,
         setName: l.setName || '(imported)',
         species: l.species || 'Unknown', count: (l.count * 1) || 1,
+        otherType: l.otherType || null,
         disposition: l.disposition || 'kept',
         date: date, seasonYear: l.seasonYear || seasonYearOf(date),
         bait: l.bait || '', lure: l.lure || '',
@@ -2432,6 +2519,14 @@ function wireUp() {
   }
   $('log-count-minus').onclick = function () { if (logCount > 1) { logCount--; $('log-count').textContent = logCount; renderLogWarnings(); } };
   $('log-count-plus').onclick = function () { if (logCount < 99) { logCount++; $('log-count').textContent = logCount; renderLogWarnings(); } };
+  /* event-type toggle: Catch vs Other event */
+  var evBtns = document.querySelectorAll('#log-eventtype button');
+  for (var eb = 0; eb < evBtns.length; eb++) {
+    evBtns[eb].onclick = (function (b) {
+      return function () { setLogEventType(b.getAttribute('data-ev')); };
+    })(evBtns[eb]);
+  }
+  $('log-othertype').onchange = function () { logOtherType = this.value; };
   $('log-date').onchange = renderLogWarnings;
   $('btn-save-log').onclick = saveLog;
   $('btn-voice-lognotes').onclick = function () {
