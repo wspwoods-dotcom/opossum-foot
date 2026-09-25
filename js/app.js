@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-09-24bb';
+var APP_VERSION = 'beta 0.1 · build 2026-09-24bc';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -846,13 +846,118 @@ function applyFeatureToggles() {
 }
 
 /* ---- new-set field toggles ---- */
-var SET_FIELD_IDS = { traptype: 'setfield-traptype', settype: 'setfield-settype', bait: 'setfield-bait', lure: 'setfield-lure', notes: 'setfield-notes' };
+var SET_FIELD_IDS = { traptype: 'setfield-traptype', trapcount: 'setfield-trapcount', trapdetail: 'setfield-trapdetail', settype: 'setfield-settype', bait: 'setfield-bait', lure: 'setfield-lure', notes: 'setfield-notes' };
 function setFieldOn(key) { return !Store.data.setFields || Store.data.setFields[key] !== false; }
 function applySetFieldToggles() {
   for (var key in SET_FIELD_IDS) {
     var el = $(SET_FIELD_IDS[key]);
     if (el) el.style.display = setFieldOn(key) ? '' : 'none';
   }
+}
+
+/* ---------- Trap subcategories (build bc) ----------
+   Verified 2026-09-25 against current catalogs (F&T Fur Harvester's Trading
+   Post, IronTrail Trapline, Fleming Traps + corroboration). Size ladders are
+   what makers actually sell today; "Other / unsure" covers maker numbering
+   quirks (e.g. Bridger #1.65, MB model numbers instead of # sizes). */
+var TRAP_SUB = {
+  'Foothold': {
+    springs: ['Coil-spring', 'Longspring'],
+    sizes: {
+      'Coil-spring': ['#1', '#1.5', '#1.65', '#1.75', '#2', '#3', '#4'],
+      'Longspring': ['#0', '#1', '#11', '#5']
+    },
+    otherSize: 'Other / unsure', model: true
+  },
+  'Bodygrip / Conibear': { sizes: ['110', '120', '160', '220', '280', '330'], otherSize: 'Other' },
+  'Snare': { snare: true },
+  'Cage live trap': {
+    sizes: ['Small — up to 7"x7"x24"', 'Medium — 9"x9"x24" to 10"x12"x32"', 'Large — 12"x12" and up'],
+    otherSize: 'Other', model: true
+  },
+  'Colony trap': { sizes: ['5"x5"x24"', '6"x6"', '7"x7"x24"', '7"x7"x36"', '8"x8"x36"'], otherSize: 'Other' },
+  'Dog-proof': { model: true },
+  'Other': { model: true }
+};
+var SNARE_DIAS = ['1/16"', '5/64"', '3/32"'];
+var SNARE_LOCKS = ['Washer', 'Cam', 'Relaxing'];
+var SNARE_LENS = ['30"', '48"', '60"', '84"'];
+
+function selHtml(id, label, options, val) {
+  var h = '<label class="field" for="' + id + '">' + label + '</label><select id="' + id + '">';
+  h += '<option value="">—</option>';
+  for (var i = 0; i < options.length; i++) {
+    h += '<option value="' + esc(options[i]) + '"' + (val === options[i] ? ' selected' : '') + '>' + esc(options[i]) + '</option>';
+  }
+  return h + '</select>';
+}
+/* Read the current dynamic trap-detail field values ('' when absent). */
+function trapDetailValues() {
+  var f = function (id) { var el = $(id); return el ? el.value : ''; };
+  return {
+    trapSpring: f('sf-trapspring'), trapSize: f('sf-trapsize'),
+    snareDia: f('sf-snaredia'), snareLock: f('sf-snarelock'), snareLen: f('sf-snarelen'),
+    trapModel: f('sf-trapmodel').trim()
+  };
+}
+/* Render the subcategory inputs for the currently picked trap type. `saved`
+   is a set (edit mode); otherwise current field values are preserved. */
+function renderTrapDetailFields(saved) {
+  var type = $('sf-type').value;
+  var v = saved || trapDetailValues();
+  var host = $('trapdetail-fields');
+  var cfg = TRAP_SUB[type];
+  if (!cfg) { host.innerHTML = ''; return; }
+  var h = '';
+  if (cfg.springs) {
+    var spring = v.trapSpring || '';
+    var ladder = cfg.sizes[spring] || [];
+    var sizeVal = (ladder.indexOf(v.trapSize) >= 0 || v.trapSize === cfg.otherSize) ? v.trapSize : '';
+    h += selHtml('sf-trapspring', 'Spring type', cfg.springs, spring);
+    h += selHtml('sf-trapsize', 'Size', ladder.concat([cfg.otherSize]), sizeVal);
+  } else if (cfg.sizes) {
+    var sizeVal2 = (cfg.sizes.indexOf(v.trapSize) >= 0 || v.trapSize === cfg.otherSize) ? v.trapSize : '';
+    h += selHtml('sf-trapsize', 'Size', cfg.sizes.concat([cfg.otherSize]), sizeVal2);
+  }
+  if (cfg.snare) {
+    h += selHtml('sf-snaredia', 'Cable diameter', SNARE_DIAS.concat(['Other']), v.snareDia || '');
+    h += selHtml('sf-snarelock', 'Lock type', SNARE_LOCKS.concat(['Other']), v.snareLock || '');
+    h += selHtml('sf-snarelen', 'Cable length', SNARE_LENS.concat(['Other']), v.snareLen || '');
+  }
+  if (cfg.model) {
+    h += '<label class="field" for="sf-trapmodel">Brand / model</label>' +
+      '<input type="text" id="sf-trapmodel" placeholder="e.g. Bridger #1.75" autocomplete="off" value="' + esc(v.trapModel || '') + '">';
+  }
+  host.innerHTML = h;
+  var springEl = $('sf-trapspring');
+  if (springEl) springEl.onchange = function () { renderTrapDetailFields(); };
+}
+/* One-line human summary of a set's trap details, for set detail + logs. */
+function trapDetailSummary(s) {
+  if (!s) return '';
+  var parts = [];
+  if (s.trapType === 'Foothold') {
+    if (s.trapSpring) parts.push(s.trapSpring);
+    if (s.trapSize) parts.push(s.trapSize);
+  } else if (s.trapType === 'Snare') {
+    if (s.snareDia) parts.push(s.snareDia + ' cable');
+    if (s.snareLock) parts.push(s.snareLock + ' lock');
+    if (s.snareLen) parts.push(s.snareLen);
+  } else {
+    if (s.trapSize) parts.push(s.trapSize);
+  }
+  if (s.trapModel) parts.push(s.trapModel);
+  return parts.join(' · ');
+}
+/* Clear detail fields that don't belong to the set's trap type, so a type
+   switch can't leave stale values behind. */
+function normalizeTrapDetail(s) {
+  var t = s.trapType;
+  if (t === 'Foothold') { s.snareDia = s.snareLock = s.snareLen = ''; }
+  else if (t === 'Snare') { s.trapSpring = s.trapSize = s.trapModel = ''; }
+  else if (t === 'Bodygrip / Conibear' || t === 'Cage live trap' || t === 'Colony trap') {
+    s.trapSpring = s.snareDia = s.snareLock = s.snareLen = '';
+  } else { s.trapSpring = s.trapSize = s.snareDia = s.snareLock = s.snareLen = ''; }
 }
 
 /* ================= 6. MAP ================= */
@@ -1154,6 +1259,9 @@ function openSetForm(coords, setId) {
   $('sf-name').value = s ? s.name : '';
   $('sf-name').placeholder = s ? '' : 'e.g. Set ' + (activeSets().length + 1);
   $('sf-type').value = s ? s.trapType : 'Foothold';
+  $('sf-trapcount').value = (s && s.trapCount) ? s.trapCount : 1;
+  $('sf-type').onchange = function () { renderTrapDetailFields(); };
+  renderTrapDetailFields(s || null);
   $('sf-settype').value = s ? (s.setType || 'Dirt hole') : 'Dirt hole';
   $('sf-bait').value = s ? (s.bait || '') : '';
   $('sf-lure').value = s ? (s.lure || '') : '';
@@ -1210,11 +1318,18 @@ function saveSetForm() {
   if (!status) { showSetFormError('Status is required — pick one.'); return; }
   if (!dateSet) { showSetFormError('Date set is required — pick the date.'); return; }
   hideSetFormError();
+  var trapCount = Math.max(1, parseInt($('sf-trapcount').value, 10) || 1);
+  var td = trapDetailValues();
   if (editingSetId) {
     var s = getSet(editingSetId);
     if (!s) { closeSheets(); return; }
     s.name = name;
     s.trapType = $('sf-type').value;
+    s.trapCount = trapCount;
+    s.trapSpring = td.trapSpring; s.trapSize = td.trapSize;
+    s.snareDia = td.snareDia; s.snareLock = td.snareLock; s.snareLen = td.snareLen;
+    s.trapModel = td.trapModel;
+    normalizeTrapDetail(s);
     s.setType = $('sf-settype').value;
     s.bait = $('sf-bait').value.trim();
     s.lure = $('sf-lure').value.trim();
@@ -1232,6 +1347,10 @@ function saveSetForm() {
       id: uid('s'), name: name,
       lat: pendingCoords.lat, lng: pendingCoords.lng, county: null,
       trapType: $('sf-type').value,
+      trapCount: trapCount,
+      trapSpring: td.trapSpring, trapSize: td.trapSize,
+      snareDia: td.snareDia, snareLock: td.snareLock, snareLen: td.snareLen,
+      trapModel: td.trapModel,
       setType: $('sf-settype').value,
       bait: $('sf-bait').value.trim(), lure: $('sf-lure').value.trim(),
       status: status,
@@ -1239,6 +1358,7 @@ function saveSetForm() {
       notes: $('sf-notes').value.trim(),
       createdAt: Date.now()
     };
+    normalizeTrapDetail(ns);
     if (ns.status === 'pulled') ns.datePulled = ns.dateSet;
     ns.lineId = activeLineId();
     Store.data.sets.push(ns);
@@ -1288,7 +1408,8 @@ function openSetDetail(id) {
     };
   }
   $('sd-fields').innerHTML =
-    '<dt>Trap</dt><dd>' + esc(s.trapType) + '</dd>' +
+    '<dt>Trap</dt><dd>' + esc(s.trapType) + (function () { var d = trapDetailSummary(s); return d ? ' · ' + esc(d) : ''; })() + '</dd>' +
+    ((s.trapCount && s.trapCount > 1) ? '<dt>Traps</dt><dd>' + (s.trapCount * 1) + '</dd>' : '') +
     '<dt>Set type</dt><dd>' + esc(s.setType || '—') + '</dd>' +
     '<dt>Bait</dt><dd>' + esc(s.bait || '—') + '</dd>' +
     '<dt>Lure</dt><dd>' + esc(s.lure || '—') + '</dd>' +
@@ -1587,6 +1708,8 @@ function saveLog() {
     date: date, seasonYear: seasonYearOf(date),
     bait: s ? (s.bait || '') : '', lure: s ? (s.lure || '') : '',
     trapType: s ? (s.trapType || '') : '',
+    trapDetail: s ? trapDetailSummary(s) : '',
+    trapCount: s ? (s.trapCount || 1) : 1,
     setType: s ? (s.setType || '') : '',
     county: s ? (s.county || '') : '',
     lat: s ? s.lat : null, lng: s ? s.lng : null,
@@ -2447,13 +2570,15 @@ function exportCatches() {
      matches exactly what the filtered view shows. */
   var list = histFilteredLogs().slice().sort(function (a, b) { return a.date < b.date ? -1 : 1; });
   if (!list.length) { toast('No catches match the current filters.'); return; }
-  var rows = [['Date', 'Season', 'Set', 'Species', 'Count', 'Disposition', 'Set type', 'Trap type', 'Weather', 'Bait', 'Lure', 'County', 'Latitude', 'Longitude', 'Notes']];
+  var rows = [['Date', 'Season', 'Set', 'Species', 'Count', 'Disposition', 'Set type', 'Trap type', 'Trap detail', 'Weather', 'Bait', 'Lure', 'County', 'Latitude', 'Longitude', 'Notes']];
   list.forEach(function (l) {
     /* Other events with no species entered show the subtype label in the
        Species column — no format change needed. */
     var spCol = (l.otherType && !l.species) ? (OTHER_LABELS[l.otherType] || 'Other event') : l.species;
+    /* Trap detail: snapshot on the log, falling back to the set's current details for older logs. */
+    var det = l.trapDetail || (function () { var s2 = l.setId ? getSet(l.setId) : null; return s2 ? trapDetailSummary(s2) : ''; })();
     rows.push([l.date, l.seasonYear || seasonYearOf(l.date), l.setName, spCol, l.count,
-      dispLabel(l.disposition), l.setType, l.trapType, weatherText(l.weather), l.bait, l.lure, l.county, l.lat, l.lng, l.notes]);
+      dispLabel(l.disposition), l.setType, l.trapType, det, weatherText(l.weather), l.bait, l.lure, l.county, l.lat, l.lng, l.notes]);
   });
   var filt = filtersActive();
   downloadCSV('opossum-foot-catches-' + lineFileSlug() + '-' + todayISO() + (filt ? '-filtered' : '') + '.csv', rows);
@@ -2461,9 +2586,9 @@ function exportCatches() {
 }
 function exportSets() {
   if (!activeSets().length) { toast('No sets to export yet.'); return; }
-  var rows = [['Name', 'Latitude', 'Longitude', 'County', 'Set type', 'Trap type', 'Weather', 'Bait', 'Lure', 'Status', 'Date set', 'Notes']];
+  var rows = [['Name', 'Latitude', 'Longitude', 'County', 'Set type', 'Trap type', 'Trap count', 'Trap spring', 'Trap size', 'Snare diameter', 'Snare lock', 'Snare length', 'Trap model', 'Weather', 'Bait', 'Lure', 'Status', 'Date set', 'Notes']];
   activeSets().forEach(function (s) {
-    rows.push([s.name, s.lat, s.lng, s.county, s.setType, s.trapType, weatherText(s.weather), s.bait, s.lure, s.status, s.dateSet, s.notes]);
+    rows.push([s.name, s.lat, s.lng, s.county, s.setType, s.trapType, (s.trapCount || 1), (s.trapSpring || ''), (s.trapSize || ''), (s.snareDia || ''), (s.snareLock || ''), (s.snareLen || ''), (s.trapModel || ''), weatherText(s.weather), s.bait, s.lure, s.status, s.dateSet, s.notes]);
   });
   downloadCSV('opossum-foot-sets-' + lineFileSlug() + '-' + todayISO() + '.csv', rows);
   toast('Sets CSV downloaded.');
@@ -2492,6 +2617,10 @@ function importDataFile(file) {
         lat: +s.lat || 0, lng: +s.lng || 0,
         county: s.county || null,
         trapType: s.trapType || '', setType: s.setType || '',
+        trapCount: (s.trapCount * 1) || 1,
+        trapSpring: s.trapSpring || '', trapSize: s.trapSize || '',
+        snareDia: s.snareDia || '', snareLock: s.snareLock || '', snareLen: s.snareLen || '',
+        trapModel: s.trapModel || '',
         bait: s.bait || '', lure: s.lure || '',
         status: normStatus(s.status),
         dateSet: s.dateSet || todayISO(),
@@ -2514,6 +2643,7 @@ function importDataFile(file) {
         date: date, seasonYear: l.seasonYear || seasonYearOf(date),
         bait: l.bait || '', lure: l.lure || '',
         trapType: l.trapType || '', setType: l.setType || '',
+        trapDetail: l.trapDetail || '', trapCount: (l.trapCount * 1) || 1,
         county: l.county || '',
         lat: (l.lat == null ? null : +l.lat), lng: (l.lng == null ? null : +l.lng),
         notes: l.notes || '',
@@ -2757,7 +2887,7 @@ function enterMain() {
     Store.save(); applyFeatureToggles();
     toast(this.checked ? 'Seasons tab is on.' : 'Seasons tab is off.');
   };
-  var sfKeys = ['traptype', 'settype', 'bait', 'lure', 'notes'];
+  var sfKeys = ['traptype', 'trapcount', 'trapdetail', 'settype', 'bait', 'lure', 'notes'];
   sfKeys.forEach(function (key) {
     var cb = $('settings-sf-' + key);
     if (!cb) return;
@@ -2770,7 +2900,7 @@ function enterMain() {
   $('btn-features-reset').onclick = function () {
     Store.data.weatherOn = false; Store.data.voiceOn = true; Store.data.licensesOn = true;
     Store.data.seasonsOn = true;
-    Store.data.setFields = { traptype: true, settype: true, bait: true, lure: true, notes: true };
+    Store.data.setFields = { traptype: true, trapcount: true, trapdetail: true, settype: true, bait: true, lure: true, notes: true };
     Store.save();
     $('settings-weather').checked = false; $('settings-voice').checked = true; $('settings-licenses').checked = true;
     $('settings-seasons').checked = true;
