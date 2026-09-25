@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-09-24bc';
+var APP_VERSION = 'beta 0.1 · build 2026-09-24bd';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -450,6 +450,16 @@ function stateSpecies() {
   var d = stateData();
   if (!d) return [];
   return d.species.concat([DOMESTIC_ANIMAL]);
+}
+/* Alphabetical by common name for every species list in the app; the
+   Domestic animal help row stays pinned last. */
+function sortSpeciesAlpha(list) {
+  return list.sort(function (a, b) {
+    if (a.domestic && !b.domestic) return 1;
+    if (b.domestic && !a.domestic) return -1;
+    var an = (a.common_name || '').toLowerCase(), bn = (b.common_name || '').toLowerCase();
+    return an < bn ? -1 : an > bn ? 1 : 0;
+  });
 }
 function stateEntry(code) {
   for (var i = 0; i < STATES.length; i++) if (STATES[i].code === code) return STATES[i];
@@ -880,7 +890,7 @@ var TRAP_SUB = {
   'Other': { model: true }
 };
 var SNARE_DIAS = ['1/16"', '5/64"', '3/32"'];
-var SNARE_LOCKS = ['Washer', 'Cam', 'Relaxing'];
+var SNARE_LOCKS = ['Cam', 'Relaxing', 'Washer'];
 var SNARE_LENS = ['30"', '48"', '60"', '84"'];
 
 function selHtml(id, label, options, val) {
@@ -1593,11 +1603,11 @@ function renderSpeciesList(filter) {
   var box = $('log-species-list');
   if (!d) { box.innerHTML = '<p class="dim">No season data loaded.</p>'; return; }
   var q = (filter || '').toLowerCase();
-  var list = stateSpecies().filter(function (sp) {
+  var list = sortSpeciesAlpha(stateSpecies().filter(function (sp) {
     return !q || sp.common_name.toLowerCase().indexOf(q) !== -1 ||
       (sp.scientific_name || '').toLowerCase().indexOf(q) !== -1 ||
       (sp.keywords || '').toLowerCase().indexOf(q) !== -1;
-  });
+  }));
   if (!list.length) { box.innerHTML = '<p class="dim">No species match.</p>'; return; }
   box.innerHTML = list.map(function (sp) {
     var info = speciesSeasonInfo(sp);
@@ -2431,9 +2441,9 @@ function renderSeasons(filter) {
     rl.removeAttribute('href');
   }
   var q = (filter || '').toLowerCase();
-  var list = stateSpecies().filter(function (sp) {
+  var list = sortSpeciesAlpha(stateSpecies().filter(function (sp) {
     return !q || sp.common_name.toLowerCase().indexOf(q) !== -1;
-  });
+  }));
   $('seasons-list').innerHTML = list.map(function (sp) {
     var info = speciesSeasonInfo(sp);
     return '<button type="button" class="species-row" data-sp="' + esc(sp.common_name) + '">' + speciesIcon(sp.common_name) +
