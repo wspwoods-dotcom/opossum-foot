@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency.';
-var APP_VERSION = 'beta 0.1 · build 2026-09-23aq';
+var APP_VERSION = 'beta 0.1 · build 2026-09-24ar';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -793,7 +793,7 @@ function initMap() {
 function setIcon(set) {
   return L.divIcon({
     className: '',
-    html: '<div class="pin pin-' + esc(set.status || 'active') + '"></div>',
+    html: '<div class="pin pin-' + esc(normStatus(set.status)) + '"></div>',
     iconSize: [30, 30], iconAnchor: [15, 15]
   });
 }
@@ -802,6 +802,7 @@ function refreshMarkers() {
   if (!map || !markersLayer) return;
   markersLayer.clearLayers();
   Store.data.sets.forEach(function (s) {
+    if (!mapStatusFilter[normStatus(s.status)]) return;
     var m = L.marker([s.lat, s.lng], { icon: setIcon(s), title: s.name });
     m.on('click', function () { openSetDetail(s.id); });
     m._setId = s.id;
@@ -1017,7 +1018,7 @@ function openSetForm(coords, setId) {
   $('sf-settype').value = s ? (s.setType || 'Dirt hole') : 'Dirt hole';
   $('sf-bait').value = s ? (s.bait || '') : '';
   $('sf-lure').value = s ? (s.lure || '') : '';
-  $('sf-status').value = s ? s.status : 'active';
+  $('sf-status').value = s ? normStatus(s.status) : 'active';
   $('sf-date').value = s ? s.dateSet : todayISO();
   $('sf-notes').value = s ? (s.notes || '') : '';
   $('voice-setnotes-preview').classList.remove('show');
@@ -1087,9 +1088,29 @@ function openSetDetail(id) {
   if (!s) return;
   detailSetId = id;
   $('sd-name').textContent = s.name;
+  var st = normStatus(s.status);
   $('sd-badges').innerHTML =
-    '<span class="badge status-' + esc(s.status) + '">' + esc(s.status) + '</span> ' +
+    '<span class="badge status-' + esc(st) + '">' + esc(statusLabel(st)) + '</span> ' +
     (s.county ? '<span class="badge yearround">' + esc(s.county) + ' Co.</span>' : '');
+  /* manual-only status control at check time: changing this never touches
+     catches or logs — it only re-labels the set. */
+  var sdStatus = $('sd-status');
+  if (sdStatus) {
+    sdStatus.value = st;
+    sdStatus.onchange = function () {
+      var cur = getSet(detailSetId);
+      if (!cur) return;
+      cur.status = this.value;
+      if (cur.status === 'pulled' && !cur.datePulled) cur.datePulled = todayISO();
+      if (cur.status !== 'pulled' && cur.datePulled) delete cur.datePulled;
+      Store.save(); refreshMarkers();
+      var st2 = normStatus(cur.status);
+      $('sd-badges').innerHTML =
+        '<span class="badge status-' + esc(st2) + '">' + esc(statusLabel(st2)) + '</span> ' +
+        (cur.county ? '<span class="badge yearround">' + esc(cur.county) + ' Co.</span>' : '');
+      toast('Status set to ' + statusLabel(st2) + '.');
+    };
+  }
   $('sd-fields').innerHTML =
     '<dt>Trap</dt><dd>' + esc(s.trapType) + '</dd>' +
     '<dt>Set type</dt><dd>' + esc(s.setType || '—') + '</dd>' +
@@ -1619,15 +1640,51 @@ function dayLabel(iso) {
 }
 function dispOf(l) { return l.disposition || 'kept'; }
 
-/* ---------- History report filters (build aq) ----------
-   One filter state object (histUI.from/to/fSetType/fTrapType/fLure/fBait/fStatus)
-   feeds BOTH the on-screen History report and the CSV export: what the screen
-   shows is what the file holds. Status values are built dynamically from the
-   data — never hardcoded — since the canonical status list is not final. */
-var STATUS_LABELS = { active: 'Active', fresh: 'Fresh', sprung: 'Sprung', pulled: 'Pulled' };
+/* ---------- Trap status (build ar) ----------
+   The canonical status list is final: Active, Fresh, Sprung, Pulled, Other.
+   Status is manual-only: it changes only when the user picks a new value
+   (New/Edit set form, or the status control on the set-detail sheet at
+   check time). Logging a catch or recording a Sprung event NEVER changes
+   a set's status — no code path below may set s.status automatically. */
+var STATUS_VALUES = ['active', 'fresh', 'sprung', 'pulled', 'other'];
+var STATUS_LABELS = { active: 'Active', fresh: 'Fresh', sprung: 'Sprung', pulled: 'Pulled', other: 'Other' };
+function statusLabel(v) { return STATUS_LABELS[normStatus(v)] || 'Other'; }
+/* Map any saved status value onto the canonical five. Legacy/unknown
+   values are never dropped — they land in the closest bucket. */
+function normStatus(v) {
+  var s = (v === null || v === undefined) ? '' : String(v).toLowerCase().trim();
+  if (s === 'active' || s === 'fresh' || s === 'sprung' || s === 'pulled' || s === 'other') return s;
+  if (s === 'set' || s === 'live' || s === 'open' || s === 'working') return 'active';
+  if (s === 'new' || s === 'just set' || s === 'just-set' || s === 'freshly set') return 'fresh';
+  if (s === 'tripped' || s === 'fired' || s === 'sprung-empty' || s === 'sprung empty' || s === 'empty') return 'sprung';
+  if (s === 'removed' || s === 'inactive' || s === 'closed' || s === 'retired' || s === 'gone') return 'pulled';
+  if (s === '') return 'active'; /* pre-status sets defaulted to active */
+  return 'other'; /* unknown values land in the catch-all */
+}
+/* Map-view status filters: independent multi-select toggles. Several can be
+   on at once; a set shows when its current status is toggled on. */
+var mapStatusFilter = { active: true, fresh: true, sprung: true, pulled: true, other: true };
+function renderMapStatusFilters() {
+  var host = $('map-status-filters');
+  if (!host) return;
+  host.innerHTML = STATUS_VALUES.map(function (v) {
+    return '<button type="button" class="chip' + (mapStatusFilter[v] ? ' on' : '') +
+      '" data-mstatus="' + v + '" aria-pressed="' + (mapStatusFilter[v] ? 'true' : 'false') + '">' +
+      esc(STATUS_LABELS[v]) + '</button>';
+  }).join('');
+  var btns = host.querySelectorAll('button[data-mstatus]');
+  for (var i = 0; i < btns.length; i++) {
+    btns[i].onclick = function () {
+      var v = this.getAttribute('data-mstatus');
+      mapStatusFilter[v] = !mapStatusFilter[v];
+      renderMapStatusFilters();
+      refreshMarkers();
+    };
+  }
+}
 function logStatus(l) {
   var s = l.setId ? getSet(l.setId) : null;
-  return s ? (s.status || '') : '';
+  return s ? normStatus(s.status) : '';
 }
 var DIM_DEFS = [
   { key: 'fSetType', field: 'setType', label: 'Set type' },
@@ -2139,7 +2196,7 @@ function importDataFile(file) {
         county: s.county || null,
         trapType: s.trapType || '', setType: s.setType || '',
         bait: s.bait || '', lure: s.lure || '',
-        status: s.status || 'active',
+        status: normStatus(s.status),
         dateSet: s.dateSet || todayISO(),
         notes: s.notes || '',
         createdAt: s.createdAt || Date.now()
@@ -2221,6 +2278,7 @@ function enterMain() {
   showView('view-main');
   switchTab('map');
   renderHistory(); renderTotals(); renderSeasons(''); renderLicenses();
+  renderMapStatusFilters();
   buildStateSelect($('settings-state'), Store.data.state);
   $('settings-weather').checked = !!Store.data.weatherOn;
   $('settings-weather').onchange = function () {
