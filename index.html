@@ -294,10 +294,31 @@
   <div class="sheet-body">
     <div class="dim" id="log-setline"></div>
     <div id="log-warnings"></div>
-    <label class="field">Species</label>
-    <input type="search" id="log-species-search" placeholder="Search species…" autocomplete="off" aria-label="Search species">
-    <div style="height:8px"></div>
-    <div id="log-species-list" style="max-height:280px; overflow-y:auto; -webkit-overflow-scrolling:touch;"></div>
+    <label class="field">Entry type</label>
+    <div class="seg" id="log-eventtype">
+      <button type="button" data-ev="catch" class="selected">Catch</button>
+      <button type="button" data-ev="other">Other event</button>
+    </div>
+    <div id="log-other-row" hidden>
+      <label class="field" for="log-othertype">Other event type</label>
+      <select id="log-othertype">
+        <option value="sprung">Sprung</option>
+        <option value="non-native">Non-native animal</option>
+        <option value="domestic">Domestic animal</option>
+        <option value="fur">Fur</option>
+        <option value="animal-part">Animal part</option>
+      </select>
+    </div>
+    <div id="log-species-catch">
+      <label class="field">Species</label>
+      <input type="search" id="log-species-search" placeholder="Search species…" autocomplete="off" aria-label="Search species">
+      <div style="height:8px"></div>
+      <div id="log-species-list" style="max-height:280px; overflow-y:auto; -webkit-overflow-scrolling:touch;"></div>
+    </div>
+    <div id="log-species-other" hidden>
+      <label class="field" for="log-species-free">Species <span class="dim">(optional)</span></label>
+      <input type="text" id="log-species-free" placeholder="e.g. neighbor's cat — blank for a sprung empty trap" autocomplete="off">
+    </div>
     <label class="field">Count</label>
     <div class="stepper">
       <button type="button" id="log-count-minus" aria-label="Fewer">−</button>
@@ -309,6 +330,7 @@
       <button type="button" data-disp="kept">Kept</button>
       <button type="button" data-disp="kept-alive">Kept alive</button>
       <button type="button" data-disp="released">Released</button>
+      <button type="button" data-disp="transported">Transported/Released</button>
     </div>
     <label class="field" for="log-date">Date</label>
     <input type="date" id="log-date">
