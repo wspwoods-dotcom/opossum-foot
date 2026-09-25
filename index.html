@@ -173,6 +173,8 @@
         <h3>New set fields</h3>
         <p class="dim" style="margin:0 0 8px">Choose which fields appear when you add a set. Set name, Status, and Date set always show — they're required.</p>
         <label class="checkline"><input type="checkbox" id="settings-sf-traptype"> Trap type</label>
+        <label class="checkline"><input type="checkbox" id="settings-sf-trapcount"> Number of traps</label>
+        <label class="checkline"><input type="checkbox" id="settings-sf-trapdetail"> Trap details</label>
         <label class="checkline"><input type="checkbox" id="settings-sf-settype"> Set type</label>
         <label class="checkline"><input type="checkbox" id="settings-sf-bait"> Bait</label>
         <label class="checkline"><input type="checkbox" id="settings-sf-lure"> Lure</label>
@@ -237,6 +239,14 @@
       <option>Foothold</option><option>Bodygrip / Conibear</option><option>Snare</option>
       <option>Cage live trap</option><option>Colony trap</option><option>Dog-proof</option><option>Other</option>
     </select>
+    </div>
+    <div class="setfield" id="setfield-trapcount">
+    <label class="field" for="sf-trapcount">Number of traps</label>
+    <input type="number" id="sf-trapcount" min="1" step="1" value="1" inputmode="numeric">
+    </div>
+    <div class="setfield" id="setfield-trapdetail">
+    <label class="field">Trap details</label>
+    <div id="trapdetail-fields"></div>
     </div>
     <div class="setfield" id="setfield-settype">
     <label class="field" for="sf-settype">Set type</label>
