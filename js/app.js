@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-09-24be';
+var APP_VERSION = 'beta 0.1 · build 2026-09-24bf';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -2924,6 +2924,18 @@ function enterMain() {
       Store.save(); applySetFieldToggles();
     };
   });
+  /* Trapper's guide + legal notices, baked into Settings. Content is
+     generated from FOR-TRAPPERS.md / LEGAL-NOTICE.md (see tools/build-guide.js). */
+  $('btn-guide').onclick = function () {
+    $('guide-title').textContent = "Trapper's guide";
+    $('guide-body').innerHTML = window.OPOSSUM_FOOT_GUIDE_HTML || '<p class="dim">Guide not loaded.</p>';
+    openSheet('sheet-guide');
+  };
+  $('btn-legal').onclick = function () {
+    $('guide-title').textContent = 'Legal notices';
+    $('guide-body').innerHTML = window.OPOSSUM_FOOT_LEGAL_HTML || '<p class="dim">Notices not loaded.</p>';
+    openSheet('sheet-guide');
+  };
   $('btn-features-reset').onclick = function () {
     Store.data.weatherOn = false; Store.data.voiceOn = true; Store.data.licensesOn = true;
     Store.data.seasonsOn = true;
