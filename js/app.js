@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-09-24az';
+var APP_VERSION = 'beta 0.1 · build 2026-09-24bb';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -545,7 +545,7 @@ function findSpecies(name) {
 function dispLabel(d) {
   if (d === 'released') return 'Released';
   if (d === 'kept-alive') return 'Kept alive';
-  if (d === 'transported') return 'Transported/Released';
+  if (d === 'transported') return 'Transported';
   return 'Dispatched';
 }
 
@@ -1480,12 +1480,13 @@ function renderSpeciesList(filter) {
   if (!list.length) { box.innerHTML = '<p class="dim">No species match.</p>'; return; }
   box.innerHTML = list.map(function (sp) {
     var info = speciesSeasonInfo(sp);
+    /* domestic rows get the circular ? help icon in the species-icon slot (left) */
+    var iconHtml = sp.domestic ? '<span class="sp-icon sp-help" data-help="1">?</span>' : speciesIcon(sp.common_name);
     return '<button type="button" class="species-row' + (logSpecies === sp.common_name ? ' selected' : '') +
-      '" data-sp="' + esc(sp.common_name) + '">' + speciesIcon(sp.common_name) +
+      '" data-sp="' + esc(sp.common_name) + '">' + iconHtml +
       '<span class="sp-name">' + esc(sp.common_name) +
       (sp.scientific_name ? '<span class="sci">' + esc(sp.scientific_name) + '</span>' : '') + '</span>' +
-      '<span class="badge ' + info.badgeClass + '">' + info.badge + '</span>' +
-      (sp.domestic ? '<span class="sp-icon sp-help" data-help="1">?</span>' : '') + '</button>';
+      '<span class="badge ' + info.badgeClass + '">' + info.badge + '</span></button>';
   }).join('');
   var btns = box.querySelectorAll('.species-row');
   for (var i = 0; i < btns.length; i++) {
@@ -1572,7 +1573,7 @@ function saveLog() {
   var isOther = (logEventType === 'other');
   var species = isOther ? $('log-species-free').value.trim() : logSpecies;
   if (!isOther && !species) { showLogFormError('Pick a species first.'); return; }
-  if (!logDisposition) { showLogFormError('Choose a disposition — Dispatched, Kept alive, Released, or Transported/Released.'); return; }
+  if (!logDisposition) { showLogFormError('Choose a disposition — Dispatched, Kept alive, Released, or Transported.'); return; }
   hideLogFormError();
   var s = getSet(logSetId);
   var date = $('log-date').value || todayISO();
@@ -2048,7 +2049,7 @@ function clearHistFilters() {
 
 function renderHistChips() {
   var dc = $('hist-disp-chips');
-  var defs = [['all', 'All'], ['kept', 'Dispatched'], ['kept-alive', 'Kept alive'], ['released', 'Released'], ['transported', 'Transported/Released']];
+  var defs = [['all', 'All'], ['kept', 'Dispatched'], ['kept-alive', 'Kept alive'], ['released', 'Released'], ['transported', 'Transported']];
   dc.innerHTML = defs.map(function (d) {
     return '<button type="button" class="chip' + (histUI.disp === d[0] ? ' on' : '') + '" data-disp="' + d[0] + '">' + d[1] + '</button>';
   }).join('');
