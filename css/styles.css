@@ -230,7 +230,7 @@ input:focus, select:focus, textarea:focus, button:focus-visible { outline: 2px s
 .seg { display: flex; gap: 8px; margin: 2px 0 14px; }
 .seg button { flex: 1; padding: 13px; border-radius: 10px; border: 1px solid var(--line); background: var(--panel); color: var(--ink); font-size: 16px; font-weight: 600; }
 .seg button.selected { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
-#log-disposition button { white-space: nowrap; font-size: 15px; padding: 13px 6px; }
+#log-disposition button { white-space: nowrap; font-size: 14px; padding: 12px 4px; }
 
 .warnbox { background: #3d2c10; border: 1px solid #6b4d1c; color: #f5cf7a; border-radius: var(--radius); padding: 12px 14px; margin: 12px 0; font-size: 15px; }
 .warnbox.red { background: #3a1f1b; border-color: #6e2f28; color: #f0a49c; }
