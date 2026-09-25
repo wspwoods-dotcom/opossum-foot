@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-09-24bd';
+var APP_VERSION = 'beta 0.1 · build 2026-09-24be';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -2405,19 +2405,36 @@ function renderTotals() {
     var bucket = (d === 'released') ? 'released' : (d === 'kept-alive' ? 'alive' : (d === 'transported' ? 'transported' : 'kept'));
     bySpecies[l.species][bucket] += c; bySite[l.setName || '(deleted set)'][bucket] += c;
   });
-  function rows(obj) {
-    function tot(o) { return o.kept + o.alive + o.released + o.transported; }
-    return Object.keys(obj).sort(function (a, b) { return tot(obj[b]) - tot(obj[a]); }).map(function (k) {
+  function rows(obj, withMeta) {
+    /* Sorted by the kept number actually displayed, highest to lowest. */
+    return Object.keys(obj).sort(function (a, b) { return obj[b].kept - obj[a].kept; }).map(function (k) {
+      var o = obj[k], sub = [];
+      if (withMeta && siteMeta[k]) sub.push(esc(siteMeta[k]));
+      if (o.alive) sub.push(o.alive + ' kept alive');
+      if (o.released) sub.push(o.released + ' released');
+      if (o.transported) sub.push(o.transported + ' transported');
       return '<div class="rowline"><span>' + esc(k) +
-        (obj[k].alive ? '<span class="dim"> · ' + obj[k].alive + ' kept alive</span>' : '') +
-        (obj[k].released ? '<span class="dim"> · ' + obj[k].released + ' released</span>' : '') +
-        (obj[k].transported ? '<span class="dim"> · ' + obj[k].transported + ' transported/released</span>' : '') +
-        '</span><span class="big-num">' + obj[k].kept + '</span></div>';
+        (sub.length ? '<br><span class="dim">' + sub.join(' · ') + '</span>' : '') +
+        '</span><span class="big-num">' + o.kept + '</span></div>';
     }).join('');
   }
+  /* Per-site criteria: each set's current bait, lure, trap setup, and set
+     type — the "what actually produces" read, one dim line per site. */
+  var siteMeta = {};
+  activeSets().forEach(function (s) {
+    if (siteMeta[s.name]) return;
+    var bits = [];
+    if (s.bait || s.lure) bits.push([s.bait, s.lure].filter(Boolean).join(' / '));
+    var trapBit = s.trapType || '', td = trapDetailSummary(s);
+    if (td) trapBit += (trapBit ? ' · ' : '') + td;
+    if (s.trapCount > 1) trapBit += (trapBit ? ' · ' : '') + s.trapCount + ' traps';
+    if (trapBit) bits.push(trapBit);
+    if (s.setType) bits.push(s.setType);
+    siteMeta[s.name] = bits.join(' · ');
+  });
   box.innerHTML =
-    '<div class="card"><h3>By species</h3>' + rows(bySpecies) + '</div>' +
-    '<div class="card"><h3>By site</h3>' + rows(bySite) + '</div>';
+    '<div class="card"><h3>By species</h3>' + rows(bySpecies, false) + '</div>' +
+    '<div class="card"><h3>By site</h3>' + rows(bySite, true) + '</div>';
 }
 
 function renderSeasons(filter) {
