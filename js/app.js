@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-09-30bj';
+var APP_VERSION = 'beta 0.1 · build 2026-09-30bk';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -1156,27 +1156,55 @@ function rememberAttractants(s) {
   });
   if (changed) Store.save();
 }
+/* Q67: sponsored products ride INSIDE the bait/lure suggestion menus —
+   matching sponsors first with a Sponsored tag. Tapping the product name
+   fills the row; the eye opens the sponsor bio without filling anything. */
+function sponsorSuggests(key, q) {
+  var out = [];
+  for (var i = 0; i < SPONSORS.length; i++) {
+    var sp = SPONSORS[i];
+    if (sp.section !== key) continue;
+    if (q && sp.product.toLowerCase().indexOf(q) === -1 && sp.name.toLowerCase().indexOf(q) === -1) continue;
+    out.push(sp);
+  }
+  return out;
+}
 function attachSuggest(inputId, boxId, key) {
   var input = $(inputId), box = $(boxId);
   if (!input || !box || input._suggestWired) return;
   input._suggestWired = true;
+  function fillFrom(btn) {
+    input.value = btn.getAttribute('data-v');
+    box.className = 'suggest'; box.innerHTML = '';
+    input.focus();
+  }
   function render() {
     var q = input.value.trim().toLowerCase();
+    var sps = sponsorSuggests(key, q);
     var items = savedEntries(key).filter(function (v) {
       var vl = v.toLowerCase();
       return vl !== q && (!q || vl.indexOf(q) !== -1);
     }).slice(0, 6);
-    if (!items.length) { box.className = 'suggest'; box.innerHTML = ''; return; }
-    box.innerHTML = items.map(function (v) {
+    if (!sps.length && !items.length) { box.className = 'suggest'; box.innerHTML = ''; return; }
+    var html = sps.map(function (sp) {
+      return '<div class="suggest-sponsor">' +
+        '<button type="button" class="suggest-fill" data-v="' + esc(sp.product) + '">' + esc(sp.product) + ' <span class="pill">Sponsored</span></button>' +
+        '<button type="button" class="sponsor-eye" data-sp="' + esc(sp.id) + '" aria-label="About ' + esc(sp.name) + '">👁</button>' +
+        '</div>';
+    }).join('') + items.map(function (v) {
       return '<button type="button" class="suggest-item" data-v="' + esc(v) + '">' + esc(v) + '</button>';
     }).join('');
+    box.innerHTML = html;
     box.className = 'suggest show';
-    var btns = box.querySelectorAll('.suggest-item');
+    var btns = box.querySelectorAll('.suggest-item, .suggest-fill');
     for (var i = 0; i < btns.length; i++) {
-      btns[i].onclick = function () {
-        input.value = this.getAttribute('data-v');
-        box.className = 'suggest'; box.innerHTML = '';
-        input.focus();
+      btns[i].onclick = function () { fillFrom(this); };
+    }
+    var eyes = box.querySelectorAll('.sponsor-eye');
+    for (var j = 0; j < eyes.length; j++) {
+      eyes[j].onclick = function (e) {
+        if (e && e.stopPropagation) e.stopPropagation();
+        openSponsorBio(this.getAttribute('data-sp'));
       };
     }
   }
@@ -1433,7 +1461,7 @@ function renderModsHtml(t, v, forceCheck) {
     customs.forEach(function (m) { h += box(m); });
   }
   h += '<div class="mod-addrow"><input type="text" id="sf-modcustom" placeholder="Add your own modification" autocomplete="off">' +
-    '<button type="button" class="btn" id="sf-modadd">Add</button></div></div>';
+    '<button type="button" class="btn-ghost btn-small" id="sf-modadd">Add</button></div></div>';
   return h;
 }
 function bindModAdd() {
@@ -1609,7 +1637,7 @@ function initMap() {
   markersLayer = L.layerGroup().addTo(map);
 
   map.on('click', function (e) {
-    if (homePickMode) {
+    if (homePickMode && homeMapLive) {
       placeHomePin(e.latlng);
     } else if (dropPinMode) {
       startPlacePin(e.latlng);
@@ -1730,6 +1758,10 @@ function setDropPinMode(on) {
   if (on) { cancelPlacePin(); cancelHomePick(); } /* Q53: one picking mode at a time */
   $('pin-hint').classList.toggle('show', on);
   $('btn-drop-pin').classList.toggle('active-mode', on);
+  /* B15-fix: the placement lock starts the moment placement is ARMED, not
+     after the pin drops. The drop-pin button stays live so an armed
+     placement can still be cancelled. */
+  setPlacingLock(on);
 }
 
 /* Draggable placement pin: GPS gets you close, your finger dials it in. */
@@ -1770,7 +1802,7 @@ function cancelPlacePin() {
    line), and once when a new line is created. Normal pin dropping never
    asks about home. */
 var HOME_ZOOM = 11; /* ~10-15 mile span on a phone */
-var homePickMode = false, homeMarker = null;
+var homePickMode = false, homeMarker = null, homeMapLive = false;
 
 function homeLatLng() {
   var l = activeLine(), h = l && l.home;
@@ -1819,8 +1851,11 @@ function startHomePick() {
   var l0 = activeLine();
   if (l0) { l0.homeAsked = true; Store.save(); } /* asked once per line — Settings re-opens it */
   setDropPinMode(false); cancelPlacePin();
-  homePickMode = true;
+  homePickMode = true; homeMapLive = false; /* B26: map taps arm only after the map choice is tapped */
   $('home-bar').classList.add('show');
+  /* B26: the picker opens on the A/B choice — never mid-flow. */
+  $('home-choose').style.display = '';
+  $('home-bar-prompt').textContent = "Where's your home ground?";
   $('btn-home-ok').hidden = true;
   setPlacingLock(true); /* B15: same modal lock as pin placement */
   /* B13: bar just changed the map height — re-measure before centering. */
@@ -1829,7 +1864,7 @@ function startHomePick() {
   if (h) map.setView([h.lat, h.lng], Math.max(map.getZoom(), HOME_ZOOM));
 }
 function cancelHomePick() {
-  homePickMode = false;
+  homePickMode = false; homeMapLive = false;
   if (homeMarker && map) { try { map.removeLayer(homeMarker); } catch (e) {} homeMarker = null; }
   var bar = $('home-bar'); if (bar) bar.classList.remove('show');
   setPlacingLock(false);
@@ -2111,10 +2146,11 @@ function startAcquire() {
 
 /* Crosshair tap centers on the fix AND zooms in when the view is wide —
    an explicit locate tap should put you on yourself, not just pan. */
+/* B22: every crosshair tap ends zoomed in tight on the latest fix —
+   no conditional half-zoom. */
 function centerOnFix() {
   if (!map || !lastFix || lastFix.lat == null) return;
-  if (map.getZoom() < 16) map.setView([lastFix.lat, lastFix.lng], 16, { animate: false });
-  else map.panTo([lastFix.lat, lastFix.lng], { animate: false });
+  map.setView([lastFix.lat, lastFix.lng], 18, { animate: false });
 }
 
 /* ◎ button: one tap acquires and follows — follow stays on from that point,
@@ -2214,23 +2250,8 @@ function sponsorById(id) {
   for (var i = 0; i < SPONSORS.length; i++) if (SPONSORS[i].id === id) return SPONSORS[i];
   return null;
 }
-function renderBaitSponsors() {
-  var box = $('sf-bait-sponsors');
-  if (!box) return;
-  box.innerHTML = '';
-  SPONSORS.forEach(function (sp) {
-    if (sp.section !== 'bait') return;
-    var row = document.createElement('button');
-    row.type = 'button';
-    row.className = 'sponsor-row';
-    row.setAttribute('aria-label', sp.product + ' — sponsored. Tap for bio.');
-    row.innerHTML = '<img class="sponsor-badge" src="' + sp.badge + '" alt="' + esc(sp.name) + ' badge">' +
-      '<span class="sponsor-text"><span class="sponsor-product">' + esc(sp.product) + '</span>' +
-      '<span class="pill">Sponsored</span></span>';
-    row.onclick = (function (id) { return function () { openSponsorBio(id); }; })(sp.id);
-    box.appendChild(row);
-  });
-}
+/* Q67: the old standalone sponsor badge row under the Bait field is gone —
+   sponsors live inside the suggestion menus now (see sponsorSuggests). */
 /* Q32: tap-for-bio — name, short bio, link to website/place of sale. */
 function openSponsorBio(id) {
   var sp = sponsorById(id);
@@ -2379,10 +2400,6 @@ function saveSetForm() {
   if (editingSetId) {
     var s = getSet(editingSetId);
     if (!s) { closeSheets(); return; }
-    /* Q5: backfill baseline — arrays now (Q26) */
-    var oldBait = toAttrArray(s.bait), oldLure = toAttrArray(s.lure),
-        oldUrine = toAttrArray(s.urine), oldVisual = toAttrArray(s.visual),
-        oldAudio = toAttrArray(s.audio), oldOther = toAttrArray(s.other);
     s.name = name;
     rememberEntry('setname', name); /* Q12 */
     s.trapType = rt.t;
@@ -2424,15 +2441,8 @@ function saveSetForm() {
     });
     closeSheets(); openSetDetail(s.id);
     toast('Set updated.');
-    /* Q5: newly-filled attractants → offer one-tap backfill onto past catches */
-    var fills = [];
-    if (!oldBait.length && s.bait.length) fills.push({ field: 'bait', label: 'bait', values: s.bait });
-    if (!oldLure.length && s.lure.length) fills.push({ field: 'lure', label: 'lure', values: s.lure });
-    if (!oldUrine.length && s.urine.length) fills.push({ field: 'urine', label: 'urine', values: s.urine });
-    if (!oldVisual.length && s.visual.length) fills.push({ field: 'visual', label: 'visual attractants', values: s.visual });
-    if (!oldAudio.length && s.audio.length) fills.push({ field: 'audio', label: 'audio attractants', values: s.audio });
-    if (!oldOther.length && s.other.length) fills.push({ field: 'other', label: 'other attractants', values: s.other });
-    if (fills.length) offerAttractantBackfill(s, fills);
+    /* B32: no backfill prompt — old catches keep what they had; only new
+       catches inherit the set's current attractants. */
     rememberAttractants(s);
   } else {
     if (!pendingCoords) { toast('No location for this set.'); return; }
@@ -4111,32 +4121,8 @@ function renderScorecardTab() {
    offer to stamp them onto that set's past unstamped catches. Q26: values
    are arrays; the offer fires per field when the set's list is non-empty
    and past catches have empty lists for that field. */
-function offerAttractantBackfill(s, fills) {
-  var jobs = fills.filter(function (c) {
-    c.n = 0;
-    if (!toAttrArray(c.values).length) return false;
-    Store.data.logs.forEach(function (l) {
-      if (l.setId === s.id && !l.otherType && !toAttrArray(l[c.field]).length) c.n++;
-    });
-    return c.n > 0;
-  });
-  if (!jobs.length) return;
-  var body = jobs.map(function (j) {
-    return 'This set\'s ' + j.label + ' is now "' + esc(toAttrArray(j.values).join(' + ')) + '". ' + j.n +
-      ' past catch' + (j.n === 1 ? '' : 'es') + (j.n === 1 ? ' has' : ' have') + ' no ' + j.label + ' recorded.';
-  }).join('<br><br>');
-  var total = jobs.reduce(function (a, j) { return a + j.n; }, 0);
-  confirmModal('Apply to past catches too?', body, 'Apply to ' + total, function () {
-    jobs.forEach(function (j) {
-      var vals = toAttrArray(j.values).slice();
-      Store.data.logs.forEach(function (l) {
-        if (l.setId === s.id && !l.otherType && !toAttrArray(l[j.field]).length) l[j.field] = vals.slice();
-      });
-    });
-    Store.save();
-    toast('Updated ' + total + ' past catch' + (total === 1 ? '' : 'es') + '.');
-  });
-}
+/* B32: offerAttractantBackfill removed — editing a set's attractants never
+   touches old catches. */
 
 /* Q15: which By Set rows are expanded — session-only, resets on reload. */
 var totalsExpanded = {};
@@ -4961,21 +4947,41 @@ function runPinImport(pins) {
   next();
 }
 function eraseAll() {
+  /* B29: a simple math question first — a kid tapping through the warnings
+     can't get past arithmetic. No PIN, nothing to remember or recover. */
+  var a = 3 + Math.floor(Math.random() * 7); /* 3..9 */
+  var b = 2 + Math.floor(Math.random() * 8); /* 2..9 */
+  var ans = String(a + b);
+  showModal(
+    '<h3>Quick check</h3>' +
+    '<p>Before anything destructive: what is <strong>' + a + ' + ' + b + '</strong>?</p>' +
+    '<input type="text" id="m-math" inputmode="numeric" autocomplete="off" style="width:100%;margin:8px 0" placeholder="Your answer">' +
+    '<div class="btn-row"><button class="btn-secondary" id="m-cancel" type="button">Cancel</button>' +
+    '<button class="btn-danger" id="m-math-go" type="button" disabled>Continue</button></div>'
+  );
+  var minp = $('m-math'), mgo = $('m-math-go');
+  $('m-cancel').onclick = closeModal;
+  minp.oninput = function () { mgo.disabled = minp.value.trim() !== ans; };
+  mgo.onclick = function () { closeModal(); eraseAllTyped(); };
+  setTimeout(function () { try { minp.focus(); } catch (e) { /* noop */ } }, 150);
+}
+function eraseAllTyped() {
   confirmModal('Erase everything?',
     'All sets, catches, license photos, and voice memos on <strong>this phone</strong> will be permanently deleted. Back up all data (JSON) first if you want to restore it later.',
     'Erase everything', function () {
-      /* Q65: typed confirmation — a kid tapping through the warnings can't
-         get past this. The button stays dead until DELETE is typed. */
+      /* Q65: typed confirmation — DELETE EVERYTHING, not just DELETE.
+         A kid tapping through the warnings can't get past this. The button
+         stays dead until the full phrase is typed. */
       showModal(
-        '<h3>Type DELETE to erase everything</h3>' +
-        '<p>There is no undo and no cloud copy. Type <strong>DELETE</strong> in the box, then tap the button. Deleted data is gone forever.</p>' +
-        '<input type="text" id="m-erase-type" placeholder="Type DELETE here" autocomplete="off" autocapitalize="characters" style="width:100%;margin:8px 0">' +
+        '<h3>Type DELETE EVERYTHING to erase everything</h3>' +
+        '<p>There is no undo and no cloud copy. Type <strong>DELETE EVERYTHING</strong> in the box, then tap the button. Deleted data is gone forever.</p>' +
+        '<input type="text" id="m-erase-type" placeholder="Type DELETE EVERYTHING here" autocomplete="off" autocapitalize="characters" style="width:100%;margin:8px 0">' +
         '<div class="btn-row"><button class="btn-secondary" id="m-cancel" type="button">Cancel</button>' +
         '<button class="btn-danger" id="m-erase-go" type="button" disabled>Erase everything</button></div>'
       );
       var einp = $('m-erase-type'), ego = $('m-erase-go');
       $('m-cancel').onclick = closeModal;
-      einp.oninput = function () { ego.disabled = einp.value.trim().toUpperCase() !== 'DELETE'; };
+      einp.oninput = function () { ego.disabled = einp.value.trim().toUpperCase() !== 'DELETE EVERYTHING'; };
       ego.onclick = function () {
         closeModal();
         try { localStorage.removeItem(LS_KEY); } catch (e) { /* noop */ }
@@ -5693,7 +5699,13 @@ function wireUp() {
   /* Q53: home picker bar on the map. */
   $('btn-home-ok').onclick = confirmHomePin;
   $('btn-home-cancel').onclick = cancelHomePick;
-  $('btn-home-use-gps').onclick = function () {
+  /* B26: two clear choices, not steps — place it on the map, or use GPS now. */
+  $('btn-home-choice-map').onclick = function () {
+    $('home-choose').style.display = 'none';
+    homeMapLive = true;
+    $('home-bar-prompt').textContent = 'Tap the map to drop your home pin, then drag it onto the exact spot.';
+  };
+  $('btn-home-choice-gps').onclick = function () {
     homeUseGps(function () { cancelHomePick(); fitMapHome(); });
   };
   /* Q53: change home from Settings — re-settable, never permanent. */
@@ -5793,8 +5805,8 @@ function wireUp() {
     });
   };
 
-  /* Q33: sponsor badge row under the Bait field */
-  renderBaitSponsors();
+  /* Q67: sponsors now surface inside the bait/lure suggestion menus —
+     no standalone badge row anymore. */
 
   /* Q36: citation photo for a confiscated set — take a photo or upload one */
   $('btn-sf-missing-photo').onclick = function () { $('sf-missing-photo-input').click(); };
