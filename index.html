@@ -32,7 +32,7 @@
     <img src="assets/logo.png" alt="Opossum Foot logo">
     <h2>Which state are you trapping in?</h2>
     <p>We'll load that state's season reminders. You can change it anytime in Settings — handy near state lines.</p>
-    <button class="btn-secondary" id="btn-gps-state" type="button">📍 Use my location</button>
+    <button class="btn-secondary" id="btn-gps-state" type="button"><img class="bi" src="assets/icons/mappin.png" alt="">Use my location</button>
     <div class="dim" id="gps-state-result" style="margin:8px 0 4px; min-height:20px;"></div>
     <label class="field" for="onboard-state">Trapping State</label>
     <select id="onboard-state"></select>
@@ -44,10 +44,10 @@
     <img src="assets/logo.png" alt="Opossum Foot logo">
     <h2>Where's your home ground?</h2>
     <p>The map will open here every time — your county, your farms, right where you trap. Takes ten seconds, and you can change it anytime in Settings.</p>
-    <button class="btn-primary" id="btn-home-gps" type="button">📍 Use my current location</button>
+    <button class="btn-primary" id="btn-home-gps" type="button"><img class="bi inv" src="assets/icons/mappin.png" alt="">Use my current location</button>
     <div class="dim" id="gps-home-result" style="margin:8px 0 4px; min-height:20px;"></div>
     <div style="height:10px"></div>
-    <button class="btn-secondary" id="btn-home-map" type="button">🗺 Choose on the map</button>
+    <button class="btn-secondary" id="btn-home-map" type="button"><img class="bi inv" src="assets/icons/compass.png" alt="">Choose on the map</button>
     <div style="height:14px"></div>
     <button class="btn-ghost" id="btn-home-skip" type="button">Skip for now</button>
   </div>
@@ -76,6 +76,8 @@
   <div id="pane-map" class="pane active">
     <div id="map-status-filters" class="chip-row map-status-filters" aria-label="Filter sets by status"></div>
     <button type="button" id="weather-chip" class="chip weather-chip" aria-label="Weather details">🌤️</button>
+    <!-- Q8: way back to the mileage dialog while a route estimate is drawn -->
+    <button type="button" id="route-back-chip" class="btn-primary" hidden>‹ Back to mileage</button>
     <div id="map"></div>
     <div class="map-fabs">
       <button class="fab secondary" id="btn-locate" type="button" aria-label="Locate me"><img src="assets/icons/crosshair.png" alt=""></button>
@@ -98,6 +100,11 @@
     <div class="pane-head"><h2>History</h2><p>Every catch, newest first.</p></div>
     <div class="scroll">
       <div id="hist-summary" class="hist-summary"></div>
+      <div class="seg compact" id="hist-season-seg">
+        <button type="button" data-season="this">This season</button>
+        <button type="button" data-season="last">Last season</button>
+        <button type="button" data-season="all">All time</button>
+      </div>
       <div class="seg compact" id="hist-view-seg">
         <button type="button" data-view="date">By Date</button>
         <button type="button" data-view="species">By Species</button>
@@ -127,6 +134,8 @@
     <div class="scroll">
       <div class="warnbox" id="seasons-disclaimer"></div>
       <a id="seasons-regs" class="regs-link" target="_blank" rel="noopener" hidden></a>
+      <a id="seasons-warden" class="regs-link" target="_blank" rel="noopener" hidden></a>
+      <div id="seasons-rules" hidden></div>
       <input type="search" id="seasons-search" placeholder="Search species…" aria-label="Search species">
       <div style="height:10px"></div>
       <div id="seasons-list"></div>
@@ -139,7 +148,7 @@
     <div class="scroll">
       <div class="card">
         <h3>License Wallet</h3>
-        <button class="btn-secondary" id="btn-add-license" type="button">📷 Add license photo</button>
+        <button class="btn-secondary" id="btn-add-license" type="button"><img class="bi" src="assets/icons/camera.png" alt="">Add license photo</button>
         <p class="dim" style="margin:8px 0 0">Tap a photo to view it — or attach its website link, like the DNR page where you bought it.</p>
         <input type="file" id="license-input" class="hidden-file" accept="image/*" multiple>
         <div class="lic-grid" id="license-grid"></div>
@@ -172,14 +181,9 @@
       <div class="card">
         <h3>Trap Checks</h3>
         <label class="checkline"><input type="checkbox" id="settings-checkclock"> Trap check alerts</label>
-        <label class="field" for="settings-checkinterval">Check interval</label>
-        <select id="settings-checkinterval">
-          <option value="24">Every 24 hours</option>
-          <option value="36">Every 36 hours</option>
-          <option value="48">Every 48 hours</option>
-          <option value="72">Every 72 hours</option>
-        </select>
-        <p class="dim" style="margin-top:8px">Sets past this long without any activity turn red on the map. Any edit, catch, or check-in restarts the clock. Turn alerts off to hide the red pins and countdowns — visits are still recorded.</p>
+        <label class="field" for="settings-checkinterval">Check interval (hours)</label>
+        <input type="number" id="settings-checkinterval" min="1" step="1" inputmode="numeric" placeholder="24">
+        <p class="dim" style="margin-top:8px">Sets past this long without any activity turn red on the map. Any edit, catch, or check-in restarts the clock. The quick &ldquo;Checked &mdash; nothing changed&rdquo; button only restarts the clock &mdash; it saves nothing to History. Turn alerts off to hide the red pins and countdowns.</p>
       </div>
       <!-- Q53: home ground -->
       <div class="card">
@@ -196,6 +200,8 @@
         <p class="dim" style="margin:-6px 0 10px">Small arrows at the edge of each pin show the downwind direction — where your scent goes. They appear when you're zoomed in close, and use live wind data when you're online.</p>
         <label class="checkline"><input type="checkbox" id="settings-voice"> Voice entry &amp; memos</label>
         <p class="dim" style="margin:-6px 0 12px">Dictate notes and record voice memos. Transcription uses your phone's speech recognition and needs a connection; recordings stay on this phone.</p>
+        <label class="checkline"><input type="checkbox" id="settings-mileage"> Mileage tracking</label>
+        <p class="dim" style="margin:-6px 0 12px">Odometer trips per line, the route estimate, and the standalone mileage CSV — its own report for your records or reimbursement.</p>
         <button class="btn-secondary" id="btn-features-reset" type="button">Reset features to defaults</button>
         </div>
       </div>
@@ -247,15 +253,27 @@
         <div class="setsec-body" id="setsec-help-body" hidden>
         <p class="dim" style="margin:0 0 8px">The trapper's guide to the app, and the legal notices.</p>
         <div class="sheet-actions">
-          <button class="btn-secondary" id="btn-guide" type="button">📖 Trapper's guide</button>
-          <button class="btn-secondary" id="btn-legal" type="button">⚖ Legal notices</button>
+          <button class="btn-secondary" id="btn-guide" type="button">Trapper's guide</button>
+          <button class="btn-secondary" id="btn-legal" type="button">Legal notices</button>
         </div>
         </div>
       </div>
-      <div class="card setsec" id="setsec-filters">
-        <button type="button" class="setsec-head" id="setsec-filters-head" data-sec="setsec-filters" aria-expanded="false"><span>Report Filters</span><span class="setsec-chev" aria-hidden="true">›</span></button>
-        <div class="setsec-body" id="setsec-filters-body" hidden>
-        <p class="dim" style="margin-top:0">These filters apply to the catches CSV export below — they are independent of the History tab's quick filters.</p>
+      <div class="card setsec" id="setsec-backup-reports">
+        <button type="button" class="setsec-head" id="setsec-backup-reports-head" data-sec="setsec-backup-reports" aria-expanded="false"><span><img class="bi" src="assets/icons/disk.png" alt="">Backup &amp; Reports</span><span class="setsec-chev" aria-hidden="true">›</span></button>
+        <div class="setsec-body" id="setsec-backup-reports-body" hidden>
+        <p class="setsec-sub">Full backup</p>
+        <div class="sheet-actions">
+          <button class="btn-secondary" id="btn-backup" type="button"><img class="bi" src="assets/icons/disk.png" alt="">Back up all data (JSON)</button>
+          <p class="imp-cap">Saves a full Opossum Foot backup file (.json) — import it back after a reinstall.</p>
+          <button class="btn-secondary" id="btn-import" type="button">⬆ Import data (JSON)</button>
+          <p class="imp-cap">Reads back an Opossum Foot backup file (.json) from this phone.</p>
+          <input type="file" id="import-file" class="hidden-file" accept=".json,application/json">
+          <button class="btn-secondary" id="btn-import-pins" type="button"><img class="bi" src="assets/icons/mappin.png" alt="">Import pins from Google Maps</button>
+          <p class="imp-cap">Reads pin files (.kml / .geojson) from Google Maps, My Maps, or Google Takeout.</p>
+          <input type="file" id="import-pins-file" class="hidden-file" accept=".kml,.geojson,.json,application/vnd.google-earth.kml+xml,application/geo+json">
+        </div>
+        <p class="setsec-sub">Reports</p>
+        <p class="dim" style="margin-top:0">Set the filters, watch the match count, then download the report you want. The filters shape the <strong>catches</strong> report only — the sets and mileage downloads always include everything.</p>
         <div class="btn-row">
           <div><label class="field" for="exp-from">From</label><input type="date" id="exp-from" aria-label="Export start date"></div>
           <div><label class="field" for="exp-to">To</label><input type="date" id="exp-to" aria-label="Export end date"></div>
@@ -263,34 +281,23 @@
         <div id="exp-dim-filters"></div>
         <div class="sheet-actions">
           <button class="btn-secondary" id="exp-filters-clear" type="button">Clear all filters</button>
-          <button class="btn-secondary" id="btn-export-catches" type="button">⬇ Export catches (CSV)<span id="exp-filters-count" class="dim"></span></button>
         </div>
-        <p class="imp-cap" style="margin-top:6px">Downloads your catches as a spreadsheet file (.csv), honoring the filters above.</p>
-        </div>
-      </div>
-      <div class="card setsec" id="setsec-backup">
-        <button type="button" class="setsec-head" id="setsec-backup-head" data-sec="setsec-backup" aria-expanded="false"><span>Backup</span><span class="setsec-chev" aria-hidden="true">›</span></button>
-        <div class="setsec-body" id="setsec-backup-body" hidden>
-        <p class="dim">Back up everything, or download spreadsheets. A full backup can be imported back after a reinstall.</p>
+        <p class="dim" id="exp-match-count" style="margin:8px 0 0"></p>
         <div class="sheet-actions">
-          <button class="btn-secondary" id="btn-backup" type="button">💾 Back up all data (JSON)</button>
-          <p class="imp-cap">Saves a full Opossum Foot backup file (.json) — import it back after a reinstall.</p>
+          <button class="btn-secondary" id="btn-export-catches" type="button">⬇ Export catches (CSV)<span id="exp-filters-count" class="dim"></span></button>
+          <p class="imp-cap">Downloads your catches as a spreadsheet file (.csv), honoring the filters above.</p>
           <button class="btn-secondary" id="btn-export-sets" type="button">⬇ Export sets (CSV)</button>
           <p class="imp-cap">Downloads your sets as a spreadsheet file (.csv).</p>
           <button class="btn-secondary" id="btn-export-mileage" type="button">⬇ Export mileage (CSV)</button>
           <p class="imp-cap">Downloads this line's trip log as a spreadsheet file (.csv).</p>
-          <button class="btn-secondary" id="btn-import" type="button">⬆ Import data (JSON)</button>
-          <p class="imp-cap">Reads back an Opossum Foot backup file (.json) from this phone.</p>
-          <input type="file" id="import-file" class="hidden-file" accept=".json,application/json">
-          <button class="btn-secondary" id="btn-import-pins" type="button">📍 Import pins from Google Maps</button>
-          <p class="imp-cap">Reads pin files (.kml / .geojson) from Google Maps, My Maps, or Google Takeout.</p>
-          <input type="file" id="import-pins-file" class="hidden-file" accept=".kml,.geojson,.json,application/vnd.google-earth.kml+xml,application/geo+json">
         </div>
         </div>
       </div>
       <div class="card setsec" id="setsec-danger">
-        <button type="button" class="setsec-head" id="setsec-danger-head" data-sec="setsec-danger" aria-expanded="false"><span style="color:#f0a49c">Danger Zone</span><span class="setsec-chev" aria-hidden="true">›</span></button>
+        <button type="button" class="setsec-head" id="setsec-danger-head" data-sec="setsec-danger" aria-expanded="false"><span style="color:#f0a49c">Erase Everything</span><span class="setsec-chev" aria-hidden="true">›</span></button>
         <div class="setsec-body" id="setsec-danger-body" hidden>
+        <p class="dim" style="margin-top:0">Everything on this phone — sets, catches, photos, voice memos, licenses, landowners — gets permanently deleted. It will be gone forever. There is no undo and no cloud copy.</p>
+        <p class="dim"><strong>Back up all data (JSON)</strong> first if you want to keep a copy. The backup lives in Settings → Backup &amp; Reports.</p>
         <button class="btn-danger" id="btn-erase" type="button" style="width:100%">Erase all Opossum Foot data on this phone</button>
         </div>
       </div>
@@ -367,6 +374,8 @@
     <label class="field">Bait</label>
     <div id="sf-bait-rows"></div>
     <button type="button" class="btn-small btn-ghost attr-add" id="sf-bait-add">+ Add Another Bait</button>
+    <!-- Q30: state bait-rule warning, shown when bait is entered in a verified state -->
+    <div class="warnbox" id="sf-bait-warn" hidden></div>
     <!-- Q67: sponsors moved inside the suggestion menus — no separate row -->
     </div>
     <div class="setfield" id="setfield-lure">
@@ -416,7 +425,7 @@
       <input type="text" id="sf-missing-detail" placeholder="Officer, citation #, ..." autocomplete="off">
       <div class="suggest" id="sf-missing-detail-suggest"></div>
       <div class="photo-strip" id="sf-missing-photos" style="margin-top:8px"></div>
-      <button type="button" class="btn-small btn-secondary" id="btn-sf-missing-photo" style="margin-top:6px">📷 Add citation photo</button>
+      <button type="button" class="btn-small btn-secondary" id="btn-sf-missing-photo" style="margin-top:6px"><img class="bi" src="assets/icons/camera.png" alt="">Add citation photo</button>
       <input type="file" id="sf-missing-photo-input" class="hidden-file" accept="image/*">
     </div>
     </div>
@@ -427,15 +436,23 @@
     <textarea id="sf-notes" placeholder="Anything worth remembering…"></textarea>
     <div class="suggest" id="sf-notes-suggest"></div>
     <div class="btn-row" style="margin-top:8px">
-      <button class="btn-small btn-secondary" id="btn-voice-setnotes" type="button">🎤 Voice → notes</button>
+      <button class="btn-small btn-secondary" id="btn-voice-setnotes" type="button"><img class="bi" src="assets/icons/mic.png" alt="">Voice → notes</button>
     </div>
     <div class="voice-preview" id="voice-setnotes-preview"></div>
+    </div>
+    <!-- Q71: memo recording + playback + deletion on the Edit Set form (edit mode only) -->
+    <div id="setform-memos" hidden>
+    <h3 style="margin:18px 0 6px" id="se-memos-head">Voice Memos</h3>
+    <div id="se-memos"></div>
+    <div class="btn-row" style="margin-top:8px">
+      <button class="btn-small btn-secondary" id="btn-se-memo" type="button"><img class="bi" src="assets/icons/mic.png" alt="">Record memo</button>
+    </div>
     </div>
     <div id="setform-photos">
     <label class="field">Photos</label>
     <div class="photo-strip" id="sf-photos"></div>
     <div class="btn-row" style="margin-top:8px">
-      <button class="btn-small btn-secondary" id="btn-sf-photo" type="button">📷 Take a photo</button>
+      <button class="btn-small btn-secondary" id="btn-sf-photo" type="button"><img class="bi" src="assets/icons/camera.png" alt="">Take a photo</button>
     </div>
     <input type="file" id="sf-photo-input" class="hidden-file" accept="image/*">
     </div>
@@ -453,46 +470,24 @@
   <div class="sheet-head"><h2 id="sd-name">Set</h2><button class="sheet-x" data-close type="button">×</button></div>
   <div class="sheet-body">
     <div id="sd-badges" style="margin-bottom:6px"></div>
-    <div class="status-row">
-      <label class="field" for="sd-status">Status</label>
-      <select id="sd-status">
-        <option value="active">Active</option>
-        <option value="sprung">Sprung</option>
-        <option value="pulled">Pulled</option>
-        <option value="missing">Missing</option>
-      </select>
-    </div>
-    <div class="btn-row" id="sd-recovered-row" hidden style="margin-top:8px">
-      <button class="btn-small btn-secondary" id="btn-sd-recovered" type="button">✓ Mark recovered</button>
-    </div>
+    <!-- Q71: summary is strictly read-only — status changes go through "Edit this set" -->
     <dl class="kv" id="sd-fields"></dl>
     <div class="sheet-actions">
       <button class="btn-primary" id="btn-sd-log" type="button">＋ Log a catch</button>
-      <button class="btn-secondary" id="btn-sd-emptycheck" type="button">✓ Checked — nothing changed</button>
+      <button class="btn-primary" id="btn-sd-emptycheck" type="button">✓ Checked — nothing changed</button>
     </div>
     <h3 style="margin:18px 0 6px" id="sd-notes-head">Set Notes</h3>
-    <textarea id="sd-notes" placeholder="Optional…"></textarea>
-    <div class="suggest" id="sd-notes-suggest"></div>
-    <div class="btn-row" style="margin-top:8px">
-      <button class="btn-small btn-secondary" id="btn-voice-sdnotes" type="button">🎤 Voice → notes</button>
-    </div>
-    <div class="voice-preview" id="voice-sdnotes-preview"></div>
+    <textarea id="sd-notes" placeholder="Optional…" readonly></textarea>
+    <!-- Q71: summary is view-only — notes/memo/photo edits happen in "Edit this set" -->
     <h3 style="margin:18px 0 6px" id="sd-memos-head">Voice Memos</h3>
     <div id="sd-memos"></div>
-    <div class="btn-row" style="margin-top:8px">
-      <button class="btn-small btn-secondary" id="btn-sd-memo" type="button">🎤 Record memo</button>
-    </div>
     <h3 style="margin:18px 0 6px" id="sd-photos-head">Photos</h3>
     <div class="photo-strip" id="sd-photos"></div>
-    <div class="btn-row" style="margin-top:8px">
-      <button class="btn-small btn-secondary" id="btn-sd-photo" type="button">📷 Add photo</button>
-    </div>
-    <input type="file" id="sd-photo-input" class="hidden-file" accept="image/*">
     <h3 style="margin:18px 0 6px">Catches at This Set</h3>
     <div id="sd-logs"></div>
     <div class="sheet-actions">
       <div class="btn-row">
-        <button class="btn-secondary" id="btn-sd-edit" type="button">Edit set</button>
+        <button class="btn-secondary" id="btn-sd-edit" type="button">Edit this set</button>
         <button class="btn-danger" id="btn-sd-delete" type="button">Delete</button>
       </div>
     </div>
@@ -557,13 +552,13 @@
     <textarea id="log-notes" placeholder="Optional…"></textarea>
     <div class="suggest" id="log-notes-suggest"></div>
     <div class="btn-row" style="margin-top:8px">
-      <button class="btn-small btn-secondary" id="btn-voice-lognotes" type="button">🎤 Voice → notes</button>
-      <button class="btn-small btn-secondary" id="btn-log-memo" type="button">🎤 Record memo</button>
+      <button class="btn-small btn-secondary" id="btn-voice-lognotes" type="button"><img class="bi" src="assets/icons/mic.png" alt="">Voice → notes</button>
+      <button class="btn-small btn-secondary" id="btn-log-memo" type="button"><img class="bi" src="assets/icons/mic.png" alt="">Record memo</button>
     </div>
     <div class="voice-preview" id="voice-lognotes-preview"></div>
     <div class="photo-strip" id="log-photos"></div>
     <div class="btn-row" style="margin-top:8px">
-      <button class="btn-small btn-secondary" id="btn-log-photo" type="button">📷 Add photo</button>
+      <button class="btn-small btn-secondary" id="btn-log-photo" type="button"><img class="bi" src="assets/icons/camera.png" alt="">Add photo</button>
     </div>
     <input type="file" id="log-photo-input" class="hidden-file" accept="image/*">
     <div class="form-error" id="logform-error" role="alert"></div>
@@ -584,6 +579,8 @@
 
 <!-- ============ MODAL ============ -->
 <div id="modal"><div class="modal-card" id="modal-card"></div></div>
+<!-- Second layer: photo viewer above the landowner form (Tanner 2026-09-30) -->
+<div id="modal2"><div class="modal-card" id="modal2-card"></div></div>
 
 <div id="toast"></div>
 

@@ -51,8 +51,10 @@ can change it any time in Settings.
   ranked by raw catch counts. Filter by season or species, or put two lures
   head-to-head.
 - **Lines** — Your trap lines, each with its own mileage log.
-- **History** — Every catch and event you've logged. (The report filters and
-  CSV exports moved to Settings.)
+- **History** — Every catch and event you've logged. Flip between By date,
+  By species, and By Trap Type, search the lot, or chip it down by
+  disposition. (Reports and CSV exports live in Settings → Backup &
+  Reports.)
 - **Totals** — Your season numbers. Rows show the title and kept count
   only — tap one to see the details.
 - **Seasons** — Season dates and reminders for your state, species by
@@ -60,8 +62,8 @@ can change it any time in Settings.
 - **Paperwork** — Your license photos plus the landowner notebook: names,
   phone numbers, permission slips, and boundary notes for every property
   you run.
-- **Settings** — Tab toggles, feature toggles, set-field toggles, filters,
-  backups, and the danger zone.
+- **Settings** — Tab toggles, feature toggles, set-field toggles, Backup &
+  Reports, and Erase Everything.
 
 ## Trap lines
 
@@ -88,7 +90,10 @@ licenses, history, and totals, all separate.
 4. **Trap:** picking starts with the manufacturer — Bridger, Duke, Minnesota
    Brand, on down the list — then the type, then the size, so you land on
    the exact trap in three taps. Don't know the brand? Pick "Not sure /
-   mixed brands" and you get the full unfiltered lists like before. Below
+   mixed brands" and you get the full unfiltered lists like before. Don't
+   see your trap, spring, or size in the list at all? Every dropdown has an
+   "Other…" at the bottom — pick it, type what's actually in your hand, and
+   the app remembers it on that line next time. Below
    that there's an optional Mods section — pan size, lamination, whatever
    you've done to the trap since it left the factory. It defaults to stock,
    so skip it if you run them as-bought.
@@ -120,10 +125,16 @@ and notes never carry over; those are always fresh.
 Changed something at a set — fresh bait, pulled the trap? Open the set from
 the map pin and edit it. The app keeps the history straight.
 
+Red asterisks on the set form mean the same as on the log form — the app
+won't save without them. The coordinates sit at the bottom of the form (and
+the set detail too) — tap them to copy, handy when you're texting a buddy
+your spot.
+
 ## Logging a catch — step by step
 
-1. Tap the set's pin on the map (or find it in History), then tap
-   **"＋ Log a catch."**
+1. Tap the set's pin on the map, then tap
+   **"＋ Log a catch."** (History shows you what happened — the pin is where
+   you log what's happening.)
 2. The sheet opens with **Catch** and **Dispatched** already picked,
    because nine times out of ten that's what happened. The red asterisk
    marks what's required.
@@ -161,12 +172,15 @@ On the log screen there's a tab for other events. Use it for:
   furbearer; the app won't count it as a catch.
 - **Empty — nothing changed** — you checked the set and there was nothing
   to do: no catch, no change. The sheet strips down to date and notes —
-  one tap and the check is on the record.
+  one tap and the check-in is on the record (kept in your data and exports,
+  just not shown in History). Note the quick ✓ button on the set itself is
+  different — that one only restarts the check clock and saves nothing.
 - **Fur** or **Animal part** — found sign worth recording.
 - **Other** — anything else; describe it in the notes.
 
-Logging sprung and empty traps matters — it's how the catch-per-night math
-stays honest.
+Logging sprung and empty traps matters — it's how your records stay honest
+about effort. A set that fired six times and caught twice tells a different
+story than one that caught twice and never fired.
 
 ## Trap check reminders
 
@@ -185,7 +199,9 @@ find you.
   so turning it back on doesn't paint the whole map red at once.
 - Open the set to see the exact countdown: *Due in 6h* or *Overdue by 2d 4h*.
   Right below it is a **✓ Checked — nothing changed** button — one tap
-  logs the visit, restarts the clock, and the pin goes back to green.
+  restarts the clock and the pin goes back to green. It saves nothing to
+  History — it's just the clock. (Want the check-in on the record? Log it
+  as an Other → Empty event instead.)
 - Pulled sets don't get a clock — the trap's already out of the ground.
   Missing sets don't either — that's a recovery job, not a check rhythm.
 - Old sets pick up the clock from the newest thing on record — when the
@@ -201,7 +217,8 @@ to lowest.
   title and kept count — tap it for the alive/released/transported
   breakdown plus the set's setup.
 - **By disposition:** how it all shook out — dispatched, released,
-  transported, kept alive.
+  transported, kept alive. Tap a disposition row and it breaks down by
+  species, so you see exactly what got released and what got dispatched.
 - Toggle the sections on and off right on the tab.
 
 ## Scorecard — what's actually producing
@@ -214,6 +231,12 @@ changing a set later can't rewrite your past. Sets with nothing filled in
 land in an "Unspecified" bucket at the bottom so the rankings stay honest.
 Filter by this season, last season, or all-time; filter by species; or pick
 two and run them head-to-head.
+
+## The little sponsor logos
+
+Some bait and lure rows wear a small sponsor badge — that's a maker who
+helps keep this app free. Tap the badge to read who they are. Tapping it
+never fills anything in; your pick is still yours.
 
 ## Weather lives on the map now
 
@@ -245,11 +268,13 @@ app says "Waiting for GPS…" and holds the save.
 
 ## Mileage
 
-Every line has a Mileage button. Log trips with start and end odometer
-readings — date, miles, notes — and the app keeps a running total. It also
-draws a straight-line route estimate between your sets on the map (dashed
-line; it reads 20–40% under real road miles, so treat it as a rough check,
-not a receipt). Mileage exports to CSV with the rest.
+Every line has a Mileage button. Tap **+ ODOMETER** to log trips with start
+and end odometer readings — date, miles, notes — and the app keeps a running
+total. It also draws a straight-line route estimate between your sets on the
+map (dashed line; it reads 20–40% under real road miles, so treat it as a
+rough check, not a receipt). There's a mileage on/off toggle in the mileage
+screen, and "‹ Back to mileage" drops the route line off the map. Mileage
+exports to CSV from Backup & Reports.
 
 ## Bringing in Google Maps pins
 
@@ -273,11 +298,21 @@ out of History, its photos, and its voice memos — the app warns you plainly
 before it happens. You can also delete a single catch from History or from
 the set's log list, same gone-forever warning.
 
+**Erase Everything** (Settings) makes you prove it's really you — a quick
+math question and typing DELETE EVERYTHING — so a kid tapping around can't
+wipe your season.
+
 ## Seasons — the reminders
 
 The **Seasons** tab lists your state's furbearers A to Z. Tap one for its
 season dates, bag limits, and any notes. A badge shows whether it's open,
 closed, or coming up.
+
+Iowa trappers get two extras at the top of the tab: a **Trap & Snare Rules**
+quick reference (the short version of the state's trap and snare
+rules) and a **Find your game warden** button that opens the
+DNR's county directory. Same rule as everything else here — reminders, not
+legal authority.
 
 Read the red line at the top of the tab: this is a **reminder, not legal
 authority**. Seasons change, emergency orders happen, counties differ. Check
@@ -286,24 +321,30 @@ tell you it's legal to set a trap.
 
 ## Paperwork
 
-Open the **Paperwork** tab and tap "📷 Add license photo." Snap your license
-(or your kid's, your buddy's — you can label whose is whose). It lives on
+Open the **Paperwork** tab and tap "📷 Add license photo." Snap your license —
+and your kid's or your buddy's if you carry theirs. They're just photos in
+a row, so snap them in an order you'll remember. It lives on
 your phone so it's there when the warden asks, even with no signal.
 
 The tab also holds the **landowner notebook**: names, phone numbers,
 permission slips, and boundary notes for every property you run sets on.
+Tap a landowner's number to call or text them straight from the notebook —
+no copying numbers out of the app.
 
 ## Backing up — read this one twice
 
 There is no account and no cloud. Everything lives on your phone, which means
 a lost phone, a wiped phone, or clearing your browser data can take your
-whole season with it.
+whole season with it. In **Settings**, open **Backup & Reports** — the full
+backup and all the reports live in that one place now.
 
-- In **Settings**, tap **"Back up all data (JSON)"** — that's the full
-  backup: sets, catches, lines, landowners, the lot. Importing it restores
-  everything. Do this one, not just the CSVs.
-- **"⬇ Export catches (CSV)"** and **"⬇ Export sets (CSV)"** give you
-  spreadsheet copies for Excel.
+- **Full backup** is at the top: **"💾 Back up all data (JSON)"** — sets,
+  catches, lines, landowners, the lot. Importing it restores everything.
+  Do this one, not just the CSVs.
+- **Reports** is below it: set the date range and filter chips, watch the
+  match count ("37 of 210 catches match"), then download the report you
+  want. The filters shape the catches report — the sets and mileage
+  downloads always include everything.
 - Do it at least a few times a season. If the phone goes in the creek, the
   JSON file is your season.
 - License photos and voice memos don't ride in any backup file — save the
