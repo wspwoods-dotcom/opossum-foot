@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-09-29bi';
+var APP_VERSION = 'beta 0.1 · build 2026-09-30bj';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -333,6 +333,16 @@ var IDB = {
       t.onerror = function () { resolve(); };
     });
   },
+  get: function (store, id) {
+    var self = this;
+    return new Promise(function (resolve) {
+      if (!self.db) { resolve(null); return; }
+      var t = self.db.transaction(store, 'readonly');
+      var r = t.objectStore(store).get(id);
+      t.oncomplete = function () { resolve(r.result || null); };
+      t.onerror = function () { resolve(null); };
+    });
+  },
   clear: function (store) {
     var self = this;
     return new Promise(function (resolve) {
@@ -410,11 +420,16 @@ function openSheet(id) {
 }
 function closeSheets() {
   var sheets = document.querySelectorAll('.sheet.show');
+  var logWasOpen = !!document.getElementById('sheet-log').classList.contains('show');
   for (var i = 0; i < sheets.length; i++) sheets[i].classList.remove('show');
   $('scrim').classList.remove('show');
   /* never leave a stray recording running behind a closed sheet */
   try { Voice.stop(); } catch (e) { /* noop */ }
   try { Memo.stop(); } catch (e) { /* noop */ }
+  /* Catch-memo finish: a closing log sheet means the catch wasn't saved
+     (saveLog clears pendingLogMemos first), so any memos waiting for a
+     catch are orphans — remove them from the phone. */
+  if (logWasOpen) { logSheetLive = false; deletePendingLogMemos(); }
 }
 
 /* modal */
@@ -788,7 +803,10 @@ function updateWeatherChip(c) {
     var cache = Store.data.weatherTabCache;
     c = (cache && cache.payload && cache.payload.current) || null;
   }
-  chip.textContent = c ? (weatherEmoji(c.weather_code) + ' ' + Math.round(c.temperature_2m) + '°F') : '🌤️';
+  /* B16: condition over temperature, stacked — matches the chip's column layout. */
+  chip.innerHTML = c
+    ? '<span>' + weatherEmoji(c.weather_code) + '</span><span>' + Math.round(c.temperature_2m) + '°F</span>'
+    : '🌤️';
 }
 function weatherEmoji(c) {
   c = c * 1;
@@ -1024,12 +1042,12 @@ function renderWeatherTab() {
   });
 }
 
-/* ---- Q14: per-line tab visibility -------------------------------------------
-   Map, Lines, Totals, Settings always show. History, Scorecard, Seasons,
-   Licenses are toggleable per trap line — a nuisance line can run lean
+/* ---- Q14/Q62: per-line tab visibility -------------------------------------------
+   Map, Lines, Settings always show. History, Scorecard, Seasons, Licenses,
+   Totals are toggleable per trap line — a nuisance line can run lean
    while the hobby line keeps the full bar. */
-var TOGGLEABLE_TABS = ['history', 'scorecard', 'seasons', 'licenses'];
-var TAB_LABELS = { history: 'History tab', scorecard: 'Scorecard tab', seasons: 'Seasons tab', licenses: 'Paperwork tab' };
+var TOGGLEABLE_TABS = ['history', 'scorecard', 'seasons', 'licenses', 'totals'];
+var TAB_LABELS = { history: 'History tab', scorecard: 'Scorecard tab', seasons: 'Seasons tab', licenses: 'Paperwork tab', totals: 'Totals tab' };
 function lineTabs() {
   var l = activeLine(), t = (l && l.tabs) || {}, out = {};
   TOGGLEABLE_TABS.forEach(function (k) { out[k] = t[k] !== false; });
@@ -1174,17 +1192,22 @@ function attachSuggest(inputId, boxId, key) {
    button under the stack. */
 var ATTR_PLACEHOLDERS = { bait: 'e.g. sardines', lure: 'e.g. gland lure', urine: 'e.g. fox urine', visual: 'e.g. flagging tape', audio: 'e.g. squeaker', other: 'e.g. t-bone' };
 var ATTR_MAX_ROWS = 6;
-function renderAttrRows(field, values) {
+function attrRowCount(field) {
+  var host = $('sf-' + field + '-rows');
+  return host ? host.querySelectorAll('.attr-row').length : 0;
+}
+function renderAttrRows(field, values, minRows) {
   var host = $('sf-' + field + '-rows');
   if (!host) return;
   var vals = toAttrArray(values).slice(0, ATTR_MAX_ROWS);
-  if (!vals.length) vals = [''];
+  while (vals.length < Math.min(minRows || 1, ATTR_MAX_ROWS)) vals.push('');
+  var showX = vals.length > 1; /* single rows look like the old full-width boxes */
   var html = '';
   for (var i = 0; i < vals.length; i++) {
     html += '<div class="attr-row">' +
       '<input type="text" class="attr-row-input" id="sf-' + field + '-row-' + i + '" data-attr="' + field + '"' +
       ' placeholder="' + ATTR_PLACEHOLDERS[field] + '" autocomplete="off" value="' + esc(vals[i]) + '">' +
-      '<button type="button" class="attr-row-x" data-attr="' + field + '" data-i="' + i + '" aria-label="Remove">×</button>' +
+      (showX ? '<button type="button" class="attr-row-x" data-attr="' + field + '" data-i="' + i + '" aria-label="Remove">×</button>' : '') +
       '</div><div class="suggest" id="sf-' + field + '-row-' + i + '-suggest"></div>';
   }
   host.innerHTML = html;
@@ -1202,11 +1225,12 @@ function renderAttrRows(field, values) {
   }
   var add = $('sf-' + field + '-add');
   if (add) add.onclick = function () {
-    var cur = collectAttrRows(field);
-    if (cur.length >= ATTR_MAX_ROWS) { toast("That's plenty — six is the max."); return; }
-    cur.push('');
-    renderAttrRows(field, cur);
-    var last = $('sf-' + field + '-row-' + (cur.length - 1));
+    /* count real rows, not collected values — collectAttrRows drops empties,
+       so counting it made the button a no-op on an untouched row */
+    var n = attrRowCount(field);
+    if (n >= ATTR_MAX_ROWS) { toast("That's plenty — six is the max."); return; }
+    renderAttrRows(field, collectAttrRows(field), n + 1);
+    var last = $('sf-' + field + '-row-' + n);
     if (last) last.focus();
   };
 }
@@ -1300,16 +1324,23 @@ function selHtml(id, label, options, val) {
    Flow: Manufacturer -> trap type -> size/model. Picking "Not sure / mixed
    brands" (value '') keeps today's full unfiltered lists and generic detail
    fields, so legacy sets and unsure trappers lose nothing. */
+/* Gray out a select while it's showing its "e.g." hint (nothing picked yet). */
+function paintSelectHint(sel) {
+  if (!sel || !sel.classList) return;
+  sel.classList.toggle('select-hint', !sel.value);
+}
 /* Populate the manufacturer select once (options live in trap-catalog.js). */
 function renderMakerOptions() {
   var sel = $('sf-maker');
   if (!sel || sel.options.length) return;
-  var h = '<option value="">' + esc(MIXED_MAKER_LABEL) + '</option>';
+  var h = '<option value="">e.g. Bridger</option>';
+  h += '<option value="__mixed">' + esc(MIXED_MAKER_LABEL) + '</option>';
   MAKER_ORDER.forEach(function (m) {
     var label = m + (TRAP_MAKERS[m].legacy ? ' (legacy)' : '');
     h += '<option value="' + esc(m) + '">' + esc(label) + '</option>';
   });
   sel.innerHTML = h;
+  paintSelectHint(sel);
 }
 /* Type options for the picked maker. keepKey re-selects a picker type key
    when it exists in the new list. */
@@ -1318,11 +1349,12 @@ function renderTrapTypeOptions(maker, keepKey) {
   var entry = maker && TRAP_MAKERS[maker];
   var keys = entry ? Object.keys(entry.types) : ALL_TRAP_TYPES.slice();
   var cur = sel.value;
-  var h = '';
+  var h = '<option value="">e.g. Foothold</option>';
   keys.forEach(function (k) { h += '<option value="' + esc(k) + '">' + esc(k) + '</option>'; });
   sel.innerHTML = h;
   if (keepKey && keys.indexOf(keepKey) >= 0) sel.value = keepKey;
   else if (keys.indexOf(cur) >= 0) sel.value = cur;
+  paintSelectHint(sel);
 }
 /* Maker switched: try to keep the same stored trap type across the switch. */
 function onMakerChange() {
@@ -1339,6 +1371,7 @@ function onMakerChange() {
   } else if (ALL_TRAP_TYPES.indexOf(before.t) >= 0) {
     $('sf-type').value = before.t;
   }
+  paintSelectHint($('sf-maker'));
   renderTrapDetailFields();
 }
 /* Read the current dynamic trap-detail field values ('' when absent). */
@@ -1349,9 +1382,10 @@ function trapDetailValues() {
   else trapModel = f('sf-trapmodel').trim();
   var mv = trapModValues();
   return {
-    trapMaker: f('sf-maker'),
+    trapMaker: (function (m) { return m === '__mixed' ? '' : m; })(f('sf-maker')),
     trapSpring: f('sf-trapspring'), trapSize: f('sf-trapsize'),
     snareDia: f('sf-snaredia'), snareLock: f('sf-snarelock'), snareLen: f('sf-snarelen'),
+    snarePurpose: f('sf-snarepurpose'),
     trapModel: trapModel, trapMods: mv.mods, panSize: mv.panSize
   };
 }
@@ -1459,6 +1493,9 @@ function renderTrapDetailFields(saved, forceCheck) {
         h += selHtml('sf-snaredia', 'Cable diameter', SNARE_DIAS.concat(['Other']), v.snareDia || '');
         h += selHtml('sf-snarelock', 'Lock type', SNARE_LOCKS.concat(['Other']), v.snareLock || '');
         h += selHtml('sf-snarelen', 'Cable length', SNARE_LENS.concat(['Other']), v.snareLen || '');
+        /* Q56: kill vs live-hold. The setup decides, not the hardware. */
+        h += selHtml('sf-snarepurpose', 'Snare purpose', ['Kill snare', 'Live-hold snare'], v.snarePurpose || '');
+        h += '<div class="dim" style="text-align:center;margin:2px 0 6px">1/16&Prime; fox/bobcat &middot; 5/64&Prime; coyote &middot; 3/32&Prime; coyote/wolf &middot; live-hold = relaxing lock, swivels, breakaway</div>';
       }
       if (cfg.model) {
         h += '<label class="field" for="sf-trapmodel">Brand / model</label>' +
@@ -1489,6 +1526,7 @@ function trapDetailSummary(s) {
     if (s.trapSpring) parts.push(s.trapSpring);
     if (s.trapSize) parts.push(s.trapSize);
   } else if (s.trapType === 'Snare') {
+    if (s.snarePurpose) parts.push(s.snarePurpose);
     if (s.snareDia) parts.push(s.snareDia + ' cable');
     if (s.snareLock) parts.push(s.snareLock + ' lock');
     if (s.snareLen) parts.push(s.snareLen);
@@ -1504,11 +1542,11 @@ function trapDetailSummary(s) {
    switch can't leave stale values behind. */
 function normalizeTrapDetail(s) {
   var t = s.trapType;
-  if (t === 'Foothold') { s.snareDia = s.snareLock = s.snareLen = ''; }
+  if (t === 'Foothold') { s.snareDia = s.snareLock = s.snareLen = s.snarePurpose = ''; }
   else if (t === 'Snare') { s.trapSpring = s.trapSize = s.trapModel = ''; }
   else if (t === 'Bodygrip / Conibear' || t === 'Cage live trap' || t === 'Colony trap' || t === 'Bear trap') {
-    s.trapSpring = s.snareDia = s.snareLock = s.snareLen = '';
-  } else { s.trapSpring = s.trapSize = s.snareDia = s.snareLock = s.snareLen = ''; }
+    s.trapSpring = s.snareDia = s.snareLock = s.snareLen = s.snarePurpose = '';
+  } else { s.trapSpring = s.trapSize = s.snareDia = s.snareLock = s.snareLen = s.snarePurpose = ''; }
 }
 
 /* ================= 6. MAP ================= */
@@ -1679,7 +1717,8 @@ function refreshMarkers() {
   activeSets().forEach(function (s) {
     if (!mapStatusFilter[normStatus(s.status)]) return;
     var m = L.marker([s.lat, s.lng], { icon: setIcon(s), title: s.name });
-    m.on('click', function () { openSetDetail(s.id); });
+    /* B15: no opening set details mid-placement — finish the pin first. */
+    m.on('click', function () { if (document.body.classList.contains('placing')) return; openSetDetail(s.id); });
     m._setId = s.id;
     markersLayer.addLayer(m);
   });
@@ -1695,6 +1734,11 @@ function setDropPinMode(on) {
 
 /* Draggable placement pin: GPS gets you close, your finger dials it in. */
 var placeMarker = null;
+/* B15: pin placement locks the rest of the app until the pin is confirmed or
+   cancelled — you finish this decision before doing anything else. */
+function setPlacingLock(on) {
+  document.body.classList.toggle('placing', !!on);
+}
 function placeIcon() {
   return L.divIcon({
     className: '',
@@ -1709,10 +1753,12 @@ function startPlacePin(latlng) {
   placeMarker = L.marker(latlng, { draggable: true, icon: placeIcon() }).addTo(map);
   map.panTo(latlng);
   $('place-bar').classList.add('show');
+  setPlacingLock(true);
 }
 function cancelPlacePin() {
   if (placeMarker && map) { try { map.removeLayer(placeMarker); } catch (e) {} placeMarker = null; }
   var bar = $('place-bar'); if (bar) bar.classList.remove('show');
+  setPlacingLock(false);
 }
 
 /* ================= Q53. HOME GROUND =================
@@ -1748,6 +1794,11 @@ function normalizeHome(d) {
 }
 function fitMapHome() {
   if (!map || typeof L === 'undefined') return;
+  /* 2026-09-29 (B13): the home/place bars change the map container's height,
+     but Leaflet caches its size — a setView right after the bar shows/hides
+     centers on the STALE size, so the point renders high (bar just hid) or
+     low (bar just showed). Re-measure first. */
+  map.invalidateSize();
   var h = homeLatLng();
   if (h) map.setView([h.lat, h.lng], HOME_ZOOM);
   else fitMapToState();
@@ -1771,6 +1822,9 @@ function startHomePick() {
   homePickMode = true;
   $('home-bar').classList.add('show');
   $('btn-home-ok').hidden = true;
+  setPlacingLock(true); /* B15: same modal lock as pin placement */
+  /* B13: bar just changed the map height — re-measure before centering. */
+  map.invalidateSize();
   var h = homeLatLng();
   if (h) map.setView([h.lat, h.lng], Math.max(map.getZoom(), HOME_ZOOM));
 }
@@ -1778,6 +1832,7 @@ function cancelHomePick() {
   homePickMode = false;
   if (homeMarker && map) { try { map.removeLayer(homeMarker); } catch (e) {} homeMarker = null; }
   var bar = $('home-bar'); if (bar) bar.classList.remove('show');
+  setPlacingLock(false);
 }
 function placeHomePin(latlng) {
   if (!map) return;
@@ -1875,7 +1930,7 @@ function armFollowWatchdog() {
   disarmFollowWatchdog();
   followWatchdog = setTimeout(function () {
     if (locateState === 'following' || locateState === 'paused') {
-      restartFollowWatch('Reacquiring GPS…');
+      restartFollowWatch(); /* silent self-heal: no toast — the nag annoyed Tanner */
     }
   }, 40000);
 }
@@ -2054,19 +2109,27 @@ function startAcquire() {
   } catch (e) { finish(); }
 }
 
+/* Crosshair tap centers on the fix AND zooms in when the view is wide —
+   an explicit locate tap should put you on yourself, not just pan. */
+function centerOnFix() {
+  if (!map || !lastFix || lastFix.lat == null) return;
+  if (map.getZoom() < 16) map.setView([lastFix.lat, lastFix.lng], 16, { animate: false });
+  else map.panTo([lastFix.lat, lastFix.lng], { animate: false });
+}
+
 /* ◎ button: one tap acquires and follows — follow stays on from that point,
    there is no manual off. Dragging the map pauses; tap the crosshair to
    re-center and resume. */
 function locateMe() {
   if (!('geolocation' in navigator)) { toast('This device has no GPS.'); return; }
   if (locateState === 'following') {
-    if (map && lastFix && lastFix.lat != null) map.panTo([lastFix.lat, lastFix.lng], { animate: false });
+    centerOnFix();
     return;
   }
   if (locateState === 'paused') {
     locateState = 'following';
     var b = $('btn-locate'); if (b) b.classList.remove('paused-mode');
-    if (map && lastFix && lastFix.lat != null) map.panTo([lastFix.lat, lastFix.lng], { animate: false });
+    centerOnFix();
     toast('Following you.');
     return;
   }
@@ -2074,6 +2137,7 @@ function locateMe() {
     stopLocateWatch(); locateState = 'idle'; toast('Cancelled.'); return;
   }
   if (lastFix && (Date.now() - (lastFix.at || 0) < 120000)) {
+    centerOnFix();
     enterFollow();
     toast('Following you.');
     return;
@@ -2097,6 +2161,29 @@ var MISSING_REASONS = [
 function missingReasonLabel(v) {
   for (var i = 0; i < MISSING_REASONS.length; i++) if (MISSING_REASONS[i].v === v) return MISSING_REASONS[i].label;
   return '';
+}
+/* Set-form status buttons: highlight the button matching the hidden value. */
+function syncStatusSeg() {
+  var v = $('sf-status') ? $('sf-status').value : 'active';
+  var btns = document.querySelectorAll('#sf-status-seg button');
+  for (var i = 0; i < btns.length; i++) {
+    btns[i].classList.toggle('selected', btns[i].getAttribute('data-st') === v);
+  }
+}
+/* Wire the status buttons once: tap sets the hidden sf-status value,
+   highlights the button, refreshes the missing-reason row. */
+function wireStatusSeg() {
+  var stBtns = document.querySelectorAll('#sf-status-seg button');
+  for (var stb = 0; stb < stBtns.length; stb++) {
+    stBtns[stb].onclick = (function (b) {
+      return function () {
+        $('sf-status').value = b.getAttribute('data-st');
+        hideSetFormError();
+        syncStatusSeg();
+        renderMissingReasonRow();
+      };
+    })(stBtns[stb]);
+  }
 }
 /* Q36: show/hide the "Why missing" row on the set form; the confiscation
    details box only appears when Confiscated is picked. */
@@ -2166,29 +2253,34 @@ function openSetForm(coords, setId) {
   editingSetId = setId || null;
   pendingCoords = coords || null;
   var s = setId ? getSet(setId) : null;
+  /* Carry-forward: a new set starts as a copy of the last set on this line —
+     same rig, next number. Name still gets the smart number; status/date stay fresh. */
+  var tmpl = s ? null : lastSetOnLine();
   $('setform-title').textContent = s ? 'Edit Set' : 'New Set';
-  $('sf-name').value = s ? s.name : '';
-  $('sf-name').placeholder = s ? '' : 'e.g. Set ' + (activeSets().length + 1);
+  $('sf-name').value = s ? s.name : nextSetName();
+  $('sf-name').placeholder = s ? '' : 'e.g. Creek crossing';
   renderMakerOptions();
-  $('sf-maker').value = s ? (s.trapMaker || '') : '';
+  $('sf-maker').value = s ? (s.trapMaker || '__mixed') : (tmpl ? (tmpl.trapMaker || '__mixed') : '');
   var pk = (s && s.trapMaker) ? pickerTypeFor(s.trapMaker, s.trapType, s.trapSpring, s.trapModel)
-    : (s ? (s.trapType || 'Foothold') : 'Foothold');
+    : (s ? (s.trapType || '') : (tmpl ? pickerTypeFor(tmpl.trapMaker, tmpl.trapType, tmpl.trapSpring, tmpl.trapModel) : ''));
   renderTrapTypeOptions($('sf-maker').value, pk);
-  $('sf-type').onchange = function () { renderTrapDetailFields(); };
+  paintSelectHint($('sf-maker'));
+  $('sf-type').onchange = function () { renderTrapDetailFields(); paintSelectHint(this); };
   $('sf-maker').onchange = onMakerChange;
-  renderTrapDetailFields(s || null);
+  renderTrapDetailFields(s || tmpl || null);
   renderSetTypeOptions(); /* Q29: rebuild taxonomy each open so legacy values reset */
-  var stv = s ? (s.setType || 'Dirt hole') : 'Dirt hole';
+  var stv = s ? (s.setType || 'Dirt hole') : (tmpl && tmpl.setType ? tmpl.setType : 'Dirt hole');
   ensureSetTypeOption(stv); /* Q29: legacy values ("Drowning set", "Trail / blind set") ride along */
   $('sf-settype').value = stv;
   /* Q26: stacked attractant rows, one per value */
-  renderAttrRows('bait', s ? s.bait : []);
-  renderAttrRows('lure', s ? s.lure : []);
-  renderAttrRows('urine', s ? s.urine : []);
-  renderAttrRows('visual', s ? s.visual : []);
-  renderAttrRows('audio', s ? s.audio : []);
-  renderAttrRows('other', s ? s.other : []);
+  renderAttrRows('bait', s ? s.bait : (tmpl ? tmpl.bait : []));
+  renderAttrRows('lure', s ? s.lure : (tmpl ? tmpl.lure : []));
+  renderAttrRows('urine', s ? s.urine : (tmpl ? tmpl.urine : []));
+  renderAttrRows('visual', s ? s.visual : (tmpl ? tmpl.visual : []));
+  renderAttrRows('audio', s ? s.audio : (tmpl ? tmpl.audio : []));
+  renderAttrRows('other', s ? s.other : (tmpl ? tmpl.other : []));
   $('sf-status').value = s ? normStatus(s.status) : 'active';
+  syncStatusSeg(); /* status buttons mirror the stored value */
   $('sf-date').value = s ? s.dateSet : todayISO();
   updateDateDOW('sf-date', 'sf-date-dow');
   /* Q36: preselect the stored missing reason when editing a Missing set */
@@ -2247,11 +2339,37 @@ function hideLogFormError() {
   if (el) { el.textContent = ''; el.classList.remove('show'); }
 }
 
+/* Most recently created set on the active line (the carry-forward template). */
+function lastSetOnLine() {
+  var sets = activeSets().slice().sort(function (a, b) { return (b.createdAt || 0) - (a.createdAt || 0); });
+  return sets.length ? sets[0] : null;
+}
+/* Next set name: follow the most recently created set's stem on this line —
+   "Trap 1" -> "Trap 2"; "Creek crossing" -> "Creek crossing 2". Custom names
+   never disturb the counter; the number always follows what was last typed,
+   so a speed line just keeps counting. */
+function nextSetName() {
+  var sets = activeSets().slice().sort(function (a, b) { return (b.createdAt || 0) - (a.createdAt || 0); });
+  for (var i = 0; i < sets.length; i++) {
+    var nm = String(sets[i].name || '').trim();
+    if (!nm) continue;
+    var m = nm.match(/^(.*?)\s*(\d+)$/);
+    if (m) {
+      var stem = m[1].trim();
+      return (stem ? stem : 'Trap') + ' ' + (parseInt(m[2], 10) + 1);
+    }
+    return nm + ' 2';
+  }
+  return 'Trap 1';
+}
 function saveSetForm() {
   var name = $('sf-name').value.trim();
   var status = $('sf-status').value;
   var dateSet = $('sf-date').value;
-  if (!name) { showSetFormError('Set name is required — give this set a name.'); return; }
+  if (!name) {
+    if (editingSetId) { showSetFormError('Set name is required — give this set a name.'); return; }
+    name = nextSetName(); /* speed lines: never block on the name, just number it */
+  }
   if (!status) { showSetFormError('Status is required — pick one.'); return; }
   if (!dateSet) { showSetFormError('Date set is required — pick the date.'); return; }
   if (status === 'missing' && !setMissingReason) { showSetFormError('Pick why this set is missing.'); return; }
@@ -2271,6 +2389,7 @@ function saveSetForm() {
     s.trapMaker = td.trapMaker;
     s.trapSpring = td.trapSpring || rt.spring || ''; s.trapSize = td.trapSize;
     s.snareDia = td.snareDia; s.snareLock = td.snareLock; s.snareLen = td.snareLen;
+    s.snarePurpose = td.snarePurpose;
     s.trapModel = td.trapModel;
     s.trapMods = normalizeMods(td.trapMods); s.panSize = td.panSize;
     normalizeTrapDetail(s);
@@ -2324,6 +2443,7 @@ function saveSetForm() {
       trapMaker: td.trapMaker,
       trapSpring: td.trapSpring || rt.spring || '', trapSize: td.trapSize,
       snareDia: td.snareDia, snareLock: td.snareLock, snareLen: td.snareLen,
+      snarePurpose: td.snarePurpose,
       trapModel: td.trapModel,
       trapMods: normalizeMods(td.trapMods), panSize: td.panSize,
       setType: $('sf-settype').value,
@@ -2570,6 +2690,7 @@ function renderSetLogs(s, byLog) {
       dispBadge(l.disposition) +
       '<button type="button" class="log-del" data-del-log="' + l.id + '" aria-label="Delete this log entry">×</button></div>' +
       '<div class="dim">' + esc(fmtDate(l.date)) + (l.notes ? ' · ' + esc(l.notes) : '') + '</div>' +
+      logMemoHtml(l) +
       (l.weather ? '<div class="dim">🌤 ' + esc(weatherText(l.weather)) + '</div>' : '') +
       (ph ? '<div class="log-photos">' + ph + '</div>' : '') + '</div>';
   }).join('');
@@ -2640,11 +2761,13 @@ function deleteLog(logId) {
     ? (OTHER_LABELS[l.otherType] || 'Other event') + (l.species ? ' — ' + l.species : '')
     : (l.count + ' × ' + (l.species || 'Unknown'));
   var s = l.setId ? getSet(l.setId) : null;
-  function ask(nPhotos) {
+  var linkedMemoIds = logMemoIds(l);
+  function ask(nPhotos, nMemos) {
     confirmModal('Delete this log entry?',
       '“' + esc(label) + '” (' + esc(fmtDate(l.date)) + ')' +
       ' will be permanently removed from History' + (s ? ' and from “' + esc(s.name) + '”' : '') +
       (nPhotos ? ', along with its ' + nPhotos + ' photo' + (nPhotos > 1 ? 's' : '') : '') +
+      (nMemos ? ', along with its ' + nMemos + ' voice memo' + (nMemos > 1 ? 's' : '') : '') +
       '. This cannot be undone — deleted data is gone forever.',
       'Delete', function () {
         Store.data.logs = Store.data.logs.filter(function (x) { return x.id !== logId; });
@@ -2656,6 +2779,11 @@ function deleteLog(logId) {
             IDB.del('photos', p.id);
           });
         }).catch(function () { /* noop */ });
+        /* Q38: the catch's voice memos are gone everywhere too. */
+        linkedMemoIds.forEach(function (mid) {
+          if (memoURLs[mid]) { try { URL.revokeObjectURL(memoURLs[mid]); } catch (e) { /* noop */ } delete memoURLs[mid]; }
+          IDB.del('memos', mid);
+        });
         Store.save();
         renderHistory(); renderTotals();
         if (detailSetId && getSet(detailSetId)) {
@@ -2665,12 +2793,15 @@ function deleteLog(logId) {
       });
   }
   IDB.all('photos').then(function (all) {
-    ask(all.filter(function (p) { return p.logId === logId; }).length);
-  }).catch(function () { ask(0); });
+    ask(all.filter(function (p) { return p.logId === logId; }).length, linkedMemoIds.length);
+  }).catch(function () { ask(0, linkedMemoIds.length); });
 }
 
 /* ================= 8. CATCH LOGGING ================= */
-var logSetId = null, logSpecies = null, logCount = 1, logDisposition = 'kept', pendingLogPhotos = [];
+var logSetId = null, logSpecies = null, logCount = 1, logDisposition = 'kept', pendingLogPhotos = [], pendingLogMemos = [];
+/* Catch-memo finish: true while the log sheet is open for an unsaved catch.
+   A memo that finishes landing after the sheet closed is an orphan. */
+var logSheetLive = false;
 
 /* Catch-log "Other event" (build au): non-catch events recorded on a set.
    otherType is one of 'sprung' | 'non-native' | 'non-game' | 'domestic' |
@@ -2692,10 +2823,34 @@ function updateLogNotesPlaceholder() {
   $('log-notes').placeholder = (logOtherType === 'other') ? LOG_NOTES_PLACEHOLDER_OTHER : LOG_NOTES_PLACEHOLDER_DEFAULT;
 }
 
+/* Catch-memo finish: memos recorded for a catch that never gets saved are
+   orphans — remove them from the phone so they don't haunt the set's list. */
+function deletePendingLogMemos() {
+  pendingLogMemos.forEach(function (mid) {
+    if (memoURLs[mid]) { try { URL.revokeObjectURL(memoURLs[mid]); } catch (e) { /* noop */ } delete memoURLs[mid]; }
+    IDB.del('memos', mid).catch(function () { /* noop */ });
+  });
+  pendingLogMemos = [];
+}
+/* B11: has the trapper entered anything on the log sheet worth protecting?
+   An untouched form closes silently; a half-entered catch asks first. */
+function logFormDirty() {
+  if (logSpecies || logCount !== 1) return true;
+  /* 'none' is set programmatically when the row hides — only user picks count. */
+  if (logDisposition !== 'kept' && logDisposition !== 'none') return true;
+  if (pendingLogPhotos.length) return true;
+  if (pendingLogMemos.length) return true; /* a recorded memo is linked on save */
+  if (logEventType !== 'catch' || logOtherType !== 'sprung') return true;
+  if (($('log-notes').value || '').trim()) return true;
+  if (($('log-species-free').value || '').trim()) return true;
+  if (($('log-date').value || '') !== todayISO()) return true;
+  return false;
+}
 function openLogSheet(setId) {
   var s = getSet(setId);
   if (!s) return;
-  logSetId = setId; logSpecies = null; logCount = 1; logDisposition = 'kept'; pendingLogPhotos = [];
+  logSetId = setId; logSpecies = null; logCount = 1; logDisposition = 'kept'; pendingLogPhotos = []; pendingLogMemos = [];
+  logSheetLive = true;
   logEventType = 'catch'; logOtherType = 'sprung';
   renderPendingLogPhotos();
   $('log-setline').innerHTML = '<strong>' + esc(s.name) + '</strong>' +
@@ -2884,17 +3039,12 @@ function renderSpeciesList(filter) {
       '" data-sp="' + esc(sp.common_name) + '">' + iconHtml +
       '<span class="sp-name">' + esc(sp.common_name) +
       (sp.scientific_name ? '<span class="sci">' + esc(sp.scientific_name) + '</span>' : '') + '</span>' +
-      '<span class="badge ' + info.badgeClass + '">' + info.badge + '</span>' + furAvgLabel(sp.common_name) + '</button>';
+      '<span class="badge ' + info.badgeClass + '">' + info.badge + '</span>' + '</button>';
   }).join('');
   var btns = box.querySelectorAll('.species-row');
   for (var i = 0; i < btns.length; i++) {
     btns[i].onclick = function (e) {
       var t = e && e.target;
-      if (t && t.getAttribute && t.getAttribute('data-fur')) {
-        e.stopPropagation();
-        showFurPriceDetail(t.getAttribute('data-fur'));
-        return;
-      }
       if (t && t.getAttribute && t.getAttribute('data-help')) {
         e.stopPropagation();
         showSpeciesDetail(this.getAttribute('data-sp'));
@@ -2973,6 +3123,9 @@ function renderLogWarnings() {
 
 function saveLog() {
   if (!logEventType) { showLogFormError('Choose Catch or Other event.'); return; }
+  /* Catch-memo finish: never save the catch while its memo is still
+     recording or landing in storage — the link would be lost. */
+  if (Memo.recording || Memo._saving) { showLogFormError('Finish the voice memo first, then save.'); return; }
   var isOther = (logEventType === 'other');
   var species = isOther ? $('log-species-free').value.trim() : logSpecies;
   if (!isOther && !species) { showLogFormError('Pick a species first.'); return; }
@@ -3002,6 +3155,7 @@ function saveLog() {
     county: s ? (s.county || '') : '',
     lat: s ? s.lat : null, lng: s ? s.lng : null,
     notes: $('log-notes').value.trim(),
+    memoIds: pendingLogMemos.slice(),
     createdAt: Date.now()
   };
   log.lineId = activeLineId();
@@ -3017,6 +3171,7 @@ function saveLog() {
     }).catch(function () { /* noop */ });
   });
   pendingLogPhotos = [];
+  pendingLogMemos = [];
   closeSheets();
   renderHistory(); renderTotals();
   toast(isOther
@@ -3031,6 +3186,17 @@ function saveLog() {
 
 /* ================= 9. VOICE ================= */
 /* --- transcribe-first speech recognition --- */
+/* B10: iOS gives an installed web app no working speech recognition (Apple
+   reserves voice typing for the keyboard mic) — say so up front instead of
+   failing silently behind a dead button. */
+function isIOSPWA() {
+  var ua = navigator.userAgent || '';
+  var ios = /iPad|iPhone|iPod/.test(ua) ||
+    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  var standalone = (navigator.standalone === true) ||
+    (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches);
+  return !!(ios && standalone);
+}
 var Voice = {
   rec: null, listening: false,
   supported: function () {
@@ -3038,6 +3204,11 @@ var Voice = {
   },
   start: function (previewEl, onUse) {
     var self = this;
+    if (isIOSPWA()) {
+      previewEl.classList.add('show');
+      previewEl.innerHTML = '<div class="dim">Voice typing doesn\u2019t work inside the installed app on iPhones — tap the notes box, then the \uD83C\uDFA4 mic key on your keyboard to dictate. Or use Record memo below to save audio instead.</div>';
+      return;
+    }
     if (!this.supported()) { toast('Voice entry is not supported in this browser.'); return; }
     if (this.listening) { this.stop(); return; }
     var Ctor = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -3212,7 +3383,9 @@ var Memo = {
     return '';
   },
   supported: function () { return 'MediaRecorder' in window && !!navigator.mediaDevices; },
-  toggle: function (setId, btn) {
+  /* Log-a-catch attach: pass onSaved to learn the memo's id when it lands,
+     so the caller can link it to the catch being logged. */
+  toggle: function (setId, btn, onSaved) {
     var self = this;
     if (this.recording) { this.stop(btn); return; }
     if (!this.supported()) { toast('Voice memos are not supported in this browser.'); return; }
@@ -3225,20 +3398,30 @@ var Memo = {
       rec.onstop = function () {
         stream.getTracks().forEach(function (t) { t.stop(); });
         var blob = new Blob(self.chunks, { type: self._mime || 'audio/mp4' });
-        if (!blob.size) { toast('Empty recording — nothing saved.'); return; }
+        /* A memo recorded for a catch belongs to the catch: its transcript
+           stays on the memo card and never lands in the set's notes.
+           Set-level memos keep the old notes-append behavior. */
+        var forCatch = !!onSaved;
+        if (!blob.size) { self._saving = false; toast('Empty recording — nothing saved.'); return; }
+        var memoId = uid('m');
         var memoTranscript = (self._transcript || '').trim();
         IDB.put('memos', {
-          id: uid('m'), setId: self.targetSetId, mime: blob.type,
+          id: memoId, setId: self.targetSetId, mime: blob.type,
           blob: blob, createdAt: Date.now(),
           transcript: memoTranscript
         }).then(function () {
-          appendTranscriptToSetNotes(self.targetSetId, memoTranscript);
+          self._saving = false;
+          if (!forCatch) appendTranscriptToSetNotes(self.targetSetId, memoTranscript);
           renderMemos(self.targetSetId);
-          toast(memoTranscript ? 'Voice memo saved — transcript added to notes.' : 'Voice memo saved.');
-        }).catch(function () { toast('Could not save the memo.'); });
+          toast(forCatch
+            ? 'Voice memo saved — it will attach to this catch.'
+            : (memoTranscript ? 'Voice memo saved — transcript added to notes.' : 'Voice memo saved.'));
+          if (onSaved) { try { onSaved(memoId); } catch (e) { /* noop */ } }
+        }).catch(function () { self._saving = false; toast('Could not save the memo.'); });
       };
       rec.start();
       self.recorder = rec; self.recording = true; self.targetSetId = setId;
+      self._saving = !!onSaved; /* catch-memo: saveLog waits for the link */
       btn.innerHTML = '<span class="rec-indicator"></span>Stop recording';
       /* live transcription alongside the recording (needs a connection; the
          audio keeps recording regardless) */
@@ -3287,6 +3470,12 @@ var Memo = {
 var memoURLs = {};
 function renderMemos(setId) {
   var box = $('sd-memos');
+  /* memo id -> the catch it was recorded for, so linked memos say which
+     catch they're on */
+  var memoLog = {};
+  (Store.data.logs || []).forEach(function (l) {
+    logMemoIds(l).forEach(function (mid) { memoLog[mid] = l; });
+  });
   IDB.all('memos').then(function (all) {
     var memos = all.filter(function (m) { return m.setId === setId; })
       .sort(function (a, b) { return a.createdAt - b.createdAt; });
@@ -3295,6 +3484,14 @@ function renderMemos(setId) {
     memos.forEach(function (m) {
       var wrap = document.createElement('div');
       wrap.className = 'memo-card';
+      var linked = memoLog[m.id];
+      if (linked) {
+        var tag = document.createElement('div');
+        tag.className = 'dim memo-catch-tag';
+        tag.textContent = '🎤 On catch: ' + (linked.species || 'Unknown') + ' ×' + (linked.count || 1) +
+          (linked.date ? ' · ' + fmtDate(linked.date) : '');
+        wrap.appendChild(tag);
+      }
       var row = document.createElement('div');
       row.className = 'memo-row';
       var audio = document.createElement('audio');
@@ -3329,6 +3526,55 @@ function renderMemos(setId) {
       }
       wrap.appendChild(tr);
       box.appendChild(wrap);
+    });
+  });
+}
+
+/* Voice memos attached to a catch (log.memoIds). The 🎤 flag on a catch row
+   notes that a memo was left; tapping it plays the recording right there.
+   Audio elements are built lazily — one IDB fetch per memo, URLs cached. */
+function logMemoIds(l) {
+  return (l && l.memoIds && l.memoIds.slice()) || [];
+}
+function logMemoHtml(l) {
+  var ids = logMemoIds(l);
+  if (!ids.length) return '';
+  var label = ids.length === 1 ? '🎤 Memo' : '🎤 ' + ids.length + ' memos';
+  return '<div class="log-memo"><button type="button" class="memo-play" data-memo-play="' +
+    esc(ids.join(',')) + '">' + esc(label) + '</button>' +
+    '<div class="log-memo-player" hidden></div></div>';
+}
+function toggleLogMemoPlayer(btn) {
+  var wrap = btn.parentNode;
+  var player = wrap ? wrap.querySelector('.log-memo-player') : null;
+  if (!player) return;
+  if (!player.hidden) { player.hidden = true; return; }
+  if (player.getAttribute('data-loaded')) { player.hidden = false; return; }
+  var ids = (btn.getAttribute('data-memo-play') || '').split(',').filter(Boolean);
+  if (!ids.length) return;
+  btn.disabled = true;
+  var done = 0;
+  ids.forEach(function (id) {
+    IDB.get('memos', id).then(function (m) {
+      done++;
+      if (m && m.blob) {
+        if (!memoURLs[m.id]) {
+          try { memoURLs[m.id] = URL.createObjectURL(m.blob); } catch (e) { /* noop */ }
+        }
+        if (memoURLs[m.id]) {
+          var audio = document.createElement('audio');
+          audio.controls = true;
+          audio.preload = 'metadata';
+          audio.src = memoURLs[m.id];
+          player.appendChild(audio);
+        }
+      }
+      if (done === ids.length) {
+        btn.disabled = false;
+        player.setAttribute('data-loaded', '1');
+        if (player.children.length) player.hidden = false;
+        else toast('That memo is no longer on this phone.');
+      }
     });
   });
 }
@@ -3379,7 +3625,7 @@ function renderMapStatusFilters() {
   var host = $('map-status-filters');
   if (!host) return;
   host.innerHTML = STATUS_VALUES.map(function (v) {
-    return '<button type="button" class="chip' + (mapStatusFilter[v] ? ' on' : '') +
+    return '<button type="button" class="chip mst-' + v + (mapStatusFilter[v] ? ' on' : '') +
       '" data-mstatus="' + v + '" aria-pressed="' + (mapStatusFilter[v] ? 'true' : 'false') + '">' +
       esc(STATUS_LABELS[v]) + '</button>';
   }).join('');
@@ -3554,6 +3800,7 @@ function logRowHtml(l, showDate) {
     '<button type="button" class="log-del" data-del-log="' + l.id + '" aria-label="Delete this log entry">×</button></div>' +
     (meta ? '<div class="dim">' + meta + '</div>' : '') +
     (l.notes ? '<div class="lr-notes">' + esc(l.notes) + '</div>' : '') +
+    logMemoHtml(l) +
     (l.weather ? '<div class="dim">🌤 ' + esc(weatherText(l.weather)) + '</div>' : '') + '</div>';
 }
 
@@ -3907,6 +4154,7 @@ function renderTotals() {
   var sy = yearList[0];
   $('totals-sub').textContent = 'Season ' + sy + ' · ' + logs.length + ' log entries all-time.';
   var bySpecies = {}, bySet = {}, byDisp = { kept: 0, alive: 0, released: 0, transported: 0 };
+  var byDispSp = { kept: {}, alive: {}, released: {}, transported: {} }; /* Q61: species caught under each disposition */
   logs.forEach(function (l) {
     if (l.otherType) return; /* Other events are events, not catches — excluded from Totals */
     var y = l.seasonYear || seasonYearOf(l.date);
@@ -3916,6 +4164,7 @@ function renderTotals() {
     bySet[l.setName || '(deleted set)'] = bySet[l.setName || '(deleted set)'] || { kept: 0, alive: 0, released: 0, transported: 0 };
     var bucket = (d === 'released') ? 'released' : (d === 'kept-alive' ? 'alive' : (d === 'transported' ? 'transported' : 'kept'));
     bySpecies[l.species][bucket] += c; bySet[l.setName || '(deleted set)'][bucket] += c; byDisp[bucket] += c;
+    byDispSp[bucket][l.species] = (byDispSp[bucket][l.species] || 0) + c;
   });
   function rows(obj, withSetup) {
     /* Sorted by the kept number actually displayed, highest to lowest. */
@@ -3925,20 +4174,26 @@ function renderTotals() {
       if (o.alive) sub.push(o.alive + ' kept alive');
       if (o.released) sub.push(o.released + ' released');
       if (o.transported) sub.push(o.transported + ' transported');
-      var open = !!(setup && totalsExpanded[k]);
+      /* 2026-09-29: rows show the title (name + kept count) only. The
+         disposition breakdown and (for sets) the setup fields hide behind a
+         tap, so the tab reads clean. */
+      var key = (withSetup ? 'set:' : 'sp:') + k;
+      var hasDetail = sub.length > 0 || !!setup;
+      var open = hasDetail && !!totalsExpanded[key];
       var html = '<div class="rowline' + (setup ? ' totals-setrow' : '') + '"' +
-        (setup ? ' data-setkey="' + esc(k) + '"' : '') + '>' +
-        '<span>' + (setup ? '<span class="tchev">' + (open ? '▾' : '▸') + '</span> ' : '') + esc(k) +
-        (sub.length ? '<br><span class="dim">' + sub.join(' · ') + '</span>' : '') +
+        (hasDetail ? ' data-totkey="' + esc(key) + '"' : '') + '>' +
+        '<span>' + (hasDetail ? '<span class="tchev">' + (open ? '▾' : '▸') + '</span> ' : '') + esc(k) +
         '</span><span class="big-num">' + o.kept + '</span></div>';
-      if (setup) html += '<div class="totals-setup"' + (open ? '' : ' hidden') + '>' + setupDetailHtml(setup) + '</div>';
+      if (hasDetail) {
+        html += '<div class="totals-detail"' + (open ? '' : ' hidden') + '>' +
+          (sub.length ? '<div class="dim">' + sub.join(' · ') + '</div>' : '') +
+          (setup ? setupDetailHtml(setup) : '') + '</div>';
+      }
       return html;
     }).join('');
   }
-  /* Q15: per-set setup details, collapsed behind a tap. The row shows the
-     set name and count; tapping expands labeled fields (Bait / Lure / Urine /
-     Other / Trap / Set type), each showing None when empty. The Traps field
-     only appears when a set runs more than one trap (one set = one trap). */
+  /* Per-set setup details, collapsed behind a tap (see rows() above). Each
+     setup field shows None when empty; Traps only appears past one trap. */
   var setSetup = {};
   activeSets().forEach(function (s) {
     if (setSetup[s.name]) return;
@@ -3977,8 +4232,22 @@ function renderTotals() {
     if (ts.set) cards += '<div class="card"><h3>By Set</h3>' + rows(bySet, true) + '</div>';
     if (ts.disposition) {
       var names = [['kept', 'Dispatched'], ['alive', 'Kept alive'], ['released', 'Released'], ['transported', 'Transported']];
+      /* Q61: each disposition row taps open to show what was caught under it. */
       cards += '<div class="card"><h3>By Disposition</h3>' + names.map(function (n) {
-        return '<div class="rowline"><span>' + n[1] + '</span><span class="big-num">' + byDisp[n[0]] + '</span></div>';
+        var b = n[0], sp = byDispSp[b];
+        var keys = Object.keys(sp).sort(function (a, c) { return sp[c] - sp[a]; });
+        var hasDetail = keys.length > 0;
+        var dkey = 'disp:' + b;
+        var dopen = hasDetail && !!totalsExpanded[dkey];
+        var dhtml = '<div class="rowline"' + (hasDetail ? ' data-totkey="' + dkey + '"' : '') + '>' +
+          '<span>' + (hasDetail ? '<span class="tchev">' + (dopen ? '▾' : '▸') + '</span> ' : '') + n[1] +
+          '</span><span class="big-num">' + byDisp[b] + '</span></div>';
+        if (hasDetail) {
+          dhtml += '<div class="totals-detail"' + (dopen ? '' : ' hidden') + '>' + keys.map(function (s) {
+            return '<div class="rowline"><span>' + esc(s) + '</span><span class="big-num">' + sp[s] + '</span></div>';
+          }).join('') + '</div>';
+        }
+        return dhtml;
       }).join('') + '</div>';
     }
     if (!cards) cards = '<p class="dim" style="text-align:center">All sections hidden — tap a chip above to show one.</p>';
@@ -4004,7 +4273,7 @@ function renderSeasons(filter) {
     $('seasons-list').innerHTML = '<p class="dim">No season data loaded.</p>';
     return;
   }
-  $('seasons-title').textContent = 'Season reminders — ' + d.state_name;
+  $('seasons-title').textContent = 'Season Reminders — ' + d.state_name;
   $('seasons-sub').textContent = d.season_year + ' season year' + (entry && entry.provisional ? ' · data provisional' : '');
   $('seasons-disclaimer').innerHTML = '<div class="wb-title">⚠ ' + esc(REMINDER_LINE) + '</div>' + esc(d.disclaimer || '');
   var rl = $('seasons-regs');
@@ -4026,17 +4295,12 @@ function renderSeasons(filter) {
     return '<button type="button" class="species-row" data-sp="' + esc(sp.common_name) + '">' + speciesIcon(sp.common_name) +
       '<span class="sp-name">' + esc(sp.common_name) +
       (sp.scientific_name ? '<span class="sci">' + esc(sp.scientific_name) + '</span>' : '') + '</span>' +
-      '<span class="badge ' + info.badgeClass + '">' + info.badge + '</span>' + furAvgLabel(sp.common_name) + '</button>';
+      '<span class="badge ' + info.badgeClass + '">' + info.badge + '</span>' + '</button>';
   }).join('');
   var btns = $('seasons-list').querySelectorAll('.species-row');
   for (var i = 0; i < btns.length; i++) {
     btns[i].onclick = function (e) {
       var t = e && e.target;
-      if (t && t.getAttribute && t.getAttribute('data-fur')) {
-        e.stopPropagation();
-        showFurPriceDetail(t.getAttribute('data-fur'));
-        return;
-      }
       showSpeciesDetail(this.getAttribute('data-sp'));
     };
   }
@@ -4050,14 +4314,6 @@ function showSpeciesDetail(name) {
   var html = '<div style="display:flex;align-items:center;gap:12px">' + speciesIcon(name, 'sp-icon-lg') + '<h3 style="margin:0">' + esc(sp.common_name) + '</h3></div>';
   if (sp.scientific_name) html += '<p class="dim" style="font-style:italic;margin-top:-8px">' + esc(sp.scientific_name) + '</p>';
   html += '<p><span class="badge ' + info.badgeClass + '">' + info.badge + '</span></p>';
-  /* Q31: fur price reference — tappable for the auction detail. */
-  if (furPricesOn()) {
-    var _fp = furPriceFor(sp.common_name);
-    if (_fp) {
-      html += '<p><button type="button" class="fur-avg" id="m-furdetail" style="background:none;border:none;padding:0">$' +
-        Math.round(_fp.avg_usd) + ' avg</button> <span class="dim">— fur price reference</span></p>';
-    }
-  }
   (sp.seasons || []).forEach(function (s) {
     html += '<div class="card" style="margin:10px 0"><div class="dim">';
     if (s.continuous_open) html += 'Open continuously.';
@@ -4076,54 +4332,6 @@ function showSpeciesDetail(name) {
   else if (sp.notes) html += '<p class="dim">' + esc(sp.notes) + '</p>';
   html += '<p class="reminder-tag">' + esc(REMINDER_LINE) + ' ' + esc(d.disclaimer || '') + '</p>';
   html += '<button class="btn-secondary" id="m-close" type="button" style="width:100%;margin-top:10px">Close</button>';
-  showModal(html);
-  $('m-close').onclick = closeModal;
-  var _mfd = $('m-furdetail');
-  if (_mfd) _mfd.onclick = function () { showFurPriceDetail(name); };
-}
-
-/* ================= Q31. FUR PRICE AVERAGES (KBB model) =================
-   Dated auction averages beside species names — a reference baseline like
-   Kelley Blue Book, never an offer and never a live price. Data comes from
-   published auction-house results ONLY (js/fur-prices.js); never user data. */
-function furPricesOn() { return Store.data.furPricesOn !== false; }
-function furPriceFor(name) {
-  var fp = (typeof window !== 'undefined' && window.OPOSSUM_FOOT_FUR_PRICES) || null;
-  if (!fp || !name) return null;
-  var n = String(name).toLowerCase();
-  var entries = fp.entries || [];
-  for (var i = 0; i < entries.length; i++) {
-    var names = entries[i].app_names || [];
-    for (var j = 0; j < names.length; j++) {
-      if (String(names[j]).toLowerCase() === n) return entries[i];
-    }
-  }
-  return null;
-}
-function furPriceSource() {
-  var fp = (typeof window !== 'undefined' && window.OPOSSUM_FOOT_FUR_PRICES) || null;
-  return (fp && fp.source) || null;
-}
-/* Quiet "$39 avg" label; tapping it (not the row) opens the price detail. */
-function furAvgLabel(commonName) {
-  if (!furPricesOn()) return '';
-  var e = furPriceFor(commonName);
-  if (!e) return '';
-  return '<span class="fur-avg" data-fur="' + esc(commonName) + '">$' + Math.round(e.avg_usd) + ' avg</span>';
-}
-function showFurPriceDetail(commonName) {
-  var e = furPriceFor(commonName);
-  if (!e) return;
-  var s = furPriceSource() || {};
-  var html = '<h3 style="margin-top:0">Fur price reference</h3>' +
-    '<p><strong>' + esc(commonName) + '</strong></p>' +
-    '<div class="card" style="margin:10px 0"><div style="font-size:20px"><strong>$' + e.avg_usd.toFixed(2) + '</strong> <span class="dim">auction average</span></div>' +
-    '<div class="dim" style="margin-top:6px">' + esc(s.sale || 'Published auction results') + ' · ' + esc(s.sale_dates || '') + '<br>' +
-    esc(s.house || '') + '<br>' + e.pelts_sold + ' pelts sold' + (e.high_usd ? ' · top lot $' + e.high_usd.toFixed(2) : '') + '</div></div>' +
-    (e.spread_note ? '<p>' + esc(e.spread_note) + '</p>' : '') +
-    (s.region_note ? '<p class="dim">' + esc(s.region_note) + '</p>' : '') +
-    '<p class="dim">Averages hide grade and region differences — your lot may bring more or less. This is a reference baseline, like Kelley Blue Book for fur: never a live price, never an offer, and never a promise of what a buyer will pay.</p>' +
-    '<button class="btn-secondary" id="m-close" type="button" style="width:100%;margin-top:10px">Close</button>';
   showModal(html);
   $('m-close').onclick = closeModal;
 }
@@ -4466,9 +4674,9 @@ function exportSets() {
   if (!activeSets().length) { toast('No sets to export yet.'); return; }
   /* Q47: one set = one trap — the Trap count column is gone. Q26: Other
      Attractants column after Urine; lists join with ' | '. */
-  var rows = [['Name', 'Latitude', 'Longitude', 'County', 'Set type', 'Trap type', 'Trap spring', 'Trap size', 'Snare diameter', 'Snare lock', 'Snare length', 'Trap model', 'Weather', 'Bait', 'Lure', 'Urine', 'Visual', 'Audio', 'Other Attractants', 'Status', 'Date set', 'Notes', 'Trap maker', 'Pan size', 'Trap mods', 'Missing reason', 'Missing detail']];
+  var rows = [['Name', 'Latitude', 'Longitude', 'County', 'Set type', 'Trap type', 'Trap spring', 'Trap size', 'Snare diameter', 'Snare lock', 'Snare length', 'Snare purpose', 'Trap model', 'Weather', 'Bait', 'Lure', 'Urine', 'Visual', 'Audio', 'Other Attractants', 'Status', 'Date set', 'Notes', 'Trap maker', 'Pan size', 'Trap mods', 'Missing reason', 'Missing detail']];
   activeSets().forEach(function (s) {
-    rows.push([s.name, s.lat, s.lng, s.county, s.setType, s.trapType, (s.trapSpring || ''), (s.trapSize || ''), (s.snareDia || ''), (s.snareLock || ''), (s.snareLen || ''), (s.trapModel || ''), weatherText(s.weather), joinAttr(s.bait), joinAttr(s.lure), joinAttr(s.urine), joinAttr(s.visual), joinAttr(s.audio), joinAttr(s.other), s.status, s.dateSet, s.notes, (s.trapMaker || ''), (s.panSize || ''), (s.trapMods || []).join(' | '), missingReasonLabel(s.missingReason || ''), (s.missingDetail || '')]);
+    rows.push([s.name, s.lat, s.lng, s.county, s.setType, s.trapType, (s.trapSpring || ''), (s.trapSize || ''), (s.snareDia || ''), (s.snareLock || ''), (s.snareLen || ''), (s.snarePurpose || ''), (s.trapModel || ''), weatherText(s.weather), joinAttr(s.bait), joinAttr(s.lure), joinAttr(s.urine), joinAttr(s.visual), joinAttr(s.audio), joinAttr(s.other), s.status, s.dateSet, s.notes, (s.trapMaker || ''), (s.panSize || ''), (s.trapMods || []).join(' | '), missingReasonLabel(s.missingReason || ''), (s.missingDetail || '')]);
   });
   downloadCSV('opossum-foot-sets-' + lineFileSlug() + '-' + todayISO() + '.csv', rows);
   toast('Sets CSV downloaded.');
@@ -4533,6 +4741,7 @@ function importDataFile(file) {
         trapMaker: s.trapMaker || '',
         trapSpring: s.trapSpring || '', trapSize: s.trapSize || '',
         snareDia: s.snareDia || '', snareLock: s.snareLock || '', snareLen: s.snareLen || '',
+        snarePurpose: s.snarePurpose || '',
         trapModel: s.trapModel || '',
         trapMods: Array.isArray(s.trapMods) ? s.trapMods.slice() : [],
         panSize: s.panSize || '',
@@ -4687,7 +4896,7 @@ function addImportedSet(pin, lineId) {
     county: null,
     trapType: '', setType: '',
     trapMaker: '', trapSpring: '', trapSize: '',
-    snareDia: '', snareLock: '', snareLen: '',
+    snareDia: '', snareLock: '', snareLen: '', snarePurpose: '',
     trapModel: '', trapMods: [], panSize: '',
     bait: [], lure: [], urine: [], visual: [], audio: [], other: [],
     status: 'active', dateSet: todayISO(),
@@ -4755,19 +4964,34 @@ function eraseAll() {
   confirmModal('Erase everything?',
     'All sets, catches, license photos, and voice memos on <strong>this phone</strong> will be permanently deleted. Back up all data (JSON) first if you want to restore it later.',
     'Erase everything', function () {
-      confirmModal('Last chance.',
-        'There is no undo and no cloud copy. Really erase all Opossum Foot data on this phone?',
-        'Yes, erase it', function () {
-          try { localStorage.removeItem(LS_KEY); } catch (e) { /* noop */ }
-          IDB.clear('photos').then(function () { return IDB.clear('memos'); }).then(function () {
-            location.reload();
-          });
+      /* Q65: typed confirmation — a kid tapping through the warnings can't
+         get past this. The button stays dead until DELETE is typed. */
+      showModal(
+        '<h3>Type DELETE to erase everything</h3>' +
+        '<p>There is no undo and no cloud copy. Type <strong>DELETE</strong> in the box, then tap the button. Deleted data is gone forever.</p>' +
+        '<input type="text" id="m-erase-type" placeholder="Type DELETE here" autocomplete="off" autocapitalize="characters" style="width:100%;margin:8px 0">' +
+        '<div class="btn-row"><button class="btn-secondary" id="m-cancel" type="button">Cancel</button>' +
+        '<button class="btn-danger" id="m-erase-go" type="button" disabled>Erase everything</button></div>'
+      );
+      var einp = $('m-erase-type'), ego = $('m-erase-go');
+      $('m-cancel').onclick = closeModal;
+      einp.oninput = function () { ego.disabled = einp.value.trim().toUpperCase() !== 'DELETE'; };
+      ego.onclick = function () {
+        closeModal();
+        try { localStorage.removeItem(LS_KEY); } catch (e) { /* noop */ }
+        IDB.clear('photos').then(function () { return IDB.clear('memos'); }).then(function () {
+          location.reload();
         });
+      };
+      setTimeout(function () { try { einp.focus(); } catch (e) { /* noop */ } }, 150);
     });
 }
 
 /* ================= 13. TABS / NAV ================= */
 function switchTab(name) {
+  /* B15: while a pin is being placed the rest of the app is locked — the
+     placement bar's own buttons are the only way out. */
+  if (document.body.classList.contains('placing')) return;
   var tabs = document.querySelectorAll('#tabbar button');
   for (var i = 0; i < tabs.length; i++) tabs[i].classList.toggle('active', tabs[i].getAttribute('data-tab') === name);
   var panes = document.querySelectorAll('.pane');
@@ -4860,7 +5084,7 @@ function renderLines() {
 }
 function showAddLineModal() {
   showModal(
-    '<h3>New trap line</h3>' +
+    '<h3>New Trap Line</h3>' +
     '<label class="field" for="m-line-name">Line name</label>' +
     '<input type="text" id="m-line-name" maxlength="40" placeholder="e.g. River bottoms">' +
     '<div class="suggest" id="m-line-name-suggest"></div>' +
@@ -4892,7 +5116,7 @@ function showLineEditModal(id) {
   var ln = lineById(Store.data, id);
   if (!ln) return;
   showModal(
-    '<h3>Edit trap line</h3>' +
+    '<h3>Edit Trap Line</h3>' +
     '<label class="field" for="m-line-name">Line name</label>' +
     '<input type="text" id="m-line-name" maxlength="40" value="' + esc(ln.name) + '">' +
     '<div class="suggest" id="m-line-name-suggest"></div>' +
@@ -5006,15 +5230,6 @@ function enterMain() {
     Store.save(); applyFeatureToggles();
     toast(this.checked ? 'Voice entry is on.' : 'Voice entry is off.');
   };
-  /* Q31: fur price averages — default on. */
-  $('settings-furprices').checked = furPricesOn();
-  $('settings-furprices').onchange = function () {
-    Store.data.furPricesOn = this.checked;
-    Store.save();
-    renderSpeciesList($('log-species-search') ? $('log-species-search').value : '');
-    renderSeasons('');
-    toast(this.checked ? 'Fur price averages are on.' : 'Fur price averages are off.');
-  };
   /* Q14: Tabs section — per-line tab visibility for the active line. */
   TOGGLEABLE_TABS.forEach(function (k) {
     var cb = $('settings-tab-' + k);
@@ -5056,14 +5271,12 @@ function enterMain() {
       'This puts all the feature toggles back to their defaults. It will not delete any of your sets, catches, lines, photos, or memos — and you can tap everything back on again afterwards.',
       'Reset', function () {
     Store.data.weatherOn = false; Store.data.voiceOn = true; Store.data.windArrowsOn = true; /* Q17 */
-    Store.data.furPricesOn = true; /* Q31 */
-    /* Q14: tab reset is per-line — restores all four toggleable tabs on the active line. */
+    /* Q14/Q62: tab reset is per-line — restores all five toggleable tabs on the active line. */
     var l = activeLine();
-    if (l) l.tabs = { history: true, scorecard: true, seasons: true, licenses: true };
+    if (l) l.tabs = { history: true, scorecard: true, seasons: true, licenses: true, totals: true };
     Store.data.setFields = { traptype: true, trapdetail: true, settype: true, bait: true, lure: true, urine: true, visual: true, audio: true, other: true, notes: true };
     Store.save();
     $('settings-weather').checked = false; $('settings-voice').checked = true; $('settings-windarrows').checked = true;
-    $('settings-furprices').checked = true; /* Q31 */
     renderTabToggles();
     sfKeys.forEach(function (key) { var cb = $('settings-sf-' + key); if (cb) cb.checked = true; });
     applyFeatureToggles(); applySetFieldToggles();
@@ -5596,7 +5809,8 @@ function wireUp() {
   };
 
   /* Q36: missing-reason row on the set form */
-  $('sf-status').onchange = renderMissingReasonRow;
+  /* Status buttons on the set form (replaced the dropdown) */
+  wireStatusSeg();
   var mrBtns = document.querySelectorAll('#sf-missing-reason button');
   for (var mrb = 0; mrb < mrBtns.length; mrb++) {
     mrBtns[mrb].onclick = (function (b) {
@@ -5617,7 +5831,9 @@ function wireUp() {
   /* Q38: per-catch delete in the set-detail log list */
   $('sd-logs').addEventListener('click', function (e) {
     var delBtn = e.target.closest ? e.target.closest('[data-del-log]') : null;
-    if (delBtn) deleteLog(delBtn.getAttribute('data-del-log'));
+    if (delBtn) { deleteLog(delBtn.getAttribute('data-del-log')); return; }
+    var memoBtn = e.target.closest ? e.target.closest('[data-memo-play]') : null;
+    if (memoBtn) toggleLogMemoPlayer(memoBtn);
   });
   $('btn-sd-memo').onclick = function () { Memo.toggle(detailSetId, $('btn-sd-memo')); };
   $('btn-sd-photo').onclick = function () { $('sd-photo-input').click(); };
@@ -5682,6 +5898,15 @@ function wireUp() {
       ta.value = (ta.value ? ta.value.replace(/\s+$/, '') + ' ' : '') + t;
     });
   };
+  /* Voice memo on the catch: records to the set's memo store now, and the
+     memo id is linked to this catch when it saves. */
+  $('btn-log-memo').onclick = function () {
+    var btn = this;
+    Memo.toggle(logSetId, btn, function (memoId) {
+      if (!logSheetLive) { IDB.del('memos', memoId).catch(function () { /* noop */ }); return; } /* landed after the sheet closed: orphan */
+      pendingLogMemos.push(memoId);
+    });
+  };
   $('btn-log-photo').onclick = function () { $('log-photo-input').click(); };
   $('log-photo-input').onchange = function () {
     var f = this.files[0];
@@ -5722,18 +5947,18 @@ function wireUp() {
       renderTotals();
       return;
     }
-    /* Q15: tap a By Set row to expand/collapse its setup details. */
-    var setRow = e.target.closest ? e.target.closest('.totals-setrow[data-setkey]') : null;
-    if (!setRow) return;
-    var key = setRow.getAttribute('data-setkey');
-    totalsExpanded[key] = !totalsExpanded[key];
-    var det = setRow.nextElementSibling;
-    if (det && det.className.indexOf('totals-setup') !== -1) {
-      if (totalsExpanded[key]) det.removeAttribute('hidden');
+    /* Tap a By Species / By Set row to expand/collapse its details. */
+    var trow = e.target.closest ? e.target.closest('[data-totkey]') : null;
+    if (!trow) return;
+    var tkey = trow.getAttribute('data-totkey');
+    totalsExpanded[tkey] = !totalsExpanded[tkey];
+    var det = trow.nextElementSibling;
+    if (det && det.className.indexOf('totals-detail') !== -1) {
+      if (totalsExpanded[tkey]) det.removeAttribute('hidden');
       else det.setAttribute('hidden', '');
     }
-    var chev = setRow.querySelector('.tchev');
-    if (chev) chev.textContent = totalsExpanded[key] ? '▾' : '▸';
+    var chev = trow.querySelector('.tchev');
+    if (chev) chev.textContent = totalsExpanded[tkey] ? '▾' : '▸';
   });
   $('pane-history').addEventListener('click', function (e) {
     var delBtn = e.target.closest ? e.target.closest('[data-del-log]') : null;
@@ -5771,6 +5996,8 @@ function wireUp() {
       renderHistory();
       return;
     }
+    var memoBtn = e.target.closest ? e.target.closest('[data-memo-play]') : null;
+    if (memoBtn) { toggleLogMemoPlayer(memoBtn); return; }
     var row = e.target.closest ? e.target.closest('.log-row') : null;
     if (row && row.getAttribute('data-log')) {
       var k = row.getAttribute('data-log');
@@ -5841,7 +6068,16 @@ function wireUp() {
   /* sheets + modal */
   $('scrim').onclick = function () { Voice.stop(); closeSheets(); };
   var xs = document.querySelectorAll('.sheet-x');
-  for (var k = 0; k < xs.length; k++) xs[k].onclick = function () { Voice.stop(); closeSheets(); };
+  for (var k = 0; k < xs.length; k++) xs[k].onclick = function () {
+    Voice.stop();
+    var sheet = this.closest ? this.closest('.sheet') : null;
+    /* B11: closing a half-entered catch asks first — an untouched form just closes. */
+    if (sheet && sheet.id === 'sheet-log' && logFormDirty()) {
+      confirmModal('Abandon this catch?', 'Nothing here is saved yet. Close and lose what you entered?', 'Abandon', function () { closeSheets(); });
+      return;
+    }
+    closeSheets();
+  };
   $('modal').onclick = function (e) { if (e.target === $('modal')) closeModal(); };
 
   /* offline banner + county backfill when service returns */
@@ -5883,11 +6119,12 @@ function boot() {
   IDB.open().then(function () {
     if (DEMO_ACTIVE) seedDemoIDB();
     $('splash-status').textContent = 'Ready.';
+    /* B17: hold the splash a few seconds so the logo gets its moment. */
     setTimeout(function () {
       if (Store.data.onboarded && activeStateCode() && stateData()) enterMain();
       else showView('view-onboard');
       if (DEMO_ACTIVE) toast('Demo mode — fictional data.');
-    }, 700);
+    }, 3000);
   });
   /* service worker: http(s) only — skipped on file:// */
   if ('serviceWorker' in navigator && location.protocol.indexOf('http') === 0) {
