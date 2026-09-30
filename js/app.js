@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-09-30bp';
+var APP_VERSION = 'beta 0.1 · build 2026-09-30bq';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -2157,7 +2157,7 @@ function pauseFollow() {
   if (locateState !== 'following') return;
   locateState = 'paused';
   var b = $('btn-locate'); if (b) b.classList.add('paused-mode');
-  toast('Follow paused — map dragged.');
+  /* BQ3: silent pause — no toast. The button's paused state shows it. */
 }
 
 /* Only called on location permission denial — there is no manual off. */
@@ -2195,9 +2195,9 @@ function drawFix(fix, final) {
     else gpsCircle = L.circle([fix.lat, fix.lng],
       { radius: Math.max(fix.acc, 1), color: '#2f8ff0', weight: 1, opacity: 0.6, fillColor: '#2f8ff0', fillOpacity: 0.15, interactive: false }).addTo(map);
     if (final) {
-      /* tighter zoom on a good fix, wider view when the fix is coarse */
-      var zl = fix.acc <= 10 ? 20 : fix.acc <= 25 ? 19 : fix.acc <= 60 ? 18 : fix.acc <= 150 ? 17 : 16;
-      map.flyTo([fix.lat, fix.lng], zl, { duration: 1 });
+      /* BQ2: one crosshair tap always ends zoomed tight (19) — no
+         accuracy-based wide zoom that forces a second tap. */
+      map.setView([fix.lat, fix.lng], 19, { animate: false });
     }
   }
   if (final) {
