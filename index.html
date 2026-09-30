@@ -168,6 +168,19 @@
         <select id="settings-state"></select>
         <p class="dim" style="margin-top:8px">Applies to the active trap line (<strong id="settings-line-name"></strong>). Changing the state takes effect immediately.</p>
       </div>
+      <!-- Q68: trap check clock -->
+      <div class="card">
+        <h3>Trap Checks</h3>
+        <label class="checkline"><input type="checkbox" id="settings-checkclock"> Trap check alerts</label>
+        <label class="field" for="settings-checkinterval">Check interval</label>
+        <select id="settings-checkinterval">
+          <option value="24">Every 24 hours</option>
+          <option value="36">Every 36 hours</option>
+          <option value="48">Every 48 hours</option>
+          <option value="72">Every 72 hours</option>
+        </select>
+        <p class="dim" style="margin-top:8px">Sets past this long without any activity turn red on the map. Any edit, catch, or check-in restarts the clock. Turn alerts off to hide the red pins and countdowns — visits are still recorded.</p>
+      </div>
       <!-- Q53: home ground -->
       <div class="card">
         <h3>Home Ground</h3>
@@ -452,6 +465,7 @@
     <dl class="kv" id="sd-fields"></dl>
     <div class="sheet-actions">
       <button class="btn-primary" id="btn-sd-log" type="button">＋ Log a catch</button>
+      <button class="btn-secondary" id="btn-sd-emptycheck" type="button">✓ Checked — nothing changed</button>
     </div>
     <h3 style="margin:18px 0 6px" id="sd-notes-head">Set Notes</h3>
     <textarea id="sd-notes" placeholder="Optional…"></textarea>
@@ -499,6 +513,7 @@
       <label class="field" for="log-othertype">Other Event Type</label>
       <select id="log-othertype">
         <option value="animal-part">Animal part</option>
+        <option value="empty">Empty — nothing changed</option>
         <option value="fur">Fur</option>
         <option value="non-game">Non-target animal</option>
         <option value="non-native">Non-native animal</option>
@@ -517,11 +532,13 @@
       <input type="text" id="log-species-free" placeholder="e.g. neighbor's cat — blank for a sprung empty trap" autocomplete="off">
       <div class="suggest" id="log-species-free-suggest"></div>
     </div>
+    <div id="log-count-row">
     <label class="field">Count</label>
     <div class="stepper">
       <button type="button" id="log-count-minus" aria-label="Fewer">−</button>
       <div class="count" id="log-count">1</div>
       <button type="button" id="log-count-plus" aria-label="More">＋</button>
+    </div>
     </div>
     <label class="field" id="log-disposition-label">Disposition <span class="req">*</span></label>
     <div class="seg" id="log-disposition">
