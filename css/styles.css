@@ -97,6 +97,9 @@ button, .btn {
 button:disabled { opacity: .45; }
 
 label.field { display: block; margin: 14px 0 4px; font-size: 14px; font-weight: 600; color: var(--muted); text-align: center; }
+/* Q55: the "What is it?" reveal under an Other-capable dropdown. */
+.other-wrap { margin-top: 2px; }
+.other-wrap label.field { margin-top: 8px; font-size: 13px; }
 input[type=text], input[type=date], input[type=number], input[type=search], select, textarea {
   width: 100%; min-height: var(--tap);
   background: #10140c; color: var(--ink);
