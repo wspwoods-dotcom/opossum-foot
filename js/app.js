@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-09-30bo';
+var APP_VERSION = 'beta 0.1 · build 2026-09-30bp';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -6145,10 +6145,12 @@ function wireUp() {
   var rbc = $('route-back-chip');
   if (rbc) rbc.onclick = function () {
     var id = routeShownFor;
-    if (!id) return;
-    /* Tanner 2026-09-30: heading back to mileage clears the route. It only
-       comes back on an explicit "Show route on map" tap. */
+    /* BQ1 (2026-09-30): the chip must ALWAYS go away on tap. A visible
+       "Back to mileage" button that won't dismiss is never acceptable,
+       even if the route state is somehow out of sync — so clear first,
+       then navigate only when there's a line to go back to. */
     clearRouteEstimate();
+    if (!id) return;
     switchTab('lines');
     showMileageModal(id);
   };
