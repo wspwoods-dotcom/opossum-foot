@@ -1,0 +1,796 @@
+{
+ "schema_version": "1.1",
+ "state": "IA",
+ "state_name": "Iowa",
+ "season_year": "2026-27",
+ "retrieved_at": "2026-09-18",
+ "disclaimer": "Reminder reference only — NOT legal authority. Season dates, zones, and limits are set annually and can change. Always verify current regulations with the Iowa DNR before hunting or trapping.",
+ "sources": [
+  {
+   "id": "iac-108",
+   "title": "Iowa Administrative Code 571—Chapter 108, Wild Furbearer Trapping and Hunting (current through IAB 3/4/26, ARC 0117D effective 4/8/26)",
+   "url": "https://www.Legis.Iowa.gov/docs/iac/chapter/07-22-2026.571.108.pdf",
+   "type": "administrative_code",
+   "notes": "Legal authority for season dates, areas, bag limits, and tagging. Archived locally in hidden_files/season-research/."
+  },
+  {
+   "id": "dnr-booklet-2026-27",
+   "title": "Iowa Hunting, Trapping & Migratory Game Bird Regulations 2026–2027 (DNR booklet, created 2026-08-25)",
+   "url": "https://www.Iowadnr.gov/media/1700/download?inline",
+   "type": "agency_booklet",
+   "notes": "DNR-published season summary; cross-checked against IAC 108. Furbearer tables pp. 11, 32–34. Archived locally in hidden_files/season-research/."
+  }
+ ],
+ "license_summary": {
+  "furharvester_license": "Required for residents and nonresidents age 16+ to hunt or trap furbearing animals (including raccoons). Not required for coyote or groundhog HUNTING (a hunting license suffices). Under 16: no furharvester license needed when accompanied by a licensed adult (one adult per youth). Landowners and minor children hunting on their own property: no furharvester license or habitat fee needed.",
+  "habitat_fee": "Residents and nonresidents age 16–64 must also have paid the habitat fee.",
+  "otter_bobcat": "Furharvester license + habitat fee (if normally required) + CITES tag arranged through a conservation officer or designated DNR employee within 7 days of harvest; lower jaw or skull turned over at tagging."
+ },
+ "species": [
+  {
+   "common_name": "American badger",
+   "scientific_name": "Taxidea taxus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in Iowa DNR trapping regulations.",
+   "iac_reference": "571—108.1",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "both",
+     "land_type": "all",
+     "open_date": "2026-11-07",
+     "close_date": "2027-02-28",
+     "open_time": "08:00",
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "IA-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No daily bag or possession limit."
+     },
+     "notes": "Season opens 8 a.m. first Saturday in November (Nov 7, 2026)."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "",
+   "county_notes": "IAC 571-108.9(1): no leghold, body-gripping, or snare trap within 20 ft of exposed bait over water in these county corridors — Mississippi River: Allamakee, Clayton, Dubuque, Jackson, Clinton, Scott, Muscatine, Louisa, Des Moines, Lee; Missouri River (west of I-29): Woodbury, Monona, Harrison, Pottawattamie, Mills, Fremont; Des Moines River: Boone, Dallas, Polk, Marion, Mahaska, Wapello, Van Buren."
+  },
+  {
+   "common_name": "Virginia opossum",
+   "scientific_name": "Didelphis virginiana",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in Iowa DNR trapping regulations.",
+   "iac_reference": "571—108.1",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "both",
+     "land_type": "all",
+     "open_date": "2026-11-07",
+     "close_date": "2027-02-28",
+     "open_time": "08:00",
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "IA-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No daily bag or possession limit."
+     },
+     "notes": "Season opens 8 a.m. first Saturday in November (Nov 7, 2026)."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "",
+   "county_notes": "IAC 571-108.9(1): no leghold, body-gripping, or snare trap within 20 ft of exposed bait over water in these county corridors — Mississippi River: Allamakee, Clayton, Dubuque, Jackson, Clinton, Scott, Muscatine, Louisa, Des Moines, Lee; Missouri River (west of I-29): Woodbury, Monona, Harrison, Pottawattamie, Mills, Fremont; Des Moines River: Boone, Dallas, Polk, Marion, Mahaska, Wapello, Van Buren."
+  },
+  {
+   "common_name": "Striped skunk",
+   "scientific_name": "Mephitis mephitis",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in Iowa DNR trapping regulations.",
+   "iac_reference": "571—108.1",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "both",
+     "land_type": "all",
+     "open_date": "2026-11-07",
+     "close_date": "2027-02-28",
+     "open_time": "08:00",
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "IA-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No daily bag or possession limit."
+     },
+     "notes": "Season opens 8 a.m. first Saturday in November (Nov 7, 2026)."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "",
+   "county_notes": "IAC 571-108.9(1): no leghold, body-gripping, or snare trap within 20 ft of exposed bait over water in these county corridors — Mississippi River: Allamakee, Clayton, Dubuque, Jackson, Clinton, Scott, Muscatine, Louisa, Des Moines, Lee; Missouri River (west of I-29): Woodbury, Monona, Harrison, Pottawattamie, Mills, Fremont; Des Moines River: Boone, Dallas, Polk, Marion, Mahaska, Wapello, Van Buren."
+  },
+  {
+   "common_name": "Red fox",
+   "scientific_name": "Vulpes vulpes",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in Iowa DNR trapping regulations.",
+   "iac_reference": "571—108.1",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "both",
+     "land_type": "all",
+     "open_date": "2026-11-07",
+     "close_date": "2027-02-28",
+     "open_time": "08:00",
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "IA-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No daily bag or possession limit."
+     },
+     "notes": "Season opens 8 a.m. first Saturday in November (Nov 7, 2026)."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "",
+   "county_notes": "IAC 571-108.9(1): no leghold, body-gripping, or snare trap within 20 ft of exposed bait over water in these county corridors — Mississippi River: Allamakee, Clayton, Dubuque, Jackson, Clinton, Scott, Muscatine, Louisa, Des Moines, Lee; Missouri River (west of I-29): Woodbury, Monona, Harrison, Pottawattamie, Mills, Fremont; Des Moines River: Boone, Dallas, Polk, Marion, Mahaska, Wapello, Van Buren."
+  },
+  {
+   "common_name": "Gray fox",
+   "scientific_name": "Urocyon cinereoargenteus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in Iowa DNR trapping regulations.",
+   "iac_reference": "571—108.1",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "both",
+     "land_type": "all",
+     "open_date": "2026-11-07",
+     "close_date": "2027-02-28",
+     "open_time": "08:00",
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "IA-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No daily bag or possession limit."
+     },
+     "notes": "Season opens 8 a.m. first Saturday in November (Nov 7, 2026)."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "",
+   "county_notes": "IAC 571-108.9(1): no leghold, body-gripping, or snare trap within 20 ft of exposed bait over water in these county corridors — Mississippi River: Allamakee, Clayton, Dubuque, Jackson, Clinton, Scott, Muscatine, Louisa, Des Moines, Lee; Missouri River (west of I-29): Woodbury, Monona, Harrison, Pottawattamie, Mills, Fremont; Des Moines River: Boone, Dallas, Polk, Marion, Mahaska, Wapello, Van Buren."
+  },
+  {
+   "common_name": "American mink",
+   "scientific_name": "Neogale vison",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy (formerly Neovison vison); not stated in Iowa DNR trapping regulations.",
+   "iac_reference": "571—108.1",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "both",
+     "land_type": "all",
+     "open_date": "2026-11-07",
+     "close_date": "2027-02-28",
+     "open_time": "08:00",
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "IA-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No daily bag or possession limit."
+     },
+     "notes": "Season opens 8 a.m. first Saturday in November (Nov 7, 2026). Taking by shotgun or spear is prohibited."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "",
+   "county_notes": "IAC 571-108.9(1): no leghold, body-gripping, or snare trap within 20 ft of exposed bait over water in these county corridors — Mississippi River: Allamakee, Clayton, Dubuque, Jackson, Clinton, Scott, Muscatine, Louisa, Des Moines, Lee; Missouri River (west of I-29): Woodbury, Monona, Harrison, Pottawattamie, Mills, Fremont; Des Moines River: Boone, Dallas, Polk, Marion, Mahaska, Wapello, Van Buren."
+  },
+  {
+   "common_name": "Muskrat",
+   "scientific_name": "Ondatra zibethicus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in Iowa DNR trapping regulations.",
+   "iac_reference": "571—108.1",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "both",
+     "land_type": "all",
+     "open_date": "2026-11-07",
+     "close_date": "2027-02-28",
+     "open_time": "08:00",
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "IA-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No daily bag or possession limit."
+     },
+     "notes": "Season opens 8 a.m. first Saturday in November (Nov 7, 2026). Taking by shotgun or spear is prohibited."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2027-03-01",
+     "close_date": "2027-04-01",
+     "open_time": "08:00",
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "IA-muskrat-gma",
+       "zone_name": "Approved state game management areas, federal national wildlife refuges, and county conservation board areas (where approved by the wildlife bureau and posted)",
+       "area_type": "special_areas"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No daily bag or possession limit."
+     },
+     "notes": "Special late season per 108.1(2): 8 a.m. the day after the regular muskrat season ends until April 1, only where approved and posted. Foothold traps prohibited unless each trap is placed completely inside a muskrat house."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "",
+   "county_notes": "IAC 571-108.9(1): no leghold, body-gripping, or snare trap within 20 ft of exposed bait over water in these county corridors — Mississippi River: Allamakee, Clayton, Dubuque, Jackson, Clinton, Scott, Muscatine, Louisa, Des Moines, Lee; Missouri River (west of I-29): Woodbury, Monona, Harrison, Pottawattamie, Mills, Fremont; Des Moines River: Boone, Dallas, Polk, Marion, Mahaska, Wapello, Van Buren."
+  },
+  {
+   "common_name": "Weasel",
+   "scientific_name": null,
+   "scientific_name_verified": false,
+   "scientific_name_note": "Iowa regulations list 'weasel' without distinguishing species (long-tailed, short-tailed/ermine, and least weasels occur in Iowa). Left null rather than guessing.",
+   "iac_reference": "571—108.1",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "both",
+     "land_type": "all",
+     "open_date": "2026-11-07",
+     "close_date": "2027-02-28",
+     "open_time": "08:00",
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "IA-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No daily bag or possession limit."
+     },
+     "notes": "Season opens 8 a.m. first Saturday in November (Nov 7, 2026)."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "",
+   "county_notes": "IAC 571-108.9(1): no leghold, body-gripping, or snare trap within 20 ft of exposed bait over water in these county corridors — Mississippi River: Allamakee, Clayton, Dubuque, Jackson, Clinton, Scott, Muscatine, Louisa, Des Moines, Lee; Missouri River (west of I-29): Woodbury, Monona, Harrison, Pottawattamie, Mills, Fremont; Des Moines River: Boone, Dallas, Polk, Marion, Mahaska, Wapello, Van Buren."
+  },
+  {
+   "common_name": "Groundhog (woodchuck)",
+   "scientific_name": "Marmota monax",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in Iowa DNR trapping regulations.",
+   "iac_reference": "571—108.2",
+   "season_status": "continuous",
+   "seasons": [
+    {
+     "method": "both",
+     "land_type": "all",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "IA-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No daily bag or possession limit."
+     },
+     "notes": "Continuous open season. May be HUNTED on a hunting or furharvester license."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "",
+   "county_notes": "IAC 571-108.9(1): no leghold, body-gripping, or snare trap within 20 ft of exposed bait over water in these county corridors — Mississippi River: Allamakee, Clayton, Dubuque, Jackson, Clinton, Scott, Muscatine, Louisa, Des Moines, Lee; Missouri River (west of I-29): Woodbury, Monona, Harrison, Pottawattamie, Mills, Fremont; Des Moines River: Boone, Dallas, Polk, Marion, Mahaska, Wapello, Van Buren."
+  },
+  {
+   "common_name": "Raccoon",
+   "scientific_name": "Procyon lotor",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in Iowa DNR trapping regulations.",
+   "iac_reference": "571—108.3",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "private",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "IA-statewide",
+       "zone_name": "Entire state (private lands)",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No daily bag or possession limit."
+     },
+     "notes": "Continuous open season on private lands using cage traps and dog-proof traps. Outside the general furharvester season (Nov 7, 2026–Feb 28, 2027), only cage traps or dog-proof traps are legal methods on private land; during the general season other lawful traps may be used."
+    },
+    {
+     "method": "trapping",
+     "land_type": "public",
+     "open_date": "2026-11-07",
+     "close_date": "2027-02-28",
+     "open_time": "08:00",
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "IA-statewide",
+       "zone_name": "Entire state (public lands)",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No daily bag or possession limit."
+     },
+     "notes": "Season opens 8 a.m. first Saturday in November (Nov 7, 2026)."
+    },
+    {
+     "method": "hunting",
+     "land_type": "private",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "IA-statewide",
+       "zone_name": "Entire state (private lands)",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No daily bag or possession limit."
+     },
+     "notes": "Continuous open season for hunting on private lands."
+    },
+    {
+     "method": "hunting",
+     "land_type": "public",
+     "open_date": "2026-11-07",
+     "close_date": "2027-02-28",
+     "open_time": "08:00",
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "IA-statewide",
+       "zone_name": "Entire state (public lands)",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No daily bag or possession limit."
+     },
+     "notes": "Season opens 8 a.m. first Saturday in November (Nov 7, 2026)."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "A furharvester license is required to hunt or trap raccoons (unlike coyote/groundhog hunting).",
+   "county_notes": "IAC 571-108.9(1): no leghold, body-gripping, or snare trap within 20 ft of exposed bait over water in these county corridors — Mississippi River: Allamakee, Clayton, Dubuque, Jackson, Clinton, Scott, Muscatine, Louisa, Des Moines, Lee; Missouri River (west of I-29): Woodbury, Monona, Harrison, Pottawattamie, Mills, Fremont; Des Moines River: Boone, Dallas, Polk, Marion, Mahaska, Wapello, Van Buren."
+  },
+  {
+   "common_name": "American beaver",
+   "scientific_name": "Castor canadensis",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in Iowa DNR trapping regulations.",
+   "iac_reference": "571—108.4",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "both",
+     "land_type": "all",
+     "open_date": "2026-11-07",
+     "close_date": "2027-04-15",
+     "open_time": "08:00",
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "IA-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No daily bag or possession limit."
+     },
+     "notes": "Season opens 8 a.m. first Saturday in November (Nov 7, 2026) and runs through April 15, 2027. Taking by shotgun or spear is prohibited."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "",
+   "county_notes": "IAC 571-108.9(1): no leghold, body-gripping, or snare trap within 20 ft of exposed bait over water in these county corridors — Mississippi River: Allamakee, Clayton, Dubuque, Jackson, Clinton, Scott, Muscatine, Louisa, Des Moines, Lee; Missouri River (west of I-29): Woodbury, Monona, Harrison, Pottawattamie, Mills, Fremont; Des Moines River: Boone, Dallas, Polk, Marion, Mahaska, Wapello, Van Buren."
+  },
+  {
+   "common_name": "Coyote",
+   "scientific_name": "Canis latrans",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in Iowa DNR trapping regulations.",
+   "iac_reference": "571—108.5",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "IA-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No daily bag or possession limit."
+     },
+     "notes": "Continuous open season for hunting. May be hunted on a hunting or furharvester license."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-07",
+     "close_date": "2027-02-28",
+     "open_time": "08:00",
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "IA-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No daily bag or possession limit."
+     },
+     "notes": "Season opens 8 a.m. first Saturday in November (Nov 7, 2026). A conservation officer or wildlife biologist may authorize a landowner, tenant, or designee to trap coyotes causing damage outside the established trapping season."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "",
+   "county_notes": "IAC 571-108.9(1): no leghold, body-gripping, or snare trap within 20 ft of exposed bait over water in these county corridors — Mississippi River: Allamakee, Clayton, Dubuque, Jackson, Clinton, Scott, Muscatine, Louisa, Des Moines, Lee; Missouri River (west of I-29): Woodbury, Monona, Harrison, Pottawattamie, Mills, Fremont; Des Moines River: Boone, Dallas, Polk, Marion, Mahaska, Wapello, Van Buren."
+  },
+  {
+   "common_name": "Gray (timber) wolf",
+   "scientific_name": "Canis lupus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in Iowa DNR trapping regulations.",
+   "iac_reference": "571—108.6",
+   "season_status": "closed",
+   "seasons": [],
+   "permit_requirements": [],
+   "notes": "Continuous closed season statewide. Included so the app flags any logged take as out of season."
+  },
+  {
+   "common_name": "Spotted skunk (civet cat)",
+   "scientific_name": "Spilogale putorius",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in Iowa DNR trapping regulations. DNR booklet calls it 'civet cat'.",
+   "iac_reference": "571—108.6",
+   "season_status": "closed",
+   "seasons": [],
+   "permit_requirements": [],
+   "notes": "Continuous closed season statewide. Included so the app flags any logged take as out of season."
+  },
+  {
+   "common_name": "North American river otter",
+   "scientific_name": "Lontra canadensis",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in Iowa DNR trapping regulations.",
+   "iac_reference": "571—108.7",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "both",
+     "land_type": "all",
+     "open_date": "2026-11-07",
+     "close_date": "2027-02-28",
+     "open_time": "08:00",
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "IA-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": 3,
+      "possession_limit": null,
+      "limit_notes": "Season limit: 3 otters per licensed furharvester, whether hunted or trapped. Otters trapped in excess must be turned over to the department (no penalty)."
+     },
+     "notes": "Season opens first Saturday in November (Nov 7, 2026). Taking by shotgun or spear is prohibited."
+    }
+   ],
+   "permit_requirements": [
+    "Valid furharvester license and habitat fee (if normally required).",
+    "Report harvest and arrange a CITES tag from a conservation officer or designated DNR employee within 7 days of harvest.",
+    "Skin the otter and turn over the lower jaw or skull at the time the CITES tag is issued.",
+    "CITES tag must remain attached to the pelt until it is sold or otherwise rendered unavailable for sale."
+   ],
+   "notes": "Accidental capture during a closed season/area or over the bag limit: not penalized if captured during a legal trapping season or legal depredation control, a conservation officer is contacted within 24 hours, and the animal is turned over as soon as practical (108.8).",
+   "county_notes": "IAC 571-108.9(1): no leghold, body-gripping, or snare trap within 20 ft of exposed bait over water in these county corridors — Mississippi River: Allamakee, Clayton, Dubuque, Jackson, Clinton, Scott, Muscatine, Louisa, Des Moines, Lee; Missouri River (west of I-29): Woodbury, Monona, Harrison, Pottawattamie, Mills, Fremont; Des Moines River: Boone, Dallas, Polk, Marion, Mahaska, Wapello, Van Buren."
+  },
+  {
+   "common_name": "Bobcat",
+   "scientific_name": "Lynx rufus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in Iowa DNR trapping regulations.",
+   "iac_reference": "571—108.7",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "both",
+     "land_type": "all",
+     "open_date": "2026-11-07",
+     "close_date": "2027-02-28",
+     "open_time": "08:00",
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "IA-bobcat-limit1",
+       "zone_name": "Bobcat 1-per-county zone",
+       "area_type": "counties",
+       "counties": [
+        "Audubon",
+        "Boone",
+        "Cedar",
+        "Cherokee",
+        "Clinton",
+        "Crawford",
+        "Dallas",
+        "Delaware",
+        "Guthrie",
+        "Harrison",
+        "Iowa",
+        "Jackson",
+        "Jasper",
+        "Johnson",
+        "Jones",
+        "Lyon",
+        "Monona",
+        "Muscatine",
+        "Plymouth",
+        "Polk",
+        "Poweshiek",
+        "Scott",
+        "Shelby",
+        "Sioux",
+        "Webster",
+        "Woodbury"
+       ]
+      },
+      {
+       "zone_id": "IA-bobcat-limit3",
+       "zone_name": "Bobcat up-to-3-per-county zone",
+       "area_type": "counties",
+       "counties": [
+        "Adair",
+        "Adams",
+        "Appanoose",
+        "Cass",
+        "Clarke",
+        "Davis",
+        "Decatur",
+        "Des Moines",
+        "Fremont",
+        "Henry",
+        "Jefferson",
+        "Keokuk",
+        "Lee",
+        "Louisa",
+        "Lucas",
+        "Madison",
+        "Mahaska",
+        "Marion",
+        "Mills",
+        "Monroe",
+        "Montgomery",
+        "Page",
+        "Pottawattamie",
+        "Ringgold",
+        "Taylor",
+        "Union",
+        "Van Buren",
+        "Wapello",
+        "Warren",
+        "Washington",
+        "Wayne"
+       ]
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": 3,
+      "possession_limit": null,
+      "limit_notes": "No more than 3 bobcats TOTAL per furharvester per season (hunted or trapped). Within that: 1 per person per county in the 26-county limit-1 zone; up to 3 per person per county in the 31-county limit-3 zone. Bobcats trapped in excess of the limit or in a closed area must be turned over to the department (no penalty)."
+     },
+     "notes": "Open in 57 of Iowa's 99 counties (see zone county lists); remaining 42 counties are closed to bobcat harvest. Season opens first Saturday in November (Nov 7, 2026). A regular hunting license is NOT adequate — furharvester license + habitat fee required."
+    }
+   ],
+   "permit_requirements": [
+    "Valid furharvester license and habitat fee (if normally required); a regular hunting license is not adequate.",
+    "Report harvest and arrange a CITES tag from a conservation officer or designated DNR employee within 7 days of harvest.",
+    "Skin the bobcat and turn over the lower jaw or skull at the time the CITES tag is issued.",
+    "CITES tag must remain attached until the pelt is sold or otherwise rendered unavailable for sale; taxidermy mounts must keep the tag in possession as proof of legal harvest."
+   ],
+   "notes": "Accidental capture during a closed season/area or over the bag limit: not penalized if captured during a legal trapping season or legal depredation control, a conservation officer is contacted within 24 hours, and the animal is turned over as soon as practical (108.8). Bobcats accidentally captured after the season has closed or in a closed area should be released alive if possible, otherwise turned over to the DNR without penalty.",
+   "county_notes": "IAC 571-108.9(1): no leghold, body-gripping, or snare trap within 20 ft of exposed bait over water in these county corridors — Mississippi River: Allamakee, Clayton, Dubuque, Jackson, Clinton, Scott, Muscatine, Louisa, Des Moines, Lee; Missouri River (west of I-29): Woodbury, Monona, Harrison, Pottawattamie, Mills, Fremont; Des Moines River: Boone, Dallas, Polk, Marion, Mahaska, Wapello, Van Buren."
+  }
+ ],
+ "verification": {
+  "regulation_year_confirmed": true,
+  "confirmation_notes": "IAC 571 Ch.108 text is the 07-22-2026 publication (IAB 3/4/26, incorporates ARC 0117D effective 4/8/26) — current law for the 2026–27 season. Cross-checked against the DNR's 'Iowa Hunting, Trapping & Migratory Game Bird Regulations 2026–2027' booklet (PDF created 2026-08-25): all season dates match (Nov 7 opener, Feb 28 close, beaver through Apr 15 2027, otter/bobcat limits and county zones). First Saturday of November 2026 = 2026-11-07 verified by calendar.",
+  "known_gaps": [
+   "Scientific names are standard taxonomy, NOT stated in Iowa DNR trapping regulations. All are marked scientific_name_verified=false; weasel is null because regulations do not distinguish weasel species.",
+   "Muskrat special late season (108.1(2)) applies only on specific approved/posted state game management areas, federal refuges, and county conservation board areas — the dataset cannot enumerate those areas; zone is modeled as 'special_areas' with a descriptive name.",
+   "Bobcat county lists transcribed from IAC 108.7(2)/(3) and the DNR booklet p.33 zone map; 57 open counties verified consistent across both sources (26 + 31).",
+   "Depredation take outside seasons (Iowa Code 481A.87, and coyote damage authorization in 108.5(2)) is noted but not modeled as a season — the app should offer an override (e.g. 'nuisance/depredation permit') rather than blocking the log.",
+   "Full regulation text (trap placement rules, snare specs, roadside limits, exposed-bait corridors, trap tagging) is NOT in this dataset — it covers seasons, zones, limits, and permits only."
+  ]
+ },
+ "provisional": false,
+ "license_url": "https://gooutdoorsiowa.com/",
+ "license_vendor": "Go Outdoors Iowa",
+ "regs_url": "https://www.Iowadnr.gov/media/1700/download?inline",
+ "regs_kind": "pdf",
+ "trap_snare_rules": {
+  "title": "Trap & Snare Rules",
+  "updated": "2026-09-30",
+  "intro": "The short version of Iowa's trap and snare rules. Reminder only — verify with the Iowa DNR before you trap.",
+  "sources": [
+   {"label": "Iowa Admin. Code 571—Ch. 108", "url": "https://www.Legis.Iowa.gov/docs/iac/chapter/07-22-2026.571.108.pdf"},
+   {"label": "Iowa DNR 2026–27 season changes (Jul 17, 2026)", "url": "https://iowadnr.gov/news-release/2026-07-17/important-changes-heading-2026-2027-hunting-seasons"}
+  ],
+  "sections": [
+   {"heading": "Traps", "items": [
+    "Check every trap at least once every 24 hours.",
+    "Tag each trap with your name and address OR your DNR customer ID (new for 2026–27).",
+    "Foothold jaw spread: no more than 7 inches.",
+    "No serrated or toothed jaws.",
+    "No exposed bait within 20 feet of the set.",
+    "Road right-of-way setbacks apply — see the DNR booklet.",
+    "Colony traps must be set entirely underwater."
+   ]},
+   {"heading": "Snares", "items": [
+    "Loop no larger than 8 inches (bigger loops only in certain underwater or private-land-near-water sets).",
+    "Deer lock at least 2½ inches.",
+    "No powered snares except when set underwater.",
+    "No snare drags."
+   ]}
+  ]
+ },
+ "warden_directory": {
+  "label": "Find your game warden",
+  "url": "https://www.iowadnr.gov/media/9806/download?inline",
+  "kind": "pdf",
+  "note": "Iowa DNR conservation officers listed by county"
+ }
+}
