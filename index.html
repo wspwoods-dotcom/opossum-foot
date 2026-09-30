@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>Opossum Foot</title>
 <meta name="description" content="Opossum Foot — a pocket trapping notebook. Your spots never leave your phone.">
 <meta name="theme-color" content="#141810">
@@ -28,16 +28,28 @@
 
 <!-- ============ ONBOARDING: pick state ============ -->
 <div id="view-onboard" class="view">
-  <div class="onboard-card">
+  <div class="onboard-card" id="onboard-state-card">
     <img src="assets/logo.png" alt="Opossum Foot logo">
     <h2>Which state are you trapping in?</h2>
     <p>We'll load that state's season reminders. You can change it anytime in Settings — handy near state lines.</p>
     <button class="btn-secondary" id="btn-gps-state" type="button">📍 Use my location</button>
     <div class="dim" id="gps-state-result" style="margin:8px 0 4px; min-height:20px;"></div>
-    <label class="field" for="onboard-state">Trapping state</label>
+    <label class="field" for="onboard-state">Trapping State</label>
     <select id="onboard-state"></select>
     <div style="height:18px"></div>
-    <button class="btn-primary" id="btn-start" type="button">Start trapping</button>
+    <button class="btn-primary" id="btn-start" type="button">Next</button>
+  </div>
+  <!-- Q53: home ground step, after the state pick -->
+  <div class="onboard-card" id="onboard-home-card" hidden>
+    <img src="assets/logo.png" alt="Opossum Foot logo">
+    <h2>Where's your home ground?</h2>
+    <p>The map will open here every time — your county, your farms, right where you trap. Takes ten seconds, and you can change it anytime in Settings.</p>
+    <button class="btn-primary" id="btn-home-gps" type="button">📍 Use my current location</button>
+    <div class="dim" id="gps-home-result" style="margin:8px 0 4px; min-height:20px;"></div>
+    <div style="height:10px"></div>
+    <button class="btn-secondary" id="btn-home-map" type="button">🗺 Choose on the map</button>
+    <div style="height:14px"></div>
+    <button class="btn-ghost" id="btn-home-skip" type="button">Skip for now</button>
   </div>
 </div>
 
@@ -57,10 +69,13 @@
   <div id="offline-banner">You're offline. The app still works — map areas you've already viewed will render; new areas need a connection.</div>
   <div id="pin-hint">Tap the map to place your set pin.</div>
   <div id="place-bar"><span>Drag the pin onto the exact spot.</span><button class="btn-small btn-primary" id="btn-place-ok" type="button"><img class="pb-ic" src="assets/icons/check.png" alt="">Looks right</button><button class="btn-small btn-ghost" id="btn-place-cancel" type="button" aria-label="Cancel"><img class="pb-ic" src="assets/icons/x.png" alt=""></button></div>
+  <!-- Q53: home-ground picker bar -->
+  <div id="home-bar"><span>Pan to your home ground, then tap the map to drop the pin.</span><button class="btn-small btn-secondary" id="btn-home-use-gps" type="button">📍 Use my location</button><button class="btn-small btn-primary" id="btn-home-ok" type="button" hidden>Set home here</button><button class="btn-small btn-ghost" id="btn-home-cancel" type="button" aria-label="Cancel"><img class="pb-ic" src="assets/icons/x.png" alt=""></button></div>
 
   <!-- MAP PANE -->
   <div id="pane-map" class="pane active">
     <div id="map-status-filters" class="chip-row map-status-filters" aria-label="Filter sets by status"></div>
+    <button type="button" id="weather-chip" class="chip weather-chip" aria-label="Weather details">🌤️</button>
     <div id="map"></div>
     <div class="map-fabs">
       <button class="fab secondary" id="btn-locate" type="button" aria-label="Locate me"><img src="assets/icons/crosshair.png" alt=""></button>
@@ -84,23 +99,20 @@
     <div class="scroll">
       <div id="hist-summary" class="hist-summary"></div>
       <div class="seg compact" id="hist-view-seg">
-        <button type="button" data-view="date">By date</button>
-        <button type="button" data-view="species">By species</button>
-        <button type="button" data-view="scorecard">Scorecard</button>
+        <button type="button" data-view="date">By Date</button>
+        <button type="button" data-view="species">By Species</button>
+        <button type="button" data-view="traptype">By Trap Type</button>
       </div>
-      <input type="search" id="history-search" placeholder="Search species, sets, notes…" aria-label="Search history">
       <div class="chip-row" id="hist-disp-chips"></div>
-      <button type="button" class="btn-secondary" id="hist-filters-toggle">⚙ Report filters<span id="hist-filters-count" class="dim"></span></button>
-      <div id="hist-filters" hidden>
-        <div class="btn-row">
-          <div><label class="field" for="hist-from">From</label><input type="date" id="hist-from" aria-label="Report start date"></div>
-          <div><label class="field" for="hist-to">To</label><input type="date" id="hist-to" aria-label="Report end date"></div>
-        </div>
-        <div id="hist-dim-filters"></div>
-        <button type="button" class="btn-secondary" id="hist-filters-clear">Clear all filters</button>
-      </div>
+      <input type="search" id="history-search" placeholder="Search species, sets, traps, notes…" aria-label="Search history">
       <div id="history-list"></div>
     </div>
+  </div>
+
+  <!-- SCORECARD PANE (Q5) -->
+  <div id="pane-scorecard" class="pane">
+    <div class="pane-head"><h2>Scorecard</h2><p id="scorecard-sub">What's actually producing?</p></div>
+    <div class="scroll" id="scorecard-body"></div>
   </div>
 
   <!-- TOTALS PANE -->
@@ -121,99 +133,154 @@
     </div>
   </div>
 
-  <!-- LICENSES PANE -->
+  <!-- PAPERWORK PANE -->
   <div id="pane-licenses" class="pane">
-    <div class="pane-head"><h2>License wallet</h2><p>Photos of your licenses, kept on this phone only.</p></div>
+    <div class="pane-head"><h2>Paperwork</h2><p>Licenses and landowner info, kept on this phone only.</p></div>
     <div class="scroll">
-      <button class="btn-secondary" id="btn-add-license" type="button">📷 Add license photo</button>
-      <p class="dim" style="margin:8px 0 0">Tap a photo to view it — or attach its website link, like the DNR page where you bought it.</p>
-      <input type="file" id="license-input" class="hidden-file" accept="image/*" multiple>
-      <div class="lic-grid" id="license-grid"></div>
+      <div class="card">
+        <h3>License wallet</h3>
+        <button class="btn-secondary" id="btn-add-license" type="button">📷 Add license photo</button>
+        <p class="dim" style="margin:8px 0 0">Tap a photo to view it — or attach its website link, like the DNR page where you bought it.</p>
+        <input type="file" id="license-input" class="hidden-file" accept="image/*" multiple>
+        <div class="lic-grid" id="license-grid"></div>
+      </div>
+      <div class="card">
+        <h3>Landowner notebook</h3>
+        <p class="dim" style="margin:0 0 8px">Who owns the ground you trap — phone numbers, permission slips, boundaries, and the notes you don't want to forget.</p>
+        <input type="search" id="landowner-search" placeholder="Search landowners…" aria-label="Search landowners">
+        <div style="height:10px"></div>
+        <div id="landowner-list"></div>
+        <button class="btn-secondary" id="btn-add-landowner" type="button">＋ Add landowner</button>
+        <input type="file" id="lo-slip-input" class="hidden-file" accept="image/*" multiple>
+        <input type="file" id="lo-boundary-input" class="hidden-file" accept="image/*">
+      </div>
     </div>
   </div>
 
   <!-- WEATHER PANE -->
-  <div id="pane-weather" class="pane">
-    <div class="pane-head"><h2>Weather</h2><p id="weather-loc">Current conditions where you are.</p></div>
-    <div class="scroll">
-      <div class="card" id="weather-now"><p class="dim">Loading…</p></div>
-      <h3 style="margin:4px 0 6px">Next 12 hours</h3>
-      <div class="card" id="weather-hourly" style="padding:6px 14px"></div>
-      <div class="btn-row">
-        <button class="btn-secondary" id="btn-weather-refresh" type="button">↻ Refresh</button>
-      </div>
-      <p class="dim" id="weather-updated" style="margin-top:8px"></p>
-      <p class="dim">Location is sent to Open-Meteo, a free weather service, each time this tab loads. Coordinates are rounded; nothing is stored by them.</p>
-    </div>
-  </div>
-
   <!-- SETTINGS PANE -->
   <div id="pane-settings" class="pane">
     <div class="pane-head"><h2>Settings</h2><p>Opossum Foot beta.</p></div>
     <div class="scroll">
       <div class="card">
-        <h3>Trapping state</h3>
+        <h3>Trapping State</h3>
         <label class="field" for="settings-state">State</label>
         <select id="settings-state"></select>
         <p class="dim" style="margin-top:8px">Applies to the active trap line (<strong id="settings-line-name"></strong>). Changing the state takes effect immediately.</p>
       </div>
+      <!-- Q53: home ground -->
       <div class="card">
-        <h3>Features</h3>
-        <label class="checkline"><input type="checkbox" id="settings-weather"> Weather (tab + auto-record)</label>
-        <p class="dim" style="margin:6px 0 12px">Shows a Weather tab with current conditions and the next 12 hours, and attaches weather to new sets and catches. Sends the set's coordinates to Open-Meteo, a free weather service — one of two exceptions to "nothing leaves your phone" (the other is voice transcription, below). Needs a data connection; nothing is recorded when you're offline.</p>
+        <h3>Home ground</h3>
+        <p class="dim" id="settings-home-status" style="margin:0 0 8px">Not set — the map opens on your trapping state.</p>
+        <button class="btn-secondary" id="btn-change-home" type="button">Change home location</button>
+      </div>
+      <div class="card setsec" id="setsec-features">
+        <button type="button" class="setsec-head" id="setsec-features-head" data-sec="setsec-features" aria-expanded="false"><span>Features</span><span class="setsec-chev" aria-hidden="true">›</span></button>
+        <div class="setsec-body" id="setsec-features-body" hidden>
+        <label class="checkline"><input type="checkbox" id="settings-weather"> Weather (map chip + auto-record)</label>
+        <label class="checkline"><input type="checkbox" id="settings-windarrows"> Wind arrows on set pins</label>
+        <p class="dim" style="margin:-6px 0 10px">Small arrows at the edge of each pin show the downwind direction — where your scent goes. They appear when you're zoomed in close, and use live wind data when you're online.</p>
+        <p class="dim" style="margin:6px 0 12px">Shows a weather chip on the map with current conditions and the next 12 hours, and attaches weather to new sets and catches. Sends the set's coordinates to Open-Meteo, a free weather service — one of two exceptions to "nothing leaves your phone" (the other is voice transcription, below). Needs a data connection; nothing is recorded when you're offline.</p>
         <label class="checkline"><input type="checkbox" id="settings-voice"> Voice entry &amp; memos</label>
         <p class="dim" style="margin:6px 0 12px">Dictate notes and record voice memos on your sets. Live transcription uses your phone's built-in speech recognition and needs a connection — your words are transcribed by that service, not on this phone. Recordings and transcripts are stored only in this phone's browser storage.</p>
-        <label class="checkline"><input type="checkbox" id="settings-licenses"> License wallet</label>
-        <p class="dim" style="margin:6px 0 12px">Keep your license photos in the app.</p>
-        <label class="checkline"><input type="checkbox" id="settings-seasons"> Seasons tab</label>
-        <p class="dim" style="margin:6px 0 12px">Show the Seasons tab with 50-state season reminders.</p>
+        <label class="checkline"><input type="checkbox" id="settings-furprices"> Fur price averages</label>
+        <p class="dim" style="margin:6px 0 12px">Shows dated auction averages beside species names — a reference baseline like Kelley Blue Book, never a live price or an offer.</p>
         <button class="btn-secondary" id="btn-features-reset" type="button">Reset features to defaults</button>
+        </div>
       </div>
-      <div class="card">
-        <h3>New set fields</h3>
+      <div class="card setsec" id="setsec-tabs">
+        <button type="button" class="setsec-head" id="setsec-tabs-head" data-sec="setsec-tabs" aria-expanded="false"><span>Tabs</span><span class="setsec-chev" aria-hidden="true">›</span></button>
+        <div class="setsec-body" id="setsec-tabs-body" hidden>
+        <p class="dim" style="margin:0 0 8px">Choose which tabs appear on the bottom bar for the active trap line (<strong id="tabs-line-name"></strong>). Map, Lines, Totals, and Settings always show.</p>
+        <label class="checkline"><input type="checkbox" id="settings-tab-history"> History tab</label>
+        <label class="checkline"><input type="checkbox" id="settings-tab-scorecard"> Scorecard tab</label>
+        <label class="checkline"><input type="checkbox" id="settings-tab-seasons"> Seasons tab</label>
+        <label class="checkline"><input type="checkbox" id="settings-tab-licenses"> Paperwork tab</label>
+        </div>
+      </div>
+      <div class="card setsec" id="setsec-setfields">
+        <button type="button" class="setsec-head" id="setsec-setfields-head" data-sec="setsec-setfields" aria-expanded="false"><span>New Set Fields</span><span class="setsec-chev" aria-hidden="true">›</span></button>
+        <div class="setsec-body" id="setsec-setfields-body" hidden>
         <p class="dim" style="margin:0 0 8px">Choose which fields appear when you add a set. Set name, Status, and Date set always show — they're required.</p>
         <label class="checkline"><input type="checkbox" id="settings-sf-traptype"> Trap type</label>
-        <label class="checkline"><input type="checkbox" id="settings-sf-trapcount"> Number of traps</label>
         <label class="checkline"><input type="checkbox" id="settings-sf-trapdetail"> Trap details</label>
         <label class="checkline"><input type="checkbox" id="settings-sf-settype"> Set type</label>
         <label class="checkline"><input type="checkbox" id="settings-sf-bait"> Bait</label>
         <label class="checkline"><input type="checkbox" id="settings-sf-lure"> Lure</label>
+        <label class="checkline"><input type="checkbox" id="settings-sf-urine"> Urine</label>
+        <label class="checkline"><input type="checkbox" id="settings-sf-visual"> Visual</label>
+        <label class="checkline"><input type="checkbox" id="settings-sf-audio"> Audio</label>
+        <label class="checkline"><input type="checkbox" id="settings-sf-other"> Other attractants</label>
         <label class="checkline"><input type="checkbox" id="settings-sf-notes"> Notes</label>
+        </div>
       </div>
-      <div class="card">
-        <h3>Your privacy</h3>
+      <div class="card setsec" id="setsec-privacy">
+        <button type="button" class="setsec-head" id="setsec-privacy-head" data-sec="setsec-privacy" aria-expanded="false"><span>Your Privacy</span><span class="setsec-chev" aria-hidden="true">›</span></button>
+        <div class="setsec-body" id="setsec-privacy-body" hidden>
         <p><strong>Your spots never leave your phone.</strong></p>
         <p class="dim">Opossum Foot has no account, no login, and no cloud. Every set, catch, photo, and voice memo is stored only in this phone's browser storage. Nothing you enter is stored anywhere else — the only network traffic is map tiles, the app's own files, weather lookups (only if you turn weather on), and live voice transcription (only when you tap the microphone and have a connection).</p>
         <p class="dim"><strong>The honest catch:</strong> because there's no cloud backup, a lost phone, a wiped phone, or clearing this browser's data can destroy your records. Export a CSV backup regularly — that's your safety net.</p>
+        </div>
       </div>
-      <div class="card">
-        <h3>About</h3>
+      <div class="card setsec" id="setsec-about">
+        <button type="button" class="setsec-head" id="setsec-about-head" data-sec="setsec-about" aria-expanded="false"><span>About</span><span class="setsec-chev" aria-hidden="true">›</span></button>
+        <div class="setsec-body" id="setsec-about-body" hidden>
         <div class="rowline"><img src="assets/logo.png" class="about-logo" alt="Opossum Foot logo"><div><strong>Opossum Foot</strong><br><span class="dim">Beta · a pocket trapping notebook</span></div></div>
         <p class="dim">No accounts. No cloud. No analytics. No ads.<br>Season reminders are reminders only — always verify with your state agency and local ordinances.</p>
         <p class="dim">Build <span id="build-stamp">—</span></p>
+        </div>
       </div>
-      <div class="card">
-        <h3>Help &amp; legal</h3>
+      <div class="card setsec" id="setsec-help">
+        <button type="button" class="setsec-head" id="setsec-help-head" data-sec="setsec-help" aria-expanded="false"><span>Help & Legal</span><span class="setsec-chev" aria-hidden="true">›</span></button>
+        <div class="setsec-body" id="setsec-help-body" hidden>
         <p class="dim" style="margin:0 0 8px">The trapper's guide to the app, and the legal notices.</p>
         <div class="sheet-actions">
           <button class="btn-secondary" id="btn-guide" type="button">📖 Trapper's guide</button>
           <button class="btn-secondary" id="btn-legal" type="button">⚖ Legal notices</button>
         </div>
+        </div>
       </div>
-      <div class="card">
-        <h3>Backup</h3>
+      <div class="card setsec" id="setsec-filters">
+        <button type="button" class="setsec-head" id="setsec-filters-head" data-sec="setsec-filters" aria-expanded="false"><span>Report Filters</span><span class="setsec-chev" aria-hidden="true">›</span></button>
+        <div class="setsec-body" id="setsec-filters-body" hidden>
+        <p class="dim" style="margin-top:0">These filters apply to the catches CSV export below — they are independent of the History tab's quick filters.</p>
+        <div class="btn-row">
+          <div><label class="field" for="exp-from">From</label><input type="date" id="exp-from" aria-label="Export start date"></div>
+          <div><label class="field" for="exp-to">To</label><input type="date" id="exp-to" aria-label="Export end date"></div>
+        </div>
+        <div id="exp-dim-filters"></div>
+        <div class="sheet-actions">
+          <button class="btn-secondary" id="exp-filters-clear" type="button">Clear all filters</button>
+          <button class="btn-secondary" id="btn-export-catches" type="button">⬇ Export catches (CSV)<span id="exp-filters-count" class="dim"></span></button>
+        </div>
+        <p class="imp-cap" style="margin-top:6px">Downloads your catches as a spreadsheet file (.csv), honoring the filters above.</p>
+        </div>
+      </div>
+      <div class="card setsec" id="setsec-backup">
+        <button type="button" class="setsec-head" id="setsec-backup-head" data-sec="setsec-backup" aria-expanded="false"><span>Backup</span><span class="setsec-chev" aria-hidden="true">›</span></button>
+        <div class="setsec-body" id="setsec-backup-body" hidden>
         <p class="dim">Back up everything, or download spreadsheets. A full backup can be imported back after a reinstall.</p>
         <div class="sheet-actions">
           <button class="btn-secondary" id="btn-backup" type="button">💾 Back up all data (JSON)</button>
-          <button class="btn-secondary" id="btn-export-catches" type="button">⬇ Export catches (CSV)</button>
+          <p class="imp-cap">Saves a full Opossum Foot backup file (.json) — import it back after a reinstall.</p>
           <button class="btn-secondary" id="btn-export-sets" type="button">⬇ Export sets (CSV)</button>
+          <p class="imp-cap">Downloads your sets as a spreadsheet file (.csv).</p>
+          <button class="btn-secondary" id="btn-export-mileage" type="button">⬇ Export mileage (CSV)</button>
+          <p class="imp-cap">Downloads this line's trip log as a spreadsheet file (.csv).</p>
           <button class="btn-secondary" id="btn-import" type="button">⬆ Import data (JSON)</button>
+          <p class="imp-cap">Reads back an Opossum Foot backup file (.json) from this phone.</p>
           <input type="file" id="import-file" class="hidden-file" accept=".json,application/json">
+          <button class="btn-secondary" id="btn-import-pins" type="button">📍 Import pins from Google Maps</button>
+          <p class="imp-cap">Reads pin files (.kml / .geojson) from Google Maps, My Maps, or Google Takeout.</p>
+          <input type="file" id="import-pins-file" class="hidden-file" accept=".kml,.geojson,.json,application/vnd.google-earth.kml+xml,application/geo+json">
+        </div>
         </div>
       </div>
-      <div class="card">
-        <h3 style="color:#f0a49c">Danger zone</h3>
+      <div class="card setsec" id="setsec-danger">
+        <button type="button" class="setsec-head" id="setsec-danger-head" data-sec="setsec-danger" aria-expanded="false"><span style="color:#f0a49c">Danger Zone</span><span class="setsec-chev" aria-hidden="true">›</span></button>
+        <div class="setsec-body" id="setsec-danger-body" hidden>
         <button class="btn-danger" id="btn-erase" type="button" style="width:100%">Erase all Opossum Foot data on this phone</button>
+        </div>
       </div>
     </div>
   </div>
@@ -223,10 +290,10 @@
     <button type="button" data-tab="map" class="active"><img class="ti-img" src="assets/icons/compass.png" alt="">Map</button>
     <button type="button" data-tab="lines"><svg class="ti-img ti-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="5" cy="6" r="2.2"/><circle cx="19" cy="6" r="2.2"/><circle cx="12" cy="18" r="2.2"/><path d="M7 6.8h10M6.2 7.8l4.6 8M17.8 7.8l-4.6 8"/></svg>Lines</button>
     <button type="button" data-tab="history"><img class="ti-img" src="assets/icons/logbook.png" alt="">History</button>
+    <button type="button" data-tab="scorecard"><svg class="ti-img ti-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/></svg>Scorecard</button>
     <button type="button" data-tab="totals"><img class="ti-img" src="assets/icons/barchart.png" alt="">Totals</button>
     <button type="button" data-tab="seasons"><img class="ti-img" src="assets/species/opossum.png" alt="">Seasons</button>
-    <button type="button" data-tab="licenses"><img class="ti-img" src="assets/icons/idcard.png" alt="">Licenses</button>
-    <button type="button" data-tab="weather"><img class="ti-img" src="assets/icons/weather.png" alt="">Weather</button>
+    <button type="button" data-tab="licenses"><img class="ti-img" src="assets/icons/idcard.png" alt="">Paperwork</button>
     <button type="button" data-tab="settings"><img class="ti-img" src="assets/icons/gear.png" alt="">Settings</button>
   </nav>
 </div>
@@ -235,64 +302,131 @@
 <div id="scrim"></div>
 
 <!-- ADD / EDIT SET -->
+  <!-- WEATHER SHEET (Q9: folded into the Map as a chip + bottom sheet) -->
+  <div id="sheet-weather" class="sheet">
+    <div class="sheet-grab"></div>
+    <div class="sheet-head"><h2>Weather</h2><button class="sheet-x" data-close type="button">×</button></div>
+    <div class="sheet-body">
+      <p class="dim" id="weather-loc" style="text-align:center">Current conditions where you are.</p>
+      <div class="card" id="weather-alerts" style="display:none"></div>
+      <div class="card" id="weather-now"><p class="dim">Loading…</p></div>
+      <h3 style="margin:4px 0 6px;text-align:center">7-day forecast</h3>
+      <div class="card" id="weather-daily" style="padding:6px 14px"><p class="dim">Loading…</p></div>
+      <h3 style="margin:4px 0 6px;text-align:center">Next 12 hours</h3>
+      <div class="card" id="weather-hourly" style="padding:6px 14px"></div>
+      <div class="sheet-actions">
+        <button class="btn-secondary" id="btn-weather-refresh" type="button">↻ Refresh</button>
+      </div>
+      <p class="dim" id="weather-updated" style="margin-top:8px;text-align:center"></p>
+      <p class="dim" style="text-align:center">Location is sent to the National Weather Service and Open-Meteo, free weather services, each time you open this. Coordinates are rounded; nothing is stored by them.</p>
+    </div>
+  </div>
+
 <div id="sheet-setform" class="sheet">
   <div class="sheet-grab"></div>
   <div class="sheet-head"><h2 id="setform-title">New set</h2><button class="sheet-x" data-close type="button">×</button></div>
   <div class="sheet-body">
-    <div class="dim" id="setform-coords"></div>
-    <label class="field" for="sf-name">Set name</label>
+    <label class="field" for="sf-name">Set Name <span class="req">*</span></label>
     <input type="text" id="sf-name" placeholder="e.g. Creek crossing" autocomplete="off">
+    <div class="suggest" id="sf-name-suggest"></div>
     <div class="setfield" id="setfield-traptype">
-    <label class="field" for="sf-type">Trap type</label>
+    <label class="field" for="sf-maker">Trap Manufacturer</label>
+    <select id="sf-maker"></select>
+    <label class="field" for="sf-type">Trap Type</label>
     <select id="sf-type">
       <option>Bodygrip / Conibear</option><option>Cage live trap</option><option>Colony trap</option>
       <option>Dog-proof</option><option>Foothold</option><option>Snare</option><option>Other</option>
     </select>
     </div>
-    <div class="setfield" id="setfield-trapcount">
-    <label class="field" for="sf-trapcount">Number of traps</label>
-    <input type="number" id="sf-trapcount" min="1" step="1" value="1" inputmode="numeric">
-    </div>
     <div class="setfield" id="setfield-trapdetail">
-    <label class="field">Trap details</label>
+    <label class="field">Trap Details</label>
     <div id="trapdetail-fields"></div>
     </div>
     <div class="setfield" id="setfield-settype">
-    <label class="field" for="sf-settype">Set type</label>
+    <label class="field" for="sf-settype">Set Type</label>
     <select id="sf-settype">
-      <option>Cubby</option><option>Dirt hole</option><option>Drowning set</option>
-      <option>Flat set</option><option>Pocket set</option><option>Scent post</option>
-      <option>Trail / blind set</option><option>Other</option>
+      <!-- options built by renderSetTypeOptions() — Q29 researched taxonomy -->
     </select>
     </div>
     <div class="setfield" id="setfield-bait">
-    <label class="field" for="sf-bait">Bait</label>
-    <input type="text" id="sf-bait" placeholder="e.g. sardines" autocomplete="off">
+    <label class="field">Bait</label>
+    <div id="sf-bait-rows"></div>
+    <button type="button" class="btn-small btn-ghost attr-add" id="sf-bait-add">+ Add Another Bait</button>
+    <div id="sf-bait-sponsors"></div>
     </div>
     <div class="setfield" id="setfield-lure">
-    <label class="field" for="sf-lure">Lure</label>
-    <input type="text" id="sf-lure" placeholder="e.g. gland lure" autocomplete="off">
+    <label class="field">Lure</label>
+    <div id="sf-lure-rows"></div>
+    <button type="button" class="btn-small btn-ghost attr-add" id="sf-lure-add">+ Add Another Lure</button>
     </div>
-    <label class="field" for="sf-status">Status</label>
+    <div class="setfield" id="setfield-urine">
+    <label class="field">Urine</label>
+    <div id="sf-urine-rows"></div>
+    <button type="button" class="btn-small btn-ghost attr-add" id="sf-urine-add">+ Add Another Urine</button>
+    </div>
+    <div class="setfield" id="setfield-visual">
+    <label class="field">Visual</label>
+    <div id="sf-visual-rows"></div>
+    <button type="button" class="btn-small btn-ghost attr-add" id="sf-visual-add">+ Add Another Visual</button>
+    </div>
+    <div class="setfield" id="setfield-audio">
+    <label class="field">Audio</label>
+    <div id="sf-audio-rows"></div>
+    <button type="button" class="btn-small btn-ghost attr-add" id="sf-audio-add">+ Add Another Audio</button>
+    </div>
+    <div class="setfield" id="setfield-other">
+    <label class="field">Other Attractants</label>
+    <div id="sf-other-rows"></div>
+    <button type="button" class="btn-small btn-ghost attr-add" id="sf-other-add">+ Add Another Attractant</button>
+    </div>
+    <label class="field" for="sf-status">Status <span class="req">*</span></label>
     <select id="sf-status">
       <option value="active">Active</option>
       <option value="sprung">Sprung</option><option value="pulled">Pulled</option>
-      <option value="other">Other</option>
+      <option value="missing">Missing</option>
     </select>
-    <label class="field" for="sf-date">Date set</label>
+    <div id="setfield-missing" hidden>
+    <label class="field">Why Missing <span class="req">*</span></label>
+    <div class="seg" id="sf-missing-reason">
+      <button type="button" data-mr="stolen">Stolen</button>
+      <button type="button" data-mr="mother-nature">Mother Nature</button>
+      <button type="button" data-mr="cant-locate">Can't locate</button>
+      <button type="button" data-mr="removed">Removed</button>
+      <button type="button" data-mr="confiscated">Confiscated</button>
+    </div>
+    <div id="sf-missing-detail-wrap" hidden>
+      <label class="field" for="sf-missing-detail">Confiscation Details</label>
+      <input type="text" id="sf-missing-detail" placeholder="Officer, citation #, ..." autocomplete="off">
+      <div class="suggest" id="sf-missing-detail-suggest"></div>
+      <div class="photo-strip" id="sf-missing-photos" style="margin-top:8px"></div>
+      <button type="button" class="btn-small btn-secondary" id="btn-sf-missing-photo" style="margin-top:6px">📷 Add citation photo</button>
+      <input type="file" id="sf-missing-photo-input" class="hidden-file" accept="image/*">
+    </div>
+    </div>
+    <label class="field" for="sf-date"><span class="dim" id="sf-date-dow"></span>Date Set <span class="req">*</span></label>
     <input type="date" id="sf-date">
     <div class="setfield" id="setfield-notes">
     <label class="field" for="sf-notes">Notes</label>
     <textarea id="sf-notes" placeholder="Anything worth remembering…"></textarea>
+    <div class="suggest" id="sf-notes-suggest"></div>
     <div class="btn-row" style="margin-top:8px">
       <button class="btn-small btn-secondary" id="btn-voice-setnotes" type="button">🎤 Voice → notes</button>
     </div>
     <div class="voice-preview" id="voice-setnotes-preview"></div>
     </div>
+    <div id="setform-photos">
+    <label class="field">Photos</label>
+    <div class="photo-strip" id="sf-photos"></div>
+    <div class="btn-row" style="margin-top:8px">
+      <button class="btn-small btn-secondary" id="btn-sf-photo" type="button">📷 Take a photo</button>
+    </div>
+    <input type="file" id="sf-photo-input" class="hidden-file" accept="image/*">
+    </div>
     <div class="form-error" id="setform-error" role="alert"></div>
     <div class="sheet-actions">
       <button class="btn-primary" id="btn-save-set" type="button">Save set</button>
     </div>
+    <div id="setform-coords-bottom" class="coords-bottom"></div>
   </div>
 </div>
 
@@ -308,8 +442,11 @@
         <option value="active">Active</option>
         <option value="sprung">Sprung</option>
         <option value="pulled">Pulled</option>
-        <option value="other">Other</option>
+        <option value="missing">Missing</option>
       </select>
+    </div>
+    <div class="btn-row" id="sd-recovered-row" hidden style="margin-top:8px">
+      <button class="btn-small btn-secondary" id="btn-sd-recovered" type="button">✓ Mark recovered</button>
     </div>
     <dl class="kv" id="sd-fields"></dl>
     <div class="sheet-actions">
@@ -317,6 +454,7 @@
     </div>
     <h3 style="margin:18px 0 6px" id="sd-notes-head">Set notes</h3>
     <textarea id="sd-notes" placeholder="Optional…"></textarea>
+    <div class="suggest" id="sd-notes-suggest"></div>
     <div class="btn-row" style="margin-top:8px">
       <button class="btn-small btn-secondary" id="btn-voice-sdnotes" type="button">🎤 Voice → notes</button>
     </div>
@@ -340,34 +478,35 @@
         <button class="btn-danger" id="btn-sd-delete" type="button">Delete</button>
       </div>
     </div>
+    <div id="sd-coords-bottom" class="coords-bottom"></div>
   </div>
 </div>
 
 <!-- LOG A CATCH -->
 <div id="sheet-log" class="sheet">
   <div class="sheet-grab"></div>
-  <div class="sheet-head"><h2>Log a catch</h2><button class="sheet-x" data-close type="button">×</button></div>
+  <div class="sheet-head"><h2>Log a Catch</h2><button class="sheet-x" data-close type="button">×</button></div>
   <div class="sheet-body">
     <div class="dim" id="log-setline"></div>
     <div id="log-warnings"></div>
-    <label class="field">Entry type <span class="req">*</span></label>
+    <label class="field">Entry Type <span class="req">*</span></label>
     <div class="seg" id="log-eventtype">
       <button type="button" data-ev="catch">Catch</button>
       <button type="button" data-ev="other">Other event</button>
     </div>
     <div id="log-other-row" hidden>
-      <label class="field" for="log-othertype">Other event type</label>
+      <label class="field" for="log-othertype">Other Event Type</label>
       <select id="log-othertype">
         <option value="animal-part">Animal part</option>
         <option value="fur">Fur</option>
-        <option value="non-game">Non-game animal</option>
+        <option value="non-game">Non-target animal</option>
         <option value="non-native">Non-native animal</option>
         <option value="sprung">Sprung</option>
         <option value="other">Other</option>
       </select>
     </div>
     <div id="log-species-catch">
-      <label class="field">Species</label>
+      <label class="field">Species <span class="req">*</span></label>
       <input type="search" id="log-species-search" placeholder="Search species…" autocomplete="off" aria-label="Search species">
       <div style="height:8px"></div>
       <div id="log-species-list" style="max-height:280px; overflow-y:auto; -webkit-overflow-scrolling:touch;"></div>
@@ -375,6 +514,7 @@
     <div id="log-species-other" hidden>
       <label class="field" for="log-species-free">Species <span class="dim">(optional)</span></label>
       <input type="text" id="log-species-free" placeholder="e.g. neighbor's cat — blank for a sprung empty trap" autocomplete="off">
+      <div class="suggest" id="log-species-free-suggest"></div>
     </div>
     <label class="field">Count</label>
     <div class="stepper">
@@ -382,17 +522,19 @@
       <div class="count" id="log-count">1</div>
       <button type="button" id="log-count-plus" aria-label="More">＋</button>
     </div>
-    <label class="field">Disposition <span class="req">*</span></label>
+    <label class="field" id="log-disposition-label">Disposition <span class="req">*</span></label>
     <div class="seg" id="log-disposition">
       <button type="button" data-disp="kept">Dispatched</button>
       <button type="button" data-disp="kept-alive">Kept alive</button>
       <button type="button" data-disp="released">Released</button>
       <button type="button" data-disp="transported">Transported</button>
+      <button type="button" data-disp="discarded" hidden>Discarded</button>
     </div>
-    <label class="field" for="log-date">Date</label>
+    <label class="field" for="log-date"><span class="dim" id="log-date-dow"></span>Date</label>
     <input type="date" id="log-date">
     <label class="field" for="log-notes">Notes</label>
     <textarea id="log-notes" placeholder="Optional…"></textarea>
+    <div class="suggest" id="log-notes-suggest"></div>
     <div class="btn-row" style="margin-top:8px">
       <button class="btn-small btn-secondary" id="btn-voice-lognotes" type="button">🎤 Voice → notes</button>
     </div>
@@ -426,6 +568,8 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="js/season-data.js"></script>
 <script src="js/guide-content.js"></script>
+<script src="js/trap-catalog.js"></script>
+<script src="js/fur-prices.js"></script>
 <script src="js/app.js"></script>
 </body>
 </html>
