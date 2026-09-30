@@ -615,16 +615,24 @@ body.demo-shot #view-main { box-shadow: 0 0 80px rgba(0,0,0,.65); min-height: 10
 .suggest-sponsor:first-child { border-top: 1px solid var(--line); border-radius: 10px 10px 0 0; overflow: hidden; }
 .suggest-fill { flex: 1 1 auto; min-width: 0; text-align: left; font-size: 15px; color: var(--text);
   background: none; border: none; padding: 9px 12px; cursor: pointer;
-  display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  display: flex; align-items: center; gap: 8px; flex-wrap: nowrap; }
 .suggest-fill:active { background: var(--line); }
+/* Q69: the product name shrinks to a single line (ellipsis if it's still
+   too long); the Sponsored pill shrinks a touch. */
+.suggest-name { font-size: 13.5px; white-space: nowrap; overflow: hidden;
+  text-overflow: ellipsis; min-width: 0; flex: 1 1 auto; }
 .sponsor-eye { flex: 0 0 46px; background: none; border: none; border-left: 1px solid var(--line);
-  font-size: 19px; color: var(--muted); cursor: pointer; min-height: 0; }
+  font-size: 19px; color: var(--muted); cursor: pointer; min-height: 0;
+  display: flex; align-items: center; justify-content: center; padding: 5px; }
 .sponsor-eye:active { background: var(--line); color: var(--ink); }
+/* Q69: the sponsor logo replaces the eye — object-fit: contain keeps the
+   whole logo inside the visible icon area, never cropped. */
+.sponsor-logo { width: 100%; height: 100%; max-width: 36px; max-height: 36px;
+  object-fit: contain; pointer-events: none; }
 .pill {
-  font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
-  background: var(--accent); color: var(--accent-ink); border-radius: 20px; padding: 3px 9px;
-  white-space: nowrap;
-}
+  font-size: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+  background: var(--accent); color: var(--accent-ink); border-radius: 20px; padding: 2px 8px;
+  white-space: nowrap; flex: 0 0 auto; }
 .sponsor-bio { text-align: center; }
 .sponsor-bio-badge { width: 96px; height: 96px; border-radius: 12px; object-fit: cover; }
 .sponsor-bio h3 { margin: 10px 0 6px; }
