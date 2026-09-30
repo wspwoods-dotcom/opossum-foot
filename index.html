@@ -343,12 +343,14 @@
     <div class="suggest" id="sf-name-suggest"></div>
     <div class="setfield" id="setfield-traptype">
     <label class="field" for="sf-maker">Trap Manufacturer</label>
-    <select id="sf-maker"></select>
+    <select id="sf-maker" data-has-other="1"></select>
+    <div class="other-wrap" id="sf-maker-otherwrap" hidden><label class="field" for="sf-maker-othertext">What is it?</label><input type="text" id="sf-maker-othertext" placeholder="Type the manufacturer" autocomplete="off"></div>
     <label class="field" for="sf-type">Trap Type</label>
-    <select id="sf-type">
+    <select id="sf-type" data-has-other="1">
       <option>Bodygrip / Conibear</option><option>Cage live trap</option><option>Colony trap</option>
       <option>Dog-proof</option><option>Foothold</option><option>Snare</option><option>Other</option>
     </select>
+    <div class="other-wrap" id="sf-type-otherwrap" hidden><label class="field" for="sf-type-othertext">What is it?</label><input type="text" id="sf-type-othertext" placeholder="Type the trap type" autocomplete="off"></div>
     </div>
     <div class="setfield" id="setfield-trapdetail">
     <label class="field">Trap Details</label>
@@ -356,9 +358,10 @@
     </div>
     <div class="setfield" id="setfield-settype">
     <label class="field" for="sf-settype">Set Type</label>
-    <select id="sf-settype">
+    <select id="sf-settype" data-has-other="1">
       <!-- options built by renderSetTypeOptions() — Q29 researched taxonomy -->
     </select>
+    <div class="other-wrap" id="sf-settype-otherwrap" hidden><label class="field" for="sf-settype-othertext">What is it?</label><input type="text" id="sf-settype-othertext" placeholder="Type the set type" autocomplete="off"></div>
     </div>
     <div class="setfield" id="setfield-bait">
     <label class="field">Bait</label>
