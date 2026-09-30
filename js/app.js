@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-09-30bn';
+var APP_VERSION = 'beta 0.1 · build 2026-09-30bo';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -403,8 +403,17 @@ function fmtDate(iso) {
 function seasonYearOf(iso) {
   var p = (iso || todayISO()).split('-');
   var y = p[0] * 1, m = p[1] * 1;
-  if (m >= 8) return y + '-' + String(y + 1).slice(2);
+  /* Q40 (Tanner 2026-09-30): the trapping season year runs Sept 1 – Aug 31,
+     so November-through-January stays in one bucket. */
+  if (m >= 9) return y + '-' + String(y + 1).slice(2);
   return (y - 1) + '-' + String(y).slice(2);
+}
+/* Q40: the season label before a "YYYY-YY" label, e.g. "2026-27" -> "2025-26". */
+function prevSeasonLabel(label) {
+  var p = (label || '').split('-');
+  var y1 = p[0] * 1;
+  if (!y1 || p.length < 2) return '';
+  return (y1 - 1) + '-' + String(y1).slice(2);
 }
 
 var toastTimer = null;
@@ -810,7 +819,7 @@ function updateWeatherChip(c) {
   /* B16: condition over temperature, stacked — matches the chip's column layout. */
   chip.innerHTML = c
     ? '<span>' + weatherEmoji(c.weather_code) + '</span><span>' + Math.round(c.temperature_2m) + '°F</span>'
-    : '🌤️';
+    : '<img class="wx-ic" src="assets/icons/weather.png" alt="Weather">';
 }
 function weatherEmoji(c) {
   c = c * 1;
@@ -1072,8 +1081,9 @@ function renderTabToggles() {
 function applyFeatureToggles() {
   var vOn = Store.data.voiceOn !== false;
   ['btn-voice-setnotes', 'voice-setnotes-preview', 'btn-voice-lognotes', 'voice-lognotes-preview',
-   'btn-sd-memo', 'sd-memos-head', 'sd-memos',
-   'sd-notes-head', 'sd-notes', 'btn-voice-sdnotes', 'voice-sdnotes-preview'].forEach(function (id) {
+   'btn-se-memo', 'se-memos-head', 'se-memos', 'setform-memos',
+   'sd-memos-head', 'sd-memos',
+   'sd-notes-head', 'sd-notes'].forEach(function (id) {
     var el = $(id);
     if (el) el.style.display = vOn ? '' : 'none';
   });
@@ -1087,6 +1097,11 @@ function applyFeatureToggles() {
   var wchip = $('weather-chip');
   if (wchip) wchip.style.display = wOn ? '' : 'none';
   if (!wOn && $('sheet-weather') && $('sheet-weather').classList.contains('show')) closeSheets();
+  /* Q8: mileage toggle — hides the standalone mileage CSV export. The
+     per-line Mileage buttons are gated in renderLines. */
+  var mOn = Store.data.mileageOn !== false;
+  var mexp = $('btn-export-mileage');
+  if (mexp) mexp.style.display = mOn ? '' : 'none';
 }
 
 /* ---- new-set field toggles ---- */
@@ -1097,6 +1112,30 @@ function setFieldOn(key) { return !Store.data.setFields || Store.data.setFields[
    one set can run two lures, a urine plus a visual cue, etc. Older stores kept
    plain strings; normalizeAttractants() migrates them on every load. */
 var ATTRACTANT_KEYS = ['bait', 'lure', 'urine', 'visual', 'audio', 'other'];
+/* Q30 (Tanner 2026-09-26): state bait-use restrictions, warned at set creation.
+   VERIFIED entries only — states without a researched rule get no warning
+   rather than a wrong one. Lure-side rules: none verified yet (research
+   pending), so no lure warnings ship. Sources in the findings file. */
+var BAIT_RULES = {
+  IA: 'No leghold, bodygrip, or snare within 20 ft of exposed bait — meat, viscera, or any animal parts visible to soaring birds. Keep bait covered or concealed.',
+  PA: 'Baiting a trap with meat, animal products, or facsimiles visible from the air is unlawful.',
+  MN: 'No foothold within 20 ft of bait visible to soaring birds (any animal or animal parts, including fish). Rabbit or hare flesh may not be used as bait at all.',
+  WI: 'No sight-exposed bait (feathers, flesh, fur, hide, entrails) within 25 ft of a trap, snare, or cable restraint — except enclosed trigger traps and cage traps.'
+};
+/* Q30: show/hide the bait-rule reminder under the New/Edit Set bait rows. */
+function updateBaitWarn() {
+  var box = $('sf-bait-warn');
+  if (!box) return;
+  var code = (typeof activeStateCode === 'function') ? activeStateCode() : null;
+  var rule = code && BAIT_RULES[code];
+  var hasBait = collectAttrRows('bait').length > 0;
+  if (!rule || !hasBait) { box.setAttribute('hidden', ''); box.innerHTML = ''; return; }
+  var stName = code;
+  for (var i = 0; i < STATES.length; i++) if (STATES[i].code === code) { stName = STATES[i].name; break; }
+  box.innerHTML = '<div class="wb-title">Bait rule — ' + esc(stName) + '.</div>' + esc(rule) +
+    '<div class="reminder-tag">Reminder only, not legal advice — check your state\u2019s current regulations.</div>';
+  box.removeAttribute('hidden');
+}
 function toAttrArray(v) {
   if (Array.isArray(v)) return v.map(function (x) { return String(x || '').trim(); }).filter(Boolean);
   var s = String(v || '').trim();
@@ -1323,6 +1362,8 @@ function renderAttrRows(field, values, minRows) {
   for (var j = 0; j < vals.length; j++) {
     attachSuggest('sf-' + field + '-row-' + j, 'sf-' + field + '-row-' + j + '-suggest', field);
   }
+  /* Q30: refresh the bait-rule warning whenever bait rows re-render. */
+  if (field === 'bait' && typeof updateBaitWarn === 'function') updateBaitWarn();
   var xs = host.querySelectorAll('.attr-row-x');
   for (var k = 0; k < xs.length; k++) {
     xs[k].onclick = function () {
@@ -2061,10 +2102,10 @@ function applyImportedHomes(data) {
   }
 }
 
-var locateWatch = null, locateTimer = null, locateLastToast = 0;
+var locateWatch = null, locateTimer = null;
 var locateState = 'idle'; /* idle | acquiring | following | paused */
 var followLastPan = 0;
-var followWatchdog = null, lastFollowFixAt = 0, staleDropCount = 0, followErrs = 0;
+var followWatchdog = null, lastFollowFixAt = 0, staleDropCount = 0;
 
 function stopLocateWatch() {
   if (locateWatch !== null) { try { navigator.geolocation.clearWatch(locateWatch); } catch (e) {} locateWatch = null; }
@@ -2136,7 +2177,7 @@ function enterFollow() {
   locateState = 'following';
   var b = $('btn-locate');
   if (b) { b.classList.add('active-mode'); b.classList.remove('paused-mode'); }
-  followLastPan = 0; followErrs = 0; staleDropCount = 0;
+  followLastPan = 0; staleDropCount = 0;
   lastFollowFixAt = Date.now();
   startFollowWatch();
   armFollowWatchdog();
@@ -2160,9 +2201,9 @@ function drawFix(fix, final) {
     }
   }
   if (final) {
-    toast((fix.acc > 50
-      ? 'Coarse fix (±' + fix.acc + ' m) — step into the open, or check Precise Location for Safari.'
-      : 'Located (±' + fix.acc + ' m).') + ' Following you.');
+    /* Q70: the routine "Located" confirmation stays silent — follow-mode GPS
+       shouldn't chatter. Only a coarse fix earns a word. */
+    if (fix.acc > 50) toast('Coarse fix (±' + fix.acc + ' m) — step into the open, or check Precise Location for Safari.');
     reverseGeocode(fix.lat, fix.lng).then(function (info) {
       setCountyBanner(info);
       checkStateMismatch(info);
@@ -2188,7 +2229,6 @@ function onFollowFix(pos) {
     return;
   }
   staleDropCount = 0;
-  followErrs = 0;
   lastFollowFixAt = Date.now();
   armFollowWatchdog();
   var acc = (typeof c.accuracy === 'number' && isFinite(c.accuracy)) ? Math.round(c.accuracy) : 9999;
@@ -2209,9 +2249,8 @@ function onFollowError(err) {
     toast('Location permission denied — follow stopped.');
     return;
   }
-  /* iOS fires transient timeouts under tree cover and in dips — ride them out */
-  followErrs++;
-  if (followErrs >= 3) { followErrs = 0; toast('GPS signal weak — still trying.'); }
+  /* iOS fires transient timeouts under tree cover and in dips — ride them
+     out silently (Q70: no routine GPS chatter); only a denial ends follow. */
 }
 
 /* Field-grade locate: watch the GPS for up to 45 seconds (a cold iPhone radio
@@ -2222,8 +2261,8 @@ function onFollowError(err) {
 function startAcquire() {
   locateState = 'acquiring';
   var best = null, finished = false;
-  toast('Acquiring GPS… hold still a moment.');
-  locateLastToast = Date.now();
+  /* Q70: acquire runs silent — the dot moves, no progress chatter.
+     Denial and no-fix still speak up below. */
   hookFollowDrag();
 
   function consider(pos) {
@@ -2235,11 +2274,6 @@ function startAcquire() {
     if (!best || acc < best.acc) {
       best = { lat: c.latitude, lng: c.longitude, acc: acc };
       drawFix(best, false);
-      var now = Date.now();
-      if (now - locateLastToast > 2000) {
-        locateLastToast = now;
-        toast('Acquiring GPS… ±' + acc + ' m' + (acc > 50 ? ' — still settling' : ''));
-      }
     }
   }
 
@@ -2271,10 +2305,11 @@ function startAcquire() {
 /* Crosshair tap centers on the fix AND zooms in when the view is wide —
    an explicit locate tap should put you on yourself, not just pan. */
 /* B22: every crosshair tap ends zoomed in tight on the latest fix —
-   no conditional half-zoom. */
+   no conditional half-zoom. Q70: tighter than 18 — the recenter puts you
+   right on yourself at working zoom. */
 function centerOnFix() {
   if (!map || !lastFix || lastFix.lat == null) return;
-  map.setView([lastFix.lat, lastFix.lng], 18, { animate: false });
+  map.setView([lastFix.lat, lastFix.lng], 19, { animate: false });
 }
 
 /* ◎ button: one tap acquires and follows — follow stays on from that point,
@@ -2306,7 +2341,7 @@ function locateMe() {
 }
 
 /* ================= 7. SETS ================= */
-var editingSetId = null, pendingCoords = null, pendingSetPhotos = [];
+var editingSetId = null, pendingCoords = null, pendingSetPhotos = [], editSetPhotos = [];
 var setMissingReason = null;
 
 /* Q36: why a set went missing. Structured field on the set (set.missingReason);
@@ -2447,12 +2482,21 @@ function openSetForm(coords, setId) {
   $('sf-notes').value = s ? (s.notes || '') : '';
   $('voice-setnotes-preview').classList.remove('show');
   $('voice-setnotes-preview').innerHTML = '';
-  /* Q37: photo option on the New Set form. Edit keeps using the set detail
-     sheet's photo picker, so the form block only shows for new sets. */
+  /* Q71: edit mode keeps full photo + memo control on the form itself —
+     the read-only summary no longer carries the pickers. */
   pendingSetPhotos = [];
+  editSetPhotos = [];
+  var memoWrap = $('setform-memos');
+  if (memoWrap) memoWrap.hidden = !editingSetId;
+  var seBtn = $('btn-se-memo');
+  if (seBtn) seBtn.innerHTML = MEMO_IDLE_HTML;
+  if (editingSetId) {
+    loadSetPhotos(editingSetId, function (sp) { editSetPhotos = sp; renderPendingSetPhotos(); });
+    renderMemos(editingSetId, 'se-memos', true);
+  }
   renderPendingSetPhotos();
   var photoBlock = $('setform-photos');
-  if (photoBlock) photoBlock.style.display = setId ? 'none' : '';
+  if (photoBlock) photoBlock.style.display = '';
   hideSetFormError();
   applySetFieldToggles();
   /* Q48: quiet coords at the bottom — what the form will save */
@@ -2566,15 +2610,14 @@ function saveSetForm() {
     if (s.status !== 'pulled' && s.datePulled) delete s.datePulled;
     touchSet(s); /* Q68: any edit restarts the check clock */
     Store.save(); refreshMarkers();
-    /* Q36: citation photos pending on the Edit Set form attach here. */
-    pendingSetPhotos = pendingSetPhotos.filter(function (ph) {
-      if (ph.kind !== 'confiscation') return true;
+    /* Q71: photos added on the Edit Set form (plain or citation) attach here. */
+    pendingSetPhotos.forEach(function (ph) {
       IDB.put('photos', {
         id: uid('p'), setId: s.id, blob: ph.blob, mime: ph.blob.type || 'image/jpeg',
         lat: s.lat, lng: s.lng, createdAt: Date.now()
       }).catch(function () { /* noop */ });
-      return false;
     });
+    pendingSetPhotos = [];
     closeSheets(); openSetDetail(s.id);
     toast('Set updated.');
     /* B32: no backfill prompt — old catches keep what they had; only new
@@ -2640,116 +2683,8 @@ function saveSetForm() {
 
 var detailSetId = null;
 
-/* Q36: shared status-change path for the set detail sheet. Full re-render
-   so badges, the missing-reason row, and the recovered button stay correct. */
-function applyDetailStatus(cur, val) {
-  cur.status = val;
-  if (val === 'pulled' && !cur.datePulled) cur.datePulled = todayISO();
-  if (val !== 'pulled' && cur.datePulled) delete cur.datePulled;
-  if (val !== 'missing') { cur.missingReason = null; cur.missingDetail = null; }
-  touchSet(cur); /* Q68 */
-  Store.save(); refreshMarkers();
-  openSetDetail(cur.id);
-  toast('Status set to ' + statusLabel(normStatus(val)) + '.');
-}
-/* Q36: reason picker shown when a set is marked Missing from the set detail
-   sheet. Cancel leaves the set exactly as it was. */
-function askMissingReason(cur, prev) {
-  var reason = cur.missingReason || null;
-  var mrPhotos = []; /* citation photos saved straight to the store — the set exists */
-  function renderMrPhotoStrip() {
-    var box = $('m-mr-photos');
-    if (!box) return;
-    box.innerHTML = '';
-    mrPhotos.forEach(function (rec) {
-      var img = document.createElement('img');
-      img.className = 'photo-thumb'; img.alt = 'Citation photo';
-      img.src = URL.createObjectURL(rec.blob);
-      img.title = 'Tap to enlarge';
-      img.onclick = function () {
-        openPhotoViewer(rec, function () {
-          mrPhotos = mrPhotos.filter(function (r) { return r.id !== rec.id; });
-          renderMrModal();
-        });
-      };
-      box.appendChild(img);
-    });
-  }
-  function renderMrModal() {
-    var btns = MISSING_REASONS.map(function (r) {
-      return '<button type="button" data-mr="' + r.v + '"' + (reason === r.v ? ' class="selected"' : '') + '>' + esc(r.label) + '</button>';
-    }).join('');
-    showModal('<h3>Why is this set missing?</h3>' +
-      '<div class="mr-list" id="m-mr-list">' + btns + '</div>' +
-      '<div id="m-mr-detail-wrap"' + (reason === 'confiscated' ? '' : ' hidden') + '>' +
-      '<label class="field" for="m-mr-detail">Confiscation details</label>' +
-      '<input type="text" id="m-mr-detail" placeholder="Officer, citation #, ..." autocomplete="off" value="' + esc(cur.missingDetail || '') + '">' +
-      '<div class="suggest" id="m-mr-detail-suggest"></div>' +
-      '<div class="photo-strip" id="m-mr-photos" style="margin-top:8px"></div>' +
-      '<button type="button" class="btn-small btn-secondary" id="btn-m-mr-photo" style="margin-top:6px">📷 Add citation photo</button>' +
-      '<input type="file" id="m-mr-photo-input" class="hidden-file" accept="image/*">' +
-      '</div>' +
-      '<div class="btn-row" style="margin-top:10px"><button class="btn-secondary" id="m-mr-cancel" type="button">Cancel</button>' +
-      '<button class="btn-primary" id="m-mr-save" type="button">Save</button></div>');
-    /* Q12: confiscation detail learns from use */
-    if ($('m-mr-detail')) attachSuggest('m-mr-detail', 'm-mr-detail-suggest', 'missingdetail');
-    renderMrPhotoStrip();
-    var list = document.querySelectorAll('#m-mr-list button');
-    for (var i = 0; i < list.length; i++) {
-      list[i].onclick = (function (b) {
-        return function () { reason = b.getAttribute('data-mr'); renderMrModal(); };
-      })(list[i]);
-    }
-    /* citation photo: take a photo or upload one; saved straight to the store */
-    $('btn-m-mr-photo').onclick = function () { $('m-mr-photo-input').click(); };
-    $('m-mr-photo-input').onchange = function () {
-      var f = this.files[0];
-      this.value = '';
-      if (!f) return;
-      downscalePhoto(f, function (blob) {
-        var rec = {
-          id: uid('p'), setId: cur.id, blob: blob, mime: blob.type || 'image/jpeg',
-          lat: cur.lat, lng: cur.lng, createdAt: Date.now()
-        };
-        IDB.put('photos', rec).then(function () {
-          mrPhotos.push(rec);
-          renderMrPhotoStrip();
-          toast('Citation photo added.');
-        }).catch(function () { toast('Could not save that photo.'); });
-      });
-    };
-    $('m-mr-cancel').onclick = function () {
-      closeModal();
-      var sel = $('sd-status');
-      if (sel) sel.value = prev; /* back out clean — nothing changed */
-    };
-    $('m-mr-save').onclick = function () {
-      if (!reason) { toast('Pick why this set is missing.'); return; }
-      cur.missingReason = reason;
-      var d = $('m-mr-detail');
-      cur.missingDetail = (reason === 'confiscated' && d) ? d.value.trim() : null;
-      if (cur.missingDetail) rememberEntry('missingdetail', cur.missingDetail); /* Q12 */
-      closeModal();
-      applyDetailStatus(cur, 'missing');
-    };
-  }
-  renderMrModal();
-}
-/* Q36: Recovered is its own action — never a missing reason. The trap is
-   likely gone, so a recovered set lands on Pulled (not Active). */
-function recoverSet() {
-  var s = getSet(detailSetId);
-  if (!s || normStatus(s.status) !== 'missing') return;
-  showModal('<h3>Mark this set recovered?</h3><p>The trap is likely gone — it will be marked Pulled.</p>' +
-    '<div class="btn-row"><button class="btn-secondary" id="m-rec-cancel" type="button">Cancel</button>' +
-    '<button class="btn-primary" id="m-rec-ok" type="button">Mark recovered</button></div>');
-  $('m-rec-cancel').onclick = closeModal;
-  $('m-rec-ok').onclick = function () {
-    closeModal();
-    applyDetailStatus(s, 'pulled');
-    toast('Set recovered — marked Pulled.');
-  };
-}
+/* Q71: the summary sheet is read-only — status changes, recovery, and the
+   missing-reason picker all live on the Edit Set form now. */
 
 function openSetDetail(id) {
   var s = getSet(id);
@@ -2762,23 +2697,7 @@ function openSetDetail(id) {
   $('sd-badges').innerHTML =
     '<span class="badge status-' + esc(st) + '">' + esc(statusLabel(st)) + '</span> ' +
     (s.county ? '<span class="badge yearround">' + esc(s.county) + ' Co.</span>' : '');
-  /* manual-only status control at check time: changing this never touches
-     catches or logs — it only re-labels the set. */
-  var sdStatus = $('sd-status');
-  if (sdStatus) {
-    sdStatus.value = st;
-    sdStatus.onchange = function () {
-      var cur = getSet(detailSetId);
-      if (!cur) return;
-      var prev = normStatus(cur.status);
-      /* Q36: marking Missing asks why first; cancel backs out clean */
-      if (this.value === 'missing' && prev !== 'missing') {
-        askMissingReason(cur, prev);
-        return;
-      }
-      applyDetailStatus(cur, this.value);
-    };
-  }
+  /* Q71: status is display-only here — changes go through "Edit this set". */
   $('sd-fields').innerHTML =
     '<dt>Trap</dt><dd>' + esc(s.trapType) + (function () { var d = trapDetailSummary(s); return d ? ' · ' + esc(d) : ''; })() + '</dd>' +
     '<dt>Set type</dt><dd>' + esc(s.setType || '—') + '</dd>' +
@@ -2808,27 +2727,14 @@ function openSetDetail(id) {
   }
   /* Q68: the one-tap check-in only exists where a check rhythm exists. */
   $('btn-sd-emptycheck').hidden = (st !== 'active' || !clockOn);
-  var recRow = $('sd-recovered-row');
-  if (recRow) recRow.hidden = (st !== 'missing');
   loadSetPhotos(s.id, function (setPhotos, byLog) {
     renderSetPhotos(setPhotos);
     renderSetLogs(s, byLog);
   });
-  renderMemos(s.id);
+  /* Q71: summary memos are playback-only — recording/deletion are in Edit. */
+  renderMemos(s.id, 'sd-memos', false);
   $('sd-notes').value = s.notes || '';
-  $('voice-sdnotes-preview').classList.remove('show');
-  $('voice-sdnotes-preview').innerHTML = '';
-  $('btn-sd-memo').innerHTML = '🎤 Record memo';
   openSheet('sheet-setdetail');
-}
-
-/* set-detail notes: textarea edits and voice/memo transcripts land in s.notes */
-function saveDetailNotes() {
-  var s = getSet(detailSetId);
-  if (!s) return;
-  s.notes = $('sd-notes').value.trim();
-  touchSet(s); /* Q68: notes edits count as activity */
-  rememberEntry('setnotes', s.notes); /* Q12 */
 }
 function appendTranscriptToSetNotes(setId, tr) {
   var s = getSet(setId);
@@ -2860,9 +2766,8 @@ function renderSetLogs(s, byLog) {
   for (var i = 0; i < imgs.length; i++) {
     imgs[i].onclick = function () {
       var p = photoById[this.getAttribute('data-ph')];
-      if (p) openPhotoViewer(p, function () {
-        loadSetPhotos(detailSetId, function (sp, bl) { renderSetPhotos(sp); renderSetLogs(getSet(detailSetId), bl); });
-      });
+      /* Q71: view-only from the summary — photo changes go through Edit. */
+      if (p) openPhotoViewer(p, null, true);
     };
   }
 }
@@ -3149,6 +3054,23 @@ function renderPendingSetPhotos() {
   var box = $('sf-photos');
   if (!box) return;
   box.innerHTML = '';
+  /* Q71: in edit mode the form carries the set's stored photos too, with
+     delete — the summary sheet is view-only now. */
+  if (editingSetId) {
+    editSetPhotos.forEach(function (p) {
+      var img = document.createElement('img');
+      img.className = 'photo-thumb'; img.alt = 'Set photo';
+      img.src = photoURL(p);
+      img.title = 'Tap to enlarge';
+      img.onclick = function () {
+        openPhotoViewer(p, function () {
+          editSetPhotos = editSetPhotos.filter(function (x) { return x.id !== p.id; });
+          renderPendingSetPhotos();
+        });
+      };
+      box.appendChild(img);
+    });
+  }
   pendingSetPhotos.forEach(function (ph, i) {
     if (ph.kind === 'confiscation') return; /* the confiscation wrap shows these */
     var img = document.createElement('img');
@@ -3268,7 +3190,7 @@ function renderLogWarnings() {
   }
   var countyDetail = countyRuleText(sp);
   if (countyDetail) {
-    html += '<div class="warnbox"><div class="wb-title">📍 County/city rules apply to ' + esc(sp.common_name) +
+    html += '<div class="warnbox"><div class="wb-title"><img class="bi" src="assets/icons/mappin.png" alt=""> County/city rules apply to ' + esc(sp.common_name) +
       ' in ' + esc(d.state_name) + '.</div>' +
       esc(countyDetail) + ' Check your local ordinances.' +
       '<div class="reminder-tag">' + esc(REMINDER_LINE) + '</div></div>';
@@ -3366,41 +3288,20 @@ function saveLog() {
 }
 
 /* Q68: one-tap check-in from the set detail sheet — "I was here, nothing
-   changed." Logs an 'empty' event dated today, restarts the check clock,
-   and the pin drops back to its status color. Status untouched. */
+   changed." Tanner 2026-09-30: NO log entry — no History row, no export
+   row. The absence of any log for the date already says nothing happened.
+   Just restarts the check clock; the pin drops back to its status color.
+   Status untouched. (The Log form's Other → "Empty" subtype still saves a
+   deliberate log entry — that's the user's explicit record, unchanged.) */
 function quickEmptyCheck() {
   var s = getSet(detailSetId);
   if (!s) return;
   if (normStatus(s.status) !== 'active') return; /* Q68: active sets only */
-  var date = todayISO();
-  var log = {
-    id: uid('l'), setId: s.id,
-    setName: s.name,
-    species: '',
-    otherType: 'empty',
-    count: 0,
-    disposition: 'none',
-    date: date, seasonYear: seasonYearOf(date),
-    bait: toAttrArray(s.bait).slice(), lure: toAttrArray(s.lure).slice(),
-    urine: toAttrArray(s.urine).slice(), visual: toAttrArray(s.visual).slice(),
-    audio: toAttrArray(s.audio).slice(), other: toAttrArray(s.other).slice(),
-    trapType: s.trapType || '',
-    trapDetail: trapDetailSummary(s),
-    trapCount: s.trapCount || 1,
-    setType: s.setType || '',
-    county: s.county || '',
-    lat: s.lat, lng: s.lng,
-    notes: '',
-    memoIds: [],
-    createdAt: Date.now()
-  };
-  log.lineId = activeLineId();
-  Store.data.logs.push(log);
   touchSet(s);
   Store.save();
-  stampLogWeather(s, log);
-  refreshMarkers(); renderHistory(); renderTotals();
-  openSetDetail(s.id);
+  refreshMarkers();
+  closeSheets(); /* Tanner 2026-09-30: a no-change check-in exits the set
+    immediately — nothing to look at, back to the map. */
   toast('Checked — nothing changed. Check clock restarted.');
 }
 
@@ -3533,11 +3434,8 @@ function renderSetPhotos(list) {
     var img = document.createElement('img');
     img.className = 'photo-thumb'; img.alt = 'Set photo'; img.src = photoURL(p);
     img.onclick = function () {
-      openPhotoViewer(p, function () {
-        loadSetPhotos(detailSetId, function (sp, bl) {
-          renderSetPhotos(sp); renderSetLogs(getSet(detailSetId), bl);
-        });
-      });
+      /* Q71: view-only from the summary — photo changes go through Edit. */
+      openPhotoViewer(p, null, true);
     };
     box.appendChild(img);
   });
@@ -3568,17 +3466,20 @@ function sharePhotoFile(blob, baseName) {
   window.open(url, '_blank');
   toast('Opened full-size — long-press the photo and tap Save Image.');
 }
-function openPhotoViewer(p, onDelete) {
+/* Q71: ro = read-only (summary sheet) — no Delete button, just view + save. */
+function openPhotoViewer(p, onDelete, ro) {
   var when = '';
   try { when = new Date(p.createdAt).toLocaleString(); } catch (e) { /* noop */ }
   showModal('<img src="' + photoURL(p) + '" style="width:100%;border-radius:8px" alt="Photo">' +
     (when ? '<div class="dim" style="margin-top:6px;text-align:center">' + esc(when) + '</div>' : '') +
-    '<div class="btn-row" style="margin-top:10px"><button class="btn-danger" id="m-ph-del" type="button">Delete</button>' +
+    '<div class="btn-row" style="margin-top:10px">' +
+    (ro ? '' : '<button class="btn-danger" id="m-ph-del" type="button">Delete</button>') +
     '<button class="btn-secondary" id="m-ph-save" type="button">Save to camera roll</button>' +
     '<button class="btn-secondary" id="m-close" type="button">Close</button></div>');
   $('m-close').onclick = closeModal;
   $('m-ph-save').onclick = function () { sharePhotoFile(p.blob, 'opossum-foot-photo'); };
-  $('m-ph-del').onclick = function () {
+  var delBtn = $('m-ph-del');
+  if (delBtn) delBtn.onclick = function () {
     confirmModal('Delete this photo?', 'It will be removed from this phone.', 'Delete', function () {
       IDB.del('photos', p.id).then(function () {
         if (photoURLs[p.id]) { URL.revokeObjectURL(photoURLs[p.id]); delete photoURLs[p.id]; }
@@ -3592,6 +3493,7 @@ function openPhotoViewer(p, onDelete) {
 }
 
 /* --- voice memos via MediaRecorder, stored as blobs in IndexedDB --- */
+var MEMO_IDLE_HTML = '<img class="bi" src="assets/icons/mic.png" alt="">Record memo';
 var Memo = {
   recorder: null, chunks: [], recording: false, targetSetId: null,
   pickMime: function () {
@@ -3604,10 +3506,13 @@ var Memo = {
   },
   supported: function () { return 'MediaRecorder' in window && !!navigator.mediaDevices; },
   /* Log-a-catch attach: pass onSaved to learn the memo's id when it lands,
-     so the caller can link it to the catch being logged. */
-  toggle: function (setId, btn, onSaved) {
+     so the caller can link it to the catch being logged. boxId/editable
+     (Q71) say which memo list refreshes when the save lands. */
+  toggle: function (setId, btn, onSaved, boxId, editable) {
     var self = this;
     if (this.recording) { this.stop(btn); return; }
+    self._boxId = boxId || 'sd-memos';
+    self._editable = editable !== false;
     if (!this.supported()) { toast('Voice memos are not supported in this browser.'); return; }
     navigator.mediaDevices.getUserMedia({ audio: true }).then(function (stream) {
       self.chunks = [];
@@ -3632,7 +3537,7 @@ var Memo = {
         }).then(function () {
           self._saving = false;
           if (!forCatch) appendTranscriptToSetNotes(self.targetSetId, memoTranscript);
-          renderMemos(self.targetSetId);
+          renderMemos(self.targetSetId, self._boxId, self._editable);
           toast(forCatch
             ? 'Voice memo saved — it will attach to this catch.'
             : (memoTranscript ? 'Voice memo saved — transcript added to notes.' : 'Voice memo saved.'));
@@ -3669,7 +3574,7 @@ var Memo = {
   stop: function (btn) {
     var self = this;
     this.recording = false;
-    if (btn) btn.textContent = '🎤 Record memo';
+    if (btn) btn.innerHTML = MEMO_IDLE_HTML;
     /* let the transcription deliver its final words before the recorder stops */
     var done = false;
     function fin() {
@@ -3688,8 +3593,11 @@ var Memo = {
 };
 
 var memoURLs = {};
-function renderMemos(setId) {
-  var box = $('sd-memos');
+/* Q71: boxId/editable let the summary sheet render playback-only while the
+   Edit Set form gets recording parity. */
+function renderMemos(setId, boxId, editable) {
+  var box = $(boxId || 'sd-memos');
+  if (!box) return;
   /* memo id -> the catch it was recorded for, so linked memos say which
      catch they're on */
   var memoLog = {};
@@ -3708,8 +3616,8 @@ function renderMemos(setId) {
       if (linked) {
         var tag = document.createElement('div');
         tag.className = 'dim memo-catch-tag';
-        tag.textContent = '🎤 On catch: ' + (linked.species || 'Unknown') + ' ×' + (linked.count || 1) +
-          (linked.date ? ' · ' + fmtDate(linked.date) : '');
+        tag.innerHTML = '<img class="bi" src="assets/icons/mic.png" alt="">On catch: ' + esc(linked.species || 'Unknown') + ' ×' + (linked.count || 1) +
+          (linked.date ? ' · ' + esc(fmtDate(linked.date)) : '');
         wrap.appendChild(tag);
       }
       var row = document.createElement('div');
@@ -3722,19 +3630,22 @@ function renderMemos(setId) {
       var when = document.createElement('span');
       when.className = 'dim';
       when.textContent = new Date(m.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
-      var del = document.createElement('button');
-      del.className = 'btn-small btn-danger';
-      del.type = 'button';
-      del.textContent = 'Delete';
-      del.onclick = function () {
-        confirmModal('Delete this memo?', 'The recording will be removed from this phone.', 'Delete', function () {
-          IDB.del('memos', m.id).then(function () {
-            if (memoURLs[m.id]) { URL.revokeObjectURL(memoURLs[m.id]); delete memoURLs[m.id]; }
-            renderMemos(setId);
+      row.appendChild(audio); row.appendChild(when);
+      if (editable) {
+        var del = document.createElement('button');
+        del.className = 'btn-small btn-danger';
+        del.type = 'button';
+        del.textContent = 'Delete';
+        del.onclick = function () {
+          confirmModal('Delete this memo?', 'The recording will be removed from this phone.', 'Delete', function () {
+            IDB.del('memos', m.id).then(function () {
+              if (memoURLs[m.id]) { URL.revokeObjectURL(memoURLs[m.id]); delete memoURLs[m.id]; }
+              renderMemos(setId, boxId, editable);
+            });
           });
-        });
-      };
-      row.appendChild(audio); row.appendChild(when); row.appendChild(del);
+        };
+        row.appendChild(del);
+      }
       wrap.appendChild(row);
       var tr = document.createElement('p');
       if (m.transcript) {
@@ -3750,7 +3661,7 @@ function renderMemos(setId) {
   });
 }
 
-/* Voice memos attached to a catch (log.memoIds). The 🎤 flag on a catch row
+/* Voice memos attached to a catch (log.memoIds). The mic-icon flag on a catch row
    notes that a memo was left; tapping it plays the recording right there.
    Audio elements are built lazily — one IDB fetch per memo, URLs cached. */
 function logMemoIds(l) {
@@ -3759,9 +3670,9 @@ function logMemoIds(l) {
 function logMemoHtml(l) {
   var ids = logMemoIds(l);
   if (!ids.length) return '';
-  var label = ids.length === 1 ? '🎤 Memo' : '🎤 ' + ids.length + ' memos';
+  var label = ids.length === 1 ? 'Memo' : ids.length + ' memos';
   return '<div class="log-memo"><button type="button" class="memo-play" data-memo-play="' +
-    esc(ids.join(',')) + '">' + esc(label) + '</button>' +
+    esc(ids.join(',')) + '"><img class="bi" src="assets/icons/mic.png" alt="">' + esc(label) + '</button>' +
     '<div class="log-memo-player" hidden></div></div>';
 }
 function toggleLogMemoPlayer(btn) {
@@ -3800,7 +3711,7 @@ function toggleLogMemoPlayer(btn) {
 }
 
 /* ================= 10. HISTORY / TOTALS / SEASONS ================= */
-var histUI = { q: '', disp: 'all', view: 'date', collapsed: {}, expanded: {}, spOpen: {}, ttOpen: {}, defaultsSet: false };
+var histUI = { q: '', disp: 'all', view: 'date', season: 'this', collapsed: {}, expanded: {}, spOpen: {}, ttOpen: {}, defaultsSet: false };
 /* Q6: the old History report filters (date range + dimension chips) moved to
    Settings. This independent state drives the catches CSV export only —
    it shares the same criteria but never affects the History tab. */
@@ -3907,10 +3818,20 @@ function dimPass(val, sel) {
    drive the catches CSV export, not this list. */
 function histFilteredLogs() {
   var f = histUI, q = f.q.toLowerCase();
+  /* Q40: season scope — Sept 1 – Aug 31 season years (Tanner 2026-09-30).
+     Logs with no usable date are never scope-filtered out. */
+  var thisSY = seasonYearOf(todayISO()), lastSY = prevSeasonLabel(thisSY);
   return activeLogs().slice().sort(function (a, b) {
     if (a.date !== b.date) return a.date < b.date ? 1 : -1;
     return b.createdAt - a.createdAt;
   }).filter(function (l) {
+    /* Tanner 2026-09-30: 'empty' check-ins are the absence of an event — they
+       stay in the data/exports but never show in History. */
+    if (l.otherType === 'empty') return false;
+    if (f.season === 'this' || f.season === 'last') {
+      var sy = l.seasonYear || (l.date ? seasonYearOf(l.date) : '');
+      if (sy && sy !== (f.season === 'this' ? thisSY : lastSY)) return false;
+    }
     if (f.disp !== 'all' && dispOf(l) !== f.disp) return false;
     if (q) {
       var hay = ((l.species || '') + ' ' + (l.setName || '') + ' ' + (l.trapType || '') + ' ' + (l.notes || '') + ' ' +
@@ -3960,6 +3881,16 @@ function renderExportFilterBar() {
   var n = countExportFilters();
   var cnt = $('exp-filters-count');
   if (cnt) cnt.textContent = n ? ' (' + n + ' filter' + (n === 1 ? '' : 's') + ')' : '';
+  /* Q-report: live match count — the catches CSV exports exactly
+     exportFilteredLogs(), so this number is what the download will contain. */
+  var mc = $('exp-match-count');
+  if (mc) {
+    var total = activeLogs().length, match = exportFilteredLogs().length;
+    if (!total) mc.textContent = 'No catches logged yet.';
+    else if (!n) mc.textContent = total === 1 ? 'Your 1 catch will be in the report.' : 'All ' + total + ' catches will be in the report.';
+    else if (!match) mc.textContent = 'No catches match these filters.';
+    else mc.textContent = match === 1 ? '1 of ' + total + ' catches matches these filters.' : match + ' of ' + total + ' catches match these filters.';
+  }
   var fr = $('exp-from'), to = $('exp-to');
   if (fr && fr.value !== exportUI.from) fr.value = exportUI.from;
   if (to && to.value !== exportUI.to) to.value = exportUI.to;
@@ -4154,9 +4085,17 @@ function renderHistory() {
       btns[i].classList.toggle('selected', btns[i].getAttribute('data-view') === histUI.view);
     }
   }
+  /* Q40: season scope segmented control. */
+  var sseg = $('hist-season-seg');
+  if (sseg) {
+    var sbtns = sseg.querySelectorAll('button');
+    for (var j = 0; j < sbtns.length; j++) {
+      sbtns[j].classList.toggle('selected', sbtns[j].getAttribute('data-season') === histUI.season);
+    }
+  }
   if (!logs.length) {
     renderHistSummary([]);
-    box.innerHTML = '<div class="empty"><div class="big">📒</div>No catches logged yet.<br>Tap a set pin on the map to log your first catch.</div>';
+    box.innerHTML = '<div class="empty"><div class="big"><img class="bi inv" src="assets/icons/logbook.png" alt=""></div>No catches logged yet.<br>Tap a set pin on the map to log your first catch.</div>';
     return;
   }
   var list = histFilteredLogs();
@@ -4341,7 +4280,7 @@ function renderTotals() {
   var box = $('totals-body');
   var logs = activeLogs();
   if (!logs.length) {
-    box.innerHTML = '<div class="empty"><div class="big">📊</div>Nothing to total yet.</div>';
+    box.innerHTML = '<div class="empty"><div class="big"><img class="bi inv" src="assets/icons/barchart.png" alt=""></div>Nothing to total yet.</div>';
     return;
   }
   var years = {};
@@ -4422,14 +4361,26 @@ function renderTotals() {
       return '<button type="button" class="chip' + (ts[d[0]] ? ' on' : '') + '" data-sec="' + d[0] + '">' + d[1] + '</button>';
     }).join('') + '</div>';
   }
+  /* Tanner 2026-09-30: each of the three section cards collapses behind its
+     own header — tap to open or fold at leisure. State persists on-device. */
+  function totalsCollapsed() {
+    var t = Store.data.totalsCollapsed;
+    if (!t || typeof t !== 'object') { t = {}; Store.data.totalsCollapsed = t; }
+    return t;
+  }
+  function totalsCardHead(key, title) {
+    var closed = !!totalsCollapsed()[key];
+    return '<button type="button" class="totals-card-head" data-tsec="' + key + '" aria-expanded="' + (!closed) + '">' +
+      '<h3>' + title + '</h3><span class="tchev">' + (closed ? '▸' : '▾') + '</span></button>';
+  }
   function totalsSectionCards() {
-    var ts = totalsSections(), cards = '';
-    if (ts.species) cards += '<div class="card"><h3>By Species</h3>' + rows(bySpecies, false) + '</div>';
-    if (ts.set) cards += '<div class="card"><h3>By Set</h3>' + rows(bySet, true) + '</div>';
+    var ts = totalsSections(), tc = totalsCollapsed(), cards = '';
+    if (ts.species) cards += '<div class="card">' + totalsCardHead('species', 'By Species') + '<div class="totals-card-body"' + (tc.species ? ' hidden' : '') + '>' + rows(bySpecies, false) + '</div></div>';
+    if (ts.set) cards += '<div class="card">' + totalsCardHead('set', 'By Set') + '<div class="totals-card-body"' + (tc.set ? ' hidden' : '') + '>' + rows(bySet, true) + '</div></div>';
     if (ts.disposition) {
       var names = [['kept', 'Dispatched'], ['alive', 'Kept alive'], ['released', 'Released'], ['transported', 'Transported']];
       /* Q61: each disposition row taps open to show what was caught under it. */
-      cards += '<div class="card"><h3>By Disposition</h3>' + names.map(function (n) {
+      cards += '<div class="card">' + totalsCardHead('disposition', 'By Disposition') + '<div class="totals-card-body"' + (tc.disposition ? ' hidden' : '') + '>' + names.map(function (n) {
         var b = n[0], sp = byDispSp[b];
         var keys = Object.keys(sp).sort(function (a, c) { return sp[c] - sp[a]; });
         var hasDetail = keys.length > 0;
@@ -4444,7 +4395,7 @@ function renderTotals() {
           }).join('') + '</div>';
         }
         return dhtml;
-      }).join('') + '</div>';
+      }).join('') + '</div></div>';
     }
     if (!cards) cards = '<p class="dim" style="text-align:center">All sections hidden — tap a chip above to show one.</p>';
     return cards;
@@ -4482,6 +4433,7 @@ function renderSeasons(filter) {
     rl.hidden = true;
     rl.removeAttribute('href');
   }
+  renderSeasonsCompliance(d);
   var q = (filter || '').toLowerCase();
   var list = sortSpeciesAlpha(stateSpecies().filter(function (sp) {
     return !q || sp.common_name.toLowerCase().indexOf(q) !== -1;
@@ -4500,6 +4452,46 @@ function renderSeasons(filter) {
       showSpeciesDetail(this.getAttribute('data-sp'));
     };
   }
+}
+
+/* Iowa proof 2026-09-30: Trap & Snare Rules card + game-warden link.
+   Data-driven — only states carrying trap_snare_rules / warden_directory
+   in their season data show anything. Tanner's call before other states. */
+function renderSeasonsCompliance(d) {
+  var wl = $('seasons-warden');
+  var wd = d.warden_directory;
+  if (wd && wd.url) {
+    wl.hidden = false;
+    wl.href = wd.url;
+    /* Tanner 2026-09-30: plain label only — no emoji, no "(DNR — PDF)" suffix. */
+    wl.innerHTML = esc(wd.label);
+  } else {
+    wl.hidden = true;
+    wl.removeAttribute('href');
+  }
+  var box = $('seasons-rules');
+  var r = d.trap_snare_rules;
+  if (!r) { box.innerHTML = ''; box.hidden = true; return; }
+  var h = '<div class="card setsec open" id="rules-card">' +
+    '<button type="button" class="setsec-head" id="rules-toggle"><span>' + esc(r.title) + '</span>' +
+    '<span class="setsec-chev">›</span></button>' +
+    '<div class="setsec-body"><p class="dim">' + esc(r.intro) + '</p>';
+  (r.sections || []).forEach(function (sec) {
+    h += '<p class="rules-sec">' + esc(sec.heading) + '</p><ul class="rules-list">' +
+      (sec.items || []).map(function (it) { return '<li>' + esc(it) + '</li>'; }).join('') + '</ul>';
+  });
+  h += '<p class="dim rules-src">Sources: ' + (r.sources || []).map(function (s) {
+    return '<a href="' + esc(s.url) + '" target="_blank" rel="noopener">' + esc(s.label) + '</a>';
+  }).join(' · ') + '<br>Updated ' + esc(r.updated) + '</p></div></div>';
+  box.innerHTML = h;
+  box.hidden = false;
+  $('rules-toggle').onclick = function () {
+    var card = $('rules-card');
+    var body = card.querySelector('.setsec-body');
+    var open = !body.hasAttribute('hidden');
+    if (open) { body.setAttribute('hidden', ''); card.classList.remove('open'); }
+    else { body.removeAttribute('hidden'); card.classList.add('open'); }
+  };
 }
 
 function showSpeciesDetail(name) {
@@ -4669,9 +4661,77 @@ function landownerMatches(lo, q) {
 }
 var loPhotoURLs = {};
 function loPhotoURL(p) {
-  if (!p || !p.id) return '';
-  if (!loPhotoURLs[p.id] && p.blob) loPhotoURLs[p.id] = URL.createObjectURL(p.blob);
-  return loPhotoURLs[p.id] || '';
+  if (!p || !p.blob) return '';
+  if (p.id) {
+    if (!loPhotoURLs[p.id]) loPhotoURLs[p.id] = URL.createObjectURL(p.blob);
+    return loPhotoURLs[p.id];
+  }
+  /* Pending (not yet saved) photos have no id — cache the object URL on the
+     object itself so fresh uploads render instead of a broken thumbnail. */
+  if (!p._objURL) p._objURL = URL.createObjectURL(p.blob);
+  return p._objURL;
+}
+/* Second modal layer, above the landowner form (Tanner 2026-09-30). The main
+   showModal would wipe the form, so photo viewing and its delete confirm
+   live up here instead. */
+function showModal2(html) {
+  $('modal2-card').innerHTML = html;
+  $('modal2').classList.add('show');
+}
+function closeModal2() { $('modal2').classList.remove('show'); }
+function confirmModal2(title, body, okLabel, onOk) {
+  showModal2(
+    '<h3>' + esc(title) + '</h3><p>' + body + '</p>' +
+    '<div class="btn-row"><button class="btn-secondary" id="m2-cancel" type="button">Cancel</button>' +
+    '<button class="btn-danger" id="m2-ok" type="button">' + esc(okLabel) + '</button></div>'
+  );
+  $('m2-cancel').onclick = closeModal2;
+  $('m2-ok').onclick = function () { closeModal2(); onOk(); };
+}
+/* Full-size viewer for a landowner photo (permission slip or boundary map).
+   Delete carries the usual gone-forever warning. */
+function openLoPhotoViewer(p, title, onDel) {
+  openPhotoViewerLayer2(p, title, loPhotoURL, onDel);
+}
+/* Layer-2 photo viewer for use inside another modal: the main showModal
+   would wipe the form underneath, so viewing and its delete confirm live
+   up here instead. urlFor(p) resolves the image src. */
+function openPhotoViewerLayer2(p, title, urlFor, onDelete) {
+  var src = urlFor(p);
+  showModal2('<h3>' + esc(title) + '</h3>' +
+    (src ? '<img src="' + src + '" style="width:100%;border-radius:8px" alt="' + esc(title) + '">' : '<p class="dim">Photo would not load.</p>') +
+    '<div class="btn-row" style="margin-top:10px"><button class="btn-danger" id="m2-ph-del" type="button">Delete</button>' +
+    '<button class="btn-secondary" id="m2-ph-save" type="button">Save to camera roll</button>' +
+    '<button class="btn-secondary" id="m2-close" type="button">Close</button></div>');
+  $('m2-close').onclick = closeModal2;
+  $('m2-ph-save').onclick = function () { if (p && p.blob) sharePhotoFile(p.blob, 'opossum-foot-photo'); };
+  $('m2-ph-del').onclick = function () {
+    confirmModal2('Delete this photo?', 'It will be gone forever.', 'Delete', function () { onDelete(); });
+  };
+}
+/* Q52: split the free-text phones field into individual dialable numbers. */
+function landownerPhoneList(phones) {
+  return String(phones || '').split(/[,;\n\/]+/).map(function (p) { return p.trim(); })
+    .filter(function (p) { return /[0-9]/.test(p); });
+}
+function landownerPhoneDigits(p) {
+  var plus = p.trim().charAt(0) === '+';
+  return (plus ? '+' : '') + p.replace(/\D/g, '');
+}
+function landownerPhoneHtml(lo) {
+  var nums = landownerPhoneList(lo.phones);
+  if (nums.length) {
+    /* Tanner 2026-09-30: every number is one tap from a call or a text. */
+    return nums.map(function (n) {
+      var d = landownerPhoneDigits(n);
+      return '<div class="lo-phone"><span class="lo-phone-num">' + esc(n) + '</span>' +
+        '<span class="lo-phone-btns"><a class="btn-small btn-primary" href="tel:' + esc(d) + '"><img class="bi inv" src="assets/icons/phone.png" alt="">Call</a>' +
+        '<a class="btn-small btn-secondary" href="sms:' + esc(d) + '"><img class="bi" src="assets/icons/phone.png" alt="">Text</a>' +
+        '<button class="lo-phone-x" type="button" data-lo-phone-del="' + esc(n) + '" aria-label="Remove this number">✕</button></span></div>';
+    }).join('');
+  }
+  if (lo.phones) return '<p style="margin:4px 0"><strong>' + esc(lo.phones) + '</strong></p>';
+  return '';
 }
 function renderLandowners() {
   var list = $('landowner-list');
@@ -4698,7 +4758,7 @@ function landownerCard(lo, photos) {
   var slips = photos.filter(function (p) { return p.kind === 'slip'; }).length;
   var hasBoundary = !!lo.boundaryNote || photos.some(function (p) { return p.kind === 'boundary'; });
   var html = '<h3 style="text-align:left">' + esc(lo.name) + '</h3>';
-  if (lo.phones) html += '<p style="margin:4px 0"><strong>' + esc(lo.phones) + '</strong></p>';
+  html += landownerPhoneHtml(lo);
   if (lo.notes) html += '<p class="dim" style="margin:4px 0">' + esc(lo.notes) + '</p>';
   var bits = [];
   if (slips) bits.push(slips + ' slip photo' + (slips === 1 ? '' : 's'));
@@ -4709,7 +4769,25 @@ function landownerCard(lo, photos) {
   card.innerHTML = html;
   card.querySelector('[data-lo-edit]').onclick = function () { openLandownerForm(lo.id); };
   card.querySelector('[data-lo-del]').onclick = function () { deleteLandowner(lo.id); };
+  card.querySelectorAll('[data-lo-phone-del]').forEach(function (b) {
+    b.onclick = function () { deleteLandownerPhone(lo.id, b.getAttribute('data-lo-phone-del')); };
+  });
   return card;
+}
+/* Tanner 2026-09-30: one-tap remove for a single phone number, with the
+   usual gone-forever warning. */
+function deleteLandownerPhone(loId, num) {
+  var rec = landownerById(loId);
+  if (!rec) return;
+  confirmModal('Remove this number?',
+    esc(num) + ' will be removed from ' + esc(rec.name) + '. The landowner and everything else stay.',
+    'Remove',
+    function () {
+      rec.phones = landownerPhoneList(rec.phones).filter(function (n) { return n !== num; }).join(',');
+      rec.updatedAt = Date.now();
+      Store.save();
+      renderLandowners();
+    });
 }
 /* Add/edit form. New photos sit in pendingLoPhotos (Q37's pattern) and are
    flushed to IDB on save; existing photos delete straight away. */
@@ -4726,21 +4804,28 @@ function openLandownerForm(id) {
     '<label class="field" for="lo-name">Name <span class="req">*</span></label>' +
     '<input id="lo-name" type="text" value="' + esc(lo.name) + '" placeholder="Who owns the ground">' +
     '<label class="field" for="lo-phones">Phone numbers</label>' +
-    '<input id="lo-phones" type="tel" value="' + esc(lo.phones) + '" placeholder="Call or text — list them all">' +
+    '<input id="lo-phones" type="tel" inputmode="numeric" value="' + esc(lo.phones) + '" placeholder="Digits only — separate multiple with commas">' +
     '<label class="field" for="lo-notes">Notes</label>' +
     '<textarea id="lo-notes" rows="3" placeholder="Gate code, where to park, areas to stay out of, who to call first…">' + esc(lo.notes) + '</textarea>' +
     '<label class="field" for="lo-boundary-note">Boundary — written note</label>' +
     '<textarea id="lo-boundary-note" rows="2" placeholder="North of the creek to the east fence…">' + esc(lo.boundaryNote) + '</textarea>' +
     '<p class="dim" style="margin:8px 0 4px">…or upload a map photo:</p>' +
-    '<button class="btn-secondary" id="lo-boundary-btn" type="button">📷 Upload boundary map</button>' +
+    '<button class="btn-secondary" id="lo-boundary-btn" type="button"><img class="bi" src="assets/icons/camera.png" alt="">Upload boundary map</button>' +
     '<div class="lic-grid" id="lo-boundary-grid"></div>' +
     '<label class="field">Permission slips</label>' +
-    '<button class="btn-secondary" id="lo-slip-btn" type="button">📷 Add permission slip photo</button>' +
+    '<button class="btn-secondary" id="lo-slip-btn" type="button"><img class="bi" src="assets/icons/camera.png" alt="">Add permission slip photo</button>' +
     '<div class="lic-grid" id="lo-slip-grid"></div>' +
     '<div class="btn-row" style="margin-top:14px"><button class="btn-secondary" id="m-cancel" type="button">Cancel</button>' +
     '<button class="btn-primary" id="lo-save" type="button">Save landowner</button></div>'
   );
   $('m-cancel').onclick = closeModal;
+  /* Tanner 2026-09-30: phone field takes digits only (commas between
+     numbers) — any notes belong in the Notes field. */
+  var loPhonesInput = $('lo-phones');
+  if (loPhonesInput) loPhonesInput.addEventListener('input', function () {
+    var clean = this.value.replace(/[^0-9,]/g, '').replace(/,+/g, ',');
+    if (clean !== this.value) this.value = clean;
+  });
   $('lo-boundary-btn').onclick = function () { $('lo-boundary-input').click(); };
   $('lo-slip-btn').onclick = function () { $('lo-slip-input').click(); };
   $('lo-slip-input').onchange = function () { loTakePhotos(this.files, 'slip'); this.value = ''; };
@@ -4753,14 +4838,20 @@ function loTakePhotos(files, kind) {
   for (var i = 0; i < files.length; i++) pendingLoPhotos.push({ blob: files[i], name: files[i].name, kind: kind });
   renderLoFormPhotos(loFormId);
 }
-function loPhotoThumb(p, onDel) {
+function loPhotoThumb(p, kind, onDel) {
   var item = document.createElement('div');
   item.className = 'lic-item';
   var img = document.createElement('img');
   img.src = loPhotoURL(p); img.alt = 'Landowner photo';
+  /* Tanner 2026-09-30: tap opens the photo; the X asks before deleting. */
+  var title = kind === 'slip' ? 'Permission slip' : 'Boundary map';
+  img.onclick = function () { openLoPhotoViewer(p, title, onDel); };
   var del = document.createElement('button');
   del.type = 'button'; del.textContent = '×'; del.setAttribute('aria-label', 'Delete photo');
-  del.onclick = function (e) { e.stopPropagation(); onDel(); };
+  del.onclick = function (e) {
+    e.stopPropagation();
+    confirmModal2('Delete this photo?', 'It will be gone forever.', 'Delete', onDel);
+  };
   item.appendChild(img); item.appendChild(del);
   return item;
 }
@@ -4773,7 +4864,7 @@ function renderLoFormPhotos(loId) {
     function fill(grid, kind) {
       grid.innerHTML = '';
       existing.filter(function (p) { return p.kind === kind; }).forEach(function (p) {
-        grid.appendChild(loPhotoThumb(p, function () {
+        grid.appendChild(loPhotoThumb(p, kind, function () {
           IDB.del('photos', p.id).then(function () {
             if (loPhotoURLs[p.id]) { URL.revokeObjectURL(loPhotoURLs[p.id]); delete loPhotoURLs[p.id]; }
             renderLoFormPhotos(loId);
@@ -4781,7 +4872,8 @@ function renderLoFormPhotos(loId) {
         }));
       });
       pend.filter(function (pp) { return pp.kind === kind; }).forEach(function (pp) {
-        grid.appendChild(loPhotoThumb({ id: '', blob: pp.blob }, function () {
+        grid.appendChild(loPhotoThumb(pp, kind, function () {
+          if (pp._objURL) { try { URL.revokeObjectURL(pp._objURL); } catch (e) { /* noop */ } }
           var ix = pendingLoPhotos.indexOf(pp);
           if (ix !== -1) pendingLoPhotos.splice(ix, 1);
           renderLoFormPhotos(loId);
@@ -4802,7 +4894,8 @@ function saveLandownerForm(loId, isNew) {
     Store.data.landowners.push(rec);
   }
   rec.name = name;
-  rec.phones = $('lo-phones').value.trim();
+  /* Tanner 2026-09-30: digits (and commas) only — notes live in Notes. */
+  rec.phones = $('lo-phones').value.replace(/[^0-9,]/g, '').replace(/,+/g, ',').replace(/^,|,$/g, '');
   rec.notes = $('lo-notes').value.trim();
   rec.boundaryNote = $('lo-boundary-note').value.trim();
   rec.updatedAt = Date.now();
@@ -5284,7 +5377,7 @@ function renderLines() {
       ' · ' + nLogs + ' catch' + (nLogs === 1 ? '' : 'es') + '</span>' +
       (ln.id === lid ? '<span class="badge alive">Active</span>' : '') +
       '</button>' +
-      '<button type="button" class="btn-small btn-secondary line-edit" data-act="mileage">Mileage</button>' +
+      '<button type="button" class="btn-small btn-secondary line-edit" data-act="mileage"' + (Store.data.mileageOn !== false ? '' : ' hidden') + '>Mileage</button>' +
       '<button type="button" class="btn-small btn-secondary line-edit" data-act="edit">Edit</button>' +
       '</div>';
   }).join('');
@@ -5446,6 +5539,18 @@ function enterMain() {
     Store.save(); applyFeatureToggles();
     toast(this.checked ? 'Voice entry is on.' : 'Voice entry is off.');
   };
+  /* Q8: mileage toggle — off hides the per-line Mileage buttons, clears any
+     drawn route, and hides the mileage CSV export. Default on. */
+  var milBox = $('settings-mileage');
+  if (milBox) {
+    milBox.checked = Store.data.mileageOn !== false;
+    milBox.onchange = function () {
+      Store.data.mileageOn = this.checked;
+      if (!this.checked && typeof clearRouteEstimate === 'function') clearRouteEstimate();
+      Store.save(); applyFeatureToggles(); renderLines();
+      toast(this.checked ? 'Mileage tracking is on.' : 'Mileage tracking is off.');
+    };
+  }
   /* Q68: trap check interval — longer than 24h where the regs allow it. */
   var ciSel = $('settings-checkinterval');
   var ccBox = $('settings-checkclock');
@@ -5464,9 +5569,13 @@ function enterMain() {
   }
   if (ciSel) {
     ciSel.onchange = function () {
-      Store.data.checkIntervalHours = parseInt(this.value, 10) || 24;
+      /* Tanner 2026-09-30: free-entry hours, default 24 — replaces the old
+         24/36/48/72 preset dropdown. */
+      var h = Math.max(1, parseInt(this.value, 10) || 24);
+      Store.data.checkIntervalHours = h;
+      this.value = String(h);
       Store.save(); refreshMarkers();
-      toast('Trap check interval: every ' + Store.data.checkIntervalHours + ' hours.');
+      toast('Trap check interval: every ' + h + ' hours.');
     };
   }
   /* Q14: Tabs section — per-line tab visibility for the active line. */
@@ -5510,15 +5619,18 @@ function enterMain() {
       'This puts all the feature toggles back to their defaults. It will not delete any of your sets, catches, lines, photos, or memos — and you can tap everything back on again afterwards.',
       'Reset', function () {
     Store.data.weatherOn = false; Store.data.voiceOn = true; Store.data.windArrowsOn = true; /* Q17 */
+    Store.data.mileageOn = true; /* Q8 */
     /* Q14/Q62: tab reset is per-line — restores all five toggleable tabs on the active line. */
     var l = activeLine();
     if (l) l.tabs = { history: true, scorecard: true, seasons: true, licenses: true, totals: true };
     Store.data.setFields = { traptype: true, trapdetail: true, settype: true, bait: true, lure: true, urine: true, visual: true, audio: true, other: true, notes: true };
     Store.save();
     $('settings-weather').checked = false; $('settings-voice').checked = true; $('settings-windarrows').checked = true;
+    var mcb = $('settings-mileage'); if (mcb) mcb.checked = true;
     renderTabToggles();
     sfKeys.forEach(function (key) { var cb = $('settings-sf-' + key); if (cb) cb.checked = true; });
     applyFeatureToggles(); applySetFieldToggles();
+    if (typeof renderLines === 'function') renderLines();
     toast('Features reset to defaults.');
       });
   };
@@ -5540,7 +5652,7 @@ function maybePromptHomeOnce() {
     '<p>The map can open right on your home ground every time — your county, your farms, right where you trap. Takes ten seconds.</p>' +
     '<div class="btn-row"><button class="btn-secondary" id="m-home-skip" type="button">Not now</button>' +
     '<button class="btn-secondary" id="m-home-map" type="button">Choose on map</button>' +
-    '<button class="btn-primary" id="m-home-gps" type="button">📍 Use my location</button></div>'
+    '<button class="btn-primary" id="m-home-gps" type="button"><img class="bi inv" src="assets/icons/mappin.png" alt="">Use my location</button></div>'
   );
   $('m-home-skip').onclick = closeModal;
   $('m-home-map').onclick = function () { closeModal(); switchTab('map'); startHomePick(); };
@@ -5805,6 +5917,8 @@ function routeLayerGroup() {
 function clearRouteEstimate() {
   if (routeLayer) routeLayer.clearLayers();
   routeShownFor = null;
+  var rb = $('route-back-chip');
+  if (rb) rb.hidden = true;
 }
 /* The ➤ glyph points east; rotate so it points along the segment bearing. */
 function drawRouteEstimate(lineId) {
@@ -5826,6 +5940,8 @@ function drawRouteEstimate(lineId) {
     L.marker([(a[0] + b[0]) / 2, (a[1] + b[1]) / 2], { icon: icon, interactive: false, keyboard: false }).addTo(g);
   }
   routeShownFor = lineId;
+  var rb = $('route-back-chip');
+  if (rb) rb.hidden = false;
   return true;
 }
 
@@ -5855,11 +5971,11 @@ function renderMileageModal(lineId) {
     'Route estimate: <strong>' + esc(fmtMiles(est.miles)) + '</strong>' +
     ' <span class="dim">(straight-line estimate \u2014 typically 20\u201340% under road miles)</span></p>' +
     (rows || '<p class="dim">No trips logged yet.</p>') +
-    '<div class="btn-row" style="margin-top:14px">' +
-    '<button class="btn-secondary" id="m-trip-add" type="button">+ Add trip</button>' +
-    '<button class="btn-secondary" id="m-trip-route" type="button">' +
+    '<div class="btn-row mbtns" style="margin-top:14px">' +
+    '<button class="btn-primary" id="m-trip-add" type="button">+ Odometer</button>' +
+    '<button class="btn-primary" id="m-trip-route" type="button">' +
     (routeShownFor === lineId ? 'Hide route' : 'Show route on map') + '</button></div>' +
-    '<div class="btn-row" style="margin-top:10px"><button class="btn-secondary" id="m-trip-close" type="button">Close</button></div>'
+    '<div class="btn-row mbtns" style="margin-top:10px"><button class="btn-primary" id="m-trip-close" type="button">Close</button></div>'
   );
   $('m-trip-add').onclick = function () { showTripModal(lineId, null); };
   $('m-trip-close').onclick = closeModal;
@@ -5954,6 +6070,11 @@ function exportMileage() {
 /* ================= 15. WIRING ================= */
 function wireUp() {
   renderSetTypeOptions(); /* Q29: populate the Set Type dropdown from the taxonomy */
+  /* Q30: live bait-rule warning as the trapper types in the bait rows. */
+  document.addEventListener('input', function (e) {
+    if (e.target && e.target.closest && e.target.closest('#sf-bait-rows') &&
+        typeof updateBaitWarn === 'function') updateBaitWarn();
+  });
   /* splash -> next */
   $('btn-gps-state').onclick = gpsPreselect;
   $('btn-start').onclick = function () {
@@ -6019,11 +6140,24 @@ function wireUp() {
 
   /* map buttons */
   $('btn-locate').onclick = locateMe;
+  /* Q8: while a route estimate is drawn, a chip offers the way back to the
+     mileage dialog it came from. */
+  var rbc = $('route-back-chip');
+  if (rbc) rbc.onclick = function () {
+    var id = routeShownFor;
+    if (!id) return;
+    /* Tanner 2026-09-30: heading back to mileage clears the route. It only
+       comes back on an explicit "Show route on map" tap. */
+    clearRouteEstimate();
+    switchTab('lines');
+    showMileageModal(id);
+  };
   /* Coming back from lock screen / background: iOS may have killed the GPS
-     watch, so restart it if follow was engaged. */
+     watch, so restart it if follow was engaged. Q70: silent — no routine
+     GPS chatter on every wake. */
   document.addEventListener('visibilitychange', function () {
     if (!document.hidden && (locateState === 'following' || locateState === 'paused')) {
-      restartFollowWatch('Reacquiring GPS…');
+      restartFollowWatch();
     }
   });
   var bs = $('build-stamp'); if (bs) bs.textContent = APP_VERSION;
@@ -6129,12 +6263,26 @@ function wireUp() {
       };
     })(mrBtns[mrb]);
   }
-  /* Q36: recovered action for a Missing set */
-  $('btn-sd-recovered').onclick = recoverSet;
+  /* Q71: status edits and recovery go through "Edit this set" now. */
 
   /* set detail */
   $('btn-sd-log').onclick = function () { openLogSheet(detailSetId); };
-  $('btn-sd-emptycheck').onclick = function () { quickEmptyCheck(); };
+  $('btn-sd-emptycheck').onclick = function () {
+    /* Tanner 2026-09-30: confirm first — a check-in restarts the clock and
+       can't be undone. */
+    var s = getSet(detailSetId);
+    var name = s ? s.name : 'this set';
+    confirmModal('Are you sure there\u2019s no changes?',
+      'This restarts the check clock for <b>' + esc(name) + '</b> \u2014 no going back.',
+      'Yes, checked', function () { quickEmptyCheck(); });
+    /* Tanner 2026-09-30: arm the confirm's OK button after a beat, so a fast
+       double-tap on the sheet button can't fire straight through it. */
+    var okBtn = $('m-ok');
+    if (okBtn) {
+      okBtn.disabled = true;
+      setTimeout(function () { var b = $('m-ok'); if (b) b.disabled = false; }, 700);
+    }
+  };
   $('btn-sd-edit').onclick = function () { openSetForm(null, detailSetId); };
   $('btn-sd-delete').onclick = function () { deleteSet(detailSetId); };
   /* Q38: per-catch delete in the set-detail log list */
@@ -6144,34 +6292,9 @@ function wireUp() {
     var memoBtn = e.target.closest ? e.target.closest('[data-memo-play]') : null;
     if (memoBtn) toggleLogMemoPlayer(memoBtn);
   });
-  $('btn-sd-memo').onclick = function () { Memo.toggle(detailSetId, $('btn-sd-memo')); };
-  $('btn-sd-photo').onclick = function () { $('sd-photo-input').click(); };
-  $('sd-photo-input').onchange = function () {
-    var f = this.files[0];
-    this.value = '';
-    if (!f || !detailSetId) return;
-    var s = getSet(detailSetId);
-    if (!s) return;
-    downscalePhoto(f, function (blob) {
-      IDB.put('photos', {
-        id: uid('p'), setId: s.id, blob: blob, mime: blob.type || 'image/jpeg',
-        lat: s.lat, lng: s.lng, createdAt: Date.now()
-      }).then(function () {
-        loadSetPhotos(s.id, function (sp) { renderSetPhotos(sp); });
-        toast('Photo added to ' + s.name + '.');
-      }).catch(function () { toast('Could not save that photo.'); });
-    });
-  };
-  $('sd-notes').onchange = saveDetailNotes;
-  /* Q12: set-detail notes share the setnotes kind with the form notes */
-  attachSuggest('sd-notes', 'sd-notes-suggest', 'setnotes');
-  $('btn-voice-sdnotes').onclick = function () {
-    var ta = $('sd-notes');
-    Voice.start($('voice-sdnotes-preview'), function (t) {
-      ta.value = (ta.value ? ta.value.replace(/\s+$/, '') + ' ' : '') + t;
-      saveDetailNotes();
-    });
-  };
+  /* Q71: memo recording, playback, and deletion live on the Edit Set form.
+     The summary sheet is strictly read-only. */
+  $('btn-se-memo').onclick = function () { Memo.toggle(editingSetId, $('btn-se-memo'), null, 'se-memos', true); };
 
   /* log sheet */
   /* Q12: Other-event species + log notes learn from use, tap-to-fill */
@@ -6214,7 +6337,7 @@ function wireUp() {
     Memo.toggle(logSetId, btn, function (memoId) {
       if (!logSheetLive) { IDB.del('memos', memoId).catch(function () { /* noop */ }); return; } /* landed after the sheet closed: orphan */
       pendingLogMemos.push(memoId);
-    });
+    }, 'sd-memos', false); /* Q71: the set's memo list is playback-only outside Edit */
   };
   $('btn-log-photo').onclick = function () { $('log-photo-input').click(); };
   $('log-photo-input').onchange = function () {
@@ -6256,6 +6379,20 @@ function wireUp() {
       renderTotals();
       return;
     }
+    /* Tanner 2026-09-30: collapse/expand a whole Totals section card. */
+    var thead = e.target.closest ? e.target.closest('.totals-card-head') : null;
+    if (thead) {
+      var skey = thead.getAttribute('data-tsec');
+      var tco = Store.data.totalsCollapsed || {};
+      tco[skey] = !tco[skey];
+      Store.data.totalsCollapsed = tco; Store.save();
+      var tbody = thead.parentNode.querySelector('.totals-card-body');
+      if (tbody) { if (tco[skey]) tbody.setAttribute('hidden', ''); else tbody.removeAttribute('hidden'); }
+      thead.setAttribute('aria-expanded', String(!tco[skey]));
+      var thchev = thead.querySelector('.tchev');
+      if (thchev) thchev.textContent = tco[skey] ? '▸' : '▾';
+      return;
+    }
     /* Tap a By Species / By Set row to expand/collapse its details. */
     var trow = e.target.closest ? e.target.closest('[data-totkey]') : null;
     if (!trow) return;
@@ -6275,6 +6412,13 @@ function wireUp() {
     var segBtn = e.target.closest ? e.target.closest('#hist-view-seg button') : null;
     if (segBtn) {
       histUI.view = segBtn.getAttribute('data-view');
+      renderHistory();
+      return;
+    }
+    /* Q40: season scope. */
+    var seasonBtn = e.target.closest ? e.target.closest('#hist-season-seg button') : null;
+    if (seasonBtn) {
+      histUI.season = seasonBtn.getAttribute('data-season');
       renderHistory();
       return;
     }
