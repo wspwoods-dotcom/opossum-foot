@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-09-30bl';
+var APP_VERSION = 'beta 0.1 · build 2026-09-30bm';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -1163,6 +1163,18 @@ function rememberAttractants(s) {
 /* Q67: sponsored products ride INSIDE the bait/lure suggestion menus —
    matching sponsors first with a Sponsored tag. Tapping the product name
    fills the row; the eye opens the sponsor bio without filling anything. */
+/* Q69: the sponsor's logo (product badge) replaces the eye in the suggestion
+   row; tapping it still opens the sponsor bio. No badge on file → the eye
+   stays as the fallback so the info page is always one tap away. */
+function sponsorSuggestRowHtml(sp) {
+  var mark = sp.badge
+    ? '<img class="sponsor-logo" src="' + esc(sp.badge) + '" alt="' + esc(sp.name) + ' logo">'
+    : '&#128065;';
+  return '<div class="suggest-sponsor">' +
+    '<button type="button" class="suggest-fill" data-v="' + esc(sp.product) + '"><span class="suggest-name">' + esc(sp.product) + '</span> <span class="pill">Sponsored</span></button>' +
+    '<button type="button" class="sponsor-eye" data-sp="' + esc(sp.id) + '" aria-label="About ' + esc(sp.name) + '">' + mark + '</button>' +
+    '</div>';
+}
 function sponsorSuggests(key, q) {
   var out = [];
   for (var i = 0; i < SPONSORS.length; i++) {
@@ -1190,12 +1202,7 @@ function attachSuggest(inputId, boxId, key) {
       return vl !== q && (!q || vl.indexOf(q) !== -1);
     }).slice(0, 6);
     if (!sps.length && !items.length) { box.className = 'suggest'; box.innerHTML = ''; return; }
-    var html = sps.map(function (sp) {
-      return '<div class="suggest-sponsor">' +
-        '<button type="button" class="suggest-fill" data-v="' + esc(sp.product) + '">' + esc(sp.product) + ' <span class="pill">Sponsored</span></button>' +
-        '<button type="button" class="sponsor-eye" data-sp="' + esc(sp.id) + '" aria-label="About ' + esc(sp.name) + '">👁</button>' +
-        '</div>';
-    }).join('') + items.map(function (v) {
+    var html = sps.map(sponsorSuggestRowHtml).join('') + items.map(function (v) {
       return '<button type="button" class="suggest-item" data-v="' + esc(v) + '">' + esc(v) + '</button>';
     }).join('');
     box.innerHTML = html;
