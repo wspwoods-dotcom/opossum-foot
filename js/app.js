@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-09-30bk';
+var APP_VERSION = 'beta 0.1 · build 2026-09-30bl';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -97,6 +97,10 @@ var Store = {
     if (typeof this.data.weatherOn !== 'boolean') this.data.weatherOn = false;
     if (typeof this.data.voiceOn !== 'boolean') this.data.voiceOn = true;
     if (typeof this.data.windArrowsOn !== 'boolean') this.data.windArrowsOn = true; /* Q17: on by default */
+    /* Q68: trap check clock — hours between required checks, default 24. */
+    if (typeof this.data.checkIntervalHours !== 'number' || this.data.checkIntervalHours <= 0) this.data.checkIntervalHours = 24;
+    if (typeof this.data.checkClockOn !== 'boolean') this.data.checkClockOn = true; /* alerts on by default */
+    migrateCheckClock(this.data);
     /* New-set field visibility toggles — all default on. */
     var sfDef = { traptype: true, settype: true, bait: true, lure: true, urine: true, visual: true, audio: true, other: true, notes: true };
     if (!this.data.setFields || typeof this.data.setFields !== 'object') this.data.setFields = {};
@@ -1376,6 +1380,10 @@ function renderTrapTypeOptions(maker, keepKey) {
   var sel = $('sf-type');
   var entry = maker && TRAP_MAKERS[maker];
   var keys = entry ? Object.keys(entry.types) : ALL_TRAP_TYPES.slice();
+  /* Q57-B: the cascade keeps its "Other" escape hatch — the unfiltered list
+     has one and no other dropdown loses options, so a picked maker must not
+     strand the trapper without an out. Not stored in the catalog. */
+  if (entry && keys.indexOf('Other') === -1) keys.push('Other');
   var cur = sel.value;
   var h = '<option value="">e.g. Foothold</option>';
   keys.forEach(function (k) { h += '<option value="' + esc(k) + '">' + esc(k) + '</option>'; });
@@ -1732,9 +1740,11 @@ function refreshPinWinds() {
 }
 
 function setIcon(set) {
+  /* Q68: an overdue check turns the pin red, whatever the status color was. */
+  var pinCls = isCheckOverdue(set) ? 'pin-overdue' : 'pin-' + esc(normStatus(set.status));
   return L.divIcon({
     className: '',
-    html: '<div class="pin pin-' + esc(normStatus(set.status)) + '">' + windArrowHtml(set) + '</div>',
+    html: '<div class="pin ' + pinCls + '">' + windArrowHtml(set) + '</div>',
     iconSize: [30, 30], iconAnchor: [15, 15]
   });
 }
@@ -2429,6 +2439,7 @@ function saveSetForm() {
     if (s.missingDetail) rememberEntry('missingdetail', s.missingDetail); /* Q12 */
     if (s.status === 'pulled' && !s.datePulled) s.datePulled = todayISO();
     if (s.status !== 'pulled' && s.datePulled) delete s.datePulled;
+    touchSet(s); /* Q68: any edit restarts the check clock */
     Store.save(); refreshMarkers();
     /* Q36: citation photos pending on the Edit Set form attach here. */
     pendingSetPhotos = pendingSetPhotos.filter(function (ph) {
@@ -2466,7 +2477,8 @@ function saveSetForm() {
       /* Q36: missing reason rides the status */
       missingReason: (status === 'missing') ? setMissingReason : null,
       missingDetail: (status === 'missing' && setMissingReason === 'confiscated') ? $('sf-missing-detail').value.trim() : null,
-      createdAt: Date.now()
+      createdAt: Date.now(),
+      lastActivity: Date.now() /* Q68: check clock starts at creation */
     };
     normalizeTrapDetail(ns);
     if (ns.status === 'pulled') ns.datePulled = ns.dateSet;
@@ -2510,6 +2522,7 @@ function applyDetailStatus(cur, val) {
   if (val === 'pulled' && !cur.datePulled) cur.datePulled = todayISO();
   if (val !== 'pulled' && cur.datePulled) delete cur.datePulled;
   if (val !== 'missing') { cur.missingReason = null; cur.missingDetail = null; }
+  touchSet(cur); /* Q68 */
   Store.save(); refreshMarkers();
   openSetDetail(cur.id);
   toast('Status set to ' + statusLabel(normStatus(val)) + '.');
@@ -2658,6 +2671,18 @@ function openSetDetail(id) {
     $('sd-fields').innerHTML += '<dt>Missing reason</dt><dd>' + esc(missingReasonLabel(s.missingReason)) +
       (s.missingDetail ? ' — ' + esc(s.missingDetail) : '') + '</dd>';
   }
+  /* Q68: check-clock line — due in / overdue by, red when overdue. Only
+     active sets run the clock; sprung keeps its amber pin instead. Hidden
+     entirely when the alert is toggled off. */
+  var clockOn = !Store.data || Store.data.checkClockOn !== false;
+  if (st === 'active' && clockOn) {
+    var dueMs = checkDueInMs(s);
+    var overdue = dueMs < 0;
+    $('sd-fields').innerHTML += '<dt>Trap check</dt><dd' + (overdue ? ' class="check-overdue"' : '') + '>' +
+      (overdue ? 'Overdue by ' + esc(fmtCheckDur(dueMs)) : 'Due in ' + esc(fmtCheckDur(dueMs))) + '</dd>';
+  }
+  /* Q68: the one-tap check-in only exists where a check rhythm exists. */
+  $('btn-sd-emptycheck').hidden = (st !== 'active' || !clockOn);
   var recRow = $('sd-recovered-row');
   if (recRow) recRow.hidden = (st !== 'missing');
   loadSetPhotos(s.id, function (setPhotos, byLog) {
@@ -2677,12 +2702,14 @@ function saveDetailNotes() {
   var s = getSet(detailSetId);
   if (!s) return;
   s.notes = $('sd-notes').value.trim();
+  touchSet(s); /* Q68: notes edits count as activity */
   rememberEntry('setnotes', s.notes); /* Q12 */
 }
 function appendTranscriptToSetNotes(setId, tr) {
   var s = getSet(setId);
   if (!s || !tr) return;
   s.notes = (s.notes ? s.notes.replace(/\s+$/, '') + ' ' : '') + tr;
+  touchSet(s); /* Q68 */
   Store.save();
   if (setId === detailSetId && $('sd-notes')) $('sd-notes').value = s.notes;
 }
@@ -2815,15 +2842,17 @@ var logSheetLive = false;
 
 /* Catch-log "Other event" (build au): non-catch events recorded on a set.
    otherType is one of 'sprung' | 'non-native' | 'non-game' | 'domestic' |
-   'fur' | 'animal-part', null/absent for normal catches. Other events are
-   events, not catches: they never change the set's trap status and are
-   excluded from Totals and the bait/lure scorecard.
+   'fur' | 'animal-part' | 'empty' | 'other', null/absent for normal catches.
+   'empty' (Q68) is the checked-it-nothing-happened check-in: no species, no
+   count, no disposition — it exists to restart the check clock. Other
+   events are events, not catches: they never change the set's trap status
+   and are excluded from Totals and the bait/lure scorecard.
    Log-sheet entry state: logEventType defaults to 'catch' (Q20) and
    logDisposition defaults to 'kept' (Dispatched) — nine times out of ten
    that's what happens, and switching stays one tap away. logOtherType
    keeps its 'sprung' default. */
 var logEventType = 'catch', logOtherType = 'sprung';
-var OTHER_LABELS = { 'sprung': 'Sprung', 'non-native': 'Non-native animal', 'non-game': 'Non-target animal', 'domestic': 'Domestic animal', 'fur': 'Fur', 'animal-part': 'Animal part', 'other': 'Other' };
+var OTHER_LABELS = { 'sprung': 'Sprung', 'non-native': 'Non-native animal', 'non-game': 'Non-target animal', 'domestic': 'Domestic animal', 'fur': 'Fur', 'animal-part': 'Animal part', 'empty': 'Empty — nothing changed', 'other': 'Other' };
 
 /* Notes placeholder nudge: the catch-all 'Other' subtype gets a descriptive
    prompt; every other subtype keeps the plain default. Notes stay optional. */
@@ -2903,6 +2932,17 @@ function setLogEventType(t) {
   hideLogFormError();
   renderLogWarnings();
   updateLogDispositionRow();
+  updateOtherSubtypeRows();
+}
+
+/* Q68: the "Empty — nothing changed" subtype is a pure check-in — no
+   species, no count, no disposition. Just date, optional notes, Save. */
+function updateOtherSubtypeRows() {
+  var empty = (logEventType === 'other' && logOtherType === 'empty');
+  if (logEventType === 'other') $('log-species-other').hidden = empty;
+  var cr = $('log-count-row');
+  if (cr) cr.hidden = empty;
+  if (empty) { logSpecies = null; $('log-species-free').value = ''; }
 }
 
 /* Q24: the Disposition row adapts to the other-event subtype.
@@ -2911,12 +2951,16 @@ function setLogEventType(t) {
    - Other + Animal part / Fur: Kept / Discarded only.
    - Other + Sprung: the row hides entirely — nothing was there, the event
      is about the trap, not an animal — and the log saves disposition 'none'.
+   - Other + Empty (Q68): same as sprung — the sheet also drops the species
+     and count rows, leaving date, notes, and Save: a pure check-in.
    When the visible set changes out from under the current pick, the pick
    resets to the first visible option. */
 function updateLogDispositionRow() {
   var other = (logEventType === 'other');
   var sub = logOtherType;
-  var rowVisible = !other || sub !== 'sprung';
+  /* Q68: 'empty' hides the row like 'sprung' — nothing was there, the event
+     is a check-in, not an animal. */
+  var rowVisible = !other || (sub !== 'sprung' && sub !== 'empty');
   var limited = other && (sub === 'animal-part' || sub === 'fur');
   $('log-disposition-label').hidden = !rowVisible;
   $('log-disposition').hidden = !rowVisible;
@@ -2936,7 +2980,7 @@ function updateLogDispositionRow() {
 }
 
 function logDispositionRequired() {
-  return !(logEventType === 'other' && logOtherType === 'sprung');
+  return !(logEventType === 'other' && (logOtherType === 'sprung' || logOtherType === 'empty'));
 }
 
 function renderPendingLogPhotos() {
@@ -3137,7 +3181,8 @@ function saveLog() {
      recording or landing in storage — the link would be lost. */
   if (Memo.recording || Memo._saving) { showLogFormError('Finish the voice memo first, then save.'); return; }
   var isOther = (logEventType === 'other');
-  var species = isOther ? $('log-species-free').value.trim() : logSpecies;
+  var isEmpty = isOther && logOtherType === 'empty'; /* Q68: pure check-in */
+  var species = isEmpty ? '' : (isOther ? $('log-species-free').value.trim() : logSpecies);
   if (!isOther && !species) { showLogFormError('Pick a species first.'); return; }
   if (logDispositionRequired() && !logDisposition) {
     var limited = (logEventType === 'other') && (logOtherType === 'animal-part' || logOtherType === 'fur');
@@ -3152,7 +3197,7 @@ function saveLog() {
     setName: s ? s.name : '(deleted set)',
     species: species || '',
     otherType: isOther ? logOtherType : null,
-    count: logCount * 1 || 1,
+    count: isEmpty ? 0 : (logCount * 1 || 1),
     disposition: logDisposition,
     date: date, seasonYear: seasonYearOf(date),
     bait: s ? toAttrArray(s.bait).slice() : [], lure: s ? toAttrArray(s.lure).slice() : [],
@@ -3170,6 +3215,7 @@ function saveLog() {
   };
   log.lineId = activeLineId();
   Store.data.logs.push(log);
+  touchSet(getSet(logSetId)); /* Q68: a logged catch, event, or empty check restarts the clock */
   rememberEntry('lognotes', log.notes); /* Q12 */
   if (isOther && species) rememberEntry('otherspecies', species); /* Q12 */
   Store.save();
@@ -3192,6 +3238,45 @@ function saveLog() {
      exists in saveLog or any log code path. */
   /* weather snapshot in background */
   stampLogWeather(s, log);
+}
+
+/* Q68: one-tap check-in from the set detail sheet — "I was here, nothing
+   changed." Logs an 'empty' event dated today, restarts the check clock,
+   and the pin drops back to its status color. Status untouched. */
+function quickEmptyCheck() {
+  var s = getSet(detailSetId);
+  if (!s) return;
+  if (normStatus(s.status) !== 'active') return; /* Q68: active sets only */
+  var date = todayISO();
+  var log = {
+    id: uid('l'), setId: s.id,
+    setName: s.name,
+    species: '',
+    otherType: 'empty',
+    count: 0,
+    disposition: 'none',
+    date: date, seasonYear: seasonYearOf(date),
+    bait: toAttrArray(s.bait).slice(), lure: toAttrArray(s.lure).slice(),
+    urine: toAttrArray(s.urine).slice(), visual: toAttrArray(s.visual).slice(),
+    audio: toAttrArray(s.audio).slice(), other: toAttrArray(s.other).slice(),
+    trapType: s.trapType || '',
+    trapDetail: trapDetailSummary(s),
+    trapCount: s.trapCount || 1,
+    setType: s.setType || '',
+    county: s.county || '',
+    lat: s.lat, lng: s.lng,
+    notes: '',
+    memoIds: [],
+    createdAt: Date.now()
+  };
+  log.lineId = activeLineId();
+  Store.data.logs.push(log);
+  touchSet(s);
+  Store.save();
+  stampLogWeather(s, log);
+  refreshMarkers(); renderHistory(); renderTotals();
+  openSetDetail(s.id);
+  toast('Checked — nothing changed. Check clock restarted.');
 }
 
 /* ================= 9. VOICE ================= */
@@ -5236,6 +5321,29 @@ function enterMain() {
     Store.save(); applyFeatureToggles();
     toast(this.checked ? 'Voice entry is on.' : 'Voice entry is off.');
   };
+  /* Q68: trap check interval — longer than 24h where the regs allow it. */
+  var ciSel = $('settings-checkinterval');
+  var ccBox = $('settings-checkclock');
+  function renderCheckClock() {
+    var on = !Store.data || Store.data.checkClockOn !== false;
+    if (ccBox) ccBox.checked = on;
+    if (ciSel) { ciSel.value = String(Store.data.checkIntervalHours || 24); ciSel.disabled = !on; }
+  }
+  renderCheckClock();
+  if (ccBox) {
+    ccBox.onchange = function () {
+      Store.data.checkClockOn = this.checked;
+      Store.save(); refreshMarkers(); renderCheckClock();
+      toast(this.checked ? 'Trap check alerts are on.' : 'Trap check alerts are off.');
+    };
+  }
+  if (ciSel) {
+    ciSel.onchange = function () {
+      Store.data.checkIntervalHours = parseInt(this.value, 10) || 24;
+      Store.save(); refreshMarkers();
+      toast('Trap check interval: every ' + Store.data.checkIntervalHours + ' hours.');
+    };
+  }
   /* Q14: Tabs section — per-line tab visibility for the active line. */
   TOGGLEABLE_TABS.forEach(function (k) {
     var cb = $('settings-tab-' + k);
@@ -5384,6 +5492,58 @@ function migrateSetTypes(d) {
     });
   });
 }
+/* ================= Q68. TRAP CHECK CLOCK =================
+   Every set carries lastActivity (ms epoch) — the last time anything
+   happened on it: created, edited, catch/event logged, notes touched.
+   An *active* set whose clock runs past the check interval turns its map
+   pin red. Sprung sets keep their amber pin (that already means "come
+   reset me"). Pulled sets (no trap in the ground) and missing sets (a
+   recovery job, not a check rhythm) are exempt. One-time backfill: sets
+   predating the clock start from the newest of their creation and their
+   latest log entry. Idempotent. */
+function migrateCheckClock(d) {
+  if (!d || typeof d !== 'object') return;
+  if (!Array.isArray(d.sets)) return;
+  var newestLog = {};
+  if (Array.isArray(d.logs)) d.logs.forEach(function (l) {
+    if (!l || !l.setId || typeof l.createdAt !== 'number') return;
+    if (!newestLog[l.setId] || l.createdAt > newestLog[l.setId]) newestLog[l.setId] = l.createdAt;
+  });
+  d.sets.forEach(function (s) {
+    if (!s || typeof s.lastActivity === 'number') return;
+    var t = (typeof s.createdAt === 'number') ? s.createdAt : 0;
+    if (newestLog[s.id] && newestLog[s.id] > t) t = newestLog[s.id];
+    s.lastActivity = t;
+  });
+}
+function checkIntervalMs() {
+  var h = Store.data && Store.data.checkIntervalHours;
+  return ((typeof h === 'number' && h > 0) ? h : 24) * 3600 * 1000;
+}
+function setLastActivity(s) {
+  if (!s) return 0;
+  if (typeof s.lastActivity === 'number') return s.lastActivity;
+  return (typeof s.createdAt === 'number') ? s.createdAt : 0;
+}
+/* ms until the check is due; negative means overdue. */
+function checkDueInMs(s) { return setLastActivity(s) + checkIntervalMs() - Date.now(); }
+function isCheckOverdue(s) {
+  if (!s) return false;
+  /* Q68: the alert can be toggled off — the clock keeps stamping activity
+     underneath so re-enabling doesn't turn the whole map red at once. */
+  if (!Store.data || Store.data.checkClockOn === false) return false;
+  if (normStatus(s.status) !== 'active') return false; /* Q68: red is for active sets only */
+  return checkDueInMs(s) < 0;
+}
+/* "3h" / "2d 4h" / "25m" — for the set-detail check line. */
+function fmtCheckDur(ms) {
+  var a = Math.abs(ms), m = Math.round(a / 60000);
+  if (m < 60) return m + 'm';
+  var h = Math.floor(m / 60);
+  if (h < 48) return h + 'h';
+  return Math.floor(h / 24) + 'd ' + (h % 24) + 'h';
+}
+function touchSet(s) { if (s) s.lastActivity = Date.now(); }
 function renderSetTypeOptions() {
   var sel = $('sf-settype');
   if (!sel) return;
@@ -5838,6 +5998,7 @@ function wireUp() {
 
   /* set detail */
   $('btn-sd-log').onclick = function () { openLogSheet(detailSetId); };
+  $('btn-sd-emptycheck').onclick = function () { quickEmptyCheck(); };
   $('btn-sd-edit').onclick = function () { openSetForm(null, detailSetId); };
   $('btn-sd-delete').onclick = function () { deleteSet(detailSetId); };
   /* Q38: per-catch delete in the set-detail log list */
@@ -5901,7 +6062,7 @@ function wireUp() {
       return function () { setLogEventType(b.getAttribute('data-ev')); };
     })(evBtns[eb]);
   }
-  $('log-othertype').onchange = function () { logOtherType = this.value; updateLogNotesPlaceholder(); updateLogDispositionRow(); };
+  $('log-othertype').onchange = function () { logOtherType = this.value; updateLogNotesPlaceholder(); updateLogDispositionRow(); updateOtherSubtypeRows(); };
   $('log-date').onchange = function () { updateDateDOW('log-date', 'log-date-dow'); renderLogWarnings(); };
   $('btn-save-log').onclick = saveLog;
   $('btn-voice-lognotes').onclick = function () {

@@ -220,7 +220,12 @@ select.select-hint { color: var(--faint); }
 .pin-active { background: #4caf50; }
 .pin-sprung { background: #d19a2f; }
 .pin-pulled { background: #8a8a8a; }
-.pin-missing { background: #9b59d0; }
+.pin-missing { background: #3b82f6; }
+/* Q68: trap-check clock — a set past its check interval without any activity
+   turns its pin red, whatever its status color was. */
+.pin-overdue { background: #e5484d; }
+/* Q68: overdue check line on the set detail sheet. */
+.check-overdue { color: #ff7a7a; font-weight: 600; }
 /* Q17: wind arrow — small triangle orbiting the pin, pointing downwind
    (where scent goes). The wrapper rotates; the glyph always tips outward. */
 .wind-arrow { position: absolute; left: 0; top: 0; width: 30px; height: 30px; pointer-events: none; }
@@ -241,11 +246,11 @@ select.select-hint { color: var(--faint); }
 .chip.mst-active.on { background: #4caf50; border-color: #4caf50; color: #0e150a; }
 .chip.mst-sprung.on { background: #d19a2f; border-color: #d19a2f; color: #0e150a; }
 .chip.mst-pulled.on { background: #8a8a8a; border-color: #8a8a8a; color: #0e150a; }
-.chip.mst-missing.on { background: #c0392b; border-color: #c0392b; color: #fff; }
+.chip.mst-missing.on { background: #3b82f6; border-color: #3b82f6; color: #fff; }
 .chip.mst-active:not(.on) { border-color: #4caf50; color: #4caf50; }
 .chip.mst-sprung:not(.on) { border-color: #d19a2f; color: #d19a2f; }
 .chip.mst-pulled:not(.on) { border-color: #8a8a8a; color: #8a8a8a; }
-.chip.mst-missing:not(.on) { border-color: #c0392b; color: #d9705f; }
+.chip.mst-missing:not(.on) { border-color: #3b82f6; color: #7aa8f0; }
 /* Q11: saved-entry suggestions under the bait/lure/urine inputs */
 .suggest { display: none; margin-top: -2px; }
 .suggest.show { display: block; }
@@ -338,7 +343,7 @@ select.select-hint { color: var(--faint); }
 .badge.status-active { background: #1d3a1d; color: #9ed69a; }
 .badge.status-sprung { background: #3d2c10; color: #f5cf7a; }
 .badge.status-pulled { background: #2a2a2a; color: #bdbdbd; }
-.badge.status-missing { background: #2e1d3d; color: #cfa9ee; }
+.badge.status-missing { background: #1d2b4d; color: #a9c6ee; }
 .badge.released { background: #2a2a2a; color: #bdbdbd; border: 1px solid #4a4a4a; }
 .badge.alive { background: #1d3a1d; color: #9ed69a; border: 1px solid #3f6b3a; }
 .badge.transported { background: #16283d; color: #9cc0ee; border: 1px solid #2f4d6e; }
