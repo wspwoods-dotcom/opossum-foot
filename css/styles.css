@@ -35,6 +35,10 @@ html, body {
   font-size: 17px;
   line-height: 1.45;
   overscroll-behavior-y: none;
+  /* Q13: the page itself never pinch-zooms — single-finger pan/scroll stays
+     native, pinch-zoom and double-tap-zoom are off. Leaflet keeps its own
+     touch-action on #map and its JS pinch-zoom is unaffected. */
+  touch-action: pan-x pan-y;
 }
 /* Pin the document itself in place (standard PWA boilerplate): only the
    inner .scroll panes and sheet bodies ever move. Stops iOS from dragging
@@ -90,7 +94,7 @@ button, .btn {
 .btn-small { min-height: 44px; font-size: 15px; padding: 8px 14px; width: auto; }
 button:disabled { opacity: .45; }
 
-label.field { display: block; margin: 14px 0 4px; font-size: 14px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .6px; }
+label.field { display: block; margin: 14px 0 4px; font-size: 14px; font-weight: 600; color: var(--muted); text-align: center; }
 input[type=text], input[type=date], input[type=number], input[type=search], select, textarea {
   width: 100%; min-height: var(--tap);
   background: #10140c; color: var(--ink);
@@ -170,6 +174,10 @@ input:focus, select:focus, textarea:focus, button:focus-visible { outline: 2px s
 #place-bar { flex: 0 0 auto; z-index: 500; display: none; align-items: center; justify-content: center; gap: 10px; padding: 10px 14px; font-size: 15px; font-weight: 600; background: #1d2a12; color: #fff; border-bottom: 1px solid var(--line); }
 #place-bar.show { display: flex; }
 .pin-place { background: #ff9f1c; animation: pinpulse 1.4s infinite; }
+/* Q53: home-ground picker */
+#home-bar { flex: 0 0 auto; z-index: 500; display: none; align-items: center; justify-content: center; gap: 10px; padding: 10px 14px; font-size: 15px; font-weight: 600; background: #1d2a12; color: #fff; border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+#home-bar.show { display: flex; }
+.pin-home { background: #2e7d32; font-size: 18px; line-height: 32px; text-align: center; }
 @keyframes pinpulse { 0% { box-shadow: 0 0 0 0 rgba(255,159,28,.65); } 70% { box-shadow: 0 0 0 16px rgba(255,159,28,0); } 100% { box-shadow: 0 0 0 0 rgba(255,159,28,0); } }
 
 /* ---------- map ---------- */
@@ -188,13 +196,25 @@ input:focus, select:focus, textarea:focus, button:focus-visible { outline: 2px s
 }
 .fab.secondary { background: var(--panel); color: var(--ink); border: 1px solid var(--line); font-size: 22px; }
 .fab.active-mode { background: var(--green); color: #0e150a; }
+.fab.paused-mode { background: var(--green); color: #0e150a; opacity: .45; }
+/* Cosmetic: the add-set button and the Leaflet zoom/layers controls share the
+   same green tone as the crosshair / drop-pin buttons. */
+#btn-add-gps { background: var(--green); color: #0e150a; }
+.leaflet-bar a { background: var(--green); color: #0e150a; border-bottom: 1px solid rgba(0,0,0,.25); }
+.leaflet-bar a:hover, .leaflet-bar a:focus { background: var(--green); color: #0e150a; }
+.leaflet-control-layers-toggle { background-color: var(--green); }
 
 /* set pins */
-.pin { width: 30px; height: 30px; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 2px 8px rgba(0,0,0,.6); }
+.pin { width: 30px; height: 30px; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 2px 8px rgba(0,0,0,.6); position: relative; }
 .pin-active { background: #4caf50; }
 .pin-sprung { background: #d19a2f; }
 .pin-pulled { background: #8a8a8a; }
-.pin-other { background: #9b59d0; }
+.pin-missing { background: #9b59d0; }
+/* Q17: wind arrow — small triangle orbiting the pin, pointing downwind
+   (where scent goes). The wrapper rotates; the glyph always tips outward. */
+.wind-arrow { position: absolute; left: 0; top: 0; width: 30px; height: 30px; pointer-events: none; }
+.wind-arrow i { position: absolute; left: 50%; top: -9px; transform: translateX(-50%); font-style: normal; font-size: 12px; line-height: 1; color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,.85); }
+.wind-arrow.stale i { opacity: .4; }
 .gps-dot { width: 18px; height: 18px; border-radius: 50%; background: #2f8ff0; border: 3px solid #fff; box-shadow: 0 0 0 6px rgba(47,143,240,.25); }
 
 /* map status filters: independent multi-select toggles overlaid on the map */
@@ -204,6 +224,34 @@ input:focus, select:focus, textarea:focus, button:focus-visible { outline: 2px s
 }
 .map-status-filters .chip { background: rgba(18,22,14,.88); }
 .map-status-filters .chip.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+/* Q11: saved-entry suggestions under the bait/lure/urine inputs */
+.suggest { display: none; margin-top: -2px; }
+.suggest.show { display: block; }
+.suggest-item { display: block; width: 100%; text-align: left; font-size: 15px; color: var(--text);
+  background: var(--card); border: 1px solid var(--line); border-top: none; padding: 9px 12px; cursor: pointer; }
+.suggest-item:first-child { border-top: 1px solid var(--line); border-radius: 10px 10px 0 0; }
+.suggest-item:last-child { border-radius: 0 0 10px 10px; }
+.suggest-item:active { background: var(--line); }
+/* Q26: stacked attractant rows — one input + remove per row, suggestions
+   under each row, "add another" below the stack */
+.attr-row { display: flex; gap: 8px; align-items: center; margin-top: 6px; }
+.attr-row .attr-row-input { flex: 1; min-width: 0; }
+.attr-row-x { flex: 0 0 auto; width: 38px; height: 38px; border-radius: 50%;
+  background: var(--panel); color: var(--muted); border: 1px solid var(--line);
+  font-size: 20px; line-height: 1; padding: 0; }
+.attr-row-x:active { background: var(--line); }
+.attr-add { margin-top: 8px; }
+/* Q48: quiet coordinates line at the bottom of the set form/detail sheets —
+   small, dim, centered, tap to copy. Not a title, keep it quiet. */
+.coords-bottom { font-size: 11px; color: var(--muted); text-align: center; margin: 12px 0 4px; }
+.coords-bottom:active { opacity: .6; }
+
+/* weather chip (Q9): temp + condition icon overlaid on the map, top-right
+   below the status filter row; taps open the weather sheet */
+.weather-chip {
+  position: absolute; top: 50px; right: 8px; z-index: 500;
+  background: rgba(18,22,14,.88); font-size: 15px; min-height: 0;
+}
 
 /* set-detail status control (changed manually at check time) */
 .status-row { display: flex; align-items: center; gap: 10px; margin: 10px 0 4px; }
@@ -218,9 +266,29 @@ input:focus, select:focus, textarea:focus, button:focus-visible { outline: 2px s
 
 .card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px; margin-bottom: 12px; }
 .card h3 { margin: 0 0 6px; font-size: 18px; }
+/* Q49: collapsible Settings sections — full-width header buttons with a
+   chevron; the body shows/hides via the hidden attribute (reliable on iOS). */
+.setsec { padding: 0 14px; }
+.setsec-head { display: flex; align-items: center; justify-content: space-between; width: 100%; background: none; border: none; color: var(--ink); font-size: 18px; font-weight: 700; padding: 14px 0; margin: 0; min-height: 0; cursor: pointer; text-align: left; }
+.setsec-chev { color: var(--muted); font-size: 22px; line-height: 1; transition: transform .18s ease; }
+.setsec.open .setsec-chev { transform: rotate(90deg); }
+.setsec-body { padding-bottom: 14px; }
+.setsec-body[hidden] { display: none; }
 .rowline { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--line); }
 .rowline:last-child { border-bottom: none; }
+/* Q15: collapsible per-set setup details on the Totals tab. The row shows
+   the set name and count; tapping expands the labeled setup beneath it. */
+.totals-setrow { cursor: pointer; }
+.tchev { color: var(--muted); font-size: 14px; }
+.totals-setup { padding: 2px 0 10px 20px; font-size: 14px; }
+.totals-setup[hidden] { display: none; }
+.totals-setup > div { padding: 1px 0; }
 .dim { color: var(--muted); font-size: 14px; }
+/* Q7: short captions naming each import/export button's file source */
+.imp-cap { color: var(--muted); font-size: 12.5px; margin: -4px 2px 6px; line-height: 1.35; }
+/* Q8: directional arrowheads on the route-estimate polyline. The ➤ glyph
+   points east; JS rotates each one to the segment bearing. */
+.route-arrow { font-size: 18px; line-height: 22px; text-align: center; color: #e8b64c; text-shadow: 0 1px 3px rgba(0,0,0,.75); }
 .big-num { font-size: 26px; font-weight: 800; color: var(--accent); }
 
 .badge { display: inline-block; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .6px; padding: 4px 10px; border-radius: 20px; white-space: nowrap; }
@@ -231,16 +299,21 @@ input:focus, select:focus, textarea:focus, button:focus-visible { outline: 2px s
 .badge.status-active { background: #1d3a1d; color: #9ed69a; }
 .badge.status-sprung { background: #3d2c10; color: #f5cf7a; }
 .badge.status-pulled { background: #2a2a2a; color: #bdbdbd; }
-.badge.status-other { background: #2e1d3d; color: #cfa9ee; }
+.badge.status-missing { background: #2e1d3d; color: #cfa9ee; }
 .badge.released { background: #2a2a2a; color: #bdbdbd; border: 1px solid #4a4a4a; }
 .badge.alive { background: #1d3a1d; color: #9ed69a; border: 1px solid #3f6b3a; }
 .badge.transported { background: #16283d; color: #9cc0ee; border: 1px solid #2f4d6e; }
 .badge.kept { background: #3d2c10; color: #f5cf7a; border: 1px solid #6b4d1c; }
+.badge.discarded { background: #2a2a2a; color: #8a8a8a; border: 1px solid #3a3a3a; }
+.badge.none { background: transparent; color: #8a8a8a; border: 1px dashed #4a4a4a; }
 .badge.other-ev { background: #2e1d3d; color: #cfa9ee; border: 1px solid #5a3a6e; }
+/* Q31: fur price reference label — deliberately quiet, a footnote not a headline. */
+.fur-avg { display: inline-block; font-size: 11px; color: #8a8a8a; white-space: nowrap; margin-left: 8px; text-decoration: underline dotted; cursor: pointer; }
 .req { color: var(--red); }
 .seg { display: flex; gap: 8px; margin: 2px 0 14px; }
 .seg button { flex: 1; padding: 13px; border-radius: 10px; border: 1px solid var(--line); background: var(--panel); color: var(--ink); font-size: 16px; font-weight: 600; }
 .seg button.selected { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.seg button[hidden], #log-disposition[hidden], #log-disposition-label[hidden] { display: none; }
 #log-disposition button { white-space: nowrap; font-size: 14px; padding: 12px 4px; }
 
 .warnbox { background: #3d2c10; border: 1px solid #6b4d1c; color: #f5cf7a; border-radius: var(--radius); padding: 12px 14px; margin: 12px 0; font-size: 15px; }
@@ -277,8 +350,9 @@ input:focus, select:focus, textarea:focus, button:focus-visible { outline: 2px s
 }
 .sheet.show { display: flex; }
 .sheet-grab { width: 44px; height: 5px; border-radius: 3px; background: var(--faint); margin: 10px auto 2px; flex: 0 0 auto; }
-.sheet-head { display: flex; align-items: center; justify-content: space-between; padding: 8px 16px; flex: 0 0 auto; }
+.sheet-head { display: flex; align-items: center; justify-content: center; position: relative; padding: 8px 16px; flex: 0 0 auto; }
 .sheet-head h2 { margin: 0; font-size: 21px; }
+.sheet-x { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); }
 .sheet-x { background: none; border: none; color: var(--muted); font-size: 26px; min-height: 48px; width: 48px; padding: 0; }
 .sheet-body { overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 4px 16px 24px; }
 .sheet-actions { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
@@ -343,17 +417,28 @@ input:focus, select:focus, textarea:focus, button:focus-visible { outline: 2px s
 .kv { display: grid; grid-template-columns: 110px 1fr; gap: 6px 10px; font-size: 15px; margin: 10px 0; }
 .kv dt { color: var(--muted); }
 .kv dd { margin: 0; }
-.season-group-head { font-size: 15px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: var(--accent); margin: 18px 0 8px; }
+.season-group-head { font-size: 15px; font-weight: 800; color: var(--accent); margin: 18px 0 8px; text-align: center; }
 .log-row { padding: 12px 0; border-bottom: 1px solid var(--line); }
 .log-row .lr-top { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
 .log-row .lr-species { font-weight: 700; font-size: 17px; }
 .log-row .lr-count { font-weight: 800; color: var(--accent); font-size: 18px; }
+/* Q38: per-catch delete — small, quiet until needed */
+.log-del { flex: 0 0 auto; width: 32px; height: 32px; border: none; background: none;
+  color: var(--muted); font-size: 20px; line-height: 1; cursor: pointer; border-radius: 8px; }
+.log-del:active { background: var(--panel); color: #c00; }
 
 /* ---- history filters ---- */
 .hist-summary { font-size: 15px; margin: 4px 0 10px; }
 #history-search { margin-bottom: 8px; }
 .seg.compact { margin: 2px 0 10px; }
 .seg.compact button { padding: 8px; font-size: 14px; }
+/* Q36: five reason buttons wrap 3+2 on narrow phones */
+#sf-missing-reason { flex-wrap: wrap; }
+#sf-missing-reason button { flex: 1 1 28%; font-size: 13px; padding: 10px 2px; }
+/* Q36: reason picker inside the set-detail modal */
+.mr-list { display: flex; flex-direction: column; gap: 8px; margin: 12px 0; }
+.mr-list button { padding: 13px; border-radius: 10px; border: 1px solid var(--line); background: var(--panel); color: var(--ink); font-size: 16px; font-weight: 600; text-align: left; }
+.mr-list button.selected { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
 .chip-row { display: flex; gap: 6px; overflow-x: auto; padding: 2px 0 8px; -webkit-overflow-scrolling: touch; }
 .chip-row::-webkit-scrollbar { display: none; }
 .chip { flex: 0 0 auto; font-size: 13px; font-weight: 600; padding: 6px 12px; border-radius: 999px;
@@ -379,6 +464,14 @@ input:focus, select:focus, textarea:focus, button:focus-visible { outline: 2px s
 .about-logo { width: 72px; height: 72px; border-radius: 16px; }
 .checkline { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 16px; }
 .checkline input[type=checkbox] { width: 22px; height: 22px; accent-color: var(--accent); }
+/* Q39 modifications section */
+.mods-sect { margin-top: 12px; border-top: 1px solid var(--line); padding-top: 10px; }
+.mods-title { font-weight: 600; margin-bottom: 2px; }
+.mods-hint { font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+.mods-sub { font-size: 12px; color: var(--muted); margin: 8px 0 2px; text-align: center; }
+.modline { display: flex; align-items: center; gap: 10px; padding: 7px 0; cursor: pointer; }
+.mod-addrow { display: flex; gap: 8px; margin-top: 8px; }
+.mod-addrow input { flex: 1; min-width: 0; }
 
 /* ---- weather tab ---- */
 .wx-temp { font-size: 32px; font-weight: 800; }
@@ -386,6 +479,14 @@ input:focus, select:focus, textarea:focus, button:focus-visible { outline: 2px s
 .wx-meta { margin-top: 8px; font-size: 14px; color: var(--muted); line-height: 1.5; }
 .wx-hour { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 9px 0; border-bottom: 1px solid var(--line); font-size: 15px; }
 .wx-hour:last-child { border-bottom: none; }
+.wx-day { padding: 9px 0; border-bottom: 1px solid var(--line); }
+.wx-day:last-child { border-bottom: none; }
+.wx-day-top { display: flex; justify-content: space-between; align-items: center; font-size: 15px; }
+.wx-day .dim { font-size: 13px; margin-top: 2px; line-height: 1.4; }
+.wx-alert { padding: 10px 12px; border-left: 4px solid #c0392b; background: rgba(192,57,43,.08); border-radius: 8px; margin-bottom: 8px; font-size: 14px; line-height: 1.4; }
+.wx-alert:last-child { margin-bottom: 0; }
+.wx-alert details { margin-top: 6px; }
+.wx-alert summary { cursor: pointer; color: var(--muted); }
 
 /* ---- centered page furniture (all tabs) ---- */
 .pane-head { text-align: center; }
@@ -395,8 +496,8 @@ input:focus, select:focus, textarea:focus, button:focus-visible { outline: 2px s
 .season-group-head { text-align: center; }
 .warnbox { text-align: center; }
 #pane-licenses .scroll > p.dim { text-align: center; }
-#pane-weather .scroll > h3, #pane-weather .scroll > p.dim { text-align: center; }
-#pane-weather #weather-now { text-align: center; }
+#sheet-weather .sheet-body > h3, #sheet-weather .sheet-body > p.dim { text-align: center; }
+#sheet-weather #weather-now { text-align: center; }
 
 /* build ag: scorecard, trap-check, photos */
 .photo-strip { display: flex; gap: 8px; overflow-x: auto; padding: 6px 2px; }
@@ -414,12 +515,9 @@ input:focus, select:focus, textarea:focus, button:focus-visible { outline: 2px s
 #hist-disp-chips .chip { flex: 0 0 auto; width: 172px; text-align: center; padding: 10px 8px; font-size: 13px; white-space: nowrap; }
 
 /* ---- History report filters (build aq) ---- */
-#hist-filters-toggle { width: 100%; margin: 4px 0 8px; }
-#hist-filters-toggle #hist-filters-count { margin-left: 6px; }
-#hist-filters { border: 1px solid var(--line); border-radius: 12px; padding: 4px 12px 12px; margin-bottom: 10px; }
-#hist-filters .dim-label { font-size: 13px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .6px; margin: 12px 0 2px; }
-#hist-filters .btn-row > div { min-width: 0; }
-#hist-filters-clear { width: 100%; margin-top: 10px; }
+#exp-filters-clear { width: 100%; margin: 4px 0; }
+#exp-dim-filters .dim-label { font-size: 13px; font-weight: 700; color: var(--muted); margin: 12px 0 2px; text-align: center; }
+#exp-dim-filters .btn-row > div { min-width: 0; }
 
 /* ---- demo mode phone framing (build am, ?demo=1 only) ---- */
 body.demo-shot { background: #05070a; }
@@ -434,3 +532,25 @@ body.demo-shot #view-main { box-shadow: 0 0 80px rgba(0,0,0,.65); min-height: 10
 .guide-body p { margin: 8px 0; line-height: 1.55; }
 .guide-body ol, .guide-body ul { margin: 8px 0; padding-left: 22px; line-height: 1.55; }
 .guide-body li { margin: 5px 0; }
+
+/* ---------- sponsors (Q33 badge + Q32 tap-for-bio) ---------- */
+.sponsor-row {
+  display: flex; align-items: center; gap: 10px; width: 100%;
+  margin-top: 8px; padding: 8px 10px;
+  background: var(--bg2); border: 1px solid var(--line); border-radius: 10px;
+  color: var(--ink); text-align: left; cursor: pointer; font: inherit;
+}
+.sponsor-row:active { transform: scale(.99); }
+.sponsor-badge { width: 44px; height: 44px; border-radius: 8px; object-fit: cover; flex: none; }
+.sponsor-text { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.sponsor-product { font-weight: 600; }
+.pill {
+  font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+  background: var(--accent); color: var(--accent-ink); border-radius: 20px; padding: 3px 9px;
+  white-space: nowrap;
+}
+.sponsor-bio { text-align: center; }
+.sponsor-bio-badge { width: 96px; height: 96px; border-radius: 12px; object-fit: cover; }
+.sponsor-bio h3 { margin: 10px 0 6px; }
+.sponsor-bio p { margin: 0 0 12px; line-height: 1.55; color: var(--ink); }
+.sponsor-bio a.btn-small { text-decoration: none; display: inline-block; }
