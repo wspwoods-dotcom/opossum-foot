@@ -47,6 +47,8 @@ body {
   position: fixed;
   top: 0; left: 0;
   width: 100%;
+  height: 100%;
+  height: 100dvh; /* B27: pin the app to the true viewport — no dead band below the tab bar */
 }
 /* Don't let an inner scroller chain its overscroll out to the document. */
 .scroll, .sheet-body, .modal-card { overscroll-behavior-y: contain; }
@@ -122,11 +124,11 @@ select.select-hint { color: var(--faint); }
 }
 #tabbar button {
   flex: 1 1 0; min-width: 0; background: none; border: none; border-radius: 0;
-  color: var(--ink); font-size: 10px; font-weight: 600; text-align: center;
+  color: var(--ink); font-size: 9px; font-weight: 600; text-align: center;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   gap: 2px; min-height: 0; padding: 8px 2px;
 }
-#tabbar button .ti { font-size: 22px; line-height: 1; }
+#tabbar button .ti { font-size: 24px; line-height: 1; }
 /* B14: every tab identical — white icons, cream labels. The active tab keeps
    the same colors and is marked only by a thin brass tick, so the bar reads
    as one consistent row. */
@@ -180,8 +182,12 @@ select.select-hint { color: var(--faint); }
 #place-bar.show { display: flex; }
 .pin-place { background: #ff9f1c; animation: pinpulse 1.4s infinite; }
 /* Q53: home-ground picker */
-#home-bar { flex: 0 0 auto; z-index: 500; display: none; align-items: center; justify-content: center; gap: 10px; padding: 10px 14px; font-size: 15px; font-weight: 600; background: #1d2a12; color: #fff; border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+#home-bar { flex: 0 0 auto; z-index: 500; display: none; align-items: center; justify-content: center; gap: 8px; padding: 8px 10px; font-size: 15px; font-weight: 600; background: #1d2a12; color: #fff; border-bottom: 1px solid var(--line); flex-wrap: wrap; }
 #home-bar.show { display: flex; }
+/* B26: two clear choices side by side — cancel rides inline, no dedicated row. */
+.home-choose { display: flex; gap: 8px; width: 100%; }
+.home-choose .btn-small { flex: 1 1 0; }
+#home-bar .btn-ghost { margin-left: auto; }
 .pin-home { background: #2e7d32; font-size: 18px; line-height: 32px; text-align: center; }
 @keyframes pinpulse { 0% { box-shadow: 0 0 0 0 rgba(255,159,28,.65); } 70% { box-shadow: 0 0 0 16px rgba(255,159,28,0); } 100% { box-shadow: 0 0 0 0 rgba(255,159,28,0); } }
 
@@ -218,13 +224,14 @@ select.select-hint { color: var(--faint); }
 /* Q17: wind arrow — small triangle orbiting the pin, pointing downwind
    (where scent goes). The wrapper rotates; the glyph always tips outward. */
 .wind-arrow { position: absolute; left: 0; top: 0; width: 30px; height: 30px; pointer-events: none; }
-.wind-arrow i { position: absolute; left: 50%; top: -9px; transform: translateX(-50%); font-style: normal; font-size: 12px; line-height: 1; color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,.85); }
+.wind-arrow i { position: absolute; left: 50%; top: -12px; transform: translateX(-50%); font-style: normal; font-size: 16px; line-height: 1; color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,.85); }
 .wind-arrow.stale i { opacity: .4; }
 .gps-dot { width: 18px; height: 18px; border-radius: 50%; background: #2f8ff0; border: 3px solid #fff; box-shadow: 0 0 0 6px rgba(47,143,240,.25); }
 
-/* map status filters: independent multi-select toggles overlaid on the map */
+/* map status filters: independent multi-select toggles overlaid on the map.
+   B19: full-width, centered — the weather chip no longer crowds the top-right. */
 .map-status-filters {
-  position: absolute; top: 8px; left: 8px; right: 66px; z-index: 500;
+  position: absolute; top: 8px; left: 8px; right: 8px; z-index: 500;
   justify-content: safe center; padding: 2px 0;
 }
 .map-status-filters .chip { background: rgba(18,22,14,.88); }
@@ -234,11 +241,11 @@ select.select-hint { color: var(--faint); }
 .chip.mst-active.on { background: #4caf50; border-color: #4caf50; color: #0e150a; }
 .chip.mst-sprung.on { background: #d19a2f; border-color: #d19a2f; color: #0e150a; }
 .chip.mst-pulled.on { background: #8a8a8a; border-color: #8a8a8a; color: #0e150a; }
-.chip.mst-missing.on { background: #9b59d0; border-color: #9b59d0; color: #0e150a; }
+.chip.mst-missing.on { background: #c0392b; border-color: #c0392b; color: #fff; }
 .chip.mst-active:not(.on) { border-color: #4caf50; color: #4caf50; }
 .chip.mst-sprung:not(.on) { border-color: #d19a2f; color: #d19a2f; }
 .chip.mst-pulled:not(.on) { border-color: #8a8a8a; color: #8a8a8a; }
-.chip.mst-missing:not(.on) { border-color: #9b59d0; color: #9b59d0; }
+.chip.mst-missing:not(.on) { border-color: #c0392b; color: #d9705f; }
 /* Q11: saved-entry suggestions under the bait/lure/urine inputs */
 .suggest { display: none; margin-top: -2px; }
 .suggest.show { display: block; }
@@ -261,23 +268,28 @@ select.select-hint { color: var(--faint); }
 .coords-bottom { font-size: 11px; color: var(--muted); text-align: center; margin: 12px 0 4px; }
 .coords-bottom:active { opacity: .6; }
 
-/* weather chip (Q9/B16): same green as the map controls, temp + condition
-   stacked vertically, top-right clear of the filter chips and map buttons;
-   taps open the weather sheet */
-.weather-chip {
-  position: absolute; top: 8px; right: 8px; z-index: 500;
+/* weather chip (B19): sits above the map layer button, bottom-left; solid green
+   like the map controls; taps open the weather sheet. ID selector so the
+   fill beats the .chip transparent background. */
+#weather-chip {
+  position: absolute; left: 10px; bottom: 132px; top: auto; right: auto; z-index: 500;
   background: var(--green); border: 1px solid rgba(0,0,0,.25); color: #0e150a;
   font-size: 13px; font-weight: 700; min-height: 0; border-radius: 14px;
   display: flex; flex-direction: column; align-items: center; line-height: 1.3;
   padding: 5px 10px;
 }
 
-/* B16: rounder edges on the Leaflet zoom + layers controls */
-.leaflet-bar { border-radius: 14px; overflow: hidden; }
+/* B20: zoom pill and layer button share one vertical axis in the corner. */
+.leaflet-bottom.leaflet-left { display: flex; flex-direction: column; align-items: center; }
+/* B21: no white fringe on the rounded corners — the controls are green all
+   the way through, and the layer panel goes dark when expanded. */
+.leaflet-bar { border-radius: 14px; overflow: hidden; background: var(--green); border: none;
+  box-shadow: 0 4px 14px rgba(0,0,0,.5); }
 .leaflet-bar a:first-child { border-radius: 13px 13px 0 0; }
 .leaflet-bar a:last-child { border-radius: 0 0 13px 13px; }
-.leaflet-control-layers-toggle { border-radius: 14px; }
-.leaflet-control-layers { border-radius: 14px; }
+.leaflet-control-layers { background: transparent; border: none; box-shadow: none; border-radius: 14px; }
+.leaflet-control-layers-toggle { border-radius: 14px; background-color: var(--green); background-clip: padding-box; }
+.leaflet-control-layers-expanded { background: var(--panel); color: var(--ink); border: 1px solid var(--line); }
 
 /* set-detail status control (changed manually at check time) */
 .status-row { display: flex; align-items: center; gap: 10px; margin: 10px 0 4px; }
@@ -339,10 +351,8 @@ select.select-hint { color: var(--faint); }
 .seg button { flex: 1; padding: 13px; border-radius: 10px; border: 1px solid var(--line); background: var(--panel); color: var(--ink); font-size: 16px; font-weight: 600; }
 .seg button.selected { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
 /* Set-form status buttons wear their pin colors when selected */
-.status-seg button.selected.st-active { background: #4caf50; border-color: #4caf50; color: #0e150a; }
-.status-seg button.selected.st-sprung { background: #d19a2f; border-color: #d19a2f; color: #0e150a; }
-.status-seg button.selected.st-pulled { background: #8a8a8a; border-color: #8a8a8a; color: #0e150a; }
-.status-seg button.selected.st-missing { background: #9b59d0; border-color: #9b59d0; color: #0e150a; }
+/* B31: per-status colors removed from the form — the standard brass segmented
+   treatment is the only selected state. Color coding lives on the map. */
 .seg button[hidden], #log-disposition[hidden], #log-disposition-label[hidden] { display: none; }
 #log-disposition button { white-space: nowrap; font-size: 14px; padding: 12px 4px; }
 
@@ -438,7 +448,7 @@ select.select-hint { color: var(--faint); }
 .hidden-file { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
 
 /* ---------- map-screen silhouette icons (build r) ---------- */
-#tabbar button .ti-img { width: 24px; height: 24px; object-fit: contain; filter: invert(1); opacity: 1; }
+#tabbar button .ti-img { width: 28px; height: 28px; object-fit: contain; filter: invert(1); opacity: 1; }
 #tabbar button.active .ti-img { opacity: 1; }
 #tabbar button .ti-svg { filter: none; color: #fff; }
 
@@ -449,6 +459,15 @@ body.placing #tabbar,
 body.placing #line-bar { pointer-events: none; }
 body.placing #tabbar,
 body.placing #line-bar { opacity: .45; }
+/* B15-fix: while a placement is armed, the status filters, weather chip, and
+   the other map FABs go dead too — the drop-pin button stays live so the
+   armed placement can still be cancelled. */
+body.placing #map-status-filters,
+body.placing #weather-chip,
+body.placing #btn-locate,
+body.placing #btn-add-gps,
+body.placing .leaflet-control-layers { pointer-events: none; opacity: .45; }
+/* B15: zoom stays live during placement — pan and zoom, nothing else. */
 
 /* ---- trap lines ---- */
 .line-row { display: flex; gap: 8px; align-items: stretch; margin-bottom: 8px; border: 1px solid var(--line); border-radius: 12px; padding: 4px; }
@@ -458,7 +477,9 @@ body.placing #line-bar { opacity: .45; }
 .line-row .badge { margin-top: 2px; }
 .line-edit { align-self: center; flex: none; }
 .fab img { width: 30px; height: 30px; object-fit: contain; display: block; }
-.fab.secondary img { filter: invert(1); }
+/* B23: the crosshair glyph nearly fills its button. Icons ship natively
+   colored now (no more invert) — see B24. */
+#btn-locate img { width: 44px; height: 44px; }
 /* 2026-09-29: generalized from #place-bar-only — the home-bar cancel × rendered
    at the raw 128px with no size rule. */
 .pb-ic { width: 18px; height: 18px; object-fit: contain; filter: invert(1); vertical-align: -3px; margin-right: 6px; }
@@ -581,17 +602,19 @@ body.demo-shot #view-main { box-shadow: 0 0 80px rgba(0,0,0,.65); min-height: 10
 .guide-body ol, .guide-body ul { margin: 8px 0; padding-left: 22px; line-height: 1.55; }
 .guide-body li { margin: 5px 0; }
 
-/* ---------- sponsors (Q33 badge + Q32 tap-for-bio) ---------- */
-.sponsor-row {
-  display: flex; align-items: center; gap: 10px; width: 100%;
-  margin-top: 8px; padding: 8px 10px;
-  background: var(--bg2); border: 1px solid var(--line); border-radius: 10px;
-  color: var(--ink); text-align: left; cursor: pointer; font: inherit;
-}
-.sponsor-row:active { transform: scale(.99); }
-.sponsor-badge { width: 44px; height: 44px; border-radius: 8px; object-fit: cover; flex: none; }
-.sponsor-text { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-.sponsor-product { font-weight: 600; }
+/* ---------- sponsors (Q67: inside the suggestion menus + Q32 tap-for-bio) ---------- */
+/* Q67: sponsored products sit at the top of the bait/lure suggestion menus.
+   The product name fills the row on tap; the eye opens the sponsor bio. */
+.suggest-sponsor { display: flex; align-items: stretch; background: var(--card);
+  border: 1px solid var(--line); border-top: none; }
+.suggest-sponsor:first-child { border-top: 1px solid var(--line); border-radius: 10px 10px 0 0; overflow: hidden; }
+.suggest-fill { flex: 1 1 auto; min-width: 0; text-align: left; font-size: 15px; color: var(--text);
+  background: none; border: none; padding: 9px 12px; cursor: pointer;
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.suggest-fill:active { background: var(--line); }
+.sponsor-eye { flex: 0 0 46px; background: none; border: none; border-left: 1px solid var(--line);
+  font-size: 19px; color: var(--muted); cursor: pointer; min-height: 0; }
+.sponsor-eye:active { background: var(--line); color: var(--ink); }
 .pill {
   font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
   background: var(--accent); color: var(--accent-ink); border-radius: 20px; padding: 3px 9px;
