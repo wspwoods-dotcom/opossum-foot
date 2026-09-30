@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-09-30bm';
+var APP_VERSION = 'beta 0.1 · build 2026-09-30bn';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -1140,6 +1140,76 @@ function rememberOne(key, v) {
   arr.unshift(v);
   if (arr.length > 30) arr.length = 30;
 }
+/* ================= Q55. "OTHER" TYPE-IN ON EVERY DROPDOWN =================
+   Every data-entry dropdown on the set form grows an "Other…" option. Picking
+   it reveals a "What is it?" box; whatever the trapper types is saved as the
+   field's value AND remembered per trap line, so next time it's a plain
+   option in that dropdown — never retyped. One mechanism everywhere: the
+   trap-type "Other" (Q57-B), the snare "Other"s, and the set-type "Other"
+   all route through it. */
+var OTHER_VALUE = '__other'; /* the universal Other… option value */
+function customOptionsFor(id) {
+  /* Read path never creates Store.data: backfillCounties and friends use
+     `!Store.data` to mean "not loaded yet", and that must keep working. */
+  var d = Store.data;
+  if (!d || typeof d !== 'object') return [];
+  var co = d.customOptions;
+  if (!co || typeof co !== 'object') co = d.customOptions = {};
+  if (!Array.isArray(co[id])) co[id] = [];
+  return co[id];
+}
+function rememberCustomOption(id, v) {
+  v = (v || '').trim();
+  if (!v) return;
+  if (!Store.data || typeof Store.data !== 'object') Store.data = {};
+  var arr = customOptionsFor(id), li = -1;
+  for (var i = 0; i < arr.length; i++) {
+    if (arr[i].toLowerCase() === v.toLowerCase()) { li = i; break; }
+  }
+  if (li !== -1) arr.splice(li, 1);
+  arr.unshift(v);
+  if (typeof Store.save === 'function') Store.save();
+}
+/* Base options + the trapper's remembered customs (deduped, customs last). */
+function mergeCustomOptions(id, base) {
+  var out = base.slice(), seen = {}, customs = customOptionsFor(id);
+  for (var i = 0; i < out.length; i++) seen[out[i].toLowerCase()] = 1;
+  for (var j = 0; j < customs.length; j++) {
+    if (!seen[customs[j].toLowerCase()]) { out.push(customs[j]); seen[customs[j].toLowerCase()] = 1; }
+  }
+  return out;
+}
+function hasOtherOption(options) {
+  for (var i = 0; i < options.length; i++) {
+    if (options[i] === 'Other' || options[i] === OTHER_VALUE) return true;
+  }
+  return false;
+}
+/* The "What is it?" reveal row that sits under an Other-capable dropdown. */
+function otherWrapHtml(id, placeholder) {
+  return '<div class="other-wrap" id="' + id + '-otherwrap" hidden>' +
+    '<label class="field" for="' + id + '-othertext">What is it?</label>' +
+    '<input type="text" id="' + id + '-othertext" placeholder="' + esc(placeholder || 'Type it here') + '" autocomplete="off"></div>';
+}
+function toggleOtherWrap(sel) {
+  if (!sel || !sel.id) return;
+  var w = $(sel.id + '-otherwrap');
+  if (w) w.hidden = !(sel.value === OTHER_VALUE || sel.value === 'Other');
+}
+/* Read a dropdown's value, resolving Other… → the typed text (remembered).
+   Picked Other but typed nothing → blank, never the literal "Other". */
+function selVal(id) {
+  var sel = $(id);
+  if (!sel) return '';
+  var v = sel.value;
+  if (v === OTHER_VALUE || v === 'Other') {
+    var t = $(id + '-othertext');
+    var typed = t ? t.value.trim() : '';
+    if (typed) { rememberCustomOption(id, typed); return typed; }
+    return '';
+  }
+  return v;
+}
 /* Q12: remember one typed value under a field kind — offered as a
    tap-to-fill suggestion next time that field is used. Scoped per field:
    lure history never pollutes the bait field. No seeds for non-attractant
@@ -1352,12 +1422,18 @@ var SNARE_LOCKS = ['Cam', 'Relaxing', 'Washer'];
 var SNARE_LENS = ['30"', '48"', '60"', '84"'];
 
 function selHtml(id, label, options, val) {
-  var h = '<label class="field" for="' + id + '">' + label + '</label><select id="' + id + '">';
+  /* Q55: the trapper's remembered customs ride with the base options, and
+     every dropdown grows an Other… escape hatch (unless it has one). */
+  var opts = mergeCustomOptions(id, options);
+  if (!hasOtherOption(opts)) opts = opts.concat([OTHER_VALUE]);
+  var h = '<label class="field" for="' + id + '">' + label + '</label>' +
+    '<select id="' + id + '" data-has-other="1">';
   h += '<option value="">—</option>';
-  for (var i = 0; i < options.length; i++) {
-    h += '<option value="' + esc(options[i]) + '"' + (val === options[i] ? ' selected' : '') + '>' + esc(options[i]) + '</option>';
+  for (var i = 0; i < opts.length; i++) {
+    var ov = opts[i], ol = (ov === OTHER_VALUE) ? 'Other…' : ov;
+    h += '<option value="' + esc(ov) + '"' + (val === ov ? ' selected' : '') + '>' + esc(ol) + '</option>';
   }
-  return h + '</select>';
+  return h + '</select>' + otherWrapHtml(id);
 }
 /* ---- Q39: manufacturer-first trap picker ----
    Flow: Manufacturer -> trap type -> size/model. Picking "Not sure / mixed
@@ -1371,13 +1447,23 @@ function paintSelectHint(sel) {
 /* Populate the manufacturer select once (options live in trap-catalog.js). */
 function renderMakerOptions() {
   var sel = $('sf-maker');
-  if (!sel || sel.options.length) return;
+  if (!sel) return;
+  var cur = sel.value; /* Q55: rebuild keeps the trapper's pick */
   var h = '<option value="">e.g. Bridger</option>';
   h += '<option value="__mixed">' + esc(MIXED_MAKER_LABEL) + '</option>';
   MAKER_ORDER.forEach(function (m) {
     var label = m + (TRAP_MAKERS[m].legacy ? ' (legacy)' : '');
     h += '<option value="' + esc(m) + '">' + esc(label) + '</option>';
   });
+  /* Q55: the trapper's custom makers + the Other… escape hatch. */
+  var seenMakers = {};
+  MAKER_ORDER.forEach(function (m) { seenMakers[m.toLowerCase()] = 1; });
+  customOptionsFor('sf-maker').forEach(function (m) {
+    if (!seenMakers[m.toLowerCase()]) h += '<option value="' + esc(m) + '">' + esc(m) + '</option>';
+  });
+  h += '<option value="' + OTHER_VALUE + '">Other…</option>';
+  sel.innerHTML = h;
+  if (cur) sel.value = cur;
   sel.innerHTML = h;
   paintSelectHint(sel);
 }
@@ -1391,6 +1477,12 @@ function renderTrapTypeOptions(maker, keepKey) {
      has one and no other dropdown loses options, so a picked maker must not
      strand the trapper without an out. Not stored in the catalog. */
   if (entry && keys.indexOf('Other') === -1) keys.push('Other');
+  /* Q55: the trapper's custom types ride along so a remembered value reselects. */
+  var seenTypes = {};
+  keys.forEach(function (k) { seenTypes[k.toLowerCase()] = 1; });
+  customOptionsFor('sf-type').forEach(function (t) {
+    if (!seenTypes[t.toLowerCase()]) { keys.push(t); seenTypes[t.toLowerCase()] = 1; }
+  });
   var cur = sel.value;
   var h = '<option value="">e.g. Foothold</option>';
   keys.forEach(function (k) { h += '<option value="' + esc(k) + '">' + esc(k) + '</option>'; });
@@ -1400,9 +1492,17 @@ function renderTrapTypeOptions(maker, keepKey) {
   paintSelectHint(sel);
 }
 /* Maker switched: try to keep the same stored trap type across the switch. */
+function resolvedTrapType() {
+  /* Q55: Other… resolves to the typed custom (remembered for reuse);
+     blank Other → blank, never the literal "Other". */
+  var sel = $('sf-type');
+  var raw = sel ? sel.value : '';
+  if (raw === 'Other' || raw === OTHER_VALUE) return { t: selVal('sf-type'), spring: '' };
+  return resolveTrapType(raw);
+}
 function onMakerChange() {
   var maker = $('sf-maker') ? $('sf-maker').value : '';
-  var before = resolveTrapType($('sf-type').value);
+  var before = resolvedTrapType();
   renderTrapTypeOptions(maker, '');
   if (maker && TRAP_MAKERS[maker]) {
     var types = TRAP_MAKERS[maker].types, found = '';
@@ -1425,10 +1525,12 @@ function trapDetailValues() {
   else trapModel = f('sf-trapmodel').trim();
   var mv = trapModValues();
   return {
-    trapMaker: (function (m) { return m === '__mixed' ? '' : m; })(f('sf-maker')),
-    trapSpring: f('sf-trapspring'), trapSize: f('sf-trapsize'),
-    snareDia: f('sf-snaredia'), snareLock: f('sf-snarelock'), snareLen: f('sf-snarelen'),
-    snarePurpose: f('sf-snarepurpose'),
+    /* Q55: Other-capable dropdowns resolve through selVal — typed customs
+       save as the value and are remembered; blank Other saves as blank. */
+    trapMaker: (function (m) { return m === '__mixed' ? '' : m; })(selVal('sf-maker')),
+    trapSpring: selVal('sf-trapspring'), trapSize: selVal('sf-trapsize'),
+    snareDia: selVal('sf-snaredia'), snareLock: selVal('sf-snarelock'), snareLen: selVal('sf-snarelen'),
+    snarePurpose: selVal('sf-snarepurpose'),
     trapModel: trapModel, trapMods: mv.mods, panSize: mv.panSize
   };
 }
@@ -1441,7 +1543,8 @@ function trapModValues() {
     for (var i = 0; i < boxes.length; i++) if (boxes[i].checked) mods.push(boxes[i].value);
   }
   var pan = $('sf-pansize');
-  if (pan && pan.value && pan.value !== 'Stock') panSize = pan.value;
+  /* Q55: resolves Other… → the typed custom (remembered), or '' when blank. */
+  if (pan) { var psv = selVal('sf-pansize'); if (psv && psv !== 'Stock') panSize = psv; }
   return { mods: mods, panSize: panSize };
 }
 /* Optional Modifications section. `v` carries trapMods (array) + panSize.
@@ -1462,12 +1565,16 @@ function renderModsHtml(t, v, forceCheck) {
   var h = '<div class="mods-sect"><div class="mods-title">Modifications <span class="dim">— optional</span></div>' +
     '<div class="mods-hint">Work you did after buying the trap. Factory options are already in the model name above.</div>';
   if (t === 'Foothold') {
+    /* Q55: pan size is an Other-capable dropdown like the rest. */
     var pv = v.panSize || 'Stock';
-    h += '<label class="field" for="sf-pansize">Pan size</label><select id="sf-pansize">';
-    PAN_SIZES.forEach(function (p) {
-      h += '<option value="' + esc(p) + '"' + (pv === p ? ' selected' : '') + '>' + esc(p) + '</option>';
+    var pans = mergeCustomOptions('sf-pansize', PAN_SIZES);
+    if (!hasOtherOption(pans)) pans = pans.concat([OTHER_VALUE]);
+    h += '<label class="field" for="sf-pansize">Pan size</label><select id="sf-pansize" data-has-other="1">';
+    pans.forEach(function (p) {
+      var pl = (p === OTHER_VALUE) ? 'Other…' : p;
+      h += '<option value="' + esc(p) + '"' + (pv === p ? ' selected' : '') + '>' + esc(pl) + '</option>';
     });
-    h += '</select>';
+    h += '</select>' + otherWrapHtml('sf-pansize');
   }
   pre.forEach(function (m) { h += box(m); });
   var customs = getCustomMods().filter(function (c) { return pre.indexOf(c) < 0; });
@@ -1497,7 +1604,7 @@ function bindModAdd() {
 function renderTrapDetailFields(saved, forceCheck) {
   var maker = $('sf-maker') ? $('sf-maker').value : '';
   var pickerType = $('sf-type').value;
-  var rt = resolveTrapType(pickerType);
+  var rt = resolvedTrapType();
   var v = saved || trapDetailValues();
   var host = $('trapdetail-fields');
   var entry = maker && TRAP_MAKERS[maker];
@@ -2308,8 +2415,19 @@ function openSetForm(coords, setId) {
   renderTrapDetailFields(s || tmpl || null);
   renderSetTypeOptions(); /* Q29: rebuild taxonomy each open so legacy values reset */
   var stv = s ? (s.setType || 'Dirt hole') : (tmpl && tmpl.setType ? tmpl.setType : 'Dirt hole');
-  ensureSetTypeOption(stv); /* Q29: legacy values ("Drowning set", "Trail / blind set") ride along */
-  $('sf-settype').value = stv;
+  if (stv === 'Other') {
+    /* Q55: a legacy literal Other becomes the Other… escape hatch with the
+       "What is it?" box revealed, ready to be typed for real. */
+    $('sf-settype').value = OTHER_VALUE;
+  } else {
+    ensureSetTypeOption(stv); /* Q29: legacy values ("Drowning set", "Trail / blind set") ride along */
+    $('sf-settype').value = stv;
+  }
+  /* Q55: reveal any "What is it?" boxes whose dropdown opened on Other. */
+  ['sf-maker', 'sf-type', 'sf-settype', 'sf-trapspring', 'sf-trapsize', 'sf-snaredia',
+   'sf-snarelock', 'sf-snarelen', 'sf-snarepurpose', 'sf-pansize'].forEach(function (id) {
+    toggleOtherWrap($(id));
+  });
   /* Q26: stacked attractant rows, one per value */
   renderAttrRows('bait', s ? s.bait : (tmpl ? tmpl.bait : []));
   renderAttrRows('lure', s ? s.lure : (tmpl ? tmpl.lure : []));
@@ -2413,7 +2531,7 @@ function saveSetForm() {
   if (status === 'missing' && !setMissingReason) { showSetFormError('Pick why this set is missing.'); return; }
   hideSetFormError();
   var td = trapDetailValues();
-  var rt = resolveTrapType($('sf-type').value);
+  var rt = resolvedTrapType();
   if (editingSetId) {
     var s = getSet(editingSetId);
     if (!s) { closeSheets(); return; }
@@ -2427,7 +2545,7 @@ function saveSetForm() {
     s.trapModel = td.trapModel;
     s.trapMods = normalizeMods(td.trapMods); s.panSize = td.panSize;
     normalizeTrapDetail(s);
-    s.setType = $('sf-settype').value;
+    s.setType = selVal('sf-settype'); /* Q55: Other… resolves to the typed custom */
     /* Q26: stacked attractant rows -> arrays (deduped, empties dropped) */
     s.bait = collectAttrRows('bait');
     s.lure = collectAttrRows('lure');
@@ -2474,7 +2592,7 @@ function saveSetForm() {
       snarePurpose: td.snarePurpose,
       trapModel: td.trapModel,
       trapMods: normalizeMods(td.trapMods), panSize: td.panSize,
-      setType: $('sf-settype').value,
+      setType: selVal('sf-settype'), /* Q55: Other… resolves to the typed custom */
       /* Q26: stacked attractant rows -> arrays */
       bait: collectAttrRows('bait'), lure: collectAttrRows('lure'),
       urine: collectAttrRows('urine'), other: collectAttrRows('other'),
@@ -5560,7 +5678,13 @@ function renderSetTypeOptions() {
     SET_TYPES[g].forEach(function (t) { html += '<option>' + esc(t) + '</option>'; });
     html += '</optgroup>';
   });
-  html += '<option>' + SET_TYPE_OTHER + '</option>';
+  /* Q55: the trapper's custom set types, then the Other… escape hatch. */
+  var seenST = {};
+  ['Land', 'Water'].forEach(function (g) { SET_TYPES[g].forEach(function (t) { seenST[t.toLowerCase()] = 1; }); });
+  customOptionsFor('sf-settype').forEach(function (t) {
+    if (!seenST[t.toLowerCase()]) { html += '<option>' + esc(t) + '</option>'; seenST[t.toLowerCase()] = 1; }
+  });
+  html += '<option value="' + OTHER_VALUE + '">Other…</option>';
   sel.innerHTML = html;
 }
 /* Legacy stored values with no taxonomy home ("Drowning set",
@@ -5569,6 +5693,11 @@ function renderSetTypeOptions() {
 function ensureSetTypeOption(v) {
   var sel = $('sf-settype');
   if (!sel || !v || isKnownSetType(v)) return;
+  /* Q55: a remembered custom already rides in the rebuilt list — no dup. */
+  var opts = sel.options || [];
+  for (var i = 0; i < opts.length; i++) {
+    if (opts[i].value === v || opts[i].text === v) { sel.value = v; return; }
+  }
   var cur = sel.innerHTML || '';
   var tag = '<option selected>' + esc(v) + '</option>';
   if (cur.indexOf(tag) !== 0) sel.innerHTML = tag + cur;
@@ -6288,6 +6417,12 @@ function wireUp() {
 /* ================= 16. BOOT ================= */
 function boot() {
   Store.load();
+  /* Q55: one delegated listener reveals the "What is it?" box under any
+     Other-capable dropdown, wherever it was rendered. */
+  document.addEventListener('change', function (e) {
+    var t = e.target;
+    if (t && t.tagName === 'SELECT' && t.getAttribute('data-has-other')) toggleOtherWrap(t);
+  });
   /* demo mode: seed fictional data only on a completely fresh install */
   if (DEMO && Store.data.sets.length === 0 && Store.data.logs.length === 0) {
     seedDemoStore();
