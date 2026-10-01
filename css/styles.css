@@ -288,10 +288,11 @@ select.select-hint { color: var(--faint); }
 /* Q48: quiet coordinates line at the bottom of the set form/detail sheets —
    small, dim, centered, tap to copy. Not a title, keep it quiet. */
 
-/* Q72 (2026-10-01): odometer row — reading input plus camera button. */
-.odo-row { display: flex; gap: 8px; align-items: center; }
-.odo-row input[type="number"] { flex: 1; min-width: 0; }
-.odo-photo { flex: 0 0 auto; padding: 8px 12px; }
+/* Q72 (2026-10-01): odometer photo button sits below the full-width input;
+   live miles readout. */
+.odo-photo-row { display: flex; align-items: center; gap: 8px; margin: 6px 0 4px; }
+.odo-photo-btn { flex: 0 0 auto; padding: 6px 12px; font-size: 13px; }
+.odo-miles { text-align: center; font-weight: 700; font-size: 16px; margin: 8px 0 2px; min-height: 20px; }
 /* Q79 (2026-10-01): suggestion rows with per-entry delete for user-typed items. */
 .suggest-row { display: flex; align-items: center; }
 .suggest-row .suggest-item { flex: 1; text-align: left; }
@@ -306,10 +307,16 @@ select.select-hint { color: var(--faint); }
 .guide-toc-item:active { opacity: .6; }
 .leaflet-control #weather-chip {
   position: static; left: auto; bottom: auto; top: auto; right: auto;
-  background: var(--green); border: 1px solid rgba(0,0,0,.25); color: #0e150a;
+  background: var(--green) !important; border: 1px solid rgba(0,0,0,.25); color: #0e150a;
   font-size: 13px; font-weight: 700; min-height: 0; border-radius: 14px;
   display: flex; flex-direction: column; align-items: center; line-height: 1.3;
   padding: 5px 10px;
+}
+/* Tanner 2026-10-01: the left control stack (weather, zoom, layers) sits
+   vertically centered on the map, not bunched at the bottom. */
+.leaflet-bottom.leaflet-left {
+  top: 50% !important; bottom: auto !important;
+  transform: translateY(-50%);
 }
 
 /* B20: zoom pill and layer button share one vertical axis in the corner. */
