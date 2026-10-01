@@ -444,6 +444,15 @@ body.route-locked #tabbar { pointer-events: none; opacity: .35; }
 .badge.closed { background: #3a1f1b; color: #f0a49c; border: 1px solid #6e2f28; }
 .badge.yearround { background: #16283d; color: #9cc0ee; border: 1px solid #2f4d6e; }
 .badge.status-active { background: #1d3a1d; color: #9ed69a; }
+/* Q140 (2026-10-01): Tanner — stacked-pin menu rows. Full-width tappable
+   rows: set name left, status badge + trap type right. */
+.stack-row { display: flex; align-items: center; gap: 10px; width: 100%;
+  text-align: left; background: var(--card); color: var(--ink);
+  border: 1px solid var(--line); border-radius: 12px;
+  padding: 14px; margin: 0 0 10px; font-size: 16px; cursor: pointer; }
+.stack-row:active { background: #2a2f26; }
+.stack-name { flex: 1; min-width: 0; font-weight: 700; overflow: hidden;
+  text-overflow: ellipsis; white-space: nowrap; }
 .badge.status-sprung { background: #3d2c10; color: #f5cf7a; }
 .badge.status-pulled { background: #2a2a2a; color: #bdbdbd; }
 .badge.status-missing { background: #1d2b4d; color: #a9c6ee; }
@@ -513,6 +522,13 @@ body.route-locked #tabbar { pointer-events: none; opacity: .35; }
 /* Tanner 2026-10-01: date boxes were overlapping — flex children must shrink,
    and iOS date inputs need min-width:0 too or their picker UI overflows. */
 .btn-row input { min-width: 0; }
+/* Q142 (2026-10-01): bx's min-width:0 alone did NOT fix it on Tanner's iPhone
+   (still overlapping 4:53 PM) — iOS Safari's date input keeps an intrinsic
+   min-width inside its shadow datetime-edit UI. Belt and suspenders: cap the
+   input at its wrapper and zero the inner edit's minimum too. No-op in
+   spec-compliant browsers (verified: Chromium already lays out 50/50). */
+.btn-row input[type=date] { max-width: 100%; }
+.btn-row input[type=date]::-webkit-datetime-edit { min-width: 0; }
 /* Tanner 2026-10-01: compact button row — smaller, less clunky. */
 .btn-compact > .btn-secondary { padding: 8px 10px; font-size: 14px; min-height: 0; }
 /* Home-ground prompt (Q53): three equal buttons, no icon, all centered. */
