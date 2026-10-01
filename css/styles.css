@@ -100,13 +100,18 @@ label.field { display: block; margin: 14px 0 4px; font-size: 14px; font-weight: 
 /* Q55: the "What is it?" reveal under an Other-capable dropdown. */
 .other-wrap { margin-top: 2px; }
 .other-wrap label.field { margin-top: 8px; font-size: 13px; }
-input[type=text], input[type=date], input[type=number], input[type=search], select, textarea {
+input[type=text], input[type=date], input[type=time], input[type=number], input[type=search], select, textarea {
   width: 100%; min-height: var(--tap);
   background: #10140c; color: var(--ink);
   border: 1px solid var(--line); border-radius: var(--radius);
   font-family: inherit; font-size: 17px;
   padding: 12px 14px;
 }
+/* Q109 (2026-10-01): Tanner — the catch-time picker rendered as the raw iOS
+   white pill because input[type=time] was missing from the field rule above.
+   It now wears the same dark field as every other input, sitting under the
+   date. color-scheme keeps the opened spinner dark too. */
+input[type=time] { color-scheme: dark; }
 textarea { min-height: 84px; resize: vertical; }
 input:focus, select:focus, textarea:focus, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
 /* "e.g." hint state for the manufacturer/type selects — nothing picked yet. */
@@ -249,11 +254,15 @@ select.select-hint { color: var(--faint); }
 .chip.mst-active.on { background: #4caf50; border-color: #4caf50; color: #0e150a; }
 .chip.mst-sprung.on { background: #d19a2f; border-color: #d19a2f; color: #0e150a; }
 .chip.mst-pulled.on { background: #8a8a8a; border-color: #8a8a8a; color: #0e150a; }
-.chip.mst-missing.on { background: #3b82f6; border-color: #3b82f6; color: #fff; }
+.chip.mst-missing.on { background: #3b82f6; border-color: #3b82f6; color: #0e150a; } /* Q94b: Tanner 2026-10-01 — black lettering like the other three */
 .chip.mst-active:not(.on) { border-color: #4caf50; color: #4caf50; }
 .chip.mst-sprung:not(.on) { border-color: #d19a2f; color: #d19a2f; }
 .chip.mst-pulled:not(.on) { border-color: #8a8a8a; color: #8a8a8a; }
 .chip.mst-missing:not(.on) { border-color: #3b82f6; color: #7aa8f0; }
+/* Q94 (2026-10-01): Tanner — the map status chips wear a black border whether
+   toggled on or off; fills and text keep their pin colors. */
+.map-status-filters .chip.on,
+.map-status-filters .chip:not(.on) { border-color: #000; }
 /* Q11: saved-entry suggestions under the bait/lure/urine inputs */
 .suggest { display: none; margin-top: -2px; }
 .suggest.show { display: block; }
@@ -271,10 +280,11 @@ select.select-hint { color: var(--faint); }
   font-size: 20px; line-height: 1; padding: 0; }
 .attr-row-x:active { background: var(--line); }
 .attr-add { margin-top: 8px; }
+/* Q98: the add-another button hides until a row has a value; base button
+   display:inline-flex overrides the UA [hidden] rule, so this is explicit. */
+.attr-add[hidden] { display: none; }
 /* Q48: quiet coordinates line at the bottom of the set form/detail sheets —
    small, dim, centered, tap to copy. Not a title, keep it quiet. */
-.coords-bottom { font-size: 11px; color: var(--muted); text-align: center; margin: 12px 0 4px; }
-.coords-bottom:active { opacity: .6; }
 
 /* weather chip (B19): sits above the map layer button, bottom-left; solid green
    like the map controls; taps open the weather sheet. ID selector so the
@@ -288,7 +298,10 @@ select.select-hint { color: var(--faint); }
 }
 
 /* B20: zoom pill and layer button share one vertical axis in the corner. */
-.leaflet-bottom.leaflet-left { display: flex; flex-direction: column; align-items: center; }
+/* Q93 (2026-10-01): align-items was center — opening the layers panel (wider
+   than the buttons) re-centered the zoom pill and layers button, hopping them
+   right. flex-start pins everything to the left edge; nothing moves. */
+.leaflet-bottom.leaflet-left { display: flex; flex-direction: column; align-items: flex-start; }
 /* B21: no white fringe on the rounded corners — the controls are green all
    the way through, and the layer panel goes dark when expanded. */
 .leaflet-bar { border-radius: 14px; overflow: hidden; background: var(--green); border: none;
@@ -320,6 +333,9 @@ select.select-hint { color: var(--faint); }
 .setsec.open .setsec-chev { transform: rotate(90deg); }
 .setsec-body { padding-bottom: 14px; }
 .setsec-body[hidden] { display: none; }
+/* Q99 (2026-10-01): the notes/memos/photos collapsible on the set form, log
+   form, and set detail — a divider sets it off from the fields above. */
+.sheet .setsec { border-top: 1px solid var(--line); margin-top: 10px; }
 /* Q-report: subsection divider inside a merged settings card (Backup & Reports). */
 .setsec-sub { font-size: 12.5px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; color: var(--accent); margin: 16px 0 4px; }
 .setsec-sub:first-of-type { margin-top: 4px; }
@@ -378,6 +394,10 @@ select.select-hint { color: var(--faint); }
 .form-error { display: none; color: #f0a49c; font-weight: 700; font-size: 15px; margin: 10px 0 2px; }
 .form-error.show { display: block; }
 .warnbox .wb-title { font-weight: 800; margin-bottom: 4px; }
+/* Q97 (2026-10-01): the bait-rule head is a standalone collapsible row, not
+   inside a .setsec — slim, amber, chevron rotates on expand. */
+.baitrule-head { font-size: 16px; padding: 10px 0; color: #f5cf7a; }
+.baitrule-head.open .setsec-chev { transform: rotate(90deg); }
 .reminder-tag { font-size: 13px; color: var(--muted); font-style: italic; margin-top: 8px; }
 
 .species-row { display: flex; align-items: center; gap: 10px; width: 100%; text-align: left; background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 12px 14px; margin-bottom: 8px; color: var(--ink); min-height: var(--tap); }
@@ -415,6 +435,8 @@ select.select-hint { color: var(--faint); }
 .sheet-actions { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
 .btn-row { display: flex; gap: 10px; }
 .btn-row > * { flex: 1; }
+/* Home-ground prompt (Q53): three equal buttons, no icon, all centered. */
+.home-choices > * { flex: 1 1 0; min-width: 0; text-align: center; }
 
 /* ---------- modal ---------- */
 #modal { position: fixed; inset: 0; z-index: 1000; display: none; align-items: center; justify-content: center; padding: 24px; background: rgba(0,0,0,.6); }
@@ -514,6 +536,12 @@ body.placing .leaflet-control-layers { pointer-events: none; opacity: .45; }
 .kv { display: grid; grid-template-columns: 110px 1fr; gap: 6px 10px; font-size: 15px; margin: 10px 0; }
 .kv dt { color: var(--muted); }
 .kv dd { margin: 0; }
+/* Q108 (2026-10-01): Tanner — the set-detail rows (Lure, Urine, Visual, Audio,
+   Other Attractants, Date set, Weather) ran together with no separators. Each
+   row now gets its own divider so it reads as a separate row. Border goes on
+   both dt and dd so the line spans the full width of the grid. */
+#sd-fields > dt:not(:first-child),
+#sd-fields > dd:not(:nth-child(2)) { border-top: 1px solid var(--line); padding-top: 9px; }
 .season-group-head { font-size: 15px; font-weight: 800; color: var(--accent); margin: 18px 0 8px; text-align: center; }
 .log-row { padding: 12px 0; border-bottom: 1px solid var(--line); }
 .log-row .lr-top { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
@@ -569,6 +597,14 @@ body.placing .leaflet-control-layers { pointer-events: none; opacity: .45; }
 .modline { display: flex; align-items: center; gap: 10px; padding: 7px 0; cursor: pointer; }
 .mod-addrow { display: flex; gap: 8px; margin-top: 8px; }
 .mod-addrow input { flex: 1; min-width: 0; }
+/* Q101 (2026-10-01): Tanner — checkbox stacks go two-across to save space.
+   Used by the mods section and the settings toggle groups. */
+.checkgrid { display: grid; grid-template-columns: 1fr 1fr; column-gap: 14px; }
+.checkgrid .checkline { padding: 7px 0; font-size: 15px; }
+/* Q103: coordinate footer, small and dim, tap to copy — only rendered when
+   the Privacy toggle is on. */
+.coords-bottom { font-size: 11px; color: var(--muted); text-align: center; margin: 12px 0 4px; }
+.coords-bottom:active { opacity: .6; }
 
 /* ---- weather tab ---- */
 .wx-temp { font-size: 32px; font-weight: 800; }
