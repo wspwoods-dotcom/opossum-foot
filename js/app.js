@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-10-01br';
+var APP_VERSION = 'beta 0.1 · build 2026-10-01bs';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -5710,7 +5710,7 @@ function showLineEditModal(id) {
     renderLines();
     renderSettingsLineName();
     renderLineBar();
-    if (id === Store.data.activeLineId) { renderSeasons($('seasons-search').value); fitMapToState(); }
+    if (id === Store.data.activeLineId) { renderSeasons($('seasons-search').value); fitMapHome(); } /* Q110: home wins on state change too */
     toast('Line saved.');
   };
   $('m-del').onclick = function () { closeModal(); deleteLine(id); };
@@ -6863,7 +6863,7 @@ function wireUp() {
     al.state = code;
     Store.save();
     renderSeasons('');
-    fitMapToState();
+    fitMapHome(); /* Q110: the line's home wins over the new state's center */
     /* Tanner 2026-09-30: the state-mismatch alert must re-evaluate now —
        otherwise it sits on screen after the state was just fixed in Settings. */
     checkStateMismatch(lastStateInfo);
