@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-10-01bt';
+var APP_VERSION = 'beta 0.1 · build 2026-10-01bu';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -402,8 +402,10 @@ function weekdayOf(iso) {
   return new Date(+m[1], +m[2] - 1, +m[3]).toLocaleDateString('en-US', { weekday: 'long' });
 }
 function updateDateDOW(inputId, spanId) {
+  /* Tanner 2026-10-01: the weekday sits on its own line below the date field,
+     not in the label — so no trailing comma. */
   var w = weekdayOf($(inputId).value);
-  $(spanId).textContent = w ? w + ', ' : '';
+  $(spanId).textContent = w || '';
 }
 
 function fmtDate(iso) {
@@ -1243,6 +1245,31 @@ function rememberOne(key, v) {
   arr.unshift(v);
   if (arr.length > 30) arr.length = 30;
 }
+/* Q79 (2026-10-01): Tanner — remove one user-typed entry from a field's
+   suggestion list. Seeds stay; only what he typed can be deleted. */
+function forgetEntry(key, v) {
+  var arr = savedEntries(key);
+  var vl = (v || '').toLowerCase();
+  for (var i = 0; i < arr.length; i++) {
+    if (arr[i].toLowerCase() === vl) { arr.splice(i, 1); break; }
+  }
+  Store.save();
+}
+/* Q79: the built-in seeds per field — these never get a delete button. */
+function entrySeeds(key) {
+  if (key === 'urine') return URINE_SEEDS;
+  if (key === 'visual') return VISUAL_SEEDS;
+  if (key === 'audio') return AUDIO_SEEDS;
+  if (key === 'other') return OTHER_SEEDS;
+  return [];
+}
+function isSeedEntry(key, v) {
+  var seeds = entrySeeds(key), vl = (v || '').toLowerCase();
+  for (var i = 0; i < seeds.length; i++) {
+    if (seeds[i].toLowerCase() === vl) return true;
+  }
+  return false;
+}
 /* ================= Q55. "OTHER" TYPE-IN ON EVERY DROPDOWN =================
    Every data-entry dropdown on the set form grows an "Other…" option. Picking
    it reveals a "What is it?" box; whatever the trapper types is saved as the
@@ -1366,6 +1393,10 @@ function attachSuggest(inputId, boxId, key) {
     input.value = btn.getAttribute('data-v');
     box.className = 'suggest'; box.innerHTML = '';
     input.focus();
+    /* Q98 fix (2026-10-01): a programmatic fill fires no input event, so the
+       "+ Add Another" button never appeared after tapping a suggestion.
+       Dispatch it so the button (and the bait-rule check) update. */
+    input.dispatchEvent(new Event('input', { bubbles: true }));
   }
   function render() {
     var q = input.value.trim().toLowerCase();
@@ -1376,13 +1407,26 @@ function attachSuggest(inputId, boxId, key) {
     }).slice(0, 6);
     if (!sps.length && !items.length) { box.className = 'suggest'; box.innerHTML = ''; return; }
     var html = sps.map(sponsorSuggestRowHtml).join('') + items.map(function (v) {
-      return '<button type="button" class="suggest-item" data-v="' + esc(v) + '">' + esc(v) + '</button>';
+      /* Q79 (2026-10-01): Tanner — user-typed entries get a × to remove them
+         from the list; built-in seeds don't. */
+      var del = isSeedEntry(key, v)
+        ? ''
+        : '<button type="button" class="suggest-del" data-v="' + esc(v) + '" aria-label="Remove from list">×</button>';
+      return '<div class="suggest-row"><button type="button" class="suggest-item" data-v="' + esc(v) + '">' + esc(v) + '</button>' + del + '</div>';
     }).join('');
     box.innerHTML = html;
     box.className = 'suggest show';
     var btns = box.querySelectorAll('.suggest-item, .suggest-fill');
     for (var i = 0; i < btns.length; i++) {
       btns[i].onclick = function () { fillFrom(this); };
+    }
+    var dels = box.querySelectorAll('.suggest-del');
+    for (var k = 0; k < dels.length; k++) {
+      dels[k].onclick = function (e) {
+        if (e && e.stopPropagation) e.stopPropagation();
+        forgetEntry(key, this.getAttribute('data-v'));
+        render();
+      };
     }
     var eyes = box.querySelectorAll('.sponsor-eye');
     for (var j = 0; j < eyes.length; j++) {
@@ -1402,7 +1446,9 @@ function attachSuggest(inputId, boxId, key) {
    Each attractant field renders one row per value: text input with its own
    tap-to-fill suggestions, a × to drop the row, and an "add another"
    button under the stack. */
-var ATTR_PLACEHOLDERS = { bait: 'e.g. sardines', lure: 'e.g. gland lure', urine: 'e.g. fox urine', visual: 'e.g. flagging tape', audio: 'e.g. squeaker', other: 'e.g. t-bone' };
+/* Q78 (2026-10-01): Tanner — examples live as hints above the field (see
+   index.html), never inside the box and never in the suggestion list. The
+   inputs carry no placeholder. */
 var ATTR_MAX_ROWS = 6;
 function attrRowCount(field) {
   var host = $('sf-' + field + '-rows');
@@ -1433,7 +1479,7 @@ function renderAttrRows(field, values, minRows) {
   for (var i = 0; i < vals.length; i++) {
     html += '<div class="attr-row">' +
       '<input type="text" class="attr-row-input" id="sf-' + field + '-row-' + i + '" data-attr="' + field + '"' +
-      ' placeholder="' + ATTR_PLACEHOLDERS[field] + '" autocomplete="off" value="' + esc(vals[i]) + '">' +
+      ' autocomplete="off" value="' + esc(vals[i]) + '">' +
       (showX ? '<button type="button" class="attr-row-x" data-attr="' + field + '" data-i="' + i + '" aria-label="Remove">×</button>' : '') +
       '</div><div class="suggest" id="sf-' + field + '-row-' + i + '-suggest"></div>';
   }
@@ -1887,7 +1933,6 @@ function initMap() {
     return;
   }
   map = L.map('map', { zoomControl: false, attributionControl: true, maxZoom: 22 }).setView([39.5, -98.35], 4);
-  L.control.zoom({ position: 'bottomleft' }).addTo(map);
   var street = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}',
     { maxZoom: 22, maxNativeZoom: 19, attribution: '© Esri, HERE, Garmin, © OpenStreetMap contributors' });
   var satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
@@ -1905,7 +1950,14 @@ function initMap() {
   var satL = L.layerGroup([satellite, labels, roads]);
   var topoL = L.layerGroup([topo, roads]);
   satL.addTo(map);
+  /* Q74 (2026-10-01): Tanner — left-side stack is layers, zoom, weather, top
+     to bottom. Leaflet stacks same-corner controls in add order. The weather
+     chip joins as a real control so it rides the stack instead of floating. */
   L.control.layers({ 'Street': streetL, 'Satellite': satL, 'Topo': topoL }, null, { position: 'bottomleft' }).addTo(map);
+  L.control.zoom({ position: 'bottomleft' }).addTo(map);
+  var wxCtl = L.control({ position: 'bottomleft' });
+  wxCtl.onAdd = function () { return $('weather-chip'); };
+  wxCtl.addTo(map);
   markersLayer = L.layerGroup().addTo(map);
 
   map.on('click', function (e) {
@@ -2075,7 +2127,7 @@ function cancelPlacePin() {
    the first line), once on the next launch for existing users (current
    line), and once when a new line is created. Normal pin dropping never
    asks about home. */
-var HOME_ZOOM = 11; /* ~10-15 mile span on a phone */
+var HOME_ZOOM = 13; /* Q92 (2026-10-01): Tanner — tighter default, ~2-4 mile span matching his screenshot */
 var homePickMode = false, homeMarker = null, homeMapLive = false;
 
 function homeLatLng() {
@@ -2745,7 +2797,7 @@ function saveSetForm() {
       }).catch(function () { /* noop */ });
     });
     pendingSetPhotos = [];
-    closeSheets(); openSetDetail(s.id);
+    closeSheets(); switchTab('map'); /* Q76 (2026-10-01): Tanner — saving an edit goes back to the map, not the set detail. */
     toast('Set updated.');
     /* B32: no backfill prompt — old catches keep what they had; only new
        catches inherit the set's current attractants. */
@@ -3405,7 +3457,7 @@ function saveLog() {
   pendingLogPhotos = [];
   pendingLogMemos = [];
   closeSheets();
-  renderHistory(); renderTotals();
+  renderHistory(); renderTotals(); refreshMarkers(); /* Q75 (2026-10-01): Tanner — the pin repaints the moment the catch is logged, no tab switch needed. */
   toast(isOther
     ? 'Logged ' + (OTHER_LABELS[logOtherType] || 'Other event') + (species ? ' — ' + species : '') + (logDisposition && logDisposition !== 'none' ? ' (' + dispLabel(logDisposition) + ')' : '') + (s ? ' at ' + s.name : '') + '.'
     : 'Logged ' + log.count + ' ' + species + ' (' + dispLabel(logDisposition) + ')' + (s ? ' at ' + s.name : '') + '.');
@@ -4089,14 +4141,13 @@ function logRowHtml(l, showDate) {
 
 function renderHistByDate(list) {
   var f = histUI;
-  /* Default-collapse day groups older than 7 days (once per session). */
+  /* Q84 (2026-10-01): Tanner — every day group starts collapsed when History
+     opens; nothing is open until he taps it. (Replaces the old 7-day rule.) */
   if (!f.defaultsSet) {
-    var cutoff = new Date(); cutoff.setDate(cutoff.getDate() - 7);
     var seenDays = {};
     list.forEach(function (l) {
       if (!l.date || seenDays[l.date]) return; seenDays[l.date] = true;
-      var p = l.date.split('-');
-      if (new Date(p[0] * 1, p[1] * 1 - 1, p[2] * 1) < cutoff) f.collapsed[l.date] = true;
+      f.collapsed[l.date] = true;
     });
     f.defaultsSet = true;
   }
@@ -4511,6 +4562,8 @@ function renderTotals() {
     if (ts.set) cards += '<div class="card">' + totalsCardHead('set', 'By Set') + '<div class="totals-card-body"' + (tc.set ? ' hidden' : '') + '>' + rows(bySet, true) + '</div></div>';
     if (ts.disposition) {
       var names = [['kept', 'Dispatched'], ['alive', 'Kept alive'], ['released', 'Released'], ['transported', 'Transported']];
+      /* Q86 (2026-10-01): Tanner — sort largest count first, it reads cleaner. */
+      names.sort(function (a, b) { return (byDisp[b[0]] || 0) - (byDisp[a[0]] || 0); });
       /* Q61: each disposition row taps open to show what was caught under it. */
       cards += '<div class="card">' + totalsCardHead('disposition', 'By Disposition') + '<div class="totals-card-body"' + (tc.disposition ? ' hidden' : '') + '>' + names.map(function (n) {
         var b = n[0], sp = byDispSp[b];
@@ -4604,7 +4657,7 @@ function renderSeasonsCompliance(d) {
   var box = $('seasons-rules');
   var r = d.trap_snare_rules;
   if (!r) { box.innerHTML = ''; box.hidden = true; return; }
-  var h = '<div class="card setsec open" id="rules-card">' +
+  var h = '<div class="card setsec" id="rules-card">' + /* Q87 (2026-10-01): Tanner — closed by default, cleaner screen. */
     '<button type="button" class="setsec-head" id="rules-toggle"><span>' + esc(r.title) + '</span>' +
     '<span class="setsec-chev">›</span></button>' +
     '<div class="setsec-body"><p class="dim">' + esc(r.intro) + '</p>';
@@ -5916,6 +5969,9 @@ function enterMain() {
     var on = !Store.data || Store.data.checkClockOn !== false;
     if (ccBox) ccBox.checked = on;
     if (ciSel) { ciSel.value = String(Store.data.checkIntervalHours || 24); ciSel.disabled = !on; }
+    /* Q91 (2026-10-01): the interval sub-menu shows only while alerts are on. */
+    var sub = $('checkalert-sub');
+    if (sub) sub.hidden = !on;
   }
   renderCheckClock();
   if (ccBox) {
@@ -5968,9 +6024,33 @@ function enterMain() {
   });
   /* Trapper's guide + legal notices, baked into Settings. Content is
      generated from FOR-TRAPPERS.md / LEGAL-NOTICE.md (see tools/build-guide.js). */
+/* Q88 (2026-10-01): Tanner — the Trapper's Guide opens with a table of
+   contents: every section title listed, tap one to jump straight to it. */
+function buildGuideTOC() {
+  var body = $('guide-body');
+  if (!body) return;
+  var heads = body.querySelectorAll('h3');
+  if (!heads.length) return;
+  var toc = '<div class="guide-toc"><p class="guide-toc-title">In this guide</p>';
+  for (var i = 0; i < heads.length; i++) {
+    var id = 'guide-sec-' + i;
+    heads[i].id = id;
+    toc += '<button type="button" class="guide-toc-item" data-sec="' + id + '">' + heads[i].textContent + '</button>';
+  }
+  toc += '</div>';
+  body.insertAdjacentHTML('afterbegin', toc);
+  var items = body.querySelectorAll('.guide-toc-item');
+  for (var j = 0; j < items.length; j++) {
+    items[j].onclick = function () {
+      var t = document.getElementById(this.getAttribute('data-sec'));
+      if (t && t.scrollIntoView) t.scrollIntoView({ block: 'start', behavior: 'smooth' });
+    };
+  }
+}
   $('btn-guide').onclick = function () {
     $('guide-title').textContent = "Trapper's guide";
     $('guide-body').innerHTML = window.OPOSSUM_FOOT_GUIDE_HTML || '<p class="dim">Guide not loaded.</p>';
+    buildGuideTOC(); /* Q88 (2026-10-01): Tanner — tap-a-section table of contents. */
     openSheet('sheet-guide');
   };
   $('btn-legal').onclick = function () {
@@ -6059,16 +6139,17 @@ function gpsPreselect() {
    dispatch method, not a set type. Labels are short ("Flat", not
    "Flat set"). "Other" remains the escape hatch. */
 var SET_TYPES = {
-  Land: ['Dirt hole', 'Flat', 'Scent post', 'Urine post', 'Step-down', 'Trench',
-    'T-bone', 'Hay', 'Bean Duff', 'Carcass', 'Mound', 'Cubby', 'Bucket',
-    'Weasel box', 'Leaning pole', 'Leaning tree', 'Rub', 'Flag', 'Trash pile',
-    'Blind', 'Trail', 'Staked hide', 'Trail snare', 'Under-fence snare',
-    'Leg snare', 'Positive'],
-  Water: ['Pocket', 'Slide', 'Scent mound', 'Bank den', 'Canal / channel',
-    'Dam crossover', 'Dam break', 'Den / culvert', 'Drain tile', 'Feed bed',
-    'Float', 'Latrine site', 'Open water', 'Overhanging bank', 'Runway',
-    'Spring run', 'Obstruction', 'Top edge', 'Bottom edge', 'Pole (under-ice)',
-    'Slide snare', 'Den-entrance snare', 'Culvert snare']
+  /* Q81 (2026-10-01): Tanner — pick lists run A to Z. */
+  Land: ['Bean Duff', 'Blind', 'Bucket', 'Carcass', 'Cubby', 'Dirt hole',
+    'Flag', 'Flat', 'Hay', 'Leaning pole', 'Leaning tree', 'Leg snare',
+    'Mound', 'Positive', 'Rub', 'Scent post', 'Staked hide', 'Step-down',
+    'T-bone', 'Trail', 'Trail snare', 'Trash pile', 'Trench',
+    'Under-fence snare', 'Urine post', 'Weasel box'],
+  Water: ['Bank den', 'Bottom edge', 'Canal / channel', 'Culvert snare',
+    'Dam break', 'Dam crossover', 'Den / culvert', 'Den-entrance snare',
+    'Drain tile', 'Feed bed', 'Float', 'Latrine site', 'Obstruction',
+    'Open water', 'Overhanging bank', 'Pocket', 'Pole (under-ice)', 'Runway',
+    'Scent mound', 'Slide', 'Slide snare', 'Spring run', 'Top edge']
 };
 var SET_TYPE_OTHER = 'Other';
 function allSetTypes() {
@@ -6372,19 +6453,55 @@ function renderMileageModal(lineId) {
 }
 function showTripModal(lineId, tripId) {
   var t = tripId ? tripById(tripId) : null;
+  /* Q72 (2026-10-01): Tanner — start prefilled from the last trip's end. */
+  var lastEnd = '';
+  if (!t && Array.isArray(Store.data.trips)) {
+    var lineTrips = Store.data.trips.filter(function (x) { return x.lineId === lineId; });
+    if (lineTrips.length) {
+      lineTrips.sort(function (a, b) { return (b.createdAt || 0) - (a.createdAt || 0); });
+      if (isFinite(lineTrips[0].endOdo)) lastEnd = String(lineTrips[0].endOdo);
+    }
+  }
+  /* Q72: optional odometer photos — camera buttons beside each reading.
+     Typed readings are required; a photo (or failed photo) never blocks saving. */
+  var startPhoto = null, endPhoto = null;
   showModal(
     '<h3>' + (t ? 'Edit trip' : 'Log a trip') + '</h3>' +
     '<label class="field" for="m-trip-date">Date</label>' +
     '<input type="date" id="m-trip-date" value="' + esc(t ? t.date : todayISO()) + '">' +
     '<label class="field" for="m-trip-start">Starting odometer</label>' +
-    '<input type="number" id="m-trip-start" inputmode="decimal" min="0" step="any" placeholder="e.g. 48210" value="' + esc(t ? t.startOdo : '') + '">' +
+    '<div class="odo-row"><input type="number" id="m-trip-start" inputmode="decimal" min="0" step="any" placeholder="e.g. 48210" value="' + esc(t ? t.startOdo : lastEnd) + '">' +
+    '<button type="button" class="btn-secondary odo-photo" id="m-start-photo" aria-label="Photo of starting odometer">📷</button></div>' +
+    '<div class="dim" id="m-start-photo-note" style="margin:2px 0 6px;font-size:12px"></div>' +
     '<label class="field" for="m-trip-end">Ending odometer</label>' +
-    '<input type="number" id="m-trip-end" inputmode="decimal" min="0" step="any" placeholder="e.g. 48296" value="' + esc(t ? t.endOdo : '') + '">' +
+    '<div class="odo-row"><input type="number" id="m-trip-end" inputmode="decimal" min="0" step="any" placeholder="e.g. 48296" value="' + esc(t ? t.endOdo : '') + '">' +
+    '<button type="button" class="btn-secondary odo-photo" id="m-end-photo" aria-label="Photo of ending odometer">📷</button></div>' +
+    '<div class="dim" id="m-end-photo-note" style="margin:2px 0 6px;font-size:12px"></div>' +
     '<label class="field" for="m-trip-notes">Notes <span class="dim">(optional)</span></label>' +
     '<input type="text" id="m-trip-notes" maxlength="80" placeholder="e.g. River bottoms check" value="' + esc(t ? t.notes || '' : '') + '">' +
+    '<input type="file" id="m-odo-photo-input" class="hidden-file" accept="image/*">' +
     '<div class="btn-row" style="margin-top:14px"><button class="btn-secondary" id="m-cancel" type="button">Cancel</button>' +
     '<button class="btn-primary" id="m-ok" type="button">' + (t ? 'Save' : 'Add trip') + '</button></div>'
   );
+  /* Q72: wire the camera buttons — one hidden input, reused for both. */
+  var photoTarget = null;
+  $('m-start-photo').onclick = function () { photoTarget = 'start'; $('m-odo-photo-input').click(); };
+  $('m-end-photo').onclick = function () { photoTarget = 'end'; $('m-odo-photo-input').click(); };
+  $('m-odo-photo-input').onchange = function () {
+    var f = this.files[0];
+    this.value = '';
+    if (!f || !photoTarget) return;
+    var target = photoTarget;
+    photoTarget = null;
+    /* A failed photo never blocks anything — it just doesn't attach. */
+    try {
+      downscalePhoto(f, function (blob) {
+        if (!blob) return;
+        if (target === 'start') { startPhoto = blob; $('m-start-photo-note').textContent = 'Photo attached.'; }
+        else { endPhoto = blob; $('m-end-photo-note').textContent = 'Photo attached.'; }
+      });
+    } catch (e) { /* noop — saving the trip matters, the photo doesn't */ }
+  };
   $('m-cancel').onclick = function () { renderMileageModal(lineId); };
   $('m-ok').onclick = function () {
     var date = $('m-trip-date').value;
@@ -6401,6 +6518,9 @@ function showTripModal(lineId, tripId) {
       Store.data.trips.push(rec);
     }
     Store.save();
+    /* Q72: attach odometer photos if any — failures are swallowed, the trip is already saved. */
+    if (startPhoto) IDB.put('photos', { id: uid('p'), tripId: rec.id, kind: 'odo-start', blob: startPhoto, mime: startPhoto.type || 'image/jpeg', createdAt: Date.now() }).catch(function () {});
+    if (endPhoto) IDB.put('photos', { id: uid('p'), tripId: rec.id, kind: 'odo-end', blob: endPhoto, mime: endPhoto.type || 'image/jpeg', createdAt: Date.now() }).catch(function () {});
     renderMileageModal(lineId);
     toast(t ? 'Trip updated.' : 'Trip logged.');
   };
@@ -6823,6 +6943,12 @@ function wireUp() {
       var d = dh.getAttribute('data-day');
       histUI.collapsed[d] = !histUI.collapsed[d];
       renderHistory();
+      /* Q85 (2026-10-01): Tanner — opening a group below the fold scrolls it
+         into view so he lands on it. */
+      if (!histUI.collapsed[d]) {
+        var reopened = document.querySelector('.day-head[data-day="' + d + '"]');
+        if (reopened && reopened.scrollIntoView) reopened.scrollIntoView({ block: 'start', behavior: 'smooth' });
+      }
       return;
     }
     var memoBtn = e.target.closest ? e.target.closest('[data-memo-play]') : null;
