@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-10-01bu';
+var APP_VERSION = 'beta 0.1 · build 2026-10-01bv';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -6462,27 +6462,44 @@ function showTripModal(lineId, tripId) {
       if (isFinite(lineTrips[0].endOdo)) lastEnd = String(lineTrips[0].endOdo);
     }
   }
-  /* Q72: optional odometer photos — camera buttons beside each reading.
-     Typed readings are required; a photo (or failed photo) never blocks saving. */
+  /* Q72: optional odometer photos. Tanner 2026-10-01: manual entry is a full-width
+     long bar under each label (the side-by-side row squeezed the input shut on
+     phones); the camera button sits below the input; a live miles readout lets
+     him calculate right there. Typed readings are required; a photo (or failed
+     photo) never blocks saving. */
   var startPhoto = null, endPhoto = null;
   showModal(
     '<h3>' + (t ? 'Edit trip' : 'Log a trip') + '</h3>' +
     '<label class="field" for="m-trip-date">Date</label>' +
     '<input type="date" id="m-trip-date" value="' + esc(t ? t.date : todayISO()) + '">' +
     '<label class="field" for="m-trip-start">Starting odometer</label>' +
-    '<div class="odo-row"><input type="number" id="m-trip-start" inputmode="decimal" min="0" step="any" placeholder="e.g. 48210" value="' + esc(t ? t.startOdo : lastEnd) + '">' +
-    '<button type="button" class="btn-secondary odo-photo" id="m-start-photo" aria-label="Photo of starting odometer">📷</button></div>' +
-    '<div class="dim" id="m-start-photo-note" style="margin:2px 0 6px;font-size:12px"></div>' +
+    '<input type="number" id="m-trip-start" inputmode="decimal" min="0" step="any" placeholder="e.g. 48210" value="' + esc(t ? t.startOdo : lastEnd) + '">' +
+    '<div class="odo-photo-row"><button type="button" class="btn-secondary odo-photo-btn" id="m-start-photo">📷 Photo</button>' +
+    '<span class="dim" id="m-start-photo-note"></span></div>' +
     '<label class="field" for="m-trip-end">Ending odometer</label>' +
-    '<div class="odo-row"><input type="number" id="m-trip-end" inputmode="decimal" min="0" step="any" placeholder="e.g. 48296" value="' + esc(t ? t.endOdo : '') + '">' +
-    '<button type="button" class="btn-secondary odo-photo" id="m-end-photo" aria-label="Photo of ending odometer">📷</button></div>' +
-    '<div class="dim" id="m-end-photo-note" style="margin:2px 0 6px;font-size:12px"></div>' +
+    '<input type="number" id="m-trip-end" inputmode="decimal" min="0" step="any" placeholder="e.g. 48296" value="' + esc(t ? t.endOdo : '') + '">' +
+    '<div class="odo-photo-row"><button type="button" class="btn-secondary odo-photo-btn" id="m-end-photo">📷 Photo</button>' +
+    '<span class="dim" id="m-end-photo-note"></span></div>' +
+    '<div class="odo-miles" id="m-trip-miles"></div>' +
     '<label class="field" for="m-trip-notes">Notes <span class="dim">(optional)</span></label>' +
     '<input type="text" id="m-trip-notes" maxlength="80" placeholder="e.g. River bottoms check" value="' + esc(t ? t.notes || '' : '') + '">' +
     '<input type="file" id="m-odo-photo-input" class="hidden-file" accept="image/*">' +
     '<div class="btn-row" style="margin-top:14px"><button class="btn-secondary" id="m-cancel" type="button">Cancel</button>' +
     '<button class="btn-primary" id="m-ok" type="button">' + (t ? 'Save' : 'Add trip') + '</button></div>'
   );
+  /* Live miles readout — updates as he types. */
+  function updateOdoMiles() {
+    var s = parseFloat($('m-trip-start').value), e = parseFloat($('m-trip-end').value);
+    var el = $('m-trip-miles');
+    if (isFinite(s) && isFinite(e) && e >= s) {
+      el.textContent = 'Trip miles: ' + (e - s).toFixed(1);
+    } else {
+      el.textContent = '';
+    }
+  }
+  $('m-trip-start').oninput = updateOdoMiles;
+  $('m-trip-end').oninput = updateOdoMiles;
+  updateOdoMiles();
   /* Q72: wire the camera buttons — one hidden input, reused for both. */
   var photoTarget = null;
   $('m-start-photo').onclick = function () { photoTarget = 'start'; $('m-odo-photo-input').click(); };
