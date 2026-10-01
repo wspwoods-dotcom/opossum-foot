@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-10-01bw';
+var APP_VERSION = 'beta 0.1 · build 2026-10-01bx';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -4920,8 +4920,8 @@ function landownerPhoneHtml(lo) {
     return nums.map(function (n) {
       var d = landownerPhoneDigits(n);
       return '<div class="lo-phone"><span class="lo-phone-num">' + esc(formatPhoneDisplay(n)) + '</span>' +
-        '<span class="lo-phone-btns"><a class="btn-small btn-primary" href="tel:' + esc(d) + '"><img class="bi inv" src="assets/icons/phone.png" alt="">Call</a>' +
-        '<a class="btn-small btn-secondary" href="sms:' + esc(d) + '"><img class="bi" src="assets/icons/phone.png" alt="">Text</a>' +
+        '<span class="lo-phone-btns"><a class="btn-small btn-primary" href="tel:' + esc(d) + '">Call</a>' +
+        '<a class="btn-small btn-secondary" href="sms:' + esc(d) + '">Text</a>' +
         '<button class="lo-phone-x" type="button" data-lo-phone-del="' + esc(n) + '" aria-label="Remove this number">✕</button></span></div>';
     }).join('');
   }
