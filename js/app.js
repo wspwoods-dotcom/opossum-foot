@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-09-30bq';
+var APP_VERSION = 'beta 0.1 · build 2026-10-01br';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -101,6 +101,12 @@ var Store = {
     if (typeof this.data.checkIntervalHours !== 'number' || this.data.checkIntervalHours <= 0) this.data.checkIntervalHours = 24;
     if (typeof this.data.checkClockOn !== 'boolean') this.data.checkClockOn = true; /* alerts on by default */
     migrateCheckClock(this.data);
+    /* Q104 (2026-10-01): Tanner — notes get no tap-to-fill suggestions;
+       purge any remembered notes, including ones already deleted from sets. */
+    if (this.data.savedEntries && this.data.savedEntries.setnotes) delete this.data.savedEntries.setnotes;
+    /* #6 (2026-10-01): Tanner — same rule for catch-log notes: written fresh,
+       never suggested. Purge remembered log notes too. */
+    if (this.data.savedEntries && this.data.savedEntries.lognotes) delete this.data.savedEntries.lognotes;
     /* New-set field visibility toggles — all default on. */
     var sfDef = { traptype: true, settype: true, bait: true, lure: true, urine: true, visual: true, audio: true, other: true, notes: true };
     if (!this.data.setFields || typeof this.data.setFields !== 'object') this.data.setFields = {};
@@ -372,6 +378,15 @@ function uid(prefix) {
   return prefix + Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
 }
 
+/* Catch time-of-day (Tanner 2026-10-01): "HH:MM" 24-hour, defaulting to now. */
+function nowHHMM() { var d = new Date(); return ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2); }
+function fmtTime(hhmm) {
+  var m = /^([01]?\d|2[0-3]):([0-5]\d)$/.exec(hhmm || '');
+  if (!m) return '';
+  var h = +m[1], ap = h >= 12 ? 'PM' : 'AM';
+  h = h % 12; if (h === 0) h = 12;
+  return h + ':' + m[2] + ' ' + ap;
+}
 function todayISO() {
   var d = new Date();
   return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
@@ -430,6 +445,10 @@ function openSheet(id) {
   closeSheets();
   $(id).classList.add('show');
   $('scrim').classList.add('show');
+  /* Q100 (2026-10-01): Tanner — every sheet opens at the top, never
+     mid-scroll from where it was last closed. */
+  var body = $(id).querySelector('.sheet-body');
+  if (body) body.scrollTop = 0;
 }
 function closeSheets() {
   var sheets = document.querySelectorAll('.sheet.show');
@@ -445,7 +464,7 @@ function closeSheets() {
   if (logWasOpen) { logSheetLive = false; deletePendingLogMemos(); }
 }
 
-/* modal */
+/* modal — dialogs close only via their buttons, never a backdrop tap (Q105). */
 function showModal(html) {
   $('modal-card').innerHTML = html;
   $('modal').classList.add('show');
@@ -670,11 +689,13 @@ function reverseGeocode(lat, lng) {
     encodeURIComponent(lat) + '&longitude=' + encodeURIComponent(lng) + '&localityLanguage=en';
   return fetch(url).then(function (r) { return r.json(); }).then(function (j) {
     var info = parseBigDataCloud(j);
-    geoCache[key] = info;
+    /* Q96: only cache hits — a failed lookup cached as null would make every
+       retry return the stale null instantly instead of re-fetching. */
+    if (info && info.county) geoCache[key] = info;
     return info;
   }).catch(function () {
     return nominatimFallback(lat, lng).then(function (info) {
-      geoCache[key] = info;
+      if (info && info.county) geoCache[key] = info;
       return info;
     });
   });
@@ -740,8 +761,30 @@ function setCountyBanner(info) {
   }
 }
 
+/* Q96 (2026-10-01): the county lookup used to get exactly one shot — on the
+   acquire-final fix. If that single fetch failed, the banner sat at COUNTY
+   UNKNOWN for the whole outing with no recovery (tapping the crosshair again
+   just centers/enters follow). Follow-mode fixes now retry it, throttled, and
+   a failed lookup is no longer cached as null (see reverseGeocode). */
+var lastCountyRetry = 0;
+function maybeRetryCountyBanner(lat, lng) {
+  var banner = $('county-banner');
+  if (!banner || !banner.classList.contains('unknown')) return;
+  if (typeof lat !== 'number' || typeof lng !== 'number') return;
+  var now = Date.now();
+  if (now - lastCountyRetry < 60000) return;
+  lastCountyRetry = now;
+  reverseGeocode(lat, lng).then(function (info) {
+    if (info && info.county) {
+      setCountyBanner(info);
+      checkStateMismatch(info);
+    }
+  });
+}
+
 /* Warn when the GPS fix is in a different state than the trapping state. */
 function checkStateMismatch(info) {
+  lastStateInfo = info || null;
   var bar = $('state-alert');
   var tcode = activeStateCode();
   if (info && info.stateCode && tcode && info.stateCode !== tcode) {
@@ -1019,7 +1062,10 @@ function renderWeatherTab() {
       showCachedNWS();
       return;
     }
-    $('weather-loc').textContent = 'Near ' + fix.lat.toFixed(3) + ', ' + fix.lng.toFixed(3);
+    /* Q103 (2026-10-01): Tanner — no visible coordinates anywhere in the UI unless the Privacy toggle is on. */
+    $('weather-loc').textContent = showCoords()
+      ? 'Near ' + fix.lat.toFixed(3) + ', ' + fix.lng.toFixed(3)
+      : 'Current conditions where you are.';
     /* National Weather Service spot forecast, in parallel with Open-Meteo. */
     fetchNWS(fix.lat, fix.lng, function (nws) {
       if (nws) {
@@ -1122,19 +1168,37 @@ var BAIT_RULES = {
   MN: 'No foothold within 20 ft of bait visible to soaring birds (any animal or animal parts, including fish). Rabbit or hare flesh may not be used as bait at all.',
   WI: 'No sight-exposed bait (feathers, flesh, fur, hide, entrails) within 25 ft of a trap, snare, or cable restraint — except enclosed trigger traps and cage traps.'
 };
-/* Q30: show/hide the bait-rule reminder under the New/Edit Set bait rows. */
+/* Q30: show/hide the bait-rule reminder under the New/Edit Set bait rows.
+   Q97 (2026-10-01): Tanner — a slim collapsed row ("Bait rule — Iowa ›") instead
+   of the full warnbox shoving the form; tap expands the rule in place. */
 function updateBaitWarn() {
   var box = $('sf-bait-warn');
+  var head = $('sf-bait-warn-head');
   if (!box) return;
   var code = (typeof activeStateCode === 'function') ? activeStateCode() : null;
   var rule = code && BAIT_RULES[code];
   var hasBait = collectAttrRows('bait').length > 0;
-  if (!rule || !hasBait) { box.setAttribute('hidden', ''); box.innerHTML = ''; return; }
+  if (!rule || !hasBait) {
+    box.setAttribute('hidden', ''); box.innerHTML = '';
+    if (head) { head.setAttribute('hidden', ''); head.classList.remove('open'); }
+    return;
+  }
   var stName = code;
   for (var i = 0; i < STATES.length; i++) if (STATES[i].code === code) { stName = STATES[i].name; break; }
-  box.innerHTML = '<div class="wb-title">Bait rule — ' + esc(stName) + '.</div>' + esc(rule) +
-    '<div class="reminder-tag">Reminder only, not legal advice — check your state\u2019s current regulations.</div>';
-  box.removeAttribute('hidden');
+  if (head) {
+    head.innerHTML = '<span>Bait rule \u2014 ' + esc(stName) + '</span><span class="setsec-chev">\u203a</span>';
+    head.removeAttribute('hidden');
+    head.classList.remove('open');
+    head.onclick = function () {
+      var b = $('sf-bait-warn');
+      var open = !b.hasAttribute('hidden');
+      if (open) { b.setAttribute('hidden', ''); head.classList.remove('open'); }
+      else { b.removeAttribute('hidden'); head.classList.add('open'); }
+    };
+  }
+  box.innerHTML = esc(rule) +
+    '<div class="reminder-tag">Reminder only, not legal advice \u2014 check your state\u2019s current regulations.</div>';
+  box.setAttribute('hidden', ''); /* starts collapsed; the head expands it */
 }
 function toAttrArray(v) {
   if (Array.isArray(v)) return v.map(function (x) { return String(x || '').trim(); }).filter(Boolean);
@@ -1344,6 +1408,21 @@ function attrRowCount(field) {
   var host = $('sf-' + field + '-rows');
   return host ? host.querySelectorAll('.attr-row').length : 0;
 }
+/* Q98 (2026-10-01): Tanner — the "+ Add Another X" button stays hidden until
+   at least one row of that attractant actually has a value typed in. */
+function updateAttrAdd(field) {
+  var add = $('sf-' + field + '-add');
+  if (!add) return;
+  var host = $('sf-' + field + '-rows');
+  var filled = false;
+  if (host) {
+    var inputs = host.querySelectorAll('.attr-row-input');
+    for (var i = 0; i < inputs.length; i++) {
+      if ((inputs[i].value || '').trim()) { filled = true; break; }
+    }
+  }
+  if (filled) add.removeAttribute('hidden'); else add.setAttribute('hidden', '');
+}
 function renderAttrRows(field, values, minRows) {
   var host = $('sf-' + field + '-rows');
   if (!host) return;
@@ -1383,9 +1462,12 @@ function renderAttrRows(field, values, minRows) {
     var last = $('sf-' + field + '-row-' + n);
     if (last) last.focus();
   };
+  updateAttrAdd(field); /* Q98: button visibility follows row contents */
 }
-/* ---- Q48: coordinates live at the bottom of the set form and set detail,
-   small and dim, tap to copy. Q43's hidden top-line stays gone. */
+/* ---- Q103 (2026-10-01): Tanner — GPS coordinates are hidden everywhere
+   visible (screenshot-safe) unless Settings → Privacy → "Show GPS coordinates"
+   is on. The tap-to-copy footers below only render when it's on. */
+function showCoords() { return !!Store.data.showCoords; }
 function fmtCoords(lat, lng) {
   return Number(lat).toFixed(5) + ', ' + Number(lng).toFixed(5);
 }
@@ -1572,13 +1654,13 @@ function trapDetailValues() {
     trapSpring: selVal('sf-trapspring'), trapSize: selVal('sf-trapsize'),
     snareDia: selVal('sf-snaredia'), snareLock: selVal('sf-snarelock'), snareLen: selVal('sf-snarelen'),
     snarePurpose: selVal('sf-snarepurpose'),
-    trapModel: trapModel, trapMods: mv.mods, panSize: mv.panSize
+    trapModel: trapModel, trapMods: mv.mods, panSize: mv.panSize, jawShape: mv.jawShape, jawClose: mv.jawClose
   };
 }
-/* Checked modification boxes + pan size from the mods section (raw values;
+/* Checked modification boxes + pan size + jaw shape from the mods section (raw values;
    top+bottom lamination is normalized to double-laminated at save time). */
 function trapModValues() {
-  var mods = [], panSize = '';
+  var mods = [], panSize = '', jawShape = '', jawClose = '';
   if (document.querySelectorAll) {
     var boxes = document.querySelectorAll('.modchkbox');
     for (var i = 0; i < boxes.length; i++) if (boxes[i].checked) mods.push(boxes[i].value);
@@ -1586,9 +1668,13 @@ function trapModValues() {
   var pan = $('sf-pansize');
   /* Q55: resolves Other… → the typed custom (remembered), or '' when blank. */
   if (pan) { var psv = selVal('sf-pansize'); if (psv && psv !== 'Stock') panSize = psv; }
-  return { mods: mods, panSize: panSize };
+  var jaw = $('sf-jawshape');
+  if (jaw) jawShape = selVal('sf-jawshape') || '';
+  var jawc = $('sf-jawclose');
+  if (jawc) jawClose = selVal('sf-jawclose') || '';
+  return { mods: mods, panSize: panSize, jawShape: jawShape, jawClose: jawClose };
 }
-/* Optional Modifications section. `v` carries trapMods (array) + panSize.
+/* Optional Modifications section. `v` carries trapMods (array) + panSize + jawShape + jawClose.
    forceCheck lists custom mods to check immediately (just added). */
 function renderModsHtml(t, v, forceCheck) {
   var pre = t === 'Foothold' ? FOOTHOLD_MODS : (t === 'Bodygrip / Conibear' ? BODYGRIP_MODS : []);
@@ -1616,12 +1702,31 @@ function renderModsHtml(t, v, forceCheck) {
       h += '<option value="' + esc(p) + '"' + (pv === p ? ' selected' : '') + '>' + esc(pl) + '</option>';
     });
     h += '</select>' + otherWrapHtml('sf-pansize');
+    /* Q102 (2026-10-01): Tanner — round jaw vs square jaw, footholds only. */
+    var jv = v.jawShape || '';
+    h += '<label class="field" for="sf-jawshape">Jaw shape</label><select id="sf-jawshape">';
+    h += '<option value="">Select…</option>';
+    ['Round jaw', 'Square jaw'].forEach(function (j) {
+      h += '<option value="' + j + '"' + (jv === j ? ' selected' : '') + '>' + j + '</option>';
+    });
+    h += '</select>';
+    /* Tanner 2026-10-01 — jaw closure: offset vs closed, footholds only. */
+    var jcv = v.jawClose || '';
+    h += '<label class="field" for="sf-jawclose">Jaw closure</label><select id="sf-jawclose">';
+    h += '<option value="">Select…</option>';
+    ['Offset', 'Closed'].forEach(function (j) {
+      h += '<option value="' + j + '"' + (jcv === j ? ' selected' : '') + '>' + j + '</option>';
+    });
+    h += '</select>';
   }
+  h += '<div class="checkgrid">';
   pre.forEach(function (m) { h += box(m); });
+  h += '</div>';
   var customs = getCustomMods().filter(function (c) { return pre.indexOf(c) < 0; });
   if (customs.length) {
-    h += '<div class="mods-sub">Your Saved Mods</div>';
+    h += '<div class="mods-sub">Your Saved Mods</div><div class="checkgrid">';
     customs.forEach(function (m) { h += box(m); });
+    h += '</div>';
   }
   h += '<div class="mod-addrow"><input type="text" id="sf-modcustom" placeholder="Add your own modification" autocomplete="off">' +
     '<button type="button" class="btn-ghost btn-small" id="sf-modadd">Add</button></div></div>';
@@ -1726,6 +1831,8 @@ function trapDetailSummary(s) {
   }
   if (s.trapModel) parts.push(s.trapModel);
   if (s.panSize) parts.push(s.panSize + ' pan');
+  if (s.jawShape) parts.push(s.jawShape);
+  if (s.jawClose) parts.push(s.jawClose + ' jaw');
   (s.trapMods || []).forEach(function (m) { parts.push(m); });
   return parts.join(' · ');
 }
@@ -1743,6 +1850,8 @@ function normalizeTrapDetail(s) {
 /* ================= 6. MAP ================= */
 var map = null, markersLayer = null, gpsMarker = null, gpsCircle = null, dropPinMode = false;
 var lastFix = null;
+var lastStateInfo = null; /* last reverse-geocode result, so the state-mismatch
+  alert can be re-checked after a trapping-state change (Tanner 2026-09-30) */
 
 /* State bounding boxes [south, west, north, east] — map opens on the picked trapping state. */
 var STATE_BOUNDS = {
@@ -1974,6 +2083,18 @@ function homeLatLng() {
   if (h && isFinite(+h.lat) && isFinite(+h.lng)) return { lat: +h.lat, lng: +h.lng };
   return null;
 }
+/* Q107: the most recently created line that already has a home. When a brand-new
+   line has no home of its own, the home picker starts here instead of the bare
+   state center (Iowa's sits near Nevada — the town, which is why Tanner once
+   landed clear over there). */
+function lastKnownHome() {
+  var lines = (Store.data && Store.data.lines) || [];
+  for (var i = lines.length - 1; i >= 0; i--) {
+    var h = lines[i] && lines[i].home;
+    if (h && isFinite(+h.lat) && isFinite(+h.lng)) return { lat: +h.lat, lng: +h.lng };
+  }
+  return null;
+}
 function normalizeHome(d) {
   /* Migrate the short-lived global home (never released) onto the first line. */
   var gHome = null, gAsked = false;
@@ -2025,8 +2146,13 @@ function startHomePick() {
   setPlacingLock(true); /* B15: same modal lock as pin placement */
   /* B13: bar just changed the map height — re-measure before centering. */
   map.invalidateSize();
-  var h = homeLatLng();
-  if (h) map.setView([h.lat, h.lng], Math.max(map.getZoom(), HOME_ZOOM));
+  /* Q107: new line borrows another line's home as the starting point.
+     Borrowed home opens two zooms wider — familiar country, not a backyard.
+     Math.min: a tighter view zooms out to the target, a wider view stays —
+     the picker must never force a zoom-in. */
+  var h = homeLatLng(), borrowed = false;
+  if (!h) { h = lastKnownHome(); borrowed = true; }
+  if (h) map.setView([h.lat, h.lng], Math.min(map.getZoom(), borrowed ? HOME_ZOOM - 2 : HOME_ZOOM));
 }
 function cancelHomePick() {
   homePickMode = false; homeMapLive = false;
@@ -2233,6 +2359,7 @@ function onFollowFix(pos) {
   armFollowWatchdog();
   var acc = (typeof c.accuracy === 'number' && isFinite(c.accuracy)) ? Math.round(c.accuracy) : 9999;
   drawFix({ lat: c.latitude, lng: c.longitude, acc: acc }, false);
+  maybeRetryCountyBanner(c.latitude, c.longitude); /* Q96: heal a missed county lookup */
   if (map && locateState === 'following') {
     var pt = map.latLngToContainerPoint([c.latitude, c.longitude]);
     var size = map.getSize();
@@ -2491,17 +2618,18 @@ function openSetForm(coords, setId) {
   var seBtn = $('btn-se-memo');
   if (seBtn) seBtn.innerHTML = MEMO_IDLE_HTML;
   if (editingSetId) {
-    loadSetPhotos(editingSetId, function (sp) { editSetPhotos = sp; renderPendingSetPhotos(); });
+    loadSetPhotos(editingSetId, function (sp) { editSetPhotos = sp; renderPendingSetPhotos(); refreshNotesBox('setform-notessec', 'sf-notes', 'se-memos', 'sf-photos'); /* Q99 */ });
     renderMemos(editingSetId, 'se-memos', true);
   }
   renderPendingSetPhotos();
+  refreshNotesBox('setform-notessec', 'sf-notes', 'se-memos', 'sf-photos'); /* Q99 */
   var photoBlock = $('setform-photos');
   if (photoBlock) photoBlock.style.display = '';
   hideSetFormError();
   applySetFieldToggles();
-  /* Q48: quiet coords at the bottom — what the form will save */
+  /* Q103: quiet coords at the bottom when the Privacy toggle is on — what the form will save */
   var fc = s ? { lat: s.lat, lng: s.lng } : pendingCoords;
-  wireCoordsBottom('setform-coords-bottom',
+  wireCoordsBottom('setform-coords-bottom', showCoords() &&
     (fc && isFinite(+fc.lat) && isFinite(+fc.lng)) ? fmtCoords(fc.lat, fc.lng) : '');
   openSheet('sheet-setform');
 }
@@ -2587,7 +2715,7 @@ function saveSetForm() {
     s.snareDia = td.snareDia; s.snareLock = td.snareLock; s.snareLen = td.snareLen;
     s.snarePurpose = td.snarePurpose;
     s.trapModel = td.trapModel;
-    s.trapMods = normalizeMods(td.trapMods); s.panSize = td.panSize;
+    s.trapMods = normalizeMods(td.trapMods); s.panSize = td.panSize; s.jawShape = td.jawShape; s.jawClose = td.jawClose;
     normalizeTrapDetail(s);
     s.setType = selVal('sf-settype'); /* Q55: Other… resolves to the typed custom */
     /* Q26: stacked attractant rows -> arrays (deduped, empties dropped) */
@@ -2600,7 +2728,6 @@ function saveSetForm() {
     s.status = status;
     s.dateSet = dateSet;
     s.notes = $('sf-notes').value.trim();
-    rememberEntry('setnotes', s.notes); /* Q12 */
     if (td.trapModel) rememberEntry('trapmodel', td.trapModel); /* Q12 */
     /* Q36: missing reason rides the status */
     s.missingReason = (status === 'missing') ? setMissingReason : null;
@@ -2634,7 +2761,7 @@ function saveSetForm() {
       snareDia: td.snareDia, snareLock: td.snareLock, snareLen: td.snareLen,
       snarePurpose: td.snarePurpose,
       trapModel: td.trapModel,
-      trapMods: normalizeMods(td.trapMods), panSize: td.panSize,
+      trapMods: normalizeMods(td.trapMods), panSize: td.panSize, jawShape: td.jawShape, jawClose: td.jawClose,
       setType: selVal('sf-settype'), /* Q55: Other… resolves to the typed custom */
       /* Q26: stacked attractant rows -> arrays */
       bait: collectAttrRows('bait'), lure: collectAttrRows('lure'),
@@ -2654,7 +2781,6 @@ function saveSetForm() {
     Store.data.sets.push(ns);
     Store.save(); refreshMarkers(); closeSheets();
     rememberEntry('setname', ns.name); /* Q12 */
-    rememberEntry('setnotes', ns.notes); /* Q12 */
     if (ns.trapModel) rememberEntry('trapmodel', ns.trapModel); /* Q12 */
     if (ns.missingDetail) rememberEntry('missingdetail', ns.missingDetail); /* Q12 */
     rememberAttractants(ns);
@@ -2691,12 +2817,12 @@ function openSetDetail(id) {
   if (!s) return;
   detailSetId = id;
   $('sd-name').textContent = s.name;
-  /* Q48: quiet tap-to-copy coords at the bottom */
-  wireCoordsBottom('sd-coords-bottom', fmtCoords(s.lat, s.lng));
+  /* Q103: quiet tap-to-copy coords at the bottom, only when the Privacy toggle is on */
+  wireCoordsBottom('sd-coords-bottom', showCoords() ? fmtCoords(s.lat, s.lng) : '');
   var st = normStatus(s.status);
+  /* Q103d: no county badge — the county rides on the Location row instead. */
   $('sd-badges').innerHTML =
-    '<span class="badge status-' + esc(st) + '">' + esc(statusLabel(st)) + '</span> ' +
-    (s.county ? '<span class="badge yearround">' + esc(s.county) + ' Co.</span>' : '');
+    '<span class="badge status-' + esc(st) + '">' + esc(statusLabel(st)) + '</span>';
   /* Q71: status is display-only here — changes go through "Edit this set". */
   $('sd-fields').innerHTML =
     '<dt>Trap</dt><dd>' + esc(s.trapType) + (function () { var d = trapDetailSummary(s); return d ? ' · ' + esc(d) : ''; })() + '</dd>' +
@@ -2708,7 +2834,7 @@ function openSetDetail(id) {
     '<dt>Audio</dt><dd>' + esc(joinAttr(s.audio) || '—') + '</dd>' +
     '<dt>Other Attractants</dt><dd>' + esc(joinAttr(s.other) || '—') + '</dd>' +
     '<dt>Date set</dt><dd>' + esc(fmtDate(s.dateSet)) + '</dd>' +
-    '<dt>Location</dt><dd>' + s.lat.toFixed(5) + ', ' + s.lng.toFixed(5) + '</dd>' +
+    (showCoords() ? '<dt>Location</dt><dd>' + (s.county ? esc(s.county) + ' Co. · ' : '') + s.lat.toFixed(5) + ', ' + s.lng.toFixed(5) + '</dd>' : '') +
     '<dt>Weather</dt><dd>' + esc(weatherText(s.weather)) + '</dd>';
   /* Q36: show the missing reason on the set detail sheet */
   if (st === 'missing' && s.missingReason) {
@@ -2734,6 +2860,7 @@ function openSetDetail(id) {
   /* Q71: summary memos are playback-only — recording/deletion are in Edit. */
   renderMemos(s.id, 'sd-memos', false);
   $('sd-notes').value = s.notes || '';
+  refreshNotesBox('setdetail-notessec', 'sd-notes', 'sd-memos', 'sd-photos'); /* Q99 */
   openSheet('sheet-setdetail');
 }
 function appendTranscriptToSetNotes(setId, tr) {
@@ -2742,7 +2869,7 @@ function appendTranscriptToSetNotes(setId, tr) {
   s.notes = (s.notes ? s.notes.replace(/\s+$/, '') + ' ' : '') + tr;
   touchSet(s); /* Q68 */
   Store.save();
-  if (setId === detailSetId && $('sd-notes')) $('sd-notes').value = s.notes;
+  if (setId === detailSetId && $('sd-notes')) { $('sd-notes').value = s.notes; refreshNotesBox('setdetail-notessec', 'sd-notes', 'sd-memos', 'sd-photos'); /* Q99 */ }
 }
 
 function renderSetLogs(s, byLog) {
@@ -2931,7 +3058,9 @@ function openLogSheet(setId) {
   for (var d = 0; d < dispBtns.length; d++) dispBtns[d].classList.toggle('selected', dispBtns[d].getAttribute('data-disp') === 'kept');
   $('log-date').value = todayISO();
   updateDateDOW('log-date', 'log-date-dow');
+  var lt = $('log-time'); if (lt) lt.value = nowHHMM(); /* always fresh: the time the animal was found, not last entry's */
   $('log-notes').value = '';
+  setSectionOpen('logform-notessec', false); /* Q99: new catches start collapsed */
   $('log-species-search').value = '';
   $('log-species-free').value = '';
   $('log-othertype').value = 'sprung';
@@ -3246,7 +3375,7 @@ function saveLog() {
     otherType: isOther ? logOtherType : null,
     count: isEmpty ? 0 : (logCount * 1 || 1),
     disposition: logDisposition,
-    date: date, seasonYear: seasonYearOf(date),
+    date: date, time: ($('log-time') && $('log-time').value) || '', seasonYear: seasonYearOf(date),
     bait: s ? toAttrArray(s.bait).slice() : [], lure: s ? toAttrArray(s.lure).slice() : [],
     urine: s ? toAttrArray(s.urine).slice() : [], visual: s ? toAttrArray(s.visual).slice() : [],
     audio: s ? toAttrArray(s.audio).slice() : [], other: s ? toAttrArray(s.other).slice() : [],
@@ -3263,7 +3392,7 @@ function saveLog() {
   log.lineId = activeLineId();
   Store.data.logs.push(log);
   touchSet(getSet(logSetId)); /* Q68: a logged catch, event, or empty check restarts the clock */
-  rememberEntry('lognotes', log.notes); /* Q12 */
+  /* #6 (2026-10-01): Tanner — catch-log notes are written fresh, never saved for reuse. */
   if (isOther && species) rememberEntry('otherspecies', species); /* Q12 */
   Store.save();
   pendingLogPhotos.forEach(function (ph) {
@@ -3658,6 +3787,9 @@ function renderMemos(setId, boxId, editable) {
       wrap.appendChild(tr);
       box.appendChild(wrap);
     });
+    /* Q99: memos arriving late still decide the notes box's open state. */
+    if (boxId === 'se-memos') refreshNotesBox('setform-notessec', 'sf-notes', 'se-memos', 'sf-photos');
+    else if (boxId === 'sd-memos') refreshNotesBox('setdetail-notessec', 'sd-notes', 'sd-memos', 'sd-photos');
   });
 }
 
@@ -3933,7 +4065,7 @@ function renderHistSummary(logs) {
    species was entered) so they're distinguishable from catches. */
 function logRowHtml(l, showDate) {
   var expanded = !!histUI.expanded[l.createdAt];
-  var meta = (showDate ? esc(dayLabel(l.date)) : '') +
+  var meta = (showDate ? esc(dayLabel(l.date) + (l.time ? ' · ' + fmtTime(l.time) : '')) : '') +
     ((l.setName || '') ? (showDate ? ' · ' : '') + esc(l.setName) : '') +
     (function () { var a = allAttrSummary(l); return a ? ' · ' + esc(a) : ''; })();
   var title;
@@ -4938,6 +5070,7 @@ function deleteLandowner(id) {
 }
 
 /* ================= 12. CSV EXPORT / ERASE ================= */
+function exportCoords() { return !!Store.data.exportCoords; } /* #5 (2026-10-01): Tanner — coordinates ride along in reports only when this is on. Default off. */
 function exportCatches() {
   var total = activeLogs().length;
   if (!total) { toast('No catches to export yet.'); return; }
@@ -4945,15 +5078,16 @@ function exportCatches() {
      they select, regardless of the History tab's quick filters. */
   var list = exportFilteredLogs();
   if (!list.length) { toast('No catches match the current filters.'); return; }
-  var rows = [['Date', 'Season', 'Set', 'Species', 'Count', 'Disposition', 'Set type', 'Trap type', 'Trap detail', 'Weather', 'Bait', 'Lure', 'Urine', 'Visual', 'Audio', 'Other Attractants', 'County', 'Latitude', 'Longitude', 'Notes']];
+  var ec = exportCoords();
+  var rows = [['Date', 'Time', 'Season', 'Set', 'Species', 'Count', 'Disposition', 'Set type', 'Trap type', 'Trap detail', 'Weather', 'Bait', 'Lure', 'Urine', 'Visual', 'Audio', 'Other Attractants', 'County'].concat(ec ? ['Latitude', 'Longitude'] : []).concat(['Notes'])];
   list.forEach(function (l) {
     /* Other events with no species entered show the subtype label in the
        Species column — no format change needed. */
     var spCol = (l.otherType && !l.species) ? (OTHER_LABELS[l.otherType] || 'Other event') : l.species;
     /* Trap detail: snapshot on the log, falling back to the set's current details for older logs. */
     var det = l.trapDetail || (function () { var s2 = l.setId ? getSet(l.setId) : null; return s2 ? trapDetailSummary(s2) : ''; })();
-    rows.push([l.date, l.seasonYear || seasonYearOf(l.date), l.setName, spCol, l.count,
-      dispLabel(l.disposition), l.setType, l.trapType, det, weatherText(l.weather), joinAttr(l.bait), joinAttr(l.lure), joinAttr(l.urine), joinAttr(l.visual), joinAttr(l.audio), joinAttr(l.other), l.county, l.lat, l.lng, l.notes]);
+    rows.push([l.date, l.time || '', l.seasonYear || seasonYearOf(l.date), l.setName, spCol, l.count,
+      dispLabel(l.disposition), l.setType, l.trapType, det, weatherText(l.weather), joinAttr(l.bait), joinAttr(l.lure), joinAttr(l.urine), joinAttr(l.visual), joinAttr(l.audio), joinAttr(l.other), l.county].concat(ec ? [l.lat, l.lng] : []).concat([l.notes]));
   });
   var filt = exportFiltersActive();
   downloadCSV('opossum-foot-catches-' + lineFileSlug() + '-' + todayISO() + (filt ? '-filtered' : '') + '.csv', rows);
@@ -4963,9 +5097,10 @@ function exportSets() {
   if (!activeSets().length) { toast('No sets to export yet.'); return; }
   /* Q47: one set = one trap — the Trap count column is gone. Q26: Other
      Attractants column after Urine; lists join with ' | '. */
-  var rows = [['Name', 'Latitude', 'Longitude', 'County', 'Set type', 'Trap type', 'Trap spring', 'Trap size', 'Snare diameter', 'Snare lock', 'Snare length', 'Snare purpose', 'Trap model', 'Weather', 'Bait', 'Lure', 'Urine', 'Visual', 'Audio', 'Other Attractants', 'Status', 'Date set', 'Notes', 'Trap maker', 'Pan size', 'Trap mods', 'Missing reason', 'Missing detail']];
+  var ec2 = exportCoords();
+  var rows = [['Name'].concat(ec2 ? ['Latitude', 'Longitude'] : []).concat(['County', 'Set type', 'Trap type', 'Trap spring', 'Trap size', 'Snare diameter', 'Snare lock', 'Snare length', 'Snare purpose', 'Trap model', 'Weather', 'Bait', 'Lure', 'Urine', 'Visual', 'Audio', 'Other Attractants', 'Status', 'Date set', 'Notes', 'Trap maker', 'Pan size', 'Jaw shape', 'Jaw closure', 'Trap mods', 'Missing reason', 'Missing detail'])];
   activeSets().forEach(function (s) {
-    rows.push([s.name, s.lat, s.lng, s.county, s.setType, s.trapType, (s.trapSpring || ''), (s.trapSize || ''), (s.snareDia || ''), (s.snareLock || ''), (s.snareLen || ''), (s.snarePurpose || ''), (s.trapModel || ''), weatherText(s.weather), joinAttr(s.bait), joinAttr(s.lure), joinAttr(s.urine), joinAttr(s.visual), joinAttr(s.audio), joinAttr(s.other), s.status, s.dateSet, s.notes, (s.trapMaker || ''), (s.panSize || ''), (s.trapMods || []).join(' | '), missingReasonLabel(s.missingReason || ''), (s.missingDetail || '')]);
+    rows.push([s.name].concat(ec2 ? [s.lat, s.lng] : []).concat([s.county, s.setType, s.trapType, (s.trapSpring || ''), (s.trapSize || ''), (s.snareDia || ''), (s.snareLock || ''), (s.snareLen || ''), (s.snarePurpose || ''), (s.trapModel || ''), weatherText(s.weather), joinAttr(s.bait), joinAttr(s.lure), joinAttr(s.urine), joinAttr(s.visual), joinAttr(s.audio), joinAttr(s.other), s.status, s.dateSet, s.notes, (s.trapMaker || ''), (s.panSize || ''), (s.jawShape || ''), (s.jawClose || ''), (s.trapMods || []).join(' | '), missingReasonLabel(s.missingReason || ''), (s.missingDetail || '')]));
   });
   downloadCSV('opossum-foot-sets-' + lineFileSlug() + '-' + todayISO() + '.csv', rows);
   toast('Sets CSV downloaded.');
@@ -5034,6 +5169,7 @@ function importDataFile(file) {
         trapModel: s.trapModel || '',
         trapMods: Array.isArray(s.trapMods) ? s.trapMods.slice() : [],
         panSize: s.panSize || '',
+        jawShape: s.jawShape || '',
         bait: toAttrArray(s.bait), lure: toAttrArray(s.lure), urine: toAttrArray(s.urine), visual: toAttrArray(s.visual), audio: toAttrArray(s.audio), other: toAttrArray(s.other),
         status: normStatus(s.status),
         dateSet: s.dateSet || todayISO(),
@@ -5186,7 +5322,7 @@ function addImportedSet(pin, lineId) {
     trapType: '', setType: '',
     trapMaker: '', trapSpring: '', trapSize: '',
     snareDia: '', snareLock: '', snareLen: '', snarePurpose: '',
-    trapModel: '', trapMods: [], panSize: '',
+    trapModel: '', trapMods: [], panSize: '', jawShape: '',
     bait: [], lure: [], urine: [], visual: [], audio: [], other: [],
     status: 'active', dateSet: todayISO(),
     notes: '', lineId: lineId, createdAt: Date.now()
@@ -5296,6 +5432,97 @@ function eraseAllTyped() {
     });
 }
 
+/* Q82 (2026-10-01): Tanner — purge catch history by line and/or date range.
+   Sets are never touched. Matching logs go away with their photos and voice
+   memos, gone forever, same as a single-log delete. */
+function purgeMatchList() {
+  var lineId = $('purge-line') ? $('purge-line').value : '';
+  var from = $('purge-from') ? $('purge-from').value : '';
+  var to = $('purge-to') ? $('purge-to').value : '';
+  return Store.data.logs.filter(function (l) {
+    if (lineId && l.lineId !== lineId) return false;
+    if (from && (l.date || '') < from) return false;
+    if (to && (l.date || '') > to) return false;
+    return true;
+  });
+}
+function purgeCountText() {
+  var n = purgeMatchList().length;
+  return n ? n + ' catch record' + (n === 1 ? '' : 's') + ' match' + (n === 1 ? 'es' : '') + '.' : 'No catch records match.';
+}
+function refreshPurge() {
+  var sel = $('purge-line');
+  if (!sel) return;
+  var cur = sel.value;
+  sel.innerHTML = '<option value="">All lines</option>';
+  (Store.data.lines || []).forEach(function (ln) {
+    var n = (Store.data.sets || []).filter(function (s) { return s.lineId === ln.id; }).length;
+    sel.innerHTML += '<option value="' + esc(ln.id) + '">' + esc(ln.name) + ' (' + n + ' sets)</option>';
+  });
+  if (cur) sel.value = cur;
+  $('purge-count').textContent = purgeCountText();
+}
+function wirePurge() {
+  refreshPurge();
+  var upd = function () { $('purge-count').textContent = purgeCountText(); };
+  $('purge-line').onchange = upd; $('purge-from').onchange = upd; $('purge-to').onchange = upd;
+  $('btn-purge').onclick = purgeHistory;
+}
+function purgeHistory() {
+  var list = purgeMatchList();
+  if (!list.length) { toast('Nothing to purge — no catch records match.'); return; }
+  /* Same kid-proof gate as Erase Everything: a quick math question first. */
+  var a = 3 + Math.floor(Math.random() * 7);
+  var b = 2 + Math.floor(Math.random() * 8);
+  var ans = String(a + b);
+  showModal(
+    '<h3>Quick check</h3>' +
+    '<p>Before anything destructive: what is <strong>' + a + ' + ' + b + '</strong>?</p>' +
+    '<input type="text" id="m-math" inputmode="numeric" autocomplete="off" style="width:100%;margin:8px 0" placeholder="Your answer">' +
+    '<div class="btn-row"><button class="btn-secondary" id="m-cancel" type="button">Cancel</button>' +
+    '<button class="btn-danger" id="m-math-go" type="button" disabled>Continue</button></div>'
+  );
+  var minp = $('m-math'), mgo = $('m-math-go');
+  $('m-cancel').onclick = closeModal;
+  minp.oninput = function () { mgo.disabled = minp.value.trim() !== ans; };
+  mgo.onclick = function () { closeModal(); purgeConfirm(list); };
+  setTimeout(function () { try { minp.focus(); } catch (e) { /* noop */ } }, 150);
+}
+function purgeConfirm(list) {
+  var lineId = $('purge-line').value;
+  var ln = lineId ? lineById(Store.data, lineId) : null;
+  var from = $('purge-from').value, to = $('purge-to').value;
+  var scope = (ln ? ' on "' + esc(ln.name) + '"' : ' on all lines') +
+    (from || to ? ' (' + (from ? esc(fmtDate(from)) : 'any date') + ' → ' + (to ? esc(fmtDate(to)) : 'any date') + ')' : '');
+  confirmModal('Purge ' + list.length + ' catch record' + (list.length === 1 ? '' : 's') + '?',
+    'Every matching catch record' + scope + ' will be permanently deleted, along with its photos and voice memos. ' +
+    'Your sets are not touched. This cannot be undone — deleted data is gone forever.',
+    'Purge', function () {
+      var ids = {};
+      list.forEach(function (l) { ids[l.id] = true; });
+      Store.data.logs = Store.data.logs.filter(function (l) { return !ids[l.id]; });
+      IDB.all('photos').then(function (all) {
+        all.forEach(function (p) {
+          if (p && ids[p.logId]) {
+            if (photoURLs[p.id]) { URL.revokeObjectURL(photoURLs[p.id]); delete photoURLs[p.id]; }
+            delete photoById[p.id];
+            IDB.del('photos', p.id);
+          }
+        });
+      }).catch(function () { /* noop */ });
+      list.forEach(function (l) {
+        (logMemoIds(l) || []).forEach(function (mid) {
+          if (memoURLs[mid]) { try { URL.revokeObjectURL(memoURLs[mid]); } catch (e) { /* noop */ } delete memoURLs[mid]; }
+          IDB.del('memos', mid);
+        });
+      });
+      Store.save();
+      renderHistory(); renderTotals();
+      $('purge-count').textContent = purgeCountText();
+      toast('Purged ' + list.length + ' catch record' + (list.length === 1 ? '' : 's') + '.');
+    });
+}
+
 /* ================= 13. TABS / NAV ================= */
 function switchTab(name) {
   /* B15: while a pin is being placed the rest of the app is locked — the
@@ -5306,9 +5533,12 @@ function switchTab(name) {
   var panes = document.querySelectorAll('.pane');
   for (var j = 0; j < panes.length; j++) panes[j].classList.remove('active');
   $('pane-' + name).classList.add('active');
+  /* Q100 (2026-10-01): Tanner — every tab opens at the top too. */
+  var psc = $('pane-' + name).querySelector('.scroll');
+  if (psc) psc.scrollTop = 0;
   if (name === 'map') { initMap(); updateWeatherChip(); refreshMarkers(); } /* Q17: marker wind refresh on open */
   if (name === 'history') renderHistory();
-  if (name === 'settings') { renderExportDimChips(); renderExportFilterBar(); renderSettingsHome(); } /* Q53: home status */
+  if (name === 'settings') { renderExportDimChips(); renderExportFilterBar(); renderSettingsHome(); refreshPurge(); } /* Q53: home status */
   if (name === 'scorecard') renderScorecardTab();
   if (name === 'totals') renderTotals();
   if (name === 'seasons') renderSeasons($('seasons-search').value);
@@ -5400,12 +5630,14 @@ function showAddLineModal() {
     '<label class="field" for="m-line-state" style="margin-top:10px">Trapping state</label>' +
     '<select id="m-line-state"></select>' +
     '<div class="btn-row" style="margin-top:14px"><button class="btn-secondary" id="m-cancel" type="button">Cancel</button>' +
+    '<button class="btn-secondary" id="m-clone" type="button">Clone line</button>' +
     '<button class="btn-primary" id="m-ok" type="button">Add line</button></div>'
   );
   buildStateSelect($('m-line-state'), activeStateCode());
   /* Q12: line names learn from use */
   attachSuggest('m-line-name', 'm-line-name-suggest', 'linename');
   $('m-cancel').onclick = closeModal;
+  $('m-clone').onclick = function () { showClonePicker(); };
   $('m-ok').onclick = function () {
     var name = $('m-line-name').value.trim();
     if (!name) { toast('Give the line a name.'); return; }
@@ -5420,6 +5652,32 @@ function showAddLineModal() {
     maybePromptHomeOnce(); /* Q53: new line gets the home question once, skippable */
   };
   setTimeout(function () { var el = $('m-line-name'); if (el) el.focus(); }, 60);
+}
+/* Q83: pick which line to clone, from the Add-line flow. */
+function showClonePicker() {
+  var d = Store.data;
+  var rows = d.lines.map(function (ln) {
+    var nSets = 0;
+    d.sets.forEach(function (s) { if (s.lineId === ln.id) nSets++; });
+    var st = stateEntry(ln.state);
+    return '<div class="line-row"><button type="button" class="line-main" data-id="' + esc(ln.id) + '">' +
+      '<span class="line-name">' + esc(ln.name) + '</span>' +
+      '<span class="dim">' + esc(st ? st.name : 'No state set') + ' \u00B7 ' + nSets + ' set' + (nSets === 1 ? '' : 's') + '</span>' +
+      '</button></div>';
+  }).join('');
+  showModal(
+    '<h3>Clone a line</h3>' +
+    '<p>Pick the line to copy. Its set locations and trap setups carry over \u2014 no catches, no check history.</p>' +
+    rows +
+    '<div class="btn-row" style="margin-top:14px"><button class="btn-secondary" id="m-back" type="button">Back</button></div>'
+  );
+  $('m-back').onclick = function () { showAddLineModal(); };
+  var btns = document.querySelectorAll('#modal-card .line-main[data-id]');
+  for (var i = 0; i < btns.length; i++) {
+    (function (b) {
+      b.onclick = function () { closeModal(); cloneLine(b.getAttribute('data-id')); };
+    })(btns[i]);
+  }
 }
 function showLineEditModal(id) {
   var ln = lineById(Store.data, id);
@@ -5487,6 +5745,72 @@ function deleteLine(id) {
     });
 }
 
+/* Q83: clone a line — new season, old ground. The clone carries the line's
+   settings, home, and every set's location + trap setup (deep-copied, fresh
+   ids, status reset to active, check clock restarted). Catches, check history,
+   photos, mileage trips, and landowners stay on the source line. */
+function cloneLine(id) {
+  var d = Store.data;
+  var src = lineById(d, id);
+  if (!src) return;
+  var nSets = 0;
+  d.sets.forEach(function (s) { if (s.lineId === id) nSets++; });
+  /* Q83: the confirm doubles as the rename box — prefilled "<name> (copy)",
+     editable — and spells out what crosses over and what stays behind. */
+  showModal(
+    '<h3>Clone \u201C' + esc(src.name) + '\u201D?</h3>' +
+    '<label class="field" for="m-clone-name">Line name</label>' +
+    '<input type="text" id="m-clone-name" maxlength="40" value="' + esc(src.name + ' (copy)') + '">' +
+    '<p style="margin-top:10px">The new line gets this line\u2019s set locations and trap setups' +
+    (nSets ? ' (' + nSets + ' set' + (nSets === 1 ? '' : 's') + ')' : '') +
+    ' \u2014 no catches, no check history, no photos, and no bait or lure (that changes day to day). ' +
+    'Sets come back active with a fresh check clock.</p>' +
+    '<div class="btn-row"><button class="btn-secondary" id="m-cancel" type="button">Cancel</button>' +
+    '<button class="btn-primary" id="m-ok" type="button">Clone line</button></div>'
+  );
+  setTimeout(function () { var el = $('m-clone-name'); if (el) el.focus(); }, 60);
+  $('m-cancel').onclick = closeModal;
+  $('m-ok').onclick = function () {
+    var name = $('m-clone-name').value.trim() || (src.name + ' (copy)');
+      var ln = {
+        id: newLineId(), name: name, state: src.state,
+        tabs: { history: true, scorecard: true, seasons: true, licenses: true }
+      };
+      d.lines.push(ln);
+      d.sets.forEach(function (s) {
+        if (s.lineId !== id) return;
+        /* Q83: deliberate whitelist — set location + trap setup only. No catches,
+           no check history, no photos, no memos, no weather, and no bait/lure/
+           attractants (those change day to day, traps don't). */
+        var c = {
+          id: uid('s'), lineId: ln.id,
+          name: s.name, lat: s.lat, lng: s.lng, county: s.county,
+          setType: s.setType, trapType: s.trapType,
+          trapSpring: s.trapSpring, trapSize: s.trapSize,
+          trapModel: s.trapModel, trapMaker: s.trapMaker,
+          snareDia: s.snareDia, snareLock: s.snareLock,
+          snareLen: s.snareLen, snarePurpose: s.snarePurpose,
+          panSize: s.panSize, jawShape: s.jawShape, jawClose: s.jawClose,
+          trapMods: Array.isArray(s.trapMods) ? s.trapMods.slice() : [],
+          notes: s.notes || '',
+          bait: [], lure: [], urine: [], visual: [], audio: [], other: [],
+          status: 'active', dateSet: todayISO(),
+          missingReason: null, missingDetail: null,
+          createdAt: Date.now(), lastActivity: Date.now() /* Q68: fresh check clock */
+        };
+        d.sets.push(c);
+      });
+      closeModal();
+      rememberEntry('linename', ln.name); /* Q12 */
+      Store.save();
+      activateLine(ln.id);
+      maybePromptHomeOnce(); /* Q53: cloned line gets the home question once, skippable */
+      refreshForLine();
+      renderLines();
+      toast('Line cloned \u2014 ' + nSets + ' set' + (nSets === 1 ? '' : 's') + ' carried over.');
+    };
+}
+
 /* ================= 14. ONBOARDING ================= */
 function buildStateSelect(sel, current) {
   sel.innerHTML = '<option value="">— Choose a state —</option>' + STATES.map(function (s) {
@@ -5511,6 +5835,25 @@ function toggleSettingsSection(secId) {
   head.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
   return willOpen;
 }
+/* Q99 (2026-10-01): Tanner — the notes/memos/photos stack on the set form,
+   log form, and set detail lives in one collapsible box. Collapsed when
+   empty; auto-opens when there's content to show. */
+function setSectionOpen(secId, open) {
+  var sec = $(secId), body = $(secId + '-body'), head = $(secId + '-head');
+  if (!sec || !body || !head) return;
+  if (open) { sec.classList.add('open'); body.hidden = false; }
+  else { sec.classList.remove('open'); body.hidden = true; }
+  head.setAttribute('aria-expanded', open ? 'true' : 'false');
+}
+function refreshNotesBox(secId, notesId, memosId, photosId) {
+  var nv = $(notesId);
+  var hasNotes = !!(nv && (nv.value || '').trim());
+  var mb = memosId && $(memosId);
+  var hasMemos = !!(mb && mb.querySelector('.memo-card'));
+  var pb = photosId && $(photosId);
+  var hasPhotos = !!(pb && pb.querySelector('img'));
+  setSectionOpen(secId, hasNotes || hasMemos || hasPhotos);
+}
 
 function enterMain() {
   showView('view-main');
@@ -5532,6 +5875,21 @@ function enterMain() {
     Store.data.windArrowsOn = this.checked;
     Store.save(); refreshMarkers();
     toast(this.checked ? 'Wind arrows are on.' : 'Wind arrows are off.');
+  };
+  /* Q103: GPS coordinates stay hidden (screenshot-safe) unless this is on. Default off. */
+  $('settings-showcoords').checked = !!Store.data.showCoords;
+  $('settings-showcoords').onchange = function () {
+    Store.data.showCoords = this.checked;
+    Store.save();
+    toast(this.checked ? 'GPS coordinates will show.' : 'GPS coordinates are hidden.');
+  };
+  /* #5 (2026-10-01): Tanner — coordinates ride along in CSV reports only when
+     this is on. Default off, so a shared spreadsheet can't leak pin locations. */
+  $('settings-exportcoords').checked = !!Store.data.exportCoords;
+  $('settings-exportcoords').onchange = function () {
+    Store.data.exportCoords = this.checked;
+    Store.save();
+    toast(this.checked ? 'Reports will include GPS coordinates.' : 'Reports leave GPS coordinates out.');
   };
   $('settings-voice').checked = Store.data.voiceOn !== false;
   $('settings-voice').onchange = function () {
@@ -5562,6 +5920,12 @@ function enterMain() {
   renderCheckClock();
   if (ccBox) {
     ccBox.onchange = function () {
+      /* Q77: flipping the alert back on restarts every check clock from now —
+         the off period tracked nothing, so nothing can be overdue yet. */
+      if (this.checked && Array.isArray(Store.data.sets)) {
+        var now = Date.now();
+        Store.data.sets.forEach(function (s) { s.lastActivity = now; });
+      }
       Store.data.checkClockOn = this.checked;
       Store.save(); refreshMarkers(); renderCheckClock();
       toast(this.checked ? 'Trap check alerts are on.' : 'Trap check alerts are off.');
@@ -5650,9 +6014,9 @@ function maybePromptHomeOnce() {
   showModal(
     '<h3>Where\'s your home ground?</h3>' +
     '<p>The map can open right on your home ground every time — your county, your farms, right where you trap. Takes ten seconds.</p>' +
-    '<div class="btn-row"><button class="btn-secondary" id="m-home-skip" type="button">Not now</button>' +
+    '<div class="btn-row home-choices"><button class="btn-secondary" id="m-home-skip" type="button">Not now</button>' +
     '<button class="btn-secondary" id="m-home-map" type="button">Choose on map</button>' +
-    '<button class="btn-primary" id="m-home-gps" type="button"><img class="bi inv" src="assets/icons/mappin.png" alt="">Use my location</button></div>'
+    '<button class="btn-primary" id="m-home-gps" type="button">Use my location</button></div>'
   );
   $('m-home-skip').onclick = closeModal;
   $('m-home-map').onclick = function () { closeModal(); switchTab('map'); startHomePick(); };
@@ -5703,8 +6067,8 @@ var SET_TYPES = {
   Water: ['Pocket', 'Slide', 'Scent mound', 'Bank den', 'Canal / channel',
     'Dam crossover', 'Dam break', 'Den / culvert', 'Drain tile', 'Feed bed',
     'Float', 'Latrine site', 'Open water', 'Overhanging bank', 'Runway',
-    'Spring run', 'Obstruction', 'Pole (under-ice)', 'Slide snare',
-    'Den-entrance snare', 'Culvert snare']
+    'Spring run', 'Obstruction', 'Top edge', 'Bottom edge', 'Pole (under-ice)',
+    'Slide snare', 'Den-entrance snare', 'Culvert snare']
 };
 var SET_TYPE_OTHER = 'Other';
 function allSetTypes() {
@@ -5766,8 +6130,7 @@ function setLastActivity(s) {
 function checkDueInMs(s) { return setLastActivity(s) + checkIntervalMs() - Date.now(); }
 function isCheckOverdue(s) {
   if (!s) return false;
-  /* Q68: the alert can be toggled off — the clock keeps stamping activity
-     underneath so re-enabling doesn't turn the whole map red at once. */
+  /* Q77: the alert is the whole clock — off means no overdue, anywhere. */
   if (!Store.data || Store.data.checkClockOn === false) return false;
   if (normStatus(s.status) !== 'active') return false; /* Q68: red is for active sets only */
   return checkDueInMs(s) < 0;
@@ -5780,7 +6143,14 @@ function fmtCheckDur(ms) {
   if (h < 48) return h + 'h';
   return Math.floor(h / 24) + 'd ' + (h % 24) + 'h';
 }
-function touchSet(s) { if (s) s.lastActivity = Date.now(); }
+/* Q77 (Tanner 2026-10-01): the check clock is dead when the alert is off —
+   nothing stamps activity, so turning it back on restarts every clock fresh
+   instead of painting the map red with stale times. */
+function touchSet(s) {
+  if (!s) return;
+  if (Store.data && Store.data.checkClockOn === false) return;
+  s.lastActivity = Date.now();
+}
 function renderSetTypeOptions() {
   var sel = $('sf-settype');
   if (!sel) return;
@@ -6070,9 +6440,14 @@ function exportMileage() {
 /* ================= 15. WIRING ================= */
 function wireUp() {
   renderSetTypeOptions(); /* Q29: populate the Set Type dropdown from the taxonomy */
-  /* Q30: live bait-rule warning as the trapper types in the bait rows. */
+  /* Q30: live bait-rule warning as the trapper types in the bait rows.
+     Q98: the "+ Add Another X" button appears as soon as any row of that
+     attractant has a value. */
   document.addEventListener('input', function (e) {
-    if (e.target && e.target.closest && e.target.closest('#sf-bait-rows') &&
+    if (!e.target || !e.target.closest) return;
+    var inp = e.target.closest('.attr-row-input');
+    if (inp && inp.getAttribute('data-attr')) updateAttrAdd(inp.getAttribute('data-attr'));
+    if (e.target.closest('#sf-bait-rows') &&
         typeof updateBaitWarn === 'function') updateBaitWarn();
   });
   /* splash -> next */
@@ -6217,7 +6592,6 @@ function wireUp() {
      Each kind is scoped to its own field. */
   attachSuggest('sf-name', 'sf-name-suggest', 'setname');
   attachSuggest('sf-missing-detail', 'sf-missing-detail-suggest', 'missingdetail');
-  attachSuggest('sf-notes', 'sf-notes-suggest', 'setnotes');
   $('sf-date').onchange = function () { updateDateDOW('sf-date', 'sf-date-dow'); };
   $('btn-voice-setnotes').onclick = function () {
     var ta = $('sf-notes');
@@ -6276,7 +6650,7 @@ function wireUp() {
     var name = s ? s.name : 'this set';
     confirmModal('Are you sure there\u2019s no changes?',
       'This restarts the check clock for <b>' + esc(name) + '</b> \u2014 no going back.',
-      'Yes, checked', function () { quickEmptyCheck(); });
+      'Yes', function () { quickEmptyCheck(); });
     /* Tanner 2026-09-30: arm the confirm's OK button after a beat, so a fast
        double-tap on the sheet button can't fire straight through it. */
     var okBtn = $('m-ok');
@@ -6301,7 +6675,7 @@ function wireUp() {
   /* log sheet */
   /* Q12: Other-event species + log notes learn from use, tap-to-fill */
   attachSuggest('log-species-free', 'log-species-free-suggest', 'otherspecies');
-  attachSuggest('log-notes', 'log-notes-suggest', 'lognotes');
+  /* #6 (2026-10-01): Tanner — no tap-to-fill suggestions on catch-log notes either. */
   $('log-species-search').oninput = function () { renderSpeciesList(this.value); };
   var dispBtns = document.querySelectorAll('#log-disposition button');
   for (var db = 0; db < dispBtns.length; db++) {
@@ -6490,6 +6864,9 @@ function wireUp() {
     Store.save();
     renderSeasons('');
     fitMapToState();
+    /* Tanner 2026-09-30: the state-mismatch alert must re-evaluate now —
+       otherwise it sits on screen after the state was just fixed in Settings. */
+    checkStateMismatch(lastStateInfo);
     var e = stateEntry(code);
     toast('Trapping state is now ' + (e ? e.name : code) + '.');
   };
@@ -6508,6 +6885,7 @@ function wireUp() {
     this.value = '';
   };
   $('btn-erase').onclick = eraseAll;
+  wirePurge(); /* Q82 */
 
   /* Q49: wire the collapsible settings section headers */
   var secHeads = document.querySelectorAll('.setsec-head');
@@ -6533,11 +6911,16 @@ function wireUp() {
     }
     closeSheets();
   };
-  $('modal').onclick = function (e) { if (e.target === $('modal')) closeModal(); };
+  /* Q105 (2026-10-01): Tanner — no backdrop-tap dismissal on any dialog;
+     every confirm closes only via its own buttons. The old
+     "$('modal').onclick = ... closeModal()" handler is gone. */
 
   /* offline banner + county backfill when service returns */
   function net() { $('offline-banner').classList.toggle('show', !navigator.onLine); }
-  window.addEventListener('online', function () { net(); backfillCounties(); });
+  window.addEventListener('online', function () {
+    net(); backfillCounties();
+    if (lastFix) maybeRetryCountyBanner(lastFix.lat, lastFix.lng); /* Q96 */
+  });
   window.addEventListener('offline', net);
   net();
   /* Q13: never let a pinch scale the app page itself. iOS Safari ignores the
