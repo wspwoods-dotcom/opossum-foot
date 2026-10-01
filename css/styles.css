@@ -537,7 +537,7 @@ body.route-locked #tabbar { pointer-events: none; opacity: .35; }
   align-items: center;
   justify-content: center;
   gap: 12px;
-  padding: 10px 14px;
+  padding: calc(10px + env(safe-area-inset-top)) 14px 10px;
   background: #2a2416;
   border-bottom: 2px solid #d9a441;
   color: #f0e6c8;
@@ -548,7 +548,8 @@ body.route-locked #tabbar { pointer-events: none; opacity: .35; }
   color: #1a1508;
   border: none;
   border-radius: 8px;
-  padding: 8px 18px;
+  min-height: 40px;
+  padding: 6px 18px;
   font-size: 15px;
   font-weight: 700;
 }
@@ -563,6 +564,14 @@ body.route-locked #tabbar { pointer-events: none; opacity: .35; }
   min-width: 0; box-sizing: border-box; }
 .date-col > input[type=date]::-webkit-datetime-edit,
 .date-col > input[type=date]::-webkit-datetime-edit-fields-wrapper { min-width: 0; }
+/* iOS Safari lays out date inputs as content-box even with box-sizing set, so
+   the input overshoots its container by its own horizontal padding+border
+   (28px + 2px = 30px, from the base field rule) and bleeds past the card —
+   measured on Tanner's iPhone 2026-10-01. iOS-only: pull the width back so
+   the border box lands exactly on the Line select's width. */
+@supports (-webkit-touch-callout: none) {
+  .date-col > input[type=date] { width: calc(100% - 30px); }
+}
 /* Tanner 2026-10-01: compact button row — smaller, less clunky. */
 .btn-compact > .btn-secondary { padding: 8px 10px; font-size: 14px; min-height: 0; }
 /* Home-ground prompt (Q53): three equal buttons, no icon, all centered. */
