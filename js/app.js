@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-10-01by';
+var APP_VERSION = 'beta 0.1 · build 2026-10-01bz';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -4524,14 +4524,17 @@ function renderTotals() {
     byDispSp[bucket][l.species] = (byDispSp[bucket][l.species] || 0) + c;
   });
   function rows(obj, withSetup) {
-    /* Sorted by the kept number actually displayed, highest to lowest. */
-    return Object.keys(obj).sort(function (a, b) { return obj[b].kept - obj[a].kept; }).map(function (k) {
+    /* 2026-10-01 (Tanner): the headline number is TOTAL caught — a released
+       animal was still caught. Disposition breakdown hides behind the tap.
+       Sorted by the total actually displayed, highest to lowest. */
+    function tot(o) { return o.kept + o.alive + o.released + o.transported; }
+    return Object.keys(obj).sort(function (a, b) { return tot(obj[b]) - tot(obj[a]); }).map(function (k) {
       var o = obj[k], sub = [];
       var setup = withSetup ? setSetup[k] : null;
       if (o.alive) sub.push(o.alive + ' kept alive');
       if (o.released) sub.push(o.released + ' released');
       if (o.transported) sub.push(o.transported + ' transported');
-      /* 2026-09-29: rows show the title (name + kept count) only. The
+      /* Rows show the title (name + total caught) only. The
          disposition breakdown and (for sets) the setup fields hide behind a
          tap, so the tab reads clean. */
       var key = (withSetup ? 'set:' : 'sp:') + k;
@@ -4540,7 +4543,7 @@ function renderTotals() {
       var html = '<div class="rowline' + (setup ? ' totals-setrow' : '') + '"' +
         (hasDetail ? ' data-totkey="' + esc(key) + '"' : '') + '>' +
         '<span>' + (hasDetail ? '<span class="tchev">' + (open ? '▾' : '▸') + '</span> ' : '') + esc(k) +
-        '</span><span class="big-num">' + o.kept + '</span></div>';
+        '</span><span class="big-num">' + tot(o) + '</span></div>';
       if (hasDetail) {
         html += '<div class="totals-detail"' + (open ? '' : ' hidden') + '>' +
           (sub.length ? '<div class="dim">' + sub.join(' · ') + '</div>' : '') +
