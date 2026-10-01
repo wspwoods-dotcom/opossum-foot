@@ -527,8 +527,13 @@ body.route-locked #tabbar { pointer-events: none; opacity: .35; }
    min-width inside its shadow datetime-edit UI. Belt and suspenders: cap the
    input at its wrapper and zero the inner edit's minimum too. No-op in
    spec-compliant browsers (verified: Chromium already lays out 50/50). */
-.btn-row input[type=date] { max-width: 100%; }
-.btn-row input[type=date]::-webkit-datetime-edit { min-width: 0; }
+.btn-row input[type=date] { width: 100%; min-width: 0; max-width: 100%; }
+.btn-row input[type=date]::-webkit-datetime-edit,
+.btn-row input[type=date]::-webkit-datetime-edit-fields-wrapper { min-width: 0; }
+/* 2026-10-01 by didn't fix it either (Tanner's screenshot: boxes still
+   overlapping). iOS ignores min-width on date inputs and lets the box
+   overflow its flex column — so force the box to the column width with
+   width:100% instead of asking WebKit to shrink it. */
 /* Tanner 2026-10-01: compact button row — smaller, less clunky. */
 .btn-compact > .btn-secondary { padding: 8px 10px; font-size: 14px; min-height: 0; }
 /* Home-ground prompt (Q53): three equal buttons, no icon, all centered. */
