@@ -82,7 +82,10 @@
     <div class="map-fabs">
       <button class="fab secondary" id="btn-locate" type="button" aria-label="Locate me"><img src="assets/icons/crosshair.png" alt=""></button>
       <button class="fab secondary" id="btn-drop-pin" type="button" aria-label="Drop a pin"><img src="assets/icons/mappin.png" alt=""></button>
-      <button class="fab" id="btn-add-gps" type="button" aria-label="Add set at my location"><img src="assets/icons/plus.png" alt=""></button>
+      <button class="fab secondary" id="btn-add-gps" type="button" aria-label="Add set at my location"><img src="assets/icons/plus.png" alt=""></button>
+      <!-- Q95 (2026-10-01): Tanner — all three right-side fabs rest dark like the
+           other two; green only while a mode is on (crosshair follow, pin-drop
+           placing). The + button has no toggle state, so it rests dark. -->
     </div>
   </div>
 
@@ -209,17 +212,20 @@
         <button type="button" class="setsec-head" id="setsec-tabs-head" data-sec="setsec-tabs" aria-expanded="false"><span>Tab Toggles</span><span class="setsec-chev" aria-hidden="true">›</span></button>
         <div class="setsec-body" id="setsec-tabs-body" hidden>
         <p class="dim" style="margin:0 0 8px">Choose which tabs appear on the bottom bar for the active trap line (<strong id="tabs-line-name"></strong>). Map, Lines, and Settings always show.</p>
+        <div class="checkgrid">
         <label class="checkline"><input type="checkbox" id="settings-tab-history"> History tab</label>
         <label class="checkline"><input type="checkbox" id="settings-tab-scorecard"> Scorecard tab</label>
         <label class="checkline"><input type="checkbox" id="settings-tab-seasons"> Seasons tab</label>
         <label class="checkline"><input type="checkbox" id="settings-tab-licenses"> Paperwork tab</label>
         <label class="checkline"><input type="checkbox" id="settings-tab-totals"> Totals tab</label>
         </div>
+        </div>
       </div>
       <div class="card setsec" id="setsec-setfields">
         <button type="button" class="setsec-head" id="setsec-setfields-head" data-sec="setsec-setfields" aria-expanded="false"><span>Set Field Toggles</span><span class="setsec-chev" aria-hidden="true">›</span></button>
         <div class="setsec-body" id="setsec-setfields-body" hidden>
         <p class="dim" style="margin:0 0 8px">Choose which fields appear when you add a set. Set name, Status, and Date set always show — they're required.</p>
+        <div class="checkgrid">
         <label class="checkline"><input type="checkbox" id="settings-sf-traptype"> Trap type</label>
         <label class="checkline"><input type="checkbox" id="settings-sf-trapdetail"> Trap details</label>
         <label class="checkline"><input type="checkbox" id="settings-sf-settype"> Set type</label>
@@ -231,6 +237,7 @@
         <label class="checkline"><input type="checkbox" id="settings-sf-other"> Other attractants</label>
         <label class="checkline"><input type="checkbox" id="settings-sf-notes"> Notes</label>
         </div>
+        </div>
       </div>
       <div class="card setsec" id="setsec-privacy">
         <button type="button" class="setsec-head" id="setsec-privacy-head" data-sec="setsec-privacy" aria-expanded="false"><span>Your Privacy</span><span class="setsec-chev" aria-hidden="true">›</span></button>
@@ -238,6 +245,10 @@
         <p><strong>Your spots never leave your phone.</strong></p>
         <p class="dim">Opossum Foot has no account, no login, and no cloud. Every set, catch, photo, and voice memo is stored only in this phone's browser storage. Nothing you enter is stored anywhere else — the only network traffic is map tiles, the app's own files, weather lookups (only if you turn weather on), and live voice transcription (only when you tap the microphone and have a connection).</p>
         <p class="dim"><strong>The honest catch:</strong> because there's no cloud backup, a lost phone, a wiped phone, or clearing this browser's data can destroy your records. Export a CSV backup regularly — that's your safety net.</p>
+        <label class="checkline"><input type="checkbox" id="settings-showcoords"> Show GPS coordinates</label>
+        <p class="dim" style="margin:-6px 0 10px">Coordinates stay hidden so screenshots are safe to share. Turn this on to see the county and exact coordinates on set details and the weather tab.</p>
+        <label class="checkline"><input type="checkbox" id="settings-exportcoords"> Include GPS coordinates in reports</label>
+        <p class="dim" style="margin:-6px 0 10px">Off by default, so shared spreadsheets never carry your pins. Turn this on when you want Latitude and Longitude columns in the CSV exports.</p>
         </div>
       </div>
       <div class="card setsec" id="setsec-about">
@@ -299,6 +310,15 @@
         <p class="dim" style="margin-top:0">Everything on this phone — sets, catches, photos, voice memos, licenses, landowners — gets permanently deleted. It will be gone forever. There is no undo and no cloud copy.</p>
         <p class="dim"><strong>Back up all data (JSON)</strong> first if you want to keep a copy. The backup lives in Settings → Backup &amp; Reports.</p>
         <button class="btn-danger" id="btn-erase" type="button" style="width:100%">Erase all Opossum Foot data on this phone</button>
+        <p class="dim" style="margin:16px 0 4px"><strong>Purge catch history.</strong> Delete old or test catch records without touching your sets. Pick a line, a date range, or both — matching records, their photos, and their voice memos are gone forever.</p>
+        <label class="field" for="purge-line">Line</label>
+        <select id="purge-line"></select>
+        <div class="btn-row">
+          <div style="flex:1"><label class="field" for="purge-from">From</label><input type="date" id="purge-from" style="width:100%"></div>
+          <div style="flex:1"><label class="field" for="purge-to">To</label><input type="date" id="purge-to" style="width:100%"></div>
+        </div>
+        <p class="dim" id="purge-count" style="margin:4px 0 8px"></p>
+        <button class="btn-danger" id="btn-purge" type="button" style="width:100%">Purge matching catch history</button>
         </div>
       </div>
     </div>
@@ -373,35 +393,37 @@
     <div class="setfield" id="setfield-bait">
     <label class="field">Bait</label>
     <div id="sf-bait-rows"></div>
-    <button type="button" class="btn-small btn-ghost attr-add" id="sf-bait-add">+ Add Another Bait</button>
+    <button type="button" class="btn-small btn-ghost attr-add" id="sf-bait-add" hidden>+ Add Another Bait</button>
     <!-- Q30: state bait-rule warning, shown when bait is entered in a verified state -->
+    <!-- Q97 (2026-10-01): Tanner — slim collapsed row under the bait rows; tap expands the rule in place -->
+    <button type="button" class="setsec-head baitrule-head" id="sf-bait-warn-head" hidden></button>
     <div class="warnbox" id="sf-bait-warn" hidden></div>
     <!-- Q67: sponsors moved inside the suggestion menus — no separate row -->
     </div>
     <div class="setfield" id="setfield-lure">
     <label class="field">Lure</label>
     <div id="sf-lure-rows"></div>
-    <button type="button" class="btn-small btn-ghost attr-add" id="sf-lure-add">+ Add Another Lure</button>
+    <button type="button" class="btn-small btn-ghost attr-add" id="sf-lure-add" hidden>+ Add Another Lure</button>
     </div>
     <div class="setfield" id="setfield-urine">
     <label class="field">Urine</label>
     <div id="sf-urine-rows"></div>
-    <button type="button" class="btn-small btn-ghost attr-add" id="sf-urine-add">+ Add Another Urine</button>
+    <button type="button" class="btn-small btn-ghost attr-add" id="sf-urine-add" hidden>+ Add Another Urine</button>
     </div>
     <div class="setfield" id="setfield-visual">
     <label class="field">Visual</label>
     <div id="sf-visual-rows"></div>
-    <button type="button" class="btn-small btn-ghost attr-add" id="sf-visual-add">+ Add Another Visual</button>
+    <button type="button" class="btn-small btn-ghost attr-add" id="sf-visual-add" hidden>+ Add Another Visual</button>
     </div>
     <div class="setfield" id="setfield-audio">
     <label class="field">Audio</label>
     <div id="sf-audio-rows"></div>
-    <button type="button" class="btn-small btn-ghost attr-add" id="sf-audio-add">+ Add Another Audio</button>
+    <button type="button" class="btn-small btn-ghost attr-add" id="sf-audio-add" hidden>+ Add Another Audio</button>
     </div>
     <div class="setfield" id="setfield-other">
     <label class="field">Other Attractants</label>
     <div id="sf-other-rows"></div>
-    <button type="button" class="btn-small btn-ghost attr-add" id="sf-other-add">+ Add Another Attractant</button>
+    <button type="button" class="btn-small btn-ghost attr-add" id="sf-other-add" hidden>+ Add Another Attractant</button>
     </div>
     <label class="field">Status <span class="req">*</span></label>
     <div class="seg status-seg" id="sf-status-seg" role="group" aria-label="Trap status">
@@ -431,10 +453,13 @@
     </div>
     <label class="field" for="sf-date"><span class="dim" id="sf-date-dow"></span>Date Set <span class="req">*</span></label>
     <input type="date" id="sf-date">
+    <!-- Q99 (2026-10-01): Tanner — notes + memos + photos collapse into one box -->
+    <div class="setsec" id="setform-notessec">
+    <button type="button" class="setsec-head" id="setform-notessec-head" data-sec="setform-notessec" aria-expanded="false"><span>Notes, Memos &amp; Photos</span><span class="setsec-chev" aria-hidden="true">›</span></button>
+    <div class="setsec-body" id="setform-notessec-body" hidden>
     <div class="setfield" id="setfield-notes">
     <label class="field" for="sf-notes">Notes</label>
     <textarea id="sf-notes" placeholder="Anything worth remembering…"></textarea>
-    <div class="suggest" id="sf-notes-suggest"></div>
     <div class="btn-row" style="margin-top:8px">
       <button class="btn-small btn-secondary" id="btn-voice-setnotes" type="button"><img class="bi" src="assets/icons/mic.png" alt="">Voice → notes</button>
     </div>
@@ -456,6 +481,8 @@
     </div>
     <input type="file" id="sf-photo-input" class="hidden-file" accept="image/*">
     </div>
+    </div>
+    </div>
     <div class="form-error" id="setform-error" role="alert"></div>
     <div class="sheet-actions">
       <button class="btn-primary" id="btn-save-set" type="button">Save set</button>
@@ -476,13 +503,19 @@
       <button class="btn-primary" id="btn-sd-log" type="button">＋ Log a catch</button>
       <button class="btn-primary" id="btn-sd-emptycheck" type="button">✓ Checked — nothing changed</button>
     </div>
-    <h3 style="margin:18px 0 6px" id="sd-notes-head">Set Notes</h3>
+    <!-- Q99 (2026-10-01): Tanner — notes + memos + photos collapse into one box -->
+    <div class="setsec" id="setdetail-notessec">
+    <button type="button" class="setsec-head" id="setdetail-notessec-head" data-sec="setdetail-notessec" aria-expanded="false"><span>Notes, Memos &amp; Photos</span><span class="setsec-chev" aria-hidden="true">›</span></button>
+    <div class="setsec-body" id="setdetail-notessec-body" hidden>
+    <h3 style="margin:6px 0" id="sd-notes-head">Set Notes</h3>
     <textarea id="sd-notes" placeholder="Optional…" readonly></textarea>
     <!-- Q71: summary is view-only — notes/memo/photo edits happen in "Edit this set" -->
     <h3 style="margin:18px 0 6px" id="sd-memos-head">Voice Memos</h3>
     <div id="sd-memos"></div>
     <h3 style="margin:18px 0 6px" id="sd-photos-head">Photos</h3>
     <div class="photo-strip" id="sd-photos"></div>
+    </div>
+    </div>
     <h3 style="margin:18px 0 6px">Catches at This Set</h3>
     <div id="sd-logs"></div>
     <div class="sheet-actions">
@@ -548,9 +581,14 @@
     </div>
     <label class="field" for="log-date"><span class="dim" id="log-date-dow"></span>Date</label>
     <input type="date" id="log-date">
+    <label class="field" for="log-time">Time <span class="dim">— when you found it, not when you typed it</span></label>
+    <input type="time" id="log-time">
+    <!-- Q99 (2026-10-01): Tanner — notes + memos + photos collapse into one box -->
+    <div class="setsec" id="logform-notessec">
+    <button type="button" class="setsec-head" id="logform-notessec-head" data-sec="logform-notessec" aria-expanded="false"><span>Notes, Memos &amp; Photos</span><span class="setsec-chev" aria-hidden="true">›</span></button>
+    <div class="setsec-body" id="logform-notessec-body" hidden>
     <label class="field" for="log-notes">Notes</label>
     <textarea id="log-notes" placeholder="Optional…"></textarea>
-    <div class="suggest" id="log-notes-suggest"></div>
     <div class="btn-row" style="margin-top:8px">
       <button class="btn-small btn-secondary" id="btn-voice-lognotes" type="button"><img class="bi" src="assets/icons/mic.png" alt="">Voice → notes</button>
       <button class="btn-small btn-secondary" id="btn-log-memo" type="button"><img class="bi" src="assets/icons/mic.png" alt="">Record memo</button>
@@ -561,6 +599,8 @@
       <button class="btn-small btn-secondary" id="btn-log-photo" type="button"><img class="bi" src="assets/icons/camera.png" alt="">Add photo</button>
     </div>
     <input type="file" id="log-photo-input" class="hidden-file" accept="image/*">
+    </div>
+    </div>
     <div class="form-error" id="logform-error" role="alert"></div>
     <div class="sheet-actions">
       <button class="btn-primary" id="btn-save-log" type="button">Save catch</button>
