@@ -103,7 +103,7 @@ label.field { display: block; margin: 14px 0 4px; font-size: 14px; font-weight: 
 /* Q55: the "What is it?" reveal under an Other-capable dropdown. */
 .other-wrap { margin-top: 2px; }
 .other-wrap label.field { margin-top: 8px; font-size: 13px; }
-input[type=text], input[type=date], input[type=time], input[type=number], input[type=search], select, textarea {
+input[type=text], input[type=date], input[type=time], input[type=number], input[type=search], input[type=url], input[type=tel], select, textarea {
   width: 100%; min-height: var(--tap);
   background: #10140c; color: var(--ink);
   border: 1px solid var(--line); border-radius: var(--radius);
@@ -196,10 +196,9 @@ select.select-hint { color: var(--faint); }
 #home-bar { flex: 0 0 auto; z-index: 500; display: none; align-items: center; justify-content: center; gap: 8px; padding: 8px 10px; font-size: 15px; font-weight: 600; background: #1d2a12; color: #fff; border-bottom: 1px solid var(--line); flex-wrap: wrap; }
 #home-bar.show { display: flex; }
 /* B26: two clear choices side by side — cancel rides inline, no dedicated row. */
-.home-choose { display: flex; gap: 8px; width: 100%; }
-.home-choose .btn-small { flex: 1 1 0; }
+/* Q115 home picker bar — pin drop only. */
 #home-bar .btn-ghost { margin-left: auto; }
-.pin-home { background: #2e7d32; font-size: 18px; line-height: 32px; text-align: center; }
+.pin-home { background: var(--green); font-size: 28px; line-height: 46px; text-align: center; width: 52px; height: 52px; }
 @keyframes pinpulse { 0% { box-shadow: 0 0 0 0 rgba(255,159,28,.65); } 70% { box-shadow: 0 0 0 16px rgba(255,159,28,0); } 100% { box-shadow: 0 0 0 0 rgba(255,159,28,0); } }
 
 /* ---------- map ---------- */
@@ -293,6 +292,9 @@ select.select-hint { color: var(--faint); }
 .odo-photo-row { display: flex; align-items: center; gap: 8px; margin: 6px 0 4px; }
 .odo-photo-btn { flex: 0 0 auto; padding: 6px 12px; font-size: 13px; }
 .odo-miles { text-align: center; font-weight: 700; font-size: 16px; margin: 8px 0 2px; min-height: 20px; }
+/* Tanner 2026-10-01: route mode — tab bar locked while a route estimate is
+   drawn; the "‹ Back to mileage" chip is the only way out. */
+body.route-locked #tabbar { pointer-events: none; opacity: .35; }
 /* Q79 (2026-10-01): suggestion rows with per-entry delete for user-typed items. */
 .suggest-row { display: flex; align-items: center; }
 .suggest-row .suggest-item { flex: 1; text-align: left; }
@@ -463,7 +465,10 @@ select.select-hint { color: var(--faint); }
 .sheet-body { overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; padding: 4px 16px 24px; }
 .sheet-actions { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
 .btn-row { display: flex; gap: 10px; }
-.btn-row > * { flex: 1; }
+.btn-row > * { flex: 1; min-width: 0; }
+/* Tanner 2026-10-01: date boxes were overlapping — flex children must shrink. */
+/* Tanner 2026-10-01: compact button row — smaller, less clunky. */
+.btn-compact > .btn-secondary { padding: 8px 10px; font-size: 14px; min-height: 0; }
 /* Home-ground prompt (Q53): three equal buttons, no icon, all centered. */
 .home-choices > * { flex: 1 1 0; min-width: 0; text-align: center; }
 
@@ -757,6 +762,10 @@ body.placing #route-back-chip { display: none; }
 .lo-phone-num { font-weight: 700; font-size: 16px; }
 .lo-phone-btns { display: flex; gap: 6px; flex: 0 0 auto; }
 .lo-phone-btns a { text-decoration: none; }
+/* Tanner 2026-10-01: Call/Text buttons — centered text, rounded to match the app. */
+.lo-phone-btns .btn-small { justify-content: center; border-radius: var(--radius); }
+/* Tanner 2026-10-01: border around the landowner notes so it reads as a box. */
+.lo-notes-box { border: 1px solid var(--line); border-radius: var(--radius); padding: 10px 12px; }
 
 /* One-tap remove for a single landowner phone number (Tanner 2026-09-30). */
 .lo-phone-x { background: none; border: none; color: #c0392b; font-size: 18px; line-height: 1; padding: 4px 8px; cursor: pointer; }
