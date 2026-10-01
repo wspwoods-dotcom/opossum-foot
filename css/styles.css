@@ -216,9 +216,8 @@ select.select-hint { color: var(--faint); }
 .fab.secondary { background: var(--panel); color: var(--ink); border: 1px solid var(--line); font-size: 22px; }
 .fab.active-mode { background: var(--green); color: #0e150a; }
 .fab.paused-mode { background: var(--green); color: #0e150a; opacity: .45; }
-/* Cosmetic: the add-set button and the Leaflet zoom/layers controls share the
-   same green tone as the crosshair / drop-pin buttons. */
-#btn-add-gps { background: var(--green); color: #0e150a; }
+/* Q95 (2026-10-01): Tanner — the + button rests dark like the other two fabs;
+   the old always-green #btn-add-gps override was removed. */
 .leaflet-bar a { background: var(--green); color: #0e150a; border-bottom: 1px solid rgba(0,0,0,.25); }
 .leaflet-bar a:hover, .leaflet-bar a:focus { background: var(--green); color: #0e150a; }
 .leaflet-control-layers-toggle { background-color: var(--green); }
