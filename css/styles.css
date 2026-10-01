@@ -91,6 +91,10 @@ button, .btn {
   border-radius: var(--radius); background: var(--accent); color: var(--accent-ink);
   font-weight: 700; font-size: 16px; text-decoration: none; text-align: center;
 }
+/* Q134 (2026-10-01): Tanner — gold-button lettering is ALL CAPS by rule, not
+   by memory. text-transform on the class means any label dropped into a gold
+   button renders capped automatically; title case can't sneak through again. */
+.regs-link { text-transform: uppercase; }
 .regs-link .dim { color: var(--accent-ink); opacity: 0.75; font-weight: 600; }
 .btn-danger { background: #3a1f1b; color: #f0a49c; border: 1px solid #6e2f28; }
 .btn-small { min-height: 44px; font-size: 15px; padding: 8px 14px; width: auto; }
@@ -196,9 +200,14 @@ select.select-hint { color: var(--faint); }
 #home-bar { flex: 0 0 auto; z-index: 500; display: none; align-items: center; justify-content: center; gap: 8px; padding: 8px 10px; font-size: 15px; font-weight: 600; background: #1d2a12; color: #fff; border-bottom: 1px solid var(--line); flex-wrap: wrap; }
 #home-bar.show { display: flex; }
 /* B26: two clear choices side by side — cancel rides inline, no dedicated row. */
-/* Q115 home picker bar — pin drop only. */
-#home-bar .btn-ghost { margin-left: auto; }
-.pin-home { background: var(--green); font-size: 28px; line-height: 46px; text-align: center; width: 52px; height: 52px; }
+/* Q132 (2026-10-01): Tanner — "Set home here" centers on the screen; the
+   cancel × pins to the right edge of the button row. */
+#home-bar .home-bar-actions { display: flex; align-items: center; justify-content: center; width: 100%; position: relative; }
+#home-bar .home-bar-actions .btn-ghost { position: absolute; right: 0; margin-left: 0; }
+/* Q118b (2026-10-01): Tanner — the home pin was rendering at 30px because the
+   later `.pin` rule (same specificity) beat `.pin-home`'s 52px. Doubling the
+   class wins the cascade so the Q118 bigger-home-pin fix actually shows. */
+.pin.pin-home { background: var(--green); font-size: 28px; line-height: 46px; text-align: center; width: 52px; height: 52px; }
 @keyframes pinpulse { 0% { box-shadow: 0 0 0 0 rgba(255,159,28,.65); } 70% { box-shadow: 0 0 0 16px rgba(255,159,28,0); } 100% { box-shadow: 0 0 0 0 rgba(255,159,28,0); } }
 
 /* ---------- map ---------- */
@@ -249,6 +258,16 @@ select.select-hint { color: var(--faint); }
   justify-content: safe center; padding: 2px 0;
 }
 .map-status-filters .chip { background: rgba(18,22,14,.88); }
+/* Q133 (2026-10-01): Tanner — the status chips read in all caps like the
+   rest of the map header. */
+.map-status-filters .chip { text-transform: uppercase; }
+/* Q138 (2026-10-01): Tanner — thicker black borders on the four trap-status
+   buttons. Same specificity as the per-status border-color rules but later in
+   the file, so black wins in both on and off states. */
+.map-status-filters .chip.mst-active,
+.map-status-filters .chip.mst-sprung,
+.map-status-filters .chip.mst-pulled,
+.map-status-filters .chip.mst-missing { border: 2px solid #000; }
 .map-status-filters .chip.on { background: var(--accent); border-color: var(--accent); color: #fff; }
 /* Map status filter chips carry their pin colors so the buttons read the
    same as the pins on the map. Off state keeps the color as an outline. */
@@ -314,18 +333,22 @@ body.route-locked #tabbar { pointer-events: none; opacity: .35; }
   display: flex; flex-direction: column; align-items: center; line-height: 1.3;
   padding: 5px 10px;
 }
-/* Tanner 2026-10-01: the left control stack (weather, zoom, layers) sits
-   vertically centered on the map, not bunched at the bottom. */
+/* Q130 (2026-10-01): Tanner — the left control stack (weather, zoom, layers)
+   sits at the bottom-left of the map, where it used to be, with all three
+   controls centered on one shared vertical axis. */
 .leaflet-bottom.leaflet-left {
-  top: 50% !important; bottom: auto !important;
-  transform: translateY(-50%);
+  top: auto !important; bottom: 30px !important;
+  transform: none;
 }
-
-/* B20: zoom pill and layer button share one vertical axis in the corner. */
-/* Q93 (2026-10-01): align-items was center — opening the layers panel (wider
-   than the buttons) re-centered the zoom pill and layers button, hopping them
-   right. flex-start pins everything to the left edge; nothing moves. */
-.leaflet-bottom.leaflet-left { display: flex; flex-direction: column; align-items: flex-start; }
+/* Q93's concern stands: the expanded layers panel must not re-center the
+   column, so it overlays to the right of its toggle instead of stretching
+   the layout. */
+.leaflet-bottom.leaflet-left { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.leaflet-control-layers { position: relative; }
+.leaflet-control-layers-expanded {
+  position: absolute; left: calc(100% + 8px); bottom: 0;
+  white-space: nowrap; z-index: 600;
+}
 /* B21: no white fringe on the rounded corners — the controls are green all
    the way through, and the layer panel goes dark when expanded. */
 .leaflet-bar { border-radius: 14px; overflow: hidden; background: var(--green); border: none;
@@ -364,6 +387,27 @@ body.route-locked #tabbar { pointer-events: none; opacity: .35; }
 .setsec.open .setsec-chev { transform: rotate(90deg); }
 .setsec-body { padding-bottom: 14px; }
 .setsec-body[hidden] { display: none; }
+/* Q135 (2026-10-01): Tanner — the Trap & Snare Rules control matches the two
+   gold buttons above it: gold, caps, centered. It stays the only collapsible
+   one (Q119); the chevron pins right so the label stays truly centered, and
+   the opened body drops as a dark card below the gold button. Scoped to
+   #seasons-rules so sheet collapsibles are untouched. */
+#seasons-rules .card.setsec { background: none; border: none; padding: 0; margin: 12px 0; }
+#seasons-rules .setsec-head {
+  position: relative; display: flex; align-items: center; justify-content: center;
+  width: 100%; min-height: var(--tap); padding: 14px 44px 14px 18px; margin: 0;
+  background: var(--accent); color: var(--accent-ink); border: none; border-radius: var(--radius);
+  font-size: 16px; font-weight: 700; text-transform: uppercase; text-align: center; cursor: pointer;
+}
+#seasons-rules .setsec-chev {
+  position: absolute; right: 16px; top: 50%; transform: translateY(-50%);
+  color: var(--accent-ink); font-size: 22px; line-height: 1; transition: transform .18s ease;
+}
+#seasons-rules .setsec.open .setsec-chev { transform: translateY(-50%) rotate(90deg); }
+#seasons-rules .setsec-body {
+  background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+  margin-top: 8px; padding: 14px;
+}
 /* Q99 (2026-10-01): the notes/memos/photos collapsible on the set form, log
    form, and set detail — a divider sets it off from the fields above. */
 .sheet .setsec { border-top: 1px solid var(--line); margin-top: 10px; }
@@ -466,7 +510,9 @@ body.route-locked #tabbar { pointer-events: none; opacity: .35; }
 .sheet-actions { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
 .btn-row { display: flex; gap: 10px; }
 .btn-row > * { flex: 1; min-width: 0; }
-/* Tanner 2026-10-01: date boxes were overlapping — flex children must shrink. */
+/* Tanner 2026-10-01: date boxes were overlapping — flex children must shrink,
+   and iOS date inputs need min-width:0 too or their picker UI overflows. */
+.btn-row input { min-width: 0; }
 /* Tanner 2026-10-01: compact button row — smaller, less clunky. */
 .btn-compact > .btn-secondary { padding: 8px 10px; font-size: 14px; min-height: 0; }
 /* Home-ground prompt (Q53): three equal buttons, no icon, all centered. */
@@ -764,6 +810,17 @@ body.placing #route-back-chip { display: none; }
 .lo-phone-btns a { text-decoration: none; }
 /* Tanner 2026-10-01: Call/Text buttons — centered text, rounded to match the app. */
 .lo-phone-btns .btn-small { justify-content: center; border-radius: var(--radius); }
+/* Q136 (2026-10-01): Tanner — the icon + label are centered INSIDE the
+   Call/Text buttons, and the buttons run narrower/shorter so the phone
+   number fits on one line. Root cause of the miss: these are <a> elements
+   without the `btn` class, so they never matched `button, .btn` and had no
+   flex container — the old justify-content rule did nothing. */
+.lo-phone-btns .btn-small {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  min-height: 40px; font-size: 14px; padding: 6px 10px;
+}
+.lo-phone-btns .btn-small .bi { margin-right: 0; }
+.lo-phone-num { white-space: nowrap; }
 /* Tanner 2026-10-01: border around the landowner notes so it reads as a box. */
 .lo-notes-box { border: 1px solid var(--line); border-radius: var(--radius); padding: 10px 12px; }
 
