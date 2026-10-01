@@ -174,29 +174,29 @@
   <div id="pane-settings" class="pane">
     <div class="pane-head"><h2>Settings</h2><p>Opossum Foot beta.</p></div>
     <div class="scroll">
+      <!-- Q90 (2026-10-01): Tanner — Trapping State + Home Ground live in one
+           "Where You Trap" card, broad to precise. -->
       <div class="card">
-        <h3>Trapping State</h3>
+        <h3>Where You Trap</h3>
         <label class="field" for="settings-state">State</label>
         <select id="settings-state"></select>
         <p class="dim" style="margin-top:8px">Applies to the active trap line (<strong id="settings-line-name"></strong>). Changing the state takes effect immediately.</p>
-      </div>
-      <!-- Q68: trap check clock -->
-      <div class="card">
-        <h3>Trap Checks</h3>
-        <label class="checkline"><input type="checkbox" id="settings-checkclock"> Trap check alerts</label>
-        <label class="field" for="settings-checkinterval">Check interval (hours)</label>
-        <input type="number" id="settings-checkinterval" min="1" step="1" inputmode="numeric" placeholder="24">
-        <p class="dim" style="margin-top:8px">Sets past this long without any activity turn red on the map. Any edit, catch, or check-in restarts the clock. The quick &ldquo;Checked &mdash; nothing changed&rdquo; button only restarts the clock &mdash; it saves nothing to History. Turn alerts off to hide the red pins and countdowns.</p>
-      </div>
-      <!-- Q53: home ground -->
-      <div class="card">
-        <h3>Home Ground</h3>
-        <p class="dim" id="settings-home-status" style="margin:0 0 8px">Not set — the map opens on your trapping state.</p>
+        <p class="dim" id="settings-home-status" style="margin:12px 0 8px">Not set — the map opens on your trapping state.</p>
         <button class="btn-secondary" id="btn-change-home" type="button">Change home location</button>
       </div>
+      <!-- Q91 (2026-10-01): Tanner — trap check alerts live in Feature Toggles now. -->
+      <!-- Q53 home ground now lives in the Where You Trap card (Q90) -->
       <div class="card setsec" id="setsec-features">
         <button type="button" class="setsec-head" id="setsec-features-head" data-sec="setsec-features" aria-expanded="false"><span>Feature Toggles</span><span class="setsec-chev" aria-hidden="true">›</span></button>
         <div class="setsec-body" id="setsec-features-body" hidden>
+        <!-- Q91 (2026-10-01): Tanner — trap check alerts live here now. Toggling
+             it on reveals the check-interval entry as a sub-menu. -->
+        <label class="checkline"><input type="checkbox" id="settings-checkclock"> Trap check alerts</label>
+        <div id="checkalert-sub" hidden>
+          <label class="field" for="settings-checkinterval" style="margin-top:2px">Check interval (hours)</label>
+          <input type="number" id="settings-checkinterval" min="1" step="1" inputmode="numeric" placeholder="24">
+          <p class="dim" style="margin-top:8px">Sets past this long without any activity turn red on the map. Any edit, catch, or check-in restarts the clock. The quick &ldquo;Checked &mdash; nothing changed&rdquo; button only restarts the clock &mdash; it saves nothing to History. Turn alerts off to hide the red pins and countdowns.</p>
+        </div>
         <label class="checkline"><input type="checkbox" id="settings-weather"> Weather (map chip + auto-record)</label>
         <p class="dim" style="margin:-6px 0 10px">Map chip with current conditions and the next 12 hours; weather auto-attaches to new sets and catches. Sends coordinates to Open-Meteo, a free weather service — needs a connection.</p>
         <label class="checkline"><input type="checkbox" id="settings-windarrows"> Wind arrows on set pins</label>
@@ -270,7 +270,7 @@
         </div>
       </div>
       <div class="card setsec" id="setsec-backup-reports">
-        <button type="button" class="setsec-head" id="setsec-backup-reports-head" data-sec="setsec-backup-reports" aria-expanded="false"><span><img class="bi" src="assets/icons/disk.png" alt="">Backup &amp; Reports</span><span class="setsec-chev" aria-hidden="true">›</span></button>
+        <button type="button" class="setsec-head" id="setsec-backup-reports-head" data-sec="setsec-backup-reports" aria-expanded="false"><span>Backup &amp; Reports</span><span class="setsec-chev" aria-hidden="true">›</span></button>
         <div class="setsec-body" id="setsec-backup-reports-body" hidden>
         <p class="setsec-sub">Full backup</p>
         <div class="sheet-actions">
@@ -305,7 +305,7 @@
         </div>
       </div>
       <div class="card setsec" id="setsec-danger">
-        <button type="button" class="setsec-head" id="setsec-danger-head" data-sec="setsec-danger" aria-expanded="false"><span style="color:#f0a49c">Erase Everything</span><span class="setsec-chev" aria-hidden="true">›</span></button>
+        <button type="button" class="setsec-head" id="setsec-danger-head" data-sec="setsec-danger" aria-expanded="false"><span>Erase Everything</span><span class="setsec-chev" aria-hidden="true">›</span></button>
         <div class="setsec-body" id="setsec-danger-body" hidden>
         <p class="dim" style="margin-top:0">Everything on this phone — sets, catches, photos, voice memos, licenses, landowners — gets permanently deleted. It will be gone forever. There is no undo and no cloud copy.</p>
         <p class="dim"><strong>Back up all data (JSON)</strong> first if you want to keep a copy. The backup lives in Settings → Backup &amp; Reports.</p>
@@ -392,6 +392,8 @@
     </div>
     <div class="setfield" id="setfield-bait">
     <label class="field">Bait</label>
+    <!-- Q78 (2026-10-01): Tanner — the example lives here at the top, never inside the box. -->
+    <p class="dim attr-hint">e.g. sardines</p>
     <div id="sf-bait-rows"></div>
     <button type="button" class="btn-small btn-ghost attr-add" id="sf-bait-add" hidden>+ Add Another Bait</button>
     <!-- Q30: state bait-rule warning, shown when bait is entered in a verified state -->
@@ -402,26 +404,31 @@
     </div>
     <div class="setfield" id="setfield-lure">
     <label class="field">Lure</label>
+    <p class="dim attr-hint">e.g. gland lure</p>
     <div id="sf-lure-rows"></div>
     <button type="button" class="btn-small btn-ghost attr-add" id="sf-lure-add" hidden>+ Add Another Lure</button>
     </div>
     <div class="setfield" id="setfield-urine">
     <label class="field">Urine</label>
+    <p class="dim attr-hint">e.g. fox urine</p>
     <div id="sf-urine-rows"></div>
     <button type="button" class="btn-small btn-ghost attr-add" id="sf-urine-add" hidden>+ Add Another Urine</button>
     </div>
     <div class="setfield" id="setfield-visual">
     <label class="field">Visual</label>
+    <p class="dim attr-hint">e.g. flagging tape</p>
     <div id="sf-visual-rows"></div>
     <button type="button" class="btn-small btn-ghost attr-add" id="sf-visual-add" hidden>+ Add Another Visual</button>
     </div>
     <div class="setfield" id="setfield-audio">
     <label class="field">Audio</label>
+    <p class="dim attr-hint">e.g. squeaker</p>
     <div id="sf-audio-rows"></div>
     <button type="button" class="btn-small btn-ghost attr-add" id="sf-audio-add" hidden>+ Add Another Audio</button>
     </div>
     <div class="setfield" id="setfield-other">
     <label class="field">Other Attractants</label>
+    <p class="dim attr-hint">e.g. t-bone</p>
     <div id="sf-other-rows"></div>
     <button type="button" class="btn-small btn-ghost attr-add" id="sf-other-add" hidden>+ Add Another Attractant</button>
     </div>
@@ -451,8 +458,9 @@
       <input type="file" id="sf-missing-photo-input" class="hidden-file" accept="image/*">
     </div>
     </div>
-    <label class="field" for="sf-date"><span class="dim" id="sf-date-dow"></span>Date Set <span class="req">*</span></label>
+    <label class="field" for="sf-date">Date Set <span class="req">*</span></label>
     <input type="date" id="sf-date">
+    <div class="dow-line"><span id="sf-date-dow"></span></div>
     <!-- Q99 (2026-10-01): Tanner — notes + memos + photos collapse into one box -->
     <div class="setsec" id="setform-notessec">
     <button type="button" class="setsec-head" id="setform-notessec-head" data-sec="setform-notessec" aria-expanded="false"><span>Notes, Memos &amp; Photos</span><span class="setsec-chev" aria-hidden="true">›</span></button>
@@ -579,8 +587,9 @@
       <button type="button" data-disp="transported">Transported</button>
       <button type="button" data-disp="discarded" hidden>Discarded</button>
     </div>
-    <label class="field" for="log-date"><span class="dim" id="log-date-dow"></span>Date</label>
+    <label class="field" for="log-date">Date</label>
     <input type="date" id="log-date">
+    <div class="dow-line"><span id="log-date-dow"></span></div>
     <label class="field" for="log-time">Time <span class="dim">— when you found it, not when you typed it</span></label>
     <input type="time" id="log-time">
     <!-- Q99 (2026-10-01): Tanner — notes + memos + photos collapse into one box -->
