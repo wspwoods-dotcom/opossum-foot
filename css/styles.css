@@ -526,8 +526,39 @@ body.route-locked #tabbar { pointer-events: none; opacity: .35; }
    never tamed iOS's date inputs on Tanner's phone. These rows no longer
    rely on shrink math at all: explicit 50/50 columns, inputs pinned to
    their column width. */
-.date-row { display: flex; gap: 10px; }
-.date-row > .date-col { flex: none; width: calc(50% - 5px); min-width: 0; }
+/* update banner: a new build took charge while this page runs the old one */
+#update-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 10px 14px;
+  background: #2a2416;
+  border-bottom: 2px solid #d9a441;
+  color: #f0e6c8;
+  font-size: 15px;
+}
+#update-reload {
+  background: #d9a441;
+  color: #1a1508;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 18px;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+/* Reports + Danger Zone date rows: stacked full-width.
+ * Four builds tried to keep native date inputs side-by-side and iOS kept
+ * overlapping them. Stacked fields cannot overlap on any browser, ever. */
+.date-row { display: block; }
+.date-row > .date-col { width: 100%; margin: 0 0 10px 0; }
+.date-row > .date-col:last-child { margin-bottom: 0; }
 .date-col > input[type=date] { display: block; width: 100%; max-width: 100%;
   min-width: 0; box-sizing: border-box; }
 .date-col > input[type=date]::-webkit-datetime-edit,
