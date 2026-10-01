@@ -285,9 +285,9 @@
         </div>
         <p class="setsec-sub">Reports</p>
         <p class="dim" style="margin-top:0">Set the filters, watch the match count, then download the report you want. The filters shape the <strong>catches</strong> report only — the sets and mileage downloads always include everything.</p>
-        <div class="btn-row">
-          <div><label class="field" for="exp-from">From</label><input type="date" id="exp-from" aria-label="Export start date"></div>
-          <div><label class="field" for="exp-to">To</label><input type="date" id="exp-to" aria-label="Export end date"></div>
+        <div class="date-row">
+          <div class="date-col"><label class="field" for="exp-from">From</label><input type="date" id="exp-from" aria-label="Export start date"></div>
+          <div class="date-col"><label class="field" for="exp-to">To</label><input type="date" id="exp-to" aria-label="Export end date"></div>
         </div>
         <div id="exp-dim-filters"></div>
         <div class="sheet-actions">
@@ -313,9 +313,9 @@
         <p class="dim" style="margin:16px 0 4px"><strong>Purge catch history.</strong> Delete old or test catch records without touching your sets. Pick a line, a date range, or both — matching records, their photos, and their voice memos are gone forever.</p>
         <label class="field" for="purge-line">Line</label>
         <select id="purge-line"></select>
-        <div class="btn-row">
-          <div style="flex:1"><label class="field" for="purge-from">From</label><input type="date" id="purge-from" style="width:100%"></div>
-          <div style="flex:1"><label class="field" for="purge-to">To</label><input type="date" id="purge-to" style="width:100%"></div>
+        <div class="date-row">
+          <div class="date-col"><label class="field" for="purge-from">From</label><input type="date" id="purge-from"></div>
+          <div class="date-col"><label class="field" for="purge-to">To</label><input type="date" id="purge-to"></div>
         </div>
         <p class="dim" id="purge-count" style="margin:4px 0 8px"></p>
         <button class="btn-danger" id="btn-purge" type="button" style="width:100%">Purge matching catch history</button>
