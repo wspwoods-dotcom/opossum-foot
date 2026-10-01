@@ -522,18 +522,16 @@ body.route-locked #tabbar { pointer-events: none; opacity: .35; }
 /* Tanner 2026-10-01: date boxes were overlapping — flex children must shrink,
    and iOS date inputs need min-width:0 too or their picker UI overflows. */
 .btn-row input { min-width: 0; }
-/* Q142 (2026-10-01): bx's min-width:0 alone did NOT fix it on Tanner's iPhone
-   (still overlapping 4:53 PM) — iOS Safari's date input keeps an intrinsic
-   min-width inside its shadow datetime-edit UI. Belt and suspenders: cap the
-   input at its wrapper and zero the inner edit's minimum too. No-op in
-   spec-compliant browsers (verified: Chromium already lays out 50/50). */
-.btn-row input[type=date] { width: 100%; min-width: 0; max-width: 100%; }
-.btn-row input[type=date]::-webkit-datetime-edit,
-.btn-row input[type=date]::-webkit-datetime-edit-fields-wrapper { min-width: 0; }
-/* 2026-10-01 by didn't fix it either (Tanner's screenshot: boxes still
-   overlapping). iOS ignores min-width on date inputs and lets the box
-   overflow its flex column — so force the box to the column width with
-   width:100% instead of asking WebKit to shrink it. */
+/* Q142 rewrite (2026-10-01): three builds of flex-shrink/min-width tweaks
+   never tamed iOS's date inputs on Tanner's phone. These rows no longer
+   rely on shrink math at all: explicit 50/50 columns, inputs pinned to
+   their column width. */
+.date-row { display: flex; gap: 10px; }
+.date-row > .date-col { flex: none; width: calc(50% - 5px); min-width: 0; }
+.date-col > input[type=date] { display: block; width: 100%; max-width: 100%;
+  min-width: 0; box-sizing: border-box; }
+.date-col > input[type=date]::-webkit-datetime-edit,
+.date-col > input[type=date]::-webkit-datetime-edit-fields-wrapper { min-width: 0; }
 /* Tanner 2026-10-01: compact button row — smaller, less clunky. */
 .btn-compact > .btn-secondary { padding: 8px 10px; font-size: 14px; min-height: 0; }
 /* Home-ground prompt (Q53): three equal buttons, no icon, all centered. */
