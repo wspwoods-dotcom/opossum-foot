@@ -4,7 +4,7 @@
  * No user data ever passes through here — sets/catches live in
  * localStorage/IndexedDB on the device only.
  */
-var SHELL_CACHE = 'opossum-foot-shell-v55';
+var SHELL_CACHE = 'opossum-foot-shell-v56';
 var TILE_CACHE = 'opossum-foot-tiles-v1';
 var MAX_TILES = 400;
 
@@ -63,7 +63,15 @@ function isTileRequest(url) {
 self.addEventListener('install', function (event) {
   event.waitUntil(
     caches.open(SHELL_CACHE).then(function (cache) {
-      return cache.addAll(SHELL);
+      /* 2026-10-01: fetch with cache:'reload' — a plain cache.addAll can
+         precache STALE bytes from the browser HTTP cache (observed: new JS
+         active while old CSS still applied on iOS). Every build's files
+         must be byte-fresh under the new cache name. */
+      return Promise.all(SHELL.map(function (u) {
+        return fetch(u, { cache: 'reload' }).then(function (res) {
+          if (res && res.ok) return cache.put(u, res);
+        });
+      }));
     }).then(function () { return self.skipWaiting(); })
   );
 });
