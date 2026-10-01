@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-10-01bv';
+var APP_VERSION = 'beta 0.1 · build 2026-10-01bw';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -2182,18 +2182,19 @@ function saveHome(lat, lng) {
   renderSettingsHome();
 }
 function homeIcon() {
-  return L.divIcon({ className: '', html: '<div class="pin pin-home">🏠</div>', iconSize: [36, 36], iconAnchor: [18, 18] });
+  /* Tanner 2026-10-01: bigger home pin, app green — easy to see and drag. */
+  return L.divIcon({ className: '', html: '<div class="pin pin-home">🏠</div>', iconSize: [52, 52], iconAnchor: [26, 26] });
 }
 function startHomePick() {
   if (!map) { toast('Open the map first.'); return; }
   var l0 = activeLine();
   if (l0) { l0.homeAsked = true; Store.save(); } /* asked once per line — Settings re-opens it */
   setDropPinMode(false); cancelPlacePin();
-  homePickMode = true; homeMapLive = false; /* B26: map taps arm only after the map choice is tapped */
+  homePickMode = true; homeMapLive = true;
+  /* Tanner 2026-10-01: no A/B choice — the GPS button duplicated the previous
+     screen. Straight to pin drop: tap the map, drag the pin, tap OK. */
   $('home-bar').classList.add('show');
-  /* B26: the picker opens on the A/B choice — never mid-flow. */
-  $('home-choose').style.display = '';
-  $('home-bar-prompt').textContent = "Where's your home ground?";
+  $('home-bar-prompt').textContent = 'Tap the map to drop your home pin, then drag it onto the exact spot.';
   $('btn-home-ok').hidden = true;
   setPlacingLock(true); /* B15: same modal lock as pin placement */
   /* B13: bar just changed the map height — re-measure before centering. */
@@ -3217,7 +3218,7 @@ function openPendingPhotoViewer(idx) {
   var url = URL.createObjectURL(ph.blob);
   showModal('<img src="' + url + '" style="width:100%;border-radius:8px" alt="Catch photo">' +
     '<div class="btn-row" style="margin-top:10px"><button class="btn-danger" id="m-ph-del" type="button">Remove</button>' +
-    '<button class="btn-secondary" id="m-ph-save" type="button">Save to camera roll</button>' +
+    '<button class="btn-secondary" id="m-ph-save" type="button">Save Photo</button>' +
     '<button class="btn-secondary" id="m-close" type="button">Close</button></div>');
   $('m-close').onclick = function () { URL.revokeObjectURL(url); closeModal(); };
   $('m-ph-save').onclick = function () { sharePhotoFile(ph.blob, 'opossum-foot-photo'); };
@@ -3289,7 +3290,7 @@ function openPendingSetPhotoViewer(idx) {
   var url = URL.createObjectURL(ph.blob);
   showModal('<img src="' + url + '" style="width:100%;border-radius:8px" alt="Set photo">' +
     '<div class="btn-row" style="margin-top:10px"><button class="btn-danger" id="m-ph-del" type="button">Remove</button>' +
-    '<button class="btn-secondary" id="m-ph-save" type="button">Save to camera roll</button>' +
+    '<button class="btn-secondary" id="m-ph-save" type="button">Save Photo</button>' +
     '<button class="btn-secondary" id="m-close" type="button">Close</button></div>');
   $('m-close').onclick = function () { URL.revokeObjectURL(url); closeModal(); };
   $('m-ph-save').onclick = function () { sharePhotoFile(ph.blob, 'opossum-foot-photo'); };
@@ -3655,7 +3656,7 @@ function openPhotoViewer(p, onDelete, ro) {
     (when ? '<div class="dim" style="margin-top:6px;text-align:center">' + esc(when) + '</div>' : '') +
     '<div class="btn-row" style="margin-top:10px">' +
     (ro ? '' : '<button class="btn-danger" id="m-ph-del" type="button">Delete</button>') +
-    '<button class="btn-secondary" id="m-ph-save" type="button">Save to camera roll</button>' +
+    '<button class="btn-secondary" id="m-ph-save" type="button">Save Photo</button>' +
     '<button class="btn-secondary" id="m-close" type="button">Close</button></div>');
   $('m-close').onclick = closeModal;
   $('m-ph-save').onclick = function () { sharePhotoFile(p.blob, 'opossum-foot-photo'); };
@@ -4660,7 +4661,7 @@ function renderSeasonsCompliance(d) {
   var h = '<div class="card setsec" id="rules-card">' + /* Q87 (2026-10-01): Tanner — closed by default, cleaner screen. */
     '<button type="button" class="setsec-head" id="rules-toggle"><span>' + esc(r.title) + '</span>' +
     '<span class="setsec-chev">›</span></button>' +
-    '<div class="setsec-body"><p class="dim">' + esc(r.intro) + '</p>';
+    '<div class="setsec-body" hidden><p class="dim">' + esc(r.intro) + '</p>';
   (r.sections || []).forEach(function (sec) {
     h += '<p class="rules-sec">' + esc(sec.heading) + '</p><ul class="rules-list">' +
       (sec.items || []).map(function (it) { return '<li>' + esc(it) + '</li>'; }).join('') + '</ul>';
@@ -4771,18 +4772,19 @@ function openLicenseDetail(p) {
   var btnUrl = link || officialUrl;
   var html = '<img src="' + licURLs[p.id] + '" style="width:100%;border-radius:8px" alt="License photo">';
   if (btnUrl) {
-    var btnLabel = link ? 'Open license site ↗'
-      : 'Official ' + esc(d.state_name) + ' license site ↗';
-    html += '<a class="btn-primary" style="display:block;text-align:center;margin-top:10px;text-decoration:none" href="' +
+    /* Tanner 2026-10-01: title case on buttons and labels. */
+    var btnLabel = link ? 'Open License Site ↗'
+      : 'Official ' + esc(d.state_name) + ' License Site ↗';
+    html += '<a class="btn-primary" style="display:block;text-align:center;margin-top:10px;text-decoration:none;border-radius:var(--radius)" href="' +
       esc(btnUrl) + '" target="_blank" rel="noopener">' + btnLabel + '</a>';
     if (!link && d.license_note) {
       html += '<p class="dim" style="margin-top:8px">' + esc(d.license_note) + '</p>';
     }
   }
-  html += '<label class="field" for="m-lic-link" style="margin-top:12px">Custom link (optional — overrides the official site above)</label>' +
+  html += '<label class="field" for="m-lic-link" style="margin-top:12px">Custom Link (Optional — Overrides the Official Site Above)</label>' +
     '<input id="m-lic-link" type="url" inputmode="url" placeholder="https://…" value="' + esc(link) + '" autocomplete="off">' +
-    '<div class="btn-row" style="margin-top:10px"><button class="btn-secondary" id="m-lic-save" type="button">Save link</button>' +
-    '<button class="btn-secondary" id="m-ph-save" type="button">Save to camera roll</button>' +
+    '<div class="btn-row btn-compact" style="margin-top:10px"><button class="btn-secondary" id="m-lic-save" type="button">Save Link</button>' +
+    '<button class="btn-secondary" id="m-ph-save" type="button">Save Photo</button>' +
     '<button class="btn-secondary" id="m-close" type="button">Close</button></div>';
   showModal(html);
   $('m-close').onclick = closeModal;
@@ -4886,7 +4888,7 @@ function openPhotoViewerLayer2(p, title, urlFor, onDelete) {
   showModal2('<h3>' + esc(title) + '</h3>' +
     (src ? '<img src="' + src + '" style="width:100%;border-radius:8px" alt="' + esc(title) + '">' : '<p class="dim">Photo would not load.</p>') +
     '<div class="btn-row" style="margin-top:10px"><button class="btn-danger" id="m2-ph-del" type="button">Delete</button>' +
-    '<button class="btn-secondary" id="m2-ph-save" type="button">Save to camera roll</button>' +
+    '<button class="btn-secondary" id="m2-ph-save" type="button">Save Photo</button>' +
     '<button class="btn-secondary" id="m2-close" type="button">Close</button></div>');
   $('m2-close').onclick = closeModal2;
   $('m2-ph-save').onclick = function () { if (p && p.blob) sharePhotoFile(p.blob, 'opossum-foot-photo'); };
@@ -4903,13 +4905,21 @@ function landownerPhoneDigits(p) {
   var plus = p.trim().charAt(0) === '+';
   return (plus ? '+' : '') + p.replace(/\D/g, '');
 }
+/* Tanner 2026-10-01: display US 10-digit numbers as (515) 555-5555. */
+function formatPhoneDisplay(s) {
+  var d = landownerPhoneDigits(String(s == null ? '' : s)).replace(/^\+1/, '');
+  if (/^\d{10}$/.test(d)) {
+    return '(' + d.slice(0, 3) + ') ' + d.slice(3, 6) + '-' + d.slice(6);
+  }
+  return s;
+}
 function landownerPhoneHtml(lo) {
   var nums = landownerPhoneList(lo.phones);
   if (nums.length) {
     /* Tanner 2026-09-30: every number is one tap from a call or a text. */
     return nums.map(function (n) {
       var d = landownerPhoneDigits(n);
-      return '<div class="lo-phone"><span class="lo-phone-num">' + esc(n) + '</span>' +
+      return '<div class="lo-phone"><span class="lo-phone-num">' + esc(formatPhoneDisplay(n)) + '</span>' +
         '<span class="lo-phone-btns"><a class="btn-small btn-primary" href="tel:' + esc(d) + '"><img class="bi inv" src="assets/icons/phone.png" alt="">Call</a>' +
         '<a class="btn-small btn-secondary" href="sms:' + esc(d) + '"><img class="bi" src="assets/icons/phone.png" alt="">Text</a>' +
         '<button class="lo-phone-x" type="button" data-lo-phone-del="' + esc(n) + '" aria-label="Remove this number">✕</button></span></div>';
@@ -4944,7 +4954,7 @@ function landownerCard(lo, photos) {
   var hasBoundary = !!lo.boundaryNote || photos.some(function (p) { return p.kind === 'boundary'; });
   var html = '<h3 style="text-align:left">' + esc(lo.name) + '</h3>';
   html += landownerPhoneHtml(lo);
-  if (lo.notes) html += '<p class="dim" style="margin:4px 0">' + esc(lo.notes) + '</p>';
+  if (lo.notes) html += '<p class="dim lo-notes-box" style="margin:4px 0">' + esc(lo.notes) + '</p>';
   var bits = [];
   if (slips) bits.push(slips + ' slip photo' + (slips === 1 ? '' : 's'));
   if (hasBoundary) bits.push('boundary on file');
@@ -4985,7 +4995,7 @@ function openLandownerForm(id) {
   loFormId = lo.id;
   pendingLoPhotos = [];
   showModal(
-    '<h3>' + (isNew ? 'Add landowner' : 'Edit landowner') + '</h3>' +
+    '<h3>' + (isNew ? 'Add Landowner' : 'Edit Landowner') + '</h3>' +
     '<label class="field" for="lo-name">Name <span class="req">*</span></label>' +
     '<input id="lo-name" type="text" value="' + esc(lo.name) + '" placeholder="Who owns the ground">' +
     '<label class="field" for="lo-phones">Phone numbers</label>' +
@@ -5439,23 +5449,8 @@ function runPinImport(pins) {
   next();
 }
 function eraseAll() {
-  /* B29: a simple math question first — a kid tapping through the warnings
-     can't get past arithmetic. No PIN, nothing to remember or recover. */
-  var a = 3 + Math.floor(Math.random() * 7); /* 3..9 */
-  var b = 2 + Math.floor(Math.random() * 8); /* 2..9 */
-  var ans = String(a + b);
-  showModal(
-    '<h3>Quick check</h3>' +
-    '<p>Before anything destructive: what is <strong>' + a + ' + ' + b + '</strong>?</p>' +
-    '<input type="text" id="m-math" inputmode="numeric" autocomplete="off" style="width:100%;margin:8px 0" placeholder="Your answer">' +
-    '<div class="btn-row"><button class="btn-secondary" id="m-cancel" type="button">Cancel</button>' +
-    '<button class="btn-danger" id="m-math-go" type="button" disabled>Continue</button></div>'
-  );
-  var minp = $('m-math'), mgo = $('m-math-go');
-  $('m-cancel').onclick = closeModal;
-  minp.oninput = function () { mgo.disabled = minp.value.trim() !== ans; };
-  mgo.onclick = function () { closeModal(); eraseAllTyped(); };
-  setTimeout(function () { try { minp.focus(); } catch (e) { /* noop */ } }, 150);
+  /* B29: math gate first (shared harder version) — then the typed confirmation. */
+  mathGate(function () { eraseAllTyped(); });
 }
 function eraseAllTyped() {
   confirmModal('Erase everything?',
@@ -5525,12 +5520,28 @@ function purgeHistory() {
   var list = purgeMatchList();
   if (!list.length) { toast('Nothing to purge — no catch records match.'); return; }
   /* Same kid-proof gate as Erase Everything: a quick math question first. */
-  var a = 3 + Math.floor(Math.random() * 7);
-  var b = 2 + Math.floor(Math.random() * 8);
-  var ans = String(a + b);
+  mathGate(function () { purgeHistoryGo(list); });
+}
+/* Tanner 2026-10-01: one shared harder math gate — two-digit add/subtract,
+   simple multiply. A kid tapping through warnings can't get past arithmetic. */
+function mathGate(onPass) {
+  var qtype = Math.floor(Math.random() * 3), a, b, ans, qtext;
+  if (qtype === 0) { /* two-digit addition */
+    a = 11 + Math.floor(Math.random() * 89); /* 11..99 */
+    b = 11 + Math.floor(Math.random() * 89);
+    ans = String(a + b); qtext = a + ' + ' + b;
+  } else if (qtype === 1) { /* two-digit subtraction, no negatives */
+    a = 20 + Math.floor(Math.random() * 80); /* 20..99 */
+    b = 11 + Math.floor(Math.random() * (a - 10)); /* 11..a-1 */
+    ans = String(a - b); qtext = a + ' − ' + b;
+  } else { /* single-digit multiplication */
+    a = 3 + Math.floor(Math.random() * 10); /* 3..12 */
+    b = 3 + Math.floor(Math.random() * 10);
+    ans = String(a * b); qtext = a + ' × ' + b;
+  }
   showModal(
     '<h3>Quick check</h3>' +
-    '<p>Before anything destructive: what is <strong>' + a + ' + ' + b + '</strong>?</p>' +
+    '<p>Before anything destructive: what is <strong>' + qtext + '</strong>?</p>' +
     '<input type="text" id="m-math" inputmode="numeric" autocomplete="off" style="width:100%;margin:8px 0" placeholder="Your answer">' +
     '<div class="btn-row"><button class="btn-secondary" id="m-cancel" type="button">Cancel</button>' +
     '<button class="btn-danger" id="m-math-go" type="button" disabled>Continue</button></div>'
@@ -5538,9 +5549,10 @@ function purgeHistory() {
   var minp = $('m-math'), mgo = $('m-math-go');
   $('m-cancel').onclick = closeModal;
   minp.oninput = function () { mgo.disabled = minp.value.trim() !== ans; };
-  mgo.onclick = function () { closeModal(); purgeConfirm(list); };
+  mgo.onclick = function () { closeModal(); onPass(); };
   setTimeout(function () { try { minp.focus(); } catch (e) { /* noop */ } }, 150);
 }
+function purgeHistoryGo(list) { purgeConfirm(list); }
 function purgeConfirm(list) {
   var lineId = $('purge-line').value;
   var ln = lineId ? lineById(Store.data, lineId) : null;
@@ -6368,6 +6380,8 @@ function routeLayerGroup() {
 function clearRouteEstimate() {
   if (routeLayer) routeLayer.clearLayers();
   routeShownFor = null;
+  /* Tanner 2026-10-01: leaving route mode unlocks the tab bar. */
+  document.body.classList.remove('route-locked');
   var rb = $('route-back-chip');
   if (rb) rb.hidden = true;
 }
@@ -6391,6 +6405,10 @@ function drawRouteEstimate(lineId) {
     L.marker([(a[0] + b[0]) / 2, (a[1] + b[1]) / 2], { icon: icon, interactive: false, keyboard: false }).addTo(g);
   }
   routeShownFor = lineId;
+  /* Tanner 2026-10-01: while the route is drawn, the app is in route mode —
+     tab bar locked, map functions only. The "‹ Back to mileage" chip is the
+     only way out. */
+  document.body.classList.add('route-locked');
   var rb = $('route-back-chip');
   if (rb) rb.hidden = false;
   return true;
@@ -6628,15 +6646,6 @@ function wireUp() {
   /* Q53: home picker bar on the map. */
   $('btn-home-ok').onclick = confirmHomePin;
   $('btn-home-cancel').onclick = cancelHomePick;
-  /* B26: two clear choices, not steps — place it on the map, or use GPS now. */
-  $('btn-home-choice-map').onclick = function () {
-    $('home-choose').style.display = 'none';
-    homeMapLive = true;
-    $('home-bar-prompt').textContent = 'Tap the map to drop your home pin, then drag it onto the exact spot.';
-  };
-  $('btn-home-choice-gps').onclick = function () {
-    homeUseGps(function () { cancelHomePick(); fitMapHome(); });
-  };
   /* Q53: change home from Settings — re-settable, never permanent. */
   $('btn-change-home').onclick = function () { switchTab('map'); startHomePick(); };
 
