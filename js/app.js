@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-10-01bx';
+var APP_VERSION = 'beta 0.1 · build 2026-10-01by';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -665,7 +665,7 @@ function dispBadge(d) {
 function speciesSeasonTotal(name, seasonYear) {
   var n = 0;
   activeLogs().forEach(function (l) {
-    if (!l.otherType && l.species === name && seasonYearOf(l.date) === seasonYear && l.disposition !== 'released' && l.disposition !== 'transported') n += (l.count * 1 || 0);
+    if (!l.otherType && l.species === name && seasonYearOf(l.date) === seasonYear && l.disposition !== 'released' && l.disposition !== 'transported') n += normCount(l);
   });
   return n;
 }
@@ -2072,7 +2072,7 @@ function refreshMarkers() {
     if (!mapStatusFilter[normStatus(s.status)]) return;
     var m = L.marker([s.lat, s.lng], { icon: setIcon(s), title: s.name });
     /* B15: no opening set details mid-placement — finish the pin first. */
-    m.on('click', function () { if (document.body.classList.contains('placing')) return; openSetDetail(s.id); });
+    m.on('click', function () { if (document.body.classList.contains('placing')) return; openSetOrStack(s.id); });
     m._setId = s.id;
     markersLayer.addLayer(m);
   });
@@ -2865,6 +2865,34 @@ var detailSetId = null;
 /* Q71: the summary sheet is read-only — status changes, recovery, and the
    missing-reason picker all live on the Edit Set form now. */
 
+/* Q140 (2026-10-01): Tanner — five pins on top of each other. Tapping a
+   stack opens a menu listing every set at that spot (name, status, trap
+   type); tapping a row opens that set's detail. Lone pins keep today's
+   straight-to-detail behavior. Same ~20 m tolerance as the duplicate check;
+   nearby-but-legitimate sets are never blocked, only listed. */
+function setsAtSpot(lat, lng) {
+  return activeSets().filter(function (s) {
+    if (!mapStatusFilter[normStatus(s.status)]) return false;
+    return Math.abs(s.lat - lat) <= PIN_DUP_TOL_DEG && Math.abs(s.lng - lng) <= PIN_DUP_TOL_DEG;
+  });
+}
+function openSetOrStack(id) {
+  var s = getSet(id);
+  if (!s) return;
+  var stack = setsAtSpot(s.lat, s.lng);
+  if (stack.length < 2) { openSetDetail(id); return; }
+  stack.sort(function (a, b) { return a.name < b.name ? -1 : 1; });
+  $('stack-title').textContent = stack.length + ' sets at this spot';
+  $('stack-list').innerHTML = stack.map(function (x) {
+    var st = normStatus(x.status);
+    return '<button type="button" class="stack-row" data-stack-id="' + x.id + '">' +
+      '<span class="stack-name">' + esc(x.name) + '</span>' +
+      '<span class="badge status-' + esc(st) + '">' + esc(statusLabel(st)) + '</span>' +
+      '<span class="dim">' + esc(x.trapType || '—') + '</span></button>';
+  }).join('');
+  openSheet('sheet-stackmenu');
+}
+
 function openSetDetail(id) {
   var s = getSet(id);
   if (!s) return;
@@ -2934,7 +2962,7 @@ function renderSetLogs(s, byLog) {
       return '<img class="photo-thumb sm" data-ph="' + p.id + '" src="' + photoURL(p) + '" alt="Catch photo">';
     }).join('');
     return '<div class="log-row"><div class="lr-top"><span class="lr-species">' + esc(l.species) +
-      '</span><span class="lr-count">×' + esc(l.count) + '</span>' +
+      '</span><span class="lr-count">×' + esc(normCount(l)) + '</span>' +
       dispBadge(l.disposition) +
       '<button type="button" class="log-del" data-del-log="' + l.id + '" aria-label="Delete this log entry">×</button></div>' +
       '<div class="dim">' + esc(fmtDate(l.date)) + (l.notes ? ' · ' + esc(l.notes) : '') + '</div>' +
@@ -3006,7 +3034,7 @@ function deleteLog(logId) {
   if (!l) return;
   var label = l.otherType
     ? (OTHER_LABELS[l.otherType] || 'Other event') + (l.species ? ' — ' + l.species : '')
-    : (l.count + ' × ' + (l.species || 'Unknown'));
+    : (normCount(l) + ' × ' + (l.species || 'Unknown'));
   var s = l.setId ? getSet(l.setId) : null;
   var linkedMemoIds = logMemoIds(l);
   function ask(nPhotos, nMemos) {
@@ -3910,6 +3938,16 @@ function dayLabel(iso) {
   return DOWS[d.getDay()] + ', ' + MONS[d.getMonth()] + ' ' + (p[2] * 1);
 }
 function dispOf(l) { return l.disposition || 'kept'; }
+/* Q141 (2026-10-01): legacy genuine-catch logs predate the count field — a
+   missing, zero, or invalid count on a catch normalizes to 1. True empty
+   check-ins (otherType 'empty') stay 0. Read-time normalization: the stored
+   logs are never rewritten, so every view (Totals, History, Scorecard, bag
+   limits, CSV, backup) agrees. */
+function normCount(l) {
+  if (l.otherType === 'empty') return 0;
+  var n = l.count * 1;
+  return (n >= 1) ? n : 1;
+}
 
 /* ---------- Trap status (build ar; fourth value renamed Other -> Missing 2026-09-27) ----------
    The canonical status list: Active, Sprung, Pulled, Missing.
@@ -4103,7 +4141,7 @@ function renderHistSummary(logs) {
   logs.forEach(function (l) {
     if (l.otherType) return; /* events are not catches */
     if ((l.seasonYear || seasonYearOf(l.date)) !== sy) return;
-    var c = l.count * 1 || 0;
+    var c = normCount(l);
     catches += c;
     if (dispOf(l) === 'released') released += c;
     if (l.species) sps[l.species] = true;
@@ -4131,7 +4169,7 @@ function logRowHtml(l, showDate) {
   }
   return '<div class="log-row' + (expanded ? ' expanded' : '') + '" data-log="' + l.createdAt + '">' +
     '<div class="lr-top">' + title +
-    '<span class="lr-count">×' + esc(l.count) + '</span>' +
+    '<span class="lr-count">×' + esc(normCount(l)) + '</span>' +
     dispBadge(l.disposition) +
     '<button type="button" class="log-del" data-del-log="' + l.id + '" aria-label="Delete this log entry">×</button></div>' +
     (meta ? '<div class="dim">' + meta + '</div>' : '') +
@@ -4163,7 +4201,7 @@ function renderHistByDate(list) {
     if (l.date !== curDay) {
       if (curDay !== null) html += '</div>';
       var dayCatches = 0;
-      list.forEach(function (m) { if (m.date === l.date && (m.seasonYear || seasonYearOf(m.date)) === sy) dayCatches += (m.count * 1 || 0); });
+      list.forEach(function (m) { if (m.date === l.date && (m.seasonYear || seasonYearOf(m.date)) === sy) dayCatches += normCount(m); });
       var shut = !!f.collapsed[l.date];
       html += '<div class="day-group"><button type="button" class="day-head" data-day="' + esc(l.date) + '">' +
         esc(dayLabel(l.date)) + ' <span class="dim">· ' + dayCatches + ' catch' + (dayCatches === 1 ? '' : 'es') + '</span>' +
@@ -4184,7 +4222,7 @@ function renderHistBySpecies(list) {
     /* Other events group under their subtype label, not a species. */
     var sp = l.otherType ? (OTHER_LABELS[l.otherType] || 'Other event') : (l.species || 'Unknown');
     var g = groups[sp] || (groups[sp] = { logs: [], kept: 0, alive: 0, released: 0, transported: 0, total: 0 });
-    var c = l.count * 1 || 0;
+    var c = normCount(l);
     g.logs.push(l); g.total += c;
     var d = dispOf(l);
     if (d === 'released') g.released += c;
@@ -4226,7 +4264,7 @@ function renderHistByTrapType(list) {
   list.forEach(function (l) {
     var tt = l.trapType || 'Unknown trap type';
     var g = groups[tt] || (groups[tt] = { logs: [], kept: 0, alive: 0, released: 0, transported: 0, total: 0 });
-    var c = l.count * 1 || 0;
+    var c = normCount(l);
     g.logs.push(l); g.total += c;
     var d = dispOf(l);
     if (d === 'released') g.released += c;
@@ -4318,7 +4356,7 @@ function scorecardGroups(by, seasonKey, species) {
     if (l.otherType) return; /* Other events are events, not catches */
     if (!scoreSeasonMatch(l, seasonKey)) return;
     if (species && l.species !== species) return;
-    var c = l.count * 1 || 0;
+    var c = normCount(l);
     /* Q26: every distinct attractant value on the catch earns the full
        credit — no fractional splits. Dupes collapse case-insensitively so
        "Fox urine" twice scores once; "Fox urine" vs "fox urine" across
@@ -4478,7 +4516,7 @@ function renderTotals() {
     if (l.otherType) return; /* Other events are events, not catches — excluded from Totals */
     var y = l.seasonYear || seasonYearOf(l.date);
     if (y !== sy) return;
-    var c = l.count * 1 || 0, d = l.disposition || 'kept';
+    var c = normCount(l), d = l.disposition || 'kept';
     bySpecies[l.species] = bySpecies[l.species] || { kept: 0, alive: 0, released: 0, transported: 0 };
     bySet[l.setName || '(deleted set)'] = bySet[l.setName || '(deleted set)'] || { kept: 0, alive: 0, released: 0, transported: 0 };
     var bucket = (d === 'released') ? 'released' : (d === 'kept-alive' ? 'alive' : (d === 'transported' ? 'transported' : 'kept'));
@@ -5149,7 +5187,7 @@ function exportCatches() {
     var spCol = (l.otherType && !l.species) ? (OTHER_LABELS[l.otherType] || 'Other event') : l.species;
     /* Trap detail: snapshot on the log, falling back to the set's current details for older logs. */
     var det = l.trapDetail || (function () { var s2 = l.setId ? getSet(l.setId) : null; return s2 ? trapDetailSummary(s2) : ''; })();
-    rows.push([l.date, l.time || '', l.seasonYear || seasonYearOf(l.date), l.setName, spCol, l.count,
+    rows.push([l.date, l.time || '', l.seasonYear || seasonYearOf(l.date), l.setName, spCol, normCount(l),
       dispLabel(l.disposition), l.setType, l.trapType, det, weatherText(l.weather), joinAttr(l.bait), joinAttr(l.lure), joinAttr(l.urine), joinAttr(l.visual), joinAttr(l.audio), joinAttr(l.other), l.county].concat(ec ? [l.lat, l.lng] : []).concat([l.notes]));
   });
   var filt = exportFiltersActive();
@@ -5249,7 +5287,7 @@ function importDataFile(file) {
         id: (l.id && !haveLogIds[l.id]) ? l.id : uid('l'),
         setId: l.setId || null,
         setName: l.setName || '(imported)',
-        species: l.species || 'Unknown', count: (l.count * 1) || 1,
+        species: l.species || 'Unknown', count: normCount(l),
         otherType: l.otherType || null,
         disposition: l.disposition || 'kept',
         date: date, seasonYear: l.seasonYear || seasonYearOf(date),
@@ -7063,6 +7101,11 @@ function wireUp() {
     }
     closeSheets();
   };
+  /* Q140: stacked-pin menu — tapping a row opens that set's detail sheet. */
+  $('stack-list').addEventListener('click', function (e) {
+    var row = e.target && e.target.closest ? e.target.closest('[data-stack-id]') : null;
+    if (row) openSetDetail(row.getAttribute('data-stack-id'));
+  });
   /* Q105 (2026-10-01): Tanner — no backdrop-tap dismissal on any dialog;
      every confirm closes only via its own buttons. The old
      "$('modal').onclick = ... closeModal()" handler is gone. */
