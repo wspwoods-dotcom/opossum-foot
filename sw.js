@@ -4,7 +4,7 @@
  * No user data ever passes through here — sets/catches live in
  * localStorage/IndexedDB on the device only.
  */
-var SHELL_CACHE = 'opossum-foot-shell-v56';
+var SHELL_CACHE = 'opossum-foot-shell-v58';
 var TILE_CACHE = 'opossum-foot-tiles-v1';
 var MAX_TILES = 400;
 
@@ -16,6 +16,7 @@ var SHELL = [
   './js/guide-content.js',
   './js/season-data.js',
   './manifest.json',
+  './version.txt',
   './assets/logo.png',
   './assets/icon-192.png',
   './assets/icon-512.png',
@@ -82,7 +83,14 @@ self.addEventListener('activate', function (event) {
       return Promise.all(keys.map(function (k) {
         if (k !== SHELL_CACHE && k !== TILE_CACHE) return caches.delete(k);
       }));
-    }).then(function () { return self.clients.claim(); })
+    }).then(function () { return self.clients.claim(); }).then(function () {
+      /* A new build just took charge while pages may still show the old one.
+         Tell open pages so the app can offer a one-tap reload (never force
+         one — the user might be mid-log). */
+      return self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then(function (wins) {
+        wins.forEach(function (w) { w.postMessage({ type: 'OF_NEW_VERSION' }); });
+      });
+    })
   );
 });
 
@@ -122,12 +130,15 @@ self.addEventListener('fetch', function (event) {
     return;
   }
 
-  /* app shell: network-first, cache fallback.
-   * Online loads always fetch the newest code; the cache is only a fallback
-   * for offline use. This ends stale-code lock-in: no more manual cache bumps. */
+  /* app shell: network-first with forced revalidation, cache fallback.
+   * GitHub Pages sends Cache-Control: max-age=600 — a plain fetch() would
+   * serve the PREVIOUS build from the browser HTTP cache on any load within
+   * 10 minutes of the last one (this bit Tanner repeatedly on 2026-10-01:
+   * new JS active while old markup/CSS still rendered). no-cache revalidates
+   * every load (fast 304 when unchanged); the cache is only for offline use. */
   if (url.indexOf(self.location.origin) === 0 || url.indexOf('file:') === 0) {
     event.respondWith(
-      fetch(req).then(function (res) {
+      fetch(new Request(req, { cache: 'no-cache' })).then(function (res) {
         if (res && res.ok) {
           var copy = res.clone();
           caches.open(SHELL_CACHE).then(function (cache) { cache.put(req, copy); });
