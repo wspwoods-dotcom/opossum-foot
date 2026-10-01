@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-10-01ca';
+var APP_VERSION = 'beta 0.1 · build 2026-10-01cc';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -7172,13 +7172,44 @@ function boot() {
   if ('serviceWorker' in navigator && location.protocol.indexOf('http') === 0) {
     window.addEventListener('load', function () {
       navigator.serviceWorker.register('sw.js').catch(function () { /* offline still works without it */ });
-      /* when an updated worker takes over, reload once so the fresh code runs */
-      var reloaded = false;
-      navigator.serviceWorker.addEventListener('controllerchange', function () {
-        if (!reloaded) { reloaded = true; window.location.reload(); }
+      /* A new build took charge while this page still runs the old one:
+         offer a one-tap reload. Never force it — the user might be mid-log. */
+      navigator.serviceWorker.addEventListener('message', function (ev) {
+        if (ev.data && ev.data.type === 'OF_NEW_VERSION') showUpdateBanner();
       });
+      /* backstop: version stamp check when the app is foregrounded / periodically */
+      document.addEventListener('visibilitychange', function () { if (!document.hidden) checkBuildFresh(); });
+      setInterval(checkBuildFresh, 5 * 60 * 1000);
     });
   }
+}
+
+var _updateBannerShown = false;
+function showUpdateBanner() {
+  if (_updateBannerShown) return;
+  _updateBannerShown = true;
+  var d = document.createElement('div');
+  d.id = 'update-banner';
+  var s = document.createElement('span');
+  s.textContent = 'New version ready.';
+  var b = document.createElement('button');
+  b.type = 'button';
+  b.id = 'update-reload';
+  b.textContent = 'Reload';
+  b.addEventListener('click', function () { window.location.reload(); });
+  d.appendChild(s);
+  d.appendChild(b);
+  document.body.appendChild(d);
+}
+function checkBuildFresh() {
+  if (_updateBannerShown) return;
+  fetch('version.txt', { cache: 'no-store' }).then(function (r) {
+    if (!r.ok) throw 0;
+    return r.text();
+  }).then(function (t) {
+    t = (t || '').trim();
+    if (t && APP_VERSION.indexOf(t) === -1) showUpdateBanner();
+  }).catch(function () { /* offline: stay quiet */ });
 }
 
 document.addEventListener('DOMContentLoaded', boot);
