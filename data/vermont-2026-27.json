@@ -1,0 +1,721 @@
+{
+ "schema_version": "1.1",
+ "state": "VT",
+ "state_name": "Vermont",
+ "season_year": "2026",
+ "provisional": true,
+ "retrieved_at": "2026-09-18",
+ "disclaimer": "Reminder reference only \u2014 NOT legal authority. Season dates, zones, and limits are set annually and can change. Always verify current regulations with Vermont Fish & Wildlife before hunting or trapping.",
+ "sources": [
+  {
+   "id": "vt-dates-2026",
+   "title": "2026 Vermont Hunting & Trapping Seasons date sheet (VT Fish & Wildlife, publ. 7/8/2025)",
+   "url": "https://www.vtfishandwildlife.com/sites/fishandwildlife/files/documents/Seasons/2026-hunt-trap-dates.pdf.pdf",
+   "type": "agency_booklet",
+   "notes": "Official VFWD date sheet (dates inclusive). Text extracted 2026-09-18. Footnote: check the VFWD website for exceptions to these dates."
+  }
+ ],
+ "license_summary": {
+  "trapping_license": "NOT VERIFIED \u2014 license types/fees were not extracted; see Vermont Fish & Wildlife licensing before trapping.",
+  "tagging_reporting": "NOT VERIFIED \u2014 pelt tagging / harvest reporting requirements (otter, beaver, bobcat, fisher) could not be confirmed; agency site fetch failed 2026-09-18."
+ },
+ "species": [
+  {
+   "common_name": "Mink",
+   "iac_reference": "2026 VT Hunting & Trapping Seasons date sheet (VT Fish & Wildlife Dept., publ. 7/8/2025)",
+   "scientific_name": "Neogale vison",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated on the 2026 VT date sheet.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-24",
+     "close_date": "2026-12-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "VT-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag limit stated on the date sheet."
+     },
+     "notes": ""
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Striped skunk",
+   "iac_reference": "2026 VT Hunting & Trapping Seasons date sheet (VT Fish & Wildlife Dept., publ. 7/8/2025)",
+   "scientific_name": "Mephitis mephitis",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated on the 2026 VT date sheet.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-24",
+     "close_date": "2026-12-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "VT-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag limit stated on the date sheet."
+     },
+     "notes": ""
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "VT-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag limit stated on the date sheet."
+     },
+     "notes": "Date sheet: 'Open Year Round' for hunting. Check VFWD for exceptions to these dates."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Red fox",
+   "iac_reference": "2026 VT Hunting & Trapping Seasons date sheet (VT Fish & Wildlife Dept., publ. 7/8/2025)",
+   "scientific_name": "Vulpes vulpes",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated on the 2026 VT date sheet.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-24",
+     "close_date": "2026-12-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "VT-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag limit stated on the date sheet."
+     },
+     "notes": ""
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-10-24",
+     "close_date": "2027-02-14",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "VT-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag limit stated on the date sheet."
+     },
+     "notes": ""
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Gray fox",
+   "iac_reference": "2026 VT Hunting & Trapping Seasons date sheet (VT Fish & Wildlife Dept., publ. 7/8/2025)",
+   "scientific_name": "Urocyon cinereoargenteus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated on the 2026 VT date sheet.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-24",
+     "close_date": "2026-12-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "VT-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag limit stated on the date sheet."
+     },
+     "notes": ""
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-10-24",
+     "close_date": "2027-02-14",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "VT-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag limit stated on the date sheet."
+     },
+     "notes": ""
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Raccoon",
+   "iac_reference": "2026 VT Hunting & Trapping Seasons date sheet (VT Fish & Wildlife Dept., publ. 7/8/2025)",
+   "scientific_name": "Procyon lotor",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated on the 2026 VT date sheet.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-24",
+     "close_date": "2026-12-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "VT-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag limit stated on the date sheet."
+     },
+     "notes": ""
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-10-10",
+     "close_date": "2026-12-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "VT-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag limit stated on the date sheet."
+     },
+     "notes": ""
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Coyote",
+   "iac_reference": "2026 VT Hunting & Trapping Seasons date sheet (VT Fish & Wildlife Dept., publ. 7/8/2025)",
+   "scientific_name": "Canis latrans",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated on the 2026 VT date sheet.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-24",
+     "close_date": "2026-12-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "VT-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag limit stated on the date sheet."
+     },
+     "notes": ""
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "Coyote HUNTING dates are not on the date sheet ('Check website for updates') and are not modeled."
+  },
+  {
+   "common_name": "Virginia opossum",
+   "iac_reference": "2026 VT Hunting & Trapping Seasons date sheet (VT Fish & Wildlife Dept., publ. 7/8/2025)",
+   "scientific_name": "Didelphis virginiana",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated on the 2026 VT date sheet.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-24",
+     "close_date": "2026-12-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "VT-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag limit stated on the date sheet."
+     },
+     "notes": ""
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "VT-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag limit stated on the date sheet."
+     },
+     "notes": "Date sheet: 'Open Year Round' for hunting. Check VFWD for exceptions to these dates."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Weasel",
+   "iac_reference": "2026 VT Hunting & Trapping Seasons date sheet (VT Fish & Wildlife Dept., publ. 7/8/2025)",
+   "scientific_name": "Neogale frenata; Mustela erminea",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Regulations group weasels without distinguishing species; standard taxonomy, not stated on the sheet.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-24",
+     "close_date": "2026-12-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "VT-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag limit stated on the date sheet."
+     },
+     "notes": ""
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "VT-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag limit stated on the date sheet."
+     },
+     "notes": "Date sheet: 'Open Year Round' for hunting. Check VFWD for exceptions to these dates."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "River otter",
+   "iac_reference": "2026 VT Hunting & Trapping Seasons date sheet (VT Fish & Wildlife Dept., publ. 7/8/2025)",
+   "scientific_name": "Lontra canadensis",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated on the 2026 VT date sheet.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-24",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "VT-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag limit stated on the date sheet."
+     },
+     "notes": ""
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "Pelt tagging / harvest reporting requirements NOT verified (agency site fetch failed 2026-09-18)."
+  },
+  {
+   "common_name": "Muskrat",
+   "iac_reference": "2026 VT Hunting & Trapping Seasons date sheet (VT Fish & Wildlife Dept., publ. 7/8/2025)",
+   "scientific_name": "Ondatra zibethicus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated on the 2026 VT date sheet.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-24",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "VT-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag limit stated on the date sheet."
+     },
+     "notes": ""
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-03-20",
+     "close_date": "2026-04-19",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "VT-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag limit stated on the date sheet."
+     },
+     "notes": "2026 spring hunting segment from the date sheet; already past as of 2026-09-18."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "Pelt tagging / harvest reporting requirements NOT verified (agency site fetch failed 2026-09-18)."
+  },
+  {
+   "common_name": "Beaver",
+   "iac_reference": "2026 VT Hunting & Trapping Seasons date sheet (VT Fish & Wildlife Dept., publ. 7/8/2025)",
+   "scientific_name": "Castor canadensis",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated on the 2026 VT date sheet.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-24",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "VT-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag limit stated on the date sheet."
+     },
+     "notes": ""
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "Pelt tagging / harvest reporting requirements NOT verified (agency site fetch failed 2026-09-18)."
+  },
+  {
+   "common_name": "Fisher",
+   "iac_reference": "2026 VT Hunting & Trapping Seasons date sheet (VT Fish & Wildlife Dept., publ. 7/8/2025)",
+   "scientific_name": "Pekania pennanti",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated on the 2026 VT date sheet.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-12-01",
+     "close_date": "2026-12-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "VT-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag limit stated on the date sheet."
+     },
+     "notes": ""
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "No open HUNTING season for fisher. Tagging/reporting requirements NOT verified."
+  },
+  {
+   "common_name": "Bobcat",
+   "iac_reference": "2026 VT Hunting & Trapping Seasons date sheet (VT Fish & Wildlife Dept., publ. 7/8/2025)",
+   "scientific_name": "Lynx rufus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated on the 2026 VT date sheet.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-12-01",
+     "close_date": "2026-12-16",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "VT-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag limit stated on the date sheet."
+     },
+     "notes": ""
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-01-10",
+     "close_date": "2026-02-07",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "VT-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag limit stated on the date sheet."
+     },
+     "notes": "Year unstated on the date sheet; read as Jan-Feb 2026 (the sheet's calendar year). The Jan-Feb 2027 hunting segment is not published and is NOT inferred."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "Whether bobcat requires a separate permit/tag NOT verified (no draw assumed; none modeled)."
+  },
+  {
+   "common_name": "American marten",
+   "iac_reference": "2026 VT Hunting & Trapping Seasons date sheet (VT Fish & Wildlife Dept., publ. 7/8/2025)",
+   "scientific_name": "Martes americana",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated on the 2026 VT date sheet.",
+   "season_status": "closed",
+   "seasons": [],
+   "permit_requirements": [],
+   "notes": "No open season per the 2026 VT date sheet (listed under 'No Open Season')."
+  },
+  {
+   "common_name": "Canada lynx",
+   "iac_reference": "2026 VT Hunting & Trapping Seasons date sheet (VT Fish & Wildlife Dept., publ. 7/8/2025)",
+   "scientific_name": "Lynx canadensis",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated on the 2026 VT date sheet.",
+   "season_status": "closed",
+   "seasons": [],
+   "permit_requirements": [],
+   "notes": "No open season per the 2026 VT date sheet (listed under 'No Open Season')."
+  },
+  {
+   "common_name": "Gray wolf",
+   "iac_reference": "2026 VT Hunting & Trapping Seasons date sheet (VT Fish & Wildlife Dept., publ. 7/8/2025)",
+   "scientific_name": "Canis lupus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated on the 2026 VT date sheet.",
+   "season_status": "closed",
+   "seasons": [],
+   "permit_requirements": [],
+   "notes": "No open season per the 2026 VT date sheet (listed under 'No Open Season')."
+  }
+ ],
+ "verification": {
+  "regulation_year_confirmed": true,
+  "confirmation_notes": "2026 Vermont Hunting & Trapping Seasons date sheet (VFWD, published 7/8/2025). Trapping: mink/skunk/red & gray fox/raccoon/coyote/opossum/weasel Oct 24-Dec 31, 2026; otter/muskrat/beaver Oct 24, 2026-Mar 31, 2027; fisher Dec 1-31; bobcat Dec 1-16; marten/lynx/wolf no open season. Hunting: bobcat Jan 10-Feb 7 (year unstated, read as 2026); red & gray fox Oct 24, 2026-Feb 14, 2027; raccoon Oct 10-Dec 31; muskrat Mar 20-Apr 19; weasel/skunk/opossum open year-round; fisher/otter/beaver/mink no open hunting season; coyote hunting dates not given ('check website').",
+  "known_gaps": [
+   "provisional=true: the date sheet is dated 7/8/2025 and a newer 2027 sheet may exist; re-verify before launch.",
+   "Pelt tagging / harvest reporting requirements NOT verified (VFWD site fetch failed 2026-09-18).",
+   "Whether bobcat needs a separate permit/tag NOT verified; none modeled and no draw assumed.",
+   "Coyote HUNTING dates not on the sheet ('check website for updates'); not modeled.",
+   "License types/fees not extracted.",
+   "Bobcat hunting 'Jan 10-Feb 7' year is ambiguous on the sheet; read as 2026 per the sheet's calendar-year framing. The Jan-Feb 2027 segment is not inferred.",
+   "Scientific names are standard taxonomy, NOT stated on the sheet; all marked scientific_name_verified=false.",
+   "No administrative-code cross-check performed."
+  ]
+ },
+ "license_url": "https://www.vtfishandwildlife.com/licenses-and-lotteries/license-center",
+ "license_vendor": "Vermont Fish & Wildlife Department (own portal)",
+ "regs_url": "https://www.vtfishandwildlife.com/sites/fishandwildlife/files/documents/Seasons/2026-hunt-trap-dates.pdf.pdf",
+ "regs_kind": "pdf"
+,
+ "warden_directory": {
+  "label": "Report a violation",
+  "url": "http://vtfishandwildlife.com/newsroom/vermont%E2%80%99s-%E2%80%98operation-game-thief%E2%80%99-helps-catch-poachers",
+  "kind": "hotline",
+  "note": "Operation Game Thief: 1-800-752-5378 (1-800-75ALERT), toll-free 24/7/365; anonymous; rewards"
+ }
+}

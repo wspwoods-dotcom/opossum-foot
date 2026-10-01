@@ -1,0 +1,719 @@
+{
+ "disclaimer": "Reminder reference only — NOT legal authority. Season dates, zones, and limits are set annually and can change. Always verify current regulations with the Oregon Department of Fish and Wildlife before hunting or trapping.",
+ "license_summary": {
+  "furbearer_license": "An Oregon furbearer license is required to trap furbearers. Consult the ODFW booklet for license types, fees, and trap-check requirements.",
+  "method_note": "Consult the ODFW booklet for lawful trap types and restrictions — not modeled here beyond this warning."
+ },
+ "provisional": false,
+ "retrieved_at": "2026-09-18",
+ "schema_version": "1.1",
+ "season_year": "2026-27",
+ "sources": [
+  {
+   "id": "odfw-furbearer-booklet",
+   "notes": "2026–28 Oregon Furbearer Trapping and Hunting Regulations booklet (final); furbearer season tables. Archived locally in hidden_files/season-research/.",
+   "title": "2026–28 Oregon Furbearer Trapping and Hunting Regulations (ODFW booklet, final)",
+   "type": "agency_booklet",
+   "url": "https://myodfw.com/sites/default/files/2026-07/2026_Furbearer-Regs_Final_print.pdf"
+  },
+  {
+   "id": "odfw-rule-filing",
+   "notes": "Permanent rule filing adopting the 2026–28 furbearer season framework, effective July 1, 2026.",
+   "title": "ODFW permanent rule filing — Furbearer Changes (effective 7/1/2026)",
+   "type": "administrative_code",
+   "url": "https://www.dfw.state.or.us/OARS/perm/Permanent Filing_Furbearer Changes_7-1-26.pdf"
+  }
+ ],
+ "species": [
+  {
+   "common_name": "Badger",
+   "iac_reference": "2026–28 Oregon Furbearer Trapping and Hunting Regulations",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Taxidea taxus",
+   "scientific_name_note": "Standard taxonomy; not stated in ODFW furbearer regulations.",
+   "scientific_name_verified": false,
+   "season_status": "continuous",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Open all year per ODFW booklet.",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/Los_Angeles",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "OR-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Coyote",
+   "iac_reference": "2026–28 Oregon Furbearer Trapping and Hunting Regulations",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Canis latrans",
+   "scientific_name_note": "Standard taxonomy; not stated in ODFW furbearer regulations.",
+   "scientific_name_verified": false,
+   "season_status": "continuous",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Open all year per ODFW booklet.",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/Los_Angeles",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "OR-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Nutria",
+   "iac_reference": "2026–28 Oregon Furbearer Trapping and Hunting Regulations",
+   "notes": "Invasive species. Open all year.",
+   "permit_requirements": [],
+   "scientific_name": "Myocastor coypus",
+   "scientific_name_note": "Standard taxonomy; not stated in ODFW furbearer regulations.",
+   "scientific_name_verified": false,
+   "season_status": "continuous",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Open all year per ODFW booklet.",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/Los_Angeles",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "OR-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Opossum",
+   "iac_reference": "2026–28 Oregon Furbearer Trapping and Hunting Regulations",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Didelphis virginiana",
+   "scientific_name_note": "Standard taxonomy; not stated in ODFW furbearer regulations.",
+   "scientific_name_verified": false,
+   "season_status": "continuous",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Open all year per ODFW booklet.",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/Los_Angeles",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "OR-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Porcupine",
+   "iac_reference": "2026–28 Oregon Furbearer Trapping and Hunting Regulations",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Erethizon dorsatum",
+   "scientific_name_note": "Standard taxonomy; not stated in ODFW furbearer regulations.",
+   "scientific_name_verified": false,
+   "season_status": "continuous",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Open all year per ODFW booklet.",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/Los_Angeles",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "OR-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Spotted skunk",
+   "iac_reference": "2026–28 Oregon Furbearer Trapping and Hunting Regulations",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": null,
+   "scientific_name_note": "ODFW regulations list 'spotted skunk' without distinguishing species. Left null rather than guessing.",
+   "scientific_name_verified": false,
+   "season_status": "continuous",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Open all year per ODFW booklet.",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/Los_Angeles",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "OR-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Striped skunk",
+   "iac_reference": "2026–28 Oregon Furbearer Trapping and Hunting Regulations",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Mephitis mephitis",
+   "scientific_name_note": "Standard taxonomy; not stated in ODFW furbearer regulations.",
+   "scientific_name_verified": false,
+   "season_status": "continuous",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Open all year per ODFW booklet.",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/Los_Angeles",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "OR-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Weasel",
+   "iac_reference": "2026–28 Oregon Furbearer Trapping and Hunting Regulations",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": null,
+   "scientific_name_note": "ODFW regulations list 'weasel' without distinguishing species. Left null rather than guessing.",
+   "scientific_name_verified": false,
+   "season_status": "continuous",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Open all year per ODFW booklet.",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/Los_Angeles",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "OR-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Bobcat",
+   "iac_reference": "2026–28 Oregon Furbearer Trapping and Hunting Regulations",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Lynx rufus",
+   "scientific_name_note": "Standard taxonomy; not stated in ODFW furbearer regulations.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Western Oregon: no bag limit. Eastern Oregon (including Klamath and Hood River counties): season limit 5.",
+      "possession_limit": null,
+      "season_bag": 5
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Western vs. Eastern Oregon split. The Eastern Oregon season limit of 5 is modeled as the season_bag for the statewide entry; Western Oregon has no limit. Zones are modeled descriptively — the app cannot resolve the Western/Eastern boundary.",
+     "open_date": "2026-12-01",
+     "open_time": null,
+     "timezone": "America/Los_Angeles",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "OR-bobcat-western",
+       "zone_name": "Western Oregon (no bag limit)"
+      },
+      {
+       "area_type": "special_areas",
+       "zone_id": "OR-bobcat-eastern",
+       "zone_name": "Eastern Oregon, including Klamath and Hood River counties (season limit 5)"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Gray fox",
+   "iac_reference": "2026–28 Oregon Furbearer Trapping and Hunting Regulations",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Urocyon cinereoargenteus",
+   "scientific_name_note": "Standard taxonomy; not stated in ODFW furbearer regulations.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "",
+     "open_date": "2026-10-15",
+     "open_time": null,
+     "timezone": "America/Los_Angeles",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "OR-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Red fox",
+   "iac_reference": "2026–28 Oregon Furbearer Trapping and Hunting Regulations",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Vulpes vulpes",
+   "scientific_name_note": "Standard taxonomy; not stated in ODFW furbearer regulations.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Closed in the Sierra Nevada red fox protection area: within 15 miles of the Pacific Crest Trail from Washington south to Interstate 5. The app cannot resolve that boundary; users must check their set location.",
+     "open_date": "2026-10-15",
+     "open_time": null,
+     "timezone": "America/Los_Angeles",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "OR-redfox-open",
+       "zone_name": "Statewide except the Sierra Nevada red fox protection area (within 15 miles of the Pacific Crest Trail, Washington to I-5)"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Marten",
+   "iac_reference": "2026–28 Oregon Furbearer Trapping and Hunting Regulations",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Martes americana",
+   "scientific_name_note": "Standard taxonomy; not stated in ODFW furbearer regulations.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-01-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Open east of Interstate 5 only. The app cannot resolve the I-5 boundary precisely.",
+     "open_date": "2026-11-01",
+     "open_time": null,
+     "timezone": "America/Los_Angeles",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "OR-marten-open",
+       "zone_name": "East of Interstate 5"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Mink",
+   "iac_reference": "2026–28 Oregon Furbearer Trapping and Hunting Regulations",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Neogale vison",
+   "scientific_name_note": "Standard taxonomy (formerly Neovison vison); not stated in ODFW furbearer regulations.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "",
+     "open_date": "2026-11-15",
+     "open_time": null,
+     "timezone": "America/Los_Angeles",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "OR-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Muskrat",
+   "iac_reference": "2026–28 Oregon Furbearer Trapping and Hunting Regulations",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Ondatra zibethicus",
+   "scientific_name_note": "Standard taxonomy; not stated in ODFW furbearer regulations.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "",
+     "open_date": "2026-11-15",
+     "open_time": null,
+     "timezone": "America/Los_Angeles",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "OR-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Raccoon",
+   "iac_reference": "2026–28 Oregon Furbearer Trapping and Hunting Regulations",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Procyon lotor",
+   "scientific_name_note": "Standard taxonomy; not stated in ODFW furbearer regulations.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "",
+     "open_date": "2026-11-15",
+     "open_time": null,
+     "timezone": "America/Los_Angeles",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "OR-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "River otter",
+   "iac_reference": "2026–28 Oregon Furbearer Trapping and Hunting Regulations",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Lontra canadensis",
+   "scientific_name_note": "Standard taxonomy; not stated in ODFW furbearer regulations.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "",
+     "open_date": "2026-11-15",
+     "open_time": null,
+     "timezone": "America/Los_Angeles",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "OR-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Beaver",
+   "iac_reference": "2026–28 Oregon Furbearer Trapping and Hunting Regulations",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Castor canadensis",
+   "scientific_name_note": "Standard taxonomy; not stated in ODFW furbearer regulations.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Substantial beaver closures exist by county, watershed, and public land — see the ODFW booklet. The app cannot enumerate them; users must verify their set location against the booklet's closure list.",
+     "open_date": "2026-11-15",
+     "open_time": null,
+     "timezone": "America/Los_Angeles",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "OR-beaver-open",
+       "zone_name": "Open areas statewide (see ODFW booklet for county/watershed/public-land closures)"
+      }
+     ]
+    }
+   ],
+   "county_notes": "Closed in parts of Clackamas, Crook, Curry, Grant, Jefferson, Josephine, Union, Wallowa, Wheeler, and other counties per the 2026–2028 furbearer regulations — see the current regs for the listed waters. Trapping is also closed within city/municipal boundaries under special-area regulations."
+  },
+  {
+   "common_name": "Fisher",
+   "iac_reference": "2026–28 Oregon Furbearer Trapping and Hunting Regulations",
+   "notes": "Closed all year per ODFW booklet. Included so the app flags any logged take.",
+   "permit_requirements": [],
+   "scientific_name": "Pekania pennanti",
+   "scientific_name_note": "Standard taxonomy; not stated in ODFW furbearer regulations.",
+   "scientific_name_verified": false,
+   "season_status": "closed",
+   "seasons": []
+  },
+  {
+   "common_name": "Ringtail",
+   "iac_reference": "2026–28 Oregon Furbearer Trapping and Hunting Regulations",
+   "notes": "Closed all year per ODFW booklet. Included so the app flags any logged take.",
+   "permit_requirements": [],
+   "scientific_name": "Bassariscus astutus",
+   "scientific_name_note": "Standard taxonomy; not stated in ODFW furbearer regulations.",
+   "scientific_name_verified": false,
+   "season_status": "closed",
+   "seasons": []
+  },
+  {
+   "common_name": "Wolverine",
+   "iac_reference": "2026–28 Oregon Furbearer Trapping and Hunting Regulations",
+   "notes": "Closed all year per ODFW booklet. Included so the app flags any logged take.",
+   "permit_requirements": [],
+   "scientific_name": "Gulo gulo",
+   "scientific_name_note": "Standard taxonomy; not stated in ODFW furbearer regulations.",
+   "scientific_name_verified": false,
+   "season_status": "closed",
+   "seasons": []
+  },
+  {
+   "common_name": "Kit fox",
+   "iac_reference": "2026–28 Oregon Furbearer Trapping and Hunting Regulations",
+   "notes": "Closed all year per ODFW booklet. Included so the app flags any logged take.",
+   "permit_requirements": [],
+   "scientific_name": "Vulpes macrotis",
+   "scientific_name_note": "Standard taxonomy; not stated in ODFW furbearer regulations.",
+   "scientific_name_verified": false,
+   "season_status": "closed",
+   "seasons": []
+  },
+  {
+   "common_name": "Canada lynx",
+   "iac_reference": "2026–28 Oregon Furbearer Trapping and Hunting Regulations",
+   "notes": "Closed all year per ODFW booklet. Included so the app flags any logged take.",
+   "permit_requirements": [],
+   "scientific_name": "Lynx canadensis",
+   "scientific_name_note": "Standard taxonomy; not stated in ODFW furbearer regulations.",
+   "scientific_name_verified": false,
+   "season_status": "closed",
+   "seasons": []
+  },
+  {
+   "common_name": "Sea otter",
+   "iac_reference": "2026–28 Oregon Furbearer Trapping and Hunting Regulations",
+   "notes": "Closed all year per ODFW booklet (federally protected marine mammal). Included so the app flags any logged take.",
+   "permit_requirements": [],
+   "scientific_name": "Enhydra lutris",
+   "scientific_name_note": "Standard taxonomy; not stated in ODFW furbearer regulations.",
+   "scientific_name_verified": false,
+   "season_status": "closed",
+   "seasons": []
+  }
+ ],
+ "state": "OR",
+ "state_name": "Oregon",
+ "verification": {
+  "confirmation_notes": "2026–28 Oregon Furbearer Trapping and Hunting Regulations (final booklet) verified 2026-09-18; ODFW permanent rule filing effective 7/1/2026 adopts the same framework. All season dates, the bobcat Western/Eastern bag-limit split, marten east-of-I-5 restriction, Sierra Nevada red fox protection area, beaver closures, year-round open species, and year-round closed species read directly from the booklet.",
+  "known_gaps": [
+   "Scientific names are standard taxonomy, NOT stated in ODFW furbearer regulations — all flagged scientific_name_verified=false; weasel and spotted skunk are null because the regulations do not distinguish species.",
+   "Bobcat Western/Eastern Oregon zones, the marten I-5 boundary, the Sierra Nevada red fox protection area, and beaver county/watershed closures are modeled descriptively — the app cannot resolve exact boundaries.",
+   "Eastern Oregon is partly in the Mountain Time zone; all entries use America/Los_Angeles and the app should warn users in eastern Oregon accordingly.",
+   "No CITES/tagging specifics beyond what the booklet states are modeled."
+  ],
+  "regulation_year_confirmed": true
+ },
+ "license_url": "https://odfw.huntfishoregon.com/login",
+ "license_vendor": "ODFW electronic licensing system (Aspira)",
+ "regs_url": "https://myodfw.com/sites/default/files/2026-07/2026_Furbearer-Regs_Final_print.pdf",
+ "regs_kind": "pdf"
+,
+ "warden_directory": {
+  "label": "Report a violation",
+  "url": "https://www.oregon.gov/osp/programs/fw/Pages/tip.aspx",
+  "kind": "hotline",
+  "note": "Turn-in-Poachers (TIP): 1-800-452-7888; *OSP/*677 mobile; TIP@osp.oregon.gov; online form; anonymous"
+ }
+}

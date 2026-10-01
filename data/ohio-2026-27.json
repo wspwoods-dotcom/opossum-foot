@@ -1,0 +1,917 @@
+{
+ "disclaimer": "Reminder reference only — NOT legal authority. Season dates, zones, and limits are set annually and can change. Always verify current regulations with the Ohio Division of Wildlife before hunting or trapping.",
+ "license_summary": {
+  "general": "A valid Ohio hunting license is required to hunt furbearers; a fur taker permit is required to trap furbearing animals (residents and nonresidents). River otters are a CITES Appendix II species — Ohio requires mandatory tagging/registration of harvested otters (verify current tagging/check procedures with the Division of Wildlife; a proposed 2026 change to online otter check-in could not be confirmed as of 2026-09-18)."
+ },
+ "provisional": false,
+ "retrieved_at": "2026-09-18",
+ "schema_version": "1.1",
+ "season_year": "2026-27",
+ "sources": [
+  {
+   "id": "oh-seasons-2026-27",
+   "notes": "Official Ohio 2026-27 hunting and trapping season dates: furbearer seasons, river otter zones and bag limits, Lake Erie marsh extension, coyote/woodchuck no closed season.",
+   "title": "Ohio's 2026-27 Hunting and Trapping Season Dates (Ohio Division of Wildlife)",
+   "type": "agency_web",
+   "url": "https://dam.assets.ohio.gov/image/upload/ohiodnr.gov/documents/wildlife/news/2026-27_Hunting_Seasons.pdf"
+  },
+  {
+   "id": "oac-1501-31-15-18",
+   "notes": "Current rule (effective June 30, 2024 per codes.ohio.gov): open seasons for hunting/trapping raccoon, opossum, skunk, fox, weasel; trapping mink, muskrat, beaver, river otter; river otter zone A/B counties and 3-per-season limit (no more than 1 in Zone B); Lake Erie marsh extension counties; coyotes year-round.",
+   "title": "OAC Rule 1501:31-15-18 — Seasons for hunting and trapping furbearing animals",
+   "type": "administrative_code",
+   "url": "https://codes.ohio.gov/ohio-administrative-code/rule-1501:31-15-18"
+  },
+  {
+   "id": "oac-1501-31-15-17",
+   "notes": "Rule 1501:31-15-17(B) (via Register of Ohio filings): 'It shall be unlawful for any person to hunt or take a bobcat, bear, badger, fisher, porcupine or a snowshoe hare at any time.' Also Rule 1501:31-15-17(A): no open hunting season on wild animals unless expressly set forth. Ohio Bobcat Management Plan (ODNR): bobcat harvest is not currently permitted.",
+   "title": "OAC Rule 1501:31-15-17 — Hunting seasons for game birds and game quadrupeds (closed species clause)",
+   "type": "administrative_code",
+   "url": "https://www.registerofohio.state.oh.us/pdfs/1501/31/15/1501$31-15-17_PH_FF_A_RU_20130701_1554.pdf"
+  }
+ ],
+ "species": [
+  {
+   "common_name": "Red fox",
+   "iac_reference": "OAC 1501:31-15-18",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Vulpes vulpes",
+   "scientific_name_note": "Standard taxonomy; not stated in the Ohio sources used.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "None.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-01-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "",
+     "open_date": "2026-11-10",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "OH-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "None.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-01-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "",
+     "open_date": "2026-11-10",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "OH-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Gray fox",
+   "iac_reference": "OAC 1501:31-15-18",
+   "notes": "The 2026-27 sheet and the rule say 'Fox' (raccoon, opossum, skunk, fox, weasel); red and gray fox share the season.",
+   "permit_requirements": [],
+   "scientific_name": "Urocyon cinereoargenteus",
+   "scientific_name_note": "Standard taxonomy; not stated in the Ohio sources used.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "None.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-01-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "",
+     "open_date": "2026-11-10",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "OH-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "None.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-01-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "",
+     "open_date": "2026-11-10",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "OH-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Raccoon",
+   "iac_reference": "OAC 1501:31-15-18",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Procyon lotor",
+   "scientific_name_note": "Standard taxonomy; not stated in the Ohio sources used.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "None.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-01-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Statewide except the Lake Erie marsh extension counties (see extension season).",
+     "open_date": "2026-11-10",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "OH-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "None.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-01-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "",
+     "open_date": "2026-11-10",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "OH-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "None.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Extended trapping season in the Lake Erie marsh zone: Lucas County east of the Maumee River, Ottawa, Sandusky, and Erie counties. Applies to raccoon, beaver, and river otter.",
+     "open_date": "2026-11-10",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "OH-lake-erie-marsh",
+       "zone_name": "Lake Erie marsh zone (Lucas County east of the Maumee River, Ottawa, Sandusky, and Erie counties)"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Striped skunk",
+   "iac_reference": "OAC 1501:31-15-18",
+   "notes": "The rule says 'skunk'; modeled as striped skunk.",
+   "permit_requirements": [],
+   "scientific_name": "Mephitis mephitis",
+   "scientific_name_note": "Standard taxonomy; not stated in the Ohio sources used.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "None.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-01-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Statewide except the Lake Erie marsh extension counties (see extension season).",
+     "open_date": "2026-11-10",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "OH-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "None.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Extended trapping season in the Lake Erie marsh zone: Lucas County east of the Maumee River, Ottawa, Sandusky, and Erie counties. Applies to mink, muskrat, skunk, opossum, and weasel.",
+     "open_date": "2026-11-10",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "OH-lake-erie-marsh",
+       "zone_name": "Lake Erie marsh zone (Lucas County east of the Maumee River, Ottawa, Sandusky, and Erie counties)"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "None.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-01-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "",
+     "open_date": "2026-11-10",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "OH-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Opossum",
+   "iac_reference": "OAC 1501:31-15-18",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Didelphis virginiana",
+   "scientific_name_note": "Standard taxonomy; not stated in the Ohio sources used.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "None.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-01-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Statewide except the Lake Erie marsh extension counties (see extension season).",
+     "open_date": "2026-11-10",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "OH-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "None.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Extended trapping season in the Lake Erie marsh zone: Lucas County east of the Maumee River, Ottawa, Sandusky, and Erie counties. Applies to mink, muskrat, skunk, opossum, and weasel.",
+     "open_date": "2026-11-10",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "OH-lake-erie-marsh",
+       "zone_name": "Lake Erie marsh zone (Lucas County east of the Maumee River, Ottawa, Sandusky, and Erie counties)"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "None.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-01-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "",
+     "open_date": "2026-11-10",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "OH-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Weasel",
+   "iac_reference": "OAC 1501:31-15-18",
+   "notes": "The rule says 'weasel' without specifying species; modeled as Weasel with no scientific name.",
+   "permit_requirements": [],
+   "scientific_name": null,
+   "scientific_name_note": "The rule does not specify which weasel species; no scientific name modeled.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "None.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-01-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Statewide except the Lake Erie marsh extension counties (see extension season).",
+     "open_date": "2026-11-10",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "OH-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "None.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Extended trapping season in the Lake Erie marsh zone: Lucas County east of the Maumee River, Ottawa, Sandusky, and Erie counties. Applies to mink, muskrat, skunk, opossum, and weasel.",
+     "open_date": "2026-11-10",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "OH-lake-erie-marsh",
+       "zone_name": "Lake Erie marsh zone (Lucas County east of the Maumee River, Ottawa, Sandusky, and Erie counties)"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "None.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-01-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "",
+     "open_date": "2026-11-10",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "OH-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Mink",
+   "iac_reference": "OAC 1501:31-15-18",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Neogale vison",
+   "scientific_name_note": "Standard taxonomy; not stated in the Ohio sources used.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "None.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Statewide except the Lake Erie marsh extension counties (see extension season).",
+     "open_date": "2026-11-10",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "OH-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "None.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Extended trapping season in the Lake Erie marsh zone: Lucas County east of the Maumee River, Ottawa, Sandusky, and Erie counties.",
+     "open_date": "2026-11-10",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "OH-lake-erie-marsh",
+       "zone_name": "Lake Erie marsh zone (Lucas County east of the Maumee River, Ottawa, Sandusky, and Erie counties)"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Muskrat",
+   "iac_reference": "OAC 1501:31-15-18",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Ondatra zibethicus",
+   "scientific_name_note": "Standard taxonomy; not stated in the Ohio sources used.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "None.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Statewide except the Lake Erie marsh extension counties (see extension season).",
+     "open_date": "2026-11-10",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "OH-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "None.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Extended trapping season in the Lake Erie marsh zone: Lucas County east of the Maumee River, Ottawa, Sandusky, and Erie counties.",
+     "open_date": "2026-11-10",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "OH-lake-erie-marsh",
+       "zone_name": "Lake Erie marsh zone (Lucas County east of the Maumee River, Ottawa, Sandusky, and Erie counties)"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Beaver",
+   "iac_reference": "OAC 1501:31-15-18",
+   "notes": "Beaver is trapping only (no hunting season).",
+   "permit_requirements": [],
+   "scientific_name": "Castor canadensis",
+   "scientific_name_note": "Standard taxonomy; not stated in the Ohio sources used.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "None.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Statewide except the Lake Erie marsh extension counties (see extension season).",
+     "open_date": "2026-12-26",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "OH-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "None.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Extended trapping season in the Lake Erie marsh zone: Lucas County east of the Maumee River, Ottawa, Sandusky, and Erie counties. Applies to raccoon, beaver, and river otter.",
+     "open_date": "2026-12-26",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "OH-lake-erie-marsh",
+       "zone_name": "Lake Erie marsh zone (Lucas County east of the Maumee River, Ottawa, Sandusky, and Erie counties)"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "River otter",
+   "iac_reference": "OAC 1501:31-15-18",
+   "notes": "River otter is trapping only (no hunting season). River otters are a CITES Appendix II species — Ohio requires mandatory tagging/registration; verify current check-in procedures with the Division of Wildlife.",
+   "permit_requirements": [
+    "It is unlawful to take or trap more than 3 river otters per season, of which no more than 1 may be taken in Zone B (combined season limit of 3).",
+    "River otters must be tagged/registered per Division of Wildlife requirements (CITES). Verify current check-in procedures before the season."
+   ],
+   "scientific_name": "Lontra canadensis",
+   "scientific_name_note": "Standard taxonomy; not stated in the Ohio sources used.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "3 per season in Zone A; combined season limit of 3 (no more than 1 from Zone B).",
+      "possession_limit": null,
+      "season_bag": 3
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Zone A counties: Ashtabula, Belmont, Carroll, Columbiana, Coshocton, Geauga, Guernsey, Harrison, Holmes, Jefferson, Lake, Mahoning, Monroe, Morgan, Muskingum, Noble, Portage, Stark, Trumbull, Tuscarawas, Washington, and Wayne.",
+     "open_date": "2026-12-26",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "OH-otter-za",
+       "zone_name": "River Otter Zone A (Ashtabula, Belmont, Carroll, Columbiana, Coshocton, Geauga, Guernsey, Harrison, Holmes, Jefferson, Lake, Mahoning, Monroe, Morgan, Muskingum, Noble, Portage, Stark, Trumbull, Tuscarawas, Washington, Wayne counties)"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "1 per season in Zone B; combined season limit of 3 (no more than 1 from Zone B).",
+      "possession_limit": null,
+      "season_bag": 1
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Zone B except the Lake Erie marsh extension counties (see extension season). Zone B is the remainder of the state.",
+     "open_date": "2026-12-26",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "OH-otter-zb",
+       "zone_name": "River Otter Zone B (remainder of state)"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "1 per season in Zone B; combined season limit of 3 (no more than 1 from Zone B).",
+      "possession_limit": null,
+      "season_bag": 1
+     },
+     "close_date": "2027-03-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Extended trapping season in the Lake Erie marsh zone: Lucas County east of the Maumee River, Ottawa, Sandusky, and Erie counties. Applies to raccoon, beaver, and river otter.",
+     "open_date": "2026-12-26",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "OH-lake-erie-marsh",
+       "zone_name": "Lake Erie marsh zone (Lucas County east of the Maumee River, Ottawa, Sandusky, and Erie counties)"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Coyote",
+   "iac_reference": "OAC 1501:31-15-18",
+   "notes": "Coyotes may be hunted and trapped year-round unless otherwise provided by division rule.",
+   "permit_requirements": [],
+   "scientific_name": "Canis latrans",
+   "scientific_name_note": "Standard taxonomy; not stated in the Ohio sources used.",
+   "scientific_name_verified": false,
+   "season_status": "continuous",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "None.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "No closed season.",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "OH-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "None.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "No closed season.",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "OH-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Woodchuck",
+   "iac_reference": "OH 2026-27 season sheet",
+   "notes": "The official 2026-27 season sheet lists 'Woodchuck — No closed season — None'. The rule 1501:31-15-18 furbearer list does not include woodchuck.",
+   "permit_requirements": [],
+   "scientific_name": "Marmota monax",
+   "scientific_name_note": "Standard taxonomy; not stated in the Ohio sources used.",
+   "scientific_name_verified": false,
+   "season_status": "continuous",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "None.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "No closed season.",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "OH-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Bobcat",
+   "iac_reference": "OAC 1501:31-15-17(B)",
+   "notes": "'It shall be unlawful for any person to hunt or take a bobcat, bear, badger, fisher, porcupine or a snowshoe hare at any time.' Per ODNR's Ohio Bobcat Management Plan, bobcat harvest is not currently permitted; conflict removal only by Division of Wildlife chief permit. Included so the app flags any logged take as out of season.",
+   "permit_requirements": [],
+   "scientific_name": "Lynx rufus",
+   "scientific_name_note": "Standard taxonomy; not stated in the Ohio sources used.",
+   "scientific_name_verified": false,
+   "season_status": "closed",
+   "seasons": []
+  },
+  {
+   "common_name": "Black bear",
+   "iac_reference": "OAC 1501:31-15-17(B)",
+   "notes": "'It shall be unlawful for any person to hunt or take a bobcat, bear, badger, fisher, porcupine or a snowshoe hare at any time.' Included so the app flags any logged take as out of season.",
+   "permit_requirements": [],
+   "scientific_name": "Ursus americanus",
+   "scientific_name_note": "Standard taxonomy; not stated in the Ohio sources used.",
+   "scientific_name_verified": false,
+   "season_status": "closed",
+   "seasons": []
+  },
+  {
+   "common_name": "Badger",
+   "iac_reference": "OAC 1501:31-15-17(B)",
+   "notes": "'It shall be unlawful for any person to hunt or take a bobcat, bear, badger, fisher, porcupine or a snowshoe hare at any time.' Included so the app flags any logged take as out of season.",
+   "permit_requirements": [],
+   "scientific_name": "Taxidea taxus",
+   "scientific_name_note": "Standard taxonomy; not stated in the Ohio sources used.",
+   "scientific_name_verified": false,
+   "season_status": "closed",
+   "seasons": []
+  },
+  {
+   "common_name": "Fisher",
+   "iac_reference": "OAC 1501:31-15-17(B)",
+   "notes": "'It shall be unlawful for any person to hunt or take a bobcat, bear, badger, fisher, porcupine or a snowshoe hare at any time.' Included so the app flags any logged take as out of season.",
+   "permit_requirements": [],
+   "scientific_name": "Pekania pennanti",
+   "scientific_name_note": "Standard taxonomy; not stated in the Ohio sources used.",
+   "scientific_name_verified": false,
+   "season_status": "closed",
+   "seasons": []
+  },
+  {
+   "common_name": "Porcupine",
+   "iac_reference": "OAC 1501:31-15-17(B)",
+   "notes": "'It shall be unlawful for any person to hunt or take a bobcat, bear, badger, fisher, porcupine or a snowshoe hare at any time.' Included so the app flags any logged take as out of season.",
+   "permit_requirements": [],
+   "scientific_name": "Erethizon dorsatum",
+   "scientific_name_note": "Standard taxonomy; not stated in the Ohio sources used.",
+   "scientific_name_verified": false,
+   "season_status": "closed",
+   "seasons": []
+  },
+  {
+   "common_name": "Snowshoe hare",
+   "iac_reference": "OAC 1501:31-15-17(B)",
+   "notes": "'It shall be unlawful for any person to hunt or take a bobcat, bear, badger, fisher, porcupine or a snowshoe hare at any time.' Included so the app flags any logged take as out of season.",
+   "permit_requirements": [],
+   "scientific_name": "Lepus americanus",
+   "scientific_name_note": "Standard taxonomy; not stated in the Ohio sources used.",
+   "scientific_name_verified": false,
+   "season_status": "closed",
+   "seasons": []
+  }
+ ],
+ "state": "OH",
+ "state_name": "Ohio",
+ "verification": {
+  "confirmation_notes": "Data taken from the official Ohio 2026-27 Hunting and Trapping Season Dates sheet (ODNR, dam.assets.ohio.gov) and OAC Rule 1501:31-15-18 (current; effective June 30, 2024 per codes.ohio.gov) for exact season language, river otter Zone A/B county lists, the 3-per-season otter limit (no more than 1 in Zone B), the Lake Erie marsh extension counties (Lucas east of the Maumee River, Ottawa, Sandusky, Erie), and coyote year-round status. Closed species (bobcat, bear, badger, fisher, porcupine, snowshoe hare) from OAC Rule 1501:31-15-17(B).",
+  "known_gaps": [
+   "Scientific names are standard taxonomy, NOT stated in the Ohio sources used.",
+   "A 2026 proposed rule change regarding online otter check-in/CITES procedures could not be confirmed — the ODNR proposed-rules page failed to load on 2026-09-18. Verify current otter registration/check requirements with the Division of Wildlife before the Dec 26 season.",
+   "'Fox' in the rule covers red and gray fox (modeled as separate species records sharing the same season); 'skunk' modeled as striped skunk; 'weasel' is unspecified in the rule.",
+   "Woodchuck continuous season comes from the 2026-27 season sheet only; woodchuck is not in Rule 1501:31-15-18's furbearer list.",
+   "No daily bag or possession limits apply to any Ohio furbearer (sheet limit column: 'None').",
+   "Nuisance/depredation rules are not modeled."
+  ],
+  "regulation_year_confirmed": true
+ },
+ "license_url": "https://oh-web.s3licensing.com",
+ "license_vendor": "S3 Licensing (Kalkomey)",
+ "regs_url": "http://dam.assets.ohio.gov/image/upload/ohiodnr.gov/documents/wildlife/laws-regs-licenses/Ohio%20Hunting%20and%20Trapping%20Regulations%20ENGLISH.pdf",
+ "regs_kind": "pdf"
+,
+ "warden_directory": {
+  "label": "Report a violation",
+  "url": "https://ohiodnr.gov/rules-and-regulations/rules-for-landowners/turn-in-a-poacher",
+  "kind": "hotline",
+  "note": "Turn in a Poacher: 1-800-POACHER (1-800-762-2437), answered 24/7 by ODNR Communications Center; text photos to same number"
+ }
+}

@@ -1,0 +1,851 @@
+{
+ "disclaimer": "Reminder reference only — NOT legal authority. Season dates, zones, and limits are set annually and can change. Always verify current regulations with the Nebraska Game & Parks Commission before hunting or trapping. Some areas are closed by federal, state, or municipal law.",
+ "license_summary": {
+  "general": "Residents 16+ need a fur harvest permit and habitat stamp to hunt or trap furbearers; no permit is needed for residents to harvest coyotes. Nonresidents need a nonresident small game permit to pursue coyotes, and a nonresident fur harvest permit and habitat stamp to harvest furbearers. All bobcats harvested must be registered and tagged by Game and Parks within two calendar days of the close of the season and before the pelt is sold; gray foxes have the same requirement. Harvested river otters must be officially tagged by Game and Parks within two business days after the close of the season, with the permittee furnishing the date and location of harvest. Any incidental otter take outside the season or beyond limits is unlawful unless the animal is immediately released if viable, or the harvester reports the take within 24 hours and turns the carcass over to Game and Parks.",
+  "hours": "Hours open each day: all hours, except the season opens at 12:01 a.m. on opening day (Commission Order C05.02B)."
+ },
+ "provisional": false,
+ "retrieved_at": "2026-09-18",
+ "schema_version": "1.1",
+ "season_year": "2026-27",
+ "sources": [
+  {
+   "id": "order-c05",
+   "notes": "Nebraska Game and Parks Commission Order C05 (Game Birds, Furbearers, Cottontail Rabbit and Squirrels), last approved June 12, 2026 — covers the 2026-27 season. C05.02A-H: furbearer area, hours, bag limits, and season dates; C05.02E: one river otter per season per permit holder.",
+   "title": "Nebraska Game and Parks Commission Order C05 (Furbearers), last approved June 12, 2026",
+   "type": "administrative_code",
+   "url": "https://outdoornebraska.gov/wp-content/uploads/2026/07/CO5-FINAL-Game-Birds.pdf"
+  },
+  {
+   "id": "ne-furbearer-page",
+   "notes": "NGPC furbearer page: list of furbearers with harvest seasons; bobcat/gray fox/otter registration and tagging rules; coyote and woodchuck as unprotected nongame; 'no bag limits other than a limit of one river otter per season'; reference to the Small Game & Waterfowl Guide for season dates.",
+   "title": "Furbearers | Nebraska Game & Parks Commission",
+   "type": "agency_web",
+   "url": "https://outdoornebraska.gov/hunt/game/furbearers/"
+  }
+ ],
+ "species": [
+  {
+   "common_name": "Badger",
+   "iac_reference": "Commission Order C05.02F1",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Taxidea taxus",
+   "scientific_name_note": "Standard taxonomy; not stated in the Nebraska sources used.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit (C05.02C).",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Hours open each day: all hours; opens 12:01 a.m. on opening day.",
+     "open_date": "2026-11-01",
+     "open_time": "00:01",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "NE-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit (C05.02C).",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Hours open each day: all hours; opens 12:01 a.m. on opening day.",
+     "open_date": "2026-11-01",
+     "open_time": "00:01",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "NE-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Mink",
+   "iac_reference": "Commission Order C05.02F1",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Neogale vison",
+   "scientific_name_note": "Standard taxonomy; not stated in the Nebraska sources used.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit (C05.02C).",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Hours open each day: all hours; opens 12:01 a.m. on opening day.",
+     "open_date": "2026-11-01",
+     "open_time": "00:01",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "NE-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit (C05.02C).",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Hours open each day: all hours; opens 12:01 a.m. on opening day.",
+     "open_date": "2026-11-01",
+     "open_time": "00:01",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "NE-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Virginia opossum",
+   "iac_reference": "Commission Order C05.02F4 / C05.02F4a",
+   "notes": "Running (hound chase, no harvest) season is also provided for raccoon and Virginia opossum: March 1 to two weeks prior to the opening of the raccoon/opossum hunting season (C05.02H1). Running is not harvest and is not modeled as an open season.",
+   "permit_requirements": [],
+   "scientific_name": "Didelphis virginiana",
+   "scientific_name_note": "Standard taxonomy; not stated in the Nebraska sources used.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit (C05.02C).",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Hours open each day: all hours; opens 12:01 a.m. on opening day.",
+     "open_date": "2026-11-01",
+     "open_time": "00:01",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "NE-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit (C05.02C).",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Hours open each day: all hours; opens 12:01 a.m. on opening day.",
+     "open_date": "2026-11-01",
+     "open_time": "00:01",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "NE-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit (C05.02C).",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2026-10-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Early hunt-only season (C05.02F4a); no trapping in this early segment.",
+     "open_date": "2026-09-01",
+     "open_time": "00:01",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "NE-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Raccoon",
+   "iac_reference": "Commission Order C05.02F4 / C05.02F4a",
+   "notes": "Running (hound chase, no harvest) season is also provided for raccoon and Virginia opossum: March 1 to two weeks prior to the opening of the raccoon/opossum hunting season (C05.02H1). Running is not harvest and is not modeled as an open season.",
+   "permit_requirements": [],
+   "scientific_name": "Procyon lotor",
+   "scientific_name_note": "Standard taxonomy; not stated in the Nebraska sources used.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit (C05.02C).",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Hours open each day: all hours; opens 12:01 a.m. on opening day.",
+     "open_date": "2026-11-01",
+     "open_time": "00:01",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "NE-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit (C05.02C).",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Hours open each day: all hours; opens 12:01 a.m. on opening day.",
+     "open_date": "2026-11-01",
+     "open_time": "00:01",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "NE-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit (C05.02C).",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2026-10-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Early hunt-only season (C05.02F4a); no trapping in this early segment.",
+     "open_date": "2026-09-01",
+     "open_time": "00:01",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "NE-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Red fox",
+   "iac_reference": "Commission Order C05.02F1 / C05.02H3",
+   "notes": "Running (hound chase, no harvest) season is also provided for red fox: March 1 to the opening of the red fox taking season (C05.02H3). Running is not harvest and is not modeled as an open season.",
+   "permit_requirements": [],
+   "scientific_name": "Vulpes vulpes",
+   "scientific_name_note": "Standard taxonomy; not stated in the Nebraska sources used.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit (C05.02C).",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Hours open each day: all hours; opens 12:01 a.m. on opening day.",
+     "open_date": "2026-11-01",
+     "open_time": "00:01",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "NE-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit (C05.02C).",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Hours open each day: all hours; opens 12:01 a.m. on opening day.",
+     "open_date": "2026-11-01",
+     "open_time": "00:01",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "NE-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Gray fox",
+   "iac_reference": "Commission Order C05.02F1",
+   "notes": "",
+   "permit_requirements": [
+    "All gray foxes harvested in Nebraska must be registered and tagged by Game and Parks within two calendar days of the close of the season and before the pelt is sold."
+   ],
+   "scientific_name": "Urocyon cinereoargenteus",
+   "scientific_name_note": "Standard taxonomy; not stated in the Nebraska sources used.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit (C05.02C).",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Hours open each day: all hours; opens 12:01 a.m. on opening day.",
+     "open_date": "2026-11-01",
+     "open_time": "00:01",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "NE-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit (C05.02C).",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Hours open each day: all hours; opens 12:01 a.m. on opening day.",
+     "open_date": "2026-11-01",
+     "open_time": "00:01",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "NE-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Long-tailed weasel",
+   "iac_reference": "Commission Order C05.02F1",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Neogale frenata",
+   "scientific_name_note": "Standard taxonomy; not stated in the Nebraska sources used.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit (C05.02C).",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Hours open each day: all hours; opens 12:01 a.m. on opening day.",
+     "open_date": "2026-11-01",
+     "open_time": "00:01",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "NE-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit (C05.02C).",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Hours open each day: all hours; opens 12:01 a.m. on opening day.",
+     "open_date": "2026-11-01",
+     "open_time": "00:01",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "NE-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Bobcat",
+   "iac_reference": "Commission Order C05.02F2 / C05.02H2",
+   "notes": "Running (hound chase, no harvest) season is also provided for bobcat: March 1 to the opening of the bobcat taking season (C05.02H2). Running is not harvest and is not modeled as an open season.",
+   "permit_requirements": [
+    "All bobcats harvested in Nebraska must be registered and tagged by Game and Parks within two calendar days of the close of the season and before the pelt is sold."
+   ],
+   "scientific_name": "Lynx rufus",
+   "scientific_name_note": "Standard taxonomy; not stated in the Nebraska sources used.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit (C05.02C).",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Hours open each day: all hours; opens 12:01 a.m. on opening day.",
+     "open_date": "2026-12-01",
+     "open_time": "00:01",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "NE-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit (C05.02C).",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Hours open each day: all hours; opens 12:01 a.m. on opening day.",
+     "open_date": "2026-12-01",
+     "open_time": "00:01",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "NE-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Striped skunk",
+   "iac_reference": "Commission Order C05.02F3",
+   "notes": "Open year-round for both hunting and trapping.",
+   "permit_requirements": [],
+   "scientific_name": "Mephitis mephitis",
+   "scientific_name_note": "Standard taxonomy; not stated in the Nebraska sources used.",
+   "scientific_name_verified": false,
+   "season_status": "continuous",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit (C05.02C).",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Year-round per C05.02F3.",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "NE-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit (C05.02C).",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Year-round per C05.02F3.",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "NE-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Beaver",
+   "iac_reference": "Commission Order C05.02G1",
+   "notes": "Beaver and muskrat may be trapped only — there is no hunting season for these species (NGPC furbearer page). Beaver and muskrat damage permits allow control outside the harvest season.",
+   "permit_requirements": [],
+   "scientific_name": "Castor canadensis",
+   "scientific_name_note": "Standard taxonomy; not stated in the Nebraska sources used.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit (C05.02C).",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Trapping only. Hours open each day: all hours; opens 12:01 a.m. on opening day.",
+     "open_date": "2026-11-01",
+     "open_time": "00:01",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "NE-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Muskrat",
+   "iac_reference": "Commission Order C05.02G1",
+   "notes": "Beaver and muskrat may be trapped only — there is no hunting season for these species (NGPC furbearer page).",
+   "permit_requirements": [],
+   "scientific_name": "Ondatra zibethicus",
+   "scientific_name_note": "Standard taxonomy; not stated in the Nebraska sources used.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit (C05.02C).",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Trapping only. Hours open each day: all hours; opens 12:01 a.m. on opening day.",
+     "open_date": "2026-11-01",
+     "open_time": "00:01",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "NE-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "River otter",
+   "iac_reference": "Commission Order C05.02E / C05.02G2",
+   "notes": "Nebraska's otter harvest follows the NGPC River Otter Management Plan.",
+   "permit_requirements": [
+    "Only one (1) river otter may be harvested per season, per valid permit holder (C05.02E).",
+    "Harvested otters must be officially tagged by Game and Parks within two business days after the close of the season, with the permittee furnishing the date and location of harvest before attaching the harvest seal.",
+    "Any incidental take outside the harvest season, or beyond daily/season bag limits, is unlawful unless the animal is immediately released if viable, or the harvester reports the take within 24 hours and turns the carcass over to Game and Parks."
+   ],
+   "scientific_name": "Lontra canadensis",
+   "scientific_name_note": "Standard taxonomy; not stated in the Nebraska sources used.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "One per season per valid permit holder (C05.02E).",
+      "possession_limit": null,
+      "season_bag": 1
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Trapping only. Harvest allowed statewide. Hours open each day: all hours; opens 12:01 a.m. on opening day.",
+     "open_date": "2026-11-01",
+     "open_time": "00:01",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "NE-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Coyote",
+   "iac_reference": "NGPC furbearer page",
+   "notes": "Coyotes are unprotected nongame animals in Nebraska — not protected as furbearers. No permit is needed for residents to harvest coyotes. Electronic predator calls and thermal scopes are allowed when hunting coyotes.",
+   "permit_requirements": [],
+   "scientific_name": "Canis latrans",
+   "scientific_name_note": "Canis latrans is explicitly given on the NGPC furbearer page for the urban-coyote discussion.",
+   "scientific_name_verified": true,
+   "season_status": "continuous",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit (C05.02C).",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Unprotected nongame; harvested year-round.",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "NE-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit (C05.02C).",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Unprotected nongame; harvested year-round.",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "NE-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Woodchuck (groundhog)",
+   "iac_reference": "NGPC furbearer page",
+   "notes": "Woodchucks are unprotected nongame animals in Nebraska — not protected as furbearers; commonly harvested.",
+   "permit_requirements": [],
+   "scientific_name": "Marmota monax",
+   "scientific_name_note": "Standard taxonomy; not stated in the Nebraska sources used.",
+   "scientific_name_verified": false,
+   "season_status": "continuous",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit (C05.02C).",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Unprotected nongame; harvested year-round.",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "NE-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit (C05.02C).",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Unprotected nongame; harvested year-round.",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "NE-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "state": "NE",
+ "state_name": "Nebraska",
+ "verification": {
+  "confirmation_notes": "Data taken from Nebraska Game and Parks Commission Order C05 (Furbearers), last approved June 12, 2026 — the current 2026-27 order, retrieved 2026-09-18 — plus the official NGPC Furbearers page (registration/tagging rules for bobcat, gray fox, and river otter; nongame status of coyote and woodchuck; 'no bag limits other than a limit of one river otter per season'). Opening time 12:01 a.m. on opening day; all other hours open. The NGPC scientific name Canis latrans for coyote is stated on the furbearer page.",
+  "known_gaps": [
+   "Scientific names other than coyote are standard taxonomy, NOT stated in the Nebraska sources used.",
+   "No protected/closed furbearer list appears in Order C05 or the NGPC furbearer page, so no 'closed' species records were modeled for Nebraska. Species without a harvest season (e.g., swift fox, fisher, marten) are simply not listed as harvestable furbearers.",
+   "'Last day of February' (2027 is not a leap year) was rendered as 2027-02-28; 'November 1 through March 31' for beaver/muskrat rendered as 2026-11-01 to 2027-03-31.",
+   "Nuisance/depredation rules are not modeled; beaver/muskrat damage permits noted in passing.",
+   "Nebraska panhandle (Mountain Time) caveat: Nebraska spans two time zones; the order gives clock times without a zone.",
+   "Running (hound chase) seasons for raccoon, opossum, bobcat, and red fox are non-harvest and were not modeled as seasons."
+  ],
+  "regulation_year_confirmed": true
+ },
+ "license_url": "https://www.gooutdoorsne.com/",
+ "license_vendor": "Go Outdoors NE",
+ "regs_url": "https://digital.outdoornebraska.gov/i/1545976-2026-27-small-game-and-waterfowl-guide/23",
+ "regs_kind": "page"
+,
+ "warden_directory": {
+  "label": "Report a violation",
+  "url": "https://outdoornebraska.gov/conservation/wildlife-management/wildlife-crime-stoppers/",
+  "kind": "hotline",
+  "note": "Wildlife Crimestoppers: 1-800-742-7627, staffed 24/7/365; online form routes to county conservation officer"
+ }
+}

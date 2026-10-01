@@ -1,0 +1,450 @@
+{
+ "disclaimer": "Reminder reference only \u2014 NOT legal authority. Season dates, zones, and limits are set annually and can change. Always verify current regulations with the Arizona Game and Fish Department before trapping.",
+ "license_summary": {
+  "method_warning": "Under A.R.S. section 17-301(D), leghold traps, instant-kill body-gripping traps, poison, and snares are prohibited on public land, subject to statutory exceptions (e.g., licensed private-land trapping with landowner permission). Check the official trapping regulations for the current exceptions.",
+  "trapping_license": "An Arizona trapping license is required to trap furbearers. Consult the AZGFD trapping regulations for license types, fees, trap registration, and check requirements."
+ },
+ "provisional": false,
+ "retrieved_at": "2026-09-18",
+ "schema_version": "1.1",
+ "season_year": "2026-27",
+ "sources": [
+  {
+   "id": "azgfd-trapping-regulations-2026-27",
+   "notes": "Commission Order 23 establishes the 2026\u201327 trapping seasons (November 1, 2026 \u2013 February 28, 2027), open/excluded areas, and the bobcat tagging, jaw, and CITES-sealing requirements. Archived locally in hidden_files/season-research/.",
+   "title": "2026\u201327 Arizona Trapping Regulations (AZGFD, Commission Order 23)",
+   "type": "agency_booklet",
+   "url": "https://azgfd-live-portal-wordpress-pantheon.s3.us-west-2.amazonaws.com/wp-content/uploads/2026/05/20145352/2026-27-Trapping-Regulations.pdf"
+  },
+  {
+   "id": "azgfd-regulations-page",
+   "notes": "Current trapping regulations landing page; confirms the 2026\u201327 proclamation is the current year.",
+   "title": "AZGFD \u2014 Hunting Regulations (trapping regulations page)",
+   "type": "agency_webpage",
+   "url": "https://www.azgfd.com/hunting/regulations/"
+  }
+ ],
+ "species": [
+  {
+   "common_name": "Coyote",
+   "iac_reference": "2026\u201327 Arizona Trapping Regulations, Commission Order 23",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Canis latrans",
+   "scientific_name_note": "Standard taxonomy; not stated in Commission Order 23.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Open statewide including the Walnut Canyon Enclosure in Unit 22. Excludes all National Wildlife Refuges, Mohave County Park Lands, and Units 11M, 25M, 26M, and 38M.",
+     "open_date": "2026-11-01",
+     "open_time": null,
+     "timezone": "America/Phoenix",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "AZ-order23-area",
+       "zone_name": "Statewide including the Walnut Canyon Enclosure in Unit 22; excludes NWRs, Mohave County Park Lands, and Units 11M, 25M, 26M, 38M"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Bobcat",
+   "iac_reference": "2026\u201327 Arizona Trapping Regulations, Commission Order 23",
+   "notes": "",
+   "permit_requirements": [
+    "Bobcat transportation tag required.",
+    "Lower jaw submission required.",
+    "CITES sealing by April 1 (see the regulations for the sealing deadline year and locations)."
+   ],
+   "scientific_name": "Lynx rufus",
+   "scientific_name_note": "Standard taxonomy; not stated in Commission Order 23.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Open statewide including the Walnut Canyon Enclosure in Unit 22. Excludes all National Wildlife Refuges, Mohave County Park Lands, and Units 11M, 25M, 26M, and 38M. Bobcat requires a transportation tag, lower-jaw submission, and CITES sealing by April 1.",
+     "open_date": "2026-11-01",
+     "open_time": null,
+     "timezone": "America/Phoenix",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "AZ-order23-area",
+       "zone_name": "Statewide including the Walnut Canyon Enclosure in Unit 22; excludes NWRs, Mohave County Park Lands, and Units 11M, 25M, 26M, 38M"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Foxes (all species)",
+   "iac_reference": "2026\u201327 Arizona Trapping Regulations, Commission Order 23",
+   "notes": "The official proclamation lists 'foxes' generically \u2014 no species-level distinction is made. Do not treat red and gray foxes as separate seasons.",
+   "permit_requirements": [],
+   "scientific_name": null,
+   "scientific_name_note": "Left null because Commission Order 23 lists 'foxes' generically; assigning a species would be a guess.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Open statewide including the Walnut Canyon Enclosure in Unit 22. Excludes all National Wildlife Refuges, Mohave County Park Lands, and Units 11M, 25M, 26M, and 38M.",
+     "open_date": "2026-11-01",
+     "open_time": null,
+     "timezone": "America/Phoenix",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "AZ-order23-area",
+       "zone_name": "Statewide including the Walnut Canyon Enclosure in Unit 22; excludes NWRs, Mohave County Park Lands, and Units 11M, 25M, 26M, 38M"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Ringtail",
+   "iac_reference": "2026\u201327 Arizona Trapping Regulations, Commission Order 23",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Bassariscus astutus",
+   "scientific_name_note": "Standard taxonomy; not stated in Commission Order 23.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Open statewide including the Walnut Canyon Enclosure in Unit 22. Excludes all National Wildlife Refuges, Mohave County Park Lands, and Units 11M, 25M, 26M, and 38M.",
+     "open_date": "2026-11-01",
+     "open_time": null,
+     "timezone": "America/Phoenix",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "AZ-order23-area",
+       "zone_name": "Statewide including the Walnut Canyon Enclosure in Unit 22; excludes NWRs, Mohave County Park Lands, and Units 11M, 25M, 26M, 38M"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Badger",
+   "iac_reference": "2026\u201327 Arizona Trapping Regulations, Commission Order 23",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Taxidea taxus",
+   "scientific_name_note": "Standard taxonomy; not stated in Commission Order 23.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Open statewide including the Walnut Canyon Enclosure in Unit 22. Excludes all National Wildlife Refuges, Mohave County Park Lands, and Units 11M, 25M, 26M, and 38M.",
+     "open_date": "2026-11-01",
+     "open_time": null,
+     "timezone": "America/Phoenix",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "AZ-order23-area",
+       "zone_name": "Statewide including the Walnut Canyon Enclosure in Unit 22; excludes NWRs, Mohave County Park Lands, and Units 11M, 25M, 26M, 38M"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Raccoon",
+   "iac_reference": "2026\u201327 Arizona Trapping Regulations, Commission Order 23",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Procyon lotor",
+   "scientific_name_note": "Standard taxonomy; not stated in Commission Order 23.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Open statewide including the Walnut Canyon Enclosure in Unit 22. Excludes all National Wildlife Refuges, Mohave County Park Lands, and Units 11M, 25M, 26M, and 38M.",
+     "open_date": "2026-11-01",
+     "open_time": null,
+     "timezone": "America/Phoenix",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "AZ-order23-area",
+       "zone_name": "Statewide including the Walnut Canyon Enclosure in Unit 22; excludes NWRs, Mohave County Park Lands, and Units 11M, 25M, 26M, 38M"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Skunks (all species)",
+   "iac_reference": "2026\u201327 Arizona Trapping Regulations, Commission Order 23",
+   "notes": "The official proclamation lists 'skunks' generically \u2014 no species-level distinction is made.",
+   "permit_requirements": [],
+   "scientific_name": null,
+   "scientific_name_note": "Left null because Commission Order 23 lists 'skunks' generically; assigning a species would be a guess.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Open statewide including the Walnut Canyon Enclosure in Unit 22. Excludes all National Wildlife Refuges, Mohave County Park Lands, and Units 11M, 25M, 26M, and 38M.",
+     "open_date": "2026-11-01",
+     "open_time": null,
+     "timezone": "America/Phoenix",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "AZ-order23-area",
+       "zone_name": "Statewide including the Walnut Canyon Enclosure in Unit 22; excludes NWRs, Mohave County Park Lands, and Units 11M, 25M, 26M, 38M"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Weasels (all species)",
+   "iac_reference": "2026\u201327 Arizona Trapping Regulations, Commission Order 23",
+   "notes": "The official proclamation lists 'weasels' generically \u2014 no species-level distinction is made.",
+   "permit_requirements": [],
+   "scientific_name": null,
+   "scientific_name_note": "Left null because Commission Order 23 lists 'weasels' generically; assigning a species would be a guess.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Open statewide including the Walnut Canyon Enclosure in Unit 22. Excludes all National Wildlife Refuges, Mohave County Park Lands, and Units 11M, 25M, 26M, and 38M.",
+     "open_date": "2026-11-01",
+     "open_time": null,
+     "timezone": "America/Phoenix",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "AZ-order23-area",
+       "zone_name": "Statewide including the Walnut Canyon Enclosure in Unit 22; excludes NWRs, Mohave County Park Lands, and Units 11M, 25M, 26M, 38M"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "American beaver",
+   "iac_reference": "2026\u201327 Arizona Trapping Regulations, Commission Order 23",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Castor canadensis",
+   "scientific_name_note": "Standard taxonomy; not stated in Commission Order 23.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Same dates; excludes NWRs, Mohave County Park Lands, Units 11M, 25M, 26M, 38M, AND Unit 34B.",
+     "open_date": "2026-11-01",
+     "open_time": null,
+     "timezone": "America/Phoenix",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "AZ-order23-beaver",
+       "zone_name": "Statewide including the Walnut Canyon Enclosure in Unit 22; excludes NWRs, Mohave County Park Lands, and Units 11M, 25M, 26M, 38M, and 34B"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Muskrat",
+   "iac_reference": "2026\u201327 Arizona Trapping Regulations, Commission Order 23",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Ondatra zibethicus",
+   "scientific_name_note": "Standard taxonomy; not stated in Commission Order 23.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Same dates; excludes NWRs, Mohave County Park Lands, Units 11M, 25M, 26M, 38M, AND Unit 34B.",
+     "open_date": "2026-11-01",
+     "open_time": null,
+     "timezone": "America/Phoenix",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "AZ-order23-beaver",
+       "zone_name": "Statewide including the Walnut Canyon Enclosure in Unit 22; excludes NWRs, Mohave County Park Lands, and Units 11M, 25M, 26M, 38M, and 34B"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Mexican gray wolf",
+   "iac_reference": "2026\u201327 Arizona Trapping Regulations, Commission Order 23 (no season listed); protected under the federal Endangered Species Act, 50 CFR sections 17.11, 17.84(k)",
+   "notes": "Federally endangered; the Commission Order sets no wolf season. Mexican wolves outside the Mexican Wolf Experimental Population Area (north of I-40) are fully endangered; wolves inside the experimental area are a nonessential experimental population. Included so the app flags any logged take.",
+   "permit_requirements": [],
+   "scientific_name": "Canis lupus baileyi",
+   "scientific_name_note": "Mexican gray wolf subspecies; cited in federal listing documents, not in Commission Order 23.",
+   "scientific_name_verified": false,
+   "season_status": "closed",
+   "seasons": []
+  },
+  {
+   "common_name": "Jaguar",
+   "iac_reference": "2026\u201327 Arizona Trapping Regulations, Commission Order 23 (no season listed); federally endangered under the ESA",
+   "notes": "Federally endangered; no open season. Included so the app flags any logged take.",
+   "permit_requirements": [],
+   "scientific_name": "Panthera onca",
+   "scientific_name_note": "Standard taxonomy; cited in federal listing documents, not in Commission Order 23.",
+   "scientific_name_verified": false,
+   "season_status": "closed",
+   "seasons": []
+  },
+  {
+   "common_name": "Ocelot",
+   "iac_reference": "2026\u201327 Arizona Trapping Regulations, Commission Order 23 (no season listed); federally endangered under the ESA",
+   "notes": "Federally endangered; no open season. Included so the app flags any logged take.",
+   "permit_requirements": [],
+   "scientific_name": "Leopardus pardalis",
+   "scientific_name_note": "Standard taxonomy; cited in federal listing documents, not in Commission Order 23.",
+   "scientific_name_verified": false,
+   "season_status": "closed",
+   "seasons": []
+  },
+  {
+   "common_name": "Black-footed ferret",
+   "iac_reference": "2026\u201327 Arizona Trapping Regulations, Commission Order 23 (no season listed); federally endangered under the ESA",
+   "notes": "Federally endangered; no open season. Included so the app flags any logged take.",
+   "permit_requirements": [],
+   "scientific_name": "Mustela nigripes",
+   "scientific_name_note": "Standard taxonomy; cited in federal listing documents, not in Commission Order 23.",
+   "scientific_name_verified": false,
+   "season_status": "closed",
+   "seasons": []
+  }
+ ],
+ "state": "AZ",
+ "state_name": "Arizona",
+ "verification": {
+  "confirmation_notes": "The 2026\u201327 Arizona Trapping Regulations (Commission Order 23) were downloaded from AZGFD's official regulations page and verified 2026-09-18: November 1, 2026 \u2013 February 28, 2027 for both species groups, with the beaver/muskrat Unit 34B exclusion and the bobcat tag/jaw/CITES requirements. The proclamation lists 'foxes,' 'skunks,' and 'weasels' generically \u2014 modeled without inventing species-level seasons. Closed entries (Mexican gray wolf, jaguar, ocelot, black-footed ferret) reflect federal ESA endangered status; AZGFD confirms only specifically authorized species may be hunted/trapped and lists these as endangered.",
+  "known_gaps": [
+   "Scientific names are standard taxonomy, NOT stated in Commission Order 23 \u2014 all flagged scientific_name_verified=false; foxes, skunks, and weasels are null because the proclamation is generic.",
+   "The proclamation does not enumerate protected wildlife; closed entries were added from federal ESA listings rather than an AZGFD trapping-pamphlet list.",
+   "Excluded units (NWRs, Mohave County Park Lands, Units 11M, 25M, 26M, 38M, 34B) are modeled descriptively \u2014 the app cannot resolve unit boundaries.",
+   "Bobcat CITES-sealing details (locations/deadline) are summarized; users must check the proclamation."
+  ],
+  "regulation_year_confirmed": true
+ },
+ "license_url": "https://license.azgfd.com/",
+ "license_vendor": "AZGFD (department portal)",
+ "regs_url": "https://azgfd-live-portal-wordpress-pantheon.s3.us-west-2.amazonaws.com/wp-content/uploads/2026/05/20145352/2026-27-Trapping-Regulations.pdf",
+ "regs_kind": "pdf"
+,
+ "warden_directory": {
+  "label": "Report a violation",
+  "url": "https://www.azgfd.com/operation-game-thief/",
+  "kind": "hotline",
+  "note": "Operation Game Thief: 1-800-352-0700, 24/7/365"
+ }
+}

@@ -1,0 +1,445 @@
+{
+ "disclaimer": "Reminder reference only \u2014 NOT legal authority. Season dates, zones, and limits are set annually and can change. Always verify current regulations with the Washington Department of Fish and Wildlife before hunting or trapping.",
+ "license_summary": {
+  "method_warning": "Body-gripping traps \u2014 including foothold traps, snares, and Conibear-type traps \u2014 are generally unlawful for recreational trappers without a special conflict-abatement permit. Cage/live traps are the standard legal method.",
+  "sealing": "Bobcat and river otter pelts must be sealed by WDFW by April 20 of the year following the season; bobcat lower jaw must be turned in at sealing.",
+  "trapping_license": "A Washington trapping license is required to trap furbearers. Check the WDFW page for license types and fees."
+ },
+ "provisional": false,
+ "retrieved_at": "2026-09-18",
+ "schema_version": "1.1",
+ "season_year": "2026-27",
+ "sources": [
+  {
+   "id": "wdfw-trapping-page",
+   "notes": "WDFW states this page summarizes rules in the Washington Administrative Code. Archived reference in hidden_files/season-research/.",
+   "title": "WDFW Trapping Regulations (official WDFW webpage; rules effective April 1, 2026 through March 31, 2027)",
+   "type": "agency_webpage",
+   "url": "https://wdfw.wa.gov/hunting/regulations/trapping"
+  }
+ ],
+ "species": [
+  {
+   "common_name": "Badger",
+   "iac_reference": "WDFW trapping rules (effective 4/1/2026\u20133/31/2027)",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Taxidea taxus",
+   "scientific_name_note": "Standard taxonomy; not stated in WDFW trapping regulations.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "",
+     "open_date": "2026-11-01",
+     "open_time": null,
+     "timezone": "America/Los_Angeles",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "WA-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Beaver",
+   "iac_reference": "WDFW trapping rules (effective 4/1/2026\u20133/31/2027)",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Castor canadensis",
+   "scientific_name_note": "Standard taxonomy; not stated in WDFW trapping regulations.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "",
+     "open_date": "2026-11-01",
+     "open_time": null,
+     "timezone": "America/Los_Angeles",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "WA-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Bobcat",
+   "iac_reference": "WDFW trapping rules (effective 4/1/2026\u20133/31/2027)",
+   "notes": "",
+   "permit_requirements": [
+    "Pelt must be sealed by WDFW by April 20, 2027.",
+    "Lower jaw must be turned in at the time of sealing."
+   ],
+   "scientific_name": "Lynx rufus",
+   "scientific_name_note": "Standard taxonomy; not stated in WDFW trapping regulations.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "",
+     "open_date": "2026-11-01",
+     "open_time": null,
+     "timezone": "America/Los_Angeles",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "WA-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Mink",
+   "iac_reference": "WDFW trapping rules (effective 4/1/2026\u20133/31/2027)",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Neogale vison",
+   "scientific_name_note": "Standard taxonomy (formerly Neovison vison); not stated in WDFW trapping regulations.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "",
+     "open_date": "2026-11-01",
+     "open_time": null,
+     "timezone": "America/Los_Angeles",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "WA-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Muskrat",
+   "iac_reference": "WDFW trapping rules (effective 4/1/2026\u20133/31/2027)",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Ondatra zibethicus",
+   "scientific_name_note": "Standard taxonomy; not stated in WDFW trapping regulations.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "",
+     "open_date": "2026-11-01",
+     "open_time": null,
+     "timezone": "America/Los_Angeles",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "WA-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Raccoon",
+   "iac_reference": "WDFW trapping rules (effective 4/1/2026\u20133/31/2027)",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Procyon lotor",
+   "scientific_name_note": "Standard taxonomy; not stated in WDFW trapping regulations.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "",
+     "open_date": "2026-11-01",
+     "open_time": null,
+     "timezone": "America/Los_Angeles",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "WA-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "River otter",
+   "iac_reference": "WDFW trapping rules (effective 4/1/2026\u20133/31/2027)",
+   "notes": "",
+   "permit_requirements": [
+    "Pelt must be sealed by WDFW by April 20, 2027."
+   ],
+   "scientific_name": "Lontra canadensis",
+   "scientific_name_note": "Standard taxonomy; not stated in WDFW trapping regulations.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "",
+     "open_date": "2026-11-01",
+     "open_time": null,
+     "timezone": "America/Los_Angeles",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "WA-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Weasel",
+   "iac_reference": "WDFW trapping rules (effective 4/1/2026\u20133/31/2027)",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": null,
+   "scientific_name_note": "WDFW regulations list 'weasel' without distinguishing species. Left null rather than guessing.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "",
+     "open_date": "2026-11-01",
+     "open_time": null,
+     "timezone": "America/Los_Angeles",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "WA-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Marten",
+   "iac_reference": "WDFW trapping rules (effective 4/1/2026\u20133/31/2027)",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Martes americana",
+   "scientific_name_note": "Standard taxonomy; not stated in WDFW trapping regulations.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Closed to marten trapping in Clallam, Jefferson, Mason, and Grays Harbor counties. The dataset models the open zone descriptively; the app cannot enumerate the closure boundary beyond these four counties.",
+     "open_date": "2026-11-01",
+     "open_time": null,
+     "timezone": "America/Los_Angeles",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "WA-marten-open",
+       "zone_name": "Statewide except Clallam, Jefferson, Mason, and Grays Harbor counties (closed for marten)"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Red fox",
+   "iac_reference": "WDFW trapping rules (effective 4/1/2026\u20133/31/2027)",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Vulpes vulpes",
+   "scientific_name_note": "Standard taxonomy; not stated in WDFW trapping regulations.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Closed within the Mount Baker-Snoqualmie, Okanogan-Wenatchee, and Gifford Pinchot National Forest boundaries to protect the Cascade red fox (a protected subspecies). The app cannot resolve national-forest boundaries; users must check their set location.",
+     "open_date": "2026-11-01",
+     "open_time": null,
+     "timezone": "America/Los_Angeles",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "WA-redfox-open",
+       "zone_name": "Statewide except within the boundaries of Mount Baker-Snoqualmie, Okanogan-Wenatchee, and Gifford Pinchot National Forests (closed for red fox)"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Canada lynx",
+   "iac_reference": "WDFW trapping rules (effective 4/1/2026\u20133/31/2027)",
+   "notes": "Protected species \u2014 cannot legally be trapped in Washington. Included so the app flags any logged take.",
+   "permit_requirements": [],
+   "scientific_name": "Lynx canadensis",
+   "scientific_name_note": "Standard taxonomy; not stated in WDFW trapping regulations.",
+   "scientific_name_verified": false,
+   "season_status": "closed",
+   "seasons": []
+  },
+  {
+   "common_name": "Fisher",
+   "iac_reference": "WDFW trapping rules (effective 4/1/2026\u20133/31/2027)",
+   "notes": "Protected species \u2014 cannot legally be trapped in Washington. Included so the app flags any logged take.",
+   "permit_requirements": [],
+   "scientific_name": "Pekania pennanti",
+   "scientific_name_note": "Standard taxonomy; not stated in WDFW trapping regulations.",
+   "scientific_name_verified": false,
+   "season_status": "closed",
+   "seasons": []
+  },
+  {
+   "common_name": "Wolverine",
+   "iac_reference": "WDFW trapping rules (effective 4/1/2026\u20133/31/2027)",
+   "notes": "Protected species \u2014 cannot legally be trapped in Washington. Included so the app flags any logged take.",
+   "permit_requirements": [],
+   "scientific_name": "Gulo gulo",
+   "scientific_name_note": "Standard taxonomy; not stated in WDFW trapping regulations.",
+   "scientific_name_verified": false,
+   "season_status": "closed",
+   "seasons": []
+  },
+  {
+   "common_name": "Cascade red fox",
+   "iac_reference": "WDFW trapping rules (effective 4/1/2026\u20133/31/2027)",
+   "notes": "Protected subspecies \u2014 the Cascade red fox cannot be trapped; the geographic red fox closures exist to protect it. Included so the app flags any logged take.",
+   "permit_requirements": [],
+   "scientific_name": null,
+   "scientific_name_note": "WDFW describes it as a protected subspecies of red fox; no Latin name given in the regulations summary. Left null rather than guessing.",
+   "scientific_name_verified": false,
+   "season_status": "closed",
+   "seasons": []
+  }
+ ],
+ "state": "WA",
+ "state_name": "Washington",
+ "verification": {
+  "confirmation_notes": "WDFW trapping regulations page states rules are effective April 1, 2026 through March 31, 2027 \u2014 the current rule period covering the 2026\u201327 trapping season. Seasons, county closures, national-forest closures, sealing deadlines, protected-species list, and the recreational body-gripping trap prohibition all read directly from that official page on 2026-09-18.",
+  "known_gaps": [
+   "Scientific names are standard taxonomy, NOT stated in the WDFW trapping regulations \u2014 all flagged scientific_name_verified=false; weasel and Cascade red fox are null because the regulations do not distinguish the species/subspecies by Latin name.",
+   "Marten and red fox closure boundaries (four counties; three national forests) are modeled as descriptive special_areas zones \u2014 the app cannot resolve exact geographic boundaries.",
+   "Detailed trap-placement and hardware rules are not modeled \u2014 only the major recreational body-gripping trap prohibition is noted as a warning.",
+   "No bag limits are stated on the WDFW trapping page; none are modeled."
+  ],
+  "regulation_year_confirmed": true
+ },
+ "license_url": "https://fishhunt.dfw.wa.gov/",
+ "license_vendor": "Washington Department of Fish and Wildlife (WILD licensing system)",
+ "regs_url": "https://wdfw.wa.gov/sites/default/files/2026-06/2026-furbearertrappingregulations.pdf",
+ "regs_kind": "pdf"
+,
+ "warden_directory": {
+  "label": "Report a violation",
+  "url": "https://wdfw.wa.gov/about/enforcement/report",
+  "kind": "hotline",
+  "note": "WDFW Police: 911 in-progress; 877-933-9847 non-emergency 8am–7pm; text WDFWTIP to 847411; reportpoaching@dfw.wa.gov; online form"
+ }
+}

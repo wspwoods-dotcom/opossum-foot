@@ -1,0 +1,667 @@
+{
+ "disclaimer": "Reminder reference only \u2014 NOT legal authority. Season dates, zones, and limits are set annually and can change. Always verify current regulations with Colorado Parks and Wildlife before hunting or trapping.",
+ "license_summary": {
+  "furbearer_license": "A Colorado furbearer license is required to hunt or trap furbearers. Consult the CPW small game/furbearer guide for license types and fees.",
+  "method_warning": "Recreational and commercial leghold traps, instant-kill body-gripping traps, snares, and poisons are generally prohibited in Colorado; live cage/box traps remain available, with narrow statutory exceptions (e.g., 30-day exemptions). Check CPW for the current lawful methods."
+ },
+ "provisional": false,
+ "retrieved_at": "2026-09-18",
+ "schema_version": "1.1",
+ "season_year": "2026-27",
+ "sources": [
+  {
+   "id": "cpw-chapter-w3",
+   "notes": "Adopted by the Parks and Wildlife Commission July 16, 2026; effective September 1, 2026. Season dates, daily limits, and the beaver sealing requirement read directly from this rule. Archived locally in hidden_files/season-research/.",
+   "title": "Colorado Parks and Wildlife Commission \u2014 Chapter W-3: Furbearers and Small Game (as approved July 2026)",
+   "type": "administrative_code",
+   "url": "https://cpw.state.co.us/sites/default/files/dam/itadrdzzou/ch-w3-as-approved-july-2026.pdf"
+  }
+ ],
+ "species": [
+  {
+   "common_name": "American mink",
+   "iac_reference": "Chapter W-3 (effective 9/1/2026)",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Neogale vison",
+   "scientific_name_note": "Standard taxonomy (formerly Neovison vison); not stated in Chapter W-3.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": 2,
+      "limit_notes": "Daily bag limit 2; possession limit unlimited.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "both",
+     "notes": "Open November 1 through the end of February annually, statewide.",
+     "open_date": "2026-11-01",
+     "open_time": null,
+     "timezone": "America/Denver",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "CO-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Pine marten",
+   "iac_reference": "Chapter W-3 (effective 9/1/2026)",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Martes americana",
+   "scientific_name_note": "Standard taxonomy; not stated in Chapter W-3.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": 2,
+      "limit_notes": "Daily bag limit 2; possession limit unlimited.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "both",
+     "notes": "Open November 1 through the end of February annually, statewide.",
+     "open_date": "2026-11-01",
+     "open_time": null,
+     "timezone": "America/Denver",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "CO-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Badger",
+   "iac_reference": "Chapter W-3 (effective 9/1/2026)",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Taxidea taxus",
+   "scientific_name_note": "Standard taxonomy; not stated in Chapter W-3.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": 2,
+      "limit_notes": "Daily bag limit 2; possession limit unlimited.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "both",
+     "notes": "Open November 1 through the end of February annually, statewide.",
+     "open_date": "2026-11-01",
+     "open_time": null,
+     "timezone": "America/Denver",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "CO-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Gray fox",
+   "iac_reference": "Chapter W-3 (effective 9/1/2026)",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Urocyon cinereoargenteus",
+   "scientific_name_note": "Standard taxonomy; not stated in Chapter W-3.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": 2,
+      "limit_notes": "Daily bag limit 2; possession limit unlimited.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "both",
+     "notes": "Open November 1 through the end of February annually, statewide.",
+     "open_date": "2026-11-01",
+     "open_time": null,
+     "timezone": "America/Denver",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "CO-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Red fox",
+   "iac_reference": "Chapter W-3 (effective 9/1/2026)",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Vulpes vulpes",
+   "scientific_name_note": "Standard taxonomy; not stated in Chapter W-3.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": 2,
+      "limit_notes": "Daily bag limit 2; possession limit unlimited.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "both",
+     "notes": "Open November 1 through the end of February annually, statewide.",
+     "open_date": "2026-11-01",
+     "open_time": null,
+     "timezone": "America/Denver",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "CO-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Swift fox",
+   "iac_reference": "Chapter W-3 (effective 9/1/2026)",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Vulpes velox",
+   "scientific_name_note": "Standard taxonomy; not stated in Chapter W-3.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": 2,
+      "limit_notes": "Daily bag limit 2; possession limit unlimited.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "both",
+     "notes": "Open November 1 through the end of February annually, statewide.",
+     "open_date": "2026-11-01",
+     "open_time": null,
+     "timezone": "America/Denver",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "CO-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Raccoon",
+   "iac_reference": "Chapter W-3 (effective 9/1/2026)",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Procyon lotor",
+   "scientific_name_note": "Standard taxonomy; not stated in Chapter W-3.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": 2,
+      "limit_notes": "Daily bag limit 2; possession limit unlimited.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "both",
+     "notes": "Open November 1 through the end of February annually, statewide.",
+     "open_date": "2026-11-01",
+     "open_time": null,
+     "timezone": "America/Denver",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "CO-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Ringtail",
+   "iac_reference": "Chapter W-3 (effective 9/1/2026)",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Bassariscus astutus",
+   "scientific_name_note": "Standard taxonomy; not stated in Chapter W-3.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": 2,
+      "limit_notes": "Daily bag limit 2; possession limit unlimited.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "both",
+     "notes": "Open November 1 through the end of February annually, statewide.",
+     "open_date": "2026-11-01",
+     "open_time": null,
+     "timezone": "America/Denver",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "CO-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Striped skunk",
+   "iac_reference": "Chapter W-3 (effective 9/1/2026)",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Mephitis mephitis",
+   "scientific_name_note": "Standard taxonomy; not stated in Chapter W-3.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": 2,
+      "limit_notes": "Daily bag limit 2; possession limit unlimited.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "both",
+     "notes": "Open November 1 through the end of February annually, statewide.",
+     "open_date": "2026-11-01",
+     "open_time": null,
+     "timezone": "America/Denver",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "CO-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Western spotted skunk",
+   "iac_reference": "Chapter W-3 (effective 9/1/2026)",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Spilogale gracilis",
+   "scientific_name_note": "Standard taxonomy; not stated in Chapter W-3.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": 2,
+      "limit_notes": "Daily bag limit 2; possession limit unlimited.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "both",
+     "notes": "Open November 1 through the end of February annually, statewide.",
+     "open_date": "2026-11-01",
+     "open_time": null,
+     "timezone": "America/Denver",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "CO-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Long-tailed weasel",
+   "iac_reference": "Chapter W-3 (effective 9/1/2026)",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Neogale frenata",
+   "scientific_name_note": "Standard taxonomy; not stated in Chapter W-3.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": 2,
+      "limit_notes": "Daily bag limit 2; possession limit unlimited.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "both",
+     "notes": "Open November 1 through the end of February annually, statewide.",
+     "open_date": "2026-11-01",
+     "open_time": null,
+     "timezone": "America/Denver",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "CO-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Short-tailed weasel (ermine)",
+   "iac_reference": "Chapter W-3 (effective 9/1/2026)",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Mustela erminea",
+   "scientific_name_note": "Standard taxonomy; not stated in Chapter W-3.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": 2,
+      "limit_notes": "Daily bag limit 2; possession limit unlimited.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "both",
+     "notes": "Open November 1 through the end of February annually, statewide.",
+     "open_date": "2026-11-01",
+     "open_time": null,
+     "timezone": "America/Denver",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "CO-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Opossum",
+   "iac_reference": "Chapter W-3 (effective 9/1/2026)",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Didelphis virginiana",
+   "scientific_name_note": "Standard taxonomy; not stated in Chapter W-3.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": 2,
+      "limit_notes": "Daily bag limit 2; possession limit unlimited.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "both",
+     "notes": "Open November 1 through the end of February annually, statewide.",
+     "open_date": "2026-11-01",
+     "open_time": null,
+     "timezone": "America/Denver",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "CO-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Muskrat",
+   "iac_reference": "Chapter W-3 (effective 9/1/2026)",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Ondatra zibethicus",
+   "scientific_name_note": "Standard taxonomy; not stated in Chapter W-3.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": 2,
+      "limit_notes": "Daily bag limit 2; possession limit unlimited.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "both",
+     "notes": "Open November 1 through the end of February annually, statewide.",
+     "open_date": "2026-11-01",
+     "open_time": null,
+     "timezone": "America/Denver",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "CO-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Bobcat",
+   "iac_reference": "Chapter W-3 (effective 9/1/2026)",
+   "notes": "",
+   "permit_requirements": [
+    "Bobcat pelts are subject to mandatory sealing/check requirements per Chapter W-3. Consult CPW for sealing locations and deadlines."
+   ],
+   "scientific_name": "Lynx rufus",
+   "scientific_name_note": "Standard taxonomy; not stated in Chapter W-3.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": 2,
+      "limit_notes": "Daily bag limit 2; possession limit unlimited.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "both",
+     "notes": "Open December 1 through the end of February annually, statewide.",
+     "open_date": "2026-12-01",
+     "open_time": null,
+     "timezone": "America/Denver",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "CO-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Coyote",
+   "iac_reference": "Chapter W-3 (effective 9/1/2026)",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Canis latrans",
+   "scientific_name_note": "Standard taxonomy; not stated in Chapter W-3.",
+   "scientific_name_verified": false,
+   "season_status": "continuous",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": 2,
+      "limit_notes": "Daily bag limit 2; possession limit unlimited.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "both",
+     "notes": "Open January 1 through December 31 annually (year-round), statewide.",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/Denver",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "CO-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "American beaver",
+   "iac_reference": "Chapter W-3 (effective 9/1/2026)",
+   "notes": "",
+   "permit_requirements": [
+    "Beaver are subject to a new mandatory sealing/check requirement per Chapter W-3. Consult CPW for sealing locations and deadlines."
+   ],
+   "scientific_name": "Castor canadensis",
+   "scientific_name_note": "Standard taxonomy; not stated in Chapter W-3.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": 2,
+      "limit_notes": "Daily bag limit 2; possession limit unlimited.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "both",
+     "notes": "Open October 1 through March 31 annually, statewide.",
+     "open_date": "2026-10-01",
+     "open_time": null,
+     "timezone": "America/Denver",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "CO-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "River otter",
+   "iac_reference": "Chapter W-3 (effective 9/1/2026)",
+   "notes": "No open season in the furbearer chapter; Colorado's river otters are a restored/protected population (CPW's 50th anniversary 'Year of the Otter' census program, 2026). Included so the app flags any logged take.",
+   "permit_requirements": [],
+   "scientific_name": "Lontra canadensis",
+   "scientific_name_note": "Standard taxonomy; not stated in Chapter W-3.",
+   "scientific_name_verified": false,
+   "season_status": "closed",
+   "seasons": []
+  },
+  {
+   "common_name": "Canada lynx",
+   "iac_reference": "Chapter W-3 (effective 9/1/2026)",
+   "notes": "No open season; Canada lynx are state- and federally endangered in Colorado (CPW reintroduced 96 around Creede and Durango). Included so the app flags any logged take.",
+   "permit_requirements": [],
+   "scientific_name": "Lynx canadensis",
+   "scientific_name_note": "Standard taxonomy; not stated in Chapter W-3.",
+   "scientific_name_verified": false,
+   "season_status": "closed",
+   "seasons": []
+  }
+ ],
+ "state": "CO",
+ "state_name": "Colorado",
+ "verification": {
+  "confirmation_notes": "Chapter W-3 as approved July 16, 2026 and effective September 1, 2026 \u2014 the current rule for the 2026\u201327 season \u2014 verified 2026-09-18. All 17 furbearers' seasons and daily limits read directly from the rule. River otter and Canada lynx have no open season in the furbearer chapter; lynx is state- and federally endangered (CPW), and otters are a protected restored population (CPW 'Year of the Otter,' 2026).",
+  "known_gaps": [
+   "Scientific names are standard taxonomy, NOT stated in Chapter W-3 \u2014 all flagged scientific_name_verified=false.",
+   "Kit fox is not addressed in the Chapter W-3 open-season list; it is not modeled. If CPW lists it as protected elsewhere, a closed entry may need to be added.",
+   "Beaver and bobcat mandatory sealing/check requirements exist in the rule but CPW sealing locations/deadlines are not modeled \u2014 users must check CPW.",
+   "Detailed lawful-method rules (cage-trap specifications, statutory exemptions) are not modeled \u2014 only the major prohibition warning is included.",
+   "No zone structure: all open species are statewide in the rule."
+  ],
+  "regulation_year_confirmed": true
+ },
+ "license_url": "https://www.cpwshop.com",
+ "license_vendor": "CPW Shop",
+ "regs_url": "https://cpw.state.co.us/sites/default/files/dam/itadrdzzou/ch-w3-as-approved-july-2026.pdf",
+ "regs_kind": "pdf"
+,
+ "warden_directory": {
+  "label": "Report a violation",
+  "url": "https://cpw.state.co.us/activities/hunting",
+  "kind": "hotline",
+  "note": "Operation Game Thief: 1-877-265-6648 (1-877-COLO-OGT); Verizon #OGT; anonymous"
+ }
+}

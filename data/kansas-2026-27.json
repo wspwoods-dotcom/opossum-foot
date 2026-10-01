@@ -1,0 +1,1219 @@
+{
+ "disclaimer": "Reminder reference only — NOT legal authority. Season dates are set annually by the Kansas Department of Wildlife and Parks and can change. Always verify current regulations with KDWP before hunting or trapping.",
+ "license_summary": {
+  "general": "A Kansas furharvester license is required to hunt, trap, or run furbearers. It is unlawful to sell, ship, or offer for sale or shipment any furbearer's hides, pelts, or furs without a trapping/furharvester license for the current calendar year. Nonresidents may hunt/trap only with a nonresident furharvester license. A landowner (and immediate family domiciled with him) may hunt furbearers on his own land by legal methods without a license; tenants have the same privilege on leased agricultural land. (Per K.A.R. 115-5-1 and Kansas regulations summary.)",
+  "season_times": "Per the KDWP 'When to Hunt' page: all furbearer hunting, trapping, and running seasons begin at 12:00 a.m. on opening day and close at midnight of closing day."
+ },
+ "provisional": false,
+ "retrieved_at": "2026-09-18",
+ "schema_version": "1.1",
+ "season_year": "2026-27",
+ "sources": [
+  {
+   "id": "when-to-hunt",
+   "notes": "States all furbearer hunting, trapping, and running seasons begin at 12:00 a.m. on opening day and close at midnight of closing day.",
+   "title": "When to Hunt — Kansas Department of Wildlife and Parks",
+   "type": "agency_page",
+   "url": "https://www.ksoutdoors.gov/outdoor-activities/hunting-in-kansas/when-to-hunt"
+  },
+  {
+   "id": "fhs-2024-25",
+   "notes": "Confirms the new extended raccoon and opossum hunting and trapping season — effectively year-round for both species, though legal trapping equipment is limited during the extended season (outside the regular season). Season-open formula: first Wednesday after the second Saturday in November; beaver/otter through March 31.",
+   "title": "2024-25 Furharvester Activity Survey (KDWP, September 2025)",
+   "type": "agency_report",
+   "url": "https://www.ksoutdoors.gov/home/showpublisheddocument/1584/638967136529130000"
+  },
+  {
+   "id": "kar-115-25-11",
+   "notes": "Season framework: general furbearer hunting/trapping season from the first Wednesday after the second Saturday in November through February 15; beaver through March 31; otter through March 31, managed by 13 otter management units with unit bag limits of 1-10 otters per trapper and no statewide season quota (per KDWP commission action and the KDWP otter pelt tagging reports: Lower Neosho and Marais des Cygnes units 10; Missouri and Verdigris units 5; Upper Neosho, Kansas, Big Blue, and Lower Arkansas units 2; Middle Arkansas, Republican, Smoky Saline, Solomon, and Western units 1); running season March 1-November 1. Opening time changed to 12:00 a.m. per the KDWP season page. Official code text published by the Kansas Secretary of State. The 115-25-11 text structure (seasons beginning first Wednesday after the second Saturday in November; running season Mar 1-Nov 1) also appears verbatim in the 2011 Wildlife and Parks Commission proposed-regulation record filed with the Kansas Legislature.",
+   "title": "Kansas Administrative Regulations — official K.A.R. publications (Kansas Secretary of State)",
+   "type": "administrative_code",
+   "url": "http://www.sos.ks.gov/pubs/pubs_kar.aspx"
+  },
+  {
+   "id": "kar-115-5-1",
+   "notes": "Legal equipment, taking methods, and coyote provisions: coyote is NOT classified as a furbearer in Kansas; artificial light/thermal/night-vision equipment for hunting coyotes Jan 1 - Mar 31 requires a department permit. Official code text published by the Kansas Secretary of State (replaces the earlier Cornell LII mirror citation).",
+   "title": "K.A.R. 115-5-1 — official text (Kansas Secretary of State)",
+   "type": "agency_code",
+   "url": "http://www.sos.ks.gov/pubs/pubs_kar.aspx"
+  },
+  {
+   "id": "otter-report-2024-25",
+   "notes": "Otter management unit structure and bag limits: units established in 2019 with 1-5 otter unit bag limits; bag limit increased to 10 in several units in 2023; season quota is unlimited. A total of 259 otters were taken in 2024-25.",
+   "title": "2024-25 Otter Pelt Tagging Report (KDWP, July 2025)",
+   "type": "agency_report",
+   "url": "https://www.ksoutdoors.gov/home/showpublisheddocument/1586/638967136531870000"
+  }
+ ],
+ "species": [
+  {
+   "common_name": "Badger",
+   "iac_reference": "K.A.R. 115-25-11",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Taxidea taxus",
+   "scientific_name_note": "Standard taxonomy; not stated in Kansas regulations.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Unlimited.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "",
+     "open_date": "2026-11-18",
+     "open_time": "00:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "KS-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Unlimited.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "",
+     "open_date": "2026-11-18",
+     "open_time": "00:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "KS-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Bobcat",
+   "iac_reference": "K.A.R. 115-25-11; KDWP furharvester reports",
+   "notes": "Bobcat pelts must be tagged (pelt tagging records used for harvest monitoring). Federal CITES export tag required to sell/ship bobcat pelts; obtain by presenting the pelt and carcass to a state game warden or other Commission employee at a district, regional, or headquarters office.",
+   "permit_requirements": [
+    "Bobcat pelts must be pelt-tagged by KDWP before sale/shipment (federal CITES requirement)."
+   ],
+   "scientific_name": "Lynx rufus",
+   "scientific_name_note": "Standard taxonomy; not stated in Kansas regulations.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Unlimited.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "",
+     "open_date": "2026-11-18",
+     "open_time": "00:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "KS-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Unlimited.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "",
+     "open_date": "2026-11-18",
+     "open_time": "00:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "KS-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Gray fox",
+   "iac_reference": "K.A.R. 115-25-11",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Urocyon cinereoargenteus",
+   "scientific_name_note": "Standard taxonomy; not stated in Kansas regulations.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Unlimited.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "",
+     "open_date": "2026-11-18",
+     "open_time": "00:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "KS-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Unlimited.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "",
+     "open_date": "2026-11-18",
+     "open_time": "00:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "KS-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Red fox",
+   "iac_reference": "K.A.R. 115-25-11",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Vulpes vulpes",
+   "scientific_name_note": "Standard taxonomy; not stated in Kansas regulations.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Unlimited.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "",
+     "open_date": "2026-11-18",
+     "open_time": "00:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "KS-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Unlimited.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "",
+     "open_date": "2026-11-18",
+     "open_time": "00:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "KS-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Swift fox",
+   "iac_reference": "K.A.R. 115-25-11; KDWP furharvester reports",
+   "notes": "Swift fox harvest is monitored via pelt tagging records — tag swift fox pelts with KDWP.",
+   "permit_requirements": [],
+   "scientific_name": "Vulpes velox",
+   "scientific_name_note": "Standard taxonomy; not stated in Kansas regulations.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Unlimited.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "",
+     "open_date": "2026-11-18",
+     "open_time": "00:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "KS-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Unlimited.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "",
+     "open_date": "2026-11-18",
+     "open_time": "00:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "KS-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Mink",
+   "iac_reference": "K.A.R. 115-25-11",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Neogale vison",
+   "scientific_name_note": "Standard taxonomy; not stated in Kansas regulations.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Unlimited.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "",
+     "open_date": "2026-11-18",
+     "open_time": "00:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "KS-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Unlimited.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "",
+     "open_date": "2026-11-18",
+     "open_time": "00:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "KS-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Muskrat",
+   "iac_reference": "K.A.R. 115-25-11",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Ondatra zibethicus",
+   "scientific_name_note": "Standard taxonomy; not stated in Kansas regulations.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Unlimited.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "",
+     "open_date": "2026-11-18",
+     "open_time": "00:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "KS-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Unlimited.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "",
+     "open_date": "2026-11-18",
+     "open_time": "00:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "KS-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Opossum",
+   "iac_reference": "K.A.R. 115-25-11; 2024-25 Furharvester Activity Survey",
+   "notes": "Raccoon and opossum have an extended hunting and trapping season covering the entire period outside the regular furharvesting season — effectively year-round. Legal trapping equipment is LIMITED during the extended season (outside the regular season); verify equipment rules with KDWP.",
+   "permit_requirements": [],
+   "scientific_name": "Didelphis virginiana",
+   "scientific_name_note": "Standard taxonomy; not stated in Kansas regulations.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Unlimited.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Regular-season trapping.",
+     "open_date": "2026-11-18",
+     "open_time": "00:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "KS-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Unlimited during the extended season.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Extended trapping season: effectively year-round (the period outside the regular furharvesting season). Legal trapping equipment is LIMITED during the extended season — verify equipment rules with KDWP.",
+     "open_date": null,
+     "open_time": "00:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "KS-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Unlimited.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Extended hunting season: effectively year-round (the period outside the regular furharvesting season). Running opossum with dogs during the former running season is now treated as hunting activity under this extended season.",
+     "open_date": null,
+     "open_time": "00:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "KS-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Raccoon",
+   "iac_reference": "K.A.R. 115-25-11; 2024-25 Furharvester Activity Survey",
+   "notes": "Raccoon and opossum have an extended hunting and trapping season covering the entire period outside the regular furharvesting season — effectively year-round. Legal trapping equipment is LIMITED during the extended season (outside the regular season); verify equipment rules with KDWP.",
+   "permit_requirements": [],
+   "scientific_name": "Procyon lotor",
+   "scientific_name_note": "Standard taxonomy; not stated in Kansas regulations.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Unlimited.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Regular-season trapping.",
+     "open_date": "2026-11-18",
+     "open_time": "00:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "KS-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Unlimited during the extended season.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Extended trapping season: effectively year-round (the period outside the regular furharvesting season). Legal trapping equipment is LIMITED during the extended season — verify equipment rules with KDWP.",
+     "open_date": null,
+     "open_time": "00:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "KS-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Unlimited.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Extended hunting season: effectively year-round (the period outside the regular furharvesting season). Running raccoon with dogs during the former running season is now treated as hunting activity under this extended season.",
+     "open_date": null,
+     "open_time": "00:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "KS-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Striped skunk",
+   "iac_reference": "K.A.R. 115-25-11",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Mephitis mephitis",
+   "scientific_name_note": "Standard taxonomy; not stated in Kansas regulations.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Unlimited.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "",
+     "open_date": "2026-11-18",
+     "open_time": "00:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "KS-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Unlimited.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "",
+     "open_date": "2026-11-18",
+     "open_time": "00:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "KS-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Weasel",
+   "iac_reference": "K.A.R. 115-25-11",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": null,
+   "scientific_name_note": "K.A.R. 115-25-11 lists 'weasel' without a Latin name; left null rather than guessing.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Unlimited.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "",
+     "open_date": "2026-11-18",
+     "open_time": "00:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "KS-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Unlimited.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "",
+     "open_date": "2026-11-18",
+     "open_time": "00:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "KS-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Beaver",
+   "iac_reference": "K.A.R. 115-25-11",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Castor canadensis",
+   "scientific_name_note": "Standard taxonomy; not stated in Kansas regulations.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Unlimited.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Beaver may only be trapped (no hunting season).",
+     "open_date": "2026-11-18",
+     "open_time": "00:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "KS-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "River otter",
+   "iac_reference": "K.A.R. 115-25-11; KDWP otter pelt tagging reports",
+   "notes": "Otter harvest is monitored via pelt tagging records — tag otter pelts with KDWP (federal CITES requirement).",
+   "permit_requirements": [
+    "Otter harvest is managed by 13 otter management units with unit bag limits of 1-10 otters per trapper; the bag limit for each unit is shown in its season entry.",
+    "No statewide season quota.",
+    "Otter pelts must be pelt-tagged by KDWP before sale or shipment (federal CITES requirement)."
+   ],
+   "scientific_name": "Lontra canadensis",
+   "scientific_name_note": "Standard taxonomy; not stated in Kansas regulations.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "10 otters per trapper in the Lower Neosho otter management unit. No statewide season quota.",
+      "possession_limit": null,
+      "season_bag": 10
+     },
+     "close_date": "2027-03-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Otter may only be trapped (no hunting season). Bag limit applies within this unit only.",
+     "open_date": "2026-11-18",
+     "open_time": "00:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "KS-otter-lower-neosho",
+       "zone_name": "Lower Neosho Otter Management Unit"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "10 otters per trapper in the Marais des Cygnes otter management unit. No statewide season quota.",
+      "possession_limit": null,
+      "season_bag": 10
+     },
+     "close_date": "2027-03-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Otter may only be trapped (no hunting season). Bag limit applies within this unit only.",
+     "open_date": "2026-11-18",
+     "open_time": "00:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "KS-otter-marais-des-cygnes",
+       "zone_name": "Marais des Cygnes Otter Management Unit"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "5 otters per trapper in the Missouri otter management unit. No statewide season quota.",
+      "possession_limit": null,
+      "season_bag": 5
+     },
+     "close_date": "2027-03-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Otter may only be trapped (no hunting season). Bag limit applies within this unit only.",
+     "open_date": "2026-11-18",
+     "open_time": "00:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "KS-otter-missouri",
+       "zone_name": "Missouri Otter Management Unit"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "5 otters per trapper in the Verdigris otter management unit. No statewide season quota.",
+      "possession_limit": null,
+      "season_bag": 5
+     },
+     "close_date": "2027-03-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Otter may only be trapped (no hunting season). Bag limit applies within this unit only.",
+     "open_date": "2026-11-18",
+     "open_time": "00:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "KS-otter-verdigris",
+       "zone_name": "Verdigris Otter Management Unit"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "2 otters per trapper in the Upper Neosho otter management unit. No statewide season quota.",
+      "possession_limit": null,
+      "season_bag": 2
+     },
+     "close_date": "2027-03-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Otter may only be trapped (no hunting season). Bag limit applies within this unit only.",
+     "open_date": "2026-11-18",
+     "open_time": "00:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "KS-otter-upper-neosho",
+       "zone_name": "Upper Neosho Otter Management Unit"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "2 otters per trapper in the Kansas otter management unit. No statewide season quota.",
+      "possession_limit": null,
+      "season_bag": 2
+     },
+     "close_date": "2027-03-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Otter may only be trapped (no hunting season). Bag limit applies within this unit only.",
+     "open_date": "2026-11-18",
+     "open_time": "00:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "KS-otter-kansas",
+       "zone_name": "Kansas Otter Management Unit"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "2 otters per trapper in the Big Blue otter management unit. No statewide season quota.",
+      "possession_limit": null,
+      "season_bag": 2
+     },
+     "close_date": "2027-03-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Otter may only be trapped (no hunting season). Bag limit applies within this unit only.",
+     "open_date": "2026-11-18",
+     "open_time": "00:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "KS-otter-big-blue",
+       "zone_name": "Big Blue Otter Management Unit"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "2 otters per trapper in the Lower Arkansas otter management unit. No statewide season quota.",
+      "possession_limit": null,
+      "season_bag": 2
+     },
+     "close_date": "2027-03-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Otter may only be trapped (no hunting season). Bag limit applies within this unit only.",
+     "open_date": "2026-11-18",
+     "open_time": "00:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "KS-otter-lower-arkansas",
+       "zone_name": "Lower Arkansas Otter Management Unit"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "1 otters per trapper in the Middle Arkansas otter management unit. No statewide season quota.",
+      "possession_limit": null,
+      "season_bag": 1
+     },
+     "close_date": "2027-03-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Otter may only be trapped (no hunting season). Bag limit applies within this unit only.",
+     "open_date": "2026-11-18",
+     "open_time": "00:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "KS-otter-middle-arkansas",
+       "zone_name": "Middle Arkansas Otter Management Unit"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "1 otters per trapper in the Republican otter management unit. No statewide season quota.",
+      "possession_limit": null,
+      "season_bag": 1
+     },
+     "close_date": "2027-03-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Otter may only be trapped (no hunting season). Bag limit applies within this unit only.",
+     "open_date": "2026-11-18",
+     "open_time": "00:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "KS-otter-republican",
+       "zone_name": "Republican Otter Management Unit"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "1 otters per trapper in the Smoky Saline otter management unit. No statewide season quota.",
+      "possession_limit": null,
+      "season_bag": 1
+     },
+     "close_date": "2027-03-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Otter may only be trapped (no hunting season). Bag limit applies within this unit only.",
+     "open_date": "2026-11-18",
+     "open_time": "00:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "KS-otter-smoky-saline",
+       "zone_name": "Smoky Saline Otter Management Unit"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "1 otters per trapper in the Solomon otter management unit. No statewide season quota.",
+      "possession_limit": null,
+      "season_bag": 1
+     },
+     "close_date": "2027-03-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Otter may only be trapped (no hunting season). Bag limit applies within this unit only.",
+     "open_date": "2026-11-18",
+     "open_time": "00:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "KS-otter-solomon",
+       "zone_name": "Solomon Otter Management Unit"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "1 otters per trapper in the Western otter management unit. No statewide season quota.",
+      "possession_limit": null,
+      "season_bag": 1
+     },
+     "close_date": "2027-03-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Otter may only be trapped (no hunting season). Bag limit applies within this unit only.",
+     "open_date": "2026-11-18",
+     "open_time": "00:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "KS-otter-western",
+       "zone_name": "Western Otter Management Unit"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Coyote",
+   "iac_reference": "K.A.R. 115-5-1; KDWP Furharvester Activity Survey",
+   "notes": "The coyote is NOT legally classified as a furbearer in Kansas. A furharvester license is not required to hunt coyotes.",
+   "permit_requirements": [
+    "Artificial light, light-amplifying scopes, and thermal-imaging equipment for hunting coyotes from Jan 1 through Mar 31 requires a department permit (vehicles may not be used with this equipment; use is not authorized on department lands and waters)."
+   ],
+   "scientific_name": "Canis latrans",
+   "scientific_name_note": "Standard taxonomy; not stated in Kansas regulations.",
+   "scientific_name_verified": false,
+   "season_status": "continuous",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "No closed season for trapping coyotes.",
+     "open_date": null,
+     "open_time": "00:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "KS-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Coyote hunting is open year-round EXCEPT it is closed during firearms deer season. (2026 firearms deer season dates not verified against KDWP — verify locally.)",
+     "open_date": null,
+     "open_time": "00:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "KS-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Spotted skunk (civet cat)",
+   "iac_reference": "K.A.R. 115-25-11",
+   "notes": "Listed as a furbearer in Kansas statutes ('civet cat') but NOT included in any open season in K.A.R. 115-25-11. Included so the app flags any logged take as out of season.",
+   "permit_requirements": [],
+   "scientific_name": "Spilogale putorius",
+   "scientific_name_note": "Standard taxonomy; not stated in Kansas regulations.",
+   "scientific_name_verified": false,
+   "season_status": "closed",
+   "seasons": []
+  },
+  {
+   "common_name": "Black-footed ferret",
+   "iac_reference": "K.A.R. 115-25-11; federal ESA",
+   "notes": "Federally endangered; no open season. Included so the app flags any logged take as out of season.",
+   "permit_requirements": [],
+   "scientific_name": "Mustela nigripes",
+   "scientific_name_note": "Standard taxonomy; not stated in Kansas regulations.",
+   "scientific_name_verified": false,
+   "season_status": "closed",
+   "seasons": []
+  },
+  {
+   "common_name": "Lynx",
+   "iac_reference": "K.A.R. 115-25-11",
+   "notes": "Listed as a furbearer in Kansas statutes but NOT included in any open season. Included so the app flags any logged take as out of season.",
+   "permit_requirements": [],
+   "scientific_name": "Lynx canadensis",
+   "scientific_name_note": "Standard taxonomy; not stated in Kansas regulations.",
+   "scientific_name_verified": false,
+   "season_status": "closed",
+   "seasons": []
+  },
+  {
+   "common_name": "Marten",
+   "iac_reference": "K.A.R. 115-25-11",
+   "notes": "Listed as a furbearer in Kansas statutes but NOT included in any open season. Included so the app flags any logged take as out of season.",
+   "permit_requirements": [],
+   "scientific_name": "Martes americana",
+   "scientific_name_note": "Standard taxonomy; not stated in Kansas regulations.",
+   "scientific_name_verified": false,
+   "season_status": "closed",
+   "seasons": []
+  }
+ ],
+ "state": "KS",
+ "state_name": "Kansas",
+ "verification": {
+  "confirmation_notes": "Data built from Kansas statutory/regulatory framework: K.A.R. 115-25-11 season structure (general furbearer hunting/trapping season from the first Wednesday after the second Saturday in November through February 15; beaver through March 31; otter through March 31 managed by 13 otter management units with unit bag limits of 1-10 otters per trapper and no statewide season quota), the KDWP 'When to Hunt' page (12:00 a.m. opening / midnight closing times), the official KDWP 2024-25 Furharvester Activity Survey (extended year-round raccoon/opossum hunting and trapping season), and K.A.R. 115-5-1 (coyote not a furbearer; thermal/night-vision coyote permit rules). 2026-27 dates computed from the regulatory formula: first Wednesday after the second Saturday in November 2026 = November 18, 2026 (verified with date -d). Code citations (K.A.R. 115-25-11 and 115-5-1) now point to the official Kansas Secretary of State K.A.R. publications instead of the Cornell LII mirror. Season opening dates computed from the 115-25-11 formula: first Wednesday after the second Saturday in November 2026 = Nov 18, 2026 (Wednesday), verified with date -d.",
+  "known_gaps": [
+   "2026-27 raccoon/opossum extended season: confirmed as policy from the 2024-25 KDWP survey ('new' in 2024-25); presumed continuing for 2026-27. If KDWP ended the extension, hunting/trapping revert to the Nov 18-Feb 15 regular season only.",
+   "Otter unit bag limits are per K.A.R. 115-25-11 as amended and the KDWP 2024-25 otter pelt tagging report (10 in Lower Neosho and Marais des Cygnes units; 5 in Missouri and Verdigris units; 2 in Upper Neosho, Kansas, Big Blue, and Lower Arkansas units; 1 in Middle Arkansas, Republican, Smoky Saline, Solomon, and Western units). Re-verify unit boundaries and bag limits against current KDWP notices before trapping.",
+   "Firearms deer season dates (which close coyote hunting) were not verified for 2026.",
+   "Bobcat/swift fox/otter pelt-tagging requirements are per KDWP harvest-monitoring programs; confirm current tagging station/contact requirements with KDWP.",
+   "Specific equipment limitations during the extended (off-regular-season) raccoon/opossum trapping period were not verified — verify with KDWP.",
+   "Scientific names are standard taxonomy, not stated in Kansas sources.",
+   "Running seasons (March 1 - November 1 for bobcat, gray/red fox; raccoon/opossum running now folded into the extended hunting season) are non-take seasons and not modeled.",
+   "Fees and exact license product names were not verified and are omitted.",
+   "Nuisance/depredation rules are not modeled.",
+   "Western Kansas (roughly west of the I-83 corridor — Sherman, Wallace, Greeley, Hamilton, Stanton, Morton, Stevens, Meade, Seward and adjacent counties) observes Mountain Time; the dataset uses America/Chicago statewide — adjust clock-dependent times for Mountain-Time counties. All K.A.R. 115-25-11 season boundary times are 12:00 midnight/midnight boundaries."
+  ],
+  "regulation_year_confirmed": true
+ },
+ "license_url": "https://license.gooutdoorskansas.com",
+ "license_vendor": "Go Outdoors Kansas",
+ "regs_url": "https://www.ksoutdoors.gov/programs-services/law-enforcement/regulations-statutes",
+ "regs_kind": "page"
+,
+ "warden_directory": {
+  "label": "Report a violation",
+  "url": "https://www.ksoutdoors.gov/programs-services/law-enforcement/operation-game-thief",
+  "kind": "hotline",
+  "note": "Operation Game Thief: 1-877-426-3843, toll-free 24/7"
+ }
+}

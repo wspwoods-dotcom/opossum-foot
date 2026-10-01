@@ -1,0 +1,616 @@
+{
+ "schema_version": "1.1",
+ "state": "GA",
+ "state_name": "Georgia",
+ "season_year": "2026-27",
+ "retrieved_at": "2026-09-18",
+ "disclaimer": "Reminder reference only \u2014 NOT legal authority. Season dates, zones, and limits are set annually and can change. Always verify current regulations with the Georgia DNR before hunting or trapping.",
+ "sources": [
+  {
+   "id": "ga-trapping-pdf",
+   "title": "Georgia DNR Law Enforcement: Georgia Trapping Regulations",
+   "url": "https://gadnrle.org/sites/default/files/le/pdf/Special-Permits/Georgia_Trapping_Regulations.pdf",
+   "type": "agency_booklet",
+   "notes": "Official DNR trapping regulations; archived locally. Confirms general furbearer trapping Dec 1\u2013Feb 28 and no closed trapping season for beaver or coyote."
+  },
+  {
+   "id": "ga-rule-391-4-2-31",
+   "title": "Ga. Comp. R. & Regs. r. 391-4-2-.31 (Fox, Grouse, Opossum, Quail, Rabbit, Raccoon, Squirrel, Bobcat) \u2014 official GA DNR rule text",
+   "url": "https://gadnrle.org/sites/default/files/April2022_Public%20Notice_Proposed%20Amendments%20to%20Rules%20391-4-2-12%20and%20391-4-2-.31_Raccoon%26Opossum.pdf",
+   "type": "administrative_code",
+   "notes": "Bobcat and fox: statewide Dec. 1 through last day of February, no limit. Opossum/raccoon: department-managed lands Aug. 15 through last day of February; all other lands Jan. 1\u2013Dec. 31 (no closed season)."
+  },
+  {
+   "id": "ga-rule-391-4-2-12",
+   "title": "Ga. Comp. R. & Regs. r. 391-4-2-.12 (Trapping) \u2014 official GA DNR rule text",
+   "url": "https://gadnrle.org/sites/default/files/April2022_Public%20Notice_Proposed%20Amendments%20to%20Rules%20391-4-2-12%20and%20391-4-2-.31_Raccoon%26Opossum.pdf",
+   "type": "administrative_code",
+   "notes": "Trapping season for raccoon, mink, otter, fox, opossum, muskrat, skunk, bobcat, weasel: Dec. 1 through last day of February; no closed season on beaver and coyotes. Private-land any-time trapping of beaver/raccoon/opossum consistent with O.C.G.A. \u00a7 27-3-62."
+  }
+ ],
+ "license_summary": {
+  "trapping_license": "A Georgia trapping license is required for trapping and for selling fur, hides and pelts. A hunting license is required for hunting take of furbearers.",
+  "reporting": "All trappers must report in writing (Georgia Trapper Questionnaire) the number of furs, hides or pelts taken and to whom sold within 10 days after the close of trapping season. Traps must be inspected at least once each 24 hours and be stamped or tagged with the owner's name or permanent trapper ID.",
+  "bobcat_otter_tagging": "All bobcats and otters exported out of Georgia must have a federal export tag attached by State personnel no later than 10 days after the close of trapping season."
+ },
+ "species": [
+  {
+   "common_name": "Beaver",
+   "scientific_name": "Castor canadensis",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Georgia DNR regulations.",
+   "iac_reference": "O.C.G.A. \u00a7 27-3-62",
+   "season_status": "continuous",
+   "seasons": [
+    {
+     "method": "both",
+     "land_type": "all",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "GA-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Unprotected species: no closed season, no limit. O.C.G.A. \u00a7 27-3-62: on private land not operated by the department, beaver may be trapped at any time during the year."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Bobcat",
+   "scientific_name": "Lynx rufus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Georgia DNR regulations.",
+   "iac_reference": "O.C.G.A. \u00a7 27-3-62",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-12-01",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "GA-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Dec. 1 \u2013 Feb. 28, no limit. All bobcats exported out of Georgia must have a federal export tag attached by State personnel no later than 10 days after the close of trapping season."
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-12-01",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "GA-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Dec. 1 \u2013 Feb. 28, no limit. May be hunted with small game firearms or centerfire firearms of .17 caliber or larger; electronic calls may be used; hunting with dogs allowed; night hunting allowed."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Coyote",
+   "scientific_name": "Canis latrans",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Georgia DNR regulations.",
+   "iac_reference": "O.C.G.A. \u00a7 27-3-62",
+   "season_status": "continuous",
+   "seasons": [
+    {
+     "method": "both",
+     "land_type": "all",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "GA-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Unprotected species: no closed season, no limit. Electronic calls may be used for hunting coyotes."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Fox",
+   "scientific_name": "Urocyon cinereoargenteus / Vulpes vulpes",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Georgia DNR regulations.",
+   "iac_reference": "O.C.G.A. \u00a7 27-3-62",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-12-01",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "GA-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Dec. 1 \u2013 Feb. 28, no limit."
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-12-01",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "GA-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Dec. 1 \u2013 Feb. 28, no limit. May be hunted with small game firearms or centerfire firearms of .17 caliber or larger; electronic calls may be used; hunting with dogs allowed; night hunting allowed."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Mink",
+   "scientific_name": "Neogale vison",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Georgia DNR regulations.",
+   "iac_reference": "O.C.G.A. \u00a7 27-3-62",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-12-01",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "GA-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Dec. 1 \u2013 Feb. 28, no limit. No statewide hunting season listed for mink."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Muskrat",
+   "scientific_name": "Ondatra zibethicus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Georgia DNR regulations.",
+   "iac_reference": "O.C.G.A. \u00a7 27-3-62",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-12-01",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "GA-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Dec. 1 \u2013 Feb. 28, no limit. No statewide hunting season listed for muskrat."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Nutria",
+   "scientific_name": "Myocastor coypus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Georgia DNR regulations.",
+   "iac_reference": "O.C.G.A. \u00a7 27-3-62",
+   "season_status": "continuous",
+   "seasons": [
+    {
+     "method": "both",
+     "land_type": "all",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "GA-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Unprotected species: no closed season, no limit."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Opossum",
+   "scientific_name": "Didelphis virginiana",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Georgia DNR regulations.",
+   "iac_reference": "O.C.G.A. \u00a7 27-3-62",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "GA-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "No closed season statewide, no limit. O.C.G.A. \u00a7 27-3-62: on private land not operated by the department, opossums may be trapped at any time during the year."
+    },
+    {
+     "method": "hunting",
+     "land_type": "public",
+     "open_date": "2026-08-15",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "GA-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Public lands: Aug. 15 \u2013 Feb. 28, no limit."
+    },
+    {
+     "method": "hunting",
+     "land_type": "private",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "GA-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Private lands: no closed season, no limit."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "River otter",
+   "scientific_name": "Lontra canadensis",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Georgia DNR regulations.",
+   "iac_reference": "O.C.G.A. \u00a7 27-3-62",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-12-01",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "GA-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Dec. 1 \u2013 Feb. 28, no limit. All otters exported out of Georgia must have a federal export tag attached by State personnel no later than 10 days after the close of trapping season. No statewide hunting season listed for otter."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Raccoon",
+   "scientific_name": "Procyon lotor",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Georgia DNR regulations.",
+   "iac_reference": "O.C.G.A. \u00a7 27-3-62",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "GA-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "No closed season statewide, no limit. O.C.G.A. \u00a7 27-3-62: on private land not operated by the department, raccoons may be trapped at any time during the year."
+    },
+    {
+     "method": "hunting",
+     "land_type": "public",
+     "open_date": "2026-08-15",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "GA-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Public lands: Aug. 15 \u2013 Feb. 28, no limit."
+    },
+    {
+     "method": "hunting",
+     "land_type": "private",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "GA-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Private lands: no closed season, no limit."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Skunk",
+   "scientific_name": null,
+   "scientific_name_verified": false,
+   "scientific_name_note": "Georgia regulations do not distinguish skunk species; no single standard taxon applies.",
+   "iac_reference": "O.C.G.A. \u00a7 27-3-62",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-12-01",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "GA-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Dec. 1 \u2013 Feb. 28, no limit. No statewide hunting season listed for skunk."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Weasel",
+   "scientific_name": "Mustela frenata",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Georgia DNR regulations.",
+   "iac_reference": "O.C.G.A. \u00a7 27-3-62",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-12-01",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "GA-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Dec. 1 \u2013 Feb. 28, no limit. No statewide hunting season listed for weasel."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  }
+ ],
+ "verification": {
+  "regulation_year_confirmed": true,
+  "confirmation_notes": "Ga. Comp. R. & Regs. rr. 391-4-2-.31 and 391-4-2-.12 (official GA DNR rule text, gadnrle.org) and the GA DNR Law Enforcement trapping regulations PDF, read 2026-09-18. The eRegulations/Kalkomey mirror was not cited.",
+  "known_gaps": [
+   "Scientific names are standard taxonomy, not stated in GA DNR regulations.",
+   "Depredation/nuisance take provisions (e.g., year-round private-land take of unprotected species) are noted, not modeled as seasons."
+  ]
+ },
+ "provisional": false,
+ "license_url": "https://license.gooutdoorsgeorgia.com/Licensing/CustomerLookup.aspx",
+ "license_vendor": "Go Outdoors",
+ "regs_url": "https://gadnrle.org/sites/default/files/le/pdf/Special-Permits/Georgia_Trapping_Regulations.pdf",
+ "regs_kind": "pdf"
+,
+ "warden_directory": {
+  "label": "Report a violation",
+  "url": "https://gadnrle.org/ranger-hotline",
+  "kind": "hotline",
+  "note": "Ranger Hotline: 1-800-241-4113, 24/7; *DNR on AT&T"
+ }
+}

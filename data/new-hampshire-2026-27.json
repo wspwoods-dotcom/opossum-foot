@@ -1,0 +1,1371 @@
+{
+ "schema_version": "1.0",
+ "state": "NH",
+ "state_name": "New Hampshire",
+ "season_year": "2026-27",
+ "provisional": false,
+ "retrieved_at": "2026-09-18",
+ "disclaimer": "Reminder reference only \u2014 NOT legal authority. Season dates, zones, and limits are set annually and can change. Always verify current regulations with the NH Fish and Game Department before hunting or trapping.",
+ "sources": [
+  {
+   "id": "nh-digest-2026-27",
+   "title": "2026\u20132027 New Hampshire Hunting & Trapping Digest (NH Fish & Game, via eRegulations)",
+   "url": "https://www.eregulations.com/newhampshire/hunting/furbearer-hunting-trapping-seasons",
+   "type": "agency_booklet",
+   "notes": "Official online digest (Department's eRegulations publication; page last updated August 27, 2026). Full digest: https://www.eregulations.com/newhampshire/hunting/2026-2027-new-hampshire-hunting-digest"
+  },
+  {
+   "id": "nhfg-registration-news-2026",
+   "title": "Furbearers Are Now Required to Register Their Harvest Online (NHFG news, Aug 27, 2026)",
+   "url": "https://nhfishgame.com/2026/08/27/furbearer-hunters-are-now-required-to-register-their-harvest-online/",
+   "type": "agency_news",
+   "notes": "Online registration of hunter-harvested furbearers mandatory since 2025 (within 24 hours); fisher sealing + lower-jaw submission."
+  }
+ ],
+ "license_summary": {
+  "trapping_license": "Trapping license required (fees not extracted \u2014 see NHFG licensing).",
+  "trapper_report": "Annual Trapper's Report due April 30 (all licensed trappers).",
+  "hunter_registration": "All furbearers taken by HUNTING (coyote, fisher, raccoon, red/gray fox, opossum, mink, weasel, skunk, muskrat) must be registered online within 24 hours of take.",
+  "fisher_sealing": "All harvested fisher must be sealed and the lower jaw submitted at the time of sealing.",
+  "hunting_hours": "Furbearer hunting hours: 1/2 hour before sunrise to 1/2 hour after sunset."
+ },
+ "species": [
+  {
+   "common_name": "Beaver",
+   "iac_reference": "2026-2027 NH Hunting & Trapping Digest, Furbearer & Trapping Seasons (eRegulations)",
+   "scientific_name": "Castor canadensis",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the 2026-2027 NH Hunting & Trapping Digest.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-15",
+     "close_date": "2027-04-10",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "NH-WMU-A-F",
+       "zone_name": "WMUs A-F",
+       "area_type": "management_units",
+       "units": [
+        "A",
+        "B",
+        "C1",
+        "C2",
+        "D1",
+        "D2",
+        "E",
+        "F"
+       ]
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No daily or season bag limit."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-04-10",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "NH-WMU-G-M",
+       "zone_name": "WMUs G-M",
+       "area_type": "management_units",
+       "units": [
+        "G",
+        "H1",
+        "H2",
+        "I1",
+        "I2",
+        "J1",
+        "J2",
+        "K",
+        "L",
+        "M"
+       ]
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No daily or season bag limit."
+     },
+     "notes": ""
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "No open HUNTING season for beaver."
+  },
+  {
+   "common_name": "Muskrat",
+   "iac_reference": "2026-2027 NH Hunting & Trapping Digest, Furbearer & Trapping Seasons (eRegulations)",
+   "scientific_name": "Ondatra zibethicus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the 2026-2027 NH Hunting & Trapping Digest.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-15",
+     "close_date": "2027-04-10",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "NH-WMU-A-F",
+       "zone_name": "WMUs A-F",
+       "area_type": "management_units",
+       "units": [
+        "A",
+        "B",
+        "C1",
+        "C2",
+        "D1",
+        "D2",
+        "E",
+        "F"
+       ]
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No daily or season bag limit."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-04-10",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "NH-WMU-G-M",
+       "zone_name": "WMUs G-M",
+       "area_type": "management_units",
+       "units": [
+        "G",
+        "H1",
+        "H2",
+        "I1",
+        "I2",
+        "J1",
+        "J2",
+        "K",
+        "L",
+        "M"
+       ]
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No daily or season bag limit."
+     },
+     "notes": ""
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-10-15",
+     "close_date": "2027-04-10",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "NH-WMU-A-F",
+       "zone_name": "WMUs A-F",
+       "area_type": "management_units",
+       "units": [
+        "A",
+        "B",
+        "C1",
+        "C2",
+        "D1",
+        "D2",
+        "E",
+        "F"
+       ]
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No daily or season bag limit."
+     },
+     "notes": "Hunter-harvested furbearers must be registered online within 24 hours of take at www.wildlife.nh.gov/hunting-nh/furbearer."
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-04-10",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "NH-WMU-G-M",
+       "zone_name": "WMUs G-M",
+       "area_type": "management_units",
+       "units": [
+        "G",
+        "H1",
+        "H2",
+        "I1",
+        "I2",
+        "J1",
+        "J2",
+        "K",
+        "L",
+        "M"
+       ]
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No daily or season bag limit."
+     },
+     "notes": "Hunter-harvested furbearers must be registered online within 24 hours of take at www.wildlife.nh.gov/hunting-nh/furbearer."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Mink",
+   "iac_reference": "2026-2027 NH Hunting & Trapping Digest, Furbearer & Trapping Seasons (eRegulations)",
+   "scientific_name": "Neogale vison",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the 2026-2027 NH Hunting & Trapping Digest.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-15",
+     "close_date": "2027-04-10",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "NH-WMU-A-F",
+       "zone_name": "WMUs A-F",
+       "area_type": "management_units",
+       "units": [
+        "A",
+        "B",
+        "C1",
+        "C2",
+        "D1",
+        "D2",
+        "E",
+        "F"
+       ]
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No daily or season bag limit."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-04-10",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "NH-WMU-G-M",
+       "zone_name": "WMUs G-M",
+       "area_type": "management_units",
+       "units": [
+        "G",
+        "H1",
+        "H2",
+        "I1",
+        "I2",
+        "J1",
+        "J2",
+        "K",
+        "L",
+        "M"
+       ]
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No daily or season bag limit."
+     },
+     "notes": ""
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-10-15",
+     "close_date": "2027-04-10",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "NH-WMU-A-F",
+       "zone_name": "WMUs A-F",
+       "area_type": "management_units",
+       "units": [
+        "A",
+        "B",
+        "C1",
+        "C2",
+        "D1",
+        "D2",
+        "E",
+        "F"
+       ]
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No daily or season bag limit."
+     },
+     "notes": "Hunter-harvested furbearers must be registered online within 24 hours of take at www.wildlife.nh.gov/hunting-nh/furbearer."
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-04-10",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "NH-WMU-G-M",
+       "zone_name": "WMUs G-M",
+       "area_type": "management_units",
+       "units": [
+        "G",
+        "H1",
+        "H2",
+        "I1",
+        "I2",
+        "J1",
+        "J2",
+        "K",
+        "L",
+        "M"
+       ]
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No daily or season bag limit."
+     },
+     "notes": "Hunter-harvested furbearers must be registered online within 24 hours of take at www.wildlife.nh.gov/hunting-nh/furbearer."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "River otter",
+   "iac_reference": "2026-2027 NH Hunting & Trapping Digest, Furbearer & Trapping Seasons (eRegulations)",
+   "scientific_name": "Lontra canadensis",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the 2026-2027 NH Hunting & Trapping Digest.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-15",
+     "close_date": "2027-04-10",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "NH-WMU-A-F",
+       "zone_name": "WMUs A-F",
+       "area_type": "management_units",
+       "units": [
+        "A",
+        "B",
+        "C1",
+        "C2",
+        "D1",
+        "D2",
+        "E",
+        "F"
+       ]
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": 10,
+      "possession_limit": null,
+      "limit_notes": "Season limit 10 otter per trapper."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-04-10",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "NH-WMU-G-M",
+       "zone_name": "WMUs G-M",
+       "area_type": "management_units",
+       "units": [
+        "G",
+        "H1",
+        "H2",
+        "I1",
+        "I2",
+        "J1",
+        "J2",
+        "K",
+        "L",
+        "M"
+       ]
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": 10,
+      "possession_limit": null,
+      "limit_notes": "Season limit 10 otter per trapper."
+     },
+     "notes": ""
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "No open HUNTING season for otter."
+  },
+  {
+   "common_name": "Weasel",
+   "iac_reference": "2026-2027 NH Hunting & Trapping Digest, Furbearer & Trapping Seasons (eRegulations)",
+   "scientific_name": "Neogale frenata; Mustela erminea",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Digest groups weasels without distinguishing species; standard taxonomy, not stated in the digest.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-15",
+     "close_date": "2027-04-10",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "NH-WMU-A-F",
+       "zone_name": "WMUs A-F",
+       "area_type": "management_units",
+       "units": [
+        "A",
+        "B",
+        "C1",
+        "C2",
+        "D1",
+        "D2",
+        "E",
+        "F"
+       ]
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No daily or season bag limit."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-04-10",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "NH-WMU-G-M",
+       "zone_name": "WMUs G-M",
+       "area_type": "management_units",
+       "units": [
+        "G",
+        "H1",
+        "H2",
+        "I1",
+        "I2",
+        "J1",
+        "J2",
+        "K",
+        "L",
+        "M"
+       ]
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No daily or season bag limit."
+     },
+     "notes": ""
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-10-15",
+     "close_date": "2027-04-10",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "NH-WMU-A-F",
+       "zone_name": "WMUs A-F",
+       "area_type": "management_units",
+       "units": [
+        "A",
+        "B",
+        "C1",
+        "C2",
+        "D1",
+        "D2",
+        "E",
+        "F"
+       ]
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No daily or season bag limit."
+     },
+     "notes": "Hunter-harvested furbearers must be registered online within 24 hours of take at www.wildlife.nh.gov/hunting-nh/furbearer."
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-04-10",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "NH-WMU-G-M",
+       "zone_name": "WMUs G-M",
+       "area_type": "management_units",
+       "units": [
+        "G",
+        "H1",
+        "H2",
+        "I1",
+        "I2",
+        "J1",
+        "J2",
+        "K",
+        "L",
+        "M"
+       ]
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No daily or season bag limit."
+     },
+     "notes": "Hunter-harvested furbearers must be registered online within 24 hours of take at www.wildlife.nh.gov/hunting-nh/furbearer."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Fisher",
+   "iac_reference": "2026-2027 NH Hunting & Trapping Digest, Furbearer & Trapping Seasons (eRegulations)",
+   "scientific_name": "Pekania pennanti",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the 2026-2027 NH Hunting & Trapping Digest.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-12-01",
+     "close_date": "2026-12-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "NH-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": 2,
+      "possession_limit": null,
+      "limit_notes": "Statewide bag limit of 2 fisher per trapper, COMBINED across hunting and trapping."
+     },
+     "notes": "All fisher harvested must be SEALED and the lower jaw submitted at the time of sealing. Hunter-harvested furbearers must be registered online within 24 hours of take at www.wildlife.nh.gov/hunting-nh/furbearer."
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-12-01",
+     "close_date": "2027-01-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "NH-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": 2,
+      "possession_limit": null,
+      "limit_notes": "Statewide bag limit of 2 fisher per trapper, COMBINED across hunting and trapping."
+     },
+     "notes": "All fisher harvested must be SEALED and the lower jaw submitted at the time of sealing. Hunter-harvested furbearers must be registered online within 24 hours of take at www.wildlife.nh.gov/hunting-nh/furbearer."
+    }
+   ],
+   "permit_requirements": [
+    "All fisher harvested must be SEALED and the lower jaw submitted at the time of sealing. Hunter-harvested furbearers must be registered online within 24 hours of take at www.wildlife.nh.gov/hunting-nh/furbearer."
+   ],
+   "notes": ""
+  },
+  {
+   "common_name": "Red fox",
+   "iac_reference": "2026-2027 NH Hunting & Trapping Digest, Furbearer & Trapping Seasons (eRegulations)",
+   "scientific_name": "Vulpes vulpes",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the 2026-2027 NH Hunting & Trapping Digest.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-15",
+     "close_date": "2026-12-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "NH-WMU-A-F",
+       "zone_name": "WMUs A-F",
+       "area_type": "management_units",
+       "units": [
+        "A",
+        "B",
+        "C1",
+        "C2",
+        "D1",
+        "D2",
+        "E",
+        "F"
+       ]
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No daily or season bag limit."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-01-15",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "NH-WMU-G-M",
+       "zone_name": "WMUs G-M",
+       "area_type": "management_units",
+       "units": [
+        "G",
+        "H1",
+        "H2",
+        "I1",
+        "I2",
+        "J1",
+        "J2",
+        "K",
+        "L",
+        "M"
+       ]
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No daily or season bag limit."
+     },
+     "notes": ""
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-09-01",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "NH-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No daily or season bag limit."
+     },
+     "notes": "Hunter-harvested furbearers must be registered online within 24 hours of take at www.wildlife.nh.gov/hunting-nh/furbearer."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Gray fox",
+   "iac_reference": "2026-2027 NH Hunting & Trapping Digest, Furbearer & Trapping Seasons (eRegulations)",
+   "scientific_name": "Urocyon cinereoargenteus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the 2026-2027 NH Hunting & Trapping Digest.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-15",
+     "close_date": "2026-12-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "NH-WMU-A-F",
+       "zone_name": "WMUs A-F",
+       "area_type": "management_units",
+       "units": [
+        "A",
+        "B",
+        "C1",
+        "C2",
+        "D1",
+        "D2",
+        "E",
+        "F"
+       ]
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No daily or season bag limit."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-01-15",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "NH-WMU-G-M",
+       "zone_name": "WMUs G-M",
+       "area_type": "management_units",
+       "units": [
+        "G",
+        "H1",
+        "H2",
+        "I1",
+        "I2",
+        "J1",
+        "J2",
+        "K",
+        "L",
+        "M"
+       ]
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No daily or season bag limit."
+     },
+     "notes": ""
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-09-01",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "NH-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No daily or season bag limit."
+     },
+     "notes": "Hunter-harvested furbearers must be registered online within 24 hours of take at www.wildlife.nh.gov/hunting-nh/furbearer."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Virginia opossum",
+   "iac_reference": "2026-2027 NH Hunting & Trapping Digest, Furbearer & Trapping Seasons (eRegulations)",
+   "scientific_name": "Didelphis virginiana",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the 2026-2027 NH Hunting & Trapping Digest.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-15",
+     "close_date": "2026-12-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "NH-WMU-A-F",
+       "zone_name": "WMUs A-F",
+       "area_type": "management_units",
+       "units": [
+        "A",
+        "B",
+        "C1",
+        "C2",
+        "D1",
+        "D2",
+        "E",
+        "F"
+       ]
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No daily or season bag limit."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-01-15",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "NH-WMU-G-M",
+       "zone_name": "WMUs G-M",
+       "area_type": "management_units",
+       "units": [
+        "G",
+        "H1",
+        "H2",
+        "I1",
+        "I2",
+        "J1",
+        "J2",
+        "K",
+        "L",
+        "M"
+       ]
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No daily or season bag limit."
+     },
+     "notes": ""
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-09-01",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "NH-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No daily or season bag limit."
+     },
+     "notes": "Hunter-harvested furbearers must be registered online within 24 hours of take at www.wildlife.nh.gov/hunting-nh/furbearer."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Striped skunk",
+   "iac_reference": "2026-2027 NH Hunting & Trapping Digest, Furbearer & Trapping Seasons (eRegulations)",
+   "scientific_name": "Mephitis mephitis",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the 2026-2027 NH Hunting & Trapping Digest.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-15",
+     "close_date": "2026-12-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "NH-WMU-A-F",
+       "zone_name": "WMUs A-F",
+       "area_type": "management_units",
+       "units": [
+        "A",
+        "B",
+        "C1",
+        "C2",
+        "D1",
+        "D2",
+        "E",
+        "F"
+       ]
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No daily or season bag limit."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-01-15",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "NH-WMU-G-M",
+       "zone_name": "WMUs G-M",
+       "area_type": "management_units",
+       "units": [
+        "G",
+        "H1",
+        "H2",
+        "I1",
+        "I2",
+        "J1",
+        "J2",
+        "K",
+        "L",
+        "M"
+       ]
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No daily or season bag limit."
+     },
+     "notes": ""
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-09-01",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "NH-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No daily or season bag limit."
+     },
+     "notes": "Hunter-harvested furbearers must be registered online within 24 hours of take at www.wildlife.nh.gov/hunting-nh/furbearer."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Raccoon",
+   "iac_reference": "2026-2027 NH Hunting & Trapping Digest, Furbearer & Trapping Seasons (eRegulations)",
+   "scientific_name": "Procyon lotor",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the 2026-2027 NH Hunting & Trapping Digest.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-15",
+     "close_date": "2026-12-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "NH-WMU-A-F",
+       "zone_name": "WMUs A-F",
+       "area_type": "management_units",
+       "units": [
+        "A",
+        "B",
+        "C1",
+        "C2",
+        "D1",
+        "D2",
+        "E",
+        "F"
+       ]
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No daily or season bag limit."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-01-15",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "NH-WMU-G-M",
+       "zone_name": "WMUs G-M",
+       "area_type": "management_units",
+       "units": [
+        "G",
+        "H1",
+        "H2",
+        "I1",
+        "I2",
+        "J1",
+        "J2",
+        "K",
+        "L",
+        "M"
+       ]
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No daily or season bag limit."
+     },
+     "notes": ""
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-09-01",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "NH-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No daily or season bag limit."
+     },
+     "notes": "Hunter-harvested furbearers must be registered online within 24 hours of take at www.wildlife.nh.gov/hunting-nh/furbearer."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Coyote",
+   "iac_reference": "2026-2027 NH Hunting & Trapping Digest, Furbearer & Trapping Seasons (eRegulations)",
+   "scientific_name": "Canis latrans",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the 2026-2027 NH Hunting & Trapping Digest.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-15",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "NH-WMU-A-F",
+       "zone_name": "WMUs A-F",
+       "area_type": "management_units",
+       "units": [
+        "A",
+        "B",
+        "C1",
+        "C2",
+        "D1",
+        "D2",
+        "E",
+        "F"
+       ]
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No daily or season bag limit."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "NH-WMU-G-M",
+       "zone_name": "WMUs G-M",
+       "area_type": "management_units",
+       "units": [
+        "G",
+        "H1",
+        "H2",
+        "I1",
+        "I2",
+        "J1",
+        "J2",
+        "K",
+        "L",
+        "M"
+       ]
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No daily or season bag limit."
+     },
+     "notes": ""
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "NH-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No daily or season bag limit."
+     },
+     "notes": "No closed season for coyote hunting. Night hunting allowed Jan 1-Mar 31 (lights may be used, except from a motor vehicle, snowmobile, or OHRV). Hunter-harvested furbearers must be registered online within 24 hours of take at www.wildlife.nh.gov/hunting-nh/furbearer."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Bobcat",
+   "iac_reference": "2026-2027 NH Hunting & Trapping Digest, Furbearer & Trapping Seasons (eRegulations)",
+   "scientific_name": "Lynx rufus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the 2026-2027 NH Hunting & Trapping Digest.",
+   "season_status": "closed",
+   "seasons": [],
+   "permit_requirements": [],
+   "notes": "CLOSED per the 2026-2027 NH digest (listed as 'Bobcat, Lynx, Pine marten \u2014 CLOSED')."
+  },
+  {
+   "common_name": "Canada lynx",
+   "iac_reference": "2026-2027 NH Hunting & Trapping Digest, Furbearer & Trapping Seasons (eRegulations)",
+   "scientific_name": "Lynx canadensis",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the 2026-2027 NH Hunting & Trapping Digest.",
+   "season_status": "closed",
+   "seasons": [],
+   "permit_requirements": [],
+   "notes": "CLOSED per the 2026-2027 NH digest (listed as 'Bobcat, Lynx, Pine marten \u2014 CLOSED')."
+  },
+  {
+   "common_name": "American marten",
+   "iac_reference": "2026-2027 NH Hunting & Trapping Digest, Furbearer & Trapping Seasons (eRegulations)",
+   "scientific_name": "Martes americana",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the 2026-2027 NH Hunting & Trapping Digest.",
+   "season_status": "closed",
+   "seasons": [],
+   "permit_requirements": [],
+   "notes": "CLOSED per the 2026-2027 NH digest (listed as 'Bobcat, Lynx, Pine marten \u2014 CLOSED')."
+  }
+ ],
+ "verification": {
+  "regulation_year_confirmed": true,
+  "confirmation_notes": "2026-2027 NH Hunting & Trapping Digest (official eRegulations publication, updated 8/27/2026). Hunting: coyote no closed season (night hunting Jan 1-Mar 31); fisher Dec 1, 2026-Jan 31, 2027 (limit 2 combined); red & gray fox/opossum/skunk/raccoon Sept 1, 2026-Mar 31, 2027; mink/muskrat/weasel WMUs A-F Oct 15, 2026-Apr 10, 2027, G-M Nov 1, 2026-Apr 10, 2027; no open hunting season for otter/beaver; bobcat/lynx/pine marten closed. Trapping: beaver/muskrat/mink/otter/weasel A-F Oct 15, 2026-Apr 10, 2027, G-M Nov 1, 2026-Apr 10, 2027 (otter limit 10); fisher Dec 1-31, 2026 statewide (limit 2 combined); fox/opossum/skunk/raccoon A-F Oct 15-Dec 31, 2026, G-M Nov 1, 2026-Jan 15, 2027; coyote A-F Oct 15, 2026-Mar 31, 2027, G-M Nov 1, 2026-Mar 31, 2027; bobcat/lynx/pine marten closed. Hunter harvest registration within 24 hours; fisher sealing + jaw; trapper report due Apr 30.",
+  "known_gaps": [
+   "Scientific names are standard taxonomy, NOT stated in the digest; all marked scientific_name_verified=false.",
+   "License fees not extracted.",
+   "No administrative-code (Fis) cross-check performed; the digest is the Department's published summary (the digest itself notes it is not the full law).",
+   "Digest PDF archival attempted 2026-09-18; see research dir for whether the download completed."
+  ]
+ },
+ "license_url": "https://nhfishandgame.com/",
+ "license_vendor": "NH Fish and Game online license system",
+ "license_note": "Trapping licenses are not sold online in NH \u2014 Concord HQ or by mail only. This link covers other license types.",
+ "regs_url": "https://www.eregulations.com/newhampshire/hunting/furbearer-hunting-trapping-seasons",
+ "regs_kind": "page"
+,
+ "warden_directory": {
+  "label": "Report a violation",
+  "url": "http://www.wildnh.com/ogt",
+  "kind": "hotline",
+  "note": "Operation Game Thief: 1-800-344-4262, 24-hr; text NHOGT to 847411"
+ }
+}

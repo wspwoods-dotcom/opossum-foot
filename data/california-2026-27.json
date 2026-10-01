@@ -1,0 +1,58 @@
+{
+ "disclaimer": "Reminder reference only — NOT legal authority. Recreational and commercial fur trapping is prohibited in California. Always verify current regulations with the California Department of Fish and Wildlife before hunting or trapping. Check county and city ordinances — local rules may add restrictions.",
+ "license_summary": "California issues no recreational or commercial fur-trapping season. AB 273 (signed 2019, effective January 1, 2020) prohibits trapping any fur-bearing or nongame mammal for recreation or commerce in fur, by any means (Fish & Game Code §3003.1). Limited take for depredation, public health/safety, or scientific/educational purposes may occur under separate code provisions and permits — outside this dataset's scope and handled as an app-level override, not a season.",
+ "provisional": false,
+ "retrieved_at": "2026-09-18",
+ "schema_version": "1.0",
+ "season_year": "2026-27",
+ "sources": [
+  {
+   "id": "ab-273",
+   "notes": "Legislative intent: 'prohibit commercial and recreational trapping of all fur-bearing and nongame mammals in California.' Amends Fish & Game Code §3003.1. §3003.1(b): 'Nothing in this section authorizes any person to trap for purposes of recreation or commerce in fur any fur-bearing mammal or nongame mammal by any other means.'",
+   "title": "California AB 273 (2019–20), Fur-bearing and nongame mammals: recreational and commercial fur trapping: prohibition (enrolled bill text)",
+   "type": "statute",
+   "url": "https://leginfo.legislature.ca.gov/faces/billTextClient.xhtml?bill_id=201920200AB273"
+  },
+  {
+   "id": "cdfw-trapping-regs-2025",
+   "notes": "CDFW §465.5(c): 'It is unlawful for any person to trap for the purposes of recreation or commerce in fur any furbearing mammal or nongame mammal...' — restates the AB 273 prohibition in current agency regulations.",
+   "title": "California Department of Fish and Wildlife, California Trapping Laws and Regulations (rev. 5/1/2025)",
+   "type": "agency_regulations",
+   "url": "https://nrm.dfg.ca.gov/FileHandler.ashx?DocumentID=45902"
+  }
+ ],
+ "species": [
+  {
+   "common_name": "All fur-bearing and nongame mammals",
+   "iac_reference": "Fish & Game Code §3003.1 (as amended by AB 273)",
+   "notes": "AB 273 prohibits trapping any fur-bearing or nongame mammal for purposes of recreation or commerce in fur, by any means. The app must flag ANY logged furbearer take in California as out of season. Depredation/nuisance take under separate provisions is not modeled — app-level override only.",
+   "permit_requirements": [],
+   "scientific_name": null,
+   "scientific_name_note": "This record covers all fur-bearing and nongame mammals as defined by California Fish & Game Code §§3950, 3965, 4000, 4150, and 4700 — it is not a single species.",
+   "scientific_name_verified": false,
+   "season_status": "closed",
+   "seasons": []
+  }
+ ],
+ "state": "CA",
+ "state_name": "California",
+ "verification": {
+  "confirmation_notes": "The prohibition is statute, not an annual season — there is no 2026–27 season to confirm. AB 273 remains in force; the CDFW's current (rev. 5/1/2025) trapping regulations restate the ban. No sunset or amendment found as of 2026-09-18.",
+  "known_gaps": [
+   "Depredation, public-health, and scientific take provisions (Fish & Game Code §§4152, 4180 et seq., §465.5 exceptions) are not modeled in this dataset.",
+   "No recreational/commercial fur-trapping license exists to summarize — none is issued."
+  ],
+  "regulation_year_confirmed": true
+ },
+ "license_url": "https://www.licenses.wildlife.ca.gov/internetsales/",
+ "license_vendor": "Aspira (CDFW ALDS)",
+ "regs_url": "https://wildlife.ca.gov/hunting/nongame-furbearers",
+ "regs_kind": "page"
+,
+ "warden_directory": {
+  "label": "Report a violation",
+  "url": "https://wildlife.ca.gov/Enforcement/CalTIP",
+  "kind": "hotline",
+  "note": "CALTIP: 1-888-334-2258 (1-888-334-CALTIP), 24/7; text CALTIP to 847411"
+ }
+}

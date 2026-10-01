@@ -1,0 +1,741 @@
+{
+  "schema_version": "1.1",
+  "state": "TN",
+  "state_name": "Tennessee",
+  "season_year": "2026-27",
+  "retrieved_at": "2026-09-18",
+  "disclaimer": "Reminder reference only \u2014 NOT legal authority. Season dates, zones, and limits are set annually and can change. Always verify current regulations with the Tennessee Wildlife Resources Agency before hunting or trapping.",
+  "sources": [
+    {
+      "id": "tn-guide",
+      "title": "2026-2027 Tennessee Hunting, Fishing, & Trapping Guide (TWRA)",
+      "url": "https://www.tn.gov/content/dam/tn/twra/documents/guide/TWRA-TN-Hunting-Guide.pdf",
+      "type": "agency_booklet",
+      "notes": "Official TWRA guide; archived locally. Beaver-hunting row verified from the rendered table page."
+    }
+  ],
+  "license_summary": {
+    "licenses": "Tennessee hunting licenses are all-inclusive Hunt/Fish/Trap licenses \u2014 a valid hunting license covers trapping.",
+    "otter_bobcat_tagging": "All river otters harvested must be tagged with Tennessee U.S. CITES tags (contact the regional TWRA office for instructions). Bobcat pelts must be tagged with Tennessee U.S. CITES tags before being exported from the U.S.",
+    "night_hunting": "Night hunting season for coyote and bobcat is private land only and requires landowner permission.",
+    "timezone_note": "Eastern Tennessee observes Eastern Time; the rest of the state observes Central Time. Season dates shown are statewide calendar dates."
+  },
+  "species": [
+    {
+      "common_name": "Beaver",
+      "scientific_name": "Castor canadensis",
+      "scientific_name_verified": false,
+      "scientific_name_note": "Standard taxonomy; not stated in the Tennessee Wildlife Resources Agency regulations.",
+      "iac_reference": "TWRA 2026-2027 Hunting, Fishing, & Trapping Guide",
+      "season_status": "open",
+      "seasons": [
+        {
+          "method": "trapping",
+          "land_type": "all",
+          "open_date": null,
+          "close_date": null,
+          "open_time": null,
+          "timezone": "America/Chicago",
+          "continuous_open": true,
+          "zones": [
+            {
+              "zone_id": "TN-statewide",
+              "zone_name": "Entire state",
+              "area_type": "statewide"
+            }
+          ],
+          "bag_limits": {
+            "daily_bag": null,
+            "season_bag": null,
+            "possession_limit": null,
+            "limit_notes": "No bag or possession limit."
+          },
+          "notes": "Trapping: year-round, no limit."
+        },
+        {
+          "method": "hunting",
+          "land_type": "all",
+          "open_date": "2026-11-07",
+          "close_date": "2027-02-28",
+          "open_time": null,
+          "timezone": "America/Chicago",
+          "continuous_open": false,
+          "zones": [
+            {
+              "zone_id": "TN-statewide",
+              "zone_name": "Entire state",
+              "area_type": "statewide"
+            }
+          ],
+          "bag_limits": {
+            "daily_bag": 6,
+            "season_bag": null,
+            "possession_limit": null,
+            "limit_notes": "daily bag 6."
+          },
+          "notes": "Hunting: Nov. 7, 2026 \u2013 Feb. 28, 2027; daily bag 6."
+        }
+      ],
+      "permit_requirements": [],
+      "notes": ""
+    },
+    {
+      "common_name": "Bobcat",
+      "scientific_name": "Lynx rufus",
+      "scientific_name_verified": false,
+      "scientific_name_note": "Standard taxonomy; not stated in the Tennessee Wildlife Resources Agency regulations.",
+      "iac_reference": "TWRA 2026-2027 Hunting, Fishing, & Trapping Guide",
+      "season_status": "open",
+      "seasons": [
+        {
+          "method": "trapping",
+          "land_type": "all",
+          "open_date": "2026-11-20",
+          "close_date": "2027-02-28",
+          "open_time": null,
+          "timezone": "America/Chicago",
+          "continuous_open": false,
+          "zones": [
+            {
+              "zone_id": "TN-statewide",
+              "zone_name": "Entire state",
+              "area_type": "statewide"
+            }
+          ],
+          "bag_limits": {
+            "daily_bag": null,
+            "season_bag": null,
+            "possession_limit": null,
+            "limit_notes": "Trapping: Nov. 20, 2026 \u2013 Feb. 28, 2027."
+          },
+          "notes": "Trapping: Nov. 20, 2026 \u2013 Feb. 28, 2027."
+        },
+        {
+          "method": "hunting",
+          "land_type": "private",
+          "open_date": "2026-09-26",
+          "close_date": "2026-11-19",
+          "open_time": null,
+          "timezone": "America/Chicago",
+          "continuous_open": false,
+          "zones": [
+            {
+              "zone_id": "TN-statewide",
+              "zone_name": "Entire state",
+              "area_type": "statewide"
+            }
+          ],
+          "bag_limits": {
+            "daily_bag": null,
+            "season_bag": null,
+            "possession_limit": null,
+            "limit_notes": "limit 1 per season."
+          },
+          "notes": "Private land, daylight: Sept. 26 \u2013 Nov. 19, 2026; limit 1 per season."
+        },
+        {
+          "method": "hunting",
+          "land_type": "private",
+          "open_date": "2026-11-20",
+          "close_date": "2027-02-28",
+          "open_time": null,
+          "timezone": "America/Chicago",
+          "continuous_open": false,
+          "zones": [
+            {
+              "zone_id": "TN-statewide",
+              "zone_name": "Entire state",
+              "area_type": "statewide"
+            }
+          ],
+          "bag_limits": {
+            "daily_bag": null,
+            "season_bag": null,
+            "possession_limit": null,
+            "limit_notes": "limit 1 per season."
+          },
+          "notes": "Private land, daylight: Nov. 20, 2026 \u2013 Feb. 28, 2027; limit 1 per season."
+        },
+        {
+          "method": "hunting",
+          "land_type": "private",
+          "open_date": "2026-06-06",
+          "close_date": "2026-08-09",
+          "open_time": null,
+          "timezone": "America/Chicago",
+          "continuous_open": false,
+          "zones": [
+            {
+              "zone_id": "TN-statewide",
+              "zone_name": "Entire state",
+              "area_type": "statewide"
+            }
+          ],
+          "bag_limits": {
+            "daily_bag": null,
+            "season_bag": null,
+            "possession_limit": null,
+            "limit_notes": "Private land, night hunting: June 6 \u2013 Aug. 9, 2026."
+          },
+          "notes": "Private land, night hunting: June 6 \u2013 Aug. 9, 2026."
+        },
+        {
+          "method": "hunting",
+          "land_type": "private",
+          "open_date": "2027-01-16",
+          "close_date": "2027-03-14",
+          "open_time": null,
+          "timezone": "America/Chicago",
+          "continuous_open": false,
+          "zones": [
+            {
+              "zone_id": "TN-statewide",
+              "zone_name": "Entire state",
+              "area_type": "statewide"
+            }
+          ],
+          "bag_limits": {
+            "daily_bag": null,
+            "season_bag": null,
+            "possession_limit": null,
+            "limit_notes": "Private land, night hunting: Jan. 16 \u2013 Mar. 14, 2027."
+          },
+          "notes": "Private land, night hunting: Jan. 16 \u2013 Mar. 14, 2027."
+        }
+      ],
+      "permit_requirements": [],
+      "notes": ""
+    },
+    {
+      "common_name": "Coyote",
+      "scientific_name": "Canis latrans",
+      "scientific_name_verified": false,
+      "scientific_name_note": "Standard taxonomy; not stated in the Tennessee Wildlife Resources Agency regulations.",
+      "iac_reference": "TWRA 2026-2027 Hunting, Fishing, & Trapping Guide",
+      "season_status": "open",
+      "seasons": [
+        {
+          "method": "trapping",
+          "land_type": "all",
+          "open_date": null,
+          "close_date": null,
+          "open_time": null,
+          "timezone": "America/Chicago",
+          "continuous_open": true,
+          "zones": [
+            {
+              "zone_id": "TN-statewide",
+              "zone_name": "Entire state",
+              "area_type": "statewide"
+            }
+          ],
+          "bag_limits": {
+            "daily_bag": null,
+            "season_bag": null,
+            "possession_limit": null,
+            "limit_notes": "No bag or possession limit."
+          },
+          "notes": "Trapping: year-round, no limit."
+        },
+        {
+          "method": "hunting",
+          "land_type": "all",
+          "open_date": null,
+          "close_date": null,
+          "open_time": null,
+          "timezone": "America/Chicago",
+          "continuous_open": true,
+          "zones": [
+            {
+              "zone_id": "TN-statewide",
+              "zone_name": "Entire state",
+              "area_type": "statewide"
+            }
+          ],
+          "bag_limits": {
+            "daily_bag": null,
+            "season_bag": null,
+            "possession_limit": null,
+            "limit_notes": "No bag or possession limit."
+          },
+          "notes": "Hunting: year-round, no limit."
+        },
+        {
+          "method": "hunting",
+          "land_type": "private",
+          "open_date": "2026-06-06",
+          "close_date": "2026-08-09",
+          "open_time": null,
+          "timezone": "America/Chicago",
+          "continuous_open": false,
+          "zones": [
+            {
+              "zone_id": "TN-statewide",
+              "zone_name": "Entire state",
+              "area_type": "statewide"
+            }
+          ],
+          "bag_limits": {
+            "daily_bag": null,
+            "season_bag": null,
+            "possession_limit": null,
+            "limit_notes": "Private land, night hunting: June 6 \u2013 Aug. 9, 2026."
+          },
+          "notes": "Private land, night hunting: June 6 \u2013 Aug. 9, 2026."
+        },
+        {
+          "method": "hunting",
+          "land_type": "private",
+          "open_date": "2027-01-16",
+          "close_date": "2027-03-14",
+          "open_time": null,
+          "timezone": "America/Chicago",
+          "continuous_open": false,
+          "zones": [
+            {
+              "zone_id": "TN-statewide",
+              "zone_name": "Entire state",
+              "area_type": "statewide"
+            }
+          ],
+          "bag_limits": {
+            "daily_bag": null,
+            "season_bag": null,
+            "possession_limit": null,
+            "limit_notes": "Private land, night hunting: Jan. 16 \u2013 Mar. 14, 2027."
+          },
+          "notes": "Private land, night hunting: Jan. 16 \u2013 Mar. 14, 2027."
+        }
+      ],
+      "permit_requirements": [],
+      "notes": ""
+    },
+    {
+      "common_name": "Fox",
+      "scientific_name": null,
+      "scientific_name_verified": false,
+      "scientific_name_note": "Tennessee regulations do not distinguish red and gray fox; no single standard taxon applies.",
+      "iac_reference": "TWRA 2026-2027 Hunting, Fishing, & Trapping Guide",
+      "season_status": "open",
+      "seasons": [
+        {
+          "method": "both",
+          "land_type": "all",
+          "open_date": "2026-11-20",
+          "close_date": "2027-02-28",
+          "open_time": null,
+          "timezone": "America/Chicago",
+          "continuous_open": false,
+          "zones": [
+            {
+              "zone_id": "TN-statewide",
+              "zone_name": "Entire state",
+              "area_type": "statewide"
+            }
+          ],
+          "bag_limits": {
+            "daily_bag": null,
+            "season_bag": null,
+            "possession_limit": null,
+            "limit_notes": "Trapping and hunting: Nov. 20, 2026 \u2013 Feb. 28, 2027."
+          },
+          "notes": "Trapping and hunting: Nov. 20, 2026 \u2013 Feb. 28, 2027."
+        }
+      ],
+      "permit_requirements": [],
+      "notes": ""
+    },
+    {
+      "common_name": "Groundhog",
+      "scientific_name": "Marmota monax",
+      "scientific_name_verified": false,
+      "scientific_name_note": "Standard taxonomy; not stated in the Tennessee Wildlife Resources Agency regulations.",
+      "iac_reference": "TWRA 2026-2027 Hunting, Fishing, & Trapping Guide",
+      "season_status": "continuous",
+      "seasons": [
+        {
+          "method": "both",
+          "land_type": "all",
+          "open_date": null,
+          "close_date": null,
+          "open_time": null,
+          "timezone": "America/Chicago",
+          "continuous_open": true,
+          "zones": [
+            {
+              "zone_id": "TN-statewide",
+              "zone_name": "Entire state",
+              "area_type": "statewide"
+            }
+          ],
+          "bag_limits": {
+            "daily_bag": null,
+            "season_bag": null,
+            "possession_limit": null,
+            "limit_notes": "No bag or possession limit."
+          },
+          "notes": "Year-round, no limit."
+        }
+      ],
+      "permit_requirements": [],
+      "notes": ""
+    },
+    {
+      "common_name": "Least weasel",
+      "scientific_name": "Mustela nivalis",
+      "scientific_name_verified": false,
+      "scientific_name_note": "The Tennessee Hunting Guide furbearer table distinguishes least and long-tailed weasel.",
+      "iac_reference": "TWRA 2026-2027 Hunting, Fishing, & Trapping Guide",
+      "season_status": "open",
+      "seasons": [
+        {
+          "method": "both",
+          "land_type": "all",
+          "open_date": "2026-11-20",
+          "close_date": "2027-02-28",
+          "open_time": null,
+          "timezone": "America/Chicago",
+          "continuous_open": false,
+          "zones": [
+            {
+              "zone_id": "TN-statewide",
+              "zone_name": "Entire state",
+              "area_type": "statewide"
+            }
+          ],
+          "bag_limits": {
+            "daily_bag": null,
+            "season_bag": null,
+            "possession_limit": null,
+            "limit_notes": "Trapping and hunting: Nov. 20, 2026 \u2013 Feb. 28, 2027."
+          },
+          "notes": "Trapping and hunting: Nov. 20, 2026 \u2013 Feb. 28, 2027."
+        }
+      ],
+      "permit_requirements": [],
+      "notes": ""
+    },
+    {
+      "common_name": "Mink",
+      "scientific_name": "Neogale vison",
+      "scientific_name_verified": false,
+      "scientific_name_note": "Standard taxonomy; not stated in the Tennessee Wildlife Resources Agency regulations.",
+      "iac_reference": "TWRA 2026-2027 Hunting, Fishing, & Trapping Guide",
+      "season_status": "open",
+      "seasons": [
+        {
+          "method": "both",
+          "land_type": "all",
+          "open_date": "2026-11-20",
+          "close_date": "2027-02-28",
+          "open_time": null,
+          "timezone": "America/Chicago",
+          "continuous_open": false,
+          "zones": [
+            {
+              "zone_id": "TN-statewide",
+              "zone_name": "Entire state",
+              "area_type": "statewide"
+            }
+          ],
+          "bag_limits": {
+            "daily_bag": null,
+            "season_bag": null,
+            "possession_limit": null,
+            "limit_notes": "Trapping and hunting: Nov. 20, 2026 \u2013 Feb. 28, 2027."
+          },
+          "notes": "Trapping and hunting: Nov. 20, 2026 \u2013 Feb. 28, 2027."
+        }
+      ],
+      "permit_requirements": [],
+      "notes": ""
+    },
+    {
+      "common_name": "Muskrat",
+      "scientific_name": "Ondatra zibethicus",
+      "scientific_name_verified": false,
+      "scientific_name_note": "Standard taxonomy; not stated in the Tennessee Wildlife Resources Agency regulations.",
+      "iac_reference": "TWRA 2026-2027 Hunting, Fishing, & Trapping Guide",
+      "season_status": "open",
+      "seasons": [
+        {
+          "method": "both",
+          "land_type": "all",
+          "open_date": "2026-11-20",
+          "close_date": "2027-02-28",
+          "open_time": null,
+          "timezone": "America/Chicago",
+          "continuous_open": false,
+          "zones": [
+            {
+              "zone_id": "TN-statewide",
+              "zone_name": "Entire state",
+              "area_type": "statewide"
+            }
+          ],
+          "bag_limits": {
+            "daily_bag": null,
+            "season_bag": null,
+            "possession_limit": null,
+            "limit_notes": "Trapping and hunting: Nov. 20, 2026 \u2013 Feb. 28, 2027."
+          },
+          "notes": "Trapping and hunting: Nov. 20, 2026 \u2013 Feb. 28, 2027."
+        }
+      ],
+      "permit_requirements": [],
+      "notes": ""
+    },
+    {
+      "common_name": "Opossum",
+      "scientific_name": "Didelphis virginiana",
+      "scientific_name_verified": false,
+      "scientific_name_note": "Standard taxonomy; not stated in the Tennessee Wildlife Resources Agency regulations.",
+      "iac_reference": "TWRA 2026-2027 Hunting, Fishing, & Trapping Guide",
+      "season_status": "open",
+      "seasons": [
+        {
+          "method": "trapping",
+          "land_type": "all",
+          "open_date": null,
+          "close_date": null,
+          "open_time": null,
+          "timezone": "America/Chicago",
+          "continuous_open": true,
+          "zones": [
+            {
+              "zone_id": "TN-statewide",
+              "zone_name": "Entire state",
+              "area_type": "statewide"
+            }
+          ],
+          "bag_limits": {
+            "daily_bag": null,
+            "season_bag": null,
+            "possession_limit": null,
+            "limit_notes": "No bag or possession limit."
+          },
+          "notes": "Trapping: year-round, no limit."
+        },
+        {
+          "method": "hunting",
+          "land_type": "private",
+          "open_date": null,
+          "close_date": null,
+          "open_time": null,
+          "timezone": "America/Chicago",
+          "continuous_open": true,
+          "zones": [
+            {
+              "zone_id": "TN-statewide",
+              "zone_name": "Entire state",
+              "area_type": "statewide"
+            }
+          ],
+          "bag_limits": {
+            "daily_bag": null,
+            "season_bag": null,
+            "possession_limit": null,
+            "limit_notes": "Private land: year-round, 4 per night."
+          },
+          "notes": "Private land: year-round, 4 per night."
+        },
+        {
+          "method": "hunting",
+          "land_type": "all",
+          "open_date": "2026-09-18",
+          "close_date": "2027-03-15",
+          "open_time": null,
+          "timezone": "America/Chicago",
+          "continuous_open": false,
+          "zones": [
+            {
+              "zone_id": "TN-statewide",
+              "zone_name": "Entire state",
+              "area_type": "statewide"
+            }
+          ],
+          "bag_limits": {
+            "daily_bag": null,
+            "season_bag": null,
+            "possession_limit": null,
+            "limit_notes": "4 per night."
+          },
+          "notes": "Hunting: Sept. 18, 2026 \u2013 Mar. 15, 2027; 4 per night."
+        }
+      ],
+      "permit_requirements": [],
+      "notes": ""
+    },
+    {
+      "common_name": "River otter",
+      "scientific_name": "Lontra canadensis",
+      "scientific_name_verified": false,
+      "scientific_name_note": "Standard taxonomy; not stated in the Tennessee Wildlife Resources Agency regulations.",
+      "iac_reference": "TWRA 2026-2027 Hunting, Fishing, & Trapping Guide",
+      "season_status": "open",
+      "seasons": [
+        {
+          "method": "both",
+          "land_type": "all",
+          "open_date": "2026-11-20",
+          "close_date": "2027-02-28",
+          "open_time": null,
+          "timezone": "America/Chicago",
+          "continuous_open": false,
+          "zones": [
+            {
+              "zone_id": "TN-statewide",
+              "zone_name": "Entire state",
+              "area_type": "statewide"
+            }
+          ],
+          "bag_limits": {
+            "daily_bag": null,
+            "season_bag": null,
+            "possession_limit": null,
+            "limit_notes": "Trapping and hunting: Nov. 20, 2026 \u2013 Feb. 28, 2027. CITES tag required for pelts."
+          },
+          "notes": "Trapping and hunting: Nov. 20, 2026 \u2013 Feb. 28, 2027. CITES tag required for pelts."
+        }
+      ],
+      "permit_requirements": [],
+      "notes": ""
+    },
+    {
+      "common_name": "Raccoon",
+      "scientific_name": "Procyon lotor",
+      "scientific_name_verified": false,
+      "scientific_name_note": "Standard taxonomy; not stated in the Tennessee Wildlife Resources Agency regulations.",
+      "iac_reference": "TWRA 2026-2027 Hunting, Fishing, & Trapping Guide",
+      "season_status": "open",
+      "seasons": [
+        {
+          "method": "trapping",
+          "land_type": "all",
+          "open_date": null,
+          "close_date": null,
+          "open_time": null,
+          "timezone": "America/Chicago",
+          "continuous_open": true,
+          "zones": [
+            {
+              "zone_id": "TN-statewide",
+              "zone_name": "Entire state",
+              "area_type": "statewide"
+            }
+          ],
+          "bag_limits": {
+            "daily_bag": null,
+            "season_bag": null,
+            "possession_limit": null,
+            "limit_notes": "No bag or possession limit."
+          },
+          "notes": "Trapping: year-round, no limit."
+        },
+        {
+          "method": "hunting",
+          "land_type": "private",
+          "open_date": null,
+          "close_date": null,
+          "open_time": null,
+          "timezone": "America/Chicago",
+          "continuous_open": true,
+          "zones": [
+            {
+              "zone_id": "TN-statewide",
+              "zone_name": "Entire state",
+              "area_type": "statewide"
+            }
+          ],
+          "bag_limits": {
+            "daily_bag": null,
+            "season_bag": null,
+            "possession_limit": null,
+            "limit_notes": "Private land: year-round, 4 per night."
+          },
+          "notes": "Private land: year-round, 4 per night."
+        },
+        {
+          "method": "hunting",
+          "land_type": "all",
+          "open_date": "2026-09-18",
+          "close_date": "2027-03-15",
+          "open_time": null,
+          "timezone": "America/Chicago",
+          "continuous_open": false,
+          "zones": [
+            {
+              "zone_id": "TN-statewide",
+              "zone_name": "Entire state",
+              "area_type": "statewide"
+            }
+          ],
+          "bag_limits": {
+            "daily_bag": null,
+            "season_bag": null,
+            "possession_limit": null,
+            "limit_notes": "4 per night."
+          },
+          "notes": "Hunting: Sept. 18, 2026 \u2013 Mar. 15, 2027; 4 per night."
+        }
+      ],
+      "permit_requirements": [],
+      "notes": ""
+    },
+    {
+      "common_name": "Striped skunk",
+      "scientific_name": "Mephitis mephitis",
+      "scientific_name_verified": false,
+      "scientific_name_note": "Standard taxonomy; not stated in the Tennessee Wildlife Resources Agency regulations.",
+      "iac_reference": "TWRA 2026-2027 Hunting, Fishing, & Trapping Guide",
+      "season_status": "continuous",
+      "seasons": [
+        {
+          "method": "both",
+          "land_type": "all",
+          "open_date": null,
+          "close_date": null,
+          "open_time": null,
+          "timezone": "America/Chicago",
+          "continuous_open": true,
+          "zones": [
+            {
+              "zone_id": "TN-statewide",
+              "zone_name": "Entire state",
+              "area_type": "statewide"
+            }
+          ],
+          "bag_limits": {
+            "daily_bag": null,
+            "season_bag": null,
+            "possession_limit": null,
+            "limit_notes": "No bag or possession limit."
+          },
+          "notes": "Year-round, no limit."
+        }
+      ],
+      "permit_requirements": [],
+      "notes": ""
+    }
+  ],
+  "verification": {
+    "regulation_year_confirmed": true,
+    "confirmation_notes": "Official 2026-2027 Tennessee Hunting, Fishing, & Trapping Guide PDF from tn.gov, text-extracted 2026-09-18; beaver-hunting row verified from the rendered table page.",
+    "known_gaps": [
+      "Scientific names are standard taxonomy, not stated in TWRA regulations.",
+      "WMA-specific seasons may differ from statewide dates."
+    ]
+  },
+  "provisional": false,
+  "license_url": "https://gooutdoorstennessee.com/",
+  "license_vendor": "Go Outdoors Tennessee (Aspira/Kalkomey)",
+  "regs_url": "https://www.tn.gov/content/dam/tn/twra/documents/guide/TWRA-TN-Hunting-Guide.pdf",
+  "regs_kind": "pdf"
+,
+ "warden_directory": {
+  "label": "Report a violation",
+  "url": "https://www.tn.gov/content/tn/twra/contact-us.html#poaching",
+  "kind": "hotline",
+  "note": "TWRA: West TN 1-800-831-1173; Middle TN 1-800-255-8972; Cumberland Plateau 1-800-241-0767; East TN 1-800-831-1174"
+ }
+}

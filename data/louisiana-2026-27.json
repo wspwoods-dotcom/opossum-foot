@@ -1,0 +1,533 @@
+{
+ "schema_version": "1.1",
+ "state": "LA",
+ "state_name": "Louisiana",
+ "season_year": "2026-27",
+ "retrieved_at": "2026-09-18",
+ "disclaimer": "Reminder reference only — NOT legal authority. Season dates, zones, and limits are set annually and can change. Always verify current regulations with the Louisiana Department of Wildlife and Fisheries before hunting or trapping. Parish and local ordinances may add restrictions.",
+ "sources": [
+  {
+   "id": "la-trapping-regs",
+   "title": "2026-2027 Louisiana Trapping Regulations (LDWF)",
+   "url": "https://www.wlf.louisiana.gov/assets/Resources/Publications/Regulations/2026-2027-Trapping-Regulations.pdf",
+   "type": "agency_booklet",
+   "notes": "Official LDWF trapping regulations; archived locally."
+  }
+ ],
+ "license_summary": {
+  "trapping_license": "No person shall set or run traps of any type to catch furbearers during the open trapping season without a current trapping license. A trapping license is also required to sell furbearer pelts or carcasses (bobcats cannot be pelted or sold without a trapping license).",
+  "wma": "On WMAs, trapping requires a self-clearing permit and WMA Access Permit, and trapping dates vary by individual WMA schedule.",
+  "bobcat_otter_tagging": "For bobcat and river otter, a special possession tag (red for bobcat, blue for river otter) must be filled out by the trapper when the pelt is first sold; no bobcat or river otter pelts may be shipped from Louisiana without an attached CITES tag."
+ },
+ "species": [
+  {
+   "common_name": "Beaver",
+   "scientific_name": "Castor canadensis",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Louisiana Department of Wildlife and Fisheries regulations.",
+   "iac_reference": "La. Admin. Code tit. 76, § 129",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-20",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "LA-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Trapping: Nov. 20, 2026 – Mar. 31, 2027, statewide; no bag limit. WMA schedules vary by area."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Bobcat",
+   "scientific_name": "Lynx rufus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Louisiana Department of Wildlife and Fisheries regulations.",
+   "iac_reference": "La. Admin. Code tit. 76, § 129",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-20",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "LA-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Trapping: Nov. 20, 2026 – Mar. 31, 2027, statewide; no bag limit. WMA schedules vary by area. All bobcats must have a Louisiana red locking tag affixed before sale or shipment out of state."
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "LA-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": 1,
+      "possession_limit": null,
+      "limit_notes": "1 per calendar year; hunting restricted to specified areas/lands per the trapping regulations."
+     },
+     "notes": "Hunting: no closed season statewide; daylight hours only; 1 per calendar year; hunting restricted to specified areas/lands per the trapping regulations."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Coyote",
+   "scientific_name": "Canis latrans",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Louisiana Department of Wildlife and Fisheries regulations.",
+   "iac_reference": "La. Admin. Code tit. 76, § 129",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-20",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "LA-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Trapping: Nov. 20, 2026 – Mar. 31, 2027, statewide; no bag limit. WMA schedules vary by area."
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "LA-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Hunting: year-round; daylight hours only; no bag limit."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Gray fox",
+   "scientific_name": "Urocyon cinereoargenteus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Louisiana Department of Wildlife and Fisheries regulations.",
+   "iac_reference": "La. Admin. Code tit. 76, § 129",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-20",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "LA-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Trapping: Nov. 20, 2026 – Mar. 31, 2027, statewide; no bag limit. WMA schedules vary by area."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Mink",
+   "scientific_name": "Neogale vison",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Louisiana Department of Wildlife and Fisheries regulations.",
+   "iac_reference": "La. Admin. Code tit. 76, § 129",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-20",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "LA-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Trapping: Nov. 20, 2026 – Mar. 31, 2027, statewide; no bag limit. WMA schedules vary by area."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Muskrat",
+   "scientific_name": "Ondatra zibethicus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Louisiana Department of Wildlife and Fisheries regulations.",
+   "iac_reference": "La. Admin. Code tit. 76, § 129",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-20",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "LA-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Trapping: Nov. 20, 2026 – Mar. 31, 2027, statewide; no bag limit. WMA schedules vary by area."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Nutria",
+   "scientific_name": "Myocastor coypus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Louisiana Department of Wildlife and Fisheries regulations.",
+   "iac_reference": "La. Admin. Code tit. 76, § 129",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-20",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "LA-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Trapping: Nov. 20, 2026 – Mar. 31, 2027, statewide; no bag limit. WMA schedules vary by area. Trapping take also allowed with rifle during legal shooting hours (sunrise–sunset)."
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-09-01",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "LA-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Hunting: Sept. 1, 2026 – Feb. 28, 2027, for properly licensed hunters; Sept. 1 – Mar. 31 on listed WMAs; no bag limit."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Opossum",
+   "scientific_name": "Didelphis virginiana",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Louisiana Department of Wildlife and Fisheries regulations.",
+   "iac_reference": "La. Admin. Code tit. 76, § 129",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-20",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "LA-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Trapping: Nov. 20, 2026 – Mar. 31, 2027, statewide; no bag limit. WMA schedules vary by area."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Red fox",
+   "scientific_name": "Vulpes vulpes",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Louisiana Department of Wildlife and Fisheries regulations.",
+   "iac_reference": "La. Admin. Code tit. 76, § 129",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-20",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "LA-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Trapping: Nov. 20, 2026 – Mar. 31, 2027, statewide; no bag limit. WMA schedules vary by area."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Raccoon",
+   "scientific_name": "Procyon lotor",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Louisiana Department of Wildlife and Fisheries regulations.",
+   "iac_reference": "La. Admin. Code tit. 76, § 129",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-20",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "LA-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Trapping: Nov. 20, 2026 – Mar. 31, 2027, statewide; no bag limit. WMA schedules vary by area."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "River otter",
+   "scientific_name": "Lontra canadensis",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Louisiana Department of Wildlife and Fisheries regulations.",
+   "iac_reference": "La. Admin. Code tit. 76, § 129",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-20",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "LA-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Trapping: Nov. 20, 2026 – Mar. 31, 2027, statewide; no bag limit. WMA schedules vary by area."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Skunk",
+   "scientific_name": null,
+   "scientific_name_verified": false,
+   "scientific_name_note": "Louisiana regulations do not distinguish skunk species; no single standard taxon applies.",
+   "iac_reference": "La. Admin. Code tit. 76, § 129",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-20",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "LA-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Trapping: Nov. 20, 2026 – Mar. 31, 2027, statewide; no bag limit. WMA schedules vary by area."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  }
+ ],
+ "verification": {
+  "regulation_year_confirmed": true,
+  "confirmation_notes": "Official 2026-2027 Louisiana Trapping Regulations PDF from LDWF (wlf.louisiana.gov), text-extracted 2026-09-18.",
+  "known_gaps": [
+   "WMA trapping dates vary by individual WMA schedule — statewide dates do not apply on WMAs.",
+   "Scientific names are standard taxonomy, not stated in LDWF regulations."
+  ]
+ },
+ "provisional": false,
+ "license_url": "https://louisianaoutdoors.com/",
+ "license_vendor": "LouisianaOutdoors.com (LDWF official licensing site)",
+ "regs_url": "https://www.wlf.louisiana.gov/assets/Resources/Publications/Regulations/2026-2027-Trapping-Regulations.pdf",
+ "regs_kind": "pdf"
+,
+ "warden_directory": {
+  "label": "Report a violation",
+  "url": "https://www.wlf.louisiana.gov/page/report-violation",
+  "kind": "hotline",
+  "note": "Operation Game Thief: 1-800-442-2511, 24-hr toll-free; text LADWF to 847411; rewards up to $1,000"
+ }
+}

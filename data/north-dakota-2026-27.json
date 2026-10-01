@@ -1,0 +1,939 @@
+{
+ "disclaimer": "Reminder reference only \u2014 NOT legal authority. Season dates, zones, and limits are set annually and can change. Always verify current regulations with the North Dakota Game and Fish Department before hunting or trapping.",
+ "license_summary": {
+  "general": "Fisher, American marten, river otter, bobcat, and mountain lion may only be harvested by North Dakota residents. Bobcat, fisher, American marten, and river otter pelts must be tagged by the Department (fishers/marten/otter: register harvest within 12 hours; bobcat Zone 1: present pelt and carcass for inspection and tagging no later than 14 days after the close of the season or before sale/transfer; bobcat Zone 2: report within 12 hours). Carcasses of fisher, American marten, river otter, and bobcat remain the property of the Department. No person, taxidermist, or fur dealer may possess or purchase untagged animals of these species. All trapping and cable device seasons and raccoon/beaver hunting open at one-half hour before sunrise (Central Time). Written permission is required to trap or use a cable device on private land."
+ },
+ "provisional": false,
+ "retrieved_at": "2026-09-18",
+ "schema_version": "1.1",
+ "season_year": "2026-27",
+ "sources": [
+  {
+   "id": "nd-proc-2026-27",
+   "notes": "Official 2026-2027 Small Game, Waterfowl and Furbearer Proclamation text on gf.nd.gov. Sections used: 4 (hours), 11 (unlimited furbearers unless specified), 19 (beaver and raccoon), 20 (weasel, mink, muskrat), 21 (bobcat), 22 (red fox, gray fox, coyote, badger), 23 (mountain lions), 24 (fisher and American marten), 25 (river otter), 27 (protected furbearers with Latin names).",
+   "title": "2026-2027 Small Game, Waterfowl and Furbearer Proclamation (North Dakota Game and Fish Department)",
+   "type": "agency_web",
+   "url": "https://gf.nd.gov/regulations/small-game"
+  }
+ ],
+ "species": [
+  {
+   "common_name": "Beaver",
+   "iac_reference": "ND 2026-27 Proclamation Sec. 19",
+   "notes": "Beaver and raccoon may be taken at any hour of the day, while hunting on foot, with the aid of artificial light, night vision, thermal vision, or infrared light with a power source of not more than 6 volts (light must produce a red, green, or amber color, except when taking a raccoon treed or at bay). Beaver dams may be partially or completely dismantled when their presence causes property damage.",
+   "permit_requirements": [],
+   "scientific_name": "Castor canadensis",
+   "scientific_name_note": "Standard taxonomy; not stated in the proclamation.",
+   "scientific_name_verified": false,
+   "season_status": "continuous",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Unlimited (Sec. 11).",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Continuous open season per the 2026-27 proclamation license-year framework. May be taken with traps and underwater cable devices year-round. Cable devices may be used on land Nov 23, 2026-May 10, 2027 (within 50 feet of water and \u22644 inches off the ground from Mar 16, 2027).",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "ND-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Unlimited (Sec. 11).",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Continuous open season per the 2026-27 proclamation license-year framework. May be taken with firearms, pre-charged pneumatic air guns, and archery equipment (including crossbows) year-round; may be taken at any hour of the day on foot (see notes for light rules). All hunting opens at 1/2 hour before sunrise, Central Time.",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "ND-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Raccoon",
+   "iac_reference": "ND 2026-27 Proclamation Sec. 19",
+   "notes": "Raccoon may be pursued with dogs statewide year-round. Beaver and raccoon may be taken at any hour of the day, while hunting on foot, with the aid of artificial light, night vision, thermal vision, or infrared light with a power source of not more than 6 volts (light must produce a red, green, or amber color, except when taking a raccoon treed or at bay).",
+   "permit_requirements": [],
+   "scientific_name": "Procyon lotor",
+   "scientific_name_note": "Standard taxonomy; not stated in the proclamation.",
+   "scientific_name_verified": false,
+   "season_status": "continuous",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Unlimited (Sec. 11).",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Continuous open season per the 2026-27 proclamation license-year framework. May be taken with traps and underwater cable devices year-round. Cable devices may be used on land Nov 23, 2026-May 10, 2027.",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "ND-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Unlimited (Sec. 11).",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Continuous open season per the 2026-27 proclamation license-year framework. May be taken with firearms, pre-charged pneumatic air guns, and archery equipment (including crossbows) year-round; may be taken at any hour of the day on foot (see notes for light rules). All hunting opens at 1/2 hour before sunrise, Central Time.",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "ND-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Weasel",
+   "iac_reference": "ND 2026-27 Proclamation Sec. 20",
+   "notes": "The proclamation refers to 'Weasel' without specifying long-tailed vs. short-tailed. Hunting limited to rimfire cartridges or pre-charged pneumatic air guns of .22 caliber or smaller and archery equipment (including crossbows).",
+   "permit_requirements": [],
+   "scientific_name": null,
+   "scientific_name_note": "The proclamation does not specify which weasel species; no scientific name modeled.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Unlimited (Sec. 11).",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Traps Oct 24, 2026-Mar 15, 2027; cable devices (snares) Nov 23, 2026-Mar 15, 2027. All trapping opens at 1/2 hour before sunrise, Central Time.",
+     "open_date": "2026-10-24",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "ND-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Unlimited (Sec. 11).",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Hunting hours: 1/2 hour before sunrise to 1/2 hour after sunset, Central Time.",
+     "open_date": "2026-11-23",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "ND-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Mink",
+   "iac_reference": "ND 2026-27 Proclamation Sec. 20",
+   "notes": "Hunting limited to rimfire cartridges or pre-charged pneumatic air guns of .22 caliber or smaller and archery equipment (including crossbows).",
+   "permit_requirements": [],
+   "scientific_name": "Neogale vison",
+   "scientific_name_note": "Standard taxonomy; not stated in the proclamation.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Unlimited (Sec. 11).",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-05-10",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Traps Oct 24, 2026-May 10, 2027; cable devices Nov 23, 2026-May 10, 2027. From Mar 16, 2027: non-floating colony traps must be under at least 2 inches of water; no trapping on the outside of muskrat houses/structures; footholds submerged or covered; body-gripping water sets \u22642 inches above water or covered; float sets covered May 1-10, 2027.",
+     "open_date": "2026-10-24",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "ND-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Unlimited (Sec. 11).",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-05-10",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Hunting hours: 1/2 hour before sunrise to 1/2 hour after sunset, Central Time.",
+     "open_date": "2026-11-23",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "ND-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Muskrat",
+   "iac_reference": "ND 2026-27 Proclamation Sec. 20",
+   "notes": "Hunting limited to rimfire cartridges or pre-charged pneumatic air guns of .22 caliber or smaller and archery equipment (including crossbows). Muskrat huts may be opened for insertion of traps or cable devices but must be restored to approximate original condition to prevent freeze-up.",
+   "permit_requirements": [],
+   "scientific_name": "Ondatra zibethicus",
+   "scientific_name_note": "Standard taxonomy; not stated in the proclamation.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Unlimited (Sec. 11).",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-05-10",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Same water-set and muskrat-house restrictions as mink from Mar 16, 2027.",
+     "open_date": "2026-10-24",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "ND-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Unlimited (Sec. 11).",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-05-10",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Hunting hours: 1/2 hour before sunrise to 1/2 hour after sunset, Central Time.",
+     "open_date": "2026-11-23",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "ND-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Bobcat",
+   "iac_reference": "ND 2026-27 Proclamation Sec. 21",
+   "notes": "Bobcat may only be harvested by North Dakota residents. Zone 1 is land west of US Highway 83 from the Canadian border to the South Dakota border; Zone 2 is the remainder of the state. Pelt tags are available from the U.S. Fish and Wildlife Service for pelts of captive born and raised lynx in North Dakota (F2 generation or later) with documented proof.",
+   "permit_requirements": [
+    "Zone 1: the pelt and carcass of each bobcat must be presented to Department personnel for inspection and tagging no later than 14 days after the close of the season (March 29, 2027), or prior to sale or transfer of possession, whichever comes first. The pelt must be removed from the carcass before presentation; the carcass remains Department property.",
+    "Zone 2: report the harvest to the local game warden or Department field office, or register online via your account, within 12 hours and make arrangements to have the bobcat tagged.",
+    "No person, taxidermist, or fur dealer shall possess or purchase an untagged bobcat."
+   ],
+   "scientific_name": "Lynx rufus",
+   "scientific_name_note": "Standard taxonomy; not stated in the proclamation.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit per person (Sec. 21, Zone 1).",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Zone 1: firearms, air guns, archery, or traps Nov 7, 2026-Mar 15, 2027; cable devices or dogs Nov 23, 2026-Mar 15, 2027. Residents only.",
+     "open_date": "2026-11-07",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "ND-bobcat-z1",
+       "zone_name": "Bobcat Zone 1 (west of US Highway 83, Canadian border to South Dakota border)"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit per person (Sec. 21, Zone 1).",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Zone 1: hunting hours 1/2 hour before sunrise to 1/2 hour after sunset, Central Time. Residents only.",
+     "open_date": "2026-11-07",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "ND-bobcat-z1",
+       "zone_name": "Bobcat Zone 1 (west of US Highway 83, Canadian border to South Dakota border)"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "1 per person; Zone 2 season closes immediately once 8 bobcats are harvested (quota).",
+      "possession_limit": null,
+      "season_bag": 1
+     },
+     "close_date": "2027-03-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Zone 2: firearms, air guns, archery, traps, cable devices, or dogs Nov 23, 2026-Mar 15, 2027. Residents only. Zone quota of 8 closes the season when reached.",
+     "open_date": "2026-11-23",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "ND-bobcat-z2",
+       "zone_name": "Bobcat Zone 2 (remainder of state east of US Highway 83)"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "1 per person; Zone 2 season closes immediately once 8 bobcats are harvested (quota).",
+      "possession_limit": null,
+      "season_bag": 1
+     },
+     "close_date": "2027-03-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Zone 2: hunting hours 1/2 hour before sunrise to 1/2 hour after sunset, Central Time. Residents only. Zone quota of 8 closes the season when reached.",
+     "open_date": "2026-11-23",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "ND-bobcat-z2",
+       "zone_name": "Bobcat Zone 2 (remainder of state east of US Highway 83)"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Red fox",
+   "iac_reference": "ND 2026-27 Proclamation Sec. 22",
+   "notes": "Night hunters (1/2 hour after sunset to 1/2 hour before sunrise) for red fox, gray fox, or coyote must hunt exclusively on foot. Use of artificial light, night vision, thermal vision, or infrared light for locating or hunting game is prohibited EXCEPT for beaver, raccoon, red fox, gray fox, or coyote during the open night hunting season.",
+   "permit_requirements": [],
+   "scientific_name": "Vulpes vulpes",
+   "scientific_name_note": "Standard taxonomy; not stated in the proclamation.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Unlimited (Sec. 11).",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Trapping statewide year-round (season closes Mar 31, reopens Apr 1). Cable devices only Nov 23, 2026-Mar 15, 2027.",
+     "open_date": "2026-04-01",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "ND-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Unlimited (Sec. 11).",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Day hunting: 1/2 hour before sunrise to 1/2 hour after sunset, Central Time. Night hunting season Nov 23, 2026-May 31, 2027 (firearms and air guns at any hour; archery also allowed from Jan 4, 2027); night hunters must hunt on foot.",
+     "open_date": "2026-04-01",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "ND-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Gray fox",
+   "iac_reference": "ND 2026-27 Proclamation Sec. 22",
+   "notes": "Same season framework as red fox (night hunters must hunt exclusively on foot).",
+   "permit_requirements": [],
+   "scientific_name": "Urocyon cinereoargenteus",
+   "scientific_name_note": "Standard taxonomy; not stated in the proclamation.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Unlimited (Sec. 11).",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Trapping statewide year-round (season closes Mar 31, reopens Apr 1). Cable devices only Nov 23, 2026-Mar 15, 2027.",
+     "open_date": "2026-04-01",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "ND-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Unlimited (Sec. 11).",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Day hunting: 1/2 hour before sunrise to 1/2 hour after sunset, Central Time. Night hunting season Nov 23, 2026-May 31, 2027 (firearms and air guns at any hour; archery also allowed from Jan 4, 2027); night hunters must hunt on foot.",
+     "open_date": "2026-04-01",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "ND-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Coyote",
+   "iac_reference": "ND 2026-27 Proclamation Sec. 22",
+   "notes": "Same season framework as red/gray fox (night hunters must hunt exclusively on foot).",
+   "permit_requirements": [],
+   "scientific_name": "Canis latrans",
+   "scientific_name_note": "Standard taxonomy; not stated in the proclamation.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Unlimited (Sec. 11).",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Trapping statewide year-round (season closes Mar 31, reopens Apr 1). Cable devices only Nov 23, 2026-Mar 15, 2027.",
+     "open_date": "2026-04-01",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "ND-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Unlimited (Sec. 11).",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Day hunting: 1/2 hour before sunrise to 1/2 hour after sunset, Central Time. Night hunting season Nov 23, 2026-May 31, 2027 (firearms and air guns at any hour; archery also allowed from Jan 4, 2027); night hunters must hunt on foot.",
+     "open_date": "2026-04-01",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "ND-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Badger",
+   "iac_reference": "ND 2026-27 Proclamation Sec. 22",
+   "notes": "Night hunting is authorized only for red fox, gray fox, and coyote \u2014 NOT badger. Badger day hunting: 1/2 hour before sunrise to 1/2 hour after sunset, Central Time.",
+   "permit_requirements": [],
+   "scientific_name": "Taxidea taxus",
+   "scientific_name_note": "Standard taxonomy; not stated in the proclamation.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Unlimited (Sec. 11).",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Trapping statewide year-round (season closes Mar 31, reopens Apr 1). Cable devices only Nov 23, 2026-Mar 15, 2027.",
+     "open_date": "2026-04-01",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "ND-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Unlimited (Sec. 11).",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Day hunting only (no night season for badger): 1/2 hour before sunrise to 1/2 hour after sunset, Central Time. Firearms, air guns, archery (incl. crossbows), and dogs.",
+     "open_date": "2026-04-01",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "ND-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Mountain lion",
+   "iac_reference": "ND 2026-27 Proclamation Sec. 23",
+   "notes": "Mountain lion is included in the small game/furbearer proclamation but is managed as a big-game-style hunt: residents only, HUNTING ONLY \u2014 the use of traps or cable devices (snares) to take mountain lions is prohibited. Zone 1 is south of ND Highway 1804 from the Montana border to Lake Sakakawea, across the lake, then south along ND Highway 8 to ND Highway 200, west on 200 to US Highway 85, south on 85 to the South Dakota border; Zone 2 is the remainder of the state. Kittens (visible spots) and females accompanied by kittens may not be harvested.",
+   "permit_requirements": [
+    "Harvesters must contact the local game warden or Department field office, or register online via their account, within 12 hours and make arrangements to have the mountain lion tagged.",
+    "The entire mountain lion, including the head, must be presented for inspection and tagging. Legally taken animals are returned to the hunter for pelt removal; the carcass remains Department property.",
+    "Harvest quotas close seasons immediately; the Department announces closures through press releases, PSAs, and media contacts."
+   ],
+   "scientific_name": "Puma concolor",
+   "scientific_name_note": "Standard taxonomy; not stated in the proclamation.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "1 per person per season.",
+      "possession_limit": null,
+      "season_bag": 1
+     },
+     "close_date": "2026-11-22",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Zone 1 Early Season: legal firearms and archery. Harvest quota: 8 mountain lions. Residents only.",
+     "open_date": "2026-09-04",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "ND-ml-z1",
+       "zone_name": "Mountain Lion Zone 1 (Badlands/southwest as bounded in Sec. 23)"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "1 per person; late season closes at 7 mountain lions OR 3 females, whichever comes first.",
+      "possession_limit": null,
+      "season_bag": 1
+     },
+     "close_date": "2027-03-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Zone 1 Late Season: legal firearms, archery, and pursuing with dogs. Conditional reopening of the early season applies if the early-season quota was not met by Nov 22, 2026 and the late season has been closed 5 consecutive days (not after Mar 25, 2027). Residents only.",
+     "open_date": "2026-11-23",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "ND-ml-z1",
+       "zone_name": "Mountain Lion Zone 1 (Badlands/southwest as bounded in Sec. 23)"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "1 per person; no zone harvest quota.",
+      "possession_limit": null,
+      "season_bag": 1
+     },
+     "close_date": "2027-03-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Zone 2: legal firearms and archery Sept 4, 2026-Mar 31, 2027; pursuing with dogs allowed Nov 23, 2026-Mar 31, 2027. Residents only.",
+     "open_date": "2026-09-04",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "ND-ml-z2",
+       "zone_name": "Mountain Lion Zone 2 (remainder of state)"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Fisher",
+   "iac_reference": "ND 2026-27 Proclamation Sec. 24",
+   "notes": "2026 is the first year fisher can be harvested statewide (previously restricted to the Turtle Mountains). Hunting of fishers is prohibited \u2014 traps or cable devices only.",
+   "permit_requirements": [
+    "Fishers may only be harvested by North Dakota residents.",
+    "Trappers must contact the local game warden or Department field office, or register their harvest online via their account, within 12 hours and make arrangements to have the fisher tagged.",
+    "The fisher pelt must be removed from the carcass before presenting to Department personnel; no pelt is tagged until the animal is skinned and presented with the entire carcass, including the head. The carcass remains Department property.",
+    "No person, taxidermist, or fur dealer shall possess or purchase an untagged fisher."
+   ],
+   "scientific_name": "Pekania pennanti",
+   "scientific_name_note": "Standard taxonomy; not stated in the proclamation.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "1 fisher per person per season (combined species framework: 1 fisher AND 1 American marten each).",
+      "possession_limit": null,
+      "season_bag": 1
+     },
+     "close_date": "2026-11-29",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Traps or cable devices (snares) only, statewide. Residents only. Season is 7 days (Nov 23-29, 2026).",
+     "open_date": "2026-11-23",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "ND-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "American marten",
+   "iac_reference": "ND 2026-27 Proclamation Sec. 24",
+   "notes": "2026 is the FIRST-EVER harvest season for American marten in North Dakota (mirrors the fisher season). Hunting of American marten is prohibited \u2014 traps or cable devices only.",
+   "permit_requirements": [
+    "American marten may only be harvested by North Dakota residents.",
+    "Trappers must contact the local game warden or Department field office, or register their harvest online via their account, within 12 hours and make arrangements to have the marten tagged.",
+    "The marten pelt must be removed from the carcass before presenting to Department personnel; no pelt is tagged until the animal is skinned and presented with the entire carcass, including the head. The carcass remains Department property.",
+    "No person, taxidermist, or fur dealer shall possess or purchase an untagged American marten."
+   ],
+   "scientific_name": "Martes americana",
+   "scientific_name_note": "Standard taxonomy; not stated in the proclamation.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "1 American marten per person per season (combined species framework: 1 fisher AND 1 American marten each).",
+      "possession_limit": null,
+      "season_bag": 1
+     },
+     "close_date": "2026-11-29",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Traps or cable devices (snares) only, statewide. Residents only. Season is 7 days (Nov 23-29, 2026).",
+     "open_date": "2026-11-23",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "ND-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "River otter",
+   "iac_reference": "ND 2026-27 Proclamation Sec. 25",
+   "notes": "The 2026-27 otter season runs three weeks (Nov 23-Dec 13), replacing the previous Nov 23-Mar 15 season that closed after a quota of 30. Hunting of river otters is prohibited \u2014 traps or cable devices only.",
+   "permit_requirements": [
+    "River otter may only be harvested by North Dakota residents.",
+    "Trappers must contact the local game warden or Department field office, or register their harvest online via their account, within 12 hours and make arrangements to have the river otter tagged.",
+    "The pelt must be removed from the carcass before presenting to Department personnel; no pelt is tagged until the animal is skinned and presented with the entire carcass, including the head. The carcass remains Department property.",
+    "No person, taxidermist, or fur dealer shall possess or purchase an untagged river otter."
+   ],
+   "scientific_name": "Lontra canadensis",
+   "scientific_name_note": "Standard taxonomy; not stated in the proclamation.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "1 river otter per person per season.",
+      "possession_limit": null,
+      "season_bag": 1
+     },
+     "close_date": "2026-12-13",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Traps or cable devices (snares) only, statewide. Residents only. No quota in 2026-27.",
+     "open_date": "2026-11-23",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "ND-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Canada lynx",
+   "iac_reference": "ND 2026-27 Proclamation Sec. 27",
+   "notes": "The season for Canada lynx shall remain closed. Pelt tags are available from the U.S. Fish and Wildlife Service for pelts of captive born and raised lynx in North Dakota (documented F2-generation-or-later breeding colony offspring). Included so the app flags any logged take as out of season.",
+   "permit_requirements": [],
+   "scientific_name": "Lynx canadensis",
+   "scientific_name_note": "Scientific name stated in the proclamation (Sec. 27).",
+   "scientific_name_verified": true,
+   "season_status": "closed",
+   "seasons": []
+  },
+  {
+   "common_name": "Gray wolf",
+   "iac_reference": "ND 2026-27 Proclamation Sec. 27",
+   "notes": "The season for gray wolf shall remain closed. Included so the app flags any logged take as out of season.",
+   "permit_requirements": [],
+   "scientific_name": "Canis lupus",
+   "scientific_name_note": "Scientific name stated in the proclamation (Sec. 27).",
+   "scientific_name_verified": true,
+   "season_status": "closed",
+   "seasons": []
+  },
+  {
+   "common_name": "Swift fox",
+   "iac_reference": "ND 2026-27 Proclamation Sec. 27",
+   "notes": "The season for swift fox shall remain closed. Included so the app flags any logged take as out of season.",
+   "permit_requirements": [],
+   "scientific_name": "Vulpes velox",
+   "scientific_name_note": "Scientific name stated in the proclamation (Sec. 27).",
+   "scientific_name_verified": true,
+   "season_status": "closed",
+   "seasons": []
+  },
+  {
+   "common_name": "Black bear",
+   "iac_reference": "ND 2026-27 Proclamation Sec. 27",
+   "notes": "The season for black bear shall remain closed (as a furbearer). Included so the app flags any logged take as out of season.",
+   "permit_requirements": [],
+   "scientific_name": "Ursus americanus",
+   "scientific_name_note": "Scientific name stated in the proclamation (Sec. 27).",
+   "scientific_name_verified": true,
+   "season_status": "closed",
+   "seasons": []
+  },
+  {
+   "common_name": "Wolverine",
+   "iac_reference": "ND 2026-27 Proclamation Sec. 27",
+   "notes": "The season for wolverine shall remain closed. Included so the app flags any logged take as out of season.",
+   "permit_requirements": [],
+   "scientific_name": "Gulo gulo",
+   "scientific_name_note": "Scientific name stated in the proclamation (Sec. 27).",
+   "scientific_name_verified": true,
+   "season_status": "closed",
+   "seasons": []
+  }
+ ],
+ "state": "ND",
+ "state_name": "North Dakota",
+ "verification": {
+  "confirmation_notes": "Data taken from the official 2026-2027 Small Game, Waterfowl and Furbearer Proclamation text published on gf.nd.gov (retrieved 2026-09-18). Sections 19 (beaver/raccoon), 20 (weasel/mink/muskrat), 21 (bobcat zones), 22 (red fox/gray fox/coyote/badger), 23 (mountain lions), 24 (fisher and American marten \u2014 first-ever marten season, statewide fisher), 25 (river otter, new 3-week season Nov 23-Dec 13 with no quota), and 27 (protected furbearers with official Latin names). Calendar-check: Nov 7, 2026 is a Saturday; Nov 23, 2026 is a Monday; Nov 29, 2026 is a Sunday; Dec 13, 2026 is a Sunday; Mar 15, 2027 is a Monday; Mar 29, 2027 is a Monday. Southwestern North Dakota observes Mountain Time; the proclamation prescribes hunting hours in Central Time.",
+  "known_gaps": [
+   "Year-round species (beaver, raccoon, red fox, gray fox, coyote, badger) are modeled as season_status 'continuous' with continuous_open true and null dates, per the Iowa schema convention; the proclamation's Apr 1\u2013Mar 31 license-year framing is recorded in the season notes.",
+   "Scientific names (other than the five protected species in Sec. 27) are standard taxonomy, NOT stated in the proclamation.",
+   "Striped skunk: the 2026-27 proclamation contains no provisions for skunks, so no skunk season was modeled \u2014 verify against North Dakota Century Code whether striped skunk may be taken and under what authority.",
+   "Weasel: the proclamation says 'Weasel' without specifying species; modeled as 'Weasel' with no scientific name.",
+   "Mountain lion is included in the furbearer proclamation as a hunting-only, residents-only managed hunt (traps/cable devices prohibited) with zone quotas; its Zone 1 early/late/conditional structure is as published.",
+   "Zone boundaries are summarized; the illustrated zone maps (Figure 2 bobcat, Figure 3 mountain lion) should be consulted for exact boundaries.",
+   "Nuisance/depredation take (e.g., beaver damaging property, livestock defense) is mentioned in passing but not modeled.",
+   "Fort Berthold (Three Affiliated Tribes) furbearer rules are a separate jurisdiction and are not reflected in this state dataset.",
+   "Southwestern North Dakota (south and west of the Missouri River \u2014 e.g., Adams, Bowman, Golden Valley, Hettinger, Slope counties) observes Mountain Time; the dataset uses America/Chicago statewide. The proclamation states hunting hours in Central Time \u2014 adjust for Mountain-Time counties."
+  ],
+  "regulation_year_confirmed": true
+ },
+ "license_url": "https://apps.nd.gov/gnf/onlineservices/lic/public/myGNF.htm",
+ "license_vendor": "State-run (NDGF)",
+ "regs_url": "https://gf.nd.gov/gnf/regulations/docs/combination/Combo-Hunting-Trapping-Guide26.pdf",
+ "regs_kind": "pdf"
+,
+ "warden_directory": {
+  "label": "Report a violation",
+  "url": "https://gf.nd.gov/rap",
+  "kind": "hotline",
+  "note": "Report All Poachers: 701-328-9921 (some sources cite 1-800-472-2121); anonymous; rewards $100–$1,000"
+ }
+}

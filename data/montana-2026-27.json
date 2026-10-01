@@ -1,0 +1,1103 @@
+{
+ "schema_version": "1.1",
+ "state": "MT",
+ "state_name": "Montana",
+ "season_year": "2026-27",
+ "provisional": false,
+ "retrieved_at": "2026-09-18",
+ "disclaimer": "Reminder reference only \u2014 NOT legal authority. Regulations for season dates, structures, and restrictions were adopted by the F&W Commission on Aug. 19, 2026 and are valid through June 30, 2027; the Commission reserves the authority to amend them. Quota-driven early closures apply \u2014 always verify current quota status and regulations with FWP before trapping.",
+ "license_summary": {
+  "trapping_license": "General Trapper License: resident $20, available to resident conservation license holders 12+. Nonresident Trapper License: $250 (issued through FWP offices). Landowner Trapper: $1 resident. Youth Trapper (ages 6-11): free resident license, valid for mink and muskrat only. All licenses must be purchased by Nov. 30 each year to be valid for bobcat.",
+  "wolf_license": "Wolf License: $12 resident / $50 nonresident; must be purchased by Feb. 28, 2027. Maximum of 10 per person. Class C or C-2 wolf trapping license for trappers. Completion of the Idaho or Montana wolf trapping certification class is mandatory to trap wolves.",
+  "trapper_education": "Trapper education is required for any resident trapper who has not purchased a trapping license for three years in their lifetime (not necessarily consecutive); does not apply to those trapping for livestock or property protection.",
+  "harvest_reporting": "Harvest of bobcat, otter, swift fox, fisher, wolf, and marten must be called in within 24 hours (1-877-FWP-WILD). Pelts must be inspected and tagged within 10 days of the calendar close of the season at an FWP office. All wolf skulls and hides must be presented UNFROZEN within 10 days of harvest for tagging, tissue sampling, and tooth extraction.",
+  "quota_closure": "In districts with quotas, seasons close with 48 hours notice upon reaching or approaching the quota (24-hour notice for wolf), or on the season closure date, whichever is first. Current status: 1-800-711-8727 or 406-444-9557, 24 hours a day; or fwp.mt.gov.",
+  "nonresident_bobcat": "Nonresidents may not hunt or chase bobcats.",
+  "supplemental_permit": "A free Supplemental Trapping Permit is required for all trappers (except those using water sets or live cage traps) inside the geographic scope identified by federal court order when targeting nongame (raccoon, badger, red fox) and predatory animals (coyote, striped/striped skunk, spotted skunk, weasel).",
+  "state_land": "A Special Recreational Use License for Trapping (SRULT) from DNRC is required before trapping on state trust land for persons 12 and older.",
+  "wma_regulations": "State Wildlife Management Areas have specific closures and season dates (e.g., Lake Helena WMA drawing, Freezout Lake WMA units, Haggin WMA). See WMA Special Regulations in the booklet."
+ },
+ "species": [
+  {
+   "common_name": "American beaver",
+   "scientific_name": null,
+   "scientific_name_verified": false,
+   "scientific_name_note": "Left null; not stated in Montana sources.",
+   "iac_reference": "MFWP 2026 Wolf & Furbearer Trapping and Hunting Regulations, p. 14 \u2014 Furbearer Season Dates by Region (p. 4) and Beaver table",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-04-15",
+     "open_time": null,
+     "timezone": "America/Denver",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MT-R1-2-3",
+       "zone_name": "FWP Regions 1, 2, 3",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Quota: unlimited; per-person limit: unlimited (p. 14)."
+     },
+     "notes": "Quota: unlimited. Reporting/pelt tagging not required. Quota line: 1-800-711-8727 or 406-444-9557, 24 hours a day; fwp.mt.gov (updated daily)."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-09-01",
+     "close_date": "2027-05-31",
+     "open_time": null,
+     "timezone": "America/Denver",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MT-R4-5-6-7",
+       "zone_name": "FWP Regions 4, 5, 6, 7",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Quota: unlimited; per-person limit: unlimited (p. 14)."
+     },
+     "notes": "Quota: unlimited. Reporting/pelt tagging not required."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "14 named drainages/areas are closed to beaver trapping (Broadwater, Deer Lodge, Gallatin, Granite, Lewis and Clark, Missoula, Mineral, Powell, Sweet Grass, Teton counties, Moose Creek, and Spotted Dog closures \u2014 p. 14); all beaver closures are also closed to otter. Modeled as a separate closed entry."
+  },
+  {
+   "common_name": "American beaver (closure areas)",
+   "scientific_name": null,
+   "scientific_name_verified": false,
+   "scientific_name_note": "Left null; not stated in Montana sources.",
+   "iac_reference": "MFWP 2026 Wolf & Furbearer Trapping and Hunting Regulations, p. 14 \u2014 Beaver and Otter Closures",
+   "season_status": "closed",
+   "seasons": [],
+   "permit_requirements": [],
+   "notes": "CLOSED to beaver trapping in 14 named drainages/areas listed on p. 14 (e.g., portions of Dry Creek, Confederate Gulch, Gallatin River tributaries, Moose Creek, Spotted Dog area, Teton River drainage, and others). Included so the app flags any logged beaver take in these areas. Check p. 14 legal descriptions before setting traps."
+  },
+  {
+   "common_name": "North American river otter",
+   "scientific_name": null,
+   "scientific_name_verified": false,
+   "scientific_name_note": "Left null; not stated in Montana sources.",
+   "iac_reference": "MFWP 2026 Wolf & Furbearer Trapping and Hunting Regulations, p. 21 \u2014 Otter table; Furbearer Season Dates by Region (p. 4)",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-04-15",
+     "open_time": null,
+     "timezone": "America/Denver",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MT-R1",
+       "zone_name": "FWP Region 1",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": 4,
+      "possession_limit": null,
+      "limit_notes": "Region 1 quota: 50; per-person limit: 4. Furbearer seasons close with 48 hours notice when a species quota is reached or approached prior to the end of the regular season (p. 21). Quota line: 1-800-711-8727 or 406-444-9557, 24 hours a day; fwp.mt.gov (updated daily)."
+     },
+     "notes": "Report harvest within 24 hours; inspection/pelt tagging required within 10 days of the calendar close of the season; lower jaw specimen required."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-04-15",
+     "open_time": null,
+     "timezone": "America/Denver",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MT-R2",
+       "zone_name": "FWP Region 2",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": 4,
+      "possession_limit": null,
+      "limit_notes": "Region 2 quota: 50; per-person limit: 4. Furbearer seasons close with 48 hours notice when a species quota is reached or approached prior to the end of the regular season (p. 21). Quota line: 1-800-711-8727 or 406-444-9557, 24 hours a day; fwp.mt.gov (updated daily)."
+     },
+     "notes": "Report harvest within 24 hours; inspection/pelt tagging required within 10 days of the calendar close of the season; lower jaw specimen required."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-04-15",
+     "open_time": null,
+     "timezone": "America/Denver",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MT-R3",
+       "zone_name": "FWP Region 3",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": 2,
+      "possession_limit": null,
+      "limit_notes": "Region 3 quota: 36; per-person limit: 2. Furbearer seasons close with 48 hours notice when a species quota is reached or approached prior to the end of the regular season (p. 21). Quota line: 1-800-711-8727 or 406-444-9557, 24 hours a day; fwp.mt.gov (updated daily)."
+     },
+     "notes": "Report harvest within 24 hours; inspection/pelt tagging required within 10 days of the calendar close of the season; lower jaw specimen required."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-04-15",
+     "open_time": null,
+     "timezone": "America/Denver",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MT-R4",
+       "zone_name": "FWP Region 4",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": 2,
+      "possession_limit": null,
+      "limit_notes": "Region 4 quota: 8; per-person limit: 2. Furbearer seasons close with 48 hours notice when a species quota is reached or approached prior to the end of the regular season (p. 21). Quota line: 1-800-711-8727 or 406-444-9557, 24 hours a day; fwp.mt.gov (updated daily)."
+     },
+     "notes": "Report harvest within 24 hours; inspection/pelt tagging required within 10 days of the calendar close of the season; lower jaw specimen required."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-04-15",
+     "open_time": null,
+     "timezone": "America/Denver",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MT-R5",
+       "zone_name": "FWP Region 5",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": 2,
+      "possession_limit": null,
+      "limit_notes": "Region 5 quota: 8; per-person limit: 2. Furbearer seasons close with 48 hours notice when a species quota is reached or approached prior to the end of the regular season (p. 21). Quota line: 1-800-711-8727 or 406-444-9557, 24 hours a day; fwp.mt.gov (updated daily)."
+     },
+     "notes": "Report harvest within 24 hours; inspection/pelt tagging required within 10 days of the calendar close of the season; lower jaw specimen required."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-04-15",
+     "open_time": null,
+     "timezone": "America/Denver",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MT-R6",
+       "zone_name": "FWP Region 6",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": 2,
+      "possession_limit": null,
+      "limit_notes": "Region 6 quota: 2; per-person limit: 2. Furbearer seasons close with 48 hours notice when a species quota is reached or approached prior to the end of the regular season (p. 21). Quota line: 1-800-711-8727 or 406-444-9557, 24 hours a day; fwp.mt.gov (updated daily)."
+     },
+     "notes": "Report harvest within 24 hours; inspection/pelt tagging required within 10 days of the calendar close of the season; lower jaw specimen required."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-04-15",
+     "open_time": null,
+     "timezone": "America/Denver",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MT-R7",
+       "zone_name": "FWP Region 7",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": 2,
+      "possession_limit": null,
+      "limit_notes": "Region 7 quota: 4; per-person limit: 2. Furbearer seasons close with 48 hours notice when a species quota is reached or approached prior to the end of the regular season (p. 21). Quota line: 1-800-711-8727 or 406-444-9557, 24 hours a day; fwp.mt.gov (updated daily)."
+     },
+     "notes": "Report harvest within 24 hours; inspection/pelt tagging required within 10 days of the calendar close of the season; lower jaw specimen required."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "All areas closed to beaver trapping are also closed to otter (modeled as a separate closed entry). Recommendations to avoid incidental otter harvest when trapping beaver are on p. 21 (avoid dam crossovers, castor-mound sets on pond edges)."
+  },
+  {
+   "common_name": "North American river otter (closure areas)",
+   "scientific_name": null,
+   "scientific_name_verified": false,
+   "scientific_name_note": "Left null; not stated in Montana sources.",
+   "iac_reference": "MFWP 2026 Wolf & Furbearer Trapping and Hunting Regulations, p. 21 \u2014 Closures \u2014 all areas closed to beaver trapping are also closed to otter trapping",
+   "season_status": "closed",
+   "seasons": [],
+   "permit_requirements": [],
+   "notes": "CLOSED to otter trapping wherever beaver trapping is closed (the 14 named drainages/areas on p. 14). Included so the app flags any logged otter take in these areas."
+  },
+  {
+   "common_name": "Muskrat",
+   "scientific_name": null,
+   "scientific_name_verified": false,
+   "scientific_name_note": "Left null; not stated in Montana sources.",
+   "iac_reference": "MFWP 2026 Wolf & Furbearer Trapping and Hunting Regulations, p. 20 \u2014 Muskrat table; Furbearer Season Dates by Region (p. 4)",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-04-15",
+     "open_time": null,
+     "timezone": "America/Denver",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MT-R1-2-3-4-5-6-7",
+       "zone_name": "FWP Regions 1, 2, 3, 4, 5, 6, 7",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Quota: unlimited; per-person limit: unlimited."
+     },
+     "notes": "Reporting/pelt tagging not required; specimen not collected. Traps may be set in muskrat houses if the part removed is replaced. State WMAs have specific closures and season dates (see WMA Special Regulations)."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "American mink",
+   "scientific_name": null,
+   "scientific_name_verified": false,
+   "scientific_name_note": "Left null; not stated in Montana sources.",
+   "iac_reference": "MFWP 2026 Wolf & Furbearer Trapping and Hunting Regulations, p. 20 \u2014 Mink table; Furbearer Season Dates by Region (p. 4)",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-04-15",
+     "open_time": null,
+     "timezone": "America/Denver",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MT-R1-2-3-4-5-6-7",
+       "zone_name": "FWP Regions 1, 2, 3, 4, 5, 6, 7",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Quota: unlimited; per-person limit: unlimited."
+     },
+     "notes": "Reporting/pelt tagging not required; specimen not collected. State WMAs have specific closures and season dates."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Bobcat",
+   "scientific_name": null,
+   "scientific_name_verified": false,
+   "scientific_name_note": "Left null; not stated in Montana sources.",
+   "iac_reference": "MFWP 2026 Wolf & Furbearer Trapping and Hunting Regulations, p. 15 \u2014 Bobcat table and Bobcat Hunting Season; Furbearer Season Dates by Region (p. 4)",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-12-01",
+     "close_date": "2027-02-15",
+     "open_time": null,
+     "timezone": "America/Denver",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MT-R1",
+       "zone_name": "FWP Region 1",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": 4,
+      "possession_limit": null,
+      "limit_notes": "Region 1 quota: 200; per-person limit: 4 in region 1, or 7 in combination with regions 1-3. Furbearer seasons close with 48 hours notice when a species quota is reached or approached prior to the end of the regular season (p. 21). Quota line: 1-800-711-8727 or 406-444-9557, 24 hours a day; fwp.mt.gov (updated daily)."
+     },
+     "notes": "Mandatory pelt tagging & harvest reporting (p. 3 of booklet): harvest of bobcat, otter, swift fox, fisher, wolf, and marten must be called in within 24 hours (1-877-FWP-WILD); pelts must be inspected and tagged within 10 days of the calendar close of the season at an FWP office. All wolf skulls and hides must be presented UNFROZEN within 10 days of harvest for tagging, tissue sampling, and tooth extraction."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-12-01",
+     "close_date": "2027-02-15",
+     "open_time": null,
+     "timezone": "America/Denver",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MT-R2",
+       "zone_name": "FWP Region 2",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": 7,
+      "possession_limit": null,
+      "limit_notes": "Region 2 quota: 150; per-person limit: 7 in region 2, or 7 in combination with regions 1-3. Furbearer seasons close with 48 hours notice when a species quota is reached or approached prior to the end of the regular season (p. 21). Quota line: 1-800-711-8727 or 406-444-9557, 24 hours a day; fwp.mt.gov (updated daily)."
+     },
+     "notes": "Mandatory pelt tagging & harvest reporting (p. 3 of booklet): harvest of bobcat, otter, swift fox, fisher, wolf, and marten must be called in within 24 hours (1-877-FWP-WILD); pelts must be inspected and tagged within 10 days of the calendar close of the season at an FWP office. All wolf skulls and hides must be presented UNFROZEN within 10 days of harvest for tagging, tissue sampling, and tooth extraction."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-12-01",
+     "close_date": "2027-02-15",
+     "open_time": null,
+     "timezone": "America/Denver",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MT-R3",
+       "zone_name": "FWP Region 3",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": 5,
+      "possession_limit": null,
+      "limit_notes": "Region 3 quota: 150; per-person limit: 5 in region 3, or 7 in combination with regions 1-3. Furbearer seasons close with 48 hours notice when a species quota is reached or approached prior to the end of the regular season (p. 21). Quota line: 1-800-711-8727 or 406-444-9557, 24 hours a day; fwp.mt.gov (updated daily)."
+     },
+     "notes": "Mandatory pelt tagging & harvest reporting (p. 3 of booklet): harvest of bobcat, otter, swift fox, fisher, wolf, and marten must be called in within 24 hours (1-877-FWP-WILD); pelts must be inspected and tagged within 10 days of the calendar close of the season at an FWP office. All wolf skulls and hides must be presented UNFROZEN within 10 days of harvest for tagging, tissue sampling, and tooth extraction."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-12-01",
+     "close_date": "2027-03-01",
+     "open_time": null,
+     "timezone": "America/Denver",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MT-R4",
+       "zone_name": "FWP Region 4",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Region 4 quota: 100; per-person limit: No per-person limit. Furbearer seasons close with 48 hours notice when a species quota is reached or approached prior to the end of the regular season (p. 21). Quota line: 1-800-711-8727 or 406-444-9557, 24 hours a day; fwp.mt.gov (updated daily)."
+     },
+     "notes": "Mandatory pelt tagging & harvest reporting (p. 3 of booklet): harvest of bobcat, otter, swift fox, fisher, wolf, and marten must be called in within 24 hours (1-877-FWP-WILD); pelts must be inspected and tagged within 10 days of the calendar close of the season at an FWP office. All wolf skulls and hides must be presented UNFROZEN within 10 days of harvest for tagging, tissue sampling, and tooth extraction."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-12-01",
+     "close_date": "2027-03-01",
+     "open_time": null,
+     "timezone": "America/Denver",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MT-R5",
+       "zone_name": "FWP Region 5",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Region 5 quota: 100; per-person limit: No per-person limit. Furbearer seasons close with 48 hours notice when a species quota is reached or approached prior to the end of the regular season (p. 21). Quota line: 1-800-711-8727 or 406-444-9557, 24 hours a day; fwp.mt.gov (updated daily)."
+     },
+     "notes": "Mandatory pelt tagging & harvest reporting (p. 3 of booklet): harvest of bobcat, otter, swift fox, fisher, wolf, and marten must be called in within 24 hours (1-877-FWP-WILD); pelts must be inspected and tagged within 10 days of the calendar close of the season at an FWP office. All wolf skulls and hides must be presented UNFROZEN within 10 days of harvest for tagging, tissue sampling, and tooth extraction."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-12-01",
+     "close_date": "2027-03-01",
+     "open_time": null,
+     "timezone": "America/Denver",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MT-R6",
+       "zone_name": "FWP Region 6",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Region 6 quota: 25; per-person limit: No per-person limit. Furbearer seasons close with 48 hours notice when a species quota is reached or approached prior to the end of the regular season (p. 21). Quota line: 1-800-711-8727 or 406-444-9557, 24 hours a day; fwp.mt.gov (updated daily)."
+     },
+     "notes": "Mandatory pelt tagging & harvest reporting (p. 3 of booklet): harvest of bobcat, otter, swift fox, fisher, wolf, and marten must be called in within 24 hours (1-877-FWP-WILD); pelts must be inspected and tagged within 10 days of the calendar close of the season at an FWP office. All wolf skulls and hides must be presented UNFROZEN within 10 days of harvest for tagging, tissue sampling, and tooth extraction."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-12-01",
+     "close_date": "2027-03-01",
+     "open_time": null,
+     "timezone": "America/Denver",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MT-R7",
+       "zone_name": "FWP Region 7",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Region 7 quota: 300; per-person limit: No per-person limit. Furbearer seasons close with 48 hours notice when a species quota is reached or approached prior to the end of the regular season (p. 21). Quota line: 1-800-711-8727 or 406-444-9557, 24 hours a day; fwp.mt.gov (updated daily)."
+     },
+     "notes": "Mandatory pelt tagging & harvest reporting (p. 3 of booklet): harvest of bobcat, otter, swift fox, fisher, wolf, and marten must be called in within 24 hours (1-877-FWP-WILD); pelts must be inspected and tagged within 10 days of the calendar close of the season at an FWP office. All wolf skulls and hides must be presented UNFROZEN within 10 days of harvest for tagging, tissue sampling, and tooth extraction."
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-12-01",
+     "close_date": "2027-02-15",
+     "open_time": null,
+     "timezone": "America/Denver",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MT-R1-2-3",
+       "zone_name": "FWP Regions 1, 2, 3",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Per-person limits follow the trapping limits above."
+     },
+     "notes": "Bobcat is the only furbearer that may be taken by hunting in Montana (MCA 87-2-606). Hunting hours: one-half hour before sunrise to one-half hour after sunset. Dogs may be used to take bobcat. Nonresidents may not hunt or chase bobcats. License must be purchased by Nov. 30, 2026. Bobcat season on the Flathead Indian Reservation is closed. Mandatory pelt tagging & harvest reporting (p. 3 of booklet): harvest of bobcat, otter, swift fox, fisher, wolf, and marten must be called in within 24 hours (1-877-FWP-WILD); pelts must be inspected and tagged within 10 days of the calendar close of the season at an FWP office. All wolf skulls and hides must be presented UNFROZEN within 10 days of harvest for tagging, tissue sampling, and tooth extraction."
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-12-01",
+     "close_date": "2027-03-01",
+     "open_time": null,
+     "timezone": "America/Denver",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MT-R4-5-6-7",
+       "zone_name": "FWP Regions 4, 5, 6, 7",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Per-person limits follow the trapping limits above."
+     },
+     "notes": "Bobcat is the only furbearer that may be taken by hunting in Montana (MCA 87-2-606). Hunting hours: one-half hour before sunrise to one-half hour after sunset. Dogs may be used to take bobcat. Nonresidents may not hunt or chase bobcats. License must be purchased by Nov. 30, 2026. Bobcat season on the Flathead Indian Reservation is closed. Mandatory pelt tagging & harvest reporting (p. 3 of booklet): harvest of bobcat, otter, swift fox, fisher, wolf, and marten must be called in within 24 hours (1-877-FWP-WILD); pelts must be inspected and tagged within 10 days of the calendar close of the season at an FWP office. All wolf skulls and hides must be presented UNFROZEN within 10 days of harvest for tagging, tissue sampling, and tooth extraction."
+    }
+   ],
+   "permit_requirements": [
+    "Trapping license (General, Landowner, or Nonresident) purchased by Nov. 30, 2026 to be valid for bobcat"
+   ],
+   "notes": "All bobcat snares in regions 1, 2, and portions of 3, 4, and 5 must be equipped with a relaxing device (p. 15; boundary on p. 26). Additional restrictions apply in Lynx Protection Zones (p. 16). Voluntary tissue sample request for genetic sex determination (p. 15)."
+  },
+  {
+   "common_name": "American marten",
+   "scientific_name": "Martes americana",
+   "scientific_name_verified": true,
+   "scientific_name_note": "Printed on the cover of the 2026 regulations booklet ('Marten Martes americana').",
+   "iac_reference": "MFWP 2026 Wolf & Furbearer Trapping and Hunting Regulations, p. 20 \u2014 Marten table; Furbearer Season Dates by Region (p. 4)",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-12-01",
+     "close_date": "2027-02-15",
+     "open_time": null,
+     "timezone": "America/Denver",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MT-R1",
+       "zone_name": "FWP Region 1",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": 10,
+      "possession_limit": null,
+      "limit_notes": "Quota: unlimited; per-person limit: 10 in region 1 (p. 20)."
+     },
+     "notes": "Mandatory pelt tagging & harvest reporting (p. 3 of booklet): harvest of bobcat, otter, swift fox, fisher, wolf, and marten must be called in within 24 hours (1-877-FWP-WILD); pelts must be inspected and tagged within 10 days of the calendar close of the season at an FWP office. All wolf skulls and hides must be presented UNFROZEN within 10 days of harvest for tagging, tissue sampling, and tooth extraction. Specimen: not collected."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-12-01",
+     "close_date": "2027-02-15",
+     "open_time": null,
+     "timezone": "America/Denver",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MT-R2-3-4-5",
+       "zone_name": "FWP Regions 2, 3, 4, 5",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Quota: unlimited; no per-person limit in regions 2-5 (p. 20)."
+     },
+     "notes": "Mandatory pelt tagging & harvest reporting (p. 3 of booklet): harvest of bobcat, otter, swift fox, fisher, wolf, and marten must be called in within 24 hours (1-877-FWP-WILD); pelts must be inspected and tagged within 10 days of the calendar close of the season at an FWP office. All wolf skulls and hides must be presented UNFROZEN within 10 days of harvest for tagging, tissue sampling, and tooth extraction. Specimen: not collected."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "To avoid incidental capture of fisher, trappers are encouraged to use cubby boxes with a closed front and a 2\u00bd-inch x 2\u00bd-inch entrance hole (p. 20)."
+  },
+  {
+   "common_name": "American marten (closed areas)",
+   "scientific_name": null,
+   "scientific_name_verified": false,
+   "scientific_name_note": "Left null; not stated in Montana sources.",
+   "iac_reference": "MFWP 2026 Wolf & Furbearer Trapping and Hunting Regulations, p. 20 \u2014 Marten trapping is closed in that portion of Montana north of Interstate 90 and east of Interstate 15; Furbearer Season Dates by Region (p. 4)",
+   "season_status": "closed",
+   "seasons": [],
+   "permit_requirements": [],
+   "notes": "CLOSED: FWP Regions 6 and 7, AND the portion of Montana north of Interstate 90 and east of Interstate 15. Included so the app flags any logged marten take in these areas."
+  },
+  {
+   "common_name": "Fisher",
+   "scientific_name": null,
+   "scientific_name_verified": false,
+   "scientific_name_note": "Left null; not stated in Montana sources.",
+   "iac_reference": "MFWP 2026 Wolf & Furbearer Trapping and Hunting Regulations, p. 20 \u2014 Fisher table and FMU descriptions",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-12-01",
+     "close_date": "2027-02-15",
+     "open_time": null,
+     "timezone": "America/Denver",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MT-fisher-bitterroot",
+       "zone_name": "Bitterroot Fisher Management Unit (Mineral and Ravalli Counties, and Missoula County south of I-90)",
+       "area_type": "counties",
+       "counties": [
+        "Mineral",
+        "Ravalli",
+        "Missoula"
+       ]
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": 1,
+      "possession_limit": null,
+      "limit_notes": "Bitterroot FMU quota: 5 overall; female subquota: 1; per-person limit: 1 (p. 20)."
+     },
+     "notes": "Mandatory pelt tagging & harvest reporting (p. 3 of booklet): harvest of bobcat, otter, swift fox, fisher, wolf, and marten must be called in within 24 hours (1-877-FWP-WILD); pelts must be inspected and tagged within 10 days of the calendar close of the season at an FWP office. All wolf skulls and hides must be presented UNFROZEN within 10 days of harvest for tagging, tissue sampling, and tooth extraction. Carcass specimen required. Furbearer seasons close with 48 hours notice when a species quota is reached or approached prior to the end of the regular season (p. 21). Quota line: 1-800-711-8727 or 406-444-9557, 24 hours a day; fwp.mt.gov (updated daily)."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "Cabinet FMU (Sanders County and Lincoln County south of Hwy 2), Yaak FMU (Lincoln County north of Hwy 2), and Continental Divide FMU all have quota: 0 \u2014 modeled as a separate closed entry."
+  },
+  {
+   "common_name": "Fisher (closed FMUs)",
+   "scientific_name": null,
+   "scientific_name_verified": false,
+   "scientific_name_note": "Left null; not stated in Montana sources.",
+   "iac_reference": "MFWP 2026 Wolf & Furbearer Trapping and Hunting Regulations, p. 20 \u2014 Fisher table \u2014 Cabinet, Yaak, and Continental Divide FMUs: Quota: 0",
+   "season_status": "closed",
+   "seasons": [],
+   "permit_requirements": [],
+   "notes": "CLOSED: Cabinet FMU, Yaak FMU, and Continental Divide FMU (quota: 0). Included so the app flags any logged fisher take in these units."
+  },
+  {
+   "common_name": "Swift fox",
+   "scientific_name": null,
+   "scientific_name_verified": false,
+   "scientific_name_note": "Left null; not stated in Montana sources.",
+   "iac_reference": "MFWP 2026 Wolf & Furbearer Trapping and Hunting Regulations, p. 21, 26 \u2014 Swift Fox table and map (p. 21); Portion of Region 6 legal description (p. 26); Furbearer Season Dates by Region (p. 4)",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-01-15",
+     "open_time": null,
+     "timezone": "America/Denver",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MT-swiftfox-R6",
+       "zone_name": "Portion of FWP Region 6 open to swift fox trapping (portions of Blaine, Hill, Phillips, and Valley Counties \u2014 legal description on p. 26)",
+       "area_type": "management_units",
+       "counties": [
+        "Blaine",
+        "Hill",
+        "Phillips",
+        "Valley"
+       ]
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": 3,
+      "possession_limit": null,
+      "limit_notes": "Regional quota: 10; per-person limit: 3. Season closes with 48 hours notice upon reaching the regional quota (p. 21)."
+     },
+     "notes": "Mandatory pelt tagging & harvest reporting (p. 3 of booklet): harvest of bobcat, otter, swift fox, fisher, wolf, and marten must be called in within 24 hours (1-877-FWP-WILD); pelts must be inspected and tagged within 10 days of the calendar close of the season at an FWP office. All wolf skulls and hides must be presented UNFROZEN within 10 days of harvest for tagging, tissue sampling, and tooth extraction. Lower jaw specimen required. Trapping only \u2014 no hunting allowed (p. 21). Furbearer seasons close with 48 hours notice when a species quota is reached or approached prior to the end of the regular season (p. 21). Quota line: 1-800-711-8727 or 406-444-9557, 24 hours a day; fwp.mt.gov (updated daily)."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "Region 6 portions outside the described area and all other regions are closed to swift fox trapping."
+  },
+  {
+   "common_name": "Gray wolf",
+   "scientific_name": null,
+   "scientific_name_verified": false,
+   "scientific_name_note": "Left null; not stated in Montana sources.",
+   "iac_reference": "MFWP 2026 Wolf & Furbearer Trapping and Hunting Regulations, p. 18-19 \u2014 Wolf Trapping Season Dates (p. 18); Wolf table, Quotas, Licenses and Bag Limits (p. 19)",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2027-01-01",
+     "close_date": "2027-02-15",
+     "open_time": null,
+     "timezone": "America/Denver",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MT-wolf-inside-scope",
+       "zone_name": "Inside the geographic scope identified by federal court order (FWP Wildlife Management Regions 1, 2, and 3; all areas south of I-90 and west of Laurel along US Routes 212/310; all areas west of US Hwy 89 south of Great Falls; all areas west and south of US Hwy 87 from Great Falls to the Region 4 border near Loma to the Canadian border \u2014 see p. 18)",
+       "area_type": "special_areas"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": 10,
+      "possession_limit": null,
+      "limit_notes": "Regional quotas \u2014 Region 1: 131; Region 2: 92; Region 3: 33 (per-person: 5 hunting / 10 trapping); WMU 313: 1 (per-person 1); WMU 316: 1 (per-person 1); Region 4: 28; Region 5: 6; Region 6: 4; Region 7: 4 (total 300). A hunter may take up to 10 wolves per season on one wolf license except in Region 3 (5); a trapper may take up to 10 wolves per season on one Class C or C-2 wolf trapping license; both bag limits may be filled in one season (p. 19)."
+     },
+     "notes": "Mandatory pelt tagging & harvest reporting (p. 3 of booklet): harvest of bobcat, otter, swift fox, fisher, wolf, and marten must be called in within 24 hours (1-877-FWP-WILD); pelts must be inspected and tagged within 10 days of the calendar close of the season at an FWP office. All wolf skulls and hides must be presented UNFROZEN within 10 days of harvest for tagging, tissue sampling, and tooth extraction. Quota closure: when a quota is reached, all hunting and trapping for the region and/or WMU closes upon 24-hour notice, no later than March 15, 2027. Wolf trap pan tension must be at least 10 pounds in regions 1, 2, 3, 4, 5. Snares are prohibited on public lands within Lynx Protection Zones. Trappers must check wolf traps before 12 p.m. WMU 313 and WMU 316 quotas are independent and do not count toward the Region 3 quota. Harvest updates: myfwp.mt.gov/fwpPub/speciesHuntingGuide (11 a.m.\u20131 p.m. daily)."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-30",
+     "close_date": "2027-03-15",
+     "open_time": null,
+     "timezone": "America/Denver",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MT-wolf-outside-scope",
+       "zone_name": "Outside the geographic scope identified by federal court order",
+       "area_type": "special_areas"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": 10,
+      "possession_limit": null,
+      "limit_notes": "Regional quotas \u2014 Region 1: 131; Region 2: 92; Region 3: 33 (per-person: 5 hunting / 10 trapping); WMU 313: 1 (per-person 1); WMU 316: 1 (per-person 1); Region 4: 28; Region 5: 6; Region 6: 4; Region 7: 4 (total 300). A hunter may take up to 10 wolves per season on one wolf license except in Region 3 (5); a trapper may take up to 10 wolves per season on one Class C or C-2 wolf trapping license; both bag limits may be filled in one season (p. 19)."
+     },
+     "notes": "Mandatory pelt tagging & harvest reporting (p. 3 of booklet): harvest of bobcat, otter, swift fox, fisher, wolf, and marten must be called in within 24 hours (1-877-FWP-WILD); pelts must be inspected and tagged within 10 days of the calendar close of the season at an FWP office. All wolf skulls and hides must be presented UNFROZEN within 10 days of harvest for tagging, tissue sampling, and tooth extraction. Quota closure: when a quota is reached, all hunting and trapping for the region and/or WMU closes upon 24-hour notice, no later than March 15, 2027. Wolf trap pan tension must be at least 10 pounds in regions 1, 2, 3, 4, 5. Snares are prohibited on public lands within Lynx Protection Zones. Trappers must check wolf traps before 12 p.m. WMU 313 and WMU 316 quotas are independent and do not count toward the Region 3 quota. Harvest updates: myfwp.mt.gov/fwpPub/speciesHuntingGuide (11 a.m.\u20131 p.m. daily)."
+    }
+   ],
+   "permit_requirements": [
+    "Class E-1/E-2 wolf license (hunting) or Class C/C-2 wolf trapping license, purchased by Feb. 28, 2027",
+    "Wolf trapper education certification (Idaho or Montana class)",
+    "Supplemental Trapping Permit (free) when trapping nongame/predatory animals inside the federal-court scope"
+   ],
+   "notes": "Wolf trapping season dates are split by the federal-court geographic scope (see map on p. 17). WMU 313 is closed to wolf trapping in the Deckard Flats to Trail Creek Wolf Trapping Closure Area \u2014 modeled as a separate closed entry."
+  },
+  {
+   "common_name": "Gray wolf (Deckard Flats to Trail Creek closure area)",
+   "scientific_name": null,
+   "scientific_name_verified": false,
+   "scientific_name_note": "Left null; not stated in Montana sources.",
+   "iac_reference": "MFWP 2026 Wolf & Furbearer Trapping and Hunting Regulations, p. 19 \u2014 WMU 313 is closed to wolf trapping in the Deckard Flats to Trail Creek Wolf Trapping Closure Area",
+   "season_status": "closed",
+   "seasons": [],
+   "permit_requirements": [],
+   "notes": "CLOSED to wolf trapping in the Deckard Flats to Trail Creek Wolf Trapping Closure Area (within WMU 313). Included so the app flags any logged wolf trapping in this area."
+  },
+  {
+   "common_name": "Canada lynx",
+   "scientific_name": null,
+   "scientific_name_verified": false,
+   "scientific_name_note": "Left null; not stated in Montana sources.",
+   "iac_reference": "MFWP 2026 Wolf & Furbearer Trapping and Hunting Regulations, p. 16 \u2014 Lynx are protected by federal law under the Endangered Species Act; no season for lynx (p. 2)",
+   "season_status": "closed",
+   "seasons": [],
+   "permit_requirements": [],
+   "notes": "CONTINUOUSLY CLOSED \u2014 federally protected (threatened) under the Endangered Species Act. Trapped lynx that are uninjured must be released immediately and the incident reported to a FWP warden or biologist within 24 hours of release; if injured, notify a FWP warden or biologist immediately. Lynx Protection Zones apply on public lands in the Greater Yellowstone Area and Northwest Montana (pp. 16-17) with special trap restrictions (e.g., wolf snaring prohibited on public lands in LPZs). Included so the app flags any logged take as prohibited."
+  },
+  {
+   "common_name": "Wolverine",
+   "scientific_name": null,
+   "scientific_name_verified": false,
+   "scientific_name_note": "Left null; not stated in Montana sources.",
+   "iac_reference": "MFWP 2026 Wolf & Furbearer Trapping and Hunting Regulations, p. 21 \u2014 Wolverines are protected by federal law under the Endangered Species Act; no season for wolverine (p. 2)",
+   "season_status": "closed",
+   "seasons": [],
+   "permit_requirements": [],
+   "notes": "CONTINUOUSLY CLOSED \u2014 federally protected under the Endangered Species Act per the 2026 booklet. Avoid placing sets that might attract wolverines. A trapped wolverine that is uninjured must be released immediately and the incident reported to a FWP warden or biologist within 24 hours of release; if injured, notify immediately. Report by calling TIPMONT. Included so the app flags any logged take as prohibited."
+  },
+  {
+   "common_name": "Red fox",
+   "scientific_name": null,
+   "scientific_name_verified": false,
+   "scientific_name_note": "Left null; not stated in Montana sources.",
+   "iac_reference": "MFWP 2026 Wolf & Furbearer Trapping and Hunting Regulations, p. 2, 18 \u2014 Nongame Wildlife definition \u2014 red fox listed (p. 2); Supplemental Trapping Permit (p. 18)",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/Denver",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "MT-statewide",
+       "zone_name": "Statewide",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Nongame wildlife in Montana \u2014 no resident license is required to trap nongame wildlife; nonresidents must purchase a license (p. 2). A free Supplemental Trapping Permit is required when targeting nongame or predatory animals inside the geographic scope identified by federal court order (p. 18). Modeled as continuous open since no season dates are printed."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Raccoon",
+   "scientific_name": null,
+   "scientific_name_verified": false,
+   "scientific_name_note": "Left null; not stated in Montana sources.",
+   "iac_reference": "MFWP 2026 Wolf & Furbearer Trapping and Hunting Regulations, p. 2, 18 \u2014 Nongame Wildlife definition \u2014 raccoon listed (p. 2); Supplemental Trapping Permit (p. 18)",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/Denver",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "MT-statewide",
+       "zone_name": "Statewide",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Nongame wildlife in Montana \u2014 no resident license is required to trap nongame wildlife; nonresidents must purchase a license (p. 2). A free Supplemental Trapping Permit is required when targeting nongame or predatory animals inside the geographic scope identified by federal court order (p. 18). Modeled as continuous open since no season dates are printed."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "American badger",
+   "scientific_name": null,
+   "scientific_name_verified": false,
+   "scientific_name_note": "Left null; not stated in Montana sources.",
+   "iac_reference": "MFWP 2026 Wolf & Furbearer Trapping and Hunting Regulations, p. 2, 18 \u2014 Nongame Wildlife definition \u2014 badger listed (p. 2); Supplemental Trapping Permit (p. 18)",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/Denver",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "MT-statewide",
+       "zone_name": "Statewide",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Nongame wildlife in Montana \u2014 no resident license is required to trap nongame wildlife; nonresidents must purchase a license (p. 2). A free Supplemental Trapping Permit is required when targeting nongame or predatory animals inside the geographic scope identified by federal court order (p. 18). Modeled as continuous open since no season dates are printed."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Coyote",
+   "scientific_name": null,
+   "scientific_name_verified": false,
+   "scientific_name_note": "Left null; not stated in Montana sources.",
+   "iac_reference": "MFWP 2026 Wolf & Furbearer Trapping and Hunting Regulations, p. 2, 18 \u2014 Predatory Animals definition \u2014 coyote listed (p. 2); Supplemental Trapping Permit (p. 18)",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/Denver",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "MT-statewide",
+       "zone_name": "Statewide",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Predatory animals in Montana \u2014 no resident license is required to trap predators; nonresidents must purchase a license (p. 2). A free Supplemental Trapping Permit is required when targeting nongame or predatory animals inside the geographic scope identified by federal court order (p. 18). Modeled as continuous open since no season dates are printed."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Striped skunk",
+   "scientific_name": null,
+   "scientific_name_verified": false,
+   "scientific_name_note": "Left null; not stated in Montana sources.",
+   "iac_reference": "MFWP 2026 Wolf & Furbearer Trapping and Hunting Regulations, p. 2, 18 \u2014 Predatory Animals definition \u2014 skunk listed (p. 2); Supplemental Trapping Permit (p. 18)",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/Denver",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "MT-statewide",
+       "zone_name": "Statewide",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Predatory animals in Montana \u2014 no resident license is required to trap predators; nonresidents must purchase a license (p. 2). A free Supplemental Trapping Permit is required when targeting nongame or predatory animals inside the geographic scope identified by federal court order (p. 18). Modeled as continuous open since no season dates are printed."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Spotted skunk (civet cat)",
+   "scientific_name": null,
+   "scientific_name_verified": false,
+   "scientific_name_note": "Left null; not stated in Montana sources.",
+   "iac_reference": "MFWP 2026 Wolf & Furbearer Trapping and Hunting Regulations, p. 2, 18 \u2014 Predatory Animals definition \u2014 spotted skunk listed; 'civet cat' (p. 2); Supplemental Trapping Permit (p. 18)",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/Denver",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "MT-statewide",
+       "zone_name": "Statewide",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Predatory animals in Montana \u2014 no resident license is required to trap predators; nonresidents must purchase a license (p. 2). A free Supplemental Trapping Permit is required when targeting nongame or predatory animals inside the geographic scope identified by federal court order (p. 18). Modeled as continuous open since no season dates are printed."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "Montana statute classifies the spotted skunk ('civet cat') as a predatory animal."
+  },
+  {
+   "common_name": "Weasel",
+   "scientific_name": null,
+   "scientific_name_verified": false,
+   "scientific_name_note": "Left null; not stated in Montana sources.",
+   "iac_reference": "MFWP 2026 Wolf & Furbearer Trapping and Hunting Regulations, p. 2, 18 \u2014 Predatory Animals definition \u2014 weasel listed (p. 2); Supplemental Trapping Permit (p. 18)",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/Denver",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "MT-statewide",
+       "zone_name": "Statewide",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Predatory animals in Montana \u2014 no resident license is required to trap predators; nonresidents must purchase a license (p. 2). A free Supplemental Trapping Permit is required when targeting nongame or predatory animals inside the geographic scope identified by federal court order (p. 18). Modeled as continuous open since no season dates are printed."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  }
+ ],
+ "sources": [
+  {
+   "id": "mt-2026-furbearer-final-pdf",
+   "title": "2026 Wolf & Furbearer Trapping and Hunting Regulations",
+   "url": "https://fwp.mt.gov/binaries/content/assets/fwp/hunt/regulations/2026/2026-wolf-and-furbearer-final-for-web.pdf",
+   "type": "agency_regulations",
+   "notes": "Final adopted regulations (F&W Commission, Aug. 19, 2026; valid through June 30, 2027). Season dates by region (p. 4), wolf dates (pp. 4, 18-19), species tables (pp. 14-21), federal-court scope map (p. 17), legal descriptions (pp. 24-26). Archived locally."
+  },
+  {
+   "id": "mt-fwp-furbearer-page",
+   "title": "Hunt By Species: Furbearers (Trapping) - Montana FWP",
+   "url": "https://fwp.mt.gov/hunt/regulations/furbearer-trapping",
+   "type": "agency_webpage",
+   "notes": "Confirms season dates and license details; links the final regulations PDF. Mandatory pelt tagging & harvest reporting (24-hour call-in; 10-day tagging) and quota hotlines read here."
+  }
+ ],
+ "verification": {
+  "regulation_year_confirmed": true,
+  "confirmation_notes": "Final adopted (not draft) regulations read cover-to-cover from the official PDF (32 pages) and the FWP species page, both verified 2026-09-18. Wolf quota total = 300 (131+92+33+1+1+28+6+4+4), matching the Commission's Aug. 19, 2026 adoption. Marten Regions 1-5 confirmed by the p. 20 detail table.",
+  "known_gaps": [
+   "Spotted skunk classified as predatory per MCA (p. 2); modeled continuous open as the statute directs.",
+   "Bobcat hunting season dates follow the regional trapping windows; hours/dogs rules noted.",
+   "WMA-specific closures summarized, not enumerated. Region 1 setback changes and LPZ hardware rules summarized."
+  ]
+ },
+ "license_url": "https://ols.fwp.mt.gov/",
+ "license_vendor": "Montana FWP Online Licensing System",
+ "regs_url": "https://fwp.mt.gov/binaries/content/assets/fwp/hunt/regulations/2026/2026-wolf-and-furbearer-final-for-web.pdf",
+ "regs_kind": "pdf"
+,
+ "warden_directory": {
+  "label": "Report a violation",
+  "url": "https://tipmont.mt.gov",
+  "kind": "hotline",
+  "note": "TIP-MONT: 1-800-847-6668 (1-800-TIP-MONT), 24-hr toll-free; anonymous; rewards up to $1,000"
+ }
+}

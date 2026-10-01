@@ -1,0 +1,410 @@
+{
+ "schema_version": "1.1",
+ "state": "FL",
+ "state_name": "Florida",
+ "season_year": "2026-27",
+ "retrieved_at": "2026-09-18",
+ "disclaimer": "Reminder reference only \u2014 NOT legal authority. Season dates, zones, and limits are set annually and can change. Always verify current regulations with the Florida FWC before hunting or trapping.",
+ "sources": [
+  {
+   "id": "fl-68a-24-002",
+   "title": "Fla. Admin. Code r. 68A-24.002 (Furbearers; effective July 1, 2026)",
+   "url": "https://myfwc.com/media/o42bldvf/5a-rl-68a-24.pdf",
+   "type": "administrative_code",
+   "notes": "Official rule text; archived locally in hidden_files/season-research/."
+  },
+  {
+   "id": "fl-fwc-furbearers",
+   "title": "FWC: Furbearers",
+   "url": "https://myfwc.com/hunting/furbearers/",
+   "type": "agency_webpage",
+   "notes": "Official FWC furbearer summary page."
+  }
+ ],
+ "license_summary": {
+  "trapping_license": "A furbearer/trapping license is required to set traps or snares and for commercial sale of furbearers; a hunting license is required for take by methods other than trapping.",
+  "bobcat_otter_tagging": "A CITES tag is required when a bobcat or otter pelt is sold or transported across state lines; hunters may possess one untagged untanned pelt of each; untagged pelts are prohibited April 1 \u2013 November 30; trappers have no possession limit. (FWC contact for CITES tags: 850-488-5878.)",
+  "timezone_note": "The Florida Panhandle (west of the Apalachicola River) observes Central Time; the rest of Florida observes Eastern Time. Season dates shown are statewide calendar dates."
+ },
+ "species": [
+  {
+   "common_name": "Beaver",
+   "scientific_name": "Castor canadensis",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Florida FWC regulations.",
+   "iac_reference": "Fla. Admin. Code r. 68A-24.002",
+   "season_status": "continuous",
+   "seasons": [
+    {
+     "method": "both",
+     "land_type": "all",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "FL-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Year-round take (2026 rule). Statewide dates do not govern WMAs \u2014 individual WMA brochures vary."
+     },
+     "notes": "Year-round take (2026 rule). Statewide dates do not govern WMAs \u2014 individual WMA brochures vary."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Bobcat",
+   "scientific_name": "Lynx rufus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Florida FWC regulations.",
+   "iac_reference": "Fla. Admin. Code r. 68A-24.002",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-12-01",
+     "close_date": "2027-03-01",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "FL-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Dec. 1 \u2013 Mar. 1, no limits. CITES tag required when sold or transported across state lines; untagged pelts prohibited April 1 \u2013 Nov. 30."
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-12-01",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "FL-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Dec. 1 \u2013 Mar. 31. Hunters may possess one untagged untanned pelt; untagged pelts prohibited April 1 \u2013 Nov. 30."
+     },
+     "notes": "Dec. 1 \u2013 Mar. 31. Hunters may possess one untagged untanned pelt; untagged pelts prohibited April 1 \u2013 Nov. 30."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Coyote",
+   "scientific_name": "Canis latrans",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Florida FWC regulations.",
+   "iac_reference": "Fla. Admin. Code r. 68A-24.002",
+   "season_status": "continuous",
+   "seasons": [
+    {
+     "method": "both",
+     "land_type": "all",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "FL-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Year-round take (2026 rule). Statewide dates do not govern WMAs \u2014 individual WMA brochures vary."
+     },
+     "notes": "Year-round take (2026 rule). Statewide dates do not govern WMAs \u2014 individual WMA brochures vary."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Gray fox",
+   "scientific_name": "Urocyon cinereoargenteus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Florida FWC regulations.",
+   "iac_reference": "Fla. Admin. Code r. 68A-24.002",
+   "season_status": "closed",
+   "seasons": [],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Mink",
+   "scientific_name": "Neogale vison",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Florida FWC regulations.",
+   "iac_reference": "Fla. Admin. Code r. 68A-24.002",
+   "season_status": "closed",
+   "seasons": [],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Nutria",
+   "scientific_name": "Myocastor coypus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Florida FWC regulations.",
+   "iac_reference": "Fla. Admin. Code r. 68A-24.002",
+   "season_status": "continuous",
+   "seasons": [
+    {
+     "method": "both",
+     "land_type": "all",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "FL-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Year-round take under the 2026 rule (rule text expressly includes nutria, though the FWC webpage summary list omits it). Statewide dates do not govern WMAs."
+     },
+     "notes": "Year-round take under the 2026 rule (rule text expressly includes nutria, though the FWC webpage summary list omits it). Statewide dates do not govern WMAs."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Opossum",
+   "scientific_name": "Didelphis virginiana",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Florida FWC regulations.",
+   "iac_reference": "Fla. Admin. Code r. 68A-24.002",
+   "season_status": "continuous",
+   "seasons": [
+    {
+     "method": "both",
+     "land_type": "all",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "FL-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Year-round take (2026 rule). Statewide dates do not govern WMAs \u2014 individual WMA brochures vary."
+     },
+     "notes": "Year-round take (2026 rule). Statewide dates do not govern WMAs \u2014 individual WMA brochures vary."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "River otter",
+   "scientific_name": "Lontra canadensis",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Florida FWC regulations.",
+   "iac_reference": "Fla. Admin. Code r. 68A-24.002",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-12-01",
+     "close_date": "2027-03-01",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "FL-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Dec. 1 \u2013 Mar. 1, no limits. CITES tag required when sold or transported across state lines; untagged pelts prohibited April 1 \u2013 Nov. 30; trappers have no possession limit."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Raccoon",
+   "scientific_name": "Procyon lotor",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Florida FWC regulations.",
+   "iac_reference": "Fla. Admin. Code r. 68A-24.002",
+   "season_status": "continuous",
+   "seasons": [
+    {
+     "method": "both",
+     "land_type": "all",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "FL-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Year-round take (2026 rule). Statewide dates do not govern WMAs \u2014 individual WMA brochures vary."
+     },
+     "notes": "Year-round take (2026 rule). Statewide dates do not govern WMAs \u2014 individual WMA brochures vary."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Red fox",
+   "scientific_name": "Vulpes vulpes",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Florida FWC regulations.",
+   "iac_reference": "Fla. Admin. Code r. 68A-24.002",
+   "season_status": "closed",
+   "seasons": [],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Round-tailed muskrat",
+   "scientific_name": "Neofiber alleni",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Florida FWC regulations.",
+   "iac_reference": "Fla. Admin. Code r. 68A-24.002",
+   "season_status": "closed",
+   "seasons": [],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Striped skunk",
+   "scientific_name": "Mephitis mephitis",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Florida FWC regulations.",
+   "iac_reference": "Fla. Admin. Code r. 68A-24.002",
+   "season_status": "continuous",
+   "seasons": [
+    {
+     "method": "both",
+     "land_type": "all",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "FL-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Year-round take (2026 rule). Statewide dates do not govern WMAs \u2014 individual WMA brochures vary."
+     },
+     "notes": "Year-round take (2026 rule). Statewide dates do not govern WMAs \u2014 individual WMA brochures vary."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Weasel",
+   "scientific_name": "Mustela frenata",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Florida FWC regulations.",
+   "iac_reference": "Fla. Admin. Code r. 68A-24.002",
+   "season_status": "closed",
+   "seasons": [],
+   "permit_requirements": [],
+   "notes": ""
+  }
+ ],
+ "verification": {
+  "regulation_year_confirmed": true,
+  "confirmation_notes": "Official Florida Administrative Code Rule 68A-24.002 text (effective July 1, 2026) and the FWC furbearers page, read 2026-09-18.",
+  "known_gaps": [
+   "Rule text expressly includes nutria in year-round take, though the FWC webpage summary list omits it (flagged in nutria notes).",
+   "Statewide dates do not govern WMAs \u2014 individual WMA brochures vary.",
+   "Scientific names are standard taxonomy, not stated in FWC regulations."
+  ]
+ },
+ "provisional": false,
+ "license_url": "https://license.gooutdoorsflorida.com/Licensing/CustomerLookup.aspx",
+ "license_vendor": "Go Outdoors",
+ "regs_url": "https://myfwc.com/hunting/furbearers/",
+ "regs_kind": "page"
+,
+ "warden_directory": {
+  "label": "Report a violation",
+  "url": "http://MyFWC.com/contact/wildlife-alert/",
+  "kind": "hotline",
+  "note": "Wildlife Alert: 888-404-3922 (888-404-FWCC); #FWC from cell"
+ }
+}

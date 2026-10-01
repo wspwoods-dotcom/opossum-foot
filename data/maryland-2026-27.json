@@ -1,0 +1,1327 @@
+{
+ "schema_version": "1.0",
+ "state": "MD",
+ "state_name": "Maryland",
+ "season_year": "2026-27",
+ "provisional": false,
+ "retrieved_at": "2026-09-18",
+ "disclaimer": "Reminder reference only — NOT legal authority. Season dates, zones, and limits are set annually and can change. Always verify current regulations with the Maryland Department of Natural Resources before hunting or trapping.",
+ "sources": [
+  {
+   "id": "md-guide-2026-27",
+   "title": "2026–2027 Maryland Guide to Hunting & Trapping — Furbearer Seasons & Limits (DNR, via eRegulations)",
+   "url": "https://www.eregulations.com/maryland/hunting/furbearer-seasons-limits/",
+   "type": "agency_booklet",
+   "notes": "Official online guide (Department's eRegulations publication). Full 2026-2027 furbearer table extracted 2026-09-18."
+  },
+  {
+   "id": "md-proposals-2026-28",
+   "title": "Hunting and Trapping Regulation Proposals 2026–2028 (MD DNR)",
+   "url": "https://dnr.maryland.gov:443/wildlife/Documents/2026-2028-Regulation-Proposals.pdf",
+   "type": "agency_proposal",
+   "notes": "NOT final authority. Used only to resolve method/limit ambiguities (fisher methods, otter Allegany/Garrett limits). The final guide adopted its dates/limits everywhere verifiable."
+  }
+ ],
+ "license_summary": {
+  "furbearer_permit": "Furbearer Permit required to chase, hunt, or trap furbearers ($5 individual per the license application).",
+  "trapper_education": "Trapper education required for trappers who did not hold a permit/certificate before Aug 1, 2007.",
+  "shipping_tag": "Fur Shipping Tag required for pelts/carcasses transported across the state line (via MD Outdoors/COMPASS).",
+  "otter_carcass": "Whole skinned carcass of any river otter taken in Allegany or Garrett counties must be submitted to the Wildlife and Heritage Service: (301) 777-2136.",
+  "gray_fox_registration": "Gray fox: register within 48 hours via MD Outdoors or (410) 260-8900 (NEW 2026-27).",
+  "sunday": "Sunday hunting for certain furbearers is permitted with restrictions in some counties/locations (see the Sunday hunting chart).",
+  "wma_leaseholders": "On DNR lands in Caroline, Dorchester, Somerset, Talbot, Wicomico, and Worcester counties, only leaseholders or their appointees may hunt or trap furbearers Nov 15–Mar 15."
+ },
+ "species": [
+  {
+   "common_name": "Beaver",
+   "scientific_name": "Castor canadensis",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the 2026-2027 MD guide.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-12-15",
+     "close_date": "2027-03-15",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MD-beaver-general",
+       "zone_name": "All counties except Allegany and Garrett",
+       "area_type": "counties",
+       "note": "All Maryland counties except Allegany and Garrett."
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-12-01",
+     "close_date": "2027-03-15",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MD-allegany-garrett",
+       "zone_name": "Allegany and Garrett counties",
+       "area_type": "counties",
+       "counties": [
+        "Allegany",
+        "Garrett"
+       ]
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit."
+     },
+     "notes": ""
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "",
+   "iac_reference": "COMAR 08.03.03.05; 2026–2027 MD Guide to Hunting & Trapping, Furbearer Seasons & Limits"
+  },
+  {
+   "common_name": "Bobcat",
+   "scientific_name": "Lynx rufus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the 2026-2027 MD guide.",
+   "season_status": "closed",
+   "seasons": [],
+   "permit_requirements": [],
+   "notes": "CLOSED SEASON statewide. The bobcat may not be taken in Maryland.",
+   "iac_reference": "COMAR 08.03.03.05; 2026–2027 MD Guide to Hunting & Trapping, Furbearer Seasons & Limits"
+  },
+  {
+   "common_name": "Coyote",
+   "scientific_name": "Canis latrans",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the 2026-2027 MD guide.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "MD-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit."
+     },
+     "notes": "Firearms, archery, and airgun hunting year-round in all counties, day and night."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-31",
+     "close_date": "2027-02-15",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MD-east-bay",
+       "zone_name": "East of the Chesapeake Bay and Susquehanna River",
+       "area_type": "special_areas",
+       "note": "That portion of the state east of the Chesapeake Bay and the Susquehanna River."
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit."
+     },
+     "notes": "EAST/WEST ASSIGNMENT FLAG: the final 2026-2027 guide assigns Oct 31–Feb 15 to EAST of the Chesapeake Bay/Susquehanna River and Nov 14–Feb 28 to WEST, but the DNR regulation proposal and the 2024–2026 COMAR pattern assign the earlier season to WEST. Modeled per the final guide; verify against current COMAR 08.03.03.05 before launch."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-14",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MD-west-bay",
+       "zone_name": "West of the Chesapeake Bay and Susquehanna River",
+       "area_type": "special_areas",
+       "note": "That portion of the state west of the Chesapeake Bay and the Susquehanna River."
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit."
+     },
+     "notes": "EAST/WEST ASSIGNMENT FLAG: the final 2026-2027 guide assigns Oct 31–Feb 15 to EAST of the Chesapeake Bay/Susquehanna River and Nov 14–Feb 28 to WEST, but the DNR regulation proposal and the 2024–2026 COMAR pattern assign the earlier season to WEST. Modeled per the final guide; verify against current COMAR 08.03.03.05 before launch."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "",
+   "iac_reference": "COMAR 08.03.03.05; 2026–2027 MD Guide to Hunting & Trapping, Furbearer Seasons & Limits"
+  },
+  {
+   "common_name": "Fisher",
+   "scientific_name": "Pekania pennanti",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the 2026-2027 MD guide.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-31",
+     "close_date": "2027-02-01",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MD-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": 4,
+      "season_bag": 4,
+      "possession_limit": null,
+      "limit_notes": "4 per day, 4 per season."
+     },
+     "notes": "Fisher pelts must be tagged within 15 days after the season has closed (per the 2024-2025 guide; re-verify for 2026-2027). Tags from Wildlife and Heritage Service or Natural Resources Police offices."
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-10-31",
+     "close_date": "2027-02-01",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MD-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": 4,
+      "season_bag": 4,
+      "possession_limit": null,
+      "limit_notes": "4 per day, 4 per season. Firearms, archery, and airgun hunting."
+     },
+     "notes": "Method per the DNR 2026-2028 regulation proposal (final table merges fisher/weasel rows); verify against COMAR. Fisher pelts must be tagged within 15 days after the season has closed (per the 2024-2025 guide; re-verify for 2026-2027). Tags from Wildlife and Heritage Service or Natural Resources Police offices."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "",
+   "iac_reference": "COMAR 08.03.03.05; 2026–2027 MD Guide to Hunting & Trapping, Furbearer Seasons & Limits"
+  },
+  {
+   "common_name": "Long-tailed weasel",
+   "scientific_name": "Mustela frenata",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the 2026-2027 MD guide.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-31",
+     "close_date": "2027-02-01",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MD-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": 4,
+      "season_bag": 4,
+      "possession_limit": null,
+      "limit_notes": "4 per day, 4 per season. Trapping only (per the DNR regulation proposal)."
+     },
+     "notes": ""
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "",
+   "iac_reference": "COMAR 08.03.03.05; 2026–2027 MD Guide to Hunting & Trapping, Furbearer Seasons & Limits"
+  },
+  {
+   "common_name": "Red fox",
+   "scientific_name": "Vulpes vulpes",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the 2026-2027 MD guide.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-08-01",
+     "close_date": "2027-07-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "MD-fox-charles-dorchester",
+       "zone_name": "Charles and Dorchester counties",
+       "area_type": "counties",
+       "counties": [
+        "Charles",
+        "Dorchester"
+       ]
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit."
+     },
+     "notes": "Trapping, firearms, archery, and airgun hunting year-round in Charles and Dorchester counties. It is unlawful to kill a fox being pursued by dogs in Cecil, Harford, Kent, and Wicomico counties."
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-08-01",
+     "close_date": "2027-07-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "MD-fox-charles-dorchester",
+       "zone_name": "Charles and Dorchester counties",
+       "area_type": "counties",
+       "counties": [
+        "Charles",
+        "Dorchester"
+       ]
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit."
+     },
+     "notes": "Trapping, firearms, archery, and airgun hunting year-round in Charles and Dorchester counties. It is unlawful to kill a fox being pursued by dogs in Cecil, Harford, Kent, and Wicomico counties."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-14",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MD-fox-eastern-shore",
+       "zone_name": "Caroline, Cecil, Kent, Queen Anne's, Somerset, Talbot, Wicomico, Worcester counties",
+       "area_type": "counties",
+       "counties": [
+        "Caroline",
+        "Cecil",
+        "Kent",
+        "Queen Anne's",
+        "Somerset",
+        "Talbot",
+        "Wicomico",
+        "Worcester"
+       ]
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit."
+     },
+     "notes": "It is unlawful to kill a fox being pursued by dogs in Cecil, Harford, Kent, and Wicomico counties."
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-11-14",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MD-fox-eastern-shore",
+       "zone_name": "Caroline, Cecil, Kent, Queen Anne's, Somerset, Talbot, Wicomico, Worcester counties",
+       "area_type": "counties",
+       "counties": [
+        "Caroline",
+        "Cecil",
+        "Kent",
+        "Queen Anne's",
+        "Somerset",
+        "Talbot",
+        "Wicomico",
+        "Worcester"
+       ]
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit."
+     },
+     "notes": "It is unlawful to kill a fox being pursued by dogs in Cecil, Harford, Kent, and Wicomico counties."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-31",
+     "close_date": "2027-02-15",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MD-fox-western-central",
+       "zone_name": "Allegany, Anne Arundel, Baltimore, Calvert, Carroll, Frederick, Garrett, Harford, Howard, Montgomery, Prince George's, St. Mary's, Washington counties",
+       "area_type": "counties",
+       "counties": [
+        "Allegany",
+        "Anne Arundel",
+        "Baltimore",
+        "Calvert",
+        "Carroll",
+        "Frederick",
+        "Garrett",
+        "Harford",
+        "Howard",
+        "Montgomery",
+        "Prince George's",
+        "St. Mary's",
+        "Washington"
+       ]
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit."
+     },
+     "notes": "It is unlawful to kill a fox being pursued by dogs in Cecil, Harford, Kent, and Wicomico counties."
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-10-31",
+     "close_date": "2027-02-15",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MD-fox-western-central",
+       "zone_name": "Allegany, Anne Arundel, Baltimore, Calvert, Carroll, Frederick, Garrett, Harford, Howard, Montgomery, Prince George's, St. Mary's, Washington counties",
+       "area_type": "counties",
+       "counties": [
+        "Allegany",
+        "Anne Arundel",
+        "Baltimore",
+        "Calvert",
+        "Carroll",
+        "Frederick",
+        "Garrett",
+        "Harford",
+        "Howard",
+        "Montgomery",
+        "Prince George's",
+        "St. Mary's",
+        "Washington"
+       ]
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit."
+     },
+     "notes": "It is unlawful to kill a fox being pursued by dogs in Cecil, Harford, Kent, and Wicomico counties."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "Some counties have local fox restrictions; contact local law enforcement for details.",
+   "iac_reference": "COMAR 08.03.03.05; 2026–2027 MD Guide to Hunting & Trapping, Furbearer Seasons & Limits"
+  },
+  {
+   "common_name": "Gray fox",
+   "scientific_name": "Urocyon cinereoargenteus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the 2026-2027 MD guide.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-08-01",
+     "close_date": "2027-07-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "MD-fox-charles-dorchester",
+       "zone_name": "Charles and Dorchester counties",
+       "area_type": "counties",
+       "counties": [
+        "Charles",
+        "Dorchester"
+       ]
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit."
+     },
+     "notes": "Trapping, firearms, archery, and airgun hunting year-round in Charles and Dorchester counties. NEW: within 48 hours of harvesting a gray fox, register it with DNR via MD Outdoors (app/website) or (410) 260-8900. It is unlawful to kill a fox being pursued by dogs in Cecil, Harford, Kent, and Wicomico counties."
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-08-01",
+     "close_date": "2027-07-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "MD-fox-charles-dorchester",
+       "zone_name": "Charles and Dorchester counties",
+       "area_type": "counties",
+       "counties": [
+        "Charles",
+        "Dorchester"
+       ]
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit."
+     },
+     "notes": "Trapping, firearms, archery, and airgun hunting year-round in Charles and Dorchester counties. NEW: within 48 hours of harvesting a gray fox, register it with DNR via MD Outdoors (app/website) or (410) 260-8900. It is unlawful to kill a fox being pursued by dogs in Cecil, Harford, Kent, and Wicomico counties."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-14",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MD-fox-eastern-shore",
+       "zone_name": "Caroline, Cecil, Kent, Queen Anne's, Somerset, Talbot, Wicomico, Worcester counties",
+       "area_type": "counties",
+       "counties": [
+        "Caroline",
+        "Cecil",
+        "Kent",
+        "Queen Anne's",
+        "Somerset",
+        "Talbot",
+        "Wicomico",
+        "Worcester"
+       ]
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit."
+     },
+     "notes": "NEW: within 48 hours of harvesting a gray fox, register it with DNR via MD Outdoors (app/website) or (410) 260-8900. It is unlawful to kill a fox being pursued by dogs in Cecil, Harford, Kent, and Wicomico counties."
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-11-14",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MD-fox-eastern-shore",
+       "zone_name": "Caroline, Cecil, Kent, Queen Anne's, Somerset, Talbot, Wicomico, Worcester counties",
+       "area_type": "counties",
+       "counties": [
+        "Caroline",
+        "Cecil",
+        "Kent",
+        "Queen Anne's",
+        "Somerset",
+        "Talbot",
+        "Wicomico",
+        "Worcester"
+       ]
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit."
+     },
+     "notes": "NEW: within 48 hours of harvesting a gray fox, register it with DNR via MD Outdoors (app/website) or (410) 260-8900. It is unlawful to kill a fox being pursued by dogs in Cecil, Harford, Kent, and Wicomico counties."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-31",
+     "close_date": "2027-02-15",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MD-fox-western-central",
+       "zone_name": "Allegany, Anne Arundel, Baltimore, Calvert, Carroll, Frederick, Garrett, Harford, Howard, Montgomery, Prince George's, St. Mary's, Washington counties",
+       "area_type": "counties",
+       "counties": [
+        "Allegany",
+        "Anne Arundel",
+        "Baltimore",
+        "Calvert",
+        "Carroll",
+        "Frederick",
+        "Garrett",
+        "Harford",
+        "Howard",
+        "Montgomery",
+        "Prince George's",
+        "St. Mary's",
+        "Washington"
+       ]
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit."
+     },
+     "notes": "NEW: within 48 hours of harvesting a gray fox, register it with DNR via MD Outdoors (app/website) or (410) 260-8900. It is unlawful to kill a fox being pursued by dogs in Cecil, Harford, Kent, and Wicomico counties."
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-10-31",
+     "close_date": "2027-02-15",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MD-fox-western-central",
+       "zone_name": "Allegany, Anne Arundel, Baltimore, Calvert, Carroll, Frederick, Garrett, Harford, Howard, Montgomery, Prince George's, St. Mary's, Washington counties",
+       "area_type": "counties",
+       "counties": [
+        "Allegany",
+        "Anne Arundel",
+        "Baltimore",
+        "Calvert",
+        "Carroll",
+        "Frederick",
+        "Garrett",
+        "Harford",
+        "Howard",
+        "Montgomery",
+        "Prince George's",
+        "St. Mary's",
+        "Washington"
+       ]
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit."
+     },
+     "notes": "NEW: within 48 hours of harvesting a gray fox, register it with DNR via MD Outdoors (app/website) or (410) 260-8900. It is unlawful to kill a fox being pursued by dogs in Cecil, Harford, Kent, and Wicomico counties."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "Some counties have local fox restrictions; contact local law enforcement for details.",
+   "iac_reference": "COMAR 08.03.03.05; 2026–2027 MD Guide to Hunting & Trapping, Furbearer Seasons & Limits"
+  },
+  {
+   "common_name": "Muskrat",
+   "scientific_name": "Ondatra zibethicus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the 2026-2027 MD guide.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-14",
+     "close_date": "2027-02-15",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MD-muskrat-west",
+       "zone_name": "Allegany, Carroll, Frederick, Garrett, Howard, Washington counties",
+       "area_type": "counties",
+       "counties": [
+        "Allegany",
+        "Carroll",
+        "Frederick",
+        "Garrett",
+        "Howard",
+        "Washington"
+       ]
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2027-01-01",
+     "close_date": "2027-03-15",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MD-muskrat-central",
+       "zone_name": "Anne Arundel, Calvert, Caroline, Charles, Dorchester, Montgomery, Prince George's, St. Mary's, Talbot, Wicomico counties",
+       "area_type": "counties",
+       "counties": [
+        "Anne Arundel",
+        "Calvert",
+        "Caroline",
+        "Charles",
+        "Dorchester",
+        "Montgomery",
+        "Prince George's",
+        "St. Mary's",
+        "Talbot",
+        "Wicomico"
+       ]
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-12-15",
+     "close_date": "2027-03-15",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MD-muskrat-east",
+       "zone_name": "Baltimore, Cecil, Harford, Kent, Queen Anne's, Somerset, Worcester counties",
+       "area_type": "counties",
+       "counties": [
+        "Baltimore",
+        "Cecil",
+        "Harford",
+        "Kent",
+        "Queen Anne's",
+        "Somerset",
+        "Worcester"
+       ]
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit."
+     },
+     "notes": ""
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "",
+   "iac_reference": "COMAR 08.03.03.05; 2026–2027 MD Guide to Hunting & Trapping, Furbearer Seasons & Limits"
+  },
+  {
+   "common_name": "Mink",
+   "scientific_name": "Neogale vison",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the 2026-2027 MD guide.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-14",
+     "close_date": "2027-02-15",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MD-muskrat-west",
+       "zone_name": "Allegany, Carroll, Frederick, Garrett, Howard, Washington counties",
+       "area_type": "counties",
+       "counties": [
+        "Allegany",
+        "Carroll",
+        "Frederick",
+        "Garrett",
+        "Howard",
+        "Washington"
+       ]
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2027-01-01",
+     "close_date": "2027-03-15",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MD-muskrat-central",
+       "zone_name": "Anne Arundel, Calvert, Caroline, Charles, Dorchester, Montgomery, Prince George's, St. Mary's, Talbot, Wicomico counties",
+       "area_type": "counties",
+       "counties": [
+        "Anne Arundel",
+        "Calvert",
+        "Caroline",
+        "Charles",
+        "Dorchester",
+        "Montgomery",
+        "Prince George's",
+        "St. Mary's",
+        "Talbot",
+        "Wicomico"
+       ]
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-12-15",
+     "close_date": "2027-03-15",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MD-muskrat-east",
+       "zone_name": "Baltimore, Cecil, Harford, Kent, Queen Anne's, Somerset, Worcester counties",
+       "area_type": "counties",
+       "counties": [
+        "Baltimore",
+        "Cecil",
+        "Harford",
+        "Kent",
+        "Queen Anne's",
+        "Somerset",
+        "Worcester"
+       ]
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit."
+     },
+     "notes": ""
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "",
+   "iac_reference": "COMAR 08.03.03.05; 2026–2027 MD Guide to Hunting & Trapping, Furbearer Seasons & Limits"
+  },
+  {
+   "common_name": "River otter",
+   "scientific_name": "Lontra canadensis",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the 2026-2027 MD guide.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-12-15",
+     "close_date": "2027-03-15",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MD-otter-general",
+       "zone_name": "All counties except Allegany, Carroll, Frederick, Garrett, Howard, Montgomery, Washington",
+       "area_type": "counties",
+       "note": "All Maryland counties except Allegany, Carroll, Frederick, Garrett, Howard, Montgomery, and Washington."
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": 10,
+      "season_bag": 10,
+      "possession_limit": null,
+      "limit_notes": "10 per day, 10 per season."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-12-15",
+     "close_date": "2027-03-15",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MD-otter-central",
+       "zone_name": "Carroll, Frederick, Howard, Montgomery, Washington counties",
+       "area_type": "counties",
+       "counties": [
+        "Carroll",
+        "Frederick",
+        "Howard",
+        "Montgomery",
+        "Washington"
+       ]
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": 2,
+      "season_bag": 2,
+      "possession_limit": null,
+      "limit_notes": "2 per day, 2 per season."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-12-01",
+     "close_date": "2027-03-15",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MD-allegany-garrett",
+       "zone_name": "Allegany and Garrett counties",
+       "area_type": "counties",
+       "counties": [
+        "Allegany",
+        "Garrett"
+       ]
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": 2,
+      "season_bag": 2,
+      "possession_limit": null,
+      "limit_notes": "2 per day, 2 per season — per the DNR regulation proposal (up from 1/1); the final table's Allegany/Garrett limit cells did not extract cleanly. Verify against COMAR. Trappers must submit the whole, skinned carcass of any river otter taken in Allegany or Garrett counties to the Wildlife and Heritage Service — call (301) 777-2136, Western Regional Office."
+     },
+     "notes": ""
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "",
+   "iac_reference": "COMAR 08.03.03.05; 2026–2027 MD Guide to Hunting & Trapping, Furbearer Seasons & Limits"
+  },
+  {
+   "common_name": "Raccoon",
+   "scientific_name": "Procyon lotor",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the 2026-2027 MD guide.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-10-15",
+     "close_date": "2027-03-15",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MD-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit."
+     },
+     "notes": "Firearms, archery, airgun, and dog hunting in all counties, day and night. Chasing (no kill) seasons Aug 1–Oct 14 and Mar 16–Jul 31 statewide — not modeled as take."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-14",
+     "close_date": "2027-03-15",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MD-east-bay",
+       "zone_name": "East of the Chesapeake Bay and Susquehanna River",
+       "area_type": "special_areas",
+       "note": "That portion of the state east of the Chesapeake Bay and the Susquehanna River."
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-31",
+     "close_date": "2027-03-15",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MD-west-bay",
+       "zone_name": "West of the Chesapeake Bay and Susquehanna River",
+       "area_type": "special_areas",
+       "note": "That portion of the state west of the Chesapeake Bay and the Susquehanna River."
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit."
+     },
+     "notes": ""
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "",
+   "iac_reference": "COMAR 08.03.03.05; 2026–2027 MD Guide to Hunting & Trapping, Furbearer Seasons & Limits"
+  },
+  {
+   "common_name": "Virginia opossum",
+   "scientific_name": "Didelphis virginiana",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the 2026-2027 MD guide.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-10-15",
+     "close_date": "2027-03-15",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MD-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit."
+     },
+     "notes": "Firearms, archery, airgun, and dog hunting in all counties, day and night. Chasing (no kill) seasons Aug 1–Oct 14 and Mar 16–Jul 31 statewide — not modeled as take."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-14",
+     "close_date": "2027-03-15",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MD-east-bay",
+       "zone_name": "East of the Chesapeake Bay and Susquehanna River",
+       "area_type": "special_areas",
+       "note": "That portion of the state east of the Chesapeake Bay and the Susquehanna River."
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-31",
+     "close_date": "2027-03-15",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MD-west-bay",
+       "zone_name": "West of the Chesapeake Bay and Susquehanna River",
+       "area_type": "special_areas",
+       "note": "That portion of the state west of the Chesapeake Bay and the Susquehanna River."
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit."
+     },
+     "notes": ""
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "",
+   "iac_reference": "COMAR 08.03.03.05; 2026–2027 MD Guide to Hunting & Trapping, Furbearer Seasons & Limits"
+  },
+  {
+   "common_name": "Striped skunk",
+   "scientific_name": "Mephitis mephitis",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the 2026-2027 MD guide.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-10-31",
+     "close_date": "2027-03-15",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MD-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit."
+     },
+     "notes": "Firearms, archery, and airgun hunting in all counties."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-14",
+     "close_date": "2027-03-15",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MD-east-bay",
+       "zone_name": "East of the Chesapeake Bay and Susquehanna River",
+       "area_type": "special_areas",
+       "note": "That portion of the state east of the Chesapeake Bay and the Susquehanna River."
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-31",
+     "close_date": "2027-03-15",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MD-west-bay",
+       "zone_name": "West of the Chesapeake Bay and Susquehanna River",
+       "area_type": "special_areas",
+       "note": "That portion of the state west of the Chesapeake Bay and the Susquehanna River."
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit."
+     },
+     "notes": ""
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "",
+   "iac_reference": "COMAR 08.03.03.05; 2026–2027 MD Guide to Hunting & Trapping, Furbearer Seasons & Limits"
+  },
+  {
+   "common_name": "Woodchuck",
+   "scientific_name": "Marmota monax",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the 2026-2027 MD guide.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "MD-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit."
+     },
+     "notes": "Classified as an unprotected mammal: may be hunted throughout the year, including Sundays; no hunting license or furbearer permit required. Per the 2024-2025 MD guide — re-verify for 2026-2027."
+    }
+   ],
+   "permit_requirements": [
+    "No hunting license or furbearer permit required (unprotected mammal, per 2024-2025 guide)."
+   ],
+   "notes": "",
+   "iac_reference": "COMAR 08.03.03.05; 2026–2027 MD Guide to Hunting & Trapping, Furbearer Seasons & Limits"
+  }
+ ],
+ "verification": {
+  "regulation_year_confirmed": true,
+  "confirmation_notes": "2026-2027 Maryland Guide to Hunting & Trapping, Furbearer Seasons & Limits (DNR via eRegulations). Beaver trapping Dec 15-Mar 15 (Dec 1-Mar 15 Allegany/Garrett), no limit; bobcat closed statewide; coyote firearms/archery/airgun hunting year-round statewide day/night; coyote trapping Oct 31-Feb 15 east of Bay/Susquehanna, Nov 14-Feb 28 west (CONFLICT flagged); fisher and long-tailed weasel Oct 31-Feb 1 statewide, 4/day & 4/season; red & gray fox Aug 1-Jul 31 Charles/Dorchester, Nov 14-Feb 28 eastern-shore group, Oct 31-Feb 15 western/central group; muskrat & mink trapping in three county groups (Nov 14-Feb 15 / Jan 1-Mar 15 / Dec 15-Mar 15); river otter trapping Dec 15-Mar 15 (10/10 general; 2/2 central group; Dec 1-Mar 15 Allegany/Garrett 2/2 per proposal, flagged); raccoon & opossum hunting Oct 15-Mar 15 statewide day/night, trapping Nov 14-Mar 15 east / Oct 31-Mar 15 west; skunk hunting Oct 31-Mar 15 statewide, trapping same east/west split; gray fox 48-hour registration (new); otter carcass submission (Allegany/Garrett); fur shipping tags; WMA leaseholder rule.",
+  "known_gaps": [
+   "COYOTE EAST/WEST CONFLICT: final guide assigns Oct 31-Feb 15 to EAST and Nov 14-Feb 28 to WEST, but the DNR proposal and 2024-2026 COMAR assign the earlier season to WEST. Modeled per the final guide; MUST verify against current COMAR 08.03.03.05 before launch.",
+   "Otter Allegany/Garrett limits (2/day, 2/season) follow the DNR proposal; the final table's cells did not extract cleanly. Verify against COMAR.",
+   "Fisher hunting methods (firearms/archery/airgun) and weasel trapping-only status follow the DNR proposal's method labels; the final table merges the rows. Verify against COMAR.",
+   "Fisher/otter 15-day pelt-tagging rule carried from the 2024-2025 guide; re-verify for 2026-2027.",
+   "Woodchuck year-round rule carried from the 2024-2025 guide (unprotected mammal); re-verify.",
+   "Nutria omitted: 2026-2027 final table does not list it and the guide calls nutria eradicated in MD.",
+   "Current COMAR 08.03.03.05 (2026-2028) text not verified.",
+   "Scientific names are standard taxonomy, NOT stated in the guide; all marked scientific_name_verified=false.",
+   "No local PDF archive kept."
+  ]
+ },
+ "license_url": "https://mdoutdoors.maryland.gov/home",
+ "license_vendor": "MD Outdoors (Brandt Information Services)",
+ "regs_url": "https://www.eregulations.com/maryland/hunting/furbearer-seasons-limits/",
+ "regs_kind": "page"
+,
+ "warden_directory": {
+  "label": "Report a violation",
+  "url": "https://dnr.maryland.gov/nrp/Pages/default.aspx",
+  "kind": "hotline",
+  "note": "Natural Resources Police: 1-800-635-6124 (Catch a Poacher, 24-hr); outside MD 410-260-8888; Wildlife Crimestoppers 443-433-4112"
+ }
+}

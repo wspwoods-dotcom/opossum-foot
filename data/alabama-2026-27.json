@@ -1,0 +1,612 @@
+{
+ "schema_version": "1.1",
+ "state": "AL",
+ "state_name": "Alabama",
+ "season_year": "2026-27",
+ "retrieved_at": "2026-09-18",
+ "disclaimer": "Reminder reference only \u2014 NOT legal authority. Season dates, zones, and limits are set annually and can change. Always verify current regulations with the Alabama DCNR before hunting or trapping.",
+ "sources": [
+  {
+   "id": "al-admincode-220-2-29",
+   "title": "Ala. Admin. Code r. 220-2-.29 (Open Trapping Seasons on Fur-Bearers)",
+   "url": "https://admincode.legislature.state.al.us/api/rule/220-2-.29",
+   "type": "administrative_code",
+   "notes": "Official Alabama Legislature administrative code; designates furbearing animals and season structure."
+  },
+  {
+   "id": "al-admincode-220-2-01",
+   "title": "Ala. Admin. Code r. 220-2-.01 (2026-2027 Hunting Seasons)",
+   "url": "https://admincode.legislature.state.al.us/api/rule/220-2-.01",
+   "type": "administrative_code",
+   "notes": "Official 2026-2027 hunting seasons (beaver, nutria, bobcat, coyote, fox, opossum, raccoon)."
+  },
+  {
+   "id": "al-admincode-220-2-30",
+   "title": "Ala. Admin. Code r. 220-2-.30 (Fur-Bearing Animals Designated)",
+   "url": "https://admincode.legislature.state.al.us/api/rule/220-2-.30",
+   "type": "administrative_code",
+   "notes": "Designates beaver, bobcat, fox, mink, muskrat, nutria, opossum, otter, raccoon, striped skunk, coyote, feral swine; bobcat/otter tagging rule."
+  },
+  {
+   "id": "al-outdooralabama",
+   "title": "Outdoor Alabama: Furbearer Trapping Season",
+   "url": "https://OutdoorAlabama.com/seasons-and-bag-limits/furbearer-trapping-season",
+   "type": "agency_webpage",
+   "notes": "Official ADCNR furbearer trapping season summary."
+  }
+ ],
+ "license_summary": {
+  "fur_catcher_license": "A fur catcher (trapping) license is required to take furbearing animals for commercial purposes (Code of Alabama \u00a79-11-59). Fee amounts were not confirmed from an official source and are not listed here.",
+  "trap_id": "Each trap must be identified with a metal tag bearing the owner's name and address or Conservation ID number.",
+  "bobcat_otter_tagging": "Bobcat and otter fur/pelts must be tagged by a Division of Wildlife and Freshwater Fisheries representative within 14 days of harvest and before sale or other disposal (licensed fur catchers may sell untagged to authorized resident fur dealers with a completed fur tag report)."
+ },
+ "species": [
+  {
+   "common_name": "Beaver",
+   "scientific_name": "Castor canadensis",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Alabama DCNR regulations.",
+   "iac_reference": "Ala. Admin. Code r. 220-2-.29",
+   "season_status": "continuous",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "AL-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No closed season for trapping."
+     },
+     "notes": "No closed season for trapping."
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "AL-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "No closed season; no bag limit; daylight hours only."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Bobcat",
+   "scientific_name": "Lynx rufus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Alabama DCNR regulations.",
+   "iac_reference": "Ala. Admin. Code r. 220-2-.29",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-31",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AL-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Last Saturday in October (Oct. 31, 2026) through last day of February (Feb. 28, 2027). All bobcat, regardless of method of harvest, must be tagged by a Wildlife and Freshwater Fisheries representative within 14 days of harvest."
+     },
+     "notes": "Last Saturday in October (Oct. 31, 2026) through last day of February (Feb. 28, 2027). All bobcat, regardless of method of harvest, must be tagged by a Wildlife and Freshwater Fisheries representative within 14 days of harvest."
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "AL-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "No closed season; no bag limit; daylight hours only. Trapping is limited to the legal furbearer trapping season."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Coyote",
+   "scientific_name": "Canis latrans",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Alabama DCNR regulations.",
+   "iac_reference": "Ala. Admin. Code r. 220-2-.29",
+   "season_status": "continuous",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "AL-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No closed season for trapping."
+     },
+     "notes": "No closed season for trapping."
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "AL-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "No closed season; no bag limit; daylight hours only. Special nighttime season on privately owned and leased lands only (begins 12:00 am the day after the last day of Gun Deer Season in that zone, ends 30 minutes before sunrise on opening day of Archery Deer Season in that zone); requires a valid annual resident or nonresident nighttime feral swine and coyote hunting license."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Fox",
+   "scientific_name": null,
+   "scientific_name_verified": false,
+   "scientific_name_note": "Alabama regulations do not distinguish red and gray fox; no single standard taxon applies.",
+   "iac_reference": "Ala. Admin. Code r. 220-2-.29",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-31",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AL-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Last Saturday in October (Oct. 31, 2026) through last day of February (Feb. 28, 2027)."
+     },
+     "notes": "Last Saturday in October (Oct. 31, 2026) through last day of February (Feb. 28, 2027)."
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "AL-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "No closed season; no bag limit; may be hunted daytime and nighttime hours (nighttime hours with dogs only)."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Mink",
+   "scientific_name": "Neogale vison",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Alabama DCNR regulations.",
+   "iac_reference": "Ala. Admin. Code r. 220-2-.29",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-31",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AL-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Last Saturday in October (Oct. 31, 2026) through last day of February (Feb. 28, 2027)."
+     },
+     "notes": "Last Saturday in October (Oct. 31, 2026) through last day of February (Feb. 28, 2027)."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Muskrat",
+   "scientific_name": "Ondatra zibethicus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Alabama DCNR regulations.",
+   "iac_reference": "Ala. Admin. Code r. 220-2-.29",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-31",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AL-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Last Saturday in October (Oct. 31, 2026) through last day of February (Feb. 28, 2027)."
+     },
+     "notes": "Last Saturday in October (Oct. 31, 2026) through last day of February (Feb. 28, 2027)."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Nutria",
+   "scientific_name": "Myocastor coypus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Alabama DCNR regulations.",
+   "iac_reference": "Ala. Admin. Code r. 220-2-.29",
+   "season_status": "continuous",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "AL-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No closed season for trapping."
+     },
+     "notes": "No closed season for trapping."
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "AL-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "No closed season; no bag limit; daylight hours only."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Opossum",
+   "scientific_name": "Didelphis virginiana",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Alabama DCNR regulations.",
+   "iac_reference": "Ala. Admin. Code r. 220-2-.29",
+   "season_status": "continuous",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "AL-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No closed season for trapping."
+     },
+     "notes": "No closed season for trapping."
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "AL-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "No closed season; no bag limit; may be hunted daytime and nighttime hours."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "River otter",
+   "scientific_name": "Lontra canadensis",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Alabama DCNR regulations.",
+   "iac_reference": "Ala. Admin. Code r. 220-2-.29",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-31",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AL-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Last Saturday in October (Oct. 31, 2026) through last day of February (Feb. 28, 2027). All otter, regardless of method of harvest, must be tagged by a Wildlife and Freshwater Fisheries representative within 14 days of harvest."
+     },
+     "notes": "Last Saturday in October (Oct. 31, 2026) through last day of February (Feb. 28, 2027). All otter, regardless of method of harvest, must be tagged by a Wildlife and Freshwater Fisheries representative within 14 days of harvest."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Raccoon",
+   "scientific_name": "Procyon lotor",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Alabama DCNR regulations.",
+   "iac_reference": "Ala. Admin. Code r. 220-2-.29",
+   "season_status": "continuous",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "AL-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No closed season for trapping."
+     },
+     "notes": "No closed season for trapping."
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "AL-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "No closed season; no bag limit on privately owned and leased lands; limit 5 per party on open permit-public land. May be hunted daytime and nighttime hours."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Striped skunk",
+   "scientific_name": "Mephitis mephitis",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Alabama DCNR regulations.",
+   "iac_reference": "Ala. Admin. Code r. 220-2-.29",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-31",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AL-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Last Saturday in October (Oct. 31, 2026) through last day of February (Feb. 28, 2027)."
+     },
+     "notes": "Last Saturday in October (Oct. 31, 2026) through last day of February (Feb. 28, 2027)."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  }
+ ],
+ "verification": {
+  "regulation_year_confirmed": true,
+  "confirmation_notes": "Ala. Admin. Code rules 220-2-.01, 220-2-.29, and 220-2-.30 read 2026-09-18 from the official Alabama Legislature admincode site, plus the Outdoor Alabama furbearer trapping page. Relative trapping dates converted to ISO and calendar-verified (Oct. 31, 2026 is the last Saturday of October 2026).",
+  "known_gaps": [
+   "License fee amounts (\u00a79-11-59) were not confirmed from an official source and are omitted; the license requirement itself is cited.",
+   "Nuisance/depredation take outside seasons is noted in license_summary but not modeled as a season; the app should offer a permit override rather than blocking the log.",
+   "Feral swine is listed as a fur-bearing animal in Ala. Admin. Code r. 220-2-.30 but is intentionally excluded from this dataset under the project's documented exclusion rule (managed as a nuisance species under separate removal provisions, not in the furbearer trapping program). No take season is modeled for it."
+  ]
+ },
+ "provisional": false,
+ "license_url": "https://www.myoutdooralabama.com/",
+ "license_vendor": "My Outdoor Alabama (ADCNR)",
+ "regs_url": "https://www.outdooralabama.com/seasons-and-bag-limits/furbearer-trapping-season",
+ "regs_kind": "page"
+,
+ "warden_directory": {
+  "label": "Report a violation",
+  "url": "https://www.outdooralabama.com/law-enforcement-contacts/operation-gamewatch",
+  "kind": "hotline",
+  "note": "Operation Gamewatch: 1-800-272-4263 (1-800-272-GAME), 24/7, confidential"
+ }
+}

@@ -1,0 +1,756 @@
+{
+ "disclaimer": "Reminder reference only — NOT legal authority. Season dates, zones, and limits are set annually and can change. Always verify current regulations with MassWildlife (Division of Fisheries and Wildlife) before hunting or trapping. MGL Ch. 131 §80A: the trap ban exempts municipal boards of health — check city/town rules.",
+ "license_summary": {
+  "hunting_license": "Hunting or sporting license required for residents; small game or big game license for non-residents. No additional permit required to hunt bobcat, coyote, or fox.",
+  "pelt_check": "Pelt checking/reporting required for beaver, bobcat, coyote, fisher, fox, mink, and river otter. Bobcats must be reported at an official furbearer check station within 4 working days of harvest (not online); other species within 4 working days of the end of the season for that species.",
+  "trapping_license": "A separate Massachusetts trapping license is required to trap furbearers. Trapper education is mandatory for new trappers."
+ },
+ "provisional": false,
+ "retrieved_at": "2026-09-18",
+ "schema_version": "1.0",
+ "season_year": "2026-27",
+ "sources": [
+  {
+   "id": "masswildlife-bobcat-hunt",
+   "notes": "Official current hunting dates, zones, bag limits, and check-station reporting rules. Archived research notes in hidden_files/season-research/massachusetts/.",
+   "title": "Bobcat hunting regulations (MassWildlife, mass.gov) — 2026 season dates Dec. 21, 2026 – March 8, 2027, Zones 1–8",
+   "type": "agency_page",
+   "url": "https://www.mass.gov/info-details/bobcat-hunting-regulations"
+  },
+  {
+   "id": "masswildlife-coyote-hunt",
+   "notes": "Official current hunting dates, zones, and hours.",
+   "title": "Coyote hunting regulations (MassWildlife, mass.gov) — 2026 season dates Oct. 17, 2026 – Mar. 8, 2027, statewide",
+   "type": "agency_page",
+   "url": "https://www.mass.gov/info-details/coyote-hunting-regulations"
+  },
+  {
+   "id": "masswildlife-fox-hunt",
+   "notes": "Official current hunting dates, zones, and shotgun-deer-season closure.",
+   "title": "Fox hunting regulations (MassWildlife, mass.gov) — 2026 season dates Nov. 2, 2026 – Feb. 27, 2027, statewide",
+   "type": "agency_page",
+   "url": "https://www.mass.gov/info-details/fox-hunting-regulations"
+  },
+  {
+   "id": "cmr-321-3-02",
+   "notes": "Legal authority for season-date formulas, zones, bag limits, trap-type restrictions, and scientific-name definitions for bobcat and fox. Cross-checked against current MassWildlife season publications.",
+   "title": "321 CMR 3.02: Hunting, Particular Game (mass.gov PDF, MA REG. #1356 dated 1-12-18)",
+   "type": "administrative_code",
+   "url": "https://www.mass.gov/files/documents/2018/01/22/321cmr3.pdf"
+  },
+  {
+   "id": "masswildlife-2026-hunt-summary",
+   "notes": "Official 2026 hunting dates including shotgun deer season (Nov. 30 – Dec. 12, 2026) and furbearer hunting closures.",
+   "title": "2026 Hunting Season Summary (MassWildlife, current as of March 13, 2026)",
+   "type": "agency_publication",
+   "url": "https://stage.mass.gov/doc/updating-hunting-laws/download"
+  },
+  {
+   "id": "masswildlife-2025-season-summary",
+   "notes": "MassWildlife-published furbearer trapping table and footnotes (pelt checking, bobcat zones, year-round take list); confirms the fixed annual trapping pattern used for 2026–27.",
+   "title": "2025 Massachusetts Fishing & Hunting Season Summary (MassWildlife publication, town-hosted copy)",
+   "type": "agency_publication",
+   "url": "https://westfordma.gov/DocumentCenter/View/16820/2025-MA-fishing-and-hunitng-season-summary"
+  }
+ ],
+ "species": [
+  {
+   "common_name": "American beaver",
+   "iac_reference": "321 CMR 3.02(5)(10)",
+   "notes": "",
+   "permit_requirements": [
+    "Valid Massachusetts trapping license.",
+    "Pelt checking/reporting required — beaver pelts must be checked per current MassWildlife trapping regulations."
+   ],
+   "scientific_name": "Castor canadensis",
+   "scientific_name_note": "Standard taxonomy; not stated in the cited MassWildlife sources.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No daily bag or possession limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-04-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Regulatory formula: November 1 through the following April 15. Pelt checking/reporting required.",
+     "open_date": "2026-11-01",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "MA-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Bobcat",
+   "iac_reference": "321 CMR 3.02(3)(b), 3.02(5)(6)",
+   "notes": "The regulation's definition of bobcat explicitly excludes lynx/Canada lynx — any logged lynx is out of season.",
+   "permit_requirements": [
+    "Hunting: hunting or sporting license (residents) / small game or big game license (non-residents); no extra permit. Trapping: valid trapping license.",
+    "All bobcats taken or salvaged must be sealed with an official seal within 4 working days (trapped/hunted); seal stays on pelt/carcass until tanned, sold, or mounted."
+   ],
+   "scientific_name": "Lynx rufus",
+   "scientific_name_note": "321 CMR 3.02(3)(a) defines bobcat as 'bobcat or wildcat (Felis [Lynx] rufus)', explicitly excluding lynx/Canada lynx. Rendered here under the current standard name.",
+   "scientific_name_verified": true,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No daily bag or possession limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2026-11-30",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Bobcats may be trapped ONLY in Wildlife Management Zones 1–8. Pelt checking/reporting required.",
+     "open_date": "2026-11-01",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "management_units",
+       "zone_id": "MA-WMZ-1-8",
+       "zone_name": "Wildlife Management Zones 1–8"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-08",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Dates published by MassWildlife for the 2026 season year (regulatory framework Dec 20 – Mar 8; no Sunday hunting, so effective opener Dec 21, 2026). Hunting hours 1/2 hr before sunrise to 1/2 hr after sunset. May not be hunted with dogs. Bobcats cannot be reported online — report at an official furbearer station within 4 working days of end of season.",
+     "open_date": "2026-12-21",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "management_units",
+       "zone_id": "MA-WMZ-1-8",
+       "zone_name": "Wildlife Management Zones 1–8"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Coyote",
+   "iac_reference": "321 CMR 3.02(3)(b), 3.02(5)(5)",
+   "notes": "",
+   "permit_requirements": [
+    "Hunting: hunting or sporting license (residents) / small game or big game license (non-residents); no extra permit. Trapping: valid trapping license.",
+    "Pelt checking/reporting required — coyote pelts must be checked per current MassWildlife trapping regulations."
+   ],
+   "scientific_name": "Canis latrans",
+   "scientific_name_note": "Standard taxonomy; not stated in the cited MassWildlife sources.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No daily bag or possession limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2026-11-30",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Pelt checking/reporting required.",
+     "open_date": "2026-11-01",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "MA-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-08",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Opener is the first Saturday after Columbus Day (Oct 17, 2026) per 321 CMR 3.02(3)(b). Coyote is the ONLY furbearer whose hunting season stays open during shotgun deer season (Nov 30 – Dec 12, 2026); during that period hunting hours end 1/2 hr after sunset and only shotgun/muzzleloader/bow may be used, no electronic calls. Hunting hours otherwise 1/2 hr before sunrise to midnight. No Sunday hunting.",
+     "open_date": "2026-10-17",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "MA-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Red fox",
+   "iac_reference": "321 CMR 3.02(3)(b), 3.02(5)(5)",
+   "notes": "",
+   "permit_requirements": [
+    "Hunting: hunting or sporting license (residents) / small game or big game license (non-residents); no extra permit. Trapping: valid trapping license.",
+    "Pelt checking/reporting required — fox pelts must be checked per current MassWildlife trapping regulations."
+   ],
+   "scientific_name": "Vulpes vulpes",
+   "scientific_name_note": "321 CMR 3.02(3)(a) defines fox as red fox (Vulpes vulpes) and gray fox (Urocyon cinereoargenteus).",
+   "scientific_name_verified": true,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No daily bag or possession limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2026-11-30",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Pelt checking/reporting required.",
+     "open_date": "2026-11-01",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "MA-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-27",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Dates published by MassWildlife for the 2026 season year. Fox HUNTING is closed during shotgun deer season (Nov 30 – Dec 12, 2026); foxes may still be taken by trapping during that period. Hunting hours 1/2 hr before sunrise to midnight. No Sunday hunting.",
+     "open_date": "2026-11-02",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "MA-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Gray fox",
+   "iac_reference": "321 CMR 3.02(3)(b), 3.02(5)(5)",
+   "notes": "",
+   "permit_requirements": [
+    "Hunting: hunting or sporting license (residents) / small game or big game license (non-residents); no extra permit. Trapping: valid trapping license.",
+    "Pelt checking/reporting required — fox pelts must be checked per current MassWildlife trapping regulations."
+   ],
+   "scientific_name": "Urocyon cinereoargenteus",
+   "scientific_name_note": "321 CMR 3.02(3)(a) defines fox as red fox (Vulpes vulpes) and gray fox (Urocyon cinereoargenteus).",
+   "scientific_name_verified": true,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No daily bag or possession limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2026-11-30",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Pelt checking/reporting required.",
+     "open_date": "2026-11-01",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "MA-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-27",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Dates published by MassWildlife for the 2026 season year. Fox HUNTING is closed during shotgun deer season (Nov 30 – Dec 12, 2026); foxes may still be taken by trapping during that period. Hunting hours 1/2 hr before sunrise to midnight. No Sunday hunting.",
+     "open_date": "2026-11-02",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "MA-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Fisher",
+   "iac_reference": "321 CMR 3.02(5)(7)",
+   "notes": "",
+   "permit_requirements": [
+    "Valid Massachusetts trapping license.",
+    "Pelt checking/reporting required — fisher pelts must be checked per current MassWildlife trapping regulations."
+   ],
+   "scientific_name": "Pekania pennanti",
+   "scientific_name_note": "Standard taxonomy; not stated in the cited MassWildlife sources.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No daily bag or possession limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2026-11-22",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Regulatory formula: November 1 through November 22. Trapping only — no fisher hunting season in Massachusetts. Pelt checking/reporting required.",
+     "open_date": "2026-11-01",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "MA-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Weasel",
+   "iac_reference": "321 CMR 3.02(5)(5)",
+   "notes": "",
+   "permit_requirements": [
+    "Hunting: hunting or sporting license. Trapping: valid trapping license."
+   ],
+   "scientific_name": null,
+   "scientific_name_note": "Massachusetts regulations list 'weasel' without distinguishing species (long-tailed, short-tailed/ermine, and least weasels occur in MA). Left null rather than guessing.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No daily bag or possession limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2026-11-30",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "No pelt checking required for weasel.",
+     "open_date": "2026-11-01",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "MA-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No daily or seasonal bag or possession limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Weasels may be taken year-round by licensed hunters and falconers, EXCEPT during shotgun deer season (Nov 30 – Dec 12, 2026). No Sunday hunting.",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "MA-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "American mink",
+   "iac_reference": "321 CMR 3.02(5)(8)",
+   "notes": "",
+   "permit_requirements": [
+    "Valid Massachusetts trapping license.",
+    "Pelt checking/reporting required — mink pelts must be checked per current MassWildlife trapping regulations."
+   ],
+   "scientific_name": "Neogale vison",
+   "scientific_name_note": "Standard taxonomy (formerly Neovison vison); not stated in the cited MassWildlife sources.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No daily bag or possession limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2026-12-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Regulatory formula: November 1 through December 15. Trapping only. Pelt checking/reporting required.",
+     "open_date": "2026-11-01",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "MA-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "North American river otter",
+   "iac_reference": "321 CMR 3.02(5)(8)",
+   "notes": "",
+   "permit_requirements": [
+    "Valid Massachusetts trapping license.",
+    "Pelt checking/reporting required — otter pelts must be checked per current MassWildlife trapping regulations."
+   ],
+   "scientific_name": "Lontra canadensis",
+   "scientific_name_note": "Standard taxonomy; not stated in the cited MassWildlife sources.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No daily bag or possession limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2026-12-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Regulatory formula: November 1 through December 15. Trapping only. Pelt checking/reporting required.",
+     "open_date": "2026-11-01",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "MA-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Muskrat",
+   "iac_reference": "321 CMR 3.02(5)(9)",
+   "notes": "",
+   "permit_requirements": [
+    "Valid Massachusetts trapping license."
+   ],
+   "scientific_name": "Ondatra zibethicus",
+   "scientific_name_note": "Standard taxonomy; not stated in the cited MassWildlife sources.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No daily bag or possession limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Regulatory formula: November 1 through the following last day of February. No pelt checking required.",
+     "open_date": "2026-11-01",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "MA-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Virginia opossum",
+   "iac_reference": "321 CMR 3.02(5)(2), 3.02(5)(11)",
+   "notes": "",
+   "permit_requirements": [
+    "Hunting: hunting or sporting license. Trapping: valid trapping license."
+   ],
+   "scientific_name": "Didelphis virginiana",
+   "scientific_name_note": "Standard taxonomy; not stated in the cited MassWildlife sources.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No daily bag or possession limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Regulatory formula: November 1 through the following last day of February. No pelt checking required.",
+     "open_date": "2026-11-01",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "MA-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No daily bag or possession limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-01-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Regulatory formula: October 1 through the following January 31. During shotgun deer season (Nov 30 – Dec 12, 2026) opossums may be taken ONLY by trapping. No Sunday hunting.",
+     "open_date": "2026-10-01",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "MA-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Raccoon",
+   "iac_reference": "321 CMR 3.02(5)(2), 3.02(5)(3), 3.02(5)(11)",
+   "notes": "",
+   "permit_requirements": [
+    "Hunting: hunting or sporting license. Trapping: valid trapping license."
+   ],
+   "scientific_name": "Procyon lotor",
+   "scientific_name_note": "Standard taxonomy; not stated in the cited MassWildlife sources.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No daily bag or possession limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Regulatory formula: November 1 through the following last day of February. No pelt checking required.",
+     "open_date": "2026-11-01",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "MA-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": 3,
+      "limit_notes": "Daily limit 3 raccoons per person (sunset-to-sunset), and no more than 6 per party hunting together. No season or possession limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-01-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Regulatory formula: October 1 through the following January 31. During shotgun deer season (Nov 30 – Dec 12, 2026) raccoons may be taken ONLY by trapping. No Sunday hunting.",
+     "open_date": "2026-10-01",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "MA-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Striped skunk",
+   "iac_reference": "321 CMR 3.02(5)(11)",
+   "notes": "",
+   "permit_requirements": [
+    "Hunting: hunting or sporting license. Trapping: valid trapping license."
+   ],
+   "scientific_name": "Mephitis mephitis",
+   "scientific_name_note": "Standard taxonomy; not stated in the cited MassWildlife sources.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No daily bag or possession limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Regulatory formula: November 1 through the following last day of February. No pelt checking required.",
+     "open_date": "2026-11-01",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "MA-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No daily or seasonal bag or possession limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Skunks may be taken year-round by licensed hunters and falconers, EXCEPT during shotgun deer season (Nov 30 – Dec 12, 2026). No Sunday hunting.",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "MA-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "state": "MA",
+ "state_name": "Massachusetts",
+ "verification": {
+  "confirmation_notes": "Hunting dates spanning the 2026–27 new year are explicitly published on current MassWildlife regulation pages (bobcat: Dec. 21, 2026 – Mar. 8, 2027; coyote: Oct. 17, 2026 – Mar. 8, 2027; fox: Nov. 2, 2026 – Feb. 27, 2027), all crawled September 2026. Trapping seasons follow fixed annual formulas in 321 CMR 3.02(5), confirmed against MassWildlife's published furbearer trapping table (2025 season summary) — pattern is unchanged year to year. Raccoon/opossum hunting formula (Oct 1 – Jan 31) from 321 CMR 3.02(5)(2). Shotgun deer season Nov 30 – Dec 12, 2026 from the official 2026 Hunting Season Summary.",
+  "known_gaps": [
+   "Scientific names are stated in an official MA source only for bobcat, red fox, and gray fox (321 CMR 3.02(3)(a)); all others are standard taxonomy with scientific_name_verified=false. Weasel is null because regulations do not distinguish weasel species.",
+   "No explicit closed-season species list was found in official MA sources (e.g., Canada lynx is excluded from the legal definition of bobcat but no explicit closed-season statement exists); no closed species is modeled for MA.",
+   "Pelt check-station mechanics beyond the published 'within 4 working days' rule should be confirmed in the current MassWildlife trapping regulations before field use — noted as reminder-level detail, not legal authority.",
+   "Proposed 2026 legislation to allow Sunday hunting had NOT passed as of June 2026 per MassWildlife; if enacted, season dates could shift.",
+   "Problem Animal Control (PAC) agent take and beaver emergency-permit take are depredation mechanisms — noted but not modeled as seasons.",
+   "Full trap-hardware detail is excluded per schema scope; brief method restriction (box/cage traps or common rat traps; body-grip/leghold/snare restrictions under MGL c.131 §80A) is noted in research notes only."
+  ],
+  "regulation_year_confirmed": true
+ },
+ "license_url": "https://massfishhunt.mass.gov/",
+ "license_vendor": "MassFishHunt (Massachusetts state portal, MyMassGov login)",
+ "regs_url": "https://www.mass.gov/info-details/trapping-information",
+ "regs_kind": "page"
+,
+ "warden_directory": {
+  "label": "Report a violation",
+  "url": "tel:18006328075",
+  "kind": "phone",
+  "note": "MA Environmental Police 24-hr dispatch: 1-800-632-8075"
+ }
+}

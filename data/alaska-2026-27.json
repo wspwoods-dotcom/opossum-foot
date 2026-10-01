@@ -1,0 +1,3287 @@
+{
+ "schema_version": "1.1",
+ "state": "AK",
+ "state_name": "Alaska",
+ "season_year": "2026-27",
+ "provisional": false,
+ "retrieved_at": "2026-09-18",
+ "disclaimer": "Reminder reference only — NOT legal authority. Alaska seasons are set by Game Management Unit (GMU); zones below use GMUs, which the app cannot resolve to a map pin — always verify the current GMU boundaries, emergency-order closures, and regulations with ADF&G before trapping. Local regulations, ordinances, and state park rules may prohibit trapping.",
+ "license_summary": {
+  "trapping_license": "An Alaska trapping license is required to take furbearers. Consult ADF&G for license types, fees, and sealing-officer locations.",
+  "sealing": "Beaver, fisher, lynx, marten (in listed units), river otter, wolf, and wolverine must be sealed within 30 days after the close of the season. Mountain lions must be sealed on or before the 10th day after removal from the trap (skull and hide, evidence of sex attached, both unfrozen). Unit 2 wolves: call the ADF&G Ketchikan office within 7 days of take and seal hides within 15 days.",
+  "emergency_orders": "Lynx seasons in Units 7, 14C, 15 and Units 11, 13, 14A, 14B, 16 may be closed by emergency order and are reviewed annually — check ADF&G emergency orders before trapping lynx.",
+  "closed_areas": "Numerous areas are closed to trapping (Juneau-area strips/trails/refuges, Chugach State Park species closures, JBER, Kenai Moose Research Center, McNeil River Sanctuary, Unit 20B Creamer's Field registration, and others). See the booklet's 'Areas Closed to Trapping' and 'Additional Restrictions' for each section — not enumerated here."
+ },
+ "species": [
+  {
+   "common_name": "American beaver",
+   "scientific_name": "Castor canadensis",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in ADF&G trapping regulations.",
+   "iac_reference": "2026–27 Alaska Trapping Regulations (ADF&G booklet)",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-10",
+     "close_date": "2027-05-15",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-1-5",
+       "zone_name": "Units 1-5 (Southeast Alaska)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Must be sealed within 30 days after the close of the season. May not disturb or destroy a beaver house or den. Beaver may be taken only with a steel trap, snare, firearm, or bow and arrow."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-10",
+     "close_date": "2027-04-30",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-6",
+       "zone_name": "Unit 6",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Must be sealed within 30 days after the close of the season. Beaver may be taken only with a steel trap, snare, firearm, or bow and arrow."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-10",
+     "close_date": "2027-04-30",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-7-14C-drain-15ABC",
+       "zone_name": "Unit 7; Unit 14C within the drainages of Glacier Creek, Kern Creek, Peterson Creek, the Twentymile River, the drainages of Knik River outside Chugach State Park, Birchwood Management Area, and JBER Management Area; Units 15A, 15B, 15C excluding the Anchor River drainage",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": 20,
+      "possession_limit": null,
+      "limit_notes": "Season limit 20."
+     },
+     "notes": "Must be sealed within 30 days after the close of the season. Apr 1–Apr 30 in Units 7 and 15: no firearms; traps and snares must be underwater."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-10",
+     "close_date": "2027-04-30",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-8",
+       "zone_name": "Unit 8 (Kodiak)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": 30,
+      "possession_limit": null,
+      "limit_notes": "Season limit 30."
+     },
+     "notes": "Must be sealed within 30 days after the close of the season."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-10",
+     "close_date": "2027-05-31",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-9-17",
+       "zone_name": "Units 9 and 17",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Must be sealed within 30 days after the close of the season. Beaver may be taken only with a steel trap, snare, firearm, or bow and arrow."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-09-25",
+     "close_date": "2027-05-31",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-11-13-16",
+       "zone_name": "Units 11, 13, and 16",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Must be sealed within 30 days after the close of the season. Sep 25–Nov 9: no firearms; traps and snares must be underwater."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-10",
+     "close_date": "2027-05-15",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-14A-14B",
+       "zone_name": "Units 14A and 14B",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Must be sealed within 30 days after the close of the season."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-09-15",
+     "close_date": "2027-06-10",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-12-20ACEF",
+       "zone_name": "Units 12, 20A, 20C, 20E, and 20F",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Must be sealed within 30 days after the close of the season. Beaver may be taken only with a steel trap, snare, firearm, or bow and arrow."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-09-01",
+     "close_date": "2027-06-10",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-19-21-24-25",
+       "zone_name": "Units 19, 21, 24, and 25",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Must be sealed within 30 days after the close of the season."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-09-25",
+     "close_date": "2027-05-31",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-20D-20Brem",
+       "zone_name": "Unit 20D and the remainder of Unit 20B",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Must be sealed within 30 days after the close of the season. Sep 25–Oct 31 and Apr 16–May 31: no firearms; traps and snares must be underwater."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "AK-18-22-23",
+       "zone_name": "Units 18, 22, and 23 (Western Alaska)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Must be sealed within 30 days after the close of the season. No closed season. Jun 11–Sep 15 in Unit 22: beaver may be taken only with a firearm."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "American beaver (closed areas)",
+   "scientific_name": "Castor canadensis",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in ADF&G trapping regulations.",
+   "iac_reference": "2026–27 Alaska Trapping Regulations (ADF&G booklet)",
+   "season_status": "closed",
+   "seasons": [],
+   "permit_requirements": [],
+   "notes": "No open season in the 2026–27 regulations: Unit 26A; Unit 20B — that portion of the Chena River downstream from its confluence with the Little Chena River and Creamer's Field Migratory Waterfowl Refuge (ADF&G may set permit-only seasons to reduce high beaver populations); Unit 14C Remainder and Unit 15C Anchor River drainage. Included so the app flags any logged take in these areas."
+  },
+  {
+   "common_name": "Coyote",
+   "scientific_name": "Canis latrans",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in ADF&G trapping regulations.",
+   "iac_reference": "2026–27 Alaska Trapping Regulations (ADF&G booklet)",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-04-30",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-1-5",
+       "zone_name": "Units 1-5 (Southeast Alaska)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-10",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-6-7-15",
+       "zone_name": "Units 6, 7, and 15",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-10",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-14C",
+       "zone_name": "Unit 14C",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-10",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-9-17-csw",
+       "zone_name": "Units 9-11, 13, 14A, 14B, 16, and 17 (Central/Southwest)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-15",
+     "close_date": "2027-04-30",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-12-20E",
+       "zone_name": "Units 12 and 20E",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Unlawful to trap with a steel trap or a snare smaller than 3/32 inch diameter during April or October."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-int-1920212425",
+       "zone_name": "Units 19, 20 (except 20E), 21, 24, and 25 (Interior)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-04-15",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-26BC",
+       "zone_name": "Units 26B and 26C (Arctic)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-10",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-18",
+       "zone_name": "Unit 18",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-04-15",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-22-23-26A",
+       "zone_name": "Units 22, 23, and 26A (Western/Arctic)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": ""
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "No coyote season is listed for Unit 8 (Kodiak) in the 2026–27 booklet. A coyote caught in a trap or snare may be shot the same day the trapper has flown in an airplane (if more than 300 feet from the airplane otherwise)."
+  },
+  {
+   "common_name": "Fisher",
+   "scientific_name": "Pekania pennanti",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in ADF&G trapping regulations.",
+   "iac_reference": "2026–27 Alaska Trapping Regulations (ADF&G booklet)",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-12-01",
+     "close_date": "2027-02-15",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-1-5",
+       "zone_name": "Units 1-5 (Southeast Alaska)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Must be sealed within 30 days after the close of the season."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "Fisher seasons are listed only for Southeast Alaska (Units 1-5) in the 2026–27 booklet."
+  },
+  {
+   "common_name": "Red fox (including cross, black, and silver color phases)",
+   "scientific_name": "Vulpes vulpes",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in ADF&G trapping regulations.",
+   "iac_reference": "2026–27 Alaska Trapping Regulations (ADF&G booklet)",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-12-01",
+     "close_date": "2027-02-15",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-1-4",
+       "zone_name": "Units 1-4",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-10",
+     "close_date": "2027-02-15",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-5",
+       "zone_name": "Unit 5 (Yakutat)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-10",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-9-16-csw",
+       "zone_name": "Units 9-11, 13, 14A, 14B, and 16 (Central/Southwest)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-10",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-17",
+       "zone_name": "Unit 17",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-03-15",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-12-20E",
+       "zone_name": "Units 12 and 20E",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-20x-21-24-25",
+       "zone_name": "Units 20 (except 20E), 21, 24, and 25",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-19",
+       "zone_name": "Unit 19",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-04-15",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-26BC",
+       "zone_name": "Units 26B and 26C (Arctic)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-10",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-18",
+       "zone_name": "Unit 18",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-04-15",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-22-23-26A",
+       "zone_name": "Units 22, 23, and 26A (Western/Arctic)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": ""
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "No red fox season is listed for Units 6, 7, 8, 14C, or 15 in the 2026–27 booklet. A fox caught in a trap or snare may be shot the same day the trapper has flown (if more than 300 feet from the airplane otherwise)."
+  },
+  {
+   "common_name": "Arctic fox (white and blue color phases)",
+   "scientific_name": "Vulpes lagopus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in ADF&G trapping regulations.",
+   "iac_reference": "2026–27 Alaska Trapping Regulations (ADF&G booklet)",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-10",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-9-10",
+       "zone_name": "Units 9 and 10",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-10",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-17",
+       "zone_name": "Unit 17",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-24-25",
+       "zone_name": "Units 24 and 25",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-04-15",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-26BC",
+       "zone_name": "Units 26B and 26C (Arctic)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-10",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-18",
+       "zone_name": "Unit 18",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-04-15",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-22-23-26A",
+       "zone_name": "Units 22, 23, and 26A (Western/Arctic)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": ""
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "Arctic fox seasons are listed only for Units 9, 10, 17, 18, 22-26 in the 2026–27 booklet."
+  },
+  {
+   "common_name": "Canada lynx",
+   "scientific_name": "Lynx canadensis",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in ADF&G trapping regulations.",
+   "iac_reference": "2026–27 Alaska Trapping Regulations (ADF&G booklet)",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-12-01",
+     "close_date": "2027-02-15",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-1-5",
+       "zone_name": "Units 1-5 (Southeast Alaska)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Must be sealed within 30 days after the close of the season."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-10",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-6-14C",
+       "zone_name": "Units 6 and 14C",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Must be sealed within 30 days after the close of the season. Seasons for Units 7, 14C, and 15 may be closed by emergency order; reviewed annually."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-12-15",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-7-15",
+       "zone_name": "Units 7 and 15",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Must be sealed within 30 days after the close of the season. May be closed by emergency order; reviewed annually."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-10",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-csw-lynx-a",
+       "zone_name": "Units 9A, 9C, 9D, 9E, 11, 13, 14A, 14B, and 16",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Must be sealed within 30 days after the close of the season. Seasons for Units 11, 13, 14A, 14B, and 16 may be closed by emergency order; reviewed annually."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-10",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-9B-17",
+       "zone_name": "Units 9B and 17",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Must be sealed within 30 days after the close of the season."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-03-15",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-int-lynx-a",
+       "zone_name": "Units 12, 19A, 19B, 19E, 20, 21B, 21C, 21D, 21E, and 25",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Must be sealed within 30 days after the close of the season."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-int-lynx-b",
+       "zone_name": "Units 19C, 19D, and 21A",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Must be sealed within 30 days after the close of the season."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-24",
+       "zone_name": "Unit 24",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Must be sealed within 30 days after the close of the season."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-04-15",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-26BC",
+       "zone_name": "Units 26B and 26C (Arctic)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Must be sealed within 30 days after the close of the season."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-10",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-18",
+       "zone_name": "Unit 18",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Must be sealed within 30 days after the close of the season."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-04-15",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-22-23-26A",
+       "zone_name": "Units 22, 23, and 26A (Western/Arctic)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Must be sealed within 30 days after the close of the season."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "A lynx caught in a trap or snare may be shot the same day the trapper has flown (if more than 300 feet from the airplane otherwise). Emergency-order closures possible — see notes."
+  },
+  {
+   "common_name": "American marten",
+   "scientific_name": "Martes americana",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in ADF&G trapping regulations.",
+   "iac_reference": "2026–27 Alaska Trapping Regulations (ADF&G booklet)",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-12-01",
+     "close_date": "2027-02-15",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-1-3-xkuiu",
+       "zone_name": "Units 1-3, except Kuiu Island",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Must be sealed within 30 days after the close of the season."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-12-01",
+     "close_date": "2026-12-31",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-4-chichagof",
+       "zone_name": "Unit 4: Chichagof Island east of Idaho Inlet and north of Trail River and Tenakee Inlet and north of a line from the headwaters of Trail River to the head of Tenakee Inlet",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Must be sealed within 30 days after the close of the season."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-12-01",
+     "close_date": "2027-02-15",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-4-remainder",
+       "zone_name": "Unit 4, Remainder (Admiralty/Baranof)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Must be sealed within 30 days after the close of the season."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-10",
+     "close_date": "2027-02-15",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-5",
+       "zone_name": "Unit 5 (Yakutat)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Must be sealed within 30 days after the close of the season."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-10",
+     "close_date": "2027-01-31",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-7-8-15",
+       "zone_name": "Units 7, 8, and 15",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Must be sealed within 30 days after the close of the season. (required in Units 6, 7, 14C, 15)"
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-10",
+     "close_date": "2026-12-31",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-14C",
+       "zone_name": "Unit 14C",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Must be sealed within 30 days after the close of the season."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-10",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-6",
+       "zone_name": "Unit 6",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Must be sealed within 30 days after the close of the season."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-10",
+     "close_date": "2027-01-31",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-14A-14B-16",
+       "zone_name": "Units 14A, 14B, and 16",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Must be sealed within 30 days after the close of the season. (required in Units 14A, 14B, 16)"
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-10",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-9-11-13-17",
+       "zone_name": "Units 9, 11, 13, and 17",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-int-marten",
+       "zone_name": "Units 12, 19-21, 24, and 25 (Interior)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-04-15",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-26BC",
+       "zone_name": "Units 26B and 26C (Arctic)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-10",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-18",
+       "zone_name": "Unit 18",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-04-15",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-22-23-26A",
+       "zone_name": "Units 22, 23, and 26A (Western/Arctic)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": ""
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "American marten (Kuiu Island)",
+   "scientific_name": "Martes americana",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in ADF&G trapping regulations.",
+   "iac_reference": "2026–27 Alaska Trapping Regulations (ADF&G booklet)",
+   "season_status": "closed",
+   "seasons": [],
+   "permit_requirements": [],
+   "notes": "No open season: Unit 3, Kuiu Island. Included so the app flags any logged take."
+  },
+  {
+   "common_name": "American mink",
+   "scientific_name": "Neogale vison",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in ADF&G trapping regulations.",
+   "iac_reference": "2026–27 Alaska Trapping Regulations (ADF&G booklet)",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-12-01",
+     "close_date": "2027-02-15",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-1-3",
+       "zone_name": "Units 1-3",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-12-01",
+     "close_date": "2026-12-31",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-4-chichagof",
+       "zone_name": "Unit 4: Chichagof Island east of Idaho Inlet and north of Trail River and Tenakee Inlet and north of a line from the headwaters of Trail River to the head of Tenakee Inlet",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-12-01",
+     "close_date": "2027-02-15",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-4-remainder",
+       "zone_name": "Unit 4, Remainder (Admiralty/Baranof)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-10",
+     "close_date": "2027-02-15",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-5",
+       "zone_name": "Unit 5 (Yakutat)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-10",
+     "close_date": "2027-01-31",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-7-8-14C-15",
+       "zone_name": "Units 7, 8, 14C, and 15",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-10",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-6",
+       "zone_name": "Unit 6",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-10",
+     "close_date": "2027-01-31",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-14A-14B-16",
+       "zone_name": "Units 14A, 14B, and 16",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-10",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-9-11-13-17",
+       "zone_name": "Units 9-11, 13, and 17",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-int-mink",
+       "zone_name": "Units 12, 19-21, 24, and 25 (Interior)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-04-15",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-26BC",
+       "zone_name": "Units 26B and 26C (Arctic)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-10",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-18",
+       "zone_name": "Unit 18",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-04-15",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-22-23-26A",
+       "zone_name": "Units 22, 23, and 26A (Western/Arctic)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": ""
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "The booklet lists 'Mink & Weasel (least and short-tailed)' as one season table; mink and weasel are modeled as separate species entries with identical seasons."
+  },
+  {
+   "common_name": "Weasel (least and short-tailed)",
+   "scientific_name": null,
+   "scientific_name_verified": false,
+   "scientific_name_note": "Left null because the booklet groups 'least and short-tailed' weasels without a single species; assigning one would be a guess.",
+   "iac_reference": "2026–27 Alaska Trapping Regulations (ADF&G booklet)",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-12-01",
+     "close_date": "2027-02-15",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-1-3",
+       "zone_name": "Units 1-3",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-12-01",
+     "close_date": "2026-12-31",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-4-chichagof",
+       "zone_name": "Unit 4: Chichagof Island east of Idaho Inlet and north of Trail River and Tenakee Inlet and north of a line from the headwaters of Trail River to the head of Tenakee Inlet",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-12-01",
+     "close_date": "2027-02-15",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-4-remainder",
+       "zone_name": "Unit 4, Remainder (Admiralty/Baranof)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-10",
+     "close_date": "2027-02-15",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-5",
+       "zone_name": "Unit 5 (Yakutat)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-10",
+     "close_date": "2027-01-31",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-7-8-14C-15",
+       "zone_name": "Units 7, 8, 14C, and 15",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-10",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-6",
+       "zone_name": "Unit 6",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-10",
+     "close_date": "2027-01-31",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-14A-14B-16",
+       "zone_name": "Units 14A, 14B, and 16",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-10",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-9-11-13-17",
+       "zone_name": "Units 9-11, 13, and 17",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-int-mink",
+       "zone_name": "Units 12, 19-21, 24, and 25 (Interior)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-04-15",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-26BC",
+       "zone_name": "Units 26B and 26C (Arctic)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-10",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-18",
+       "zone_name": "Unit 18",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-04-15",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-22-23-26A",
+       "zone_name": "Units 22, 23, and 26A (Western/Arctic)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": ""
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "The booklet lists 'Mink & Weasel (least and short-tailed)' as one season table; mink and weasel are modeled as separate species entries with identical seasons."
+  },
+  {
+   "common_name": "Mountain lion",
+   "scientific_name": "Puma concolor",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in ADF&G trapping regulations.",
+   "iac_reference": "2026–27 Alaska Trapping Regulations (ADF&G booklet)",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-10",
+     "close_date": "2027-04-30",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-1-345",
+       "zone_name": "Units 1, 3-5 (Southeast Alaska)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Must be sealed on or before the 10th day after removal from the trap; bring the skull and hide (evidence of sex attached) to a sealing officer, skull skinned from hide, both unfrozen."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "Mountain lion seasons are listed only for Southeast Alaska (Units 1, 3-5) in the 2026–27 booklet."
+  },
+  {
+   "common_name": "Mountain lion (Unit 2)",
+   "scientific_name": "Puma concolor",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in ADF&G trapping regulations.",
+   "iac_reference": "2026–27 Alaska Trapping Regulations (ADF&G booklet)",
+   "season_status": "closed",
+   "seasons": [],
+   "permit_requirements": [],
+   "notes": "No open season: Unit 2 (Prince of Wales Island). Included so the app flags any logged take."
+  },
+  {
+   "common_name": "Muskrat",
+   "scientific_name": "Ondatra zibethicus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in ADF&G trapping regulations.",
+   "iac_reference": "2026–27 Alaska Trapping Regulations (ADF&G booklet)",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-12-01",
+     "close_date": "2027-02-15",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-1-5",
+       "zone_name": "Units 1-5 (Southeast Alaska)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-10",
+     "close_date": "2027-06-10",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-6-8",
+       "zone_name": "Units 6 and 8",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-10",
+     "close_date": "2027-05-15",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-7-14C-15",
+       "zone_name": "Units 7, 14C, and 15",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-10",
+     "close_date": "2027-06-10",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-9-11-16",
+       "zone_name": "Units 9-11 and 16",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-10",
+     "close_date": "2027-05-15",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-14A-14B",
+       "zone_name": "Units 14A and 14B",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-09-25",
+     "close_date": "2027-06-10",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-13",
+       "zone_name": "Unit 13",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-10",
+     "close_date": "2027-05-31",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-17",
+       "zone_name": "Unit 17",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-09-15",
+     "close_date": "2027-06-10",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-int-muskrat-a",
+       "zone_name": "Units 19, 20 (except 20E), 21, 24, 25, 26B, and 26C",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-09-20",
+     "close_date": "2027-06-10",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-12-20E",
+       "zone_name": "Units 12 and 20E",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-06-10",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-22",
+       "zone_name": "Unit 22",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Jun 11–Oct 31 in Unit 23: muskrat may be taken only with a firearm."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "AK-18-23-26A",
+       "zone_name": "Units 18, 23, and 26A",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "No closed season. Jun 11–Oct 31 in Unit 23: muskrat may be taken only with a firearm."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "River otter",
+   "scientific_name": "Lontra canadensis",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in ADF&G trapping regulations.",
+   "iac_reference": "2026–27 Alaska Trapping Regulations (ADF&G booklet)",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-10",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-1-5",
+       "zone_name": "Units 1-5 (Southeast Alaska)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Must be sealed within 30 days after the close of the season."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-10",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-6-8",
+       "zone_name": "Units 6 and 8",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Must be sealed within 30 days after the close of the season."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-10",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-7-14C-15",
+       "zone_name": "Units 7, 14C, and 15",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Must be sealed within 30 days after the close of the season."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-10",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-csw-otter",
+       "zone_name": "Units 9-11, 13, 14A, 14B, 16, and 17 (Central/Southwest)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Must be sealed within 30 days after the close of the season."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-04-15",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-int-otter",
+       "zone_name": "Units 12, 19-21, 24, 25, 26B, and 26C (Interior/Arctic)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Must be sealed within 30 days after the close of the season."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-10",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-18",
+       "zone_name": "Unit 18",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Must be sealed within 30 days after the close of the season."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-04-15",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-22-23-26A",
+       "zone_name": "Units 22, 23, and 26A (Western/Arctic)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Must be sealed within 30 days after the close of the season."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "When trapping river otter in a unit where the mink or marten seasons are closed, use a snare, a killer-style (body-grip) trap, or a foothold with inside jaw spread of 5 7/8 inches or greater."
+  },
+  {
+   "common_name": "Squirrel and marmot (red, flying, and ground (parka) squirrels; marmots and woodchucks)",
+   "scientific_name": null,
+   "scientific_name_verified": false,
+   "scientific_name_note": "Left null because the booklet groups multiple squirrel and marmot species without species-level seasons; assigning names would be a guess.",
+   "iac_reference": "2026–27 Alaska Trapping Regulations (ADF&G booklet)",
+   "season_status": "continuous",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "AK-all",
+       "zone_name": "Units 1-26 (statewide)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "No closed season; no limit. Modeled as one generic entry because the booklet does not set species-level seasons."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "Modeled as one entry with status continuous."
+  },
+  {
+   "common_name": "Gray wolf",
+   "scientific_name": "Canis lupus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in ADF&G trapping regulations.",
+   "iac_reference": "2026–27 Alaska Trapping Regulations (ADF&G booklet)",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-04-30",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-1-345",
+       "zone_name": "Units 1, 3-5 (Southeast Alaska)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Must be sealed within 30 days after the close of the season. Unit 1C, Gustavus: trappers must register with ADF&G before trapping wolves. May not shoot/assist shooting a wolf until after 3:00 a.m. following a day flown in an airplane; a wolf caught in a trap/snare may be shot the same day flown."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-15",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-2",
+       "zone_name": "Unit 2 (Prince of Wales Island)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Unit 2: wolves must be sequentially numbered/marked by the trapper; call the ADF&G Ketchikan office (907) 225-2475 within 7 days of take with date and location; seal hides within 15 days of take."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-10",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-6-7-15",
+       "zone_name": "Units 6, 7, and 15",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Must be sealed within 30 days after the close of the season."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-10",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-14C",
+       "zone_name": "Unit 14C",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Must be sealed within 30 days after the close of the season."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-01",
+     "close_date": "2027-04-30",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-9-10",
+       "zone_name": "Units 9 and 10",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Must be sealed within 30 days after the close of the season. Unlawful to trap with a steel trap or a snare smaller than 3/32 inch diameter during April, October, or Nov 1–Nov 9. ATVs may be used in Units 9B, 9C, 9E to position trappers; animals must be shot from a stationary ATV."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-10",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-11",
+       "zone_name": "Unit 11",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Must be sealed within 30 days after the close of the season."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-15",
+     "close_date": "2027-04-30",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-13-16",
+       "zone_name": "Units 13 and 16",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Must be sealed within 30 days after the close of the season. Unlawful to trap with a steel trap or a snare smaller than 3/32 inch diameter during April, October, or Nov 1–Nov 9."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-10",
+     "close_date": "2027-04-30",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-14A-14B-17",
+       "zone_name": "Units 14A, 14B, and 17",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Must be sealed within 30 days after the close of the season. Unlawful to trap with a steel trap or a snare smaller than 3/32 inch diameter during April (Units 14A, 14B, 17)."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-01",
+     "close_date": "2027-04-30",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-int-wolf-a",
+       "zone_name": "Units 19D, 21A, 24, and 25",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Must be sealed within 30 days after the close of the season. Unlawful to trap with a steel trap or a snare smaller than 3/32 inch diameter during April or October (Units 19D, 21A, 24, 25)."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-04-30",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-int-wolf-b",
+       "zone_name": "Units 19A, 19B, 19C, 19E, 20A, 20B, 20C, 20F, 21B, 21C, 21D, 21E, 26B, and 26C",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Must be sealed within 30 days after the close of the season. Unlawful to trap with a steel trap or a snare smaller than 3/32 inch diameter during April (Units 19A-C, 19E, 20A-C, 20F, 21B-E). Unit 25C: ATVs may be used to position trappers; animals must be shot from a stationary ATV."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-15",
+     "close_date": "2027-04-30",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-12-20D-20E",
+       "zone_name": "Units 12, 20D, and 20E",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Must be sealed within 30 days after the close of the season. Unlawful to trap with a steel trap or a snare smaller than 3/32 inch diameter during April or October."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-10",
+     "close_date": "2027-04-30",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-18",
+       "zone_name": "Unit 18",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Must be sealed within 30 days after the close of the season."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-04-30",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-22-23-26A",
+       "zone_name": "Units 22, 23, and 26A (Western/Arctic)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Must be sealed within 30 days after the close of the season. Unit 22: ATVs may be used to position trappers; animals must be shot from a stationary ATV."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "Wolves are classified as BOTH big game and furbearers. The Alaska Hunting Regulations apply if taken under a hunting license; the Alaska Trapping Regulations apply if taken under a trapping license. No wolf season is listed for Unit 8 (Kodiak) in the 2026–27 booklet."
+  },
+  {
+   "common_name": "Wolverine",
+   "scientific_name": "Gulo gulo",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in ADF&G trapping regulations.",
+   "iac_reference": "2026–27 Alaska Trapping Regulations (ADF&G booklet)",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-10",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-1-5",
+       "zone_name": "Units 1-5 (Southeast Alaska)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Must be sealed within 30 days after the close of the season."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-10",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-6-7-15",
+       "zone_name": "Units 6, 7, and 15",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Must be sealed within 30 days after the close of the season."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-10",
+     "close_date": "2027-01-31",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-14C",
+       "zone_name": "Unit 14C",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": 2,
+      "possession_limit": null,
+      "limit_notes": "Season limit 2."
+     },
+     "notes": "Must be sealed within 30 days after the close of the season."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-10",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-9-11-16B-17",
+       "zone_name": "Units 9, 11, 16B, and 17",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Must be sealed within 30 days after the close of the season."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-10",
+     "close_date": "2027-02-15",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-13",
+       "zone_name": "Unit 13",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Must be sealed within 30 days after the close of the season."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-12-15",
+     "close_date": "2027-01-31",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-14A",
+       "zone_name": "Unit 14A",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": 2,
+      "possession_limit": null,
+      "limit_notes": "Season limit 2."
+     },
+     "notes": "Must be sealed within 30 days after the close of the season."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-10",
+     "close_date": "2027-01-31",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-14B-16A",
+       "zone_name": "Units 14B and 16A",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": 2,
+      "possession_limit": null,
+      "limit_notes": "Season limit 2."
+     },
+     "notes": "Must be sealed within 30 days after the close of the season."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-03-15",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-12-20E",
+       "zone_name": "Units 12 and 20E",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Must be sealed within 30 days after the close of the season."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-int-wolv-a",
+       "zone_name": "Units 19, 20C, 21, 24, 25A, 25B, and 25D",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Must be sealed within 30 days after the close of the season."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-int-wolv-b",
+       "zone_name": "Units 20A, 20B, 20D, 20F, and 25C",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Must be sealed within 30 days after the close of the season."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-04-15",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-26BC",
+       "zone_name": "Units 26B and 26C (Arctic)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Must be sealed within 30 days after the close of the season."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-10",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-18",
+       "zone_name": "Unit 18",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Must be sealed within 30 days after the close of the season."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-04-15",
+     "open_time": null,
+     "timezone": "America/Anchorage",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AK-22-23-26A",
+       "zone_name": "Units 22, 23, and 26A (Western/Arctic)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Must be sealed within 30 days after the close of the season."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "Wolverines are classified as BOTH big game and furbearers. A wolverine caught in a trap or snare may be shot the same day the trapper has flown. May not shoot/assist shooting until after 3:00 a.m. following a day flown otherwise."
+  },
+  {
+   "common_name": "Wolverine (Unit 10)",
+   "scientific_name": "Gulo gulo",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in ADF&G trapping regulations.",
+   "iac_reference": "2026–27 Alaska Trapping Regulations (ADF&G booklet)",
+   "season_status": "closed",
+   "seasons": [],
+   "permit_requirements": [],
+   "notes": "No open season: Unit 10 (Aleutian Islands). Included so the app flags any logged take."
+  }
+ ],
+ "sources": [
+  {
+   "id": "adfg-trapping-booklet-2026-27",
+   "title": "2026–27 Alaska Trapping Regulations (ADF&G booklet, effective July 1, 2026 – June 30, 2027)",
+   "url": "https://www.awc.adfg.alaska.gov/static/regulations/wildliferegulations/pdfs/trapping.pdf",
+   "type": "agency_booklet",
+   "notes": "All season tables, limits, sealing requirements, and area closures read directly from this booklet. Archived locally in hidden_files/season-research/alaska/."
+  }
+ ],
+ "verification": {
+  "regulation_year_confirmed": true,
+  "confirmation_notes": "The 2026–27 ADF&G trapping booklet (2026-07-01–2027-06-30 regulatory year) verified 2026-09-18. All season dates and limits read from the five regional sections (Southeast Units 1-5; Southcentral Units 6-8, 14C, 15; Central/Southwest Units 9-11, 13, 14A, 14B, 16, 17; Interior Units 12, 19-21, 24, 25, 26B, 26C; Western/Arctic Units 18, 22, 23, 26A). Fisher and mountain lion appear only in the Southeast section.",
+  "known_gaps": [
+   "GMU zones are descriptive — the app cannot resolve GMU boundaries; unit-subunit boundary descriptions (e.g., the Unit 4 Chichagof Island line) are not modeled as polygons.",
+   "Areas closed to trapping are summarized, not enumerated — users must check the booklet's 'Areas Closed to Trapping' and 'Additional Restrictions' for their unit.",
+   "Scientific names are standard taxonomy, NOT stated in the ADF&G trapping regulations — all flagged scientific_name_verified=false; weasel is null because the booklet groups species.",
+   "All entries use America/Anchorage; the western Aleutians (Unit 10) observe Hawaii-Aleutian Time — a one-hour difference the app should account for.",
+   "No red fox season is listed for Units 6, 7, 8, 14C, 15; no coyote or wolf season for Unit 8 (Kodiak) — noted, not modeled as closed entries.",
+   "Lynx seasons may be closed by emergency order — the app should direct users to check ADF&G emergency orders.",
+   "Detailed method rules (beaver house/den protection, aircraft same-day-shooting rules, wolf steel-trap/snare diameter restrictions, Unit 26A aircraft restrictions) are noted per season, not fully modeled."
+  ]
+ },
+ "license_url": "https://store.adfg.alaska.gov",
+ "license_vendor": "ADF&G online store",
+ "regs_url": "https://www.awc.adfg.alaska.gov/static/regulations/wildliferegulations/pdfs/trapping.pdf",
+ "regs_kind": "pdf"
+,
+ "warden_directory": {
+  "label": "Report a violation",
+  "url": "https://dps.alaska.gov/awt/contact",
+  "kind": "hotline",
+  "note": "Alaska Wildlife Troopers: 1-800-478-3377 (Fish & Wildlife Safeguard)"
+ }
+}

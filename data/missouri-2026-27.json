@@ -1,0 +1,967 @@
+{
+ "disclaimer": "Reminder reference only — NOT legal authority. Season dates, zones, and limits are set annually and can change. Always verify current regulations with the Missouri Department of Conservation before hunting or trapping. In communities of 10,000 or more, only cage-type or foot-enclosing traps within 150 ft of residences.",
+ "license_summary": {
+  "general": "Missouri residents need a Small Game Hunting Permit to hunt furbearers and a Resident Trapping Permit ($11.00, residents only) to trap furbearers and sell pelts; the trapping permit also allows trapping groundhogs and rabbits (rabbit carcasses may not be sold). Nonresidents need the Nonresident Furbearer Hunting and Trapping Permit ($221.50). Trapping on conservation areas requires a special-use permit applied for at least 30 days before trapping begins. Traps may be placed/set for furbearers at 12:01 a.m. on Nov. 15 and must be removed by midnight of the last day of the trapping season."
+ },
+ "provisional": false,
+ "retrieved_at": "2026-09-18",
+ "schema_version": "1.1",
+ "season_year": "2026-27",
+ "sources": [
+  {
+   "id": "mdc-seasons",
+   "notes": "2026-27 official seasons by species; 2026-27 official seasons at a glance; furbearer hunting allowed/prohibited methods; trapping regulations page (registration by April 10, conservation-area special-use permits, trap set/removal times).",
+   "title": "Missouri Department of Conservation — Seasons by Species / Trapping / Trapping Regulations (2026-27)",
+   "type": "agency_web",
+   "url": "https://mdc.mo.gov/hunting-trapping/seasons/species"
+  },
+  {
+   "id": "csr-8.515",
+   "notes": "Official text of 3 CSR 10-8.515: Badger, beaver, bobcat, coyote, gray fox, mink, muskrat, nutria, opossum, raccoon, red fox, river otter, and striped skunk may be taken IN ANY NUMBERS by trapping only; statewide trapping dates; special private-land harvest season Mar 1-Apr 14 for coyote, opossum, raccoon, striped skunk. Amended May 16, 2025.",
+   "title": "3 CSR 10-8.515: Furbearers: Trapping Seasons (Missouri Department of Conservation)",
+   "type": "administrative_code",
+   "url": "https://mdc.mo.gov/about-us/about-regulations/wildlife-code-missouri/3-csr-10-8515-furbearers-trapping-seasons"
+  },
+  {
+   "id": "mdc-2025-summary",
+   "notes": "2025 Missouri hunting/trapping regulations summary (prior year): 'Open seasons exist for all furbearers except mountain lions, spotted skunks, and longtailed weasels.' Used only for the closed-species list; all season dates come from the 2026-27 pages.",
+   "title": "A Summary of Missouri Hunting and Trapping Regulations 2025 (MDC)",
+   "type": "agency_booklet",
+   "url": "https://mdc.mo.gov/sites/default/files/2025-03/Summary Missouri Hunting Trapping 2025_508.pdf"
+  }
+ ],
+ "species": [
+  {
+   "common_name": "Badger",
+   "iac_reference": "3 CSR 10-8.515",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Taxidea taxus",
+   "scientific_name_note": "Standard taxonomy; not stated in the MDC sources used.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Any number.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-01-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "3 CSR 10-8.515: badger taken 'in any numbers by trapping only' statewide.",
+     "open_date": "2026-11-15",
+     "open_time": "00:01",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "MO-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Any number.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-01-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Furbearer hunting hours were not stated on the 2026-27 MDC season pages reviewed — see known_gaps.",
+     "open_date": "2026-11-15",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "MO-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Beaver",
+   "iac_reference": "3 CSR 10-8.515",
+   "notes": "Combined with nutria as 'Beaver and Nutria: Trapping' on MDC season pages.",
+   "permit_requirements": [],
+   "scientific_name": "Castor canadensis",
+   "scientific_name_note": "Standard taxonomy; not stated in the MDC sources used.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Any number.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "3 CSR 10-8.515: beaver taken 'in any numbers by trapping only' statewide, Nov 15-Mar 31.",
+     "open_date": "2026-11-15",
+     "open_time": "00:01",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "MO-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Nutria",
+   "iac_reference": "3 CSR 10-8.515",
+   "notes": "Combined with beaver as 'Beaver and Nutria: Trapping' on MDC season pages.",
+   "permit_requirements": [],
+   "scientific_name": "Myocastor coypus",
+   "scientific_name_note": "Standard taxonomy; not stated in the MDC sources used.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Any number.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "3 CSR 10-8.515: nutria taken 'in any numbers by trapping only' statewide, Nov 15-Mar 31.",
+     "open_date": "2026-11-15",
+     "open_time": "00:01",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "MO-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Bobcat",
+   "iac_reference": "3 CSR 10-8.515",
+   "notes": "",
+   "permit_requirements": [
+    "Bobcats and otters or their pelts must be delivered to an agent of the Conservation Department for registration or tagging before selling, transferring, tanning, or mounting, BY APRIL 10. Tagged bobcats, otters, or their pelts may be possessed by the taker throughout the year and sold only to licensed taxidermists, tanners, or fur dealers. It is illegal to purchase or sell untagged bobcats, otters, or their pelts."
+   ],
+   "scientific_name": "Lynx rufus",
+   "scientific_name_note": "Standard taxonomy; not stated in the MDC sources used.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Any number.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "3 CSR 10-8.515: bobcat taken 'in any numbers by trapping only' statewide.",
+     "open_date": "2026-11-15",
+     "open_time": "00:01",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "MO-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Any number.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Furbearer hunting hours were not stated on the 2026-27 MDC season pages reviewed — see known_gaps.",
+     "open_date": "2026-11-15",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "MO-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Coyote",
+   "iac_reference": "3 CSR 10-8.515",
+   "notes": "Coyotes, except as otherwise provided, may be taken by hunting and pelts/carcasses possessed, transported, and sold in any numbers throughout the year. Coyotes may NOT be taken during daylight hours from April 1 through the day prior to the beginning of spring turkey season. From Jan 1-Sept 30 (excluding the spring turkey season), artificial light, night vision, infrared, and thermal imagery equipment may be used to take coyotes; during the spring turkey season, coyotes may be taken only during legal turkey shooting hours with methods allowed for spring turkey (hunters must have an unfilled spring turkey permit plus a small game or furbearer permit).",
+   "permit_requirements": [],
+   "scientific_name": "Canis latrans",
+   "scientific_name_note": "Standard taxonomy; not stated in the MDC sources used.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Any number.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2026-12-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "2026 calendar-year season (Jan 1-Dec 31, 2026). Special method restrictions apply during spring turkey, elk, and deer seasons.",
+     "open_date": "2026-01-01",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "MO-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Any number.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "3 CSR 10-8.515: coyote taken 'in any numbers by trapping only' statewide. Traps must be removed by midnight of the last day of the trapping season.",
+     "open_date": "2026-11-15",
+     "open_time": "00:01",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "MO-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Any number.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-04-14",
+     "continuous_open": false,
+     "land_type": "private",
+     "method": "trapping",
+     "notes": "Special harvest season on private lands per 3 CSR 10-8.515. Only foot-hold traps, foot-enclosing traps, and cage-type traps may be used.",
+     "open_date": "2027-03-01",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "MO-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Red fox",
+   "iac_reference": "3 CSR 10-8.515",
+   "notes": "MDC season pages combine 'Fox (Red or Gray): Hunting and Trapping'. From Jan 1-Sept 30 coyote methods (artificial light, night vision, thermal) apply to coyotes only, not fox.",
+   "permit_requirements": [],
+   "scientific_name": "Vulpes vulpes",
+   "scientific_name_note": "Standard taxonomy; not stated in the MDC sources used.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Any number.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-01-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "3 CSR 10-8.515: red fox taken 'in any numbers by trapping only' statewide.",
+     "open_date": "2026-11-15",
+     "open_time": "00:01",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "MO-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Any number.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-01-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Furbearer hunting hours were not stated on the 2026-27 MDC season pages reviewed — see known_gaps.",
+     "open_date": "2026-11-15",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "MO-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Gray fox",
+   "iac_reference": "3 CSR 10-8.515",
+   "notes": "MDC season pages combine 'Fox (Red or Gray): Hunting and Trapping'.",
+   "permit_requirements": [],
+   "scientific_name": "Urocyon cinereoargenteus",
+   "scientific_name_note": "Standard taxonomy; not stated in the MDC sources used.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Any number.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-01-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "3 CSR 10-8.515: gray fox taken 'in any numbers by trapping only' statewide.",
+     "open_date": "2026-11-15",
+     "open_time": "00:01",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "MO-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Any number.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-01-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Furbearer hunting hours were not stated on the 2026-27 MDC season pages reviewed — see known_gaps.",
+     "open_date": "2026-11-15",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "MO-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Mink",
+   "iac_reference": "3 CSR 10-8.515",
+   "notes": "Mink is trapping only in Missouri (no hunting season appears on the 2026-27 MDC season pages).",
+   "permit_requirements": [],
+   "scientific_name": "Neogale vison",
+   "scientific_name_note": "Standard taxonomy; not stated in the MDC sources used.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Any number.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "3 CSR 10-8.515: mink taken 'in any numbers by trapping only' statewide.",
+     "open_date": "2026-11-15",
+     "open_time": "00:01",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "MO-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Muskrat",
+   "iac_reference": "3 CSR 10-8.515",
+   "notes": "Muskrat is trapping only in Missouri (no hunting season appears on the 2026-27 MDC season pages).",
+   "permit_requirements": [],
+   "scientific_name": "Ondatra zibethicus",
+   "scientific_name_note": "Standard taxonomy; not stated in the MDC sources used.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Any number.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "3 CSR 10-8.515: muskrat taken 'in any numbers by trapping only' statewide.",
+     "open_date": "2026-11-15",
+     "open_time": "00:01",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "MO-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Opossum",
+   "iac_reference": "3 CSR 10-8.515",
+   "notes": "MDC season pages: 'Opossum: Hunting and Trapping'.",
+   "permit_requirements": [],
+   "scientific_name": "Didelphis virginiana",
+   "scientific_name_note": "Standard taxonomy; not stated in the MDC sources used.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Any number.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2026-10-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Early season: only foot-enclosing traps and cage-type traps may be used from Aug 1-Oct 15. Traps may be placed/set at 12:01 a.m. on Aug 1 for this early season per the general provision (Nov 15 provision is for the main season).",
+     "open_date": "2026-08-01",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "MO-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Any number.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "3 CSR 10-8.515: opossum taken 'in any numbers by trapping only' statewide.",
+     "open_date": "2026-11-15",
+     "open_time": "00:01",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "MO-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Any number.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2026-10-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Early hunting season Aug 1-Oct 15.",
+     "open_date": "2026-08-01",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "MO-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Any number.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Furbearer hunting hours were not stated on the 2026-27 MDC season pages reviewed — see known_gaps.",
+     "open_date": "2026-11-15",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "MO-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Any number.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-04-14",
+     "continuous_open": false,
+     "land_type": "private",
+     "method": "trapping",
+     "notes": "Special harvest season on private lands per 3 CSR 10-8.515. Only foot-hold traps, foot-enclosing traps, and cage-type traps may be used Mar 1-Apr 14.",
+     "open_date": "2027-03-01",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "MO-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Raccoon",
+   "iac_reference": "3 CSR 10-8.515",
+   "notes": "MDC season pages: 'Raccoon: Hunting and Trapping'. Artificial light may be used to spot, locate, attempt to take, and hunt raccoons (or other furbearing animals) when treed with the aid of dogs during the prescribed furbearer season.",
+   "permit_requirements": [],
+   "scientific_name": "Procyon lotor",
+   "scientific_name_note": "Standard taxonomy; not stated in the MDC sources used.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Any number.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2026-10-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Early season: only foot-enclosing traps and cage-type traps may be used from Aug 1-Oct 15.",
+     "open_date": "2026-08-01",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "MO-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Any number.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "3 CSR 10-8.515: raccoon taken 'in any numbers by trapping only' statewide.",
+     "open_date": "2026-11-15",
+     "open_time": "00:01",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "MO-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Any number.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2026-10-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Early hunting season Aug 1-Oct 15.",
+     "open_date": "2026-08-01",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "MO-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Any number.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Furbearer hunting hours were not stated on the 2026-27 MDC season pages reviewed — see known_gaps.",
+     "open_date": "2026-11-15",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "MO-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Any number.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-04-14",
+     "continuous_open": false,
+     "land_type": "private",
+     "method": "trapping",
+     "notes": "Special harvest season on private lands per 3 CSR 10-8.515. Only foot-hold traps, foot-enclosing traps, and cage-type traps may be used Mar 1-Apr 14.",
+     "open_date": "2027-03-01",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "MO-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Striped skunk",
+   "iac_reference": "3 CSR 10-8.515",
+   "notes": "MDC season pages: 'Striped Skunk: Hunting and Trapping'.",
+   "permit_requirements": [],
+   "scientific_name": "Mephitis mephitis",
+   "scientific_name_note": "Standard taxonomy; not stated in the MDC sources used.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Any number.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2026-10-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Early season: only foot-enclosing traps and cage-type traps may be used from Aug 1-Oct 15.",
+     "open_date": "2026-08-01",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "MO-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Any number.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "3 CSR 10-8.515: striped skunk taken 'in any numbers by trapping only' statewide.",
+     "open_date": "2026-11-15",
+     "open_time": "00:01",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "MO-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Any number.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2026-10-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Early hunting season Aug 1-Oct 15.",
+     "open_date": "2026-08-01",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "MO-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Any number.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Furbearer hunting hours were not stated on the 2026-27 MDC season pages reviewed — see known_gaps.",
+     "open_date": "2026-11-15",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "MO-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Any number.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-04-14",
+     "continuous_open": false,
+     "land_type": "private",
+     "method": "trapping",
+     "notes": "Special harvest season on private lands per 3 CSR 10-8.515. Only foot-hold traps, foot-enclosing traps, and cage-type traps may be used Mar 1-Apr 14.",
+     "open_date": "2027-03-01",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "MO-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "River otter",
+   "iac_reference": "3 CSR 10-8.515",
+   "notes": "River otter is trapping only in Missouri (no hunting season appears on the 2026-27 MDC season pages).",
+   "permit_requirements": [
+    "Bobcats and otters or their pelts must be delivered to an agent of the Conservation Department for registration or tagging before selling, transferring, tanning, or mounting, BY APRIL 10. It is illegal to purchase or sell untagged otters or their pelts."
+   ],
+   "scientific_name": "Lontra canadensis",
+   "scientific_name_note": "Standard taxonomy; not stated in the MDC sources used.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Any number (3 CSR 10-8.515: 'in any numbers').",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "3 CSR 10-8.515: river otter taken 'in any numbers by trapping only' statewide — no bag limit in Missouri.",
+     "open_date": "2026-11-15",
+     "open_time": "00:01",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "MO-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Mountain lion (cougar)",
+   "iac_reference": "2025 Summary of Missouri Hunting and Trapping Regulations (MDC)",
+   "notes": "MDC regulations summary: 'Open seasons exist for all furbearers except mountain lions, spotted skunks, and longtailed weasels.' Included so the app flags any logged take as out of season.",
+   "permit_requirements": [],
+   "scientific_name": "Puma concolor",
+   "scientific_name_note": "Standard taxonomy; not stated in the MDC sources used.",
+   "scientific_name_verified": false,
+   "season_status": "closed",
+   "seasons": []
+  },
+  {
+   "common_name": "Spotted skunk",
+   "iac_reference": "2025 Summary of Missouri Hunting and Trapping Regulations (MDC)",
+   "notes": "MDC regulations summary: 'Open seasons exist for all furbearers except mountain lions, spotted skunks, and longtailed weasels.' Included so the app flags any logged take as out of season.",
+   "permit_requirements": [],
+   "scientific_name": "Spilogale putorius",
+   "scientific_name_note": "Standard taxonomy; not stated in the MDC sources used.",
+   "scientific_name_verified": false,
+   "season_status": "closed",
+   "seasons": []
+  },
+  {
+   "common_name": "Long-tailed weasel",
+   "iac_reference": "2025 Summary of Missouri Hunting and Trapping Regulations (MDC)",
+   "notes": "MDC regulations summary: 'Open seasons exist for all furbearers except mountain lions, spotted skunks, and longtailed weasels.' Included so the app flags any logged take as out of season.",
+   "permit_requirements": [],
+   "scientific_name": "Neogale frenata",
+   "scientific_name_note": "Standard taxonomy; not stated in the MDC sources used.",
+   "scientific_name_verified": false,
+   "season_status": "closed",
+   "seasons": []
+  }
+ ],
+ "state": "MO",
+ "state_name": "Missouri",
+ "verification": {
+  "confirmation_notes": "Data taken from official MDC 2026-27 seasons pages (downloaded/opened 2026-09-18): seasons-by-species page, seasons-at-a-glance table, trapping page, and trapping regulations page. 3 CSR 10-8.515 (official text on mdc.mo.gov, amended May 16, 2025) confirms all listed furbearers are taken 'in any numbers by trapping only' with the statewide dates and the Mar 1-Apr 14 private-land special harvest season (coyote, opossum, raccoon, striped skunk). Bobcat/otter registration-by-April-10 rule from the official trapping regulations page. Coyote hunting: Jan 1-Dec 31, 2026 with the daylight-hours turkey-season restriction and method rules. Early Aug 1-Oct 15 season (raccoon, opossum, striped skunk) and its foot-enclosing/cage-trap-only restriction confirmed. Coyote trapping: Nov 15, 2026-Feb 28, 2027 plus the private-land extension. Closed furbearers (mountain lion, spotted skunk, long-tailed weasel) from the MDC 2025 regulations summary note.",
+  "known_gaps": [
+   "Scientific names are standard taxonomy, NOT stated in the MDC sources used.",
+   "General furbearer HUNTING hours were not stated on the 2026-27 MDC season pages reviewed; hunting seasons were modeled without open/close times. Verify in the full 2026 Missouri Hunting and Trapping Regulations summary (not yet published as of 2026-09-18).",
+   "Groundhog (woodchuck): the resident trapping permit notes allow trapping groundhogs, but no groundhog season dates appeared on the MDC season pages reviewed — no season was modeled. Verify whether Missouri has a groundhog season or whether it is incidental to furbearer trapping.",
+   "The by-species page row for 'Mink' etc. appeared under trapping only; mink/muskrat/beaver/nutria/otter have no hunting season in the sources reviewed.",
+   "Coyote hunting hours restriction 'may not be taken during daylight hours from April 1 through the day prior to spring turkey season' is as stated on MDC's coyote season row; night-take methods (artificial light/night vision/thermal Jan 1-Sept 30) still apply subject to the turkey-season rules.",
+   "Season close dates in 2027 (e.g., beaver through Mar 31, private-land extension through Apr 14) are as published for the 2026-27 season.",
+   "Nuisance/depredation rules are not modeled."
+  ],
+  "regulation_year_confirmed": true
+ },
+ "license_url": "https://mdc-web.s3licensing.com/",
+ "license_vendor": "MDC e-Permits vendor portal",
+ "regs_url": "https://mdc.mo.gov/sites/default/files/2026-02/Hunting%20Trapping%20Summ%202026_508.pdf",
+ "regs_kind": "pdf"
+,
+ "warden_directory": {
+  "label": "Report a violation",
+  "url": "http://mdc.mo.gov/about-us/about-regulations/operation-game-thief",
+  "kind": "hotline",
+  "note": "Operation Game Thief: 800-392-1111, 24-hr toll-free; rewards $50–$1,000"
+ }
+}

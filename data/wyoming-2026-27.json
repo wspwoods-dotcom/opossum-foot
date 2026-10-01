@@ -1,0 +1,837 @@
+{
+ "disclaimer": "Reminder reference only \u2014 NOT legal authority. Season dates, areas, quotas, and limits are set annually and can change. Always verify current regulations with the Wyoming Game and Fish Department before hunting or trapping.",
+ "license_summary": {
+  "predatory_animals": "Coyote, jackrabbit, porcupine, raccoon, red fox, skunk, and gray wolf located outside the Wolf Trophy Game Management Area (and Seasonal WTGMA) are statutory predatory animals and may be taken without a license. All snares used for furbearing or predatory animals must have a break-away device releasing at 295 pounds or less, with loop size no greater than 12 inches.",
+  "protected_animals": "Black-footed ferret, fisher, lynx, pika, and wolverine are 'protected animals' under the 2026 guide: any trapped protected animal must be released unharmed; if injured or killed, the trapper must notify a Department law enforcement officer as soon as reasonably possible.",
+  "trapping_license": "A Wyoming furbearing animal trapping license is required to trap furbearing animals (not predatory animals). Consult WGFD for license types, fees, and trap-check periods."
+ },
+ "provisional": false,
+ "retrieved_at": "2026-09-18",
+ "schema_version": "1.1",
+ "season_year": "2026-27",
+ "sources": [
+  {
+   "id": "wgfd-furbearer-guide-2026",
+   "notes": "2026 Wyoming Furbearing Animal Hunting and Trapping Regulations guide. All season tables, Area descriptions (including beaver limited-quota/closed areas and the Snowy Range marten Area 2 boundary), the 'protected animal' definition, the predatory-animal definition (including wolves outside the WTGMA), snare break-away rules, and release/report rules read directly from this guide. Archived locally in hidden_files/season-research/.",
+   "title": "2026 Wyoming Furbearing Animal Hunting and Trapping Regulations (WGFD guide)",
+   "type": "agency_booklet",
+   "url": "https://wgfd.wyo.gov/media/34090/download?inline"
+  },
+  {
+   "id": "wgfd-chapter-47-draft-2026",
+   "notes": "Draft only (05.12.2026.2), presented to the Commission July 14\u201315, 2026; the adopted final was not yet confirmed at verification. It restricts trophy-game wolves to firearms/archery during open hunting seasons \u2014 NO trapping. Do not treat draft dates as law.",
+   "title": "Chapter 47, Gray Wolf Hunting Seasons \u2014 2026 DRAFT (not adopted-confirmed)",
+   "type": "administrative_code",
+   "url": "https://wgfd.wyo.gov/regulations?nid=298"
+  }
+ ],
+ "species": [
+  {
+   "common_name": "Mink",
+   "iac_reference": "2026 Wyoming Furbearing Animal Hunting and Trapping Regulations",
+   "notes": "Area 1 = the entire state, excluding areas closed in Section 4(b).",
+   "permit_requirements": [],
+   "scientific_name": "Neogale vison",
+   "scientific_name_note": "Standard taxonomy (formerly Neovison vison); not stated in WGFD guide.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Any mink.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-04-30",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "both",
+     "notes": "Area 1.",
+     "open_date": "2026-10-01",
+     "open_time": null,
+     "timezone": "America/Denver",
+     "zones": [
+      {
+       "area_type": "management_units",
+       "zone_id": "WY-area1",
+       "zone_name": "Area 1 \u2014 entire state, excluding areas closed in Section 4(b)"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Bobcat",
+   "iac_reference": "2026 Wyoming Furbearing Animal Hunting and Trapping Regulations",
+   "notes": "Area 1 = the entire state, excluding areas closed in Section 4(b).",
+   "permit_requirements": [],
+   "scientific_name": "Lynx rufus",
+   "scientific_name_note": "Standard taxonomy; not stated in WGFD guide.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Any bobcat.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-01",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "both",
+     "notes": "Area 1.",
+     "open_date": "2026-11-15",
+     "open_time": null,
+     "timezone": "America/Denver",
+     "zones": [
+      {
+       "area_type": "management_units",
+       "zone_id": "WY-area1",
+       "zone_name": "Area 1 \u2014 entire state, excluding areas closed in Section 4(b)"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Muskrat",
+   "iac_reference": "2026 Wyoming Furbearing Animal Hunting and Trapping Regulations",
+   "notes": "Area 1 = the entire state, excluding areas closed in Section 4(b).",
+   "permit_requirements": [],
+   "scientific_name": "Ondatra zibethicus",
+   "scientific_name_note": "Standard taxonomy; not stated in WGFD guide.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Any muskrat.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-04-30",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "both",
+     "notes": "Area 1.",
+     "open_date": "2026-10-01",
+     "open_time": null,
+     "timezone": "America/Denver",
+     "zones": [
+      {
+       "area_type": "management_units",
+       "zone_id": "WY-area1",
+       "zone_name": "Area 1 \u2014 entire state, excluding areas closed in Section 4(b)"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Weasel",
+   "iac_reference": "2026 Wyoming Furbearing Animal Hunting and Trapping Regulations",
+   "notes": "The guide's season table lists 'Weasel' generically (Area 1, Oct 1\u2013Mar 31). The guide's sightings section separately mentions least weasel as a non-furbearer \u2014 see the Least weasel closed entry.",
+   "permit_requirements": [],
+   "scientific_name": null,
+   "scientific_name_note": "Left null because the WGFD guide lists 'Weasel' generically; assigning a species would be a guess.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Any weasel.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "both",
+     "notes": "Area 1.",
+     "open_date": "2026-10-01",
+     "open_time": null,
+     "timezone": "America/Denver",
+     "zones": [
+      {
+       "area_type": "management_units",
+       "zone_id": "WY-area1",
+       "zone_name": "Area 1 \u2014 entire state, excluding areas closed in Section 4(b)"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Badger",
+   "iac_reference": "2026 Wyoming Furbearing Animal Hunting and Trapping Regulations",
+   "notes": "January 1\u2013December 31 annually. Area 1 = the entire state, excluding areas closed in Section 4(b).",
+   "permit_requirements": [],
+   "scientific_name": "Taxidea taxus",
+   "scientific_name_note": "Standard taxonomy; not stated in WGFD guide.",
+   "scientific_name_verified": false,
+   "season_status": "continuous",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Any badger.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "both",
+     "notes": "Open year-round (Jan 1\u2013Dec 31 annually).",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/Denver",
+     "zones": [
+      {
+       "area_type": "management_units",
+       "zone_id": "WY-area1",
+       "zone_name": "Area 1 \u2014 entire state, excluding areas closed in Section 4(b)"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Marten",
+   "iac_reference": "2026 Wyoming Furbearing Animal Hunting and Trapping Regulations",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Martes americana",
+   "scientific_name_note": "Standard taxonomy; not stated in WGFD guide.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Any marten.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-01",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "both",
+     "notes": "Marten Area 1 = the entire state, excluding Area 2 (Snowy Range) and areas closed in Section 4(b).",
+     "open_date": "2026-10-01",
+     "open_time": null,
+     "timezone": "America/Denver",
+     "zones": [
+      {
+       "area_type": "management_units",
+       "zone_id": "WY-marten-area1",
+       "zone_name": "Marten Area 1 \u2014 entire state excluding the Snowy Range (Area 2) and closed areas"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Any marten.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-01",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "both",
+     "notes": "Marten Area 2 (Snowy Range): bounded by I-80, US-287, the Wyoming-Colorado line, WY-230, and WY-130 around Laramie \u2014 see the guide for the legal description.",
+     "open_date": "2026-12-01",
+     "open_time": null,
+     "timezone": "America/Denver",
+     "zones": [
+      {
+       "area_type": "management_units",
+       "zone_id": "WY-marten-area2",
+       "zone_name": "Marten Area 2 (Snowy Range)"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "American beaver",
+   "iac_reference": "2026 Wyoming Furbearing Animal Hunting and Trapping Regulations",
+   "notes": "Beaver Area 1 = the entire state, excluding the limited-quota areas and the closed areas. Closed beaver areas: 301\u2013305, 401, 404\u2013407, 503\u2013505, 605\u2013606.",
+   "permit_requirements": [],
+   "scientific_name": "Castor canadensis",
+   "scientific_name_note": "Standard taxonomy; not stated in WGFD guide.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Any beaver.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-04-30",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "both",
+     "notes": "Beaver Area 1.",
+     "open_date": "2026-10-01",
+     "open_time": null,
+     "timezone": "America/Denver",
+     "zones": [
+      {
+       "area_type": "management_units",
+       "zone_id": "WY-beaver-area1",
+       "zone_name": "Beaver Area 1 \u2014 entire state, excluding limited-quota areas and closed areas (301\u2013305, 401, 404\u2013407, 503\u2013505, 605\u2013606)"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Limited quota: 1 trapper; 25 beaver.",
+      "possession_limit": null,
+      "season_bag": 25
+     },
+     "close_date": "2027-04-30",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "both",
+     "notes": "Limited-quota Area 408 (Salt Creek, Lincoln County): 1 trapper; 25 beaver.",
+     "open_date": "2026-10-01",
+     "open_time": null,
+     "timezone": "America/Denver",
+     "zones": [
+      {
+       "area_type": "management_units",
+       "zone_id": "WY-beaver-408",
+       "zone_name": "Area 408 (Salt Creek)"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Limited quota: 1 trapper; 15 beaver.",
+      "possession_limit": null,
+      "season_bag": 15
+     },
+     "close_date": "2027-04-30",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "both",
+     "notes": "Limited-quota Area 409 (Upper Smiths Fork, Lincoln County): 1 trapper; 15 beaver.",
+     "open_date": "2026-10-01",
+     "open_time": null,
+     "timezone": "America/Denver",
+     "zones": [
+      {
+       "area_type": "management_units",
+       "zone_id": "WY-beaver-409",
+       "zone_name": "Area 409 (Upper Smiths Fork)"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Limited quota: 1 trapper; 20 beaver.",
+      "possession_limit": null,
+      "season_bag": 20
+     },
+     "close_date": "2027-04-30",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "both",
+     "notes": "Limited-quota Area 410 (Hobble Creek, Lincoln County): 1 trapper; 20 beaver.",
+     "open_date": "2026-10-01",
+     "open_time": null,
+     "timezone": "America/Denver",
+     "zones": [
+      {
+       "area_type": "management_units",
+       "zone_id": "WY-beaver-410",
+       "zone_name": "Area 410 (Hobble Creek)"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Limited quota: 1 trapper; 35 beaver.",
+      "possession_limit": null,
+      "season_bag": 35
+     },
+     "close_date": "2027-04-30",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "both",
+     "notes": "Limited-quota Area 411 (Hams Fork River, Lincoln County): 1 trapper; 35 beaver.",
+     "open_date": "2026-10-01",
+     "open_time": null,
+     "timezone": "America/Denver",
+     "zones": [
+      {
+       "area_type": "management_units",
+       "zone_id": "WY-beaver-411",
+       "zone_name": "Area 411 (Hams Fork River)"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Limited quota: 1 trapper; 15 beaver.",
+      "possession_limit": null,
+      "season_bag": 15
+     },
+     "close_date": "2027-04-30",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "both",
+     "notes": "Limited-quota Area 412 (South Fork Fontenelle Creek, Lincoln County): 1 trapper; 15 beaver.",
+     "open_date": "2026-10-01",
+     "open_time": null,
+     "timezone": "America/Denver",
+     "zones": [
+      {
+       "area_type": "management_units",
+       "zone_id": "WY-beaver-412",
+       "zone_name": "Area 412 (South Fork Fontenelle Creek)"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Limited quota: 1 trapper; 30 beaver.",
+      "possession_limit": null,
+      "season_bag": 30
+     },
+     "close_date": "2027-04-30",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "both",
+     "notes": "Limited-quota Area 413 (Fontenelle Creek, Lincoln County): 1 trapper; 30 beaver.",
+     "open_date": "2026-10-01",
+     "open_time": null,
+     "timezone": "America/Denver",
+     "zones": [
+      {
+       "area_type": "management_units",
+       "zone_id": "WY-beaver-413",
+       "zone_name": "Area 413 (Fontenelle Creek)"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Limited quota: 1 trapper; 30 beaver.",
+      "possession_limit": null,
+      "season_bag": 30
+     },
+     "close_date": "2027-04-30",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "both",
+     "notes": "Limited-quota Area 414 (LaBarge Creek and South LaBarge Creek, Lincoln County): 1 trapper; 30 beaver. LaBarge Creek proper is closed 1 mile each direction from the confluence of Nameless Creek and LaBarge Creek.",
+     "open_date": "2026-10-01",
+     "open_time": null,
+     "timezone": "America/Denver",
+     "zones": [
+      {
+       "area_type": "management_units",
+       "zone_id": "WY-beaver-414",
+       "zone_name": "Area 414 (LaBarge Creek)"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Limited quota: 1 trapper; 10 beaver.",
+      "possession_limit": null,
+      "season_bag": 10
+     },
+     "close_date": "2027-04-30",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "both",
+     "notes": "Limited-quota Area 501 (North Pole Mountain, Albany County): 1 trapper; 10 beaver.",
+     "open_date": "2026-10-01",
+     "open_time": null,
+     "timezone": "America/Denver",
+     "zones": [
+      {
+       "area_type": "management_units",
+       "zone_id": "WY-beaver-501",
+       "zone_name": "Area 501 (North Pole Mountain)"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Limited quota: 1 trapper; 10 beaver.",
+      "possession_limit": null,
+      "season_bag": 10
+     },
+     "close_date": "2027-04-30",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "both",
+     "notes": "Limited-quota Area 502 (South Pole Mountain, Albany County): 1 trapper; 10 beaver.",
+     "open_date": "2026-10-01",
+     "open_time": null,
+     "timezone": "America/Denver",
+     "zones": [
+      {
+       "area_type": "management_units",
+       "zone_id": "WY-beaver-502",
+       "zone_name": "Area 502 (South Pole Mountain)"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Gray wolf (inside Wolf Trophy Game Management Area)",
+   "iac_reference": "2026 Wyoming Furbearing Animal Hunting and Trapping Regulations; Chapter 47 (2026 draft)",
+   "notes": "Inside the WTGMA (and Seasonal WTGMA), gray wolves are trophy game animals: they may be taken ONLY with legal firearms and archery equipment during open gray wolf hunting seasons (Chapter 47) \u2014 NOT by trapping. The 2026 Chapter 47 draft proposed Sep 15\u2013Dec 31 hunt areas, but the adopted final was not yet confirmed at verification. Not modeled as a hunting season \u2014 this entry exists so the app warns against trapping.",
+   "permit_requirements": [],
+   "scientific_name": "Canis lupus",
+   "scientific_name_note": "Standard taxonomy; not stated in WGFD guide.",
+   "scientific_name_verified": false,
+   "season_status": "closed",
+   "seasons": []
+  },
+  {
+   "common_name": "Gray wolf (outside Wolf Trophy Game Management Area)",
+   "iac_reference": "2026 Wyoming Furbearing Animal Hunting and Trapping Regulations (predatory-animal definition, W.S. section 23-1-101(a)(xii))",
+   "notes": "Outside the WTGMA and Seasonal WTGMA, gray wolves are statutory predatory animals and may be taken without a license year-round. The guide regulates snares 'for furbearing or predatory animals,' confirming trapping/snaring is a lawful method for predatory animals. All snares must have a 295-lb-or-less break-away device and 12-inch-or-less loop. Chapter 47 requires reporting of predatory-wolf kills \u2014 verify the current reporting window and method with WGFD, as the 2026 Chapter 47 final was not yet confirmed at verification.",
+   "permit_requirements": [],
+   "scientific_name": "Canis lupus",
+   "scientific_name_note": "Standard taxonomy; not stated in WGFD guide.",
+   "scientific_name_verified": false,
+   "season_status": "continuous",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit stated for predatory animals.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Predatory animal \u2014 may be taken without a license year-round. Report the kill to WGFD per Chapter 47 (verify current reporting window).",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/Denver",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "WY-wolf-predatory",
+       "zone_name": "Outside the Wolf Trophy Game Management Area and Seasonal WTGMA"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Coyote",
+   "iac_reference": "2026 Wyoming Furbearing Animal Hunting and Trapping Regulations (predatory-animal definition)",
+   "notes": "Statutory predatory animal: may be taken without a license year-round. Night hunting with artificial light on public land is closed September 1\u2013December 31. Snare break-away (295 lb) and 12-inch loop rules apply.",
+   "permit_requirements": [],
+   "scientific_name": "Canis latrans",
+   "scientific_name_note": "Standard taxonomy; not stated in WGFD guide.",
+   "scientific_name_verified": false,
+   "season_status": "continuous",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit stated for predatory animals.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Predatory animal \u2014 may be taken without a license.",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/Denver",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "WY-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Raccoon",
+   "iac_reference": "2026 Wyoming Furbearing Animal Hunting and Trapping Regulations (predatory-animal definition)",
+   "notes": "Statutory predatory animal: may be taken without a license year-round. Snare break-away (295 lb) and 12-inch loop rules apply.",
+   "permit_requirements": [],
+   "scientific_name": "Procyon lotor",
+   "scientific_name_note": "Standard taxonomy; not stated in WGFD guide.",
+   "scientific_name_verified": false,
+   "season_status": "continuous",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit stated for predatory animals.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Predatory animal \u2014 may be taken without a license.",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/Denver",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "WY-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Red fox",
+   "iac_reference": "2026 Wyoming Furbearing Animal Hunting and Trapping Regulations (predatory-animal definition)",
+   "notes": "Statutory predatory animal: may be taken without a license year-round. Snare break-away (295 lb) and 12-inch loop rules apply.",
+   "permit_requirements": [],
+   "scientific_name": "Vulpes vulpes",
+   "scientific_name_note": "Standard taxonomy; not stated in WGFD guide.",
+   "scientific_name_verified": false,
+   "season_status": "continuous",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit stated for predatory animals.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Predatory animal \u2014 may be taken without a license.",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/Denver",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "WY-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Skunk (all species)",
+   "iac_reference": "2026 Wyoming Furbearing Animal Hunting and Trapping Regulations (predatory-animal definition)",
+   "notes": "The statute lists 'skunk' generically \u2014 no species-level distinction. Statutory predatory animal: may be taken without a license year-round. Snare break-away (295 lb) and 12-inch loop rules apply.",
+   "permit_requirements": [],
+   "scientific_name": null,
+   "scientific_name_note": "Left null because the statute lists 'skunk' generically; assigning a species would be a guess.",
+   "scientific_name_verified": false,
+   "season_status": "continuous",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit stated for predatory animals.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Predatory animal \u2014 may be taken without a license.",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/Denver",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "WY-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Black-footed ferret",
+   "iac_reference": "2026 Wyoming Furbearing Animal Hunting and Trapping Regulations ('Protected animal' definition)",
+   "notes": "Defined as a 'protected animal' in the 2026 guide: any trapped protected animal must be released unharmed; if injured or killed, the trapper must notify a Department law enforcement officer as soon as reasonably possible. Federally endangered. Included so the app flags any logged take.",
+   "permit_requirements": [],
+   "scientific_name": "Mustela nigripes",
+   "scientific_name_note": "Standard taxonomy; not stated in WGFD guide.",
+   "scientific_name_verified": false,
+   "season_status": "closed",
+   "seasons": []
+  },
+  {
+   "common_name": "Fisher",
+   "iac_reference": "2026 Wyoming Furbearing Animal Hunting and Trapping Regulations ('Protected animal' definition)",
+   "notes": "Defined as a 'protected animal' in the 2026 guide: any trapped protected animal must be released unharmed; if injured or killed, the trapper must notify a Department law enforcement officer as soon as reasonably possible. Included so the app flags any logged take.",
+   "permit_requirements": [],
+   "scientific_name": "Pekania pennanti",
+   "scientific_name_note": "Standard taxonomy; not stated in WGFD guide.",
+   "scientific_name_verified": false,
+   "season_status": "closed",
+   "seasons": []
+  },
+  {
+   "common_name": "Canada lynx",
+   "iac_reference": "2026 Wyoming Furbearing Animal Hunting and Trapping Regulations ('Protected animal' definition)",
+   "notes": "Defined as a 'protected animal' (the guide's definition says 'lynx') in the 2026 guide: any trapped protected animal must be released unharmed; if injured or killed, the trapper must notify a Department law enforcement officer as soon as reasonably possible. Included so the app flags any logged take.",
+   "permit_requirements": [],
+   "scientific_name": "Lynx canadensis",
+   "scientific_name_note": "Standard taxonomy; not stated in WGFD guide.",
+   "scientific_name_verified": false,
+   "season_status": "closed",
+   "seasons": []
+  },
+  {
+   "common_name": "Pika",
+   "iac_reference": "2026 Wyoming Furbearing Animal Hunting and Trapping Regulations ('Protected animal' definition)",
+   "notes": "Defined as a 'protected animal' in the 2026 guide: any trapped protected animal must be released unharmed; if injured or killed, the trapper must notify a Department law enforcement officer as soon as reasonably possible. Included so the app flags any logged take.",
+   "permit_requirements": [],
+   "scientific_name": "Ochotona princeps",
+   "scientific_name_note": "Standard taxonomy; not stated in WGFD guide.",
+   "scientific_name_verified": false,
+   "season_status": "closed",
+   "seasons": []
+  },
+  {
+   "common_name": "Wolverine",
+   "iac_reference": "2026 Wyoming Furbearing Animal Hunting and Trapping Regulations ('Protected animal' definition)",
+   "notes": "Defined as a 'protected animal' in the 2026 guide: any trapped protected animal must be released unharmed; if injured or killed, the trapper must notify a Department law enforcement officer as soon as reasonably possible. Included so the app flags any logged take.",
+   "permit_requirements": [],
+   "scientific_name": "Gulo gulo",
+   "scientific_name_note": "Standard taxonomy; not stated in WGFD guide.",
+   "scientific_name_verified": false,
+   "season_status": "closed",
+   "seasons": []
+  },
+  {
+   "common_name": "River otter",
+   "iac_reference": "2026 Wyoming Furbearing Animal Hunting and Trapping Regulations (no open season)",
+   "notes": "No open season in the 2026 furbearing regulations \u2014 the guide lists river otter only as a species trappers are asked to report sightings of (a non-furbearer). Included so the app flags any logged take.",
+   "permit_requirements": [],
+   "scientific_name": "Lontra canadensis",
+   "scientific_name_note": "Standard taxonomy; not stated in WGFD guide.",
+   "scientific_name_verified": false,
+   "season_status": "closed",
+   "seasons": []
+  },
+  {
+   "common_name": "Swift fox",
+   "iac_reference": "2026 Wyoming Furbearing Animal Hunting and Trapping Regulations (no open season)",
+   "notes": "No open season in the 2026 furbearing regulations \u2014 the guide lists swift fox only as a species trappers are asked to report sightings of (a non-furbearer). Included so the app flags any logged take.",
+   "permit_requirements": [],
+   "scientific_name": "Vulpes velox",
+   "scientific_name_note": "Standard taxonomy; not stated in WGFD guide.",
+   "scientific_name_verified": false,
+   "season_status": "closed",
+   "seasons": []
+  },
+  {
+   "common_name": "Gray fox",
+   "iac_reference": "2026 Wyoming Furbearing Animal Hunting and Trapping Regulations (no open season)",
+   "notes": "No open season in the 2026 furbearing regulations \u2014 the guide lists gray fox only as a species trappers are asked to report sightings of (a non-furbearer). Included so the app flags any logged take.",
+   "permit_requirements": [],
+   "scientific_name": "Urocyon cinereoargenteus",
+   "scientific_name_note": "Standard taxonomy; not stated in WGFD guide.",
+   "scientific_name_verified": false,
+   "season_status": "closed",
+   "seasons": []
+  },
+  {
+   "common_name": "Spotted skunk",
+   "iac_reference": "2026 Wyoming Furbearing Animal Hunting and Trapping Regulations (no open season)",
+   "notes": "No open season in the 2026 furbearing regulations \u2014 the guide lists spotted skunk only as a species trappers are asked to report sightings of (a non-furbearer). Included so the app flags any logged take.",
+   "permit_requirements": [],
+   "scientific_name": "Spilogale gracilis",
+   "scientific_name_note": "Standard taxonomy; not stated in WGFD guide.",
+   "scientific_name_verified": false,
+   "season_status": "closed",
+   "seasons": []
+  },
+  {
+   "common_name": "Ringtail",
+   "iac_reference": "2026 Wyoming Furbearing Animal Hunting and Trapping Regulations (no open season)",
+   "notes": "No open season in the 2026 furbearing regulations \u2014 the guide lists ringtail only as a species trappers are asked to report sightings of (a non-furbearer). Included so the app flags any logged take.",
+   "permit_requirements": [],
+   "scientific_name": "Bassariscus astutus",
+   "scientific_name_note": "Standard taxonomy; not stated in WGFD guide.",
+   "scientific_name_verified": false,
+   "season_status": "closed",
+   "seasons": []
+  },
+  {
+   "common_name": "Least weasel",
+   "iac_reference": "2026 Wyoming Furbearing Animal Hunting and Trapping Regulations (no open season)",
+   "notes": "No open season in the 2026 furbearing regulations \u2014 the guide lists least weasel only as a species trappers are asked to report sightings of (a non-furbearer). Distinct from the generic 'Weasel' season entry. Included so the app flags any logged take.",
+   "permit_requirements": [],
+   "scientific_name": "Mustela nivalis",
+   "scientific_name_note": "Standard taxonomy; not stated in WGFD guide.",
+   "scientific_name_verified": false,
+   "season_status": "closed",
+   "seasons": []
+  }
+ ],
+ "state": "WY",
+ "state_name": "Wyoming",
+ "verification": {
+  "confirmation_notes": "2026 Wyoming Furbearing Animal Hunting and Trapping Regulations guide verified 2026-09-18. All furbearer season dates, the Area 1 definition, marten Area 2 (Snowy Range) dates, all beaver limited-quota areas with quotas, all beaver closed areas, the 'protected animal' definition, the predatory-animal definition (including gray wolf outside the WTGMA), the snare break-away rule, and the trapped-protected-animal release/report rules read directly from the guide. Wolf: the 2026 Chapter 47 draft (05.12.2026.2, presented July 14\u201315, 2026) restricts trophy-game wolves to firearms/archery during open hunting seasons; the adopted final was NOT yet confirmed, so no 2026\u201327 wolf hunting dates are modeled.",
+  "known_gaps": [
+   "Scientific names are standard taxonomy, NOT stated in the WGFD guide \u2014 all flagged scientific_name_verified=false; 'Weasel' and 'Skunk' are null because the guide/statute are generic.",
+   "Gray wolf inside the WTGMA: no trapping season exists (firearms/archery only under Chapter 47); the 2026 Chapter 47 adopted final was not confirmed \u2014 its hunting dates are not modeled here.",
+   "Gray wolf outside the WTGMA is a predatory animal (may be taken without a license); the Chapter 47 predatory-wolf reporting requirement was not confirmed from the adopted 2026 final \u2014 verify the current reporting window with WGFD.",
+   "Section 4(b) closed areas (referenced in the Area 1 description) were not fully enumerated \u2014 users must check the guide for Section 4(b) closures.",
+   "Detailed lawful-method rules (trap-check periods, trap registration numbers) are not modeled \u2014 only the major snare rule and protection warnings are included.",
+   "River otter, swift fox, gray fox, spotted skunk, ringtail, and least weasel have no open season in the 2026 guide; they are modeled closed on that basis."
+  ],
+  "regulation_year_confirmed": true
+ },
+ "license_url": "https://wgfd.wyo.gov/licenses-applications",
+ "license_vendor": "Wyoming Game and Fish Department (own portal)",
+ "regs_url": "https://wgfd.wyo.gov/media/34090/download?inline",
+ "regs_kind": "pdf"
+,
+ "warden_directory": {
+  "label": "Report a violation",
+  "url": "http://wgfd.wyo.gov/law-enforcement/stop-poaching",
+  "kind": "hotline",
+  "note": "Stop Poaching: 1-877-943-3847 (1-877-WGFD-TIP); out-of-state 1-307-777-4330; text WGFD to TIP411 (847-411); rewards $100–$5,000"
+ }
+}

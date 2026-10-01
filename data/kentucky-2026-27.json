@@ -1,0 +1,1179 @@
+{
+ "schema_version": "1.1",
+ "state": "KY",
+ "state_name": "Kentucky",
+ "season_year": "2026-27",
+ "retrieved_at": "2026-09-18",
+ "disclaimer": "Reminder reference only — NOT legal authority. Season dates, zones, and limits are set annually and can change. Always verify current regulations with the Kentucky Department of Fish and Wildlife Resources before hunting or trapping.",
+ "sources": [
+  {
+   "id": "ky-furbearer-guide",
+   "title": "KDFWR 2026-27 Furbearer and Trapping Guide",
+   "url": "https://fw.ky.gov/Hunt/Documents/HuntingGuideFurbearer.pdf",
+   "type": "agency_booklet",
+   "notes": "Official guide; archived locally. Water-set extension table and bobcat 'Changes Pending' box observed."
+  },
+  {
+   "id": "ky-301kar2-251",
+   "title": "301 KAR 2:251 (hunting and trapping seasons and limits for furbearers)",
+   "url": "https://apps.legislature.ky.gov/law/kar/titles/301/002/251/3066/",
+   "type": "administrative_code",
+   "notes": "Kentucky administrative regulation for furbearer seasons and limits. Official KY Legislature KAR site."
+  }
+ ],
+ "license_summary": {
+  "licenses": "A valid hunting license is required while hunting furbearers; a bobcat hunting permit is required while hunting bobcat; a trapping license is required while trapping furbearers (301 KAR 2:251 §2).",
+  "youth_week": "Free Youth Hunting & Trapping Week: Dec. 26, 2026 – Jan. 1, 2027 (youth may hunt or trap furbearers license-free for seven consecutive days beginning the Saturday after Christmas; all other statewide requirements apply).",
+  "timezone_note": "Western Kentucky observes Central Time; the rest of the state observes Eastern Time. Season dates shown are statewide calendar dates."
+ },
+ "species": [
+  {
+   "common_name": "Beaver",
+   "scientific_name": "Castor canadensis",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Kentucky Department of Fish and Wildlife Resources regulations.",
+   "iac_reference": "301 KAR 2:251",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-16",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "KY-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Trapping: Nov. 16, 2026 – Feb. 28, 2027; no limit. Water sets may remain set through Mar. 31, 2027 — see the separate Mar. 1–31 water-set-only season entry (guide p. 16)."
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-11-16",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "KY-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Hunting: Nov. 16, 2026 – Feb. 28, 2027; daylight hours only; no limit."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2027-03-01",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "KY-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Water sets ONLY, Mar. 1–31, 2027: per the KY hunting & trapping guide (p. 16), water sets for river otter, muskrat, mink, beaver, red fox, gray fox, weasel, and striped skunk may remain set through Mar. 31, 2027. Land sets for this species closed Feb. 28, 2027."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Bobcat",
+   "scientific_name": "Lynx rufus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Kentucky Department of Fish and Wildlife Resources regulations.",
+   "iac_reference": "301 KAR 2:251",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-16",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "KY-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Trapping: Nov. 16, 2026 – Feb. 28, 2027. Bobcat permit required to trap or hunt; harvests must be reported/telechecked and tagged."
+     },
+     "notes": "Trapping: Nov. 16, 2026 – Feb. 28, 2027. Bobcat permit required to trap or hunt; harvests must be reported/telechecked and tagged."
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-11-21",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "KY-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": 5,
+      "possession_limit": null,
+      "limit_notes": "limit 5 per hunter per season, no more than 3 by gun."
+     },
+     "notes": "Night hunting: Nov. 21, 2026 – Feb. 28, 2027 (Changes Pending for 2026-27; night-hunting hours subject to revision). Daylight hours otherwise within the Nov. 16 – Feb. 28 furbearer season; limit 5 per hunter per season, no more than 3 by gun; bobcat permit required; all harvests must be reported/telechecked and tagged."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "The 2026-27 Kentucky Hunting Guide flags bobcat night-hunting hours as ‘Changes Pending’; the pending change is not modeled as a season."
+  },
+  {
+   "common_name": "Coyote",
+   "scientific_name": "Canis latrans",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Kentucky Department of Fish and Wildlife Resources regulations.",
+   "iac_reference": "301 KAR 2:251",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-16",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "KY-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Trapping: Nov. 16, 2026 – Feb. 28, 2027; no limit."
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "KY-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Hunting: year-round, day and night, no limit."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Gray fox",
+   "scientific_name": "Urocyon cinereoargenteus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Kentucky Department of Fish and Wildlife Resources regulations.",
+   "iac_reference": "301 KAR 2:251",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-16",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "KY-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Trapping: Nov. 16, 2026 – Feb. 28, 2027; no limit. Water sets may remain set through Mar. 31, 2027 — see the separate Mar. 1–31 water-set-only season entry (guide p. 16)."
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-11-16",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "KY-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Hunting: Nov. 16, 2026 – Feb. 28, 2027; no limit."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2027-03-01",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "KY-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Water sets ONLY, Mar. 1–31, 2027: per the KY hunting & trapping guide (p. 16), water sets for river otter, muskrat, mink, beaver, red fox, gray fox, weasel, and striped skunk may remain set through Mar. 31, 2027. Land sets for this species closed Feb. 28, 2027."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Least weasel",
+   "scientific_name": "Mustela nivalis",
+   "scientific_name_verified": false,
+   "scientific_name_note": "The Kentucky Hunting Guide distinguishes least and long-tailed weasel in the furbearer section.",
+   "iac_reference": "301 KAR 2:251",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-16",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "KY-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Trapping: Nov. 16, 2026 – Feb. 28, 2027; no limit. Water sets may remain set through Mar. 31, 2027 — see the separate Mar. 1–31 water-set-only season entry (guide p. 16)."
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-11-16",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "KY-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Hunting: Nov. 16, 2026 – Feb. 28, 2027; no limit."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2027-03-01",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "KY-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Water sets ONLY, Mar. 1–31, 2027: per the KY hunting & trapping guide (p. 16), water sets for river otter, muskrat, mink, beaver, red fox, gray fox, weasel, and striped skunk may remain set through Mar. 31, 2027. Land sets for this species closed Feb. 28, 2027."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Long-tailed weasel",
+   "scientific_name": "Mustela frenata",
+   "scientific_name_verified": false,
+   "scientific_name_note": "The Kentucky Hunting Guide distinguishes least and long-tailed weasel in the furbearer section.",
+   "iac_reference": "301 KAR 2:251",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-16",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "KY-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Trapping: Nov. 16, 2026 – Feb. 28, 2027; no limit. Water sets may remain set through Mar. 31, 2027 — see the separate Mar. 1–31 water-set-only season entry (guide p. 16)."
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-11-16",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "KY-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Hunting: Nov. 16, 2026 – Feb. 28, 2027; no limit."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2027-03-01",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "KY-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Water sets ONLY, Mar. 1–31, 2027: per the KY hunting & trapping guide (p. 16), water sets for river otter, muskrat, mink, beaver, red fox, gray fox, weasel, and striped skunk may remain set through Mar. 31, 2027. Land sets for this species closed Feb. 28, 2027."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Mink",
+   "scientific_name": "Neogale vison",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Kentucky Department of Fish and Wildlife Resources regulations.",
+   "iac_reference": "301 KAR 2:251",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-16",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "KY-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Trapping: Nov. 16, 2026 – Feb. 28, 2027; no limit. Water sets may remain set through Mar. 31, 2027 — see the separate Mar. 1–31 water-set-only season entry (guide p. 16)."
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-11-16",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "KY-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Hunting: Nov. 16, 2026 – Feb. 28, 2027; no limit."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2027-03-01",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "KY-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Water sets ONLY, Mar. 1–31, 2027: per the KY hunting & trapping guide (p. 16), water sets for river otter, muskrat, mink, beaver, red fox, gray fox, weasel, and striped skunk may remain set through Mar. 31, 2027. Land sets for this species closed Feb. 28, 2027."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Muskrat",
+   "scientific_name": "Ondatra zibethicus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Kentucky Department of Fish and Wildlife Resources regulations.",
+   "iac_reference": "301 KAR 2:251",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-16",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "KY-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Trapping: Nov. 16, 2026 – Feb. 28, 2027; no limit. Water sets may remain set through Mar. 31, 2027 — see the separate Mar. 1–31 water-set-only season entry (guide p. 16)."
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-11-16",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "KY-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Hunting: Nov. 16, 2026 – Feb. 28, 2027; no limit."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2027-03-01",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "KY-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Water sets ONLY, Mar. 1–31, 2027: per the KY hunting & trapping guide (p. 16), water sets for river otter, muskrat, mink, beaver, red fox, gray fox, weasel, and striped skunk may remain set through Mar. 31, 2027. Land sets for this species closed Feb. 28, 2027."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Opossum",
+   "scientific_name": "Didelphis virginiana",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Kentucky Department of Fish and Wildlife Resources regulations.",
+   "iac_reference": "301 KAR 2:251",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-16",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "KY-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Trapping: Nov. 16, 2026 – Feb. 28, 2027; no limit."
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-10-01",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "KY-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Hunting: Oct. 1, 2026 – Feb. 28, 2027; day and night; no limit."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Raccoon",
+   "scientific_name": "Procyon lotor",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Kentucky Department of Fish and Wildlife Resources regulations.",
+   "iac_reference": "301 KAR 2:251",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-16",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "KY-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Trapping: Nov. 16, 2026 – Feb. 28, 2027; no limit."
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-10-01",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "KY-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Hunting: Oct. 1, 2026 – Feb. 28, 2027; day and night; no limit."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Red fox",
+   "scientific_name": "Vulpes vulpes",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Kentucky Department of Fish and Wildlife Resources regulations.",
+   "iac_reference": "301 KAR 2:251",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-16",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "KY-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Trapping: Nov. 16, 2026 – Feb. 28, 2027; no limit. Water sets may remain set through Mar. 31, 2027 — see the separate Mar. 1–31 water-set-only season entry (guide p. 16)."
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-11-16",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "KY-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Hunting: Nov. 16, 2026 – Feb. 28, 2027; no limit."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2027-03-01",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "KY-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Water sets ONLY, Mar. 1–31, 2027: per the KY hunting & trapping guide (p. 16), water sets for river otter, muskrat, mink, beaver, red fox, gray fox, weasel, and striped skunk may remain set through Mar. 31, 2027. Land sets for this species closed Feb. 28, 2027."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "River otter",
+   "scientific_name": "Lontra canadensis",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Kentucky Department of Fish and Wildlife Resources regulations.",
+   "iac_reference": "301 KAR 2:251",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-16",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "KY-zone-1",
+       "zone_name": "Zone 1",
+       "area_type": "counties",
+       "counties": [
+        "Anderson",
+        "Ballard",
+        "Bath",
+        "Boone",
+        "Bourbon",
+        "Bracken",
+        "Breckinridge",
+        "Bullitt",
+        "Caldwell",
+        "Calloway",
+        "Campbell",
+        "Carlisle",
+        "Carroll",
+        "Christian",
+        "Crittenden",
+        "Daviess",
+        "Fayette",
+        "Fleming",
+        "Franklin",
+        "Fulton",
+        "Gallatin",
+        "Grant",
+        "Graves",
+        "Grayson",
+        "Hancock",
+        "Hardin",
+        "Harrison",
+        "Henderson",
+        "Henry",
+        "Hickman",
+        "Hopkins",
+        "Jefferson",
+        "Kenton",
+        "LaRue",
+        "Livingston",
+        "Lyon",
+        "Marshall",
+        "Mason",
+        "Meade",
+        "McCracken",
+        "McLean",
+        "Muhlenberg",
+        "Nelson",
+        "Nicholas",
+        "Ohio",
+        "Oldham",
+        "Owen",
+        "Pendleton",
+        "Robertson",
+        "Rowan",
+        "Scott",
+        "Shelby",
+        "Spencer",
+        "Trigg",
+        "Trimble",
+        "Union",
+        "Webster",
+        "Woodford"
+       ]
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "limit 10 otters, no more than 6 from Zone 2."
+     },
+     "notes": "Zone 1 (western Kentucky): trapping Nov. 16, 2026 – Feb. 28, 2027; limit 10 otters, no more than 6 from Zone 2. Water sets may remain set through Mar. 31, 2027 — see the separate Mar. 1–31 water-set-only season entry (guide p. 16)."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-16",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "KY-zone-2",
+       "zone_name": "Zone 2",
+       "area_type": "special_areas"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "limit 6 otters."
+     },
+     "notes": "Zone 2 (eastern Kentucky): trapping Nov. 16, 2026 – Feb. 28, 2027; limit 6 otters. Water sets may remain set through Mar. 31, 2027 — see the separate Mar. 1–31 water-set-only season entry (guide p. 16)."
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-11-16",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "KY-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "statewide limit 10, no more than 6 from Zone 2."
+     },
+     "notes": "Hunting: Nov. 16, 2026 – Feb. 28, 2027; statewide limit 10, no more than 6 from Zone 2."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2027-03-01",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "KY-zone-1",
+       "zone_name": "Zone 1",
+       "area_type": "counties",
+       "counties": [
+        "Anderson",
+        "Ballard",
+        "Bath",
+        "Boone",
+        "Bourbon",
+        "Bracken",
+        "Breckinridge",
+        "Bullitt",
+        "Caldwell",
+        "Calloway",
+        "Campbell",
+        "Carlisle",
+        "Carroll",
+        "Christian",
+        "Crittenden",
+        "Daviess",
+        "Fayette",
+        "Fleming",
+        "Franklin",
+        "Fulton",
+        "Gallatin",
+        "Grant",
+        "Graves",
+        "Grayson",
+        "Hancock",
+        "Hardin",
+        "Harrison",
+        "Henderson",
+        "Henry",
+        "Hickman",
+        "Hopkins",
+        "Jefferson",
+        "Kenton",
+        "LaRue",
+        "Livingston",
+        "Lyon",
+        "Marshall",
+        "Mason",
+        "Meade",
+        "McCracken",
+        "McLean",
+        "Muhlenberg",
+        "Nelson",
+        "Nicholas",
+        "Ohio",
+        "Oldham",
+        "Owen",
+        "Pendleton",
+        "Robertson",
+        "Rowan",
+        "Scott",
+        "Shelby",
+        "Spencer",
+        "Trigg",
+        "Trimble",
+        "Union",
+        "Webster",
+        "Woodford"
+       ]
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "limit 10 otters, no more than 6 from Zone 2."
+     },
+     "notes": "Water sets ONLY, Mar. 1–31, 2027: per the KY hunting & trapping guide (p. 16), water sets for river otter, muskrat, mink, beaver, red fox, gray fox, weasel, and striped skunk may remain set through Mar. 31, 2027. Land sets for this species closed Feb. 28, 2027. Applies in Zone 1."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2027-03-01",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "KY-zone-2",
+       "zone_name": "Zone 2",
+       "area_type": "special_areas"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "limit 6 otters."
+     },
+     "notes": "Water sets ONLY, Mar. 1–31, 2027: per the KY hunting & trapping guide (p. 16), water sets for river otter, muskrat, mink, beaver, red fox, gray fox, weasel, and striped skunk may remain set through Mar. 31, 2027. Land sets for this species closed Feb. 28, 2027. Applies in Zone 2."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Striped skunk",
+   "scientific_name": "Mephitis mephitis",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Kentucky Department of Fish and Wildlife Resources regulations.",
+   "iac_reference": "301 KAR 2:251",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-16",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "KY-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Trapping: Nov. 16, 2026 – Feb. 28, 2027; no limit. Water sets may remain set through Mar. 31, 2027 — see the separate Mar. 1–31 water-set-only season entry (guide p. 16)."
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-11-16",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "KY-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Hunting: Nov. 16, 2026 – Feb. 28, 2027; no limit."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2027-03-01",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "KY-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Water sets ONLY, Mar. 1–31, 2027: per the KY hunting & trapping guide (p. 16), water sets for river otter, muskrat, mink, beaver, red fox, gray fox, weasel, and striped skunk may remain set through Mar. 31, 2027. Land sets for this species closed Feb. 28, 2027."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  }
+ ],
+ "verification": {
+  "regulation_year_confirmed": true,
+  "confirmation_notes": "Official KDFWR 2026-27 Furbearer and Trapping guide (fw.ky.gov), text-extracted 2026-09-18, cross-checked with 301 KAR 2:251. The guide's 'Changes Pending' bobcat night-hunting box is NOT modeled. The March water-set extension is modeled as separate Mar. 1–31, 2027 trapping entries (water sets only) for river otter (both zones), muskrat, mink, beaver, red fox, gray fox, both weasels, and striped skunk.",
+  "known_gaps": [
+   "Otter Zone 1/Zone 2 county lists were not transcribed into this dataset; zones are descriptive only — verify the county before applying the Zone 2 cap.",
+   "Bobcat night-hunting rule changes were labeled 'Changes Pending' in the guide and are NOT modeled.",
+   "Scientific names are standard taxonomy, not stated in KDFWR regulations."
+  ]
+ },
+ "provisional": false,
+ "license_url": "https://app.fw.ky.gov/license/waonlinefront.aspx",
+ "license_vendor": "Kentucky Dept. of Fish & Wildlife Resources (in-house online sales)",
+ "regs_url": "https://fw.ky.gov/Hunt/Documents/HuntingGuideFurbearer.pdf",
+ "regs_kind": "pdf"
+,
+ "warden_directory": {
+  "label": "Report a violation",
+  "url": "https://fw.ky.gov/News/Pages/Six-person-poaching-ring-dismantled-after-year-long-investigation.aspx",
+  "kind": "hotline",
+  "note": "KDFWR poaching report: 1-800-25-ALERT (1-800-252-5378); text KFWLAW to 847411"
+ }
+}

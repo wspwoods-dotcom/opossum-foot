@@ -1,0 +1,2146 @@
+{
+ "schema_version": "1.1",
+ "state": "ID",
+ "state_name": "Idaho",
+ "season_year": "2026-27",
+ "provisional": false,
+ "retrieved_at": "2026-09-18",
+ "disclaimer": "Reminder reference only — NOT legal authority. Seasons are subject to change after the booklets were printed (notably wolf trapping, which is the subject of a federal lawsuit). Always verify current seasons, emergency changes, unit boundaries, and the federal-court closure map with IDFG before trapping.",
+ "license_summary": {
+  "trapping_license": "An Idaho trapping license is required. Mandatory furtaker report due to Fish and Game by July 31 each year (online via GoOutdoorsIdaho.com or paper); failure to report blocks next year's license.",
+  "mandatory_check": "Bobcat and river otter: mandatory check, report, and pelt tags. Raw bobcat pelts need an official export tag; raw otter pelts need an official state export tag within 72 hours after the close of season.",
+  "controlled_beaver": "Controlled Beaver Trapping Units 201, 202, 203 require a valid unit permit; applications due Sep 15; contact the listed person by Oct 14; mandatory controlled beaver report within 10 days of the season close.",
+  "wolf": "Wolf trapping requires a trapping license with Wolf Trapper Education course validation plus wolf tag(s)."
+ },
+ "species": [
+  {
+   "common_name": "American badger",
+   "scientific_name": "Taxidea taxus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the IDFG booklets.",
+   "iac_reference": "2026-27 IDFG Upland Game, Turkey & Furbearer Seasons & Rules / 2026-27 IDFG Big Game Seasons & Rules (wolf)",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-07-01",
+     "close_date": "2027-06-30",
+     "open_time": null,
+     "timezone": "America/Los_Angeles",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ID-panhandle",
+       "zone_name": "Panhandle Region (Benewah, Bonner, Boundary, Kootenai, Shoshone)",
+       "area_type": "management_units"
+      },
+      {
+       "zone_id": "ID-clearwater",
+       "zone_name": "Clearwater Region (Clearwater, Idaho, Latah, Lewis, Nez Perce)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Year-round. Badger may also be hunted (see booklet hunting rules)."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-07-01",
+     "close_date": "2027-06-30",
+     "open_time": null,
+     "timezone": "America/Boise",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ID-southwest",
+       "zone_name": "Southwest Region (Ada, Adams, Boise, Canyon, Elmore, Gem, Owyhee, Payette, Valley, Washington)",
+       "area_type": "management_units"
+      },
+      {
+       "zone_id": "ID-magic-valley",
+       "zone_name": "Magic Valley Region (Blaine, Camas, Cassia, Gooding, Jerome, Lincoln, Minidoka, Twin Falls)",
+       "area_type": "management_units"
+      },
+      {
+       "zone_id": "ID-southeast",
+       "zone_name": "Southeast Region (Bannock, Bear Lake, Bingham, Caribou, Franklin, Oneida, Power)",
+       "area_type": "management_units"
+      },
+      {
+       "zone_id": "ID-upper-snake",
+       "zone_name": "Upper Snake Region (Bonneville, Butte, Clark, Fremont, Jefferson, Madison, Teton)",
+       "area_type": "management_units"
+      },
+      {
+       "zone_id": "ID-salmon",
+       "zone_name": "Salmon Region (Custer, Lemhi)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Year-round. Badger may also be hunted (see booklet hunting rules)."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "American beaver",
+   "scientific_name": "Castor canadensis",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the IDFG booklets.",
+   "iac_reference": "2026-27 IDFG Upland Game, Turkey & Furbearer Seasons & Rules / 2026-27 IDFG Big Game Seasons & Rules (wolf)",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-15",
+     "close_date": "2027-04-15",
+     "open_time": null,
+     "timezone": "America/Los_Angeles",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ID-panhandle",
+       "zone_name": "Panhandle Region (Benewah, Bonner, Boundary, Kootenai, Shoshone)",
+       "area_type": "management_units"
+      },
+      {
+       "zone_id": "ID-clearwater",
+       "zone_name": "Clearwater Region (Clearwater, Idaho, Latah, Lewis, Nez Perce)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Beaver may be taken only with a steel trap, snare, firearm, or bow and arrow per booklet method rules. Numerous closed drainages/WMAs in the booklet — see regional exceptions."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-15",
+     "close_date": "2027-04-15",
+     "open_time": null,
+     "timezone": "America/Boise",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ID-southwest",
+       "zone_name": "Southwest Region (Ada, Adams, Boise, Canyon, Elmore, Gem, Owyhee, Payette, Valley, Washington)",
+       "area_type": "management_units"
+      },
+      {
+       "zone_id": "ID-magic-valley",
+       "zone_name": "Magic Valley Region (Blaine, Camas, Cassia, Gooding, Jerome, Lincoln, Minidoka, Twin Falls)",
+       "area_type": "management_units"
+      },
+      {
+       "zone_id": "ID-southeast",
+       "zone_name": "Southeast Region (Bannock, Bear Lake, Bingham, Caribou, Franklin, Oneida, Power)",
+       "area_type": "management_units"
+      },
+      {
+       "zone_id": "ID-upper-snake",
+       "zone_name": "Upper Snake Region (Bonneville, Butte, Clark, Fremont, Jefferson, Madison, Teton)",
+       "area_type": "management_units"
+      },
+      {
+       "zone_id": "ID-salmon",
+       "zone_name": "Salmon Region (Custer, Lemhi)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Beaver may be taken only with a steel trap, snare, firearm, or bow and arrow per booklet method rules. Numerous closed drainages/WMAs in the booklet — see regional exceptions."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-22",
+     "close_date": "2027-04-15",
+     "open_time": null,
+     "timezone": "America/Boise",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ID-cbu-201",
+       "zone_name": "Controlled Beaver Trapping Unit 201 (Mink Creek drainage, Bannock County — except East Fork and West Fork Mink Creek)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": 5,
+      "possession_limit": null,
+      "limit_notes": "5 permits for Unit 201."
+     },
+     "notes": "Controlled trapping unit — valid Unit 201 permit required. Mandatory controlled beaver report within 10 days of close. Applications due Sep 15. Contact the booklet's Unit 201 description; successful applicants must contact the listed person by Oct 14."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-22",
+     "close_date": "2027-04-15",
+     "open_time": null,
+     "timezone": "America/Boise",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ID-cbu-202",
+       "zone_name": "Controlled Beaver Trapping Unit 202 (Pebble Creek drainage, Caribou County)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": 5,
+      "possession_limit": null,
+      "limit_notes": "5 permits for Unit 202."
+     },
+     "notes": "Controlled trapping unit — valid Unit 202 permit required. Mandatory controlled beaver report within 10 days of close. Applications due Sep 15; contact listed person by Oct 14."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-22",
+     "close_date": "2027-04-15",
+     "open_time": null,
+     "timezone": "America/Boise",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ID-cbu-203",
+       "zone_name": "Controlled Beaver Trapping Unit 203 (Toponce Creek drainage, Caribou County)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": 5,
+      "possession_limit": null,
+      "limit_notes": "5 permits for Unit 203."
+     },
+     "notes": "Controlled trapping unit — valid Unit 203 permit required. Mandatory controlled beaver report within 10 days of close. Applications due Sep 15; contact listed person by Oct 14."
+    }
+   ],
+   "permit_requirements": [
+    "Idaho trapping license (applications for controlled beaver units due Sep 15 each year)"
+   ],
+   "notes": "Closed drainages and WMAs (e.g., Boise River WMA, many Elmore/Valley/Washington/Clark/Teton County drainages) are listed as regional exceptions in the booklet and are not enumerated here.",
+   "county_notes": "About 15 county-specific beaver drainage closures (Ada, Boise, Elmore, Valley, Washington, Blaine, Camas, Gooding, Bannock, Bingham, Caribou, Franklin, Bonneville, Clark, Teton) — see the current proclamation. 10-foot setback from public trails."
+  },
+  {
+   "common_name": "Bobcat",
+   "scientific_name": "Lynx rufus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the IDFG booklets.",
+   "iac_reference": "2026-27 IDFG Upland Game, Turkey & Furbearer Seasons & Rules / 2026-27 IDFG Big Game Seasons & Rules (wolf)",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-12-14",
+     "close_date": "2027-02-16",
+     "open_time": null,
+     "timezone": "America/Los_Angeles",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ID-panhandle",
+       "zone_name": "Panhandle Region (Benewah, Bonner, Boundary, Kootenai, Shoshone)",
+       "area_type": "management_units"
+      },
+      {
+       "zone_id": "ID-clearwater",
+       "zone_name": "Clearwater Region (Clearwater, Idaho, Latah, Lewis, Nez Perce)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Mandatory check, report, and pelt tag required (see booklet pages 34-35). Raw bobcat pelt must have an official export tag; possession rules and sale rules apply."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-12-14",
+     "close_date": "2027-02-16",
+     "open_time": null,
+     "timezone": "America/Boise",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ID-southwest",
+       "zone_name": "Southwest Region (Ada, Adams, Boise, Canyon, Elmore, Gem, Owyhee, Payette, Valley, Washington)",
+       "area_type": "management_units"
+      },
+      {
+       "zone_id": "ID-magic-valley",
+       "zone_name": "Magic Valley Region (Blaine, Camas, Cassia, Gooding, Jerome, Lincoln, Minidoka, Twin Falls)",
+       "area_type": "management_units"
+      },
+      {
+       "zone_id": "ID-southeast",
+       "zone_name": "Southeast Region (Bannock, Bear Lake, Bingham, Caribou, Franklin, Oneida, Power)",
+       "area_type": "management_units"
+      },
+      {
+       "zone_id": "ID-upper-snake",
+       "zone_name": "Upper Snake Region (Bonneville, Butte, Clark, Fremont, Jefferson, Madison, Teton)",
+       "area_type": "management_units"
+      },
+      {
+       "zone_id": "ID-salmon",
+       "zone_name": "Salmon Region (Custer, Lemhi)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Mandatory check, report, and pelt tag required (see booklet pages 34-35). Raw bobcat pelt must have an official export tag; possession rules and sale rules apply."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "Bobcat may also be hunted in the open season (hound hunting allowed)."
+  },
+  {
+   "common_name": "Red fox (includes all color phases found in Idaho)",
+   "scientific_name": "Vulpes vulpes",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the IDFG booklets.",
+   "iac_reference": "2026-27 IDFG Upland Game, Turkey & Furbearer Seasons & Rules / 2026-27 IDFG Big Game Seasons & Rules (wolf)",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-10",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/Los_Angeles",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ID-panhandle",
+       "zone_name": "Panhandle Region (Benewah, Bonner, Boundary, Kootenai, Shoshone)",
+       "area_type": "management_units"
+      },
+      {
+       "zone_id": "ID-clearwater",
+       "zone_name": "Clearwater Region (Clearwater, Idaho, Latah, Lewis, Nez Perce)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Fox may also be hunted in the open season (hound hunting allowed)."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-07-01",
+     "close_date": "2027-06-30",
+     "open_time": null,
+     "timezone": "America/Boise",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ID-southwest",
+       "zone_name": "Southwest Region (Ada, Adams, Boise, Canyon, Elmore, Gem, Owyhee, Payette, Valley, Washington)",
+       "area_type": "management_units"
+      },
+      {
+       "zone_id": "ID-magic-valley",
+       "zone_name": "Magic Valley Region (Blaine, Camas, Cassia, Gooding, Jerome, Lincoln, Minidoka, Twin Falls)",
+       "area_type": "management_units"
+      },
+      {
+       "zone_id": "ID-southeast",
+       "zone_name": "Southeast Region (Bannock, Bear Lake, Bingham, Caribou, Franklin, Oneida, Power)",
+       "area_type": "management_units"
+      },
+      {
+       "zone_id": "ID-upper-snake",
+       "zone_name": "Upper Snake Region (Bonneville, Butte, Clark, Fremont, Jefferson, Madison, Teton)",
+       "area_type": "management_units"
+      },
+      {
+       "zone_id": "ID-salmon",
+       "zone_name": "Salmon Region (Custer, Lemhi)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Year-round. Fox may also be hunted (hound hunting allowed)."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "American marten",
+   "scientific_name": "Martes americana",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the IDFG booklets.",
+   "iac_reference": "2026-27 IDFG Upland Game, Turkey & Furbearer Seasons & Rules / 2026-27 IDFG Big Game Seasons & Rules (wolf)",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-01-31",
+     "open_time": null,
+     "timezone": "America/Los_Angeles",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ID-panhandle",
+       "zone_name": "Panhandle Region (Benewah, Bonner, Boundary, Kootenai, Shoshone)",
+       "area_type": "management_units"
+      },
+      {
+       "zone_id": "ID-clearwater",
+       "zone_name": "Clearwater Region (Clearwater, Idaho, Latah, Lewis, Nez Perce)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Trappers are encouraged to set marten traps at least 2 feet above the ground or snow and to use cubby boxes with a 2 1/2-inch entrance hole to avoid catching fishers."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-01-31",
+     "open_time": null,
+     "timezone": "America/Boise",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ID-southwest",
+       "zone_name": "Southwest Region (Ada, Adams, Boise, Canyon, Elmore, Gem, Owyhee, Payette, Valley, Washington)",
+       "area_type": "management_units"
+      },
+      {
+       "zone_id": "ID-magic-valley",
+       "zone_name": "Magic Valley Region (Blaine, Camas, Cassia, Gooding, Jerome, Lincoln, Minidoka, Twin Falls)",
+       "area_type": "management_units"
+      },
+      {
+       "zone_id": "ID-southeast",
+       "zone_name": "Southeast Region (Bannock, Bear Lake, Bingham, Caribou, Franklin, Oneida, Power)",
+       "area_type": "management_units"
+      },
+      {
+       "zone_id": "ID-upper-snake",
+       "zone_name": "Upper Snake Region (Bonneville, Butte, Clark, Fremont, Jefferson, Madison, Teton)",
+       "area_type": "management_units"
+      },
+      {
+       "zone_id": "ID-salmon",
+       "zone_name": "Salmon Region (Custer, Lemhi)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Trappers are encouraged to set marten traps at least 2 feet above the ground or snow and to use cubby boxes with a 2 1/2-inch entrance hole to avoid catching fishers."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "American mink",
+   "scientific_name": "Neogale vison",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the IDFG booklets.",
+   "iac_reference": "2026-27 IDFG Upland Game, Turkey & Furbearer Seasons & Rules / 2026-27 IDFG Big Game Seasons & Rules (wolf)",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-15",
+     "close_date": "2027-04-15",
+     "open_time": null,
+     "timezone": "America/Los_Angeles",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ID-panhandle",
+       "zone_name": "Panhandle Region (Benewah, Bonner, Boundary, Kootenai, Shoshone)",
+       "area_type": "management_units"
+      },
+      {
+       "zone_id": "ID-clearwater",
+       "zone_name": "Clearwater Region (Clearwater, Idaho, Latah, Lewis, Nez Perce)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Gooding County: Hagerman WMA is CLOSED to mink except February 15 - February 28 (open)."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-15",
+     "close_date": "2027-04-15",
+     "open_time": null,
+     "timezone": "America/Boise",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ID-southwest",
+       "zone_name": "Southwest Region (Ada, Adams, Boise, Canyon, Elmore, Gem, Owyhee, Payette, Valley, Washington)",
+       "area_type": "management_units"
+      },
+      {
+       "zone_id": "ID-magic-valley",
+       "zone_name": "Magic Valley Region (Blaine, Camas, Cassia, Gooding, Jerome, Lincoln, Minidoka, Twin Falls)",
+       "area_type": "management_units"
+      },
+      {
+       "zone_id": "ID-southeast",
+       "zone_name": "Southeast Region (Bannock, Bear Lake, Bingham, Caribou, Franklin, Oneida, Power)",
+       "area_type": "management_units"
+      },
+      {
+       "zone_id": "ID-upper-snake",
+       "zone_name": "Upper Snake Region (Bonneville, Butte, Clark, Fremont, Jefferson, Madison, Teton)",
+       "area_type": "management_units"
+      },
+      {
+       "zone_id": "ID-salmon",
+       "zone_name": "Salmon Region (Custer, Lemhi)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Gooding County: Hagerman WMA is CLOSED to mink except February 15 - February 28 (open)."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Muskrat",
+   "scientific_name": "Ondatra zibethicus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the IDFG booklets.",
+   "iac_reference": "2026-27 IDFG Upland Game, Turkey & Furbearer Seasons & Rules / 2026-27 IDFG Big Game Seasons & Rules (wolf)",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-15",
+     "close_date": "2027-04-15",
+     "open_time": null,
+     "timezone": "America/Los_Angeles",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ID-panhandle",
+       "zone_name": "Panhandle Region (Benewah, Bonner, Boundary, Kootenai, Shoshone)",
+       "area_type": "management_units"
+      },
+      {
+       "zone_id": "ID-clearwater",
+       "zone_name": "Clearwater Region (Clearwater, Idaho, Latah, Lewis, Nez Perce)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Gooding County: Hagerman WMA is CLOSED to muskrat except February 15 - February 28 (open)."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-15",
+     "close_date": "2027-04-15",
+     "open_time": null,
+     "timezone": "America/Boise",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ID-southwest",
+       "zone_name": "Southwest Region (Ada, Adams, Boise, Canyon, Elmore, Gem, Owyhee, Payette, Valley, Washington)",
+       "area_type": "management_units"
+      },
+      {
+       "zone_id": "ID-magic-valley",
+       "zone_name": "Magic Valley Region (Blaine, Camas, Cassia, Gooding, Jerome, Lincoln, Minidoka, Twin Falls)",
+       "area_type": "management_units"
+      },
+      {
+       "zone_id": "ID-southeast",
+       "zone_name": "Southeast Region (Bannock, Bear Lake, Bingham, Caribou, Franklin, Oneida, Power)",
+       "area_type": "management_units"
+      },
+      {
+       "zone_id": "ID-upper-snake",
+       "zone_name": "Upper Snake Region (Bonneville, Butte, Clark, Fremont, Jefferson, Madison, Teton)",
+       "area_type": "management_units"
+      },
+      {
+       "zone_id": "ID-salmon",
+       "zone_name": "Salmon Region (Custer, Lemhi)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Gooding County: Hagerman WMA is CLOSED to muskrat except February 15 - February 28 (open)."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "River otter",
+   "scientific_name": "Lontra canadensis",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the IDFG booklets.",
+   "iac_reference": "2026-27 IDFG Upland Game, Turkey & Furbearer Seasons & Rules / 2026-27 IDFG Big Game Seasons & Rules (wolf)",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-15",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/Los_Angeles",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ID-panhandle",
+       "zone_name": "Panhandle Region (Benewah, Bonner, Boundary, Kootenai, Shoshone)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": 3,
+      "possession_limit": null,
+      "limit_notes": "Season limit 3 per trapper. Region harvest quota 45 (closes 72 hours after quota reached)."
+     },
+     "notes": "Mandatory check, report, and pelt tag required. Season limit 3 otters per trapper. The otter season closes in each region 72 hours after the region quota is reached. All areas closed to beaver trapping are closed to otter trapping. Region quota: 45 of 185 statewide."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-15",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/Los_Angeles",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ID-clearwater",
+       "zone_name": "Clearwater Region (Clearwater, Idaho, Latah, Lewis, Nez Perce)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": 3,
+      "possession_limit": null,
+      "limit_notes": "Season limit 3 per trapper. Region harvest quota 30 (closes 72 hours after quota reached)."
+     },
+     "notes": "Mandatory check, report, and pelt tag required. Season limit 3 otters per trapper. The otter season closes in each region 72 hours after the region quota is reached. All areas closed to beaver trapping are closed to otter trapping. Region quota: 30 of 185 statewide."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-15",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/Boise",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ID-southwest",
+       "zone_name": "Southwest Region (Ada, Adams, Boise, Canyon, Elmore, Gem, Owyhee, Payette, Valley, Washington)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": 3,
+      "possession_limit": null,
+      "limit_notes": "Season limit 3 per trapper. Region harvest quota 30 (closes 72 hours after quota reached)."
+     },
+     "notes": "Mandatory check, report, and pelt tag required. Season limit 3 otters per trapper. The otter season closes in each region 72 hours after the region quota is reached. All areas closed to beaver trapping are closed to otter trapping. Region quota: 30 of 185 statewide."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-15",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/Boise",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ID-magic-valley",
+       "zone_name": "Magic Valley Region (Blaine, Camas, Cassia, Gooding, Jerome, Lincoln, Minidoka, Twin Falls)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": 3,
+      "possession_limit": null,
+      "limit_notes": "Season limit 3 per trapper. Region harvest quota 30 (closes 72 hours after quota reached)."
+     },
+     "notes": "Mandatory check, report, and pelt tag required. Season limit 3 otters per trapper. The otter season closes in each region 72 hours after the region quota is reached. All areas closed to beaver trapping are closed to otter trapping. Region quota: 30 of 185 statewide."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-15",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/Boise",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ID-southeast",
+       "zone_name": "Southeast Region (Bannock, Bear Lake, Bingham, Caribou, Franklin, Oneida, Power)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": 3,
+      "possession_limit": null,
+      "limit_notes": "Season limit 3 per trapper. Region harvest quota 15 (closes 72 hours after quota reached)."
+     },
+     "notes": "Mandatory check, report, and pelt tag required. Season limit 3 otters per trapper. The otter season closes in each region 72 hours after the region quota is reached. All areas closed to beaver trapping are closed to otter trapping. Region quota: 15 of 185 statewide."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-15",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/Boise",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ID-upper-snake",
+       "zone_name": "Upper Snake Region (Bonneville, Butte, Clark, Fremont, Jefferson, Madison, Teton)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": 3,
+      "possession_limit": null,
+      "limit_notes": "Season limit 3 per trapper. Region harvest quota 20 (closes 72 hours after quota reached)."
+     },
+     "notes": "Mandatory check, report, and pelt tag required. Season limit 3 otters per trapper. The otter season closes in each region 72 hours after the region quota is reached. All areas closed to beaver trapping are closed to otter trapping. Region quota: 20 of 185 statewide."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-15",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/Boise",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ID-salmon",
+       "zone_name": "Salmon Region (Custer, Lemhi)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": 3,
+      "possession_limit": null,
+      "limit_notes": "Season limit 3 per trapper. Region harvest quota 15 (closes 72 hours after quota reached)."
+     },
+     "notes": "Mandatory check, report, and pelt tag required. Season limit 3 otters per trapper. The otter season closes in each region 72 hours after the region quota is reached. All areas closed to beaver trapping are closed to otter trapping. Region quota: 15 of 185 statewide."
+    }
+   ],
+   "permit_requirements": [
+    "Idaho trapping license; mandatory check/report/pelt tag for each otter"
+   ],
+   "notes": ""
+  },
+  {
+   "common_name": "Fisher",
+   "scientific_name": "Pekania pennanti",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the IDFG booklets.",
+   "iac_reference": "2026-27 IDFG Upland Game, Turkey & Furbearer Seasons & Rules / 2026-27 IDFG Big Game Seasons & Rules (wolf)",
+   "season_status": "closed",
+   "seasons": [],
+   "permit_requirements": [],
+   "notes": "Closed statewide — no open season in the 2026-27 booklet."
+  },
+  {
+   "common_name": "Kit fox",
+   "scientific_name": "Vulpes macrotis",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the IDFG booklets.",
+   "iac_reference": "2026-27 IDFG Upland Game, Turkey & Furbearer Seasons & Rules / 2026-27 IDFG Big Game Seasons & Rules (wolf)",
+   "season_status": "closed",
+   "seasons": [],
+   "permit_requirements": [],
+   "notes": "Closed statewide — no open season in the 2026-27 booklet."
+  },
+  {
+   "common_name": "Canada lynx",
+   "scientific_name": "Lynx canadensis",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the IDFG booklets.",
+   "iac_reference": "2026-27 IDFG Upland Game, Turkey & Furbearer Seasons & Rules / 2026-27 IDFG Big Game Seasons & Rules (wolf)",
+   "season_status": "closed",
+   "seasons": [],
+   "permit_requirements": [],
+   "notes": "Closed statewide — no open season in the 2026-27 booklet."
+  },
+  {
+   "common_name": "Wolverine",
+   "scientific_name": "Gulo gulo",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the IDFG booklets.",
+   "iac_reference": "2026-27 IDFG Upland Game, Turkey & Furbearer Seasons & Rules / 2026-27 IDFG Big Game Seasons & Rules (wolf)",
+   "season_status": "closed",
+   "seasons": [],
+   "permit_requirements": [],
+   "notes": "Closed statewide — no open season in the 2026-27 booklet."
+  },
+  {
+   "common_name": "Coyote",
+   "scientific_name": "Canis latrans",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the IDFG booklets.",
+   "iac_reference": "2026-27 IDFG Upland Game, Turkey & Furbearer Seasons & Rules / 2026-27 IDFG Big Game Seasons & Rules (wolf)",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-07-01",
+     "close_date": "2027-06-30",
+     "open_time": null,
+     "timezone": "America/Los_Angeles",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ID-panhandle",
+       "zone_name": "Panhandle Region (Benewah, Bonner, Boundary, Kootenai, Shoshone)",
+       "area_type": "management_units"
+      },
+      {
+       "zone_id": "ID-clearwater",
+       "zone_name": "Clearwater Region (Clearwater, Idaho, Latah, Lewis, Nez Perce)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Classified as predatory wildlife in Idaho: may be taken all year in any amounts and at any time by holders of the appropriate valid Idaho hunting, trapping, or combination license, subject to state/county/city laws."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-07-01",
+     "close_date": "2027-06-30",
+     "open_time": null,
+     "timezone": "America/Boise",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ID-southwest",
+       "zone_name": "Southwest Region (Ada, Adams, Boise, Canyon, Elmore, Gem, Owyhee, Payette, Valley, Washington)",
+       "area_type": "management_units"
+      },
+      {
+       "zone_id": "ID-magic-valley",
+       "zone_name": "Magic Valley Region (Blaine, Camas, Cassia, Gooding, Jerome, Lincoln, Minidoka, Twin Falls)",
+       "area_type": "management_units"
+      },
+      {
+       "zone_id": "ID-southeast",
+       "zone_name": "Southeast Region (Bannock, Bear Lake, Bingham, Caribou, Franklin, Oneida, Power)",
+       "area_type": "management_units"
+      },
+      {
+       "zone_id": "ID-upper-snake",
+       "zone_name": "Upper Snake Region (Bonneville, Butte, Clark, Fremont, Jefferson, Madison, Teton)",
+       "area_type": "management_units"
+      },
+      {
+       "zone_id": "ID-salmon",
+       "zone_name": "Salmon Region (Custer, Lemhi)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Classified as predatory wildlife in Idaho: may be taken all year in any amounts and at any time by holders of the appropriate valid Idaho hunting, trapping, or combination license, subject to state/county/city laws."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "Modeled as one continuous-year entry; Idaho treats this species as predatory, taken year-round."
+  },
+  {
+   "common_name": "Raccoon",
+   "scientific_name": "Procyon lotor",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the IDFG booklets.",
+   "iac_reference": "2026-27 IDFG Upland Game, Turkey & Furbearer Seasons & Rules / 2026-27 IDFG Big Game Seasons & Rules (wolf)",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-07-01",
+     "close_date": "2027-06-30",
+     "open_time": null,
+     "timezone": "America/Los_Angeles",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ID-panhandle",
+       "zone_name": "Panhandle Region (Benewah, Bonner, Boundary, Kootenai, Shoshone)",
+       "area_type": "management_units"
+      },
+      {
+       "zone_id": "ID-clearwater",
+       "zone_name": "Clearwater Region (Clearwater, Idaho, Latah, Lewis, Nez Perce)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Classified as predatory wildlife in Idaho: may be taken all year in any amounts and at any time by holders of the appropriate valid Idaho hunting, trapping, or combination license, subject to state/county/city laws."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-07-01",
+     "close_date": "2027-06-30",
+     "open_time": null,
+     "timezone": "America/Boise",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ID-southwest",
+       "zone_name": "Southwest Region (Ada, Adams, Boise, Canyon, Elmore, Gem, Owyhee, Payette, Valley, Washington)",
+       "area_type": "management_units"
+      },
+      {
+       "zone_id": "ID-magic-valley",
+       "zone_name": "Magic Valley Region (Blaine, Camas, Cassia, Gooding, Jerome, Lincoln, Minidoka, Twin Falls)",
+       "area_type": "management_units"
+      },
+      {
+       "zone_id": "ID-southeast",
+       "zone_name": "Southeast Region (Bannock, Bear Lake, Bingham, Caribou, Franklin, Oneida, Power)",
+       "area_type": "management_units"
+      },
+      {
+       "zone_id": "ID-upper-snake",
+       "zone_name": "Upper Snake Region (Bonneville, Butte, Clark, Fremont, Jefferson, Madison, Teton)",
+       "area_type": "management_units"
+      },
+      {
+       "zone_id": "ID-salmon",
+       "zone_name": "Salmon Region (Custer, Lemhi)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Classified as predatory wildlife in Idaho: may be taken all year in any amounts and at any time by holders of the appropriate valid Idaho hunting, trapping, or combination license, subject to state/county/city laws."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "Modeled as one continuous-year entry; Idaho treats this species as predatory, taken year-round."
+  },
+  {
+   "common_name": "Striped skunk",
+   "scientific_name": "Mephitis mephitis",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the IDFG booklets.",
+   "iac_reference": "2026-27 IDFG Upland Game, Turkey & Furbearer Seasons & Rules / 2026-27 IDFG Big Game Seasons & Rules (wolf)",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-07-01",
+     "close_date": "2027-06-30",
+     "open_time": null,
+     "timezone": "America/Los_Angeles",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ID-panhandle",
+       "zone_name": "Panhandle Region (Benewah, Bonner, Boundary, Kootenai, Shoshone)",
+       "area_type": "management_units"
+      },
+      {
+       "zone_id": "ID-clearwater",
+       "zone_name": "Clearwater Region (Clearwater, Idaho, Latah, Lewis, Nez Perce)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Classified as predatory wildlife in Idaho: may be taken all year in any amounts and at any time by holders of the appropriate valid Idaho hunting, trapping, or combination license, subject to state/county/city laws."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-07-01",
+     "close_date": "2027-06-30",
+     "open_time": null,
+     "timezone": "America/Boise",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ID-southwest",
+       "zone_name": "Southwest Region (Ada, Adams, Boise, Canyon, Elmore, Gem, Owyhee, Payette, Valley, Washington)",
+       "area_type": "management_units"
+      },
+      {
+       "zone_id": "ID-magic-valley",
+       "zone_name": "Magic Valley Region (Blaine, Camas, Cassia, Gooding, Jerome, Lincoln, Minidoka, Twin Falls)",
+       "area_type": "management_units"
+      },
+      {
+       "zone_id": "ID-southeast",
+       "zone_name": "Southeast Region (Bannock, Bear Lake, Bingham, Caribou, Franklin, Oneida, Power)",
+       "area_type": "management_units"
+      },
+      {
+       "zone_id": "ID-upper-snake",
+       "zone_name": "Upper Snake Region (Bonneville, Butte, Clark, Fremont, Jefferson, Madison, Teton)",
+       "area_type": "management_units"
+      },
+      {
+       "zone_id": "ID-salmon",
+       "zone_name": "Salmon Region (Custer, Lemhi)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Classified as predatory wildlife in Idaho: may be taken all year in any amounts and at any time by holders of the appropriate valid Idaho hunting, trapping, or combination license, subject to state/county/city laws."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "Modeled as one continuous-year entry; Idaho treats this species as predatory, taken year-round."
+  },
+  {
+   "common_name": "Weasel (least and short-tailed)",
+   "scientific_name": null,
+   "scientific_name_verified": false,
+   "scientific_name_note": "Left null; not distinguished in the IDFG booklets.",
+   "iac_reference": "2026-27 IDFG Upland Game, Turkey & Furbearer Seasons & Rules / 2026-27 IDFG Big Game Seasons & Rules (wolf)",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-07-01",
+     "close_date": "2027-06-30",
+     "open_time": null,
+     "timezone": "America/Los_Angeles",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ID-panhandle",
+       "zone_name": "Panhandle Region (Benewah, Bonner, Boundary, Kootenai, Shoshone)",
+       "area_type": "management_units"
+      },
+      {
+       "zone_id": "ID-clearwater",
+       "zone_name": "Clearwater Region (Clearwater, Idaho, Latah, Lewis, Nez Perce)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Classified as predatory wildlife in Idaho: may be taken all year in any amounts and at any time by holders of the appropriate valid Idaho hunting, trapping, or combination license, subject to state/county/city laws."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-07-01",
+     "close_date": "2027-06-30",
+     "open_time": null,
+     "timezone": "America/Boise",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ID-southwest",
+       "zone_name": "Southwest Region (Ada, Adams, Boise, Canyon, Elmore, Gem, Owyhee, Payette, Valley, Washington)",
+       "area_type": "management_units"
+      },
+      {
+       "zone_id": "ID-magic-valley",
+       "zone_name": "Magic Valley Region (Blaine, Camas, Cassia, Gooding, Jerome, Lincoln, Minidoka, Twin Falls)",
+       "area_type": "management_units"
+      },
+      {
+       "zone_id": "ID-southeast",
+       "zone_name": "Southeast Region (Bannock, Bear Lake, Bingham, Caribou, Franklin, Oneida, Power)",
+       "area_type": "management_units"
+      },
+      {
+       "zone_id": "ID-upper-snake",
+       "zone_name": "Upper Snake Region (Bonneville, Butte, Clark, Fremont, Jefferson, Madison, Teton)",
+       "area_type": "management_units"
+      },
+      {
+       "zone_id": "ID-salmon",
+       "zone_name": "Salmon Region (Custer, Lemhi)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Classified as predatory wildlife in Idaho: may be taken all year in any amounts and at any time by holders of the appropriate valid Idaho hunting, trapping, or combination license, subject to state/county/city laws."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "Modeled as one continuous-year entry; Idaho treats this species as predatory, taken year-round."
+  },
+  {
+   "common_name": "Black-tailed jackrabbit",
+   "scientific_name": "Lepus californicus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the IDFG booklets.",
+   "iac_reference": "2026-27 IDFG Upland Game, Turkey & Furbearer Seasons & Rules / 2026-27 IDFG Big Game Seasons & Rules (wolf)",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-07-01",
+     "close_date": "2027-06-30",
+     "open_time": null,
+     "timezone": "America/Los_Angeles",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ID-panhandle",
+       "zone_name": "Panhandle Region (Benewah, Bonner, Boundary, Kootenai, Shoshone)",
+       "area_type": "management_units"
+      },
+      {
+       "zone_id": "ID-clearwater",
+       "zone_name": "Clearwater Region (Clearwater, Idaho, Latah, Lewis, Nez Perce)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Classified as predatory wildlife in Idaho: may be taken all year in any amounts and at any time by holders of the appropriate valid Idaho hunting, trapping, or combination license, subject to state/county/city laws."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-07-01",
+     "close_date": "2027-06-30",
+     "open_time": null,
+     "timezone": "America/Boise",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ID-southwest",
+       "zone_name": "Southwest Region (Ada, Adams, Boise, Canyon, Elmore, Gem, Owyhee, Payette, Valley, Washington)",
+       "area_type": "management_units"
+      },
+      {
+       "zone_id": "ID-magic-valley",
+       "zone_name": "Magic Valley Region (Blaine, Camas, Cassia, Gooding, Jerome, Lincoln, Minidoka, Twin Falls)",
+       "area_type": "management_units"
+      },
+      {
+       "zone_id": "ID-southeast",
+       "zone_name": "Southeast Region (Bannock, Bear Lake, Bingham, Caribou, Franklin, Oneida, Power)",
+       "area_type": "management_units"
+      },
+      {
+       "zone_id": "ID-upper-snake",
+       "zone_name": "Upper Snake Region (Bonneville, Butte, Clark, Fremont, Jefferson, Madison, Teton)",
+       "area_type": "management_units"
+      },
+      {
+       "zone_id": "ID-salmon",
+       "zone_name": "Salmon Region (Custer, Lemhi)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Classified as predatory wildlife in Idaho: may be taken all year in any amounts and at any time by holders of the appropriate valid Idaho hunting, trapping, or combination license, subject to state/county/city laws."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "Modeled as one continuous-year entry; Idaho treats this species as predatory, taken year-round."
+  },
+  {
+   "common_name": "Virginia opossum",
+   "scientific_name": "Didelphis virginiana",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the IDFG booklets.",
+   "iac_reference": "2026-27 IDFG Upland Game, Turkey & Furbearer Seasons & Rules / 2026-27 IDFG Big Game Seasons & Rules (wolf)",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-07-01",
+     "close_date": "2027-06-30",
+     "open_time": null,
+     "timezone": "America/Los_Angeles",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ID-panhandle",
+       "zone_name": "Panhandle Region (Benewah, Bonner, Boundary, Kootenai, Shoshone)",
+       "area_type": "management_units"
+      },
+      {
+       "zone_id": "ID-clearwater",
+       "zone_name": "Clearwater Region (Clearwater, Idaho, Latah, Lewis, Nez Perce)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Classified as unprotected wildlife in Idaho: may be taken all year in any amounts and at any time by holders of the appropriate valid Idaho hunting, trapping, or combination license, subject to state/county/city laws."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-07-01",
+     "close_date": "2027-06-30",
+     "open_time": null,
+     "timezone": "America/Boise",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ID-southwest",
+       "zone_name": "Southwest Region (Ada, Adams, Boise, Canyon, Elmore, Gem, Owyhee, Payette, Valley, Washington)",
+       "area_type": "management_units"
+      },
+      {
+       "zone_id": "ID-magic-valley",
+       "zone_name": "Magic Valley Region (Blaine, Camas, Cassia, Gooding, Jerome, Lincoln, Minidoka, Twin Falls)",
+       "area_type": "management_units"
+      },
+      {
+       "zone_id": "ID-southeast",
+       "zone_name": "Southeast Region (Bannock, Bear Lake, Bingham, Caribou, Franklin, Oneida, Power)",
+       "area_type": "management_units"
+      },
+      {
+       "zone_id": "ID-upper-snake",
+       "zone_name": "Upper Snake Region (Bonneville, Butte, Clark, Fremont, Jefferson, Madison, Teton)",
+       "area_type": "management_units"
+      },
+      {
+       "zone_id": "ID-salmon",
+       "zone_name": "Salmon Region (Custer, Lemhi)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Classified as unprotected wildlife in Idaho: may be taken all year in any amounts and at any time by holders of the appropriate valid Idaho hunting, trapping, or combination license, subject to state/county/city laws."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "North American porcupine",
+   "scientific_name": "Erethizon dorsatum",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the IDFG booklets.",
+   "iac_reference": "2026-27 IDFG Upland Game, Turkey & Furbearer Seasons & Rules / 2026-27 IDFG Big Game Seasons & Rules (wolf)",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-07-01",
+     "close_date": "2027-06-30",
+     "open_time": null,
+     "timezone": "America/Los_Angeles",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ID-panhandle",
+       "zone_name": "Panhandle Region (Benewah, Bonner, Boundary, Kootenai, Shoshone)",
+       "area_type": "management_units"
+      },
+      {
+       "zone_id": "ID-clearwater",
+       "zone_name": "Clearwater Region (Clearwater, Idaho, Latah, Lewis, Nez Perce)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Classified as unprotected wildlife in Idaho: may be taken all year in any amounts and at any time by holders of the appropriate valid Idaho hunting, trapping, or combination license, subject to state/county/city laws."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-07-01",
+     "close_date": "2027-06-30",
+     "open_time": null,
+     "timezone": "America/Boise",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ID-southwest",
+       "zone_name": "Southwest Region (Ada, Adams, Boise, Canyon, Elmore, Gem, Owyhee, Payette, Valley, Washington)",
+       "area_type": "management_units"
+      },
+      {
+       "zone_id": "ID-magic-valley",
+       "zone_name": "Magic Valley Region (Blaine, Camas, Cassia, Gooding, Jerome, Lincoln, Minidoka, Twin Falls)",
+       "area_type": "management_units"
+      },
+      {
+       "zone_id": "ID-southeast",
+       "zone_name": "Southeast Region (Bannock, Bear Lake, Bingham, Caribou, Franklin, Oneida, Power)",
+       "area_type": "management_units"
+      },
+      {
+       "zone_id": "ID-upper-snake",
+       "zone_name": "Upper Snake Region (Bonneville, Butte, Clark, Fremont, Jefferson, Madison, Teton)",
+       "area_type": "management_units"
+      },
+      {
+       "zone_id": "ID-salmon",
+       "zone_name": "Salmon Region (Custer, Lemhi)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Classified as unprotected wildlife in Idaho: may be taken all year in any amounts and at any time by holders of the appropriate valid Idaho hunting, trapping, or combination license, subject to state/county/city laws."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Ringtail",
+   "scientific_name": "Bassariscus astutus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the IDFG booklets.",
+   "iac_reference": "2026-27 IDFG Upland Game, Turkey & Furbearer Seasons & Rules / 2026-27 IDFG Big Game Seasons & Rules (wolf)",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-07-01",
+     "close_date": "2027-06-30",
+     "open_time": null,
+     "timezone": "America/Los_Angeles",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ID-panhandle",
+       "zone_name": "Panhandle Region (Benewah, Bonner, Boundary, Kootenai, Shoshone)",
+       "area_type": "management_units"
+      },
+      {
+       "zone_id": "ID-clearwater",
+       "zone_name": "Clearwater Region (Clearwater, Idaho, Latah, Lewis, Nez Perce)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Classified as unprotected wildlife in Idaho: may be taken all year in any amounts and at any time by holders of the appropriate valid Idaho hunting, trapping, or combination license, subject to state/county/city laws."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-07-01",
+     "close_date": "2027-06-30",
+     "open_time": null,
+     "timezone": "America/Boise",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ID-southwest",
+       "zone_name": "Southwest Region (Ada, Adams, Boise, Canyon, Elmore, Gem, Owyhee, Payette, Valley, Washington)",
+       "area_type": "management_units"
+      },
+      {
+       "zone_id": "ID-magic-valley",
+       "zone_name": "Magic Valley Region (Blaine, Camas, Cassia, Gooding, Jerome, Lincoln, Minidoka, Twin Falls)",
+       "area_type": "management_units"
+      },
+      {
+       "zone_id": "ID-southeast",
+       "zone_name": "Southeast Region (Bannock, Bear Lake, Bingham, Caribou, Franklin, Oneida, Power)",
+       "area_type": "management_units"
+      },
+      {
+       "zone_id": "ID-upper-snake",
+       "zone_name": "Upper Snake Region (Bonneville, Butte, Clark, Fremont, Jefferson, Madison, Teton)",
+       "area_type": "management_units"
+      },
+      {
+       "zone_id": "ID-salmon",
+       "zone_name": "Salmon Region (Custer, Lemhi)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Classified as unprotected wildlife in Idaho: may be taken all year in any amounts and at any time by holders of the appropriate valid Idaho hunting, trapping, or combination license, subject to state/county/city laws."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Gray wolf",
+   "scientific_name": "Canis lupus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the IDFG booklets.",
+   "iac_reference": "2026-27 IDFG Upland Game, Turkey & Furbearer Seasons & Rules / 2026-27 IDFG Big Game Seasons & Rules (wolf)",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "private",
+     "open_date": "2026-12-01",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/Boise",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ID-priv-w1",
+       "zone_name": "Units 1, 2, 3, 4, 4A, 5, 6, 7, 8, 8A, 9, 10, 10A, 11, 11A, 12, 13, 14, 15, 16, 16A, 17, 19, 20, 21, 21A, 28, 29, 30, 30A, 36A, 36B, 37, 37A, 51, 52A, 58, 59, 59A, 60, 60A, 61, 62, 62A, 63A, 64, 65, 66, 67",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Foothold traps and snares allowed. CLOSED July 1–Nov 30 and Mar 1–Jun 30 (includes federal court closures in 19 counties). Idaho wolf trapping seasons are the subject of a lawsuit in federal court. Before placing wolf traps, trappers are responsible for checking the IDFG website to confirm what seasons are open: idfg.idaho.gov/rules/big-game. Wolf trapping seasons in 19 Idaho counties are closed due to the federal court decision (see booklet page 83 map)."
+    },
+    {
+     "method": "trapping",
+     "land_type": "private",
+     "open_date": "2026-12-01",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/Boise",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ID-priv-w2in",
+       "zone_name": "Units 18, 19A, 20A, 22, 23, 26, 27, 36, 50, 69 — portions WITHIN counties affected by the federal court decision (see booklet p. 83 map)",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Foothold traps and snares allowed. CLOSED July 1–Nov 30 and Mar 1–Jun 30. Idaho wolf trapping seasons are the subject of a lawsuit in federal court. Before placing wolf traps, trappers are responsible for checking the IDFG website to confirm what seasons are open: idfg.idaho.gov/rules/big-game. Wolf trapping seasons in 19 Idaho counties are closed due to the federal court decision (see booklet page 83 map)."
+    },
+    {
+     "method": "trapping",
+     "land_type": "private",
+     "open_date": "2026-04-01",
+     "close_date": "2026-11-14",
+     "open_time": null,
+     "timezone": "America/Boise",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ID-priv-w2out",
+       "zone_name": "Units 18, 19A, 20A, 22, 23, 26, 27, 36, 50, 69 — portions OUTSIDE counties affected by the federal court decision",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Foothold traps allowed; snares NOT allowed during this window. Idaho wolf trapping seasons are the subject of a lawsuit in federal court. Before placing wolf traps, trappers are responsible for checking the IDFG website to confirm what seasons are open: idfg.idaho.gov/rules/big-game. Wolf trapping seasons in 19 Idaho counties are closed due to the federal court decision (see booklet page 83 map)."
+    },
+    {
+     "method": "trapping",
+     "land_type": "private",
+     "open_date": "2026-11-15",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/Boise",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ID-priv-w2out",
+       "zone_name": "Units 18, 19A, 20A, 22, 23, 26, 27, 36, 50, 69 — portions OUTSIDE counties affected by the federal court decision",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Foothold traps and snares allowed. Idaho wolf trapping seasons are the subject of a lawsuit in federal court. Before placing wolf traps, trappers are responsible for checking the IDFG website to confirm what seasons are open: idfg.idaho.gov/rules/big-game. Wolf trapping seasons in 19 Idaho counties are closed due to the federal court decision (see booklet page 83 map)."
+    },
+    {
+     "method": "trapping",
+     "land_type": "private",
+     "open_date": "2026-04-01",
+     "close_date": "2026-11-14",
+     "open_time": null,
+     "timezone": "America/Boise",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ID-priv-w3",
+       "zone_name": "Units 24, 25, 31, 32, 32A, 33, 34, 35, 38, 39, 40, 41, 42, 43, 44, 46, 47, 54, 55, 56, 57",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Foothold traps allowed; snares NOT allowed during this window. Idaho wolf trapping seasons are the subject of a lawsuit in federal court. Before placing wolf traps, trappers are responsible for checking the IDFG website to confirm what seasons are open: idfg.idaho.gov/rules/big-game. Wolf trapping seasons in 19 Idaho counties are closed due to the federal court decision (see booklet page 83 map)."
+    },
+    {
+     "method": "trapping",
+     "land_type": "private",
+     "open_date": "2026-11-15",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/Boise",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ID-priv-w3",
+       "zone_name": "Units 24, 25, 31, 32, 32A, 33, 34, 35, 38, 39, 40, 41, 42, 43, 44, 46, 47, 54, 55, 56, 57",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Foothold traps and snares allowed. Idaho wolf trapping seasons are the subject of a lawsuit in federal court. Before placing wolf traps, trappers are responsible for checking the IDFG website to confirm what seasons are open: idfg.idaho.gov/rules/big-game. Wolf trapping seasons in 19 Idaho counties are closed due to the federal court decision (see booklet page 83 map)."
+    },
+    {
+     "method": "trapping",
+     "land_type": "private",
+     "open_date": "2026-04-01",
+     "close_date": "2026-10-09",
+     "open_time": null,
+     "timezone": "America/Boise",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ID-priv-w4",
+       "zone_name": "Units 45, 52, 53, 70, 71, 72, 73, 73A, 74, 75, 76, 77, 78",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Foothold traps allowed; snares NOT allowed during this window. Idaho wolf trapping seasons are the subject of a lawsuit in federal court. Before placing wolf traps, trappers are responsible for checking the IDFG website to confirm what seasons are open: idfg.idaho.gov/rules/big-game. Wolf trapping seasons in 19 Idaho counties are closed due to the federal court decision (see booklet page 83 map)."
+    },
+    {
+     "method": "trapping",
+     "land_type": "private",
+     "open_date": "2026-10-10",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/Boise",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ID-priv-w4",
+       "zone_name": "Units 45, 52, 53, 70, 71, 72, 73, 73A, 74, 75, 76, 77, 78",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Foothold traps and snares allowed. Idaho wolf trapping seasons are the subject of a lawsuit in federal court. Before placing wolf traps, trappers are responsible for checking the IDFG website to confirm what seasons are open: idfg.idaho.gov/rules/big-game. Wolf trapping seasons in 19 Idaho counties are closed due to the federal court decision (see booklet page 83 map)."
+    },
+    {
+     "method": "trapping",
+     "land_type": "private",
+     "open_date": "2026-07-01",
+     "close_date": "2027-06-30",
+     "open_time": null,
+     "timezone": "America/Boise",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ID-priv-w5",
+       "zone_name": "Units 48 and 49",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Foothold traps allowed year-round; snares NOT allowed. Idaho wolf trapping seasons are the subject of a lawsuit in federal court. Before placing wolf traps, trappers are responsible for checking the IDFG website to confirm what seasons are open: idfg.idaho.gov/rules/big-game. Wolf trapping seasons in 19 Idaho counties are closed due to the federal court decision (see booklet page 83 map)."
+    },
+    {
+     "method": "trapping",
+     "land_type": "private",
+     "open_date": "2026-12-01",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/Boise",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ID-priv-w6in",
+       "zone_name": "Units 52A, 63, 66A, 68, 68A — portions WITHIN counties affected by the federal court decision",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Foothold traps and snares allowed. CLOSED July 1–Nov 30 and Mar 1–Jun 30. Idaho wolf trapping seasons are the subject of a lawsuit in federal court. Before placing wolf traps, trappers are responsible for checking the IDFG website to confirm what seasons are open: idfg.idaho.gov/rules/big-game. Wolf trapping seasons in 19 Idaho counties are closed due to the federal court decision (see booklet page 83 map)."
+    },
+    {
+     "method": "trapping",
+     "land_type": "private",
+     "open_date": "2026-04-01",
+     "close_date": "2026-10-09",
+     "open_time": null,
+     "timezone": "America/Boise",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ID-priv-w6out",
+       "zone_name": "Units 52A, 63, 66A, 68, 68A — portions OUTSIDE counties affected by the federal court decision",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Foothold traps allowed; snares NOT allowed during this window. Idaho wolf trapping seasons are the subject of a lawsuit in federal court. Before placing wolf traps, trappers are responsible for checking the IDFG website to confirm what seasons are open: idfg.idaho.gov/rules/big-game. Wolf trapping seasons in 19 Idaho counties are closed due to the federal court decision (see booklet page 83 map)."
+    },
+    {
+     "method": "trapping",
+     "land_type": "private",
+     "open_date": "2026-10-10",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/Boise",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ID-priv-w6out",
+       "zone_name": "Units 52A, 63, 66A, 68, 68A — portions OUTSIDE counties affected by the federal court decision",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Foothold traps and snares allowed. Idaho wolf trapping seasons are the subject of a lawsuit in federal court. Before placing wolf traps, trappers are responsible for checking the IDFG website to confirm what seasons are open: idfg.idaho.gov/rules/big-game. Wolf trapping seasons in 19 Idaho counties are closed due to the federal court decision (see booklet page 83 map)."
+    },
+    {
+     "method": "trapping",
+     "land_type": "public",
+     "open_date": "2026-12-01",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/Boise",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ID-pub-w1",
+       "zone_name": "Units 1, 2, 4, 4A, 5, 6, 7, 8, 8A, 9, 10, 10A, 11, 11A, 12, 13, 14, 15, 16, 16A, 17, 19, 20, 21, 21A, 28, 29, 30, 30A, 36A, 36B, 37, 37A, 51, 58, 59, 59A, 60, 60A, 61, 62, 62A, 63A, 64, 65, 66, 67",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Foothold traps and snares allowed. CLOSED July 1–Nov 30 and Mar 1–Jun 30 (includes federal court closures in 19 counties). Idaho wolf trapping seasons are the subject of a lawsuit in federal court. Before placing wolf traps, trappers are responsible for checking the IDFG website to confirm what seasons are open: idfg.idaho.gov/rules/big-game. Wolf trapping seasons in 19 Idaho counties are closed due to the federal court decision (see booklet page 83 map)."
+    },
+    {
+     "method": "trapping",
+     "land_type": "public",
+     "open_date": "2026-12-01",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/Boise",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ID-pub-w2",
+       "zone_name": "Unit 3",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Foothold traps and snares allowed. Two areas within Unit 3 are CLOSED (4th of July Pass area and the Fernan Lake area — see booklet p. 83 Note 1). CLOSED July 1–Nov 30 and Mar 1–Jun 30. Idaho wolf trapping seasons are the subject of a lawsuit in federal court. Before placing wolf traps, trappers are responsible for checking the IDFG website to confirm what seasons are open: idfg.idaho.gov/rules/big-game. Wolf trapping seasons in 19 Idaho counties are closed due to the federal court decision (see booklet page 83 map)."
+    },
+    {
+     "method": "trapping",
+     "land_type": "public",
+     "open_date": "2026-12-01",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/Boise",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ID-pub-w3in",
+       "zone_name": "Units 18, 19A, 20A, 22, 23, 26, 27, 36, 50, 52A, 63, 66A, 68, 68A, 69 — portions WITHIN counties affected by the federal court decision",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Foothold traps and snares allowed. CLOSED July 1–Nov 30 and Mar 1–Jun 30. Idaho wolf trapping seasons are the subject of a lawsuit in federal court. Before placing wolf traps, trappers are responsible for checking the IDFG website to confirm what seasons are open: idfg.idaho.gov/rules/big-game. Wolf trapping seasons in 19 Idaho counties are closed due to the federal court decision (see booklet page 83 map)."
+    },
+    {
+     "method": "trapping",
+     "land_type": "public",
+     "open_date": "2026-09-10",
+     "close_date": "2026-11-14",
+     "open_time": null,
+     "timezone": "America/Boise",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ID-pub-w3out",
+       "zone_name": "Units 18, 19A, 20A, 22, 23, 26, 27, 36, 50, 52A, 63, 66A, 68, 68A, 69 — portions OUTSIDE counties affected by the federal court decision",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Foothold traps allowed; snares NOT allowed during this window. Idaho wolf trapping seasons are the subject of a lawsuit in federal court. Before placing wolf traps, trappers are responsible for checking the IDFG website to confirm what seasons are open: idfg.idaho.gov/rules/big-game. Wolf trapping seasons in 19 Idaho counties are closed due to the federal court decision (see booklet page 83 map)."
+    },
+    {
+     "method": "trapping",
+     "land_type": "public",
+     "open_date": "2026-11-15",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/Boise",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ID-pub-w3out",
+       "zone_name": "Units 18, 19A, 20A, 22, 23, 26, 27, 36, 50, 52A, 63, 66A, 68, 68A, 69 — portions OUTSIDE counties affected by the federal court decision",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Foothold traps and snares allowed. Idaho wolf trapping seasons are the subject of a lawsuit in federal court. Before placing wolf traps, trappers are responsible for checking the IDFG website to confirm what seasons are open: idfg.idaho.gov/rules/big-game. Wolf trapping seasons in 19 Idaho counties are closed due to the federal court decision (see booklet page 83 map)."
+    },
+    {
+     "method": "trapping",
+     "land_type": "public",
+     "open_date": "2026-09-10",
+     "close_date": "2026-11-14",
+     "open_time": null,
+     "timezone": "America/Boise",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ID-pub-w4",
+       "zone_name": "Units 24, 25, 31, 32, 32A, 33, 34, 35, 40, 41, 42, 43, 44, 45, 46, 47, 52, 53, 54, 55, 56, 57, 70, 71, 72, 73, 73A, 74, 75, 76, 77, 78",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Foothold traps allowed; snares NOT allowed during this window. Idaho wolf trapping seasons are the subject of a lawsuit in federal court. Before placing wolf traps, trappers are responsible for checking the IDFG website to confirm what seasons are open: idfg.idaho.gov/rules/big-game. Wolf trapping seasons in 19 Idaho counties are closed due to the federal court decision (see booklet page 83 map)."
+    },
+    {
+     "method": "trapping",
+     "land_type": "public",
+     "open_date": "2026-11-15",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/Boise",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ID-pub-w4",
+       "zone_name": "Units 24, 25, 31, 32, 32A, 33, 34, 35, 40, 41, 42, 43, 44, 45, 46, 47, 52, 53, 54, 55, 56, 57, 70, 71, 72, 73, 73A, 74, 75, 76, 77, 78",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Foothold traps and snares allowed. Idaho wolf trapping seasons are the subject of a lawsuit in federal court. Before placing wolf traps, trappers are responsible for checking the IDFG website to confirm what seasons are open: idfg.idaho.gov/rules/big-game. Wolf trapping seasons in 19 Idaho counties are closed due to the federal court decision (see booklet page 83 map)."
+    },
+    {
+     "method": "trapping",
+     "land_type": "public",
+     "open_date": "2026-09-10",
+     "close_date": "2026-11-14",
+     "open_time": null,
+     "timezone": "America/Boise",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ID-pub-w5",
+       "zone_name": "Unit 38",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Foothold traps allowed; snares NOT allowed during this window. The portion of Unit 38 within Ada County is CLOSED. Idaho wolf trapping seasons are the subject of a lawsuit in federal court. Before placing wolf traps, trappers are responsible for checking the IDFG website to confirm what seasons are open: idfg.idaho.gov/rules/big-game. Wolf trapping seasons in 19 Idaho counties are closed due to the federal court decision (see booklet page 83 map)."
+    },
+    {
+     "method": "trapping",
+     "land_type": "public",
+     "open_date": "2026-11-15",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/Boise",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ID-pub-w5",
+       "zone_name": "Unit 38",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Foothold traps and snares allowed. The portion of Unit 38 within Ada County is CLOSED. Idaho wolf trapping seasons are the subject of a lawsuit in federal court. Before placing wolf traps, trappers are responsible for checking the IDFG website to confirm what seasons are open: idfg.idaho.gov/rules/big-game. Wolf trapping seasons in 19 Idaho counties are closed due to the federal court decision (see booklet page 83 map)."
+    },
+    {
+     "method": "trapping",
+     "land_type": "public",
+     "open_date": "2026-09-10",
+     "close_date": "2026-11-14",
+     "open_time": null,
+     "timezone": "America/Boise",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ID-pub-w6",
+       "zone_name": "Unit 39",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Foothold traps allowed; snares NOT allowed during this window. The portion of Unit 39 within Ada County is CLOSED; trapping open in Unit 39 only in the Boise and Elmore County portions. Idaho wolf trapping seasons are the subject of a lawsuit in federal court. Before placing wolf traps, trappers are responsible for checking the IDFG website to confirm what seasons are open: idfg.idaho.gov/rules/big-game. Wolf trapping seasons in 19 Idaho counties are closed due to the federal court decision (see booklet page 83 map)."
+    },
+    {
+     "method": "trapping",
+     "land_type": "public",
+     "open_date": "2026-11-15",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/Boise",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ID-pub-w6",
+       "zone_name": "Unit 39",
+       "area_type": "management_units"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Foothold traps and snares allowed. The portion of Unit 39 within Ada County is CLOSED; trapping open in Unit 39 only in the Boise and Elmore County portions. Idaho wolf trapping seasons are the subject of a lawsuit in federal court. Before placing wolf traps, trappers are responsible for checking the IDFG website to confirm what seasons are open: idfg.idaho.gov/rules/big-game. Wolf trapping seasons in 19 Idaho counties are closed due to the federal court decision (see booklet page 83 map)."
+    }
+   ],
+   "permit_requirements": [
+    "Idaho trapping license with Wolf Trapper Education course validation",
+    "Wolf tag(s) (calendar-year tags)"
+   ],
+   "notes": "Wolves are managed under Idaho's big game rules and have separate hunting and trapping seasons — this entry models TRAPPING only. A valid trapping license WITH Wolf Trapper Education course validation and wolf tag(s) is required. Wolf tags are valid for the calendar year. Any person wishing to trap wolves must first complete the Idaho wolf trapper education/certification course. Diverters are optional but encouraged in moose country; minimum loop stops and breakaway devices are recommended. Idaho wolf trapping seasons are the subject of a lawsuit in federal court. Before placing wolf traps, trappers are responsible for checking the IDFG website to confirm what seasons are open: idfg.idaho.gov/rules/big-game. Wolf trapping seasons in 19 Idaho counties are closed due to the federal court decision (see booklet page 83 map)."
+  },
+  {
+   "common_name": "Gray wolf (public land, Units 48-49)",
+   "scientific_name": "Canis lupus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the IDFG booklets.",
+   "iac_reference": "2026-27 IDFG Upland Game, Turkey & Furbearer Seasons & Rules / 2026-27 IDFG Big Game Seasons & Rules (wolf)",
+   "season_status": "closed",
+   "seasons": [],
+   "permit_requirements": [],
+   "notes": "No wolf trapping season on public land in Units 48 and 49 ('None' in the 2026-27 booklet). Included so the app flags any logged public-land take in those units."
+  }
+ ],
+ "sources": [
+  {
+   "id": "idfg-upland-2026-27",
+   "title": "2026 & 2027 Upland Game, Turkey & Furbearer Seasons & Rules (IDFG)",
+   "url": "https://idfg.idaho.gov/sites/default/files/2026-2027_uplandgame_web.pdf",
+   "type": "agency_booklet",
+   "notes": "All regional furbearer tables, otter quotas, controlled beaver units, Hagerman WMA exception, predatory/unprotected classifications, and reporting rules read directly from this booklet 2026-09-18. PDF archived from the official IDFG site."
+  },
+  {
+   "id": "idfg-big-game-2026",
+   "title": "2026-27 Idaho Big Game Seasons & Rules (IDFG) — wolf trapping tables, pp. 81-83",
+   "url": "https://idfg.idaho.gov/sites/default/files/seasons-rules-big-game-2026.pdf",
+   "type": "agency_booklet",
+   "notes": "Private-land and public-land wolf trapping tables plus Notes 1-3 and the federal-court closure map read directly from booklet pages 81-83, verified visually against the rendered PDF pages 2026-09-18."
+  }
+ ],
+ "verification": {
+  "regulation_year_confirmed": true,
+  "confirmation_notes": "Both booklets are the 2026-27 editions (upland booklet covers '2026 & 2027 Seasons & Rules'; big game covers July 2026–June 2027). Regional furbearer tables are printed identically across regions except fox (Panhandle/Clearwater Oct 10–Mar 31; all other regions year-round). Otter quotas and per-trapper limit read from booklet page 33. Wolf trapping tables were verified against rendered PDF page images (booklet pp. 81-83) because text extraction garbled the unit/season/method columns.",
+  "known_gaps": [
+   "Wolf trapping: the season dates in the booklet are the subject of a federal lawsuit; the app must direct users to idfg.idaho.gov/rules/big-game before placing traps. The 19-county federal-court closure map (booklet p. 83) is not encoded as polygons — zones are descriptive.",
+   "Beaver/otter closed drainages and WMAs (regional exceptions) are summarized, not enumerated.",
+   "Scientific names are standard taxonomy, NOT stated in the IDFG booklets — all flagged scientific_name_verified=false.",
+   "Panhandle and Clearwater regions observe Pacific Time; Mountain Time is used elsewhere.",
+   "Detailed method rules (beaver house/den protection, otter trap-size rule when mink/marten closed, bait-distance rules, IDFG Access Program restrictions) are noted, not fully modeled."
+  ]
+ },
+ "license_url": "https://idfg.idaho.gov/buy-online",
+ "license_vendor": "Go Outdoors Idaho",
+ "regs_url": "https://idfg.idaho.gov/sites/default/files/seasons-rules-big-game-2026.pdf",
+ "regs_kind": "pdf"
+,
+ "warden_directory": {
+  "label": "Report a violation",
+  "url": "https://idfg.idaho.gov/press/help-catch-poachers-calling-cap-hotline-800-632-5999",
+  "kind": "hotline",
+  "note": "Citizens Against Poaching (CAP): 1-800-632-5999, 24/7 anonymous; online https://idfg.idaho.gov/poacher"
+ }
+}

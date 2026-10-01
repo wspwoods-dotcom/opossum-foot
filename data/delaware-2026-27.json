@@ -1,0 +1,782 @@
+{
+ "schema_version": "1.0",
+ "state": "DE",
+ "state_name": "Delaware",
+ "season_year": "2026-27",
+ "provisional": false,
+ "retrieved_at": "2026-09-18",
+ "disclaimer": "Reminder reference only \u2014 NOT legal authority. Season dates, zones, and limits are set annually and can change. Always verify current regulations with the DNREC Division of Fish & Wildlife before hunting or trapping.",
+ "sources": [
+  {
+   "id": "de-guide-2026-27",
+   "title": "2026/2027 Delaware Hunting and Trapping Guide (DNREC Division of Fish & Wildlife, via eRegulations)",
+   "url": "https://www.eregulations.com/delaware/hunting/pdf",
+   "type": "agency_booklet",
+   "notes": "Official online guide (Department's eRegulations publication). Furbearer material on pp. 39-41. Full text extracted 2026-09-18; no local PDF archive kept."
+  }
+ ],
+ "license_summary": {
+  "trapping_license": "Trapping license required (no license required to trap groundhogs).",
+  "trap_tags": "Metallic trap tags required on every trap set for furbearers (muskrat sets exempt but tagging recommended).",
+  "trap_check": "Traps must be visited at least once every 24 hours (muskrat sets exempt).",
+  "permission": "Written landowner permission required to set traps on private land; no trapping on Division lands without a permit.",
+  "otter_cites": "River otter: CITES tagging by a Division representative required before sale or shipment out of state (302-735-3600).",
+  "nutria_report": "Nutria harvest must be reported to the Division (302-735-3600) by close of business the day after harvest; captured nutria must be killed, never released alive.",
+  "sunday": "Sunday hunting is open for all game species (2026-27 regulatory change)."
+ },
+ "species": [
+  {
+   "common_name": "Muskrat",
+   "iac_reference": "2026/2027 DE Hunting and Trapping Guide, p. 39 (Trapping Seasons table)",
+   "scientific_name": "Ondatra zibethicus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the 2026/2027 DE guide.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-12-01",
+     "close_date": "2027-03-10",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "DE-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No daily or possession limit for trapped furbearers."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-12-01",
+     "close_date": "2027-03-20",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "DE-NCC-embanked-meadows",
+       "zone_name": "Embanked meadows, New Castle County",
+       "area_type": "special_areas",
+       "note": "Extended season through March 20 on embanked meadows in New Castle County."
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No daily or possession limit for trapped furbearers."
+     },
+     "notes": "On embanked meadows in New Castle County the season runs through March 20."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "The Department may extend muskrat trapping season 7 days (February average mean temp below 30\u00b0F or total February snowfall over 20 inches) or 14 days (below 28\u00b0F or over 32 inches), per the National Weather Service station at Wilmington \u2014 conditional, not modeled as a fixed segment. Metallic trap tags are not required on muskrat sets (recommended)."
+  },
+  {
+   "common_name": "Mink",
+   "iac_reference": "2026/2027 DE Hunting and Trapping Guide, p. 39 (Trapping Seasons table)",
+   "scientific_name": "Neogale vison",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the 2026/2027 DE guide.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-12-01",
+     "close_date": "2027-03-10",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "DE-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No daily or possession limit for trapped furbearers."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-12-01",
+     "close_date": "2027-03-20",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "DE-NCC-embanked-meadows",
+       "zone_name": "Embanked meadows, New Castle County",
+       "area_type": "special_areas",
+       "note": "Extended season through March 20 on embanked meadows in New Castle County."
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No daily or possession limit for trapped furbearers."
+     },
+     "notes": "On embanked meadows in New Castle County the season runs through March 20."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "River otter",
+   "iac_reference": "2026/2027 DE Hunting and Trapping Guide, pp. 39, 41 (Trapping table; tagging/reporting)",
+   "scientific_name": "Lontra canadensis",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the 2026/2027 DE guide.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-12-01",
+     "close_date": "2027-03-10",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "DE-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No daily or possession limit for trapped furbearers."
+     },
+     "notes": "CITES tagging by a Division of Fish and Wildlife representative REQUIRED before the otter is sold or shipped out of state (call 302-735-3600 for an appointment; animal must not be frozen when it arrives for tagging)."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-12-01",
+     "close_date": "2027-03-20",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "DE-NCC-embanked-meadows",
+       "zone_name": "Embanked meadows, New Castle County",
+       "area_type": "special_areas",
+       "note": "Extended season through March 20 on embanked meadows in New Castle County."
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No daily or possession limit for trapped furbearers."
+     },
+     "notes": "On embanked meadows in New Castle County the season runs through March 20. CITES tagging by a Division of Fish and Wildlife representative REQUIRED before the otter is sold or shipped out of state (call 302-735-3600 for an appointment; animal must not be frozen when it arrives for tagging)."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "CITES tagging by a Division of Fish and Wildlife representative REQUIRED before the otter is sold or shipped out of state (call 302-735-3600 for an appointment; animal must not be frozen when it arrives for tagging)."
+  },
+  {
+   "common_name": "Raccoon",
+   "iac_reference": "2026/2027 DE Hunting and Trapping Guide, p. 39 (Trapping Seasons table)",
+   "scientific_name": "Procyon lotor",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the 2026/2027 DE guide.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-12-01",
+     "close_date": "2027-03-10",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "DE-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No daily or possession limit for trapped furbearers."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-12-01",
+     "close_date": "2027-03-20",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "DE-NCC-embanked-meadows",
+       "zone_name": "Embanked meadows, New Castle County",
+       "area_type": "special_areas",
+       "note": "Extended season through March 20 on embanked meadows in New Castle County."
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No daily or possession limit for trapped furbearers."
+     },
+     "notes": "On embanked meadows in New Castle County the season runs through March 20."
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "DE-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit."
+     },
+     "notes": "Raccoons may be hunted with compound, recurve, longbow, shotgun, .17-.22 rimfire, or muzzleloading rifle not larger than .36 caliber. Night hunting with a light is allowed. Closed during the November youth and nonambulatory hunt and the November general firearm deer seasons. Firearm restrictions apply during deer firearms seasons. Chase-only (no harvest) season Aug 1-Oct 31 with additional deer-season closures \u2014 not modeled as take."
+    },
+    {
+     "method": "trapping",
+     "land_type": "private",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "DE-rte13-east-private",
+       "zone_name": "Private land east of Rte. 13, Federal School Lane (New Castle Co.) south to the St. Jones River (Kent Co.)",
+       "area_type": "special_areas",
+       "note": "With landowner permission. At the Dover Rte. 13/Rte. 1 split the westerly boundary follows Rte. 1 to the St. Jones River."
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit."
+     },
+     "notes": "Raccoons may be trapped any time of the year on private land in this zone, with landowner permission."
+    },
+    {
+     "method": "hunting",
+     "land_type": "private",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "DE-rte13-east-private",
+       "zone_name": "Private land east of Rte. 13, Federal School Lane (New Castle Co.) south to the St. Jones River (Kent Co.)",
+       "area_type": "special_areas",
+       "note": "With landowner permission. At the Dover Rte. 13/Rte. 1 split the westerly boundary follows Rte. 1 to the St. Jones River."
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit."
+     },
+     "notes": "Raccoons may be hunted any time of the year on private land in this zone, with landowner permission."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Virginia opossum",
+   "iac_reference": "2026/2027 DE Hunting and Trapping Guide, p. 39 (Trapping Seasons table)",
+   "scientific_name": "Didelphis virginiana",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the 2026/2027 DE guide.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-12-01",
+     "close_date": "2027-03-10",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "DE-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No daily or possession limit for trapped furbearers."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-12-01",
+     "close_date": "2027-03-20",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "DE-NCC-embanked-meadows",
+       "zone_name": "Embanked meadows, New Castle County",
+       "area_type": "special_areas",
+       "note": "Extended season through March 20 on embanked meadows in New Castle County."
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No daily or possession limit for trapped furbearers."
+     },
+     "notes": "On embanked meadows in New Castle County the season runs through March 20."
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "DE-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit."
+     },
+     "notes": "The guide presents a single Nov 1\u2013Feb 28 hunting-season entry for the raccoon/opossum group; modeled as shared. Opossums may be hunted with compound, recurve, longbow, shotgun, .17-.22 rimfire, or muzzleloading rifle not larger than .36 caliber. Night hunting with a light is allowed. Closed during the November youth and nonambulatory hunt and the November general firearm deer seasons. Firearm restrictions apply during deer firearms seasons. Chase-only (no harvest) season Mar 1-Mar 31 \u2014 not modeled as take."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Nutria",
+   "iac_reference": "2026/2027 DE Hunting and Trapping Guide, pp. 39, 41 (Trapping table; tagging/reporting)",
+   "scientific_name": "Myocastor coypus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the 2026/2027 DE guide.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-12-01",
+     "close_date": "2027-03-10",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "DE-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No daily or possession limit for trapped furbearers."
+     },
+     "notes": "Harvest must be reported to the Division (302-735-3600) by close of business on the day AFTER harvest. Captured nutria must be killed and may not be released back into the wild alive."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-12-01",
+     "close_date": "2027-03-20",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "DE-NCC-embanked-meadows",
+       "zone_name": "Embanked meadows, New Castle County",
+       "area_type": "special_areas",
+       "note": "Extended season through March 20 on embanked meadows in New Castle County."
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No daily or possession limit for trapped furbearers."
+     },
+     "notes": "On embanked meadows in New Castle County the season runs through March 20. Harvest must be reported to the Division (302-735-3600) by close of business on the day AFTER harvest. Captured nutria must be killed and may not be released back into the wild alive."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "Harvest must be reported to the Division (302-735-3600) by close of business on the day AFTER harvest. Captured nutria must be killed and may not be released back into the wild alive."
+  },
+  {
+   "common_name": "Beaver",
+   "iac_reference": "2026/2027 DE Hunting and Trapping Guide, pp. 39-40 (Trapping + Hunting tables)",
+   "scientific_name": "Castor canadensis",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the 2026/2027 DE guide.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-12-01",
+     "close_date": "2027-03-20",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "DE-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No daily or possession limit for trapped furbearers."
+     },
+     "notes": ""
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-12-01",
+     "close_date": "2027-03-20",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "DE-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit."
+     },
+     "notes": "Beavers may be hunted with shotguns, compound, recurve, or longbows."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Red fox",
+   "iac_reference": "2026/2027 DE Hunting and Trapping Guide, pp. 39-40 (Trapping + Hunting tables)",
+   "scientific_name": "Vulpes vulpes",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the 2026/2027 DE guide.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-03-10",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "DE-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No daily or possession limit for trapped furbearers."
+     },
+     "notes": ""
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "DE-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit."
+     },
+     "notes": "Red fox may be harvested with compound, recurve, longbow, crossbow, shotgun, muzzleloading rifle, or rimfire/centerfire rifle up to .25 caliber \u2014 never with handguns or straight-walled pistol-caliber rifles, and never with the aid of a light. Closed during the November youth and nonambulatory hunt and the November general firearm deer seasons. Firearm restrictions apply during deer firearms seasons. It is unlawful to kill a red fox being pursued by dogs. Chase-only (no harvest) season Oct 1-Apr 30 with deer-season closures \u2014 not modeled as take. Electronic calls may be used."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Gray fox",
+   "iac_reference": "2026/2027 DE Hunting and Trapping Guide, p. 41 (special rules)",
+   "scientific_name": "Urocyon cinereoargenteus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the 2026/2027 DE guide.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-03-10",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "DE-south-CD-canal",
+       "zone_name": "South of the Chesapeake & Delaware Canal",
+       "area_type": "special_areas",
+       "note": "Gray fox collateral take only; no take north of the canal."
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Collateral (incidental) take only \u2014 no targeted season."
+     },
+     "notes": "The collateral take of gray fox shall not be unlawful south of the Chesapeake and Delaware Canal during the established hunting and trapping seasons for red fox. NO take is permitted north of the canal. Reporting of harvested gray fox is no longer required."
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "DE-south-CD-canal",
+       "zone_name": "South of the Chesapeake & Delaware Canal",
+       "area_type": "special_areas",
+       "note": "Gray fox collateral take only; no take north of the canal."
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Collateral (incidental) take only \u2014 no targeted season."
+     },
+     "notes": "The collateral take of gray fox shall not be unlawful south of the Chesapeake and Delaware Canal during the established hunting and trapping seasons for red fox. NO take is permitted north of the canal. Closed during the November youth and nonambulatory hunt and the November general firearm deer seasons. Firearm restrictions apply during deer firearms seasons."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Coyote",
+   "iac_reference": "2026/2027 DE Hunting and Trapping Guide, pp. 39-40 (Trapping + Hunting tables)",
+   "scientific_name": "Canis latrans",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the 2026/2027 DE guide.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-03-10",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "DE-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No daily or possession limit for trapped furbearers."
+     },
+     "notes": ""
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "DE-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit."
+     },
+     "notes": "Year-round (July 1\u2013June 30). Coyotes may be harvested with compound, recurve, longbow, crossbow, shotgun, muzzleloading rifle, rimfire, or centerfire rifle up to .25 caliber \u2014 never with handguns or straight-walled pistol-caliber rifles. During any deer firearms season it is unlawful to hunt coyotes with a firearm not also legal for deer hunting. Reporting of harvested coyotes is no longer required. Hides of legally taken coyotes may be sold. Electronic calls may be used."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Groundhog",
+   "iac_reference": "2026/2027 DE Hunting and Trapping Guide, p. 39 (Trapping Seasons table)",
+   "scientific_name": "Marmota monax",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the 2026/2027 DE guide.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "DE-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No daily or possession limit for trapped furbearers."
+     },
+     "notes": "Year-round (July 1\u2013June 30). A trapping license is NOT required to trap groundhogs."
+    }
+   ],
+   "permit_requirements": [
+    "No trapping license required for groundhog."
+   ],
+   "notes": ""
+  },
+  {
+   "common_name": "Bobcat",
+   "iac_reference": "2026/2027 DE Hunting and Trapping Guide, p. 39 (closed - not a lawful furbearer)",
+   "scientific_name": "Lynx rufus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the 2026/2027 DE guide.",
+   "season_status": "closed",
+   "seasons": [],
+   "permit_requirements": [],
+   "notes": "No open season. Delaware's lawful trap list is exhaustive (muskrat, mink, otter, beaver, raccoon, opossum, groundhog, nutria, red fox, coyote) and does not include bobcat."
+  }
+ ],
+ "verification": {
+  "regulation_year_confirmed": true,
+  "confirmation_notes": "2026/2027 Delaware Hunting and Trapping Guide (DNREC, official eRegulations publication), pp. 39-41. Trapping: muskrat/mink/otter/raccoon/opossum/nutria Dec 1-Mar 10 (New Castle Co. embanked meadows through Mar 20); beaver Dec 1-Mar 20; red fox and coyote Nov 1-Mar 10; groundhog Jul 1-Jun 30 (no license required); no daily/possession limit for trapped furbearers; exhaustive lawful trap list. Hunting: raccoon and opossum Nov 1-Feb 28 (night light allowed; deer-season closures; raccoon chase-only Aug 1-Oct 31; opossum chase-only Mar 1-Mar 31); red fox Nov 1-Feb 28 (chase-only Oct 1-Apr 30); coyote year-round Jul 1-Jun 30; beaver Dec 1-Mar 20; raccoon special zone (private land east of Rte. 13, New Castle & Kent Cos.) open year-round for hunting and trapping; gray fox collateral take only south of the C&D Canal during red fox seasons; otter CITES tagging; nutria reporting/kill rule; coyote and gray fox reporting no longer required.",
+  "known_gaps": [
+   "Opossum hunting modeled as Nov 1-Feb 28 shared with raccoon (the guide presents one hunting-season entry for the raccoon/opossum group); explicitly noted.",
+   "Deer-season-relative closures (Oct/Nov/Dec/Jan deer seasons) carried as notes; 2026/27 deer dates not extracted.",
+   "Muskrat weather-based season extension is conditional and not modeled as a fixed segment.",
+   "Scientific names are standard taxonomy, NOT stated in the guide; all marked scientific_name_verified=false.",
+   "No DNREC Administrative Code (Title 7, 3900) cross-check performed.",
+   "No local PDF archive kept; re-download from the official URL to archive."
+  ]
+ },
+ "license_url": "https://epermitting.dnrec.delaware.gov/",
+ "license_vendor": "Digital DNREC",
+ "regs_url": "https://www.eregulations.com/delaware/hunting/pdf",
+ "regs_kind": "pdf"
+,
+ "warden_directory": {
+  "label": "Report a violation",
+  "url": "http://de.gov/ogt",
+  "kind": "hotline",
+  "note": "Operation Game Theft: 1-800-292-3030, anonymous"
+ }
+}

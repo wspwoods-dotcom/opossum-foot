@@ -1,0 +1,1319 @@
+{
+ "disclaimer": "Reminder reference only \u2014 NOT legal authority. Season dates, unit boundaries, bag limits, and registration deadlines can change. Always verify current regulations with the Michigan DNR before hunting or trapping.",
+ "license_summary": {
+  "general": "Everyone needs a base license ($11 resident 17-64; $6 youth 10-16; $5 resident senior 65+; $151 nonresident) valid through March 31, 2027. A fur harvester license ($15 resident or nonresident; valid through April 30, 2027) is required to hunt/trap furbearers. Residents hunting coyotes with only a base license still need a fur harvester license Nov. 10-14; residents trapping coyotes always need a fur harvester license. Kill tags (bobcat, fisher, marten, otter) are free, available May 1, 2026 (bobcat tags only through Oct. 31), and must be in the harvester's possession BEFORE harvesting. Nonresidents CANNOT harvest badger, bobcat, fisher, marten, or otter in Michigan. Must be at least 8 years old to obtain kill tags. Persons born on or after Jan. 1, 1960 need hunter education.",
+  "night_hunting": "Coyotes, foxes, opossums, raccoons, skunks, and weasels can be hunted at night; nighttime hunting seasons are the same as regular daylight hunting seasons. Legal furbearer hunting hours are 1/2 hour before sunrise to 1/2 hour after sunset."
+ },
+ "provisional": false,
+ "retrieved_at": "2026-09-18",
+ "schema_version": "1.1",
+ "season_year": "2026-27",
+ "sources": [
+  {
+   "id": "fh-summary-2026",
+   "notes": "2026 Fur Harvester Regulations Summary (covers the 2026-27 harvest year through April 2027). Season tables, bag limits, kill-tag rules, mandatory registration/deadline table, management seasons, unit boundary descriptions, license fees. Archived from michigan.gov.",
+   "title": "2026 Fur Harvester Regulations Summary (Michigan DNR)",
+   "type": "agency_page",
+   "url": "https://www.michigan.gov/dnr/managing-resources/laws/regulations/fur-harvester"
+  }
+ ],
+ "species": [
+  {
+   "common_name": "Badger",
+   "iac_reference": "Wildlife Conservation Order; 2026 MI Fur Harvester Regulations Summary",
+   "notes": "Kill tags not required for badger. Nonresidents cannot harvest badger.",
+   "permit_requirements": [],
+   "scientific_name": "Taxidea taxus",
+   "scientific_name_note": "Standard taxonomy; not stated in the Michigan summary.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Bag limit 1 per season (resident). Nonresidents may not harvest badger.",
+      "possession_limit": null,
+      "season_bag": 1
+     },
+     "close_date": "2026-11-14",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Trapping only. Zone 1 counties: Baraga, Dickinson, Gogebic, Houghton, Iron, Keweenaw, Marquette, Menominee, Ontonagon, plus that portion of Alger and Delta counties west of Federal Forest Highway 13 / U.S. 2 to the Lake Michigan shoreline. Gogebic, Iron, Dickinson, and Menominee counties are on Central Time.",
+     "open_date": "2026-10-15",
+     "open_time": null,
+     "timezone": "America/Detroit",
+     "zones": [
+      {
+       "area_type": "counties",
+       "counties": [
+        "Baraga",
+        "Dickinson",
+        "Gogebic",
+        "Houghton",
+        "Iron",
+        "Keweenaw",
+        "Marquette",
+        "Menominee",
+        "Ontonagon"
+       ],
+       "zone_id": "MI-badger-1",
+       "zone_name": "Badger Zone 1 (western Upper Peninsula counties; also includes the portion of Alger and Delta counties west of Federal Forest Highway 13 / U.S. 2 to the Lake Michigan shoreline)"
+      },
+      {
+       "area_type": "special_areas",
+       "zone_id": "MI-badger-2",
+       "zone_name": "Badger Zone 2 (corresponds with Michigan hunting Zone 2)"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Bag limit 1 per season (resident). Nonresidents may not harvest badger.",
+      "possession_limit": null,
+      "season_bag": 1
+     },
+     "close_date": "2027-03-01",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Trapping only.",
+     "open_date": "2026-11-01",
+     "open_time": null,
+     "timezone": "America/Detroit",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "MI-badger-3",
+       "zone_name": "Badger Zone 3 (corresponds with Michigan hunting Zone 3)"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Beaver",
+   "iac_reference": "Wildlife Conservation Order; 2026 MI Fur Harvester Regulations Summary",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Castor canadensis",
+   "scientific_name_note": "Standard taxonomy; not stated in the Michigan summary.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-04-23",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Regular season. Beaver trapping closed in Sleeping Bear Dunes National Lakeshore (Benzie/Leelanau counties); contact Seney National Wildlife Refuge (Schoolcraft County) about possible beaver trapping. Isle Royale (Keweenaw County) is closed to beaver trapping.",
+     "open_date": "2026-11-01",
+     "open_time": null,
+     "timezone": "America/Detroit",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "MI-beaver-A",
+       "zone_name": "Unit A (Zone 1 \u2014 Upper Peninsula)"
+      },
+      {
+       "area_type": "special_areas",
+       "zone_id": "MI-beaver-B",
+       "zone_name": "Unit B (Zone 2 \u2014 northern Lower Peninsula)"
+      },
+      {
+       "area_type": "special_areas",
+       "zone_id": "MI-beaver-C",
+       "zone_name": "Unit C (Zone 3 \u2014 southern Lower Peninsula)"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2026-10-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Furbearer MANAGEMENT season (not a regular harvest season): starts the day after the regular trapping season closes and ends the day before the regular season starts. Trapping only, on public AND private lands. Beavers cannot be taken in state parks/recreation areas Apr 1 - Sep 14. Otters incidentally caught in April beaver sets may be kept if the trapper holds unused otter kill tags. Carcasses must be buried, landfilled, or composted on own land.",
+     "open_date": "2026-04-24",
+     "open_time": null,
+     "timezone": "America/Detroit",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "MI-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Bobcat",
+   "iac_reference": "Wildlife Conservation Order; 2026 MI Fur Harvester Regulations Summary",
+   "notes": "Mandatory registration: harvested bobcats must be presented (skinned carcass or lower jaw/entire skull + pelt + kill tag) at a DNR registration station by the unit/method deadline below. Registration seals replace the kill tag; unsealed hides cannot be possessed, transported, bought, or sold after the deadline. Unit A is the Upper Peninsula except Drummond Island; Unit B is Drummond Island; Isle Royale (Keweenaw County) is closed to bobcat hunting and trapping.",
+   "permit_requirements": [
+    "Free bobcat kill tag (resident, 8+, fur harvester license) must be in possession BEFORE harvesting; kill tags available May 1 - Oct. 31 only.",
+    "Season bag limit: 2 per season. One kill tag is valid for all lands and all units combined; the second kill tag is valid for public and private lands in Unit A ONLY.",
+    "Mandatory registration at a DNR registration station by the deadline for the unit and method of take."
+   ],
+   "scientific_name": "Lynx rufus",
+   "scientific_name_note": "Standard taxonomy; not stated in the Michigan summary.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "2 per season combined (hunting + trapping). One kill tag valid statewide/all units; second kill tag valid only in Unit A.",
+      "possession_limit": null,
+      "season_bag": 2
+     },
+     "close_date": "2027-03-01",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Registration deadline: Units A, B, C \u2014 Mar 11, 2027.",
+     "open_date": "2027-01-01",
+     "open_time": null,
+     "timezone": "America/Detroit",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "MI-bobcat-A",
+       "zone_name": "Unit A (Upper Peninsula, except Drummond Island)"
+      },
+      {
+       "area_type": "special_areas",
+       "zone_id": "MI-bobcat-B",
+       "zone_name": "Unit B (Drummond Island)"
+      },
+      {
+       "area_type": "counties",
+       "counties": [
+        "Alcona",
+        "Alpena",
+        "Antrim",
+        "Charlevoix",
+        "Cheboygan",
+        "Emmet",
+        "Montmorency",
+        "Oscoda",
+        "Otsego",
+        "Presque Isle"
+       ],
+       "zone_id": "MI-bobcat-C",
+       "zone_name": "Unit C"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "2 per season combined (hunting + trapping). One kill tag valid statewide/all units; second kill tag valid only in Unit A.",
+      "possession_limit": null,
+      "season_bag": 2
+     },
+     "close_date": "2027-02-01",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Registration deadline: Unit D \u2014 Feb 11, 2027.",
+     "open_date": "2027-01-01",
+     "open_time": null,
+     "timezone": "America/Detroit",
+     "zones": [
+      {
+       "area_type": "counties",
+       "counties": [
+        "Arenac",
+        "Clare",
+        "Crawford",
+        "Gladwin",
+        "Iosco",
+        "Kalkaska",
+        "Missaukee",
+        "Ogemaw",
+        "Osceola",
+        "Roscommon",
+        "Wexford"
+       ],
+       "zone_id": "MI-bobcat-D",
+       "zone_name": "Unit D"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "2 per season combined (hunting + trapping). One kill tag valid statewide/all units; second kill tag valid only in Unit A.",
+      "possession_limit": null,
+      "season_bag": 2
+     },
+     "close_date": "2027-01-20",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Registration deadline: Unit G \u2014 Jan 30, 2027.",
+     "open_date": "2027-01-01",
+     "open_time": null,
+     "timezone": "America/Detroit",
+     "zones": [
+      {
+       "area_type": "counties",
+       "counties": [
+        "Bay",
+        "Benzie",
+        "Grand Traverse",
+        "Isabella",
+        "Lake",
+        "Leelanau",
+        "Manistee",
+        "Mason",
+        "Mecosta",
+        "Midland",
+        "Newaygo",
+        "Oceana"
+       ],
+       "zone_id": "MI-bobcat-G",
+       "zone_name": "Unit G"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "2 per season combined (hunting + trapping). One kill tag valid statewide/all units; second kill tag valid only in Unit A.",
+      "possession_limit": null,
+      "season_bag": 2
+     },
+     "close_date": "2027-01-11",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Registration deadline: Unit H \u2014 Jan 21, 2027.",
+     "open_date": "2027-01-01",
+     "open_time": null,
+     "timezone": "America/Detroit",
+     "zones": [
+      {
+       "area_type": "counties",
+       "counties": [
+        "Clinton",
+        "Gratiot",
+        "Ionia",
+        "Kent",
+        "Montcalm",
+        "Muskegon",
+        "Ottawa",
+        "Saginaw",
+        "Shiawassee"
+       ],
+       "zone_id": "MI-bobcat-H",
+       "zone_name": "Unit H"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "2 per season combined (hunting + trapping). One kill tag valid statewide/all units; second kill tag valid only in Unit A.",
+      "possession_limit": null,
+      "season_bag": 2
+     },
+     "close_date": "2026-11-14",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "First leg of split season: Nov 1-14, 2026. Registration deadline: Units A and B \u2014 Jan 28, 2027.",
+     "open_date": "2026-11-01",
+     "open_time": null,
+     "timezone": "America/Detroit",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "MI-bobcat-A",
+       "zone_name": "Unit A (Upper Peninsula, except Drummond Island)"
+      },
+      {
+       "area_type": "special_areas",
+       "zone_id": "MI-bobcat-B",
+       "zone_name": "Unit B (Drummond Island)"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "2 per season combined (hunting + trapping). One kill tag valid statewide/all units; second kill tag valid only in Unit A.",
+      "possession_limit": null,
+      "season_bag": 2
+     },
+     "close_date": "2027-01-18",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Second leg of split season: Dec 1, 2026 - Jan 18, 2027. Registration deadline: Units A and B \u2014 Jan 28, 2027.",
+     "open_date": "2026-12-01",
+     "open_time": null,
+     "timezone": "America/Detroit",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "MI-bobcat-A",
+       "zone_name": "Unit A (Upper Peninsula, except Drummond Island)"
+      },
+      {
+       "area_type": "special_areas",
+       "zone_id": "MI-bobcat-B",
+       "zone_name": "Unit B (Drummond Island)"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "2 per season combined (hunting + trapping). One kill tag valid statewide/all units; second kill tag valid only in Unit A.",
+      "possession_limit": null,
+      "season_bag": 2
+     },
+     "close_date": "2026-12-29",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Registration deadline: Units C, D, G \u2014 Jan 8, 2027.",
+     "open_date": "2026-12-10",
+     "open_time": null,
+     "timezone": "America/Detroit",
+     "zones": [
+      {
+       "area_type": "counties",
+       "counties": [
+        "Alcona",
+        "Alpena",
+        "Antrim",
+        "Charlevoix",
+        "Cheboygan",
+        "Emmet",
+        "Montmorency",
+        "Oscoda",
+        "Otsego",
+        "Presque Isle"
+       ],
+       "zone_id": "MI-bobcat-C",
+       "zone_name": "Unit C"
+      },
+      {
+       "area_type": "counties",
+       "counties": [
+        "Arenac",
+        "Clare",
+        "Crawford",
+        "Gladwin",
+        "Iosco",
+        "Kalkaska",
+        "Missaukee",
+        "Ogemaw",
+        "Osceola",
+        "Roscommon",
+        "Wexford"
+       ],
+       "zone_id": "MI-bobcat-D",
+       "zone_name": "Unit D"
+      },
+      {
+       "area_type": "counties",
+       "counties": [
+        "Bay",
+        "Benzie",
+        "Grand Traverse",
+        "Isabella",
+        "Lake",
+        "Leelanau",
+        "Manistee",
+        "Mason",
+        "Mecosta",
+        "Midland",
+        "Newaygo",
+        "Oceana"
+       ],
+       "zone_id": "MI-bobcat-G",
+       "zone_name": "Unit G"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "2 per season combined (hunting + trapping). One kill tag valid statewide/all units; second kill tag valid only in Unit A.",
+      "possession_limit": null,
+      "season_bag": 2
+     },
+     "close_date": "2026-12-20",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Registration deadline: Unit H \u2014 Dec 30, 2026.",
+     "open_date": "2026-12-10",
+     "open_time": null,
+     "timezone": "America/Detroit",
+     "zones": [
+      {
+       "area_type": "counties",
+       "counties": [
+        "Clinton",
+        "Gratiot",
+        "Ionia",
+        "Kent",
+        "Montcalm",
+        "Muskegon",
+        "Ottawa",
+        "Saginaw",
+        "Shiawassee"
+       ],
+       "zone_id": "MI-bobcat-H",
+       "zone_name": "Unit H"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Coyote",
+   "iac_reference": "Wildlife Conservation Order; 2026 MI Fur Harvester Regulations Summary",
+   "notes": "Michigan residents can hunt coyotes with just a base license; however, if hunting coyotes Nov. 10-14, a fur harvester license is required. Residents trapping coyotes need a fur harvester license.",
+   "permit_requirements": [],
+   "scientific_name": "Canis latrans",
+   "scientific_name_note": "Standard taxonomy; not stated in the Michigan summary.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-01",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Nonlethal cable restraints can be used Jan 1 - Mar 1. Traps may only be set when the open season begins.",
+     "open_date": "2026-10-15",
+     "open_time": null,
+     "timezone": "America/Detroit",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "MI-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2026-10-14",
+     "continuous_open": false,
+     "land_type": "private",
+     "method": "trapping",
+     "notes": "Furbearer MANAGEMENT season: coyotes can be trapped on PRIVATE lands only. Nonlethal cable restraints are prohibited during the management season. Use of dogs prohibited Apr 16 - Jul 7.",
+     "open_date": "2026-03-02",
+     "open_time": null,
+     "timezone": "America/Detroit",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "MI-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-01",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Nighttime hunting allowed. Hunting hours: 1/2 hour before sunrise to 1/2 hour after sunset.",
+     "open_date": "2026-10-15",
+     "open_time": null,
+     "timezone": "America/Detroit",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "MI-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2026-10-14",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Furbearer MANAGEMENT season: coyotes can be hunted on public AND private lands. Cannot be taken in state parks/recreation areas Apr 1 - Sep 14. Use of dogs prohibited Apr 16 - Jul 7.",
+     "open_date": "2026-03-02",
+     "open_time": null,
+     "timezone": "America/Detroit",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "MI-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Gray fox",
+   "iac_reference": "Wildlife Conservation Order; 2026 MI Fur Harvester Regulations Summary",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Urocyon cinereoargenteus",
+   "scientific_name_note": "Standard taxonomy; not stated in the Michigan summary.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-01",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Nonlethal cable restraints can be used Jan 1 - Mar 1.",
+     "open_date": "2026-10-15",
+     "open_time": null,
+     "timezone": "America/Detroit",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "MI-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-01",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Nighttime hunting allowed.",
+     "open_date": "2026-10-15",
+     "open_time": null,
+     "timezone": "America/Detroit",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "MI-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Red fox",
+   "iac_reference": "Wildlife Conservation Order; 2026 MI Fur Harvester Regulations Summary",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Vulpes vulpes",
+   "scientific_name_note": "Standard taxonomy; not stated in the Michigan summary.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-01",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Nonlethal cable restraints can be used Jan 1 - Mar 1.",
+     "open_date": "2026-10-15",
+     "open_time": null,
+     "timezone": "America/Detroit",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "MI-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-01",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Nighttime hunting allowed.",
+     "open_date": "2026-10-15",
+     "open_time": null,
+     "timezone": "America/Detroit",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "MI-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Fisher",
+   "iac_reference": "Wildlife Conservation Order; 2026 MI Fur Harvester Regulations Summary",
+   "notes": "Mandatory registration: harvested fishers must be presented (skinned, lower jaw/entire skull + pelt + kill tag) at a DNR registration station on or before Dec 18, 2026. Nonresidents cannot harvest fisher.",
+   "permit_requirements": [
+    "Free fisher kill tag (resident, 8+, fur harvester license) must be in possession BEFORE trapping; tags available May 1 - Dec 13.",
+    "Combined bag limit: 2 fisher + marten per season."
+   ],
+   "scientific_name": "Pekania pennanti",
+   "scientific_name_note": "Standard taxonomy; not stated in the Michigan summary.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Combined bag limit: 2 fisher and marten combined per season.",
+      "possession_limit": null,
+      "season_bag": 2
+     },
+     "close_date": "2026-12-13",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Trapping only. Registration deadline: Dec 18, 2026.",
+     "open_date": "2026-12-04",
+     "open_time": null,
+     "timezone": "America/Detroit",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "MI-fisher-marten",
+       "zone_name": "Fisher and marten management unit (all of Zone 1 / Upper Peninsula, EXCEPT Drummond Island)"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "American marten",
+   "iac_reference": "Wildlife Conservation Order; 2026 MI Fur Harvester Regulations Summary",
+   "notes": "Mandatory registration: harvested martens must be presented (skinned, lower jaw/entire skull + pelt + kill tag) at a DNR registration station on or before Dec 18, 2026. Nonresidents cannot harvest marten.",
+   "permit_requirements": [
+    "Free marten kill tag (resident, 8+, fur harvester license) must be in possession BEFORE trapping; tags available May 1 - Dec 13.",
+    "Combined bag limit: 2 fisher and marten combined per season."
+   ],
+   "scientific_name": "Martes americana",
+   "scientific_name_note": "Standard taxonomy; not stated in the Michigan summary.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Combined bag limit: 2 fisher and marten combined per season.",
+      "possession_limit": null,
+      "season_bag": 2
+     },
+     "close_date": "2026-12-13",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Trapping only. Registration deadline: Dec 18, 2026.",
+     "open_date": "2026-12-04",
+     "open_time": null,
+     "timezone": "America/Detroit",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "MI-fisher-marten",
+       "zone_name": "Fisher and marten management unit (all of Zone 1 / Upper Peninsula, EXCEPT Drummond Island)"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Mink",
+   "iac_reference": "Wildlife Conservation Order; 2026 MI Fur Harvester Regulations Summary",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Neogale vison",
+   "scientific_name_note": "Standard taxonomy; not stated in the Michigan summary.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-01",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Trapping only.",
+     "open_date": "2026-10-25",
+     "open_time": null,
+     "timezone": "America/Detroit",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "MI-zone1",
+       "zone_name": "Zone 1 (Upper Peninsula)"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-01",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Trapping only.",
+     "open_date": "2026-11-01",
+     "open_time": null,
+     "timezone": "America/Detroit",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "MI-zone2",
+       "zone_name": "Zone 2 (northern Lower Peninsula)"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-01",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Trapping only.",
+     "open_date": "2026-11-10",
+     "open_time": null,
+     "timezone": "America/Detroit",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "MI-zone3",
+       "zone_name": "Zone 3 (southern Lower Peninsula)"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Muskrat",
+   "iac_reference": "Wildlife Conservation Order; 2026 MI Fur Harvester Regulations Summary",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Ondatra zibethicus",
+   "scientific_name_note": "Standard taxonomy; not stated in the Michigan summary.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-04-23",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Regular season; trapping only.",
+     "open_date": "2026-11-01",
+     "open_time": null,
+     "timezone": "America/Detroit",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "MI-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2026-10-31",
+     "continuous_open": false,
+     "land_type": "private",
+     "method": "trapping",
+     "notes": "Furbearer MANAGEMENT season: muskrats can be trapped on PRIVATE lands only. Commercial Forest lands open to trapping by the general public are closed for muskrat trapping during the management season; a permit is required for trapping muskrats on other public lands. Cannot be taken in state parks/recreation areas Apr 1 - Sep 14. Carcasses must be buried, landfilled, or composted on own land.",
+     "open_date": "2026-04-24",
+     "open_time": null,
+     "timezone": "America/Detroit",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "MI-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Opossum",
+   "iac_reference": "Wildlife Conservation Order; 2026 MI Fur Harvester Regulations Summary",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Didelphis virginiana",
+   "scientific_name_note": "Standard taxonomy; not stated in the Michigan summary.",
+   "scientific_name_verified": false,
+   "season_status": "continuous",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Year-round statewide with a valid fur harvester license.",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/Detroit",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "MI-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Year-round statewide. Nighttime hunting allowed.",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/Detroit",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "MI-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "River otter",
+   "iac_reference": "Wildlife Conservation Order; 2026 MI Fur Harvester Regulations Summary",
+   "notes": "Mandatory registration: harvested otters must be presented (skinned, lower jaw/entire skull + pelt + kill tag) at a DNR registration station on or before Apr 10, 2027 (May 5, 2027 for otters incidentally taken while beaver trapping through April 30). Nonresidents cannot harvest otter. Otter trapping closed in Sleeping Bear Dunes National Lakeshore and at Seney National Wildlife Refuge; Isle Royale closed.",
+   "permit_requirements": [
+    "Free otter kill tag (resident, 8+, fur harvester license) must be in possession BEFORE trapping; tags available May 1 through the last day of the trapping season.",
+    "Combined bag limit: 5 otters per licensed resident fur harvester. Only 4 of the 5 may be taken from Unit B; only 3 of the 5 may be taken from Unit C."
+   ],
+   "scientific_name": "Lontra canadensis",
+   "scientific_name_note": "Standard taxonomy; not stated in the Michigan summary.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Combined bag limit: 5 per licensed resident fur harvester; no more than 4 from Unit B; no more than 3 from Unit C.",
+      "possession_limit": null,
+      "season_bag": 5
+     },
+     "close_date": "2027-03-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Trapping only. Registration deadline: Apr 10, 2027. Otters incidentally taken while beaver trapping through April 30 and included in the bag limit may be registered by May 5, 2027.",
+     "open_date": "2026-10-25",
+     "open_time": null,
+     "timezone": "America/Detroit",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "MI-otter-A",
+       "zone_name": "Unit A (Zone 1 \u2014 Upper Peninsula)"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Combined bag limit: 5 per licensed resident fur harvester; no more than 4 from Unit B; no more than 3 from Unit C.",
+      "possession_limit": null,
+      "season_bag": 5
+     },
+     "close_date": "2027-03-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Trapping only. Registration deadline: Apr 10, 2027.",
+     "open_date": "2026-11-01",
+     "open_time": null,
+     "timezone": "America/Detroit",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "MI-otter-B",
+       "zone_name": "Unit B (Zone 2 \u2014 northern Lower Peninsula)"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Combined bag limit: 5 per licensed resident fur harvester; no more than 4 from Unit B; no more than 3 from Unit C.",
+      "possession_limit": null,
+      "season_bag": 5
+     },
+     "close_date": "2027-03-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Trapping only. Registration deadline: Apr 10, 2027.",
+     "open_date": "2026-11-10",
+     "open_time": null,
+     "timezone": "America/Detroit",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "MI-otter-C",
+       "zone_name": "Unit C (Zone 3 \u2014 southern Lower Peninsula)"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Raccoon",
+   "iac_reference": "Wildlife Conservation Order; 2026 MI Fur Harvester Regulations Summary",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Procyon lotor",
+   "scientific_name_note": "Standard taxonomy; not stated in the Michigan summary.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Regular season.",
+     "open_date": "2026-10-01",
+     "open_time": null,
+     "timezone": "America/Detroit",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "MI-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2026-09-30",
+     "continuous_open": false,
+     "land_type": "private",
+     "method": "trapping",
+     "notes": "Furbearer MANAGEMENT season: raccoons can be trapped on PRIVATE lands only. Commercial Forest lands open to trapping by the general public are closed for raccoon trapping during the management season. Cannot be taken in state parks/recreation areas Apr 1 - Sep 14. Carcasses must be buried, landfilled, or composted on own land.",
+     "open_date": "2026-04-01",
+     "open_time": null,
+     "timezone": "America/Detroit",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "MI-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Regular season. Nighttime hunting allowed.",
+     "open_date": "2026-10-01",
+     "open_time": null,
+     "timezone": "America/Detroit",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "MI-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2026-09-30",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Furbearer MANAGEMENT season: raccoons can be hunted on public AND private lands. Cannot be taken in state parks/recreation areas Apr 1 - Sep 14. Use of dogs prohibited Apr 16 - Jul 7. Carcasses must be buried, landfilled, or composted on own land.",
+     "open_date": "2026-04-01",
+     "open_time": null,
+     "timezone": "America/Detroit",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "MI-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Striped skunk",
+   "iac_reference": "Wildlife Conservation Order; 2026 MI Fur Harvester Regulations Summary",
+   "notes": "The Michigan summary's furbearer glossary lists 'skunk'; no separate spotted-skunk season exists.",
+   "permit_requirements": [],
+   "scientific_name": "Mephitis mephitis",
+   "scientific_name_note": "Standard taxonomy; not stated in the Michigan summary.",
+   "scientific_name_verified": false,
+   "season_status": "continuous",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Year-round statewide with a valid fur harvester license.",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/Detroit",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "MI-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Year-round statewide. Nighttime hunting allowed.",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/Detroit",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "MI-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Weasel (least, short-tailed/ermine, long-tailed)",
+   "iac_reference": "Wildlife Conservation Order; 2026 MI Fur Harvester Regulations Summary",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": null,
+   "scientific_name_note": "The Michigan summary lists 'weasel (least, short-tailed/ermine and long-tailed)' without Latin names; left null rather than guessing.",
+   "scientific_name_verified": false,
+   "season_status": "continuous",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Year-round statewide with a valid fur harvester license.",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/Detroit",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "MI-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Year-round statewide. Nighttime hunting allowed.",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/Detroit",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "MI-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "state": "MI",
+ "state_name": "Michigan",
+ "verification": {
+  "confirmation_notes": "Data taken from the official 2026 Fur Harvester Regulations Summary (Michigan DNR, michigan.gov), which covers the 2026-27 harvest year (license year runs through April 2027; hunting-hours table explicitly covers January-March 2027, so winter season dates in Jan-Mar are 2027). Season dates, bag limits, kill-tag rules, mandatory registration deadlines, management seasons, and unit/county boundary descriptions were all read from this official source. Unit A = Upper Peninsula except Drummond Island; Units B-H as listed; bobcat, fisher, marten, and otter require free resident kill tags (bobcat tags available May 1-Oct 31) and mandatory registration.",
+  "known_gaps": [
+   "Scientific names are standard taxonomy, NOT stated in the Michigan summary.",
+   "Nonresident kill-tag bag limits are shown as 'N/A' in the bag-limit table (nonresidents cannot harvest badger, bobcat, fisher, marten, or otter).",
+   "Opossum/skunk/weasel year-round seasons are stated as harvestable 'year-round... with a valid Michigan fur harvester license' \u2014 modeled as continuous.",
+   "Bobcat trapping Unit A/B has a split season (Nov 1-14, 2026 and Dec 1, 2026-Jan 18, 2027); both legs are modeled as separate season objects.",
+   "Michigan hunting hours (1/2 hour before sunrise to 1/2 hour after sunset) vary by date and zone and are not modeled as single times; the Jan-Mar 2027 table was used to confirm season-year interpretation.",
+   "Four western Upper Peninsula counties (Gogebic, Iron, Dickinson, Menominee) are on Central Time; the dataset uses America/Detroit statewide \u2014 note the one-hour adjustment for those counties.",
+   "Tribal harvest regulations (ceded-territory/tribal member rules) are separate and not modeled.",
+   "Trap hardware rules, setbacks, and check times are not modeled.",
+   "Damage-control take on private property (no license/permit needed for beaver, coyote, muskrat, opossum, raccoon, skunk, weasel doing damage) is noted but not modeled as a season."
+  ],
+  "regulation_year_confirmed": true
+ },
+ "license_url": "https://www.mdnr-elicense.com/",
+ "license_vendor": "Michigan DNR eLicense",
+ "regs_url": "https://www.michigan.gov/dnr/managing-resources/laws/regulations/fur-harvester",
+ "regs_kind": "page"
+,
+ "warden_directory": {
+  "label": "Report a violation",
+  "url": "https://www.michigan.gov/dnr/managing-resources/laws/rap",
+  "kind": "hotline",
+  "note": "Report All Poaching (RAP): 800-292-7800, 24/7 (call or text)"
+ }
+}

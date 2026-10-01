@@ -1,0 +1,709 @@
+{
+ "disclaimer": "Reminder reference only \u2014 NOT legal authority. Season dates, zones, and limits are set annually and can change. Always verify current regulations with the Illinois Department of Natural Resources before hunting or trapping.",
+ "license_summary": {
+  "bobcat_otter_permits": "Bobcat: Bobcat Hunting and Trapping Permit required BEFORE attempting to harvest (lottery, $5 non-refundable application, applications Sept 1-30 online only); one bobcat per permit; Bobcat Registration Permit ($5) must be purchased within 48 hours of harvest (online only, not at vendors); federal CITES tag mailed 2-3 weeks later. River otter: River Otter Registration Permit ($5) within 48 hours of taking EACH otter; CITES pelt tag mailed 2-3 weeks later.",
+  "hunting_license": "To HUNT furbearers, residents and nonresidents need an applicable hunting license plus a State Habitat Stamp ($5).",
+  "trapping_license": "Residents and nonresidents need an appropriate trapping license plus a State Habitat Stamp ($5) to trap furbearers. First-time trappers born on or after Jan. 1, 1998 must complete a trapper education course before purchasing a license. Youth Hunting and Trapping license (under 18): $7. Nonresident trapping: $175 (with state reciprocity) / $250 (without)."
+ },
+ "provisional": false,
+ "retrieved_at": "2026-09-18",
+ "schema_version": "1.1",
+ "season_year": "2026-27",
+ "sources": [
+  {
+   "id": "digest-2026-27",
+   "notes": "Furbearer trapping/hunting season tables on p.42; bobcat and otter permit/tag rules pp.43-45; furbearer zone maps p.44. Archived locally in hidden_files/season-research/illinois/.",
+   "title": "Illinois 2026-2027 Digest of Hunting and Trapping Regulations (Illinois DNR, published Aug 2026)",
+   "type": "agency_booklet",
+   "url": "https://v3-wp.huntillinois.org/wp-content/uploads/2026/08/HuntTrapDigest.pdf"
+  }
+ ],
+ "species": [
+  {
+   "common_name": "Raccoon",
+   "iac_reference": "17 Ill. Adm. Code 590; 2026\u201327 IL Hunt & Trap Digest p.42",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Procyon lotor",
+   "scientific_name_note": "Standard taxonomy; not stated in Illinois DNR digest.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Trapping season. Digest does not state a trapping opening-day time.",
+     "open_date": "2026-11-10",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "IL-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit on raccoon, opossum, red fox, coyote, striped skunk, and woodchuck.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Open 24 hours during the season; season begins 1/2 hour before sunrise on opening day and closes 1/2 hour after sunset on closing day. CLOSED during first and second firearm deer seasons in counties open to firearm deer hunting. During archery deer season, hunting hours for raccoon, opossum, red fox, coyote, and striped skunk are 1/2 hour before sunrise to 1/2 hour after sunset.",
+     "open_date": "2026-11-10",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "IL-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Opossum",
+   "iac_reference": "17 Ill. Adm. Code 590; 2026\u201327 IL Hunt & Trap Digest p.42",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Didelphis virginiana",
+   "scientific_name_note": "Standard taxonomy; not stated in Illinois DNR digest.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Trapping season.",
+     "open_date": "2026-11-10",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "IL-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit on raccoon, opossum, red fox, coyote, striped skunk, and woodchuck.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Same dates/hours as raccoon hunting (open 24 hours; begins 1/2 hr before sunrise opening day; closes 1/2 hr after sunset closing day). CLOSED during first and second firearm deer seasons in counties open to firearm deer hunting.",
+     "open_date": "2026-11-10",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "IL-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Striped skunk",
+   "iac_reference": "17 Ill. Adm. Code 590; 2026\u201327 IL Hunt & Trap Digest p.42",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Mephitis mephitis",
+   "scientific_name_note": "Standard taxonomy; not stated in Illinois DNR digest.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Trapping season.",
+     "open_date": "2026-11-10",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "IL-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit on raccoon, opossum, red fox, coyote, striped skunk, and woodchuck.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Year-round hunting, CLOSED during first and second firearm deer seasons in counties open to firearm deer hunting. Hours: 1/2 hour before sunrise to 1/2 hour after sunset; no time restriction Nov 10, 2026 - Mar 15, 2027.",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "IL-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Weasel (Least and Long-tailed)",
+   "iac_reference": "17 Ill. Adm. Code 590; 2026\u201327 IL Hunt & Trap Digest p.42",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": null,
+   "scientific_name_note": "Digest lists 'Weasel (Least and Long-tailed)' without Latin names; left null rather than guessing.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Trapping-only species in Illinois (cannot be hunted).",
+     "open_date": "2026-11-10",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "IL-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Mink",
+   "iac_reference": "17 Ill. Adm. Code 590; 2026\u201327 IL Hunt & Trap Digest p.42",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Neogale vison",
+   "scientific_name_note": "Standard taxonomy; not stated in Illinois DNR digest.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Trapping-only species in Illinois (cannot be hunted).",
+     "open_date": "2026-11-10",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "IL-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Muskrat",
+   "iac_reference": "17 Ill. Adm. Code 590; 2026\u201327 IL Hunt & Trap Digest p.42",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Ondatra zibethicus",
+   "scientific_name_note": "Standard taxonomy; not stated in Illinois DNR digest.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Trapping-only species in Illinois (cannot be hunted).",
+     "open_date": "2026-11-10",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "IL-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Red fox",
+   "iac_reference": "17 Ill. Adm. Code 590; 2026\u201327 IL Hunt & Trap Digest p.42",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Vulpes vulpes",
+   "scientific_name_note": "Standard taxonomy; not stated in Illinois DNR digest.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Trapping season.",
+     "open_date": "2026-11-10",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "IL-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit on raccoon, opossum, red fox, coyote, striped skunk, and woodchuck.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Open 24 hours during the season; begins 1/2 hr before sunrise on opening day; closes 1/2 hr after sunset on closing day. CLOSED during first and second firearm deer seasons in counties open to firearm deer hunting.",
+     "open_date": "2026-11-10",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "IL-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Gray fox",
+   "iac_reference": "17 Ill. Adm. Code 590; 2026\u201327 IL Hunt & Trap Digest p.42-43",
+   "notes": "Gray fox hunting and trapping seasons are CLOSED (digest p.43: population in decline; season may re-open by administrative rule if the population rebounds). Included so the app flags any logged take as out of season.",
+   "permit_requirements": [],
+   "scientific_name": "Urocyon cinereoargenteus",
+   "scientific_name_note": "Standard taxonomy; not stated in Illinois DNR digest.",
+   "scientific_name_verified": false,
+   "season_status": "closed",
+   "seasons": []
+  },
+  {
+   "common_name": "Coyote",
+   "iac_reference": "17 Ill. Adm. Code 590; 2026\u201327 IL Hunt & Trap Digest p.42",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Canis latrans",
+   "scientific_name_note": "Standard taxonomy; not stated in Illinois DNR digest.",
+   "scientific_name_verified": false,
+   "season_status": "continuous",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Trapping season.",
+     "open_date": "2026-11-10",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "IL-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit on raccoon, opossum, red fox, coyote, striped skunk, and woodchuck.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Year-round hunting, CLOSED during first and second firearm deer seasons in counties open to firearm deer hunting. Hours: 1/2 hour before sunrise to 1/2 hour after sunset; no time restriction Nov 10, 2026 - Mar 15, 2027. Hunters with unfilled firearm deer permits may harvest coyotes during firearm deer seasons with weapons legal for deer hunting.",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "IL-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Badger",
+   "iac_reference": "17 Ill. Adm. Code 590; 2026\u201327 IL Hunt & Trap Digest p.42, 44",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Taxidea taxus",
+   "scientific_name_note": "Standard taxonomy; not stated in Illinois DNR digest.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "2 per trapper per season in the North zone.",
+      "possession_limit": null,
+      "season_bag": 2
+     },
+     "close_date": "2027-02-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Trapping-only species in Illinois (cannot be hunted). Badger trapping zone divided by U.S. Route 36 (map p.44).",
+     "open_date": "2026-11-10",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "IL-badger-north",
+       "zone_name": "North Furbearer Zone (north of U.S. Route 36)"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "1 per trapper per season in the South zone.",
+      "possession_limit": null,
+      "season_bag": 1
+     },
+     "close_date": "2027-02-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Trapping-only species in Illinois (cannot be hunted). Badger trapping zone divided by U.S. Route 36 (map p.44).",
+     "open_date": "2026-11-10",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "IL-badger-south",
+       "zone_name": "South Furbearer Zone (south of U.S. Route 36)"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Bobcat",
+   "iac_reference": "17 Ill. Adm. Code 590; 2026\u201327 IL Hunt & Trap Digest p.42, 44-45",
+   "notes": "Legal hunting methods include archery, predator calling, stalking, and treeing with dogs. Bobcat may also be salvaged as road-kill by permit holders during the open season (counts toward the one-bobcat limit).",
+   "permit_requirements": [
+    "Bobcat Hunting and Trapping Permit required BEFORE taking or attempting to harvest a bobcat; allocated by lottery; $5 non-refundable application fee; applications online only Sept 1-30.",
+    "Bobcat Registration Permit must be purchased online within 48 hours of harvest ($5); NOT available at license vendors. Federal CITES tag mailed 2-3 weeks later and must be permanently affixed to the pelt before export or transfer to a fur buyer, taxidermist, fur tanner, or garment manufacturer.",
+    "Applicants who did not receive a permit the previous year get preference in the initial random drawing."
+   ],
+   "scientific_name": "Lynx rufus",
+   "scientific_name_note": "Standard taxonomy; not stated in Illinois DNR digest.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "One bobcat per permit.",
+      "possession_limit": null,
+      "season_bag": 1
+     },
+     "close_date": "2027-02-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Closed zone (no bobcat take): area bounded by I-39/Route 51 on the west and U.S. Route 36 on the south (map p.44).",
+     "open_date": "2026-11-10",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "IL-bobcat-permit-zone",
+       "zone_name": "Bobcat Hunting and Trapping Zone (all of Illinois EXCEPT the area bounded by Interstate 39/U.S. Route 51 on the west side and U.S. Route 36 on the south side)"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "One bobcat per permit.",
+      "possession_limit": null,
+      "season_bag": 1
+     },
+     "close_date": "2027-02-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Digest table groups bobcat hunting with raccoon/opossum/red fox dates and hours (open 24 hours; begins 1/2 hr before sunrise opening day; closes 1/2 hr after sunset closing day). Hunting season is CLOSED during firearm deer seasons. Closed zone (no bobcat take): area bounded by I-39/Route 51 on the west and U.S. Route 36 on the south.",
+     "open_date": "2026-11-10",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "IL-bobcat-permit-zone",
+       "zone_name": "Bobcat Hunting and Trapping Zone (all of Illinois EXCEPT the area bounded by Interstate 39/U.S. Route 51 on the west side and U.S. Route 36 on the south side)"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Beaver",
+   "iac_reference": "17 Ill. Adm. Code 590; 2026\u201327 IL Hunt & Trap Digest p.42",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Castor canadensis",
+   "scientific_name_note": "Standard taxonomy; not stated in Illinois DNR digest.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Trapping-only species in Illinois (cannot be hunted).",
+     "open_date": "2026-11-10",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "IL-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "River otter",
+   "iac_reference": "17 Ill. Adm. Code 590; 2026\u201327 IL Hunt & Trap Digest p.42, 45",
+   "notes": "Licensed trappers may salvage a road-kill river otter during the open season; it counts toward the 5-otter harvest limit and is subject to permit/tagging requirements.",
+   "permit_requirements": [
+    "River Otter Registration Permit ($5) must be purchased within 48 hours of harvesting EACH river otter; available online and at vendors. Do not purchase before harvest.",
+    "Official CITES pelt tag mailed 2-3 weeks after purchase; must be permanently affixed to the green hide of each otter (including whole, unskinned carcass) before it is exported from the U.S. or transferred to a fur buyer, fur tanner, taxidermist, or manufacturer. Tags cannot be transferred between people.",
+    "Possession limits do not apply to fur buyers, tanners, manufacturers, taxidermists, or to tanned pelts, mounted specimens, or manufactured products."
+   ],
+   "scientific_name": "Lontra canadensis",
+   "scientific_name_note": "Standard taxonomy; not stated in Illinois DNR digest.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No more than 5 river otters may be harvested during the season. Possession limit is twice the season limit (10).",
+      "possession_limit": 10,
+      "season_bag": 5
+     },
+     "close_date": "2027-03-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Trapping-only species in Illinois (cannot be hunted).",
+     "open_date": "2026-11-10",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "IL-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Woodchuck (Groundhog)",
+   "iac_reference": "17 Ill. Adm. Code 590; 2026\u201327 IL Hunt & Trap Digest p.42",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Marmota monax",
+   "scientific_name_note": "Standard taxonomy; not stated in Illinois DNR digest.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2026-09-30",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "The published 2026-27 digest trapping season (1 Jun - 30 Sep 2026) has already closed; the next annual season is expected to be 1 Jun - 30 Sep 2027 (verify against the 2027-28 digest when published).",
+     "open_date": "2026-06-01",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "IL-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit on raccoon, opossum, red fox, coyote, striped skunk, and woodchuck.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Hunting hours: 1/2 hour before sunrise to 1/2 hour after sunset. CLOSED during first and second firearm deer seasons in counties open to firearm deer hunting.",
+     "open_date": "2026-06-01",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "IL-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "state": "IL",
+ "state_name": "Illinois",
+ "verification": {
+  "confirmation_notes": "Data taken from the official Illinois DNR 2026-2027 Digest of Hunting and Trapping Regulations (PDF hosted on huntillinois.org, uploaded Aug 2026). Furbearer trapping table and furbearer hunting table both on digest p.42; bobcat/otter permit rules pp.43-45; furbearer and bobcat zone maps p.44. Table images were visually verified against the PDF to resolve ambiguous text-extraction row alignment.",
+  "known_gaps": [
+   "Scientific names are standard taxonomy, NOT stated in the Illinois DNR digest.",
+   "Trapping opening-day time is not stated in the digest; season entries use open_time null.",
+   "Bobcat trapping dates: the trapping table merges the date cell across the general-season rows including bobcat (10 Nov 2026 - 15 Feb 2027); confirmed by the digest's 2026-2027 trapping timeline ('Badger/Bobcat/Coyote/... Opens 10').",
+   "Bobcat closed zone is described geographically (bounded by I-39/U.S. Route 51 west, U.S. Route 36 south) rather than by county list; modeled as a descriptive special_areas zone. Badger North/South zones are divided by U.S. Route 36, likewise descriptive.",
+   "Bobcat hunting hours: the digest merges bobcat's hours cell with the raccoon/opossum/red fox row ('Open 24 hours...'); the merged cell mentions other species explicitly for the archery-deer-season exception but not bobcat \u2014 flag for cross-check against 17 Ill. Adm. Code 590 if precise hours matter.",
+   "Woodchuck trapping season in the 2026-27 digest (1 Jun - 30 Sep 2026) is already closed as of dataset compilation; the next occurrence (1 Jun - 30 Sep 2027) is an annual-pattern expectation, not a published date.",
+   "First and second firearm deer season dates (which close some furbearer hunting) are not modeled.",
+   "Depredation/nuisance take (Nuisance Animal Removal Permit) is noted in the digest but not modeled as a season.",
+   "Trap hardware rules (snare specs, jaw spread limits, setbacks, tagging, check times) are NOT in this dataset."
+  ],
+  "regulation_year_confirmed": true
+ },
+ "license_url": "https://www.exploremoreil.com/",
+ "license_vendor": "ExploreMoreIL (IDNR official platform)",
+ "regs_url": "https://v3-wp.huntillinois.org/wp-content/uploads/2026/08/HuntTrapDigest.pdf",
+ "regs_kind": "pdf"
+,
+ "warden_directory": {
+  "label": "Report a violation",
+  "url": "https://dnr.Illinois.gov/lawenforcement/target-poachers.html",
+  "kind": "hotline",
+  "note": "Target Illinois Poachers: 1-877-236-7529 (1-877-2DNRLAW); 217-785-7567; confidential"
+ }
+}

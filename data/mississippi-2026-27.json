@@ -1,0 +1,632 @@
+{
+ "schema_version": "1.1",
+ "state": "MS",
+ "state_name": "Mississippi",
+ "season_year": "2026-27",
+ "retrieved_at": "2026-09-18",
+ "disclaimer": "Reminder reference only — NOT legal authority. Season dates, zones, and limits are set annually and can change. Always verify current regulations with the Mississippi Department of Wildlife, Fisheries, and Parks before hunting or trapping. Municipalities and counties may authorize snares within 100 ft of roads on a public-safety finding.",
+ "sources": [
+  {
+   "id": "ms-mdwfp-furbearer",
+   "title": "MDWFP: Furbearer & Trapping",
+   "url": "https://www.mdwfp.com/wildlife-hunting/furbearer-trapping",
+   "type": "agency_webpage",
+   "notes": "Official MDWFP page: trapping Nov 1–Mar 15 for all furbearers and nuisance species; no bag/possession limits."
+  },
+  {
+   "id": "ms-sb2420",
+   "title": "2026 Mississippi SB 2420 (amendment to Miss. Code § 49-7-31.4)",
+   "url": "https://billstatus.ls.state.ms.us/documents/2026/pdf/SB/2400-2499/SB2420PS.pdf",
+   "type": "statute",
+   "notes": "Official legislature PDF of the bill text; enactment status not confirmed from bill history — see known gaps."
+  }
+ ],
+ "license_summary": {
+  "trapping_license": "A trapping license is required of anyone 16 or older who traps furbearers (bobcat, mink, muskrat, opossum, otter, raccoon, weasel) or nuisance animals (beaver, coyote, fox, nutria, skunks) in Mississippi. Resident $25; nonresident $205. No person shall trap on the lands of another without the landowner's permission.",
+  "bobcat_otter_tagging": "River otter and bobcat are subject to tagging requirements (see MDWFP 'River Otter and Bobcat Tagging')."
+ },
+ "species": [
+  {
+   "common_name": "Beaver",
+   "scientific_name": "Castor canadensis",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Mississippi Department of Wildlife, Fisheries, and Parks regulations.",
+   "iac_reference": "40 Miss. Admin. Code Pt. 2, Ch. 4, r. 4.1",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-03-15",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MS-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "no bag or possession limits."
+     },
+     "notes": "Trapping: Nov. 1, 2026 – Mar. 15, 2027; no bag or possession limits. (Season set by Commission rule under SB 2420 (2026).)"
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Bobcat",
+   "scientific_name": "Lynx rufus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Mississippi Department of Wildlife, Fisheries, and Parks regulations.",
+   "iac_reference": "40 Miss. Admin. Code Pt. 2, Ch. 4, r. 4.1",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-03-15",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MS-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "no bag or possession limits."
+     },
+     "notes": "Trapping: Nov. 1, 2026 – Mar. 15, 2027; no bag or possession limits. (Season set by Commission rule under SB 2420 (2026).)"
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-10-01",
+     "close_date": "2026-10-31",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MS-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": "5",
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Oct. 1–31: 5 per day, 8 per party."
+     },
+     "notes": "Hunting: Oct. 1–31, 2026; 5 per day, 8 per party."
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MS-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Nov. 1 – Feb. 28: no bag or possession limit."
+     },
+     "notes": "Hunting: Nov. 1, 2026 – Feb. 28, 2027; no limit."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Coyote",
+   "scientific_name": "Canis latrans",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Mississippi Department of Wildlife, Fisheries, and Parks regulations.",
+   "iac_reference": "40 Miss. Admin. Code Pt. 2, Ch. 4, r. 4.1",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-03-15",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MS-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "no bag or possession limits."
+     },
+     "notes": "Trapping: Nov. 1, 2026 – Mar. 15, 2027; no bag or possession limits. (Season set by Commission rule under SB 2420 (2026).)"
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Fox",
+   "scientific_name": null,
+   "scientific_name_verified": false,
+   "scientific_name_note": "Mississippi regulations do not distinguish red and gray fox; no single standard taxon applies.",
+   "iac_reference": "40 Miss. Admin. Code Pt. 2, Ch. 4, r. 4.1",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-03-15",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MS-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "no bag or possession limits."
+     },
+     "notes": "Trapping: Nov. 1, 2026 – Mar. 15, 2027; no bag or possession limits. (Season set by Commission rule under SB 2420 (2026).)"
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Mink",
+   "scientific_name": "Neogale vison",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Mississippi Department of Wildlife, Fisheries, and Parks regulations.",
+   "iac_reference": "40 Miss. Admin. Code Pt. 2, Ch. 4, r. 4.1",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-03-15",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MS-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "no bag or possession limits."
+     },
+     "notes": "Trapping: Nov. 1, 2026 – Mar. 15, 2027; no bag or possession limits. (Season set by Commission rule under SB 2420 (2026).)"
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Muskrat",
+   "scientific_name": "Ondatra zibethicus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Mississippi Department of Wildlife, Fisheries, and Parks regulations.",
+   "iac_reference": "40 Miss. Admin. Code Pt. 2, Ch. 4, r. 4.1",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-03-15",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MS-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "no bag or possession limits."
+     },
+     "notes": "Trapping: Nov. 1, 2026 – Mar. 15, 2027; no bag or possession limits. (Season set by Commission rule under SB 2420 (2026).)"
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Nutria",
+   "scientific_name": "Myocastor coypus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Mississippi Department of Wildlife, Fisheries, and Parks regulations.",
+   "iac_reference": "40 Miss. Admin. Code Pt. 2, Ch. 4, r. 4.1",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-03-15",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MS-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "no bag or possession limits."
+     },
+     "notes": "Trapping: Nov. 1, 2026 – Mar. 15, 2027; no bag or possession limits. (Season set by Commission rule under SB 2420 (2026).)"
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Opossum",
+   "scientific_name": "Didelphis virginiana",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Mississippi Department of Wildlife, Fisheries, and Parks regulations.",
+   "iac_reference": "40 Miss. Admin. Code Pt. 2, Ch. 4, r. 4.1",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-03-15",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MS-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "no bag or possession limits."
+     },
+     "notes": "Trapping: Nov. 1, 2026 – Mar. 15, 2027; no bag or possession limits. (Season set by Commission rule under SB 2420 (2026).)"
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-10-01",
+     "close_date": "2026-10-31",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MS-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Hunting: Oct. 1–31, 2026."
+     },
+     "notes": "Hunting: Oct. 1–31, 2026."
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MS-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Hunting: Nov. 1, 2026 – Feb. 28, 2027."
+     },
+     "notes": "Hunting: Nov. 1, 2026 – Feb. 28, 2027."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Raccoon",
+   "scientific_name": "Procyon lotor",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Mississippi Department of Wildlife, Fisheries, and Parks regulations.",
+   "iac_reference": "40 Miss. Admin. Code Pt. 2, Ch. 4, r. 4.1",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-03-15",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MS-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "no bag or possession limits."
+     },
+     "notes": "Trapping: Nov. 1, 2026 – Mar. 15, 2027; no bag or possession limits. (Season set by Commission rule under SB 2420 (2026).)"
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-07-01",
+     "close_date": "2026-09-30",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MS-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "1 per party per night."
+     },
+     "notes": "Hunting: July 1 – Sept. 30, 2026; 1 per party per night."
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-10-01",
+     "close_date": "2026-10-31",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MS-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Hunting: Oct. 1–31, 2026."
+     },
+     "notes": "Hunting: Oct. 1–31, 2026."
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MS-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Hunting: Nov. 1, 2026 – Feb. 28, 2027."
+     },
+     "notes": "Hunting: Nov. 1, 2026 – Feb. 28, 2027."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "River otter",
+   "scientific_name": "Lontra canadensis",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Mississippi Department of Wildlife, Fisheries, and Parks regulations.",
+   "iac_reference": "40 Miss. Admin. Code Pt. 2, Ch. 4, r. 4.1",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-03-15",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MS-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "no bag or possession limits."
+     },
+     "notes": "Trapping: Nov. 1, 2026 – Mar. 15, 2027; no bag or possession limits. (Season set by Commission rule under SB 2420 (2026).)"
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Skunk",
+   "scientific_name": null,
+   "scientific_name_verified": false,
+   "scientific_name_note": "Mississippi regulations do not distinguish skunk species; no single standard taxon applies.",
+   "iac_reference": "40 Miss. Admin. Code Pt. 2, Ch. 4, r. 4.1",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-03-15",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MS-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "no bag or possession limits."
+     },
+     "notes": "Trapping: Nov. 1, 2026 – Mar. 15, 2027; no bag or possession limits. (Season set by Commission rule under SB 2420 (2026).)"
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Weasel",
+   "scientific_name": null,
+   "scientific_name_verified": false,
+   "scientific_name_note": "Mississippi regulations do not distinguish weasel species; no single standard taxon applies.",
+   "iac_reference": "40 Miss. Admin. Code Pt. 2, Ch. 4, r. 4.1",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-03-15",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "MS-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "no bag or possession limits."
+     },
+     "notes": "Trapping: Nov. 1, 2026 – Mar. 15, 2027; no bag or possession limits. (Season set by Commission rule under SB 2420 (2026).)"
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  }
+ ],
+ "verification": {
+  "regulation_year_confirmed": true,
+  "confirmation_notes": "Official MDWFP furbearer & trapping page, 40 Miss. Admin. Code Pt. 2, Ch. 4, r. 4.1, and Miss. Code § 49-7-31.4, read 2026-09-18. Hunting dates modeled per Rule 4.1; see known gaps re SB 2420.",
+  "known_gaps": [
+   "Hunting-season dates were read from the official 40 Miss. Admin. Code Pt. 2, Ch. 4, Rule 4.1 text on 2026-09-18, but no stable official URL for the current rule text was located; the 2026-27 digest table suggests a Nov. 1–Mar. 15 hunt end for opossum/raccoon/bobcat vs. the rule's Feb. 28. Re-verify against the current rule before relying on hunting dates.",
+   "2026 SB 2420 (amending § 49-7-31.4) bill text was found on the official legislature site but gubernatorial approval/enactment was not confirmed from bill history; hunting season dates are modeled per the published Rule 4.1 (through Feb. 28), with the statute's Mar. 15 end flagged in species notes.",
+   "Scientific names are standard taxonomy, not stated in MDWFP regulations."
+  ]
+ },
+ "provisional": true,
+ "license_url": "https://licensing.outdoors.ms/",
+ "license_vendor": "MDWFP online license platform (licensing.outdoors.ms)",
+ "regs_url": "https://mdwfp.com/wildlife-hunting/furbearing-and-trapping-regulations",
+ "regs_kind": "page"
+,
+ "warden_directory": {
+  "label": "Report a violation",
+  "url": "https://dev.mdwfp.com/enforcement-education",
+  "kind": "hotline",
+  "note": "MDWFP Law Enforcement: 1-800-237-6278 (1-800-BE SMART); regional offices listed"
+ }
+}

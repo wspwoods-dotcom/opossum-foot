@@ -1,0 +1,733 @@
+{
+ "disclaimer": "Reminder reference only \u2014 NOT legal authority. Season dates, quotas, county lists, and limits can change, and the otter and bobcat seasons close early if quotas are met. Always verify current regulations with the Indiana DNR before hunting or trapping.",
+ "license_summary": {
+  "bobcat": "A valid Indiana bobcat license is required to hunt or trap a bobcat (resident $15; nonresident $50; youth $15), unless the person holds a resident youth hunt/trap combo, lifetime comprehensive hunting, or lifetime comprehensive hunting and fishing license. To TRAP bobcats, a valid trapping license (or lifetime trapping / resident youth hunt-trap combo) is also required; only foothold, cage, and cable devices (e.g., snares) may be used. To HUNT bobcats, a license that authorizes hunting is also required (e.g., annual small game hunting license); dogs may NOT be used to hunt bobcats. Allowed equipment: bow and arrow, crossbow, shotgun (any gauge), handgun, muzzleloading long gun or handgun, rifle, air gun of at least .177 caliber.",
+  "hunting": "To HUNT furbearers, a valid hunting license (e.g., resident annual small game hunting license $32; nonresident $90) is required. Hunting hours: one-half (1/2) hour before sunrise to one-half (1/2) hour after sunset.",
+  "otter": "A valid Indiana trapping license is required to set traps for river otters; trapper must be at least 10 years old unless trapper-education certified. River otter harvest is trapping only.",
+  "trapping": "A valid Indiana trapping license is required to set traps (resident $20; nonresident $140; youth $20). Traps must be checked and animals removed at least once every 24 hours (48 hours for traps that capture and kill by submersion, crushing, or asphyxiation)."
+ },
+ "provisional": false,
+ "retrieved_at": "2026-09-18",
+ "schema_version": "1.1",
+ "season_year": "2026-27",
+ "sources": [
+  {
+   "id": "guide-2026-27",
+   "notes": "Furbearer hunting dates (guide p.4); trapping seasons table (p.43); river otter rules (p.43); bobcat rules, open-county map, and bobcat hunting equipment/hours (p.44); license fees. Archived locally in hidden_files/season-research/indiana/.",
+   "title": "2026-2027 Indiana Hunting & Trapping Guide (Indiana DNR)",
+   "type": "agency_booklet",
+   "url": "http://eregulations.com/assets/docs/resources/IN/26INHD_LR.pdf"
+  },
+  {
+   "id": "dnr-otter-page",
+   "notes": "Confirms statewide otter season, 2-per-person limit, 750 quota, 24-hour CheckIN Game reporting, physical registration and CITES tagging, carcass submission for age-at-harvest modeling.",
+   "title": "Indiana DNR \u2014 Indiana River Otter Trapping",
+   "type": "agency_page",
+   "url": "https://www.in.gov/dnr/fish-and-wildlife/hunting-and-trapping/indiana-river-otter-trapping/"
+  }
+ ],
+ "species": [
+  {
+   "common_name": "Red fox",
+   "iac_reference": "312 IAC 9-3; 2026-27 IN Hunting & Trapping Guide p.4, 43",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Vulpes vulpes",
+   "scientific_name_note": "Standard taxonomy; not stated in the Indiana DNR guide.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-01-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Combined 'Red & Gray Fox' trapping row.",
+     "open_date": "2026-10-15",
+     "open_time": null,
+     "timezone": "America/Indiana/Indianapolis",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "IN-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Combined 'Red & Gray Fox' hunting row. Hunting hours: 1/2 hour before sunrise to 1/2 hour after sunset.",
+     "open_date": "2026-10-15",
+     "open_time": null,
+     "timezone": "America/Indiana/Indianapolis",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "IN-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Gray fox",
+   "iac_reference": "312 IAC 9-3; 2026-27 IN Hunting & Trapping Guide p.4, 43",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Urocyon cinereoargenteus",
+   "scientific_name_note": "Standard taxonomy; not stated in the Indiana DNR guide.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-01-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Combined 'Red & Gray Fox' trapping row.",
+     "open_date": "2026-10-15",
+     "open_time": null,
+     "timezone": "America/Indiana/Indianapolis",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "IN-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Combined 'Red & Gray Fox' hunting row. Hunting hours: 1/2 hour before sunrise to 1/2 hour after sunset.",
+     "open_date": "2026-10-15",
+     "open_time": null,
+     "timezone": "America/Indiana/Indianapolis",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "IN-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Coyote",
+   "iac_reference": "312 IAC 9-3; 2026-27 IN Hunting & Trapping Guide p.4, 43",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Canis latrans",
+   "scientific_name_note": "Standard taxonomy; not stated in the Indiana DNR guide.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Combined 'Coyote & Striped Skunk' trapping row.",
+     "open_date": "2026-10-15",
+     "open_time": null,
+     "timezone": "America/Indiana/Indianapolis",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "IN-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Combined 'Coyote & Striped Skunk' hunting row. Hunting hours: 1/2 hour before sunrise to 1/2 hour after sunset.",
+     "open_date": "2026-10-15",
+     "open_time": null,
+     "timezone": "America/Indiana/Indianapolis",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "IN-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Striped skunk",
+   "iac_reference": "312 IAC 9-3; 2026-27 IN Hunting & Trapping Guide p.4, 43",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Mephitis mephitis",
+   "scientific_name_note": "Standard taxonomy; not stated in the Indiana DNR guide.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Combined 'Coyote & Striped Skunk' trapping row.",
+     "open_date": "2026-10-15",
+     "open_time": null,
+     "timezone": "America/Indiana/Indianapolis",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "IN-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Combined 'Coyote & Striped Skunk' hunting row. Hunting hours: 1/2 hour before sunrise to 1/2 hour after sunset.",
+     "open_date": "2026-10-15",
+     "open_time": null,
+     "timezone": "America/Indiana/Indianapolis",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "IN-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Raccoon",
+   "iac_reference": "312 IAC 9-3; 2026-27 IN Hunting & Trapping Guide p.4, 43",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Procyon lotor",
+   "scientific_name_note": "Standard taxonomy; not stated in the Indiana DNR guide.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-01-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Combined 'Raccoon & Opossum' trapping row.",
+     "open_date": "2026-11-08",
+     "open_time": null,
+     "timezone": "America/Indiana/Indianapolis",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "IN-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-01-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Combined 'Raccoon & Opossum' hunting row. Hunting hours: 1/2 hour before sunrise to 1/2 hour after sunset.",
+     "open_date": "2026-11-08",
+     "open_time": null,
+     "timezone": "America/Indiana/Indianapolis",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "IN-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Opossum",
+   "iac_reference": "312 IAC 9-3; 2026-27 IN Hunting & Trapping Guide p.4, 43",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Didelphis virginiana",
+   "scientific_name_note": "Standard taxonomy; not stated in the Indiana DNR guide.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-01-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Combined 'Raccoon & Opossum' trapping row.",
+     "open_date": "2026-11-08",
+     "open_time": null,
+     "timezone": "America/Indiana/Indianapolis",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "IN-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-01-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Combined 'Raccoon & Opossum' hunting row. Hunting hours: 1/2 hour before sunrise to 1/2 hour after sunset.",
+     "open_date": "2026-11-08",
+     "open_time": null,
+     "timezone": "America/Indiana/Indianapolis",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "IN-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Mink",
+   "iac_reference": "312 IAC 9-3; 2026-27 IN Hunting & Trapping Guide p.43",
+   "notes": "Guide lists no hunting season for mink; trapping only.",
+   "permit_requirements": [],
+   "scientific_name": "Neogale vison",
+   "scientific_name_note": "Standard taxonomy; not stated in the Indiana DNR guide.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-01-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Combined 'Mink, Muskrat, Long-tailed Weasel' trapping row.",
+     "open_date": "2026-11-15",
+     "open_time": null,
+     "timezone": "America/Indiana/Indianapolis",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "IN-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Muskrat",
+   "iac_reference": "312 IAC 9-3; 2026-27 IN Hunting & Trapping Guide p.43",
+   "notes": "Guide lists no hunting season for muskrat; trapping only.",
+   "permit_requirements": [],
+   "scientific_name": "Ondatra zibethicus",
+   "scientific_name_note": "Standard taxonomy; not stated in the Indiana DNR guide.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-01-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Combined 'Mink, Muskrat, Long-tailed Weasel' trapping row.",
+     "open_date": "2026-11-15",
+     "open_time": null,
+     "timezone": "America/Indiana/Indianapolis",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "IN-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Long-tailed weasel",
+   "iac_reference": "312 IAC 9-3; 2026-27 IN Hunting & Trapping Guide p.43",
+   "notes": "Guide lists no hunting season for long-tailed weasel; trapping only.",
+   "permit_requirements": [],
+   "scientific_name": "Neogale frenata",
+   "scientific_name_note": "Standard taxonomy; not stated in the Indiana DNR guide.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-01-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Combined 'Mink, Muskrat, Long-tailed Weasel' trapping row.",
+     "open_date": "2026-11-15",
+     "open_time": null,
+     "timezone": "America/Indiana/Indianapolis",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "IN-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Beaver",
+   "iac_reference": "312 IAC 9-3; 2026-27 IN Hunting & Trapping Guide p.43",
+   "notes": "Guide lists no hunting season for beaver; trapping only.",
+   "permit_requirements": [],
+   "scientific_name": "Castor canadensis",
+   "scientific_name_note": "Standard taxonomy; not stated in the Indiana DNR guide.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "",
+     "open_date": "2026-11-15",
+     "open_time": null,
+     "timezone": "America/Indiana/Indianapolis",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "IN-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "River otter",
+   "iac_reference": "312 IAC 9-3; 2026-27 IN Hunting & Trapping Guide p.43; DNR river otter trapping page",
+   "notes": "River otter harvest is trapping only \u2014 NO hunting season. The otter carcass (skinned) must be submitted for physical registration and CITES tagging within 15 days after the month of harvest so DNR biologists can collect reproductive and age data for the population model.",
+   "permit_requirements": [
+    "Bag limit: 2 otters per trapper per season. An individual who sets a trap that catches a river otter must count the animal toward their season limit.",
+    "River otters must be reported to the DNR CheckIN Game system (GoOutdoorsIN.com or 260-368-5880) within 24 hours of harvest; keep the confirmation number with the otter until physical registration.",
+    "Take the skinned carcass and separated pelt to a designated DNR employee or furbearer registration station for physical registration and CITES tagging within 15 days after the month of harvest.",
+    "Season quota of 750 river otters for 2026-2027; the season closes early if the quota is reached before March 15, 2027. Current reported take: on.IN.gov/ottertrapping or 317-232-4200."
+   ],
+   "scientific_name": "Lontra canadensis",
+   "scientific_name_note": "Standard taxonomy; not stated in the Indiana DNR guide.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "2 per trapper per season. Statewide season quota of 750 otters \u2014 season closes early if the quota is met.",
+      "possession_limit": null,
+      "season_bag": 2
+     },
+     "close_date": "2027-03-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Season closes early if the 750-otter statewide quota is reached; if the season closes early, a trapper who catches an otter within 48 hours after the close and has not reached the bag limit may keep it. If a river otter is killed after the quota is met, after the bag limit is reached, or outside the season, notify DNR within 24 hours.",
+     "open_date": "2026-11-15",
+     "open_time": null,
+     "timezone": "America/Indiana/Indianapolis",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "IN-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Bobcat",
+   "iac_reference": "312 IAC 9-3; 2026-27 IN Hunting & Trapping Guide p.4, 43-44",
+   "notes": "2026-27 rule change: the bobcat season now includes hunting (new) and the season quota is 400. Individuals who kill a bobcat after the quota is met, after the bag limit is reached, in a closed county, or outside the season must notify DNR within 24 hours and arrange for DNR to take the bobcat (local District Wildlife Biologist, Conservation Officer, or Law Enforcement Central Dispatch 812-837-9536). Bobcat carcasses are NOT required to be turned in; pelts must be CITES-tagged regardless of plans to use or sell.",
+   "permit_requirements": [
+    "A valid Indiana bobcat license is required to hunt or trap a bobcat ($15 resident, $50 nonresident, $15 youth), unless the person holds a resident youth hunt/trap combo, lifetime comprehensive hunting, or lifetime comprehensive hunting and fishing license.",
+    "Bag limit: 1 bobcat per person per season.",
+    "Bobcats taken during the season must be registered with the DNR CheckIN Game system (GoOutdoorsIN.com or 260-368-5880) within 24 hours of harvest; keep the confirmation number with the bobcat until physical registration.",
+    "Take the skinned and separated pelt to a designated DNR employee or furbearer registration station for physical registration and CITES tagging within 15 days after the month of harvest (find stations at on.IN.gov/bobcat-season).",
+    "Season quota of 400 bobcats for 2026-2027; the season closes early if the quota is reached before Jan. 31, 2027. Current reported harvest: on.IN.gov/bobcat-season or 317-232-4200."
+   ],
+   "scientific_name": "Lynx rufus",
+   "scientific_name_note": "Standard taxonomy; not stated in the Indiana DNR guide.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "1 per person per season. Statewide season quota of 400 bobcats \u2014 season closes early if the quota is met.",
+      "possession_limit": null,
+      "season_bag": 1
+     },
+     "close_date": "2027-01-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Trapping: foothold, cage, and cable devices (e.g., snares) only. A valid Indiana bobcat license is required to set traps for or harvest a bobcat unless the individual has a lifetime trapping license or resident youth hunt/trap combo; in addition to the bobcat license, a valid trapping license is required. An individual who sets a trap that catches a bobcat must count the animal toward their season limit.",
+     "open_date": "2026-11-08",
+     "open_time": null,
+     "timezone": "America/Indiana/Indianapolis",
+     "zones": [
+      {
+       "area_type": "counties",
+       "counties": [
+        "Bartholomew",
+        "Brown",
+        "Clark",
+        "Clay",
+        "Crawford",
+        "Daviess",
+        "Dearborn",
+        "Dubois",
+        "Floyd",
+        "Franklin",
+        "Gibson",
+        "Greene",
+        "Harrison",
+        "Jackson",
+        "Jefferson",
+        "Jennings",
+        "Johnson",
+        "Knox",
+        "Lawrence",
+        "Martin",
+        "Monroe",
+        "Morgan",
+        "Ohio",
+        "Orange",
+        "Owen",
+        "Parke",
+        "Perry",
+        "Pike",
+        "Posey",
+        "Putnam",
+        "Ripley",
+        "Scott",
+        "Spencer",
+        "Sullivan",
+        "Switzerland",
+        "Vanderburgh",
+        "Vermillion",
+        "Vigo",
+        "Warrick",
+        "Washington"
+       ],
+       "zone_id": "IN-bobcat-40",
+       "zone_name": "Bobcat open counties (southern and south-central Indiana, 40 counties)"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "1 per person per season. Statewide season quota of 400 bobcats \u2014 season closes early if the quota is met.",
+      "possession_limit": null,
+      "season_bag": 1
+     },
+     "close_date": "2027-01-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "NEW for 2026-27: bobcat hunting season. Hunting hours: 1/2 hour before sunrise to 1/2 hour after sunset. Dogs may NOT be used to assist in hunting bobcats. Allowed equipment: bow and arrow, crossbow, shotgun (any gauge), handgun (no minimum caliber), muzzleloading long gun or muzzleloading handgun, rifle (no minimum caliber), air gun of at least .177 caliber.",
+     "open_date": "2026-11-08",
+     "open_time": null,
+     "timezone": "America/Indiana/Indianapolis",
+     "zones": [
+      {
+       "area_type": "counties",
+       "counties": [
+        "Bartholomew",
+        "Brown",
+        "Clark",
+        "Clay",
+        "Crawford",
+        "Daviess",
+        "Dearborn",
+        "Dubois",
+        "Floyd",
+        "Franklin",
+        "Gibson",
+        "Greene",
+        "Harrison",
+        "Jackson",
+        "Jefferson",
+        "Jennings",
+        "Johnson",
+        "Knox",
+        "Lawrence",
+        "Martin",
+        "Monroe",
+        "Morgan",
+        "Ohio",
+        "Orange",
+        "Owen",
+        "Parke",
+        "Perry",
+        "Pike",
+        "Posey",
+        "Putnam",
+        "Ripley",
+        "Scott",
+        "Spencer",
+        "Sullivan",
+        "Switzerland",
+        "Vanderburgh",
+        "Vermillion",
+        "Vigo",
+        "Warrick",
+        "Washington"
+       ],
+       "zone_id": "IN-bobcat-40",
+       "zone_name": "Bobcat open counties (southern and south-central Indiana, 40 counties)"
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "state": "IN",
+ "state_name": "Indiana",
+ "verification": {
+  "confirmation_notes": "Data taken from the official 2026-2027 Indiana Hunting & Trapping Guide (eregulations.com official edition, archived locally). Trapping seasons table on p.43; furbearer hunting dates on p.4; river otter rules p.43; bobcat rules, bobcat hunting equipment/hours, and the 'Counties Open to Bobcat Season' map on p.44. The 40 open counties were read from the map image (gold-shaded counties) and cross-counted to 40, matching Indiana DNR's reported figure. The guide's 'Important Rule Changes' panel confirms hunting was added to the bobcat season for 2026-27.",
+  "known_gaps": [
+   "Scientific names are standard taxonomy, NOT stated in the Indiana DNR guide.",
+   "No trapping opening-day time stated; open_time null.",
+   "Badger is not listed as a furbearer with a season in the 2026-27 Indiana guide \u2014 Indiana treats the badger as a protected species (verify against 312 IAC 9 before assuming legal take). Omitted rather than modeled as closed.",
+   "Furbearer hunting hours beyond the 1/2-hour before sunrise to 1/2-hour after sunset general rule: raccoon/o-possum night hunting detail not stated in the extracted sections \u2014 verify against 312 IAC 9 if needed.",
+   "Chasing (dog running) season for raccoon/opossum (Feb. 1 - Oct. 25, 2026) is a non-take chasing season and is not modeled.",
+   "Nuisance/depredation rules are not modeled.",
+   "Indiana Central-Time counties (northwestern and southwestern counties on Central Time, including Jasper, Lake, LaPorte, Newton, Porter in the northwest and Gibson, Perry, Posey, Spencer, Vanderburgh, Warrick in the southwest): the dataset uses America/Indiana/Indianapolis statewide \u2014 adjust clock-dependent times by one hour for Central-Time counties."
+  ],
+  "regulation_year_confirmed": true
+ },
+ "license_url": "https://www.gooutdoorsin.com/",
+ "license_vendor": "Go Outdoors Indiana",
+ "regs_url": "http://eregulations.com/assets/docs/resources/IN/26INHD_LR.pdf",
+ "regs_kind": "pdf"
+,
+ "warden_directory": {
+  "label": "Report a violation",
+  "url": "https://www.in.gov/dnr/law-enforcement/",
+  "kind": "hotline",
+  "note": "Indiana DNR Law Enforcement: 1-800-847-4367 (1-800-TIP-IDNR), 24/7; tip.IN.gov"
+ }
+}

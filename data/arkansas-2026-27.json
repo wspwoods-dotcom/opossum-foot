@@ -1,0 +1,859 @@
+{
+ "schema_version": "1.1",
+ "state": "AR",
+ "state_name": "Arkansas",
+ "season_year": "2026-27",
+ "retrieved_at": "2026-09-18",
+ "disclaimer": "Reminder reference only \u2014 NOT legal authority. Season dates, zones, and limits are set annually and can change. Always verify current regulations with the Arkansas Game and Fish Commission before hunting or trapping.",
+ "sources": [
+  {
+   "id": "ar-agfc-trapping",
+   "title": "AGFC: Furbearers Trapping Season Dates and Bag Limits (2026-27)",
+   "url": "https://www.agfc.com/hunting/more-game/furbearers/trapping-season-dates-and-bag-limits/",
+   "type": "agency_webpage",
+   "notes": "Current 2026-27 trapping dates; excludes only coyote, beaver, nutria from the general season."
+  },
+  {
+   "id": "ar-agfc-hunting",
+   "title": "AGFC: Furbearers Hunting Season Dates and Bag Limits (2026-27)",
+   "url": "https://www.agfc.com/hunting/more-game/furbearers/hunting-season-dates-and-bag-limits/",
+   "type": "agency_webpage",
+   "notes": "Current 2026-27 hunting dates; headings verified against AGFC code structure."
+  },
+  {
+   "id": "ar-agfc-wma",
+   "title": "AGFC: 2026-27 General WMA Regulations (furbearer section)",
+   "url": "https://www.agfc.com/regulations/general-wma-regulations/",
+   "type": "administrative_code",
+   "notes": "Official AGFC code text resolving fox/mink/muskrat/nutria/beaver/raccoon/opossum/skunk hunting rows."
+  }
+ ],
+ "license_summary": {
+  "hunting_license": "Hunters and trappers age 16+ need a valid Arkansas hunting license; nonresidents additionally need the Nonresident Fur Trapper's Permit. The Resident Trapper's Permit was eliminated for 2026-27. A hunting license is required to sell pelts.",
+  "bobcat_otter_tagging": "Bobcat and river otter pelts must be tagged by an AGFC employee before being shipped out of state (unless sent to be tanned and returned). Possession of untagged river otter pelts from April 1 to the start of the next otter hunting season is prohibited except for depredation-permit animals."
+ },
+ "species": [
+  {
+   "common_name": "Badger",
+   "scientific_name": "Taxidea taxus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Arkansas Game and Fish Commission regulations.",
+   "iac_reference": "AGFC Code A1.05",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-21",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AR-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Sunrise Nov. 21, 2026 through sunset Feb. 28, 2027; no bag limit. (General furbearer trapping season; excludes coyote, beaver, nutria.)"
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "Hunting closed statewide (AGFC). Trapping open under the general furbearer season."
+  },
+  {
+   "common_name": "Beaver",
+   "scientific_name": "Castor canadensis",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Arkansas Game and Fish Commission regulations.",
+   "iac_reference": "AGFC Code A1.05",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-21",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AR-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Sunrise Nov. 21, 2026 through sunset Mar. 31, 2027; no bag limit."
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-09-01",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AR-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Sept. 1, 2026 through Mar. 31, 2027; day only; no bag limit."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Bobcat",
+   "scientific_name": "Lynx rufus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Arkansas Game and Fish Commission regulations.",
+   "iac_reference": "AGFC Code A1.05",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-21",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AR-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Sunrise Nov. 21, 2026 through sunset Feb. 28, 2027; no bag limit. (General furbearer trapping season; excludes coyote, beaver, nutria.)"
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-09-01",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AR-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": 2,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "daily limit 2."
+     },
+     "notes": "Sept. 1, 2026 through Feb. 28, 2027, plus turkey-season provisions (day only, no dogs during turkey season); daily limit 2. Pelts must be tagged by an AGFC employee before shipment out of state."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Coyote",
+   "scientific_name": "Canis latrans",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Arkansas Game and Fish Commission regulations.",
+   "iac_reference": "AGFC Code A1.05",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-08-01",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AR-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Sunrise Aug. 1, 2026 through sunset Mar. 31, 2027; no bag limit."
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "AR-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Year-round, no limit; nighttime hunting only with a free Commission predator-control permit."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Gray fox",
+   "scientific_name": "Urocyon cinereoargenteus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Arkansas Game and Fish Commission regulations.",
+   "iac_reference": "AGFC Code A1.05",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-21",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AR-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Sunrise Nov. 21, 2026 through sunset Feb. 28, 2027; no bag limit. (General furbearer trapping season; excludes coyote, beaver, nutria.)"
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-09-01",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AR-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": 2,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "daily bag 2."
+     },
+     "notes": "Sept. 1, 2026 through Feb. 28, 2027; day only; daily bag 2."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Mink",
+   "scientific_name": "Neogale vison",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Arkansas Game and Fish Commission regulations.",
+   "iac_reference": "AGFC Code A1.05",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-21",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AR-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Sunrise Nov. 21, 2026 through sunset Feb. 28, 2027; no bag limit. (General furbearer trapping season; excludes coyote, beaver, nutria.)"
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-09-01",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AR-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": 2,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "daily bag 2."
+     },
+     "notes": "Sept. 1, 2026 through Feb. 28, 2027; day only; daily bag 2."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Muskrat",
+   "scientific_name": "Ondatra zibethicus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Arkansas Game and Fish Commission regulations.",
+   "iac_reference": "AGFC Code A1.05",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-21",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AR-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Sunrise Nov. 21, 2026 through sunset Feb. 28, 2027; no bag limit. (General furbearer trapping season; excludes coyote, beaver, nutria.)"
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-09-01",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AR-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Sept. 1, 2026 through Mar. 31, 2027; day only; no bag limit."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Nutria",
+   "scientific_name": "Myocastor coypus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Arkansas Game and Fish Commission regulations.",
+   "iac_reference": "AGFC Code A1.05",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-21",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AR-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Sunrise Nov. 21, 2026 through sunset Mar. 31, 2027; no bag limit."
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-09-01",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AR-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Sept. 1, 2026 through Mar. 31, 2027; day only; no bag limit."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Opossum",
+   "scientific_name": "Didelphis virginiana",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Arkansas Game and Fish Commission regulations.",
+   "iac_reference": "AGFC Code A1.05",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-21",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AR-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Sunrise Nov. 21, 2026 through sunset Feb. 28, 2027; no bag limit. (General furbearer trapping season; excludes coyote, beaver, nutria.)"
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "AR-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Year-round, no limit; dogs required when hunting at night."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Raccoon",
+   "scientific_name": "Procyon lotor",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Arkansas Game and Fish Commission regulations.",
+   "iac_reference": "AGFC Code A1.05",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-21",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AR-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Sunrise Nov. 21, 2026 through sunset Feb. 28, 2027; no bag limit. (General furbearer trapping season; excludes coyote, beaver, nutria.)"
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "AR-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Year-round, no limit; dogs required when hunting at night."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "Modeled year-round per the current statewide AGFC hunting page; the 2026-27 WMA regulations give a split season on WMAs (July 1\u2013Aug. 31 night only; Sept. 1\u2013Feb. 28 day or night; Mar. 1\u201331 night only)."
+  },
+  {
+   "common_name": "Red fox",
+   "scientific_name": "Vulpes vulpes",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Arkansas Game and Fish Commission regulations.",
+   "iac_reference": "AGFC Code A1.05",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-21",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AR-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Sunrise Nov. 21, 2026 through sunset Feb. 28, 2027; no bag limit. (General furbearer trapping season; excludes coyote, beaver, nutria.)"
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-09-01",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AR-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": 2,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "daily bag 2."
+     },
+     "notes": "Sept. 1, 2026 through Feb. 28, 2027; day only; daily bag 2."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "River otter",
+   "scientific_name": "Lontra canadensis",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Arkansas Game and Fish Commission regulations.",
+   "iac_reference": "AGFC Code A1.05",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-21",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AR-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Sunrise Nov. 21, 2026 through sunset Feb. 28, 2027; no bag limit. (General furbearer trapping season; excludes coyote, beaver, nutria.)"
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-11-14",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AR-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": 2,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "daily limit 2."
+     },
+     "notes": "Nov. 14, 2026 through Feb. 28, 2027; day only; daily limit 2. Pelts must be tagged by an AGFC employee before shipment out of state."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Spotted skunk",
+   "scientific_name": "Spilogale putorius",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Arkansas Game and Fish Commission regulations.",
+   "iac_reference": "AGFC Code A1.05",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-21",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AR-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Sunrise Nov. 21, 2026 through sunset Feb. 28, 2027; no bag limit. (General furbearer trapping season; excludes coyote, beaver, nutria.)"
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "Hunting closed statewide (AGFC). Trapping open under the general furbearer season."
+  },
+  {
+   "common_name": "Striped skunk",
+   "scientific_name": "Mephitis mephitis",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Arkansas Game and Fish Commission regulations.",
+   "iac_reference": "AGFC Code A1.05",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-21",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AR-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Sunrise Nov. 21, 2026 through sunset Feb. 28, 2027; no bag limit. (General furbearer trapping season; excludes coyote, beaver, nutria.)"
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "AR-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Year-round, no limit; dogs required when hunting at night."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Weasel",
+   "scientific_name": null,
+   "scientific_name_verified": false,
+   "scientific_name_note": "Regulations do not distinguish species; no single standard taxon applies.",
+   "iac_reference": "AGFC Code A1.05",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-21",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "AR-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Sunrise Nov. 21, 2026 through sunset Feb. 28, 2027; no bag limit. (General furbearer trapping season; excludes coyote, beaver, nutria.)"
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "Hunting closed statewide (AGFC). Trapping open under the general furbearer season."
+  }
+ ],
+ "verification": {
+  "regulation_year_confirmed": true,
+  "confirmation_notes": "Official AGFC 2026-27 trapping and hunting pages read 2026-09-18; hunting-row species alignment resolved against official AGFC code text (A1.05) and the 2026-27 General WMA Regulations: gray/red fox and mink hunting Sept 1\u2013Feb 28 (2/day); muskrat/nutria/beaver hunting Sept 1\u2013Mar 31; badger/spotted skunk/weasel hunting closed while trapping remains open under the general furbearer season.",
+  "known_gaps": [
+   "Raccoon/opossum/striped skunk hunting is modeled year-round per the current statewide AGFC hunting page; the 2026-27 WMA regulations give different WMA-specific seasons (raccoon split season; opossum/skunk Sept 1\u2013Feb 28) \u2014 WMA users must check the WMA listing.",
+   "Detailed current otter tagging/reporting procedures beyond out-of-state tagging and April-1 possession rules were not found in a current official source.",
+   "The Commission Predator Control Permit (private-land year-round day/night take of bobcat, coyote, gray fox, opossum, raccoon, red fox, striped skunk) is a depredation-style provision \u2014 noted, not modeled as a season."
+  ]
+ },
+ "provisional": false,
+ "license_url": "https://ar-licensing.s3licensing.com",
+ "license_vendor": "S3 Licensing (AGFC portal)",
+ "regs_url": "https://www.agfc.com/hunting/more-game/furbearers/trapping-season-dates-and-bag-limits/",
+ "regs_kind": "page"
+,
+ "warden_directory": {
+  "label": "Report a violation",
+  "url": "https://www.agfc.com/enforcement/contact-your-local-game-warden/",
+  "kind": "directory",
+  "note": "Contact Your Local Game Warden: 833-356-0824"
+ }
+}

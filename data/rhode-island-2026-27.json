@@ -1,0 +1,837 @@
+{
+ "disclaimer": "Reminder reference only \u2014 NOT legal authority. Season dates, zones, and limits are set annually and can change. Always verify current regulations with the Rhode Island DEM Division of Fish & Wildlife before hunting or trapping.",
+ "license_summary": {
+  "beaver_fisher_permits": "Beaver trapping requires a Special Beaver Trapping Permit (no fee) plus pelt tagging (\u00a7 9.14(D)). Fisher trapping requires a Special Fisher Trapping Permit (no fee), pelt tagging, carcass/parts turnover, and a completed fisher trapping log (\u00a7 9.14(E)).",
+  "hunting_license": "A valid Rhode Island hunting license is required to hunt furbearers. Coyote, fox, and raccoon hunting seasons are set in the small-game section (\u00a7 9.12).",
+  "state_lands": "A free Permit to Trap State Management Areas (no fee) from the Division of Fish and Wildlife is required in addition to a trapping license to trap on DEM management areas (\u00a7 9.14(H)). Written landowner permission is required to trap on private land (R.I. Gen. Laws \u00a7 20-16-9).",
+  "trapping_license": "A current Rhode Island Trapping License is required to trap furbearers (\u00a7 9.14(A)).",
+  "trapping_report": "Every trapping-license holder must report the number and species of all furbearing animals taken within 30 days of the end of the trapping season; a license will not be renewed until the report is filed (R.I. Gen. Laws \u00a7 20-16-12)."
+ },
+ "provisional": false,
+ "retrieved_at": "2026-09-18",
+ "schema_version": "1.1",
+ "season_year": "2026-27",
+ "sources": [
+  {
+   "id": "ricr-9-final-2026",
+   "notes": "Published final regulation text on the RI Government Register. \u00a7\u00a7 9.12 (small-game/furbearer hunting seasons) and 9.14 (Furbearer Trapping) are the source of all season dates, zones, bag limits, and tagging rules. Archived locally in hidden_files/season-research/rhode-island/.",
+   "title": "250-RICR-60-00-9, Hunting and Trapping Regulations \u2014 final amendment effective 07/28/2026",
+   "type": "administrative_code",
+   "url": "https://risos-apa-production-public.s3.amazonaws.com/DEM/REG_13477_20260708094201690.pdf"
+  },
+  {
+   "id": "sos-rule-register",
+   "notes": "Confirms the 2026\u201327 amendment is finalized and in effect for the 2026\u201327 season year. The DEM-published 2026\u201327 Hunting & Trapping Abstract was not yet available as of 2026-09-18, so this dataset is built directly from the final regulation text.",
+   "title": "RI Secretary of State rule register page for 250-RICR-60-00-9 (Amendment, Active, effective 07/28/2026)",
+   "type": "regulation_register",
+   "url": "https://rules.sos.ri.gov/Regulations/part/250-60-00-9"
+  }
+ ],
+ "species": [
+  {
+   "common_name": "Gray fox",
+   "iac_reference": "250-RICR-60-00-9 \u00a7 9.14(C) / \u00a7 9.12(J)",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Urocyon cinereoargenteus",
+   "scientific_name_note": "Scientific name stated in \u00a7 9.14(C) and \u00a7 9.12(J).",
+   "scientific_name_verified": true,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Daily bag unlimited per \u00a7 9.14(C)(4). No season bag limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-01-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Trapping season Nov 1 to last day of January inclusive, all lands. Traps may not be set, staked, or placed prior to sunrise on opening day; all traps must be removed by the last day of the season.",
+     "open_date": "2026-11-01",
+     "open_time": "sunrise",
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "RI-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Daily bag unlimited per \u00a7 9.12(J)(2).",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2026-12-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Fox HUNTING season changed for 2026\u201327: first Saturday of November (Nov 7, 2026) through the last day of December, inclusive. Previously the hunting season ran to the last day of February. Legal shooting hours sunrise to sunset.",
+     "open_date": "2026-11-07",
+     "open_time": "sunrise",
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "RI-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Red fox",
+   "iac_reference": "250-RICR-60-00-9 \u00a7 9.14(C) / \u00a7 9.12(J)",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Vulpes vulpes",
+   "scientific_name_note": "Scientific name stated in \u00a7 9.14(C) and \u00a7 9.12(J).",
+   "scientific_name_verified": true,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Daily bag unlimited per \u00a7 9.14(C)(4). No season bag limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-01-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Trapping season Nov 1 to last day of January inclusive, all lands. Traps may not be set, staked, or placed prior to sunrise on opening day; all traps must be removed by the last day of the season.",
+     "open_date": "2026-11-01",
+     "open_time": "sunrise",
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "RI-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Daily bag unlimited per \u00a7 9.12(J)(2).",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2026-12-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Fox HUNTING season changed for 2026\u201327: first Saturday of November (Nov 7, 2026) through the last day of December, inclusive. Previously the hunting season ran to the last day of February. Legal shooting hours sunrise to sunset.",
+     "open_date": "2026-11-07",
+     "open_time": "sunrise",
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "RI-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Mink",
+   "iac_reference": "250-RICR-60-00-9 \u00a7 9.14(C)",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Neogale vison",
+   "scientific_name_note": "Scientific name stated in \u00a7 9.14(C).",
+   "scientific_name_verified": true,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Daily bag unlimited per \u00a7 9.14(C)(4). No season bag limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-01-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Trapping season Nov 1 to last day of January inclusive, all lands. No regulated hunting season for mink in the 2026\u201327 regulations. Traps may not be set prior to sunrise on opening day; all traps must be removed by the last day of the season.",
+     "open_date": "2026-11-01",
+     "open_time": "sunrise",
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "RI-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Muskrat",
+   "iac_reference": "250-RICR-60-00-9 \u00a7 9.14(C)",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Ondatra zibethicus",
+   "scientific_name_note": "Scientific name stated in \u00a7 9.14(C).",
+   "scientific_name_verified": true,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Season bag limit: 15 muskrats per \u00a7 9.14(C)(3). No daily bag limit stated in the regulations.",
+      "possession_limit": null,
+      "season_bag": 15
+     },
+     "close_date": "2027-01-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Trapping season Nov 1 to last day of January inclusive, all lands. No regulated hunting season for muskrat. Traps may not be set prior to sunrise on opening day; all traps must be removed by the last day of the season.",
+     "open_date": "2026-11-01",
+     "open_time": "sunrise",
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "RI-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Opossum",
+   "iac_reference": "250-RICR-60-00-9 \u00a7 9.14(C)",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Didelphis virginiana",
+   "scientific_name_note": "Scientific name stated in \u00a7 9.14(C).",
+   "scientific_name_verified": true,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Daily bag unlimited per \u00a7 9.14(C)(4). No season bag limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-01-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Trapping season Nov 1 to last day of January inclusive, all lands. No regulated hunting season for opossum. Traps may not be set prior to sunrise on opening day; all traps must be removed by the last day of the season.",
+     "open_date": "2026-11-01",
+     "open_time": "sunrise",
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "RI-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Raccoon",
+   "iac_reference": "250-RICR-60-00-9 \u00a7 9.14(C) / \u00a7 9.12(N)",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Procyon lotor",
+   "scientific_name_note": "Scientific name stated in \u00a7 9.14(C) and \u00a7 9.12(N).",
+   "scientific_name_verified": true,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Daily bag unlimited per \u00a7 9.14(C)(4). No season bag limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-01-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Trapping season Nov 1 to last day of January inclusive, all lands. Traps may not be set prior to sunrise on opening day; all traps must be removed by the last day of the season.",
+     "open_date": "2026-11-01",
+     "open_time": "sunrise",
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "RI-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Daily bag unlimited per \u00a7 9.12(N)(1).",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Raccoon HUNTING season: 6:00 P.M. October 1 through the last day in February (Feb 28, 2027). Special case: Prudence and Patience Islands hunting is limited to Jan 1\u2013Feb 28 with written landowner permission; bow hunters with a valid deer archery permit may take raccoon during legal deer shooting hours Oct 1\u2013Jan 31. Not modeled as separate zones.",
+     "open_date": "2026-10-01",
+     "open_time": "18:00",
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "RI-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Skunk",
+   "iac_reference": "250-RICR-60-00-9 \u00a7 9.14(C)",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Mephitis mephitis",
+   "scientific_name_note": "Scientific name stated in \u00a7 9.14(C).",
+   "scientific_name_verified": true,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Daily bag unlimited per \u00a7 9.14(C)(4). No season bag limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-01-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Trapping season Nov 1 to last day of January inclusive, all lands. No regulated hunting season for skunk. Traps may not be set prior to sunrise on opening day; all traps must be removed by the last day of the season.",
+     "open_date": "2026-11-01",
+     "open_time": "sunrise",
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "RI-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Weasel",
+   "iac_reference": "250-RICR-60-00-9 \u00a7 9.14(C)",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Mustela spp.",
+   "scientific_name_note": "Regs list 'weasel (Mustela spp.)' in \u00a7 9.14(C) \u2014 genus only, species not distinguished.",
+   "scientific_name_verified": true,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Daily bag unlimited per \u00a7 9.14(C)(4). No season bag limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-01-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Trapping season Nov 1 to last day of January inclusive, all lands. No regulated hunting season for weasel. Traps may not be set prior to sunrise on opening day; all traps must be removed by the last day of the season.",
+     "open_date": "2026-11-01",
+     "open_time": "sunrise",
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "RI-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Gray squirrel",
+   "iac_reference": "250-RICR-60-00-9 \u00a7 9.14(C) / \u00a7 9.12(K)",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Sciurus carolinensis",
+   "scientific_name_note": "Scientific name stated in \u00a7 9.14(C) and \u00a7 9.12(K). Note: the official regulation text prints the genus as 'Sciuris carolinensis' (a misspelling); the correct taxonomy Sciurus carolinensis is used here.",
+   "scientific_name_verified": true,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Daily bag unlimited per \u00a7 9.14(C)(4). No season bag limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-01-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Trapping season Nov 1 to last day of January inclusive, all lands. Squirrels are small game but have a trapping season under the furbearer trapping section. Traps may not be set prior to sunrise on opening day; all traps must be removed by the last day of the season.",
+     "open_date": "2026-11-01",
+     "open_time": "sunrise",
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "RI-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": 5,
+      "limit_notes": "Daily bag 5 red and gray squirrels, singly or in aggregate (shared limit with red squirrel) per \u00a7 9.12(K)(2).",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Squirrel HUNTING season: second Saturday of September (Sep 12, 2026) through the last day of February. Legal shooting hours sunrise to sunset.",
+     "open_date": "2026-09-12",
+     "open_time": "sunrise",
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "RI-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Red squirrel",
+   "iac_reference": "250-RICR-60-00-9 \u00a7 9.14(C) / \u00a7 9.12(K)",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Tamiasciurus hudsonicus",
+   "scientific_name_note": "Scientific name stated in \u00a7 9.14(C) and \u00a7 9.12(K).",
+   "scientific_name_verified": true,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Daily bag unlimited per \u00a7 9.14(C)(4). No season bag limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-01-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Trapping season Nov 1 to last day of January inclusive, all lands. Squirrels are small game but have a trapping season under the furbearer trapping section. Traps may not be set prior to sunrise on opening day; all traps must be removed by the last day of the season.",
+     "open_date": "2026-11-01",
+     "open_time": "sunrise",
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "RI-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": 5,
+      "limit_notes": "Daily bag 5 red and gray squirrels, singly or in aggregate (shared limit with gray squirrel) per \u00a7 9.12(K)(2).",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Squirrel HUNTING season: second Saturday of September (Sep 12, 2026) through the last day of February. Legal shooting hours sunrise to sunset.",
+     "open_date": "2026-09-12",
+     "open_time": "sunrise",
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "RI-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Cottontail rabbit",
+   "iac_reference": "250-RICR-60-00-9 \u00a7 9.14(C) / \u00a7 9.12(L)",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Sylvilagus floridanus",
+   "scientific_name_note": "Scientific name stated in \u00a7 9.14(C).",
+   "scientific_name_verified": true,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Daily bag unlimited per \u00a7 9.14(C)(4). No season bag limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-01-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Trapping season Nov 1 to last day of January inclusive, all lands. Cottontail is small game but has a trapping season under the furbearer trapping section. Traps may not be set prior to sunrise on opening day; all traps must be removed by the last day of the season.",
+     "open_date": "2026-11-01",
+     "open_time": "sunrise",
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "RI-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": 3,
+      "limit_notes": "Daily bag limit 3 per \u00a7 9.12(L)(2).",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Cottontail HUNTING season: October 1 through the last day of February (Feb 28, 2027). Legal shooting hours sunrise to sunset.",
+     "open_date": "2026-10-01",
+     "open_time": "sunrise",
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "RI-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Beaver",
+   "iac_reference": "250-RICR-60-00-9 \u00a7 9.14(D)",
+   "notes": "",
+   "permit_requirements": [
+    "Special Beaver Trapping Permit (no fee) from the Division of Fish and Wildlife, plus a current RI Trapping License (\u00a7 9.14(D)(2)).",
+    "All beaver pelts must be presented for tagging as prescribed by the DEM (\u00a7 9.14(D)(1)(a))."
+   ],
+   "scientific_name": "Castor canadensis",
+   "scientific_name_note": "Scientific name stated in \u00a7 9.14(D).",
+   "scientific_name_verified": true,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Season bag limit: 40 beaver for Rhode Island resident trappers, 20 beaver for non-residents, per \u00a7 9.14(D)(1).",
+      "possession_limit": null,
+      "season_bag": 40
+     },
+     "close_date": "2027-03-14",
+     "continuous_open": false,
+     "land_type": "private",
+     "method": "trapping",
+     "notes": "Beaver trapping season on private land: November 1 to March 14, inclusive. Traps may not be set prior to sunrise on opening day. No traps within 10 feet of a beaver lodge/bank den except under a Division-issued nuisance permit.",
+     "open_date": "2026-11-01",
+     "open_time": "sunrise",
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "RI-statewide",
+       "zone_name": "Entire state (private land)"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Season bag limit: 40 beaver for Rhode Island resident trappers, 20 beaver for non-residents, per \u00a7 9.14(D)(1).",
+      "possession_limit": null,
+      "season_bag": 40
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "public",
+     "method": "trapping",
+     "notes": "Beaver trapping season on State Management Areas: December 1 to the last day of February, inclusive (Feb 28, 2027). Requires the free Permit to Trap State Management Areas in addition to a trapping license. Traps may not be set prior to sunrise on opening day. No traps within 10 feet of a beaver lodge/bank den except under a Division-issued nuisance permit.",
+     "open_date": "2026-12-01",
+     "open_time": "sunrise",
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "RI-state-mgmt-areas",
+       "zone_name": "State Management Areas"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Fisher",
+   "iac_reference": "250-RICR-60-00-9 \u00a7 9.14(E)",
+   "notes": "",
+   "permit_requirements": [
+    "Special Fisher Trapping Permit (no fee) from the Division of Fish and Wildlife, plus a current RI Trapping License (\u00a7 9.14(E)(2)).",
+    "All fisher pelts must be presented for tagging as prescribed by the DEM; no pelt is tagged without submission of the carcass or required parts (\u00a7 9.14(E)(1)(a)-(c)).",
+    "All fisher carcasses or required parts, as determined by the Division, must be turned in to the Division of Fish and Wildlife (\u00a7 9.14(E)(1)(b)).",
+    "A Division-issued fisher trapping log must be completed and returned at the close of fisher season; failure to submit results in denial of future permits (\u00a7 9.14(E)(3))."
+   ],
+   "scientific_name": "Pekania pennanti",
+   "scientific_name_note": "Scientific name stated in \u00a7 9.14(E).",
+   "scientific_name_verified": true,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Season bag limit: 1 fisher per \u00a7 9.14(E)(1).",
+      "possession_limit": null,
+      "season_bag": 1
+     },
+     "close_date": "2026-12-24",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Fisher trapping season: December 1 to December 24, inclusive. The Division reserves the right to alter the number of permits or fishers harvested at any time (\u00a7 9.14(E)(4)).",
+     "open_date": "2026-12-01",
+     "open_time": "sunrise",
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "RI-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Coyote",
+   "iac_reference": "250-RICR-60-00-9 \u00a7 9.14(F) / \u00a7 9.12(M)",
+   "notes": "Foothold traps (R.I. Gen. Laws \u00a7 20-16-8) and snares (\u00a7 20-16-6) are prohibited for coyote trapping. Coyote taken on private land under the no-closed-season provisions still requires written landowner permission.",
+   "permit_requirements": [],
+   "scientific_name": "Canis latrans",
+   "scientific_name_note": "Standard taxonomy; the regulations refer only to 'coyote' without a scientific name.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Daily bag unlimited per \u00a7 9.14(F)(1).",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "private",
+     "method": "trapping",
+     "notes": "No closed season for coyote TRAPPING on private lands. Foothold traps and snares are prohibited for coyote (R.I. Gen. Laws \u00a7\u00a7 20-16-8, 20-16-6); all other general trapping regulations apply.",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "RI-statewide",
+       "zone_name": "Entire state (private land)"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Daily bag unlimited per \u00a7 9.14(F)(1).",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "public",
+     "method": "trapping",
+     "notes": "Coyote TRAPPING season on State lands: November 1 to the last day of February (Feb 28, 2027), inclusive. Foothold traps and snares are prohibited for coyote.",
+     "open_date": "2026-11-01",
+     "open_time": "sunrise",
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "RI-state-lands",
+       "zone_name": "State lands"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Coyote bag limit unlimited.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "private",
+     "method": "hunting",
+     "notes": "No closed season for coyote HUNTING on private lands. Legal shooting hours 1/2 hour before sunrise until midnight; after-dark hunters must possess a predator call. Apr 1\u2013Sep 30, centerfire rifles not larger than .229 caliber are allowed on private land (R.I. Gen. Laws \u00a7 20-13-13).",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "RI-statewide",
+       "zone_name": "Entire state (private land)"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Coyote bag limit unlimited.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "public",
+     "method": "hunting",
+     "notes": "Coyote HUNTING season on State lands: September 15 to the last day of February, inclusive. Legal shooting hours 1/2 hour before sunrise to 1/2 hour after sunset. 200 sq in fluorescent orange required Oct (3rd Sat)\u2013Feb; 500 sq in during shotgun deer season. See spring-turkey-season entry for the second State-lands hunting window.",
+     "open_date": "2026-09-15",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "RI-state-lands",
+       "zone_name": "State lands"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Coyote bag limit unlimited.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-05-23",
+     "continuous_open": false,
+     "land_type": "public",
+     "method": "hunting",
+     "notes": "Coyote HUNTING on State lands is also open during the open spring turkey hunting season (\u00a7 9.12(M)): modeled as the union of the 2027 spring turkey seasons \u2014 paraplegic weekend Apr 24\u201325, youth season Apr 26\u2013May 2, statewide season Apr 29\u2013May 23 \u2014 i.e. Apr 24\u2013May 23, 2027.",
+     "open_date": "2027-04-24",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "RI-state-lands",
+       "zone_name": "State lands"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Bobcat",
+   "iac_reference": "250-RICR-60-00-9 \u00a7 9.14(J)",
+   "notes": "No open season on bobcat in Rhode Island (\u00a7 9.14(J)). Included so the app flags any logged take as out of season. A bobcat taken under the depredation provisions (R.I. Gen. Laws \u00a7\u00a7 20-16-2, 20-16-8) may not be tagged for personal use or ownership and must be presented to the Division of Fish and Wildlife or the Division of Law Enforcement within 24 hours (\u00a7 9.14(K)).",
+   "permit_requirements": [],
+   "scientific_name": "Lynx rufus",
+   "scientific_name_note": "Scientific name stated in \u00a7 9.14(J).",
+   "scientific_name_verified": true,
+   "season_status": "closed",
+   "seasons": []
+  },
+  {
+   "common_name": "River otter",
+   "iac_reference": "250-RICR-60-00-9 \u00a7 9.14(J)",
+   "notes": "No open season on river otter in Rhode Island (\u00a7 9.14(J)). Included so the app flags any logged take as out of season. An otter taken under the depredation provisions (R.I. Gen. Laws \u00a7\u00a7 20-16-2, 20-16-8) may not be tagged for personal use or ownership and must be presented to the Division of Fish and Wildlife or the Division of Law Enforcement within 24 hours (\u00a7 9.14(K)).",
+   "permit_requirements": [],
+   "scientific_name": "Lontra canadensis",
+   "scientific_name_note": "Scientific name stated in \u00a7 9.14(J).",
+   "scientific_name_verified": true,
+   "season_status": "closed",
+   "seasons": []
+  }
+ ],
+ "state": "RI",
+ "state_name": "Rhode Island",
+ "verification": {
+  "confirmation_notes": "250-RICR-60-00-9 amendment is ACTIVE with effective date 07/28/2026 per the RI Secretary of State rule register \u2014 the regulation governing the 2026\u201327 season year is final law. All dates transcribed from the final regulation PDF (filed as REG_13477_20260708094201690). The 2026\u201327 DEM Hunting & Trapping Abstract was not yet published as of 2026-09-18, so no booklet cross-check was possible; the abstract will be verified against this dataset when published. Calendar-verified: first Saturday of November 2026 = 2026-11-07 (fox hunting opener); second Saturday of September 2026 = 2026-09-12 (squirrel hunting opener); last Thursday of April 2027 = 2027-04-29 (statewide spring turkey opener, basis for coyote state-lands spring window).",
+  "known_gaps": [
+   "The DEM-published 2026\u201327 Hunting & Trapping Abstract was not yet available (the latest found was the 2025\u20132026 guide). Dates come from the final regulation text alone; re-cross-check against the abstract when it publishes.",
+   "Furbearer TRAPPING dates (\u00a7 9.14) are unchanged from prior years: Nov 1\u2013Jan 31 group season, beaver Nov 1\u2013Mar 14 (private) / Dec 1\u2013last-day-of-Feb (State Management Areas), fisher Dec 1\u201324, coyote private-land year-round.",
+   "Fox HUNTING (\u00a7 9.12(J)) changed for 2026\u201327: first Saturday of November through last day of December (Nov 7\u2013Dec 31, 2026); prior years ran third Saturday of November through last day of February.",
+   "The regs print the gray squirrel Latin name as 'Sciuris carolinensis' (misspelled); this dataset uses the correct taxonomy Sciurus carolinensis and flags the discrepancy.",
+   "Coyote's scientific name is not stated in the regulations \u2014 marked scientific_name_verified=false; all others are stated in the official text (verified=true).",
+   "Muskrat has a stated season bag limit (15) but no stated daily bag limit; daily_bag is null with a note.",
+   "Beaver season bag limits differ by residency (40 resident / 20 non-resident); modeled as season_bag 40 with an explanatory note.",
+   "Gray and red squirrel share a hunting daily bag of 5 (singly or in aggregate); modeled as daily_bag 5 on each species' hunting entry with a note.",
+   "Raccoon hunting on Prudence and Patience Islands (Jan 1\u2013Feb 28 with landowner permission) and the bow-hunter exception (Oct 1\u2013Jan 31 during deer shooting hours) are noted, not modeled as zones.",
+   "Coyote state-lands hunting 'during the open spring turkey hunting season' is modeled as the union of the 2027 spring turkey season windows (Apr 24\u2013May 23, 2027); if spring turkey dates shift, this entry shifts with them.",
+   "Woodchuck (groundhog) is not included: it is not a regulated furbearer for trapping in RI and is covered only by the small-game hunting season (\u00a7 9.12(I)).",
+   "Depredation take outside seasons (R.I. Gen. Laws \u00a7 20-16-2 \u2014 property owners may kill furbearers damaging property, carcass turned over to DFW) is noted but not modeled as a season \u2014 the app should offer an override rather than blocking the log.",
+   "Trap hardware/placement rules (\u00a7\u00a7 9.14(G)-(I), 9.14(N)-(P)) are NOT in this dataset \u2014 seasons, zones, limits, and permits only."
+  ],
+  "regulation_year_confirmed": true
+ },
+ "license_url": "https://www.ri.gov/DEM/huntfish",
+ "license_vendor": "RIO portal (state-run, ri.gov)",
+ "regs_url": "https://dem.ri.gov/media/36651/download",
+ "regs_kind": "pdf"
+,
+ "warden_directory": {
+  "label": "Report a violation",
+  "url": "https://dem.ri.gov/law-enforcement",
+  "kind": "hotline",
+  "note": "RI DEM Law Enforcement: 401-222-3070 (24-hr); online non-emergency incident report"
+ }
+}

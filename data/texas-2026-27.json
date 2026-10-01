@@ -1,0 +1,810 @@
+{
+ "schema_version": "1.1",
+ "state": "TX",
+ "state_name": "Texas",
+ "season_year": "2026-27",
+ "retrieved_at": "2026-09-18",
+ "disclaimer": "Reminder reference only \u2014 NOT legal authority. Season dates, zones, and limits are set annually and can change. Always verify current regulations with Texas Parks and Wildlife before hunting or trapping.",
+ "sources": [
+  {
+   "id": "tx-furbearer-seasons",
+   "title": "TPWD 2026-27: Fur-bearing Animal Seasons and Bag Limits",
+   "url": "https://tpwd.texas.gov/regulations/outdoor-annual/hunting/fur-bearing-animal-regulations/seasons-bag-limits",
+   "type": "agency_webpage",
+   "notes": "Official TPWD: recreational Sept 1, 2026\u2013Aug 31, 2027; commercial nutria Sept 1\u2013Aug 31; commercial beaver Oct 1\u2013May 31; other commercial furbearers Nov 1\u2013Mar 31. Bobcat and coyote are nongame with no closed season on private property. Seasons are modeled as explicit date ranges, never continuous_open."
+  }
+ ],
+ "license_summary": {
+  "licenses": "A hunting license allows noncommercial take of fur-bearing animals, but the animals may not be sold. A trapper's license is required to take fur-bearing animals when pelts or carcasses will be sold.",
+  "bobcat_otter_tagging": "Bobcat pelts require the appropriate CITES tag before interstate transport or sale; otter pelts require a department-issued CITES tag.",
+  "timezone_note": "El Paso and far-west Texas observe Mountain Time; the rest of Texas observes Central Time. Season dates shown are statewide calendar dates."
+ },
+ "species": [
+  {
+   "common_name": "Badger",
+   "scientific_name": "Taxidea taxus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in Texas Parks and Wildlife regulations.",
+   "iac_reference": "TPWD 2026-27 fur-bearing animal regulations",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "both",
+     "land_type": "all",
+     "open_date": "2026-09-01",
+     "close_date": "2027-08-31",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "TX-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Recreational take (trapping and hunting): Sept. 1, 2026 \u2013 Aug. 31, 2027; no sale of pelts."
+     },
+     "notes": "Recreational take (trapping and hunting): Sept. 1, 2026 \u2013 Aug. 31, 2027; no sale of pelts."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "TX-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Commercial take: Nov. 1, 2026 \u2013 Mar. 31, 2027."
+     },
+     "notes": "Commercial take: Nov. 1, 2026 \u2013 Mar. 31, 2027."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Beaver",
+   "scientific_name": "Castor canadensis",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in Texas Parks and Wildlife regulations.",
+   "iac_reference": "TPWD 2026-27 fur-bearing animal regulations",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "both",
+     "land_type": "all",
+     "open_date": "2026-09-01",
+     "close_date": "2027-08-31",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "TX-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Recreational take (trapping and hunting): Sept. 1, 2026 \u2013 Aug. 31, 2027; no sale of pelts."
+     },
+     "notes": "Recreational take (trapping and hunting): Sept. 1, 2026 \u2013 Aug. 31, 2027; no sale of pelts."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-01",
+     "close_date": "2027-05-31",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "TX-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Commercial take: Oct. 1, 2026 \u2013 May 31, 2027."
+     },
+     "notes": "Commercial take: Oct. 1, 2026 \u2013 May 31, 2027."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Bobcat",
+   "scientific_name": "Lynx rufus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in Texas Parks and Wildlife regulations.",
+   "iac_reference": "TPWD 2026-27 fur-bearing animal regulations",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "both",
+     "land_type": "private",
+     "open_date": "2026-09-01",
+     "close_date": "2027-08-31",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "TX-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Nongame status: may be taken on private property year-round Sept. 1, 2026 \u2013 Aug. 31, 2027; no closed season under furbearer rules."
+     },
+     "notes": "Nongame status: may be taken on private property year-round Sept. 1, 2026 \u2013 Aug. 31, 2027; no closed season under furbearer rules."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Coyote",
+   "scientific_name": "Canis latrans",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in Texas Parks and Wildlife regulations.",
+   "iac_reference": "TPWD 2026-27 fur-bearing animal regulations",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "both",
+     "land_type": "private",
+     "open_date": "2026-09-01",
+     "close_date": "2027-08-31",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "TX-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Nongame status: may be taken on private property year-round Sept. 1, 2026 \u2013 Aug. 31, 2027; no closed season under furbearer rules."
+     },
+     "notes": "Nongame status: may be taken on private property year-round Sept. 1, 2026 \u2013 Aug. 31, 2027; no closed season under furbearer rules."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Fox",
+   "scientific_name": null,
+   "scientific_name_verified": false,
+   "scientific_name_note": "Texas regulations do not distinguish red and gray fox; no single standard taxon applies.",
+   "iac_reference": "TPWD 2026-27 fur-bearing animal regulations",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "both",
+     "land_type": "all",
+     "open_date": "2026-09-01",
+     "close_date": "2027-08-31",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "TX-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Recreational take (trapping and hunting): Sept. 1, 2026 \u2013 Aug. 31, 2027; no sale of pelts."
+     },
+     "notes": "Recreational take (trapping and hunting): Sept. 1, 2026 \u2013 Aug. 31, 2027; no sale of pelts."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "TX-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Commercial take: Nov. 1, 2026 \u2013 Mar. 31, 2027."
+     },
+     "notes": "Commercial take: Nov. 1, 2026 \u2013 Mar. 31, 2027."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Mink",
+   "scientific_name": "Neogale vison",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in Texas Parks and Wildlife regulations.",
+   "iac_reference": "TPWD 2026-27 fur-bearing animal regulations",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "both",
+     "land_type": "all",
+     "open_date": "2026-09-01",
+     "close_date": "2027-08-31",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "TX-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Recreational take (trapping and hunting): Sept. 1, 2026 \u2013 Aug. 31, 2027; no sale of pelts."
+     },
+     "notes": "Recreational take (trapping and hunting): Sept. 1, 2026 \u2013 Aug. 31, 2027; no sale of pelts."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "TX-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Commercial take: Nov. 1, 2026 \u2013 Mar. 31, 2027."
+     },
+     "notes": "Commercial take: Nov. 1, 2026 \u2013 Mar. 31, 2027."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Muskrat",
+   "scientific_name": "Ondatra zibethicus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in Texas Parks and Wildlife regulations.",
+   "iac_reference": "TPWD 2026-27 fur-bearing animal regulations",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "both",
+     "land_type": "all",
+     "open_date": "2026-09-01",
+     "close_date": "2027-08-31",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "TX-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Recreational take (trapping and hunting): Sept. 1, 2026 \u2013 Aug. 31, 2027; no sale of pelts."
+     },
+     "notes": "Recreational take (trapping and hunting): Sept. 1, 2026 \u2013 Aug. 31, 2027; no sale of pelts."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "TX-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Commercial take: Nov. 1, 2026 \u2013 Mar. 31, 2027."
+     },
+     "notes": "Commercial take: Nov. 1, 2026 \u2013 Mar. 31, 2027."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Nutria",
+   "scientific_name": "Myocastor coypus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in Texas Parks and Wildlife regulations.",
+   "iac_reference": "TPWD 2026-27 fur-bearing animal regulations",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "both",
+     "land_type": "all",
+     "open_date": "2026-09-01",
+     "close_date": "2027-08-31",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "TX-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Recreational take (trapping and hunting): Sept. 1, 2026 \u2013 Aug. 31, 2027; no sale of pelts."
+     },
+     "notes": "Recreational take (trapping and hunting): Sept. 1, 2026 \u2013 Aug. 31, 2027; no sale of pelts."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-09-01",
+     "close_date": "2027-08-31",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "TX-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Commercial take: Sept. 1, 2026 \u2013 Aug. 31, 2027."
+     },
+     "notes": "Commercial take: Sept. 1, 2026 \u2013 Aug. 31, 2027."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Opossum",
+   "scientific_name": "Didelphis virginiana",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in Texas Parks and Wildlife regulations.",
+   "iac_reference": "TPWD 2026-27 fur-bearing animal regulations",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "both",
+     "land_type": "all",
+     "open_date": "2026-09-01",
+     "close_date": "2027-08-31",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "TX-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Recreational take (trapping and hunting): Sept. 1, 2026 \u2013 Aug. 31, 2027; no sale of pelts."
+     },
+     "notes": "Recreational take (trapping and hunting): Sept. 1, 2026 \u2013 Aug. 31, 2027; no sale of pelts."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "TX-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Commercial take: Nov. 1, 2026 \u2013 Mar. 31, 2027."
+     },
+     "notes": "Commercial take: Nov. 1, 2026 \u2013 Mar. 31, 2027."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "River otter",
+   "scientific_name": "Lontra canadensis",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in Texas Parks and Wildlife regulations.",
+   "iac_reference": "TPWD 2026-27 fur-bearing animal regulations",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "both",
+     "land_type": "all",
+     "open_date": "2026-09-01",
+     "close_date": "2027-08-31",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "TX-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Recreational take (trapping and hunting): Sept. 1, 2026 \u2013 Aug. 31, 2027; no sale of pelts."
+     },
+     "notes": "Recreational take (trapping and hunting): Sept. 1, 2026 \u2013 Aug. 31, 2027; no sale of pelts."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "TX-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Commercial take: Nov. 1, 2026 \u2013 Mar. 31, 2027."
+     },
+     "notes": "Commercial take: Nov. 1, 2026 \u2013 Mar. 31, 2027."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Raccoon",
+   "scientific_name": "Procyon lotor",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in Texas Parks and Wildlife regulations.",
+   "iac_reference": "TPWD 2026-27 fur-bearing animal regulations",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "both",
+     "land_type": "all",
+     "open_date": "2026-09-01",
+     "close_date": "2027-08-31",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "TX-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Recreational take (trapping and hunting): Sept. 1, 2026 \u2013 Aug. 31, 2027; no sale of pelts."
+     },
+     "notes": "Recreational take (trapping and hunting): Sept. 1, 2026 \u2013 Aug. 31, 2027; no sale of pelts."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "TX-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Commercial take: Nov. 1, 2026 \u2013 Mar. 31, 2027."
+     },
+     "notes": "Commercial take: Nov. 1, 2026 \u2013 Mar. 31, 2027."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Ring-tailed cat",
+   "scientific_name": "Bassariscus astutus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in Texas Parks and Wildlife regulations.",
+   "iac_reference": "TPWD 2026-27 fur-bearing animal regulations",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "both",
+     "land_type": "all",
+     "open_date": "2026-09-01",
+     "close_date": "2027-08-31",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "TX-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Recreational take (trapping and hunting): Sept. 1, 2026 \u2013 Aug. 31, 2027; no sale of pelts."
+     },
+     "notes": "Recreational take (trapping and hunting): Sept. 1, 2026 \u2013 Aug. 31, 2027; no sale of pelts."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "TX-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Commercial take: Nov. 1, 2026 \u2013 Mar. 31, 2027."
+     },
+     "notes": "Commercial take: Nov. 1, 2026 \u2013 Mar. 31, 2027."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Skunk",
+   "scientific_name": null,
+   "scientific_name_verified": false,
+   "scientific_name_note": "Texas regulations do not distinguish striped and spotted skunk for this entry; spotted skunk is modeled separately where named.",
+   "iac_reference": "TPWD 2026-27 fur-bearing animal regulations",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "both",
+     "land_type": "all",
+     "open_date": "2026-09-01",
+     "close_date": "2027-08-31",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "TX-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Recreational take (trapping and hunting): Sept. 1, 2026 \u2013 Aug. 31, 2027; no sale of pelts."
+     },
+     "notes": "Recreational take (trapping and hunting): Sept. 1, 2026 \u2013 Aug. 31, 2027; no sale of pelts."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "TX-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Commercial take: Nov. 1, 2026 \u2013 Mar. 31, 2027."
+     },
+     "notes": "Commercial take: Nov. 1, 2026 \u2013 Mar. 31, 2027."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Spotted skunk (civet cat)",
+   "scientific_name": "Spilogale gracilis",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in Texas Parks and Wildlife regulations.",
+   "iac_reference": "TPWD 2026-27 fur-bearing animal regulations",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "both",
+     "land_type": "all",
+     "open_date": "2026-09-01",
+     "close_date": "2027-08-31",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "TX-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Recreational take (trapping and hunting): Sept. 1, 2026 \u2013 Aug. 31, 2027; no sale of pelts."
+     },
+     "notes": "Recreational take (trapping and hunting): Sept. 1, 2026 \u2013 Aug. 31, 2027; no sale of pelts."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "TX-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Commercial take: Nov. 1, 2026 \u2013 Mar. 31, 2027."
+     },
+     "notes": "Commercial take: Nov. 1, 2026 \u2013 Mar. 31, 2027."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  }
+ ],
+ "verification": {
+  "regulation_year_confirmed": true,
+  "confirmation_notes": "Official TPWD Outdoor Annual 2026-27 pages (valid Sept. 1, 2026 \u2013 Aug. 31, 2027): fur-bearing animal seasons and bag limits, read 2026-09-18. All seasons modeled as explicit date ranges (never continuous_open).",
+  "known_gaps": [
+   "Nongame take (bobcat, coyote) is modeled for private property per the Outdoor Annual; public lands may have additional restrictions.",
+   "Scientific names are standard taxonomy, not stated in TPWD regulations."
+  ]
+ },
+ "provisional": false,
+ "license_url": "https://www.txfgsales.com/",
+ "license_vendor": "Gordon Darby (Texas Fish and Game Sales)",
+ "regs_url": "https://tpwd.texas.gov/regulations/outdoor-annual/hunting/nongame-and-other-species",
+ "regs_kind": "page"
+,
+ "warden_directory": {
+  "label": "Report a violation",
+  "url": "https://tpwd.texas.gov/newsmedia/releases/?req=20250826b",
+  "kind": "hotline",
+  "note": "Operation Game Thief: 1-800-792-GAME (4263), 24/7; text TXOGT to 847411; Texas OGT app; rewards up to $1,000"
+ }
+}

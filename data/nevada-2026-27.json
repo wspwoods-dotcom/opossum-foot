@@ -1,0 +1,356 @@
+{
+ "schema_version": "1.1",
+ "state": "NV",
+ "state_name": "Nevada",
+ "season_year": "2026-27",
+ "provisional": false,
+ "retrieved_at": "2026-09-18",
+ "disclaimer": "Reminder reference only \u2014 NOT legal authority. Season dates for bobcat and gray fox are set by Commission rule ('Second Saturday in November \u2013 Third Sunday in February'). Always verify current regulations, closed areas, and any emergency changes with NDOW before trapping.",
+ "license_summary": {
+  "trapping_license": "A Nevada trapping license is required to take a furbearing mammal by trap, snare, or similar device, or to sell raw furs for profit. Furbearers may also be taken by gun or bow and arrow with only a hunting license, but a trapping license is needed to sell pelts.",
+  "harvest_questionnaire": "All Nevada trapping license holders must complete the mandatory furbearer harvest questionnaire online at ndowlicensing.com between May 1 and May 31, regardless of harvest activity. Failure = one-year license suspension, reversible by completing the questionnaire and paying a $50 fee.",
+  "trap_visitation": "Traps/snares must be visited at least once every other calendar day in the listed congested-area units and at least once each 96 hours elsewhere (see NAC 503.152).",
+  "trap_registration": "Each trap, snare, or similar device must be stamped with the trapper's name and address or registered with the Department ($5 per device).",
+  "closed_areas": "Many areas are closed to trapping (refuges, parks, military ranges, congested areas \u2014 see the 2026\u20132027 NDOW guide pp. 42-43, 'Areas Closed to Hunting and Trapping')."
+ },
+ "species": [
+  {
+   "common_name": "American beaver",
+   "scientific_name": "Castor canadensis",
+   "scientific_name_verified": true,
+   "scientific_name_note": "Stated expressly in NAC 503.025.",
+   "iac_reference": "2026\u20132027 Nevada Small Game Hunting Regulations & Seasons (NDOW), Furbearer Seasons & Limits",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-01",
+     "close_date": "2027-04-30",
+     "open_time": null,
+     "timezone": "America/Los_Angeles",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "NV-statewide",
+       "zone_name": "Statewide",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Furbearer seasons and limits table, 2026\u20132027 NDOW guide."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "One shared statewide season with mink and muskrat in the guide table."
+  },
+  {
+   "common_name": "American mink",
+   "scientific_name": "Mustela vison",
+   "scientific_name_verified": true,
+   "scientific_name_note": "Stated expressly in NAC 503.025 as 'Mustela vison' (modern synonym: Neogale vison).",
+   "iac_reference": "2026\u20132027 Nevada Small Game Hunting Regulations & Seasons (NDOW), Furbearer Seasons & Limits",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-01",
+     "close_date": "2027-04-30",
+     "open_time": null,
+     "timezone": "America/Los_Angeles",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "NV-statewide",
+       "zone_name": "Statewide",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Furbearer seasons and limits table, 2026\u20132027 NDOW guide."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Muskrat",
+   "scientific_name": "Ondatra zibethica",
+   "scientific_name_verified": true,
+   "scientific_name_note": "Stated expressly in NAC 503.025 as 'Ondatra zibethica' (modern spelling: Ondatra zibethicus).",
+   "iac_reference": "2026\u20132027 Nevada Small Game Hunting Regulations & Seasons (NDOW), Furbearer Seasons & Limits",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-01",
+     "close_date": "2027-04-30",
+     "open_time": null,
+     "timezone": "America/Los_Angeles",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "NV-statewide",
+       "zone_name": "Statewide",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Furbearer seasons and limits table, 2026\u20132027 NDOW guide."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "River otter",
+   "scientific_name": "Lontra canadensis",
+   "scientific_name_verified": true,
+   "scientific_name_note": "Stated expressly in NAC 503.025.",
+   "iac_reference": "2026\u20132027 Nevada Small Game Hunting Regulations & Seasons (NDOW), Furbearer Seasons & Limits",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-01",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/Los_Angeles",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "NV-otter-open",
+       "zone_name": "Elko, Eureka, Humboldt, Lander, and Pershing Counties",
+       "area_type": "counties",
+       "counties": [
+        "Elko",
+        "Eureka",
+        "Humboldt",
+        "Lander",
+        "Pershing"
+       ]
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "OPEN AREAS: Elko, Eureka, Humboldt, Lander, and Pershing Counties (2026\u20132027 NDOW guide). If an otter is accidentally trapped or killed in a closed county or outside the prescribed season, the trapper must report it within 48 hours to a Department of Wildlife representative and dispose of the animal per the representative's instructions."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "River otter (closed counties)",
+   "scientific_name": null,
+   "scientific_name_verified": false,
+   "scientific_name_note": "Left null; not stated in Nevada sources.",
+   "iac_reference": "2026\u20132027 Nevada Small Game Hunting Regulations & Seasons (NDOW), Furbearer Seasons & Limits",
+   "season_status": "closed",
+   "seasons": [],
+   "permit_requirements": [],
+   "notes": "CLOSED to otter trapping: Carson City, Churchill, Clark, Douglas, Esmeralda, Lincoln, Lyon, Mineral, Nye, Storey, Washoe, and White Pine counties (2026\u20132027 NDOW guide). Accidental take must be reported within 48 hours. Included so the app flags any logged take in these counties."
+  },
+  {
+   "common_name": "Kit fox (swift fox)",
+   "scientific_name": "Vulpes velox",
+   "scientific_name_verified": true,
+   "scientific_name_note": "Stated expressly in NAC 503.025 as 'Vulpes velox' (listed as 'Kit (Swift)').",
+   "iac_reference": "2026\u20132027 Nevada Small Game Hunting Regulations & Seasons (NDOW), Furbearer Seasons & Limits",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-01",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/Los_Angeles",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "NV-statewide",
+       "zone_name": "Statewide",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Furbearer seasons and limits table, 2026\u20132027 NDOW guide: 'October 1 - Last Day of February', statewide."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Red fox",
+   "scientific_name": "Vulpes vulpes",
+   "scientific_name_verified": true,
+   "scientific_name_note": "Stated expressly in NAC 503.025.",
+   "iac_reference": "2026\u20132027 Nevada Small Game Hunting Regulations & Seasons (NDOW), Furbearer Seasons & Limits",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-01",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/Los_Angeles",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "NV-statewide",
+       "zone_name": "Statewide",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Furbearer seasons and limits table, 2026\u20132027 NDOW guide: 'October 1 - Last Day of February', statewide."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Bobcat",
+   "scientific_name": "Lynx rufus",
+   "scientific_name_verified": true,
+   "scientific_name_note": "Stated expressly in NAC 503.025.",
+   "iac_reference": "2026\u20132027 Nevada Small Game Hunting Regulations & Seasons (NDOW), Furbearer Seasons & Limits",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-14",
+     "close_date": "2027-02-21",
+     "open_time": null,
+     "timezone": "America/Los_Angeles",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "NV-statewide",
+       "zone_name": "Statewide",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Season dates are set by Commission rule as 'Second Saturday in November \u2013 Third Sunday in February' (Nov 14, 2026 \u2013 Feb 21, 2027, per the 2026\u20132027 NDOW guide). CLOSED to nonresidents (residents only). Any bobcat killed must be personally presented by the harvester to the Department for inspection and have the bobcat seal affixed to the pelt within 10 days after the close of the season; the lower jaw must be saved and given to the Department; a bobcat harvest report form must be completed. Each seal costs $5. A bobcat pelt may not be sold, bartered, traded, purchased, transferred, tanned, shipped out of state, or transported from the state without a seal affixed. No person may possess a bobcat pelt 10 days or more after the close of the season without a Department seal affixed."
+    }
+   ],
+   "permit_requirements": [
+    "Nevada trapping license (residents only for bobcat)"
+   ],
+   "notes": "CLOSED to nonresidents \u2014 the app should flag nonresident users. 2027 pelt sealing events: Elko (Jan 12, Feb 9, Mar 3), Ely (Feb 10, Mar 2), Fallon (Jan 27, Mar 3), Las Vegas (Feb 24, Mar 3), Pioche (Feb 23, Mar 3), Reno (Jan 26), Tonopah (Feb 22, Mar 3), Winnemucca (Jan 28). Taxidermy sealing (1 per person per season) available at NDOW regional offices during the season."
+  },
+  {
+   "common_name": "Gray fox",
+   "scientific_name": "Urocyon cinereoargenteus",
+   "scientific_name_verified": true,
+   "scientific_name_note": "Stated expressly in NAC 503.025.",
+   "iac_reference": "2026\u20132027 Nevada Small Game Hunting Regulations & Seasons (NDOW), Furbearer Seasons & Limits",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-14",
+     "close_date": "2027-02-21",
+     "open_time": null,
+     "timezone": "America/Los_Angeles",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "NV-statewide",
+       "zone_name": "Statewide",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit stated."
+     },
+     "notes": "Season dates are set by Commission rule as 'Second Saturday in November \u2013 Third Sunday in February' (Nov 14, 2026 \u2013 Feb 21, 2027, per the 2026\u20132027 NDOW guide). CLOSED to nonresidents (residents only)."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "CLOSED to nonresidents \u2014 the app should flag nonresident users."
+  }
+ ],
+ "sources": [
+  {
+   "id": "ndow-small-game-2026-27",
+   "title": "2026\u20132027 Nevada Small Game Hunting Regulations & Seasons (NDOW) \u2014 Furbearer Seasons & Limits",
+   "url": "https://www.eregulations.com/nevada/hunting/small-game/2026-2027-nevada-small-game-hunting-regulations-seasons",
+   "type": "agency_guide",
+   "notes": "The 2026\u20132027 season dates with exact calendar dates (Oct 1, 2026 \u2013 Apr 30, 2027; Oct 1, 2026 \u2013 Mar 31, 2027; Oct 1, 2026 \u2013 Feb 28, 2027; Nov 14, 2026 \u2013 Feb 21, 2027), otter open/closed counties, bobcat sealing rules, license and questionnaire requirements all read from this official NDOW guide 2026-09-18."
+  },
+  {
+   "id": "nac-503",
+   "title": "NAC Chapter 503 \u2014 Hunting, Fishing and Trapping; Miscellaneous Protective Measures (Rev. 6/7/2026)",
+   "url": "https://www.leg.state.nv.us/nac/nac-503.html",
+   "type": "administrative_code",
+   "notes": "NAC 503.025 lists Nevada's complete fur-bearing mammal list WITH scientific names (beaver, bobcat, gray/kit/red fox, mink, muskrat, river otter) \u2014 all 8 species in this dataset. NAC 503.152 (trap visitation), 503.150 (trap registration), 503.160 (harvest data/questionnaire), 502.347 (bobcat sealing). Archived HTML locally."
+  }
+ ],
+ "verification": {
+  "regulation_year_confirmed": true,
+  "confirmation_notes": "The 2026\u20132027 NDOW Small Game guide was published for the 2026-27 season and prints exact calendar dates for every furbearer season (verified 2026-09-18). NAC 503 was last revised 6/7/2026. Day-of-week checks (America/Los_Angeles): Nov 14, 2026 is Saturday (second Saturday of November 2026) and Feb 21, 2027 is Sunday (third Sunday of February 2027), matching the Commission's 'Second Saturday in November \u2013 Third Sunday in February' rule.",
+  "known_gaps": [
+   "Nevada's legal furbearer list is exactly the 8 species in NAC 503.025 \u2014 all are modeled; no additional state furbearers exist.",
+   "Bobcat and gray fox are closed to nonresidents \u2014 modeled as notes, not separate nonresident records; the app should flag nonresident users.",
+   "Scientific names use the NAC 503.025 spellings verbatim (Mustela vison, Ondatra zibethica); modern synonyms are noted.",
+   "Areas closed to trapping (guide pp. 42-43) are summarized, not enumerated.",
+   "Detailed method rules (bait restrictions, steel-leghold spacer requirements, congested-area rules) are summarized in the license summary, not fully modeled."
+  ]
+ },
+ "license_url": "https://nevada.licensing.app/",
+ "license_vendor": "NDOW online licensing (Kalkomey)",
+ "regs_url": "https://www.ndow.org/wp-content/uploads/2026/06/CR-26-04-and-26-13-Notice-of-Hearing-for-Adoption.pdf",
+ "regs_kind": "pdf"
+,
+ "warden_directory": {
+  "label": "Report a violation",
+  "url": "https://www.ndow.org/news/nevada-game-wardens-investigate-alleged-illegal-take-and-possession-of-multiple-big-game-animals/",
+  "kind": "hotline",
+  "note": "NDOW Operation Game Thief: (800) 992-3030; free NDOW Tip app"
+ }
+}

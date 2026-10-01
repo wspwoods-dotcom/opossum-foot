@@ -1,0 +1,616 @@
+{
+ "disclaimer": "Reminder reference only — NOT legal authority. Season dates, zones, limits, and closures are set annually and can change. Always verify current regulations with the Utah Division of Wildlife Resources before hunting or trapping.",
+ "license_summary": {
+  "furbearer_license": "A Utah furbearer license is required to hunt or trap furbearers. A bobcat/marten permit is additionally required for those species. Consult the DWR guidebook for fees, deadlines, and trap-check requirements.",
+  "method_note": "Consult the DWR guidebook for lawful trap types, restrictions, and river-otter-protection device rules — not modeled here beyond the warnings below."
+ },
+ "provisional": false,
+ "retrieved_at": "2026-09-18",
+ "schema_version": "1.1",
+ "season_year": "2026-27",
+ "sources": [
+  {
+   "id": "dwr-furbearer-guidebook",
+   "notes": "2026–27 Utah Furbearer, Black Bear & Cougar Guidebook season tables. Archived locally in hidden_files/season-research/.",
+   "title": "2026–27 Utah Furbearer (Black Bear & Cougar) Guidebook (DWR)",
+   "type": "agency_booklet",
+   "url": "https://wildlife.utah.gov/guidebooks/black-bear-cougar-furbearer-guidebook.pdf"
+  },
+  {
+   "id": "dwr-otter-protected",
+   "notes": "DWR confirms the Utah legislature protected river otters from harvest in 1899 and there has been no legal harvest since.",
+   "title": "Utah DWR — DWR asking Utahns to report otter sightings (river otters protected from harvest since 1899)",
+   "type": "agency_webpage",
+   "url": "https://wildlife.utah.gov/otter.html"
+  }
+ ],
+ "species": [
+  {
+   "common_name": "Badger",
+   "iac_reference": "2026–27 Utah Furbearer Guidebook",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Taxidea taxus",
+   "scientific_name_note": "Standard taxonomy; not stated in DWR guidebook.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-01",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "",
+     "open_date": "2026-09-15",
+     "open_time": null,
+     "timezone": "America/Denver",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "UT-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "American beaver",
+   "iac_reference": "2026–27 Utah Furbearer Guidebook",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Castor canadensis",
+   "scientific_name_note": "Standard taxonomy; not stated in DWR guidebook.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-04-01",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Beaver trapping is closed in certain areas; see the DWR guidebook for the geographic closure list.",
+     "open_date": "2026-09-15",
+     "open_time": null,
+     "timezone": "America/Denver",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "UT-beaver-open",
+       "zone_name": "Statewide except closed areas listed in the DWR guidebook"
+      }
+     ]
+    }
+   ],
+   "county_notes": "Permanently closed in named streams and drainages across Box Elder, Cache, Emery, Garfield, Grand, Iron, Rich, Summit, Washington, and Kane counties — see the 2026–27 Furbearer Guidebook for the listed waters."
+  },
+  {
+   "common_name": "Bobcat",
+   "iac_reference": "2026–27 Utah Furbearer Guidebook",
+   "notes": "",
+   "permit_requirements": [
+    "Bobcat permit required: one bobcat per permit, maximum six permits per trapper.",
+    "Permanent tag and check-in required — see DWR guidebook for deadlines."
+   ],
+   "scientific_name": "Lynx rufus",
+   "scientific_name_note": "Standard taxonomy; not stated in DWR guidebook.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "One bobcat per permit; maximum six permits.",
+      "possession_limit": null,
+      "season_bag": 6
+     },
+     "close_date": "2027-03-01",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "",
+     "open_date": "2026-11-18",
+     "open_time": null,
+     "timezone": "America/Denver",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "UT-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Gray fox",
+   "iac_reference": "2026–27 Utah Furbearer Guidebook",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Urocyon cinereoargenteus",
+   "scientific_name_note": "Standard taxonomy; not stated in DWR guidebook.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-01",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "",
+     "open_date": "2026-09-15",
+     "open_time": null,
+     "timezone": "America/Denver",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "UT-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Kit fox",
+   "iac_reference": "2026–27 Utah Furbearer Guidebook",
+   "notes": "Kit fox is a Utah Species of Greatest Conservation Need; the DWR encourages release of incidental catches, but the season remains open.",
+   "permit_requirements": [],
+   "scientific_name": "Vulpes macrotis",
+   "scientific_name_note": "Standard taxonomy; not stated in DWR guidebook.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-01",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Species of Greatest Conservation Need — release encouraged.",
+     "open_date": "2026-09-15",
+     "open_time": null,
+     "timezone": "America/Denver",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "UT-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Marten",
+   "iac_reference": "2026–27 Utah Furbearer Guidebook",
+   "notes": "",
+   "permit_requirements": [
+    "Marten permit required.",
+    "Open only in Daggett, Duchesne, Summit, and Uintah counties."
+   ],
+   "scientific_name": "Martes americana",
+   "scientific_name_note": "Standard taxonomy; not stated in DWR guidebook.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-01",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Open only in Daggett, Duchesne, Summit, and Uintah counties.",
+     "open_date": "2026-09-15",
+     "open_time": null,
+     "timezone": "America/Denver",
+     "zones": [
+      {
+       "area_type": "counties",
+       "zone_id": "UT-marten-4counties",
+       "zone_name": "Daggett, Duchesne, Summit, and Uintah counties only",
+       "counties": [
+        "Daggett",
+        "Duchesne",
+        "Summit",
+        "Uintah"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Ringtail",
+   "iac_reference": "2026–27 Utah Furbearer Guidebook",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Bassariscus astutus",
+   "scientific_name_note": "Standard taxonomy; not stated in DWR guidebook.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-01",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "",
+     "open_date": "2026-09-15",
+     "open_time": null,
+     "timezone": "America/Denver",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "UT-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Spotted skunk",
+   "iac_reference": "2026–27 Utah Furbearer Guidebook",
+   "notes": "",
+   "permit_requirements": [
+    "Spotted skunk harvest must be reported within 48 hours — see DWR guidebook."
+   ],
+   "scientific_name": "Spilogale gracilis",
+   "scientific_name_note": "Standard taxonomy; not stated in DWR guidebook.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-01",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Harvest must be reported within 48 hours.",
+     "open_date": "2026-09-15",
+     "open_time": null,
+     "timezone": "America/Denver",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "UT-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Weasel",
+   "iac_reference": "2026–27 Utah Furbearer Guidebook",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": null,
+   "scientific_name_note": "DWR regulations list 'weasel' without distinguishing species. Left null rather than guessing.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-01",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "",
+     "open_date": "2026-09-15",
+     "open_time": null,
+     "timezone": "America/Denver",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "UT-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "American mink",
+   "iac_reference": "2026–27 Utah Furbearer Guidebook",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Neogale vison",
+   "scientific_name_note": "Standard taxonomy (formerly Neovison vison); not stated in DWR guidebook.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-04-01",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Mink trapping is closed in certain areas; see the DWR guidebook for the geographic closure list.",
+     "open_date": "2026-09-15",
+     "open_time": null,
+     "timezone": "America/Denver",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "UT-mink-open",
+       "zone_name": "Statewide except closed areas listed in the DWR guidebook"
+      }
+     ]
+    }
+   ],
+   "county_notes": "Permanently closed in named streams and drainages across Box Elder, Cache, Emery, Garfield, Grand, Iron, Rich, Summit, Washington, and Kane counties — see the 2026–27 Furbearer Guidebook for the listed waters."
+  },
+  {
+   "common_name": "Muskrat",
+   "iac_reference": "2026–27 Utah Furbearer Guidebook",
+   "notes": "",
+   "permit_requirements": [
+    "A special permit is required to trap muskrats on a waterfowl management area (WMA) — see DWR guidebook."
+   ],
+   "scientific_name": "Ondatra zibethicus",
+   "scientific_name_note": "Standard taxonomy; not stated in DWR guidebook.",
+   "scientific_name_verified": false,
+   "season_status": "continuous",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "No closed season, no bag limit. Special WMA permit required on waterfowl management areas.",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/Denver",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "UT-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Raccoon",
+   "iac_reference": "2026–27 Utah Furbearer Guidebook",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Procyon lotor",
+   "scientific_name_note": "Standard taxonomy; not stated in DWR guidebook.",
+   "scientific_name_verified": false,
+   "season_status": "continuous",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "No closed season, no bag limit.",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/Denver",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "UT-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Red fox",
+   "iac_reference": "2026–27 Utah Furbearer Guidebook",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Vulpes vulpes",
+   "scientific_name_note": "Standard taxonomy; not stated in DWR guidebook.",
+   "scientific_name_verified": false,
+   "season_status": "continuous",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "No closed season, no bag limit.",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/Denver",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "UT-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Striped skunk",
+   "iac_reference": "2026–27 Utah Furbearer Guidebook",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Mephitis mephitis",
+   "scientific_name_note": "Standard taxonomy; not stated in DWR guidebook.",
+   "scientific_name_verified": false,
+   "season_status": "continuous",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "No closed season, no bag limit.",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/Denver",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "UT-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Coyote",
+   "iac_reference": "2026–27 Utah Furbearer Guidebook",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Canis latrans",
+   "scientific_name_note": "Standard taxonomy; not stated in DWR guidebook.",
+   "scientific_name_verified": false,
+   "season_status": "continuous",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit stated.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "No closed season, no bag limit.",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/Denver",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "UT-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "River otter",
+   "iac_reference": "Utah DWR otter page (protected from harvest since 1899)",
+   "notes": "Protected from harvest by the Utah legislature since 1899 — there has been no legal harvest of river otters in Utah. The guidebook's trap-device restrictions on the Colorado, Escalante, Green, and Provo rivers are otter-protection rules, not an open season. Included so the app flags any logged take.",
+   "permit_requirements": [],
+   "scientific_name": "Lontra canadensis",
+   "scientific_name_note": "Standard taxonomy; not stated in DWR materials.",
+   "scientific_name_verified": false,
+   "season_status": "closed",
+   "seasons": []
+  },
+  {
+   "common_name": "Gray wolf",
+   "iac_reference": "2026–27 Utah Furbearer Guidebook",
+   "notes": "Wolves may not be hunted or trapped in Utah; any accidental capture or kill must be reported to the DWR immediately. Included so the app flags any logged take.",
+   "permit_requirements": [],
+   "scientific_name": "Canis lupus",
+   "scientific_name_note": "Standard taxonomy; not stated in DWR guidebook.",
+   "scientific_name_verified": false,
+   "season_status": "closed",
+   "seasons": []
+  }
+ ],
+ "state": "UT",
+ "state_name": "Utah",
+ "verification": {
+  "confirmation_notes": "2026–27 Utah Furbearer (Black Bear & Cougar) Guidebook season tables verified 2026-09-18. River otter closed status confirmed from the official DWR otter page (protected from harvest since 1899; no legal harvest since). Wolf no-take rule confirmed in the guidebook. All season dates, the bobcat permit quota (1 per permit, max 6), marten county restriction, spotted skunk 48-hour reporting rule, and year-round open species read directly from the guidebook.",
+  "known_gaps": [
+   "Scientific names are standard taxonomy, NOT stated in the DWR guidebook — all flagged scientific_name_verified=false; weasel is null because the guidebook does not distinguish species.",
+   "Beaver and mink geographic closures, river-otter-protection device restrictions (Colorado, Escalante, Green, Provo rivers), and WMA muskrat permit areas are modeled descriptively — the app cannot resolve exact boundaries.",
+   "Detailed lawful-method and trap-check rules are not modeled — users must consult the guidebook."
+  ],
+  "regulation_year_confirmed": true
+ },
+ "license_url": "https://wildlifelicense.utah.gov/hflo/main/serv1/index.html?server=serv1",
+ "license_vendor": "Utah Division of Wildlife Resources (state-run portal)",
+ "regs_url": "https://wildlife.utah.gov/guidebooks/black-bear-cougar-furbearer-guidebook.pdf",
+ "regs_kind": "pdf"
+,
+ "warden_directory": {
+  "label": "Report a violation",
+  "url": "https://wildlife.utah.gov/",
+  "kind": "hotline",
+  "note": "UTiP (Utah Turn-In-a-Poacher): 1-800-662-DEER (3337), 24/7; text 847411; UTDWR Law Enforcement app; online via DWR website"
+ }
+}

@@ -1,0 +1,735 @@
+{
+ "schema_version": "1.1",
+ "state": "VA",
+ "state_name": "Virginia",
+ "season_year": "2026-27",
+ "retrieved_at": "2026-09-18",
+ "disclaimer": "Reminder reference only — NOT legal authority. Season dates, zones, and limits are set annually and can change. Always verify current regulations with the Virginia DWR before hunting or trapping.",
+ "sources": [
+  {
+   "id": "va-guide",
+   "title": "2026-2027 Virginia Hunting, Trapping, and Migratory Game Bird Seasons Guide (DWR)",
+   "url": "https://dwr.virginia.gov/wp-content/uploads/media/2026-2027-Virginia-Hunting-Trapping-and-Migratory-Game-Bird-Seasons-Guide.pdf",
+   "type": "agency_booklet",
+   "notes": "Official DWR guide; archived locally."
+  }
+ ],
+ "license_summary": {
+  "trapping_license": "A Virginia trapping license is required to trap furbearers.",
+  "reporting": "All trapped bobcats and gray foxes must be reported within 24 hours through DWR's electronic harvest reporting system; CITES tags may be required for some bobcats and are required for raw otter pelts bought, sold, or transported out of state.",
+  "locality_note": "Certain localities and private lands have continuous open seasons for several furbearers — see the full DWR trapping regulations online."
+ },
+ "species": [
+  {
+   "common_name": "Beaver",
+   "scientific_name": "Castor canadensis",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Virginia DWR regulations.",
+   "iac_reference": "2026-2027 Virginia Hunting, Trapping, and Migratory Game Bird Seasons Guide",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-12-01",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "VA-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Dec. 1 – Feb. 28."
+     },
+     "notes": "Dec. 1 – Feb. 28."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "",
+   "county_notes": "Continuous open season within incorporated city/town limits and in Arlington, Chesterfield, Fairfax, Henrico, James City, Loudoun, Prince William, Spotsylvania, Stafford, Roanoke, and York counties."
+  },
+  {
+   "common_name": "Bobcat",
+   "scientific_name": "Lynx rufus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Virginia DWR regulations.",
+   "iac_reference": "2026-2027 Virginia Hunting, Trapping, and Migratory Game Bird Seasons Guide",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-15",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "VA-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Trapping: Nov. 15 – Feb. 28."
+     },
+     "notes": "Trapping: Nov. 15 – Feb. 28."
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-10-03",
+     "close_date": "2026-10-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "VA-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Archery hunting: Oct. 3–31, 2026."
+     },
+     "notes": "Archery hunting: Oct. 3–31, 2026."
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "VA-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "2 per party per noon-to-noon period."
+     },
+     "notes": "Firearms hunting: Nov. 1, 2026 – Feb. 28, 2027; 2 per party per noon-to-noon period."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Coyote",
+   "scientific_name": "Canis latrans",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Virginia DWR regulations.",
+   "iac_reference": "2026-2027 Virginia Hunting, Trapping, and Migratory Game Bird Seasons Guide",
+   "season_status": "continuous",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "VA-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Trapping: No closed season statewide; trapping and hunting allowed year-round."
+     },
+     "notes": "Trapping: No closed season statewide; trapping and hunting allowed year-round."
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "VA-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Hunting: No closed season statewide; trapping and hunting allowed year-round. Public-land windows: National Forest and DWR lands Sept. 1 – Mar. 10 and Apr. 10 – May 15."
+     },
+     "notes": "Hunting: No closed season statewide; trapping and hunting allowed year-round. Public-land windows: National Forest and DWR lands Sept. 1 – Mar. 10 and Apr. 10 – May 15."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Fisher",
+   "scientific_name": "Pekania pennanti",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Virginia DWR regulations.",
+   "iac_reference": "2026-2027 Virginia Hunting, Trapping, and Migratory Game Bird Seasons Guide",
+   "season_status": "closed",
+   "seasons": [],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Gray fox",
+   "scientific_name": "Urocyon cinereoargenteus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Virginia DWR regulations.",
+   "iac_reference": "2026-2027 Virginia Hunting, Trapping, and Migratory Game Bird Seasons Guide",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-15",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "VA-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Trapping: Nov. 15 – Feb. 28; prohibited in some counties — check local ordinances. Prohibited in Clarke (except G. R. Thompson WMA), Fauquier (except C. F. Phelps and G. R. Thompson WMAs), Loudoun, and Rappahannock counties."
+     },
+     "notes": "Trapping: Nov. 15 – Feb. 28; prohibited in some counties — check local ordinances. Prohibited in Clarke (except G. R. Thompson WMA), Fauquier (except C. F. Phelps and G. R. Thompson WMAs), Loudoun, and Rappahannock counties."
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2027-01-01",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "VA-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "1 per party per noon-to-noon period."
+     },
+     "notes": "Hunting: Jan. 1 – Feb. 28, 2027; 1 per party per noon-to-noon period; closed in some counties — check local ordinances. Closed in Albemarle, Clarke, Culpeper, Fauquier (except Quantico), Loudoun, Louisa, and Rappahannock counties."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "",
+   "county_notes": "Trapping prohibited in Clarke, Fauquier, Loudoun, and Rappahannock counties."
+  },
+  {
+   "common_name": "Mink",
+   "scientific_name": "Neogale vison",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Virginia DWR regulations.",
+   "iac_reference": "2026-2027 Virginia Hunting, Trapping, and Migratory Game Bird Seasons Guide",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-12-01",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "VA-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Dec. 1 – Feb. 28."
+     },
+     "notes": "Dec. 1 – Feb. 28."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Muskrat",
+   "scientific_name": "Ondatra zibethicus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Virginia DWR regulations.",
+   "iac_reference": "2026-2027 Virginia Hunting, Trapping, and Migratory Game Bird Seasons Guide",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-12-01",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "VA-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Dec. 1 – Feb. 28."
+     },
+     "notes": "Dec. 1 – Feb. 28."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "",
+   "county_notes": "Continuous open season within incorporated city/town limits and in Arlington, Chesterfield, Fairfax, Henrico, James City, Loudoun, Prince William, Spotsylvania, Stafford, Roanoke, and York counties."
+  },
+  {
+   "common_name": "Nutria",
+   "scientific_name": "Myocastor coypus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Virginia DWR regulations.",
+   "iac_reference": "2026-2027 Virginia Hunting, Trapping, and Migratory Game Bird Seasons Guide",
+   "season_status": "continuous",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "VA-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Trapping: No closed season statewide; trapping and hunting allowed year-round."
+     },
+     "notes": "Trapping: No closed season statewide; trapping and hunting allowed year-round."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Opossum",
+   "scientific_name": "Didelphis virginiana",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Virginia DWR regulations.",
+   "iac_reference": "2026-2027 Virginia Hunting, Trapping, and Migratory Game Bird Seasons Guide",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-15",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "VA-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Trapping: Nov. 15 – Feb. 28."
+     },
+     "notes": "Trapping: Nov. 15 – Feb. 28."
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-10-15",
+     "close_date": "2027-03-10",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "VA-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Hunting: Oct. 15, 2026 – Mar. 10, 2027."
+     },
+     "notes": "Hunting: Oct. 15, 2026 – Mar. 10, 2027."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "",
+   "county_notes": "Continuous open season within incorporated city/town limits and in Arlington, Chesterfield, Fairfax, Henrico, James City, Loudoun, Prince William, Spotsylvania, Stafford, Roanoke, and York counties."
+  },
+  {
+   "common_name": "Raccoon",
+   "scientific_name": "Procyon lotor",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Virginia DWR regulations.",
+   "iac_reference": "2026-2027 Virginia Hunting, Trapping, and Migratory Game Bird Seasons Guide",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-15",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "VA-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Trapping: Nov. 15 – Feb. 28."
+     },
+     "notes": "Trapping: Nov. 15 – Feb. 28."
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-10-15",
+     "close_date": "2027-03-10",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "VA-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "2 per party."
+     },
+     "notes": "Hunting: Oct. 15, 2026 – Mar. 10, 2027; 2 per party."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "",
+   "county_notes": "Continuous open season within incorporated city/town limits and in Arlington, Chesterfield, Fairfax, Henrico, James City, Loudoun, Prince William, Spotsylvania, Stafford, Roanoke, and York counties."
+  },
+  {
+   "common_name": "Red fox",
+   "scientific_name": "Vulpes vulpes",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Virginia DWR regulations.",
+   "iac_reference": "2026-2027 Virginia Hunting, Trapping, and Migratory Game Bird Seasons Guide",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-15",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "VA-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Trapping: Nov. 15 – Feb. 28; prohibited in some counties — check local ordinances. Prohibited in Clarke (except G. R. Thompson WMA), Fauquier (except C. F. Phelps and G. R. Thompson WMAs), Loudoun, and Rappahannock counties."
+     },
+     "notes": "Trapping: Nov. 15 – Feb. 28; prohibited in some counties — check local ordinances. Prohibited in Clarke (except G. R. Thompson WMA), Fauquier (except C. F. Phelps and G. R. Thompson WMAs), Loudoun, and Rappahannock counties."
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "VA-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Hunting: Nov. 1, 2026 – Feb. 28, 2027; closed in some counties — check local ordinances. Closed in Albemarle, Clarke, Culpeper, Fauquier (except Quantico), Loudoun, Louisa, and Rappahannock counties."
+     },
+     "notes": "Hunting: Nov. 1, 2026 – Feb. 28, 2027; closed in some counties — check local ordinances. Closed in Albemarle, Clarke, Culpeper, Fauquier (except Quantico), Loudoun, Louisa, and Rappahannock counties."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "",
+   "county_notes": "Trapping prohibited in Clarke, Fauquier, Loudoun, and Rappahannock counties."
+  },
+  {
+   "common_name": "River otter",
+   "scientific_name": "Lontra canadensis",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Virginia DWR regulations.",
+   "iac_reference": "2026-2027 Virginia Hunting, Trapping, and Migratory Game Bird Seasons Guide",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-12-01",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "VA-west-of-the-blue-ridge",
+       "zone_name": "West of the Blue Ridge",
+       "area_type": "special_areas"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "West of the Blue Ridge: 4 per trapper per season; East of the Blue Ridge: no season limit."
+     },
+     "notes": "Trapping: Dec. 1 – Feb. 28. West of the Blue Ridge: 4 per trapper per season. East of the Blue Ridge: no season limit."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-12-01",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "VA-east-of-the-blue-ridge",
+       "zone_name": "East of the Blue Ridge",
+       "area_type": "special_areas"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "West of the Blue Ridge: 4 per trapper per season; East of the Blue Ridge: no season limit."
+     },
+     "notes": "Trapping: Dec. 1 – Feb. 28. West of the Blue Ridge: 4 per trapper per season. East of the Blue Ridge: no season limit."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Spotted skunk",
+   "scientific_name": "Spilogale putorius",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Virginia DWR regulations.",
+   "iac_reference": "2026-2027 Virginia Hunting, Trapping, and Migratory Game Bird Seasons Guide",
+   "season_status": "closed",
+   "seasons": [],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Striped skunk",
+   "scientific_name": "Mephitis mephitis",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Virginia DWR regulations.",
+   "iac_reference": "2026-2027 Virginia Hunting, Trapping, and Migratory Game Bird Seasons Guide",
+   "season_status": "continuous",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "VA-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Trapping: No closed season statewide; trapping and hunting allowed year-round."
+     },
+     "notes": "Trapping: No closed season statewide; trapping and hunting allowed year-round."
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "VA-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Hunting: No closed season statewide; trapping and hunting allowed year-round. Public-land windows: National Forest and DWR lands Sept. 1 – Mar. 10 and Apr. 10 – May 15."
+     },
+     "notes": "Hunting: No closed season statewide; trapping and hunting allowed year-round. Public-land windows: National Forest and DWR lands Sept. 1 – Mar. 10 and Apr. 10 – May 15."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Weasel",
+   "scientific_name": null,
+   "scientific_name_verified": false,
+   "scientific_name_note": "Virginia regulations do not distinguish weasel species; no single standard taxon applies.",
+   "iac_reference": "2026-2027 Virginia Hunting, Trapping, and Migratory Game Bird Seasons Guide",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-12-01",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "VA-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Dec. 1 – Feb. 28."
+     },
+     "notes": "Dec. 1 – Feb. 28."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  }
+ ],
+ "verification": {
+  "regulation_year_confirmed": true,
+  "confirmation_notes": "Official 2026-2027 Virginia Hunting, Trapping, and Migratory Game Bird Seasons Guide PDF from dwr.virginia.gov, text-extracted 2026-09-18.",
+  "known_gaps": [
+   "Gray/red fox trapping is prohibited in Clarke (except G. R. Thompson WMA), Fauquier (except C. F. Phelps and G. R. Thompson WMAs), Loudoun, and Rappahannock counties; gray/red fox hunting closed in Albemarle, Clarke, Culpeper, Fauquier (except Quantico), Loudoun, Louisa, Rappahannock — county closures are noted in season notes but not modeled as separate zones.",
+   "Certain localities and private lands have continuous open seasons for several furbearers — see full DWR trapping regulations.",
+   "Scientific names are standard taxonomy, not stated in DWR regulations."
+  ]
+ },
+ "provisional": false,
+ "license_url": "https://license.gooutdoorsvirginia.com/Licensing/CustomerLookup.aspx",
+ "license_vendor": "Go Outdoors Virginia (Aspira/Kalkomey)",
+ "regs_url": "https://dwr.virginia.gov/wp-content/uploads/media/2026-2027-Virginia-Hunting-Trapping-and-Migratory-Game-Bird-Seasons-Guide.pdf",
+ "regs_kind": "pdf"
+,
+ "warden_directory": {
+  "label": "Report a violation",
+  "url": "https://dwr.virginia.gov/conservation-police/wildlife-violation/",
+  "kind": "hotline",
+  "note": "Report a Wildlife Violation: 1-800-237-5712; text DWRTIP to 847411; WildCrime@dwr.virginia.gov; online tip form; regional offices for local CPO"
+ }
+}

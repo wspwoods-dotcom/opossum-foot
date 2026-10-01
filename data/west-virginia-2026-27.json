@@ -1,0 +1,751 @@
+{
+ "schema_version": "1.1",
+ "state": "WV",
+ "state_name": "West Virginia",
+ "season_year": "2026-27",
+ "retrieved_at": "2026-09-18",
+ "disclaimer": "Reminder reference only — NOT legal authority. Season dates, zones, and limits are set annually and can change. Always verify current regulations with the West Virginia DNR before hunting or trapping. 58 CSR 41 (wildlife damage control agents): municipal foothold-trap rules apply; local laws may add requirements.",
+ "sources": [
+  {
+   "id": "wv-summary",
+   "title": "West Virginia Hunting and Trapping Regulations Summary, July 2026–June 2027 (WVDNR)",
+   "url": "https://wvdnr.gov/wp-content/uploads/2026/06/Pub_Regs_HuntTrap_202627_DNR_WILD_20260629.pdf",
+   "type": "agency_booklet",
+   "notes": "Official WVDNR summary; archived locally."
+  }
+ ],
+ "license_summary": {
+  "trapping_license": "A valid trapping license is required to trap (nonresidents: Class E, XXJ, AAH or AAHJ plus CS/LE stamp). Resident landowners may hunt/trap on their own land without a license during open seasons.",
+  "pelt_registration": "Beaver, bobcat, fisher and otter pelts must be electronically registered within 30 days after the close of their seasons; a CITES seal is required for each bobcat and otter pelt sold out of state.",
+  "trap_timing": "No traps before 8 a.m. on the first day of the season; none set or left set after noon on the last day."
+ },
+ "species": [
+  {
+   "common_name": "Beaver",
+   "scientific_name": "Castor canadensis",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the West Virginia DNR regulations.",
+   "iac_reference": "WVDNR Hunting and Trapping Regulations Summary (July 2026–June 2027)",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-07",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "WV-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Trapping: Nov. 7, 2026 – Mar. 31, 2027."
+     },
+     "notes": "Trapping: Nov. 7, 2026 – Mar. 31, 2027."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Bobcat",
+   "scientific_name": "Lynx rufus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the West Virginia DNR regulations.",
+   "iac_reference": "WVDNR Hunting and Trapping Regulations Summary (July 2026–June 2027)",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "both",
+     "land_type": "all",
+     "open_date": "2026-11-07",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "WV-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": 3,
+      "possession_limit": 3,
+      "limit_notes": "Combined hunting/trapping limit 3 per season."
+     },
+     "notes": "Trapping and hunting: Nov. 7, 2026 – Feb. 28, 2027. Combined hunting/trapping limit 3 per season."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Coyote",
+   "scientific_name": "Canis latrans",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the West Virginia DNR regulations.",
+   "iac_reference": "WVDNR Hunting and Trapping Regulations Summary (July 2026–June 2027)",
+   "season_status": "continuous",
+   "seasons": [
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "WV-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Hunting: year-round, no limit."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Fisher",
+   "scientific_name": "Pekania pennanti",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the West Virginia DNR regulations.",
+   "iac_reference": "WVDNR Hunting and Trapping Regulations Summary (July 2026–June 2027)",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-07",
+     "close_date": "2027-01-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "WV-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": 1,
+      "possession_limit": null,
+      "limit_notes": "limit 1 per season."
+     },
+     "notes": "Trapping: Nov. 7, 2026 – Jan. 31, 2027; limit 1 per season."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Gray fox",
+   "scientific_name": "Urocyon cinereoargenteus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the West Virginia DNR regulations.",
+   "iac_reference": "WVDNR Hunting and Trapping Regulations Summary (July 2026–June 2027)",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-07",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "WV-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Trapping: Nov. 7, 2026 – Feb. 28, 2027."
+     },
+     "notes": "Trapping: Nov. 7, 2026 – Feb. 28, 2027."
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-11-07",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "WV-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Hunting: Nov. 7, 2026 – Feb. 28, 2027."
+     },
+     "notes": "Hunting: Nov. 7, 2026 – Feb. 28, 2027."
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2027-01-01",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "WV-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Night hunting: Jan. 1 – Feb. 28, 2027."
+     },
+     "notes": "Night hunting: Jan. 1 – Feb. 28, 2027."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Mink",
+   "scientific_name": "Neogale vison",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the West Virginia DNR regulations.",
+   "iac_reference": "WVDNR Hunting and Trapping Regulations Summary (July 2026–June 2027)",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-07",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "WV-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Trapping: Nov. 7, 2026 – Feb. 28, 2027."
+     },
+     "notes": "Trapping: Nov. 7, 2026 – Feb. 28, 2027."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Muskrat",
+   "scientific_name": "Ondatra zibethicus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the West Virginia DNR regulations.",
+   "iac_reference": "WVDNR Hunting and Trapping Regulations Summary (July 2026–June 2027)",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-07",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "WV-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Trapping: Nov. 7, 2026 – Feb. 28, 2027."
+     },
+     "notes": "Trapping: Nov. 7, 2026 – Feb. 28, 2027."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Opossum",
+   "scientific_name": "Didelphis virginiana",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the West Virginia DNR regulations.",
+   "iac_reference": "WVDNR Hunting and Trapping Regulations Summary (July 2026–June 2027)",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-07",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "WV-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Trapping: Nov. 7, 2026 – Feb. 28, 2027."
+     },
+     "notes": "Trapping: Nov. 7, 2026 – Feb. 28, 2027."
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "WV-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Hunting: year-round, no limit."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Porcupine",
+   "scientific_name": "Erethizon dorsatum",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the West Virginia DNR regulations.",
+   "iac_reference": "WVDNR Hunting and Trapping Regulations Summary (July 2026–June 2027)",
+   "season_status": "closed",
+   "seasons": [],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Raccoon",
+   "scientific_name": "Procyon lotor",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the West Virginia DNR regulations.",
+   "iac_reference": "WVDNR Hunting and Trapping Regulations Summary (July 2026–June 2027)",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-07",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "WV-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Trapping: Nov. 7, 2026 – Feb. 28, 2027."
+     },
+     "notes": "Trapping: Nov. 7, 2026 – Feb. 28, 2027."
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-10-17",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "WV-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "4 per 24-hour period."
+     },
+     "notes": "Hunting: Oct. 17, 2026 – Feb. 28, 2027; 4 per 24-hour period."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Red fox",
+   "scientific_name": "Vulpes vulpes",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the West Virginia DNR regulations.",
+   "iac_reference": "WVDNR Hunting and Trapping Regulations Summary (July 2026–June 2027)",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-07",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "WV-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Trapping: Nov. 7, 2026 – Feb. 28, 2027."
+     },
+     "notes": "Trapping: Nov. 7, 2026 – Feb. 28, 2027."
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-11-07",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "WV-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Hunting: Nov. 7, 2026 – Feb. 28, 2027."
+     },
+     "notes": "Hunting: Nov. 7, 2026 – Feb. 28, 2027."
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2027-01-01",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "WV-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Night hunting: Jan. 1 – Feb. 28, 2027."
+     },
+     "notes": "Night hunting: Jan. 1 – Feb. 28, 2027."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "River otter",
+   "scientific_name": "Lontra canadensis",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the West Virginia DNR regulations.",
+   "iac_reference": "WVDNR Hunting and Trapping Regulations Summary (July 2026–June 2027)",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-07",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "WV-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": 1,
+      "possession_limit": null,
+      "limit_notes": "Limit 1 per season."
+     },
+     "notes": "Trapping: Nov. 7, 2026 – Feb. 28, 2027. Limit 1 per season."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Skunk",
+   "scientific_name": null,
+   "scientific_name_verified": false,
+   "scientific_name_note": "West Virginia regulations do not distinguish skunk species; no single standard taxon applies.",
+   "iac_reference": "WVDNR Hunting and Trapping Regulations Summary (July 2026–June 2027)",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-07",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "WV-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Trapping: Nov. 7, 2026 – Feb. 28, 2027."
+     },
+     "notes": "Trapping: Nov. 7, 2026 – Feb. 28, 2027."
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "WV-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Hunting: year-round, no limit."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Weasel",
+   "scientific_name": null,
+   "scientific_name_verified": false,
+   "scientific_name_note": "West Virginia regulations do not distinguish weasel species; no single standard taxon applies.",
+   "iac_reference": "WVDNR Hunting and Trapping Regulations Summary (July 2026–June 2027)",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-07",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "WV-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Trapping: Nov. 7, 2026 – Feb. 28, 2027."
+     },
+     "notes": "Trapping: Nov. 7, 2026 – Feb. 28, 2027."
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "WV-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Hunting: year-round, no limit."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Woodchuck",
+   "scientific_name": "Marmota monax",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the West Virginia DNR regulations.",
+   "iac_reference": "WVDNR Hunting and Trapping Regulations Summary (July 2026–June 2027)",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-07",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "WV-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Trapping: Nov. 7, 2026 – Feb. 28, 2027."
+     },
+     "notes": "Trapping: Nov. 7, 2026 – Feb. 28, 2027."
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "WV-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Hunting: year-round, no limit."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  }
+ ],
+ "verification": {
+  "regulation_year_confirmed": true,
+  "confirmation_notes": "Official WVDNR Hunting and Trapping Regulations Summary for July 2026 – June 2027, text-extracted 2026-09-18.",
+  "known_gaps": [
+   "Scientific names are standard taxonomy, not stated in WVDNR regulations."
+  ]
+ },
+ "provisional": false,
+ "license_url": "https://www.wvhunt.com/",
+ "license_vendor": "GoWILD (official WVDNR online licensing system)",
+ "regs_url": "https://wvdnr.gov/wp-content/uploads/2026/06/Pub_Regs_HuntTrap_202627_DNR_WILD_20260629.pdf",
+ "regs_kind": "pdf"
+,
+ "warden_directory": {
+  "label": "Report a violation",
+  "url": "https://WVdnr.gov/report-a-natural-resources-crime",
+  "kind": "hotline",
+  "note": "WV DNR natural resources crime tip page: online tip form; 1-800-638-4263 (1-800-NET-GAME); DNR LE (304) 558-2784"
+ }
+}

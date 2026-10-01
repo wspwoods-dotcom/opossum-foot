@@ -1,0 +1,54 @@
+{
+ "disclaimer": "Reminder reference only \u2014 NOT legal authority. Hawaii has no furbearer trapping program: there are no furbearer seasons, zones, or limits to model. Always verify current regulations with the Hawaii DLNR Division of Forestry and Wildlife before any trapping activity.",
+ "license_summary": {
+  "indigenous_wildlife": "Take (including trapping) of indigenous wildlife is prohibited under HAR Chapter 13-124.",
+  "no_furbearer_program": "Hawaii DLNR's hunting program covers game birds (HAR Chapter 13-122) and game mammals (HAR Chapter 13-123) \u2014 feral pigs, goats, deer, and sheep. There is no furbearer season structure, no furbearer trapping license, and no furbearing-animal harvest regulations."
+ },
+ "provisional": false,
+ "retrieved_at": "2026-09-18",
+ "schema_version": "1.1",
+ "season_year": "2026-27",
+ "sources": [
+  {
+   "id": "dlnr-hunting-page",
+   "notes": "DLNR hunting program homepage lists only Game Birds (HAR 13-122) and Game Mammals (HAR 13-123); no furbearer program exists.",
+   "title": "Hawaii DLNR Division of Forestry and Wildlife \u2014 Hunting (official page)",
+   "type": "agency_webpage",
+   "url": "https://dlnr.hawaii.gov/recreation/hunting/"
+  }
+ ],
+ "species": [
+  {
+   "common_name": "No regulated furbearer trapping seasons",
+   "scientific_name": null,
+   "scientific_name_verified": false,
+   "scientific_name_note": "Informational record \u2014 Hawaii DLNR has no furbearer category; this is not a species.",
+   "iac_reference": "Hawaii Administrative Rules Title 13 (no furbearer provisions; hunting rules cover game birds HAR 13-122 and game mammals HAR 13-123 only)",
+   "season_status": "closed",
+   "seasons": [],
+   "permit_requirements": [],
+   "notes": "Hawaii has no native furbearers and DLNR regulates no furbearer trapping seasons, licenses, or bag limits. Feral game mammals (pig, goat, deer, sheep) are hunted under game-mammal rules, not furbearer seasons, and are intentionally excluded. The app flags any furbearer-species log in Hawaii as out of season."
+  }
+ ],
+ "state": "HI",
+ "state_name": "Hawaii",
+ "verification": {
+  "confirmation_notes": "Verified 2026-09-18 from the DLNR Division of Forestry and Wildlife hunting page: Hawaii's regulated hunting covers game birds and game mammals (feral pig, goat, deer, sheep). No furbearer trapping seasons, licenses, or regulations exist in the current DLNR rules.",
+  "known_gaps": [
+   "Feral pigs, goats, deer, and sheep are hunted in Hawaii but are NOT furbearers and are intentionally excluded \u2014 they must not be modeled as furbearer trapping seasons.",
+   "Any unlisted species (e.g., mongoose, feral cats/dogs) taken for damage control is not a regulated furbearer season and is not modeled here."
+  ],
+  "regulation_year_confirmed": true
+ },
+ "license_url": "https://www.ehawaii.gov/DLNR/hunting/",
+ "license_vendor": "ehawaii.gov (State of Hawaii official portal)",
+ "regs_url": "https://dlnr.hawaii.gov/recreation/hunting/hunting-announcements/",
+ "regs_kind": "page"
+,
+ "warden_directory": {
+  "label": "Report a violation",
+  "url": "https://dlnr.hawaii.gov/dlnrtip/",
+  "kind": "hotline",
+  "note": "DLNRtip: text DLNRTIP to 847411; non-emergency 808-643-3567; 1-855-DLNR-TIP reward line"
+ }
+}

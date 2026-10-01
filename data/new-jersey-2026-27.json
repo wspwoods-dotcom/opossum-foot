@@ -1,0 +1,689 @@
+{
+  "schema_version": "1.0",
+  "state": "NJ",
+  "state_name": "New Jersey",
+  "season_year": "2026-27",
+  "provisional": false,
+  "retrieved_at": "2026-09-18",
+  "disclaimer": "Reminder reference only \u2014 NOT legal authority. Season dates, zones, and limits are set annually and can change. Always verify current regulations with NJDEP Fish & Wildlife before hunting or trapping.",
+  "sources": [
+    {
+      "id": "nj-digest-2026-27",
+      "title": "2026\u20132027 New Jersey Hunting & Trapping Digest \u2014 Trapping Regulations (pp. 62-64, 2026 Issue)",
+      "url": "https://dep.nj.gov/wp-content/uploads/njfw/digest-hunting-and-trapping-2026-2027-segment-62-64.pdf",
+      "type": "agency_booklet",
+      "notes": "NJDEP-hosted digest segment (official). Text verified 2026-09-18 against the official URL; direct download is bot-blocked so no local PDF archive was kept. Beaver/otter zone map: NJFishandWildlife.nj.gov/beaverotterzones/."
+    }
+  ],
+  "license_summary": {
+    "trapping_license": "Valid trapping license required and must be openly displayed on the back. Trapper Education course required for new trappers; Snare Course Completion Card required for cable restraints. Youth 12-15: free; resident 16+: $32.50; nonresident 16+: $200.50; farmer family exemption on qualifying farmland.",
+    "beaver_permit": "Beaver permit $17 by lottery (apply Oct 1-31); 10 beaver per permit; max 6 traps per zone per day.",
+    "otter_permit": "Otter permit $2 (one per trapper); 1 otter per season; max 3 otter traps per day; CITES seal within 30 days of season end.",
+    "trap_check": "Traps must be checked once every 24 hours (tidal-water semiaquatic sets once per day). Steel-jawed leghold traps are prohibited outright in New Jersey."
+  },
+  "species": [
+    {
+      "common_name": "Beaver",
+      "iac_reference": "2026-2027 NJ Hunting & Trapping Digest, Trapping Regulations (pp. 62-64)",
+      "scientific_name": "Castor canadensis",
+      "scientific_name_verified": false,
+      "scientific_name_note": "Standard taxonomy; not stated in the 2026-27 NJ Hunting & Trapping Digest.",
+      "season_status": "open",
+      "seasons": [
+        {
+          "method": "trapping",
+          "land_type": "all",
+          "open_date": "2026-12-15",
+          "close_date": "2027-03-15",
+          "open_time": "06:00",
+          "timezone": "America/New_York",
+          "continuous_open": false,
+          "zones": [
+            {
+              "zone_id": "NJ-beaver-zones",
+              "zone_name": "Beaver management zones 1-30",
+              "area_type": "management_units",
+              "zones": [
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "6",
+                "7",
+                "8",
+                "9",
+                "10",
+                "11",
+                "12",
+                "13",
+                "14",
+                "15",
+                "16",
+                "17",
+                "18",
+                "19",
+                "20",
+                "21",
+                "22",
+                "23",
+                "24",
+                "25",
+                "26",
+                "27",
+                "28",
+                "29",
+                "30"
+              ]
+            }
+          ],
+          "bag_limits": {
+            "daily_bag": null,
+            "season_bag": 10,
+            "possession_limit": null,
+            "limit_notes": "10 per permit (10 per damage-control permit). Maximum 6 traps per zone per day. No trap or trap stake may be set before 6 a.m. on opening day."
+          },
+          "notes": "All captures must be tagged immediately upon taking possession. Report harvest via the Automated Harvest Reporting System no later than 10 p.m. on the date of harvest."
+        },
+        {
+          "method": "trapping",
+          "land_type": "all",
+          "open_date": "2027-01-01",
+          "close_date": "2027-03-15",
+          "open_time": "06:00",
+          "timezone": "America/New_York",
+          "continuous_open": false,
+          "zones": [
+            {
+              "zone_id": "NJ-beaver-stocked-wma",
+              "zone_name": "Stocked WMAs",
+              "area_type": "special_areas",
+              "wmas": [
+                "Assunpink",
+                "Berkshire Valley",
+                "Bevans (Millville)",
+                "Black River",
+                "Clinton",
+                "Colliers Mills",
+                "Flatbrook-Roy",
+                "Glassboro",
+                "Greenwood Forest (incl. Howardsville tract)",
+                "Heislerville",
+                "MacNamara (Tuckahoe)",
+                "Mad Horse",
+                "Manahawkin",
+                "Manasquan River",
+                "Medford",
+                "Nantuxent",
+                "Peaslee",
+                "Pequest",
+                "Port Republic",
+                "Stafford Forge",
+                "Walpack",
+                "Whittingham",
+                "Winslow"
+              ],
+              "note": "Delayed start on stocked WMAs."
+            }
+          ],
+          "bag_limits": {
+            "daily_bag": null,
+            "season_bag": 10,
+            "possession_limit": null,
+            "limit_notes": "10 per permit. Maximum 6 traps per zone per day. No trap or trap stake may be set before 6 a.m. on opening day."
+          },
+          "notes": "All captures must be tagged immediately upon taking possession. Report harvest via AHRS no later than 10 p.m. on the date of harvest."
+        }
+      ],
+      "permit_requirements": [
+        "Beaver trapping permit required ($17, lottery; apply Oct 1-31; must claim by 11:59 p.m. Nov 25, 2026; unclaimed permits sold over the counter). Valid trapping license required. Only the permitted trapper may check/tend beaver traps."
+      ],
+      "notes": "Trapping is prohibited at all times within the Delaware Water Gap National Recreation Area."
+    },
+    {
+      "common_name": "River otter",
+      "iac_reference": "2026-2027 NJ Hunting & Trapping Digest, Trapping Regulations (pp. 62-64)",
+      "scientific_name": "Lontra canadensis",
+      "scientific_name_verified": false,
+      "scientific_name_note": "Standard taxonomy; not stated in the 2026-27 NJ Hunting & Trapping Digest.",
+      "season_status": "open",
+      "seasons": [
+        {
+          "method": "trapping",
+          "land_type": "all",
+          "open_date": "2026-12-26",
+          "close_date": "2027-02-09",
+          "open_time": "06:00",
+          "timezone": "America/New_York",
+          "continuous_open": false,
+          "zones": [
+            {
+              "zone_id": "NJ-otter-zones",
+              "zone_name": "Otter management zones 1-30",
+              "area_type": "management_units",
+              "zones": [
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "6",
+                "7",
+                "8",
+                "9",
+                "10",
+                "11",
+                "12",
+                "13",
+                "14",
+                "15",
+                "16",
+                "17",
+                "18",
+                "19",
+                "20",
+                "21",
+                "22",
+                "23",
+                "24",
+                "25",
+                "26",
+                "27",
+                "28",
+                "29",
+                "30"
+              ]
+            }
+          ],
+          "bag_limits": {
+            "daily_bag": null,
+            "season_bag": 1,
+            "possession_limit": null,
+            "limit_notes": "1 per season. Maximum 3 otter traps per day. No trap or trap stake may be set before 6 a.m. on opening day."
+          },
+          "notes": "All captures must be tagged immediately upon taking possession. Report harvest via AHRS no later than 10 p.m. on the date of harvest. CITES seal must be affixed to the pelt no later than 30 days after the end of the season; contact a Regional Office to coordinate pelt sealing."
+        },
+        {
+          "method": "trapping",
+          "land_type": "all",
+          "open_date": "2027-01-01",
+          "close_date": "2027-02-09",
+          "open_time": "06:00",
+          "timezone": "America/New_York",
+          "continuous_open": false,
+          "zones": [
+            {
+              "zone_id": "NJ-otter-stocked-wma",
+              "zone_name": "Stocked WMAs",
+              "area_type": "special_areas",
+              "wmas": [
+                "Assunpink",
+                "Berkshire Valley",
+                "Bevans (Millville)",
+                "Black River",
+                "Clinton",
+                "Colliers Mills",
+                "Flatbrook-Roy",
+                "Glassboro",
+                "Greenwood Forest (incl. Howardsville tract)",
+                "Heislerville",
+                "MacNamara (Tuckahoe)",
+                "Mad Horse",
+                "Manahawkin",
+                "Manasquan River",
+                "Medford",
+                "Nantuxent",
+                "Peaslee",
+                "Pequest",
+                "Port Republic",
+                "Stafford Forge",
+                "Walpack",
+                "Whittingham",
+                "Winslow"
+              ],
+              "note": "Delayed start on stocked WMAs."
+            }
+          ],
+          "bag_limits": {
+            "daily_bag": null,
+            "season_bag": 1,
+            "possession_limit": null,
+            "limit_notes": "1 per season. Maximum 3 otter traps per day. No trap or trap stake may be set before 6 a.m. on opening day."
+          },
+          "notes": "All captures must be tagged immediately upon taking possession. Report harvest via AHRS no later than 10 p.m. on the date of harvest. CITES seal required within 30 days after season end."
+        }
+      ],
+      "permit_requirements": [
+        "Otter trapping permit required ($2; one otter permit per trapper; lottery application Oct 1-31). Valid trapping license required. Only the permitted trapper may check/tend otter traps."
+      ],
+      "notes": "Trapping is prohibited at all times within the Delaware Water Gap National Recreation Area."
+    },
+    {
+      "common_name": "Coyote",
+      "iac_reference": "2026-2027 NJ Hunting & Trapping Digest, Trapping Regulations (pp. 62-64)",
+      "scientific_name": "Canis latrans",
+      "scientific_name_verified": false,
+      "scientific_name_note": "Standard taxonomy; not stated in the 2026-27 NJ Hunting & Trapping Digest.",
+      "season_status": "open",
+      "seasons": [
+        {
+          "method": "trapping",
+          "land_type": "all",
+          "open_date": "2026-11-15",
+          "close_date": "2027-03-15",
+          "open_time": "06:00",
+          "timezone": "America/New_York",
+          "continuous_open": false,
+          "zones": [
+            {
+              "zone_id": "NJ-statewide",
+              "zone_name": "Entire state",
+              "area_type": "statewide"
+            }
+          ],
+          "bag_limits": {
+            "daily_bag": null,
+            "season_bag": null,
+            "possession_limit": null,
+            "limit_notes": "No daily or seasonal limit. No trap or trap stake may be set before 6 a.m. on opening day."
+          },
+          "notes": "Coyote/gray fox harvest must be reported by 10 p.m. on the day of harvest via the Automated Harvest Reporting System. On stocked WMAs (Assunpink, Berkshire Valley, Bevans (Millville), Black River, Clinton, Colliers Mills, Flatbrook-Roy, Glassboro, Greenwood Forest, Heislerville, MacNamara (Tuckahoe), Mad Horse, Manahawkin, Manasquan River, Medford, Nantuxent, Peaslee, Pequest, Port Republic, Stafford Forge, Walpack, Whittingham, Winslow): no cable restraints for coyote, fox, opossum, raccoon, or skunk until 6 a.m. Jan 1; cage and encapsulating traps may be used from Nov 15. Trapping is prohibited at all times within the Delaware Water Gap National Recreation Area."
+        }
+      ],
+      "permit_requirements": [],
+      "notes": ""
+    },
+    {
+      "common_name": "Gray fox",
+      "iac_reference": "2026-2027 NJ Hunting & Trapping Digest, Trapping Regulations (pp. 62-64)",
+      "scientific_name": "Urocyon cinereoargenteus",
+      "scientific_name_verified": false,
+      "scientific_name_note": "Standard taxonomy; not stated in the 2026-27 NJ Hunting & Trapping Digest.",
+      "season_status": "open",
+      "seasons": [
+        {
+          "method": "trapping",
+          "land_type": "all",
+          "open_date": "2026-11-15",
+          "close_date": "2027-03-15",
+          "open_time": "06:00",
+          "timezone": "America/New_York",
+          "continuous_open": false,
+          "zones": [
+            {
+              "zone_id": "NJ-statewide",
+              "zone_name": "Entire state",
+              "area_type": "statewide"
+            }
+          ],
+          "bag_limits": {
+            "daily_bag": null,
+            "season_bag": null,
+            "possession_limit": null,
+            "limit_notes": "No daily or seasonal limit. No trap or trap stake may be set before 6 a.m. on opening day."
+          },
+          "notes": "Coyote/gray fox harvest must be reported by 10 p.m. on the day of harvest via the Automated Harvest Reporting System. On stocked WMAs (Assunpink, Berkshire Valley, Bevans (Millville), Black River, Clinton, Colliers Mills, Flatbrook-Roy, Glassboro, Greenwood Forest, Heislerville, MacNamara (Tuckahoe), Mad Horse, Manahawkin, Manasquan River, Medford, Nantuxent, Peaslee, Pequest, Port Republic, Stafford Forge, Walpack, Whittingham, Winslow): no cable restraints for coyote, fox, opossum, raccoon, or skunk until 6 a.m. Jan 1; cage and encapsulating traps may be used from Nov 15. Trapping is prohibited at all times within the Delaware Water Gap National Recreation Area."
+        }
+      ],
+      "permit_requirements": [],
+      "notes": ""
+    },
+    {
+      "common_name": "Red fox",
+      "iac_reference": "2026-2027 NJ Hunting & Trapping Digest, Trapping Regulations (pp. 62-64)",
+      "scientific_name": "Vulpes vulpes",
+      "scientific_name_verified": false,
+      "scientific_name_note": "Standard taxonomy; not stated in the 2026-27 NJ Hunting & Trapping Digest.",
+      "season_status": "open",
+      "seasons": [
+        {
+          "method": "trapping",
+          "land_type": "all",
+          "open_date": "2026-11-15",
+          "close_date": "2027-03-15",
+          "open_time": "06:00",
+          "timezone": "America/New_York",
+          "continuous_open": false,
+          "zones": [
+            {
+              "zone_id": "NJ-statewide",
+              "zone_name": "Entire state",
+              "area_type": "statewide"
+            }
+          ],
+          "bag_limits": {
+            "daily_bag": null,
+            "season_bag": null,
+            "possession_limit": null,
+            "limit_notes": "No daily or seasonal limit. No trap or trap stake may be set before 6 a.m. on opening day."
+          },
+          "notes": "On stocked WMAs (Assunpink, Berkshire Valley, Bevans (Millville), Black River, Clinton, Colliers Mills, Flatbrook-Roy, Glassboro, Greenwood Forest, Heislerville, MacNamara (Tuckahoe), Mad Horse, Manahawkin, Manasquan River, Medford, Nantuxent, Peaslee, Pequest, Port Republic, Stafford Forge, Walpack, Whittingham, Winslow): no cable restraints for coyote, fox, opossum, raccoon, or skunk until 6 a.m. Jan 1; cage and encapsulating traps may be used from Nov 15. Trapping is prohibited at all times within the Delaware Water Gap National Recreation Area."
+        }
+      ],
+      "permit_requirements": [],
+      "notes": ""
+    },
+    {
+      "common_name": "Mink",
+      "iac_reference": "2026-2027 NJ Hunting & Trapping Digest, Trapping Regulations (pp. 62-64)",
+      "scientific_name": "Neogale vison",
+      "scientific_name_verified": false,
+      "scientific_name_note": "Standard taxonomy; not stated in the 2026-27 NJ Hunting & Trapping Digest.",
+      "season_status": "open",
+      "seasons": [
+        {
+          "method": "trapping",
+          "land_type": "all",
+          "open_date": "2026-11-15",
+          "close_date": "2027-03-15",
+          "open_time": "06:00",
+          "timezone": "America/New_York",
+          "continuous_open": false,
+          "zones": [
+            {
+              "zone_id": "NJ-statewide",
+              "zone_name": "Entire state",
+              "area_type": "statewide"
+            }
+          ],
+          "bag_limits": {
+            "daily_bag": null,
+            "season_bag": null,
+            "possession_limit": null,
+            "limit_notes": "No daily or seasonal limit. No trap or trap stake may be set before 6 a.m. on opening day."
+          },
+          "notes": "Trapping is prohibited at all times within the Delaware Water Gap National Recreation Area."
+        }
+      ],
+      "permit_requirements": [],
+      "notes": ""
+    },
+    {
+      "common_name": "Muskrat",
+      "iac_reference": "2026-2027 NJ Hunting & Trapping Digest, Trapping Regulations (pp. 62-64)",
+      "scientific_name": "Ondatra zibethicus",
+      "scientific_name_verified": false,
+      "scientific_name_note": "Standard taxonomy; not stated in the 2026-27 NJ Hunting & Trapping Digest.",
+      "season_status": "open",
+      "seasons": [
+        {
+          "method": "trapping",
+          "land_type": "all",
+          "open_date": "2026-11-15",
+          "close_date": "2027-03-15",
+          "open_time": "06:00",
+          "timezone": "America/New_York",
+          "continuous_open": false,
+          "zones": [
+            {
+              "zone_id": "NJ-statewide",
+              "zone_name": "Entire state",
+              "area_type": "statewide"
+            }
+          ],
+          "bag_limits": {
+            "daily_bag": null,
+            "season_bag": null,
+            "possession_limit": null,
+            "limit_notes": "No daily or seasonal limit. No trap or trap stake may be set before 6 a.m. on opening day."
+          },
+          "notes": "Trapping is prohibited at all times within the Delaware Water Gap National Recreation Area."
+        }
+      ],
+      "permit_requirements": [],
+      "notes": ""
+    },
+    {
+      "common_name": "Nutria",
+      "iac_reference": "2026-2027 NJ Hunting & Trapping Digest, Trapping Regulations (pp. 62-64)",
+      "scientific_name": "Myocastor coypus",
+      "scientific_name_verified": false,
+      "scientific_name_note": "Standard taxonomy; not stated in the 2026-27 NJ Hunting & Trapping Digest.",
+      "season_status": "open",
+      "seasons": [
+        {
+          "method": "trapping",
+          "land_type": "all",
+          "open_date": "2026-11-15",
+          "close_date": "2027-03-15",
+          "open_time": "06:00",
+          "timezone": "America/New_York",
+          "continuous_open": false,
+          "zones": [
+            {
+              "zone_id": "NJ-statewide",
+              "zone_name": "Entire state",
+              "area_type": "statewide"
+            }
+          ],
+          "bag_limits": {
+            "daily_bag": null,
+            "season_bag": null,
+            "possession_limit": null,
+            "limit_notes": "No daily or seasonal limit. No trap or trap stake may be set before 6 a.m. on opening day."
+          },
+          "notes": "Trapping is prohibited at all times within the Delaware Water Gap National Recreation Area."
+        }
+      ],
+      "permit_requirements": [],
+      "notes": ""
+    },
+    {
+      "common_name": "Virginia opossum",
+      "iac_reference": "2026-2027 NJ Hunting & Trapping Digest, Trapping Regulations (pp. 62-64)",
+      "scientific_name": "Didelphis virginiana",
+      "scientific_name_verified": false,
+      "scientific_name_note": "Standard taxonomy; not stated in the 2026-27 NJ Hunting & Trapping Digest.",
+      "season_status": "open",
+      "seasons": [
+        {
+          "method": "trapping",
+          "land_type": "all",
+          "open_date": "2026-11-15",
+          "close_date": "2027-03-15",
+          "open_time": "06:00",
+          "timezone": "America/New_York",
+          "continuous_open": false,
+          "zones": [
+            {
+              "zone_id": "NJ-statewide",
+              "zone_name": "Entire state",
+              "area_type": "statewide"
+            }
+          ],
+          "bag_limits": {
+            "daily_bag": null,
+            "season_bag": null,
+            "possession_limit": null,
+            "limit_notes": "No daily or seasonal limit. No trap or trap stake may be set before 6 a.m. on opening day."
+          },
+          "notes": "On stocked WMAs (Assunpink, Berkshire Valley, Bevans (Millville), Black River, Clinton, Colliers Mills, Flatbrook-Roy, Glassboro, Greenwood Forest, Heislerville, MacNamara (Tuckahoe), Mad Horse, Manahawkin, Manasquan River, Medford, Nantuxent, Peaslee, Pequest, Port Republic, Stafford Forge, Walpack, Whittingham, Winslow): no cable restraints for coyote, fox, opossum, raccoon, or skunk until 6 a.m. Jan 1; cage and encapsulating traps may be used from Nov 15. Trapping is prohibited at all times within the Delaware Water Gap National Recreation Area."
+        }
+      ],
+      "permit_requirements": [],
+      "notes": ""
+    },
+    {
+      "common_name": "Raccoon",
+      "iac_reference": "2026-2027 NJ Hunting & Trapping Digest, Trapping Regulations (pp. 62-64)",
+      "scientific_name": "Procyon lotor",
+      "scientific_name_verified": false,
+      "scientific_name_note": "Standard taxonomy; not stated in the 2026-27 NJ Hunting & Trapping Digest.",
+      "season_status": "open",
+      "seasons": [
+        {
+          "method": "trapping",
+          "land_type": "all",
+          "open_date": "2026-11-15",
+          "close_date": "2027-03-15",
+          "open_time": "06:00",
+          "timezone": "America/New_York",
+          "continuous_open": false,
+          "zones": [
+            {
+              "zone_id": "NJ-statewide",
+              "zone_name": "Entire state",
+              "area_type": "statewide"
+            }
+          ],
+          "bag_limits": {
+            "daily_bag": null,
+            "season_bag": null,
+            "possession_limit": null,
+            "limit_notes": "No daily or seasonal limit. No trap or trap stake may be set before 6 a.m. on opening day."
+          },
+          "notes": "On stocked WMAs (Assunpink, Berkshire Valley, Bevans (Millville), Black River, Clinton, Colliers Mills, Flatbrook-Roy, Glassboro, Greenwood Forest, Heislerville, MacNamara (Tuckahoe), Mad Horse, Manahawkin, Manasquan River, Medford, Nantuxent, Peaslee, Pequest, Port Republic, Stafford Forge, Walpack, Whittingham, Winslow): no cable restraints for coyote, fox, opossum, raccoon, or skunk until 6 a.m. Jan 1; cage and encapsulating traps may be used from Nov 15. Trapping is prohibited at all times within the Delaware Water Gap National Recreation Area."
+        }
+      ],
+      "permit_requirements": [],
+      "notes": ""
+    },
+    {
+      "common_name": "Striped skunk",
+      "iac_reference": "2026-2027 NJ Hunting & Trapping Digest, Trapping Regulations (pp. 62-64)",
+      "scientific_name": "Mephitis mephitis",
+      "scientific_name_verified": false,
+      "scientific_name_note": "Standard taxonomy; not stated in the 2026-27 NJ Hunting & Trapping Digest.",
+      "season_status": "open",
+      "seasons": [
+        {
+          "method": "trapping",
+          "land_type": "all",
+          "open_date": "2026-11-15",
+          "close_date": "2027-03-15",
+          "open_time": "06:00",
+          "timezone": "America/New_York",
+          "continuous_open": false,
+          "zones": [
+            {
+              "zone_id": "NJ-statewide",
+              "zone_name": "Entire state",
+              "area_type": "statewide"
+            }
+          ],
+          "bag_limits": {
+            "daily_bag": null,
+            "season_bag": null,
+            "possession_limit": null,
+            "limit_notes": "No daily or seasonal limit. No trap or trap stake may be set before 6 a.m. on opening day."
+          },
+          "notes": "On stocked WMAs (Assunpink, Berkshire Valley, Bevans (Millville), Black River, Clinton, Colliers Mills, Flatbrook-Roy, Glassboro, Greenwood Forest, Heislerville, MacNamara (Tuckahoe), Mad Horse, Manahawkin, Manasquan River, Medford, Nantuxent, Peaslee, Pequest, Port Republic, Stafford Forge, Walpack, Whittingham, Winslow): no cable restraints for coyote, fox, opossum, raccoon, or skunk until 6 a.m. Jan 1; cage and encapsulating traps may be used from Nov 15. Trapping is prohibited at all times within the Delaware Water Gap National Recreation Area."
+        }
+      ],
+      "permit_requirements": [],
+      "notes": ""
+    },
+    {
+      "common_name": "Long-tailed weasel",
+      "iac_reference": "2026-2027 NJ Hunting & Trapping Digest, Trapping Regulations (pp. 62-64)",
+      "scientific_name": "Neogale frenata",
+      "scientific_name_verified": false,
+      "scientific_name_note": "Standard taxonomy; not stated in the 2026-27 NJ Hunting & Trapping Digest.",
+      "season_status": "open",
+      "seasons": [
+        {
+          "method": "trapping",
+          "land_type": "all",
+          "open_date": "2026-11-15",
+          "close_date": "2027-03-15",
+          "open_time": "06:00",
+          "timezone": "America/New_York",
+          "continuous_open": false,
+          "zones": [
+            {
+              "zone_id": "NJ-statewide",
+              "zone_name": "Entire state",
+              "area_type": "statewide"
+            }
+          ],
+          "bag_limits": {
+            "daily_bag": null,
+            "season_bag": null,
+            "possession_limit": null,
+            "limit_notes": "No daily or seasonal limit. No trap or trap stake may be set before 6 a.m. on opening day."
+          },
+          "notes": "Trapping is prohibited at all times within the Delaware Water Gap National Recreation Area."
+        }
+      ],
+      "permit_requirements": [],
+      "notes": ""
+    },
+    {
+      "common_name": "Short-tailed weasel",
+      "iac_reference": "2026-2027 NJ Hunting & Trapping Digest, Trapping Regulations (pp. 62-64)",
+      "scientific_name": "Mustela erminea",
+      "scientific_name_verified": false,
+      "scientific_name_note": "Standard taxonomy; not stated in the 2026-27 NJ Hunting & Trapping Digest.",
+      "season_status": "open",
+      "seasons": [
+        {
+          "method": "trapping",
+          "land_type": "all",
+          "open_date": "2026-11-15",
+          "close_date": "2027-03-15",
+          "open_time": "06:00",
+          "timezone": "America/New_York",
+          "continuous_open": false,
+          "zones": [
+            {
+              "zone_id": "NJ-statewide",
+              "zone_name": "Entire state",
+              "area_type": "statewide"
+            }
+          ],
+          "bag_limits": {
+            "daily_bag": null,
+            "season_bag": null,
+            "possession_limit": null,
+            "limit_notes": "No daily or seasonal limit. No trap or trap stake may be set before 6 a.m. on opening day."
+          },
+          "notes": "Trapping is prohibited at all times within the Delaware Water Gap National Recreation Area."
+        }
+      ],
+      "permit_requirements": [],
+      "notes": ""
+    },
+    {
+      "common_name": "Bobcat",
+      "iac_reference": "2026-2027 NJ Hunting & Trapping Digest, Trapping Regulations (pp. 62-64)",
+      "scientific_name": "Lynx rufus",
+      "scientific_name_verified": false,
+      "scientific_name_note": "Standard taxonomy; not stated in the 2026-27 NJ Hunting & Trapping Digest.",
+      "season_status": "closed",
+      "seasons": [],
+      "permit_requirements": [],
+      "notes": "Closed statewide \u2014 no take allowed. If found in a trap, do not disturb the set; immediately call (877) 927-6337 and await Fish and Wildlife's Response Team."
+    },
+    {
+      "common_name": "Fisher",
+      "iac_reference": "2026-2027 NJ Hunting & Trapping Digest, Trapping Regulations (pp. 62-64)",
+      "scientific_name": "Pekania pennanti",
+      "scientific_name_verified": false,
+      "scientific_name_note": "Standard taxonomy; not stated in the 2026-27 NJ Hunting & Trapping Digest.",
+      "season_status": "closed",
+      "seasons": [],
+      "permit_requirements": [],
+      "notes": "Closed statewide \u2014 no take allowed. If found in a trap, do not disturb the set; immediately call (877) 927-6337 and await Fish and Wildlife's Response Team."
+    }
+  ],
+  "verification": {
+    "regulation_year_confirmed": true,
+    "confirmation_notes": "2026\u20132027 NJ Hunting & Trapping Digest, Trapping Regulations (pp. 62-64, 2026 Issue), NJDEP official. Beaver Dec 15-Mar 15 zones 1-30 (Jan 1-Mar 15 stocked WMAs), 10/permit; otter Dec 26-Feb 9 zones 1-30 (Jan 1-Feb 9 stocked WMAs), 1/season, CITES seal within 30 days; coyote/gray fox/red fox, mink/muskrat/nutria, opossum/raccoon/striped skunk, and both weasels Nov 15-Mar 15 statewide, no limits; stocked-WMA cable-restraint delay to Jan 1 with the 23 named WMAs transcribed; bobcat and fisher closed statewide with the (877) 927-6337 response-team rule; Delaware Water Gap NRA trapping prohibited at all times; 6 a.m. opening-day set rule.",
+    "known_gaps": [
+      "Scientific names are standard taxonomy, NOT stated in the digest; all marked scientific_name_verified=false.",
+      "No administrative-code (N.J.A.C.) cross-check performed; the NJDEP digest is the published authority.",
+      "Furbearer HUNTING seasons (if any) were not in this digest segment and are not modeled for NJ."
+    ]
+  },
+  "license_url": "https://nj.aspirafocus.com/internetsales",
+  "license_vendor": "NJDEP Integrated Electronic Licensing (Aspira)",
+  "regs_url": "https://dep.nj.gov/wp-content/uploads/njfw/digest-hunting-and-trapping-2026-2027-segment-62-64.pdf",
+  "regs_kind": "pdf"
+,
+ "warden_directory": {
+  "label": "Report a violation",
+  "url": "https://dep.nj.gov/njfw/new-jersey-operation-game-thief",
+  "kind": "hotline",
+  "note": "New Jersey Operation Game Thief: 1-800-222-0456"
+ }
+}

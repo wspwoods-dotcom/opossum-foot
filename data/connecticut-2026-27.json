@@ -1,0 +1,733 @@
+{
+ "schema_version": "1.1",
+ "state": "CT",
+ "state_name": "Connecticut",
+ "season_year": "2026",
+ "provisional": true,
+ "retrieved_at": "2026-09-18",
+ "disclaimer": "Reminder reference only \u2014 NOT legal authority. Season dates, zones, and limits are set annually and can change. Always verify current regulations with the CT Department of Energy & Environmental Protection before hunting or trapping.",
+ "sources": [
+  {
+   "id": "ct-guide-2026",
+   "title": "2026 Connecticut Hunting and Trapping Guide (CT DEEP)",
+   "url": "https://portal.ct.gov/-/media/deep/hunting_trapping/pdf_files/2026-ct-hunting-guide.pdf?rev=0bd45223c84a41bc88f35e9082d16340&",
+   "type": "agency_booklet",
+   "notes": "CT DEEP calendar-year guide. Furbearer Seasons table on p.36; pelt-tagging schedule and protected-species rule on p.36. Archived locally in hidden_files/season-research/connecticut/."
+  }
+ ],
+ "license_summary": {
+  "trapping_license": "Trapping license required; available 24/7 via Connecticut's Online Outdoor Licensing System or at licensed retailers/town halls.",
+  "pelt_tagging": "Beaver, river otter, red fox, gray fox, wild mink, coyote, and fisher pelts must be tagged by DEEP before sale/exchange/gift/disposal/retention (by the last scheduled tagging date of the season).",
+  "fisher_carcass": "Fisher carcass submission to the Wildlife Division is mandatory.",
+  "state_land": "State-land trapping permits $60 per unit (east/west of the Connecticut River), valid November through March 31."
+ },
+ "species": [
+  {
+   "common_name": "River otter",
+   "iac_reference": "2026 CT Hunting and Trapping Guide, p. 36 (Furbearer Seasons table)",
+   "scientific_name": "Lontra canadensis",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the 2026 CT Hunting and Trapping Guide.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-01-01",
+     "close_date": "2026-03-15",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "CT-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": 8,
+      "possession_limit": null,
+      "limit_notes": "Season limit 8. Pelt must be tagged by a DEEP representative before it is sold, exchanged, given away, otherwise disposed of, or retained for personal use (by the last scheduled tagging date of the season)."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-08",
+     "close_date": "2026-12-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "CT-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": 8,
+      "possession_limit": null,
+      "limit_notes": "Season limit 8. Pelt must be tagged by a DEEP representative before it is sold, exchanged, given away, otherwise disposed of, or retained for personal use (by the last scheduled tagging date of the season)."
+     },
+     "notes": ""
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Beaver",
+   "iac_reference": "2026 CT Hunting and Trapping Guide, p. 36 (Furbearer Seasons table)",
+   "scientific_name": "Castor canadensis",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the 2026 CT Hunting and Trapping Guide.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-01-01",
+     "close_date": "2026-03-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "CT-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit. Pelt must be tagged by a DEEP representative before it is sold, exchanged, given away, otherwise disposed of, or retained for personal use (by the last scheduled tagging date of the season)."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-12-01",
+     "close_date": "2026-12-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "CT-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit. Pelt must be tagged by a DEEP representative before it is sold, exchanged, given away, otherwise disposed of, or retained for personal use (by the last scheduled tagging date of the season)."
+     },
+     "notes": ""
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Fisher",
+   "iac_reference": "2026 CT Hunting and Trapping Guide, p. 36 (Furbearer Seasons table)",
+   "scientific_name": "Pekania pennanti",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the 2026 CT Hunting and Trapping Guide.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-20",
+     "close_date": "2026-12-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "CT-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": 2,
+      "possession_limit": null,
+      "limit_notes": "Season limit 2. Pelt must be tagged by a DEEP representative before it is sold, exchanged, given away, otherwise disposed of, or retained for personal use (by the last scheduled tagging date of the season)."
+     },
+     "notes": "Carcass submission to the Wildlife Division is MANDATORY (frozen carcasses accepted at pelt-tagging dates or by arrangement: 860-424-3017)."
+    }
+   ],
+   "permit_requirements": [
+    "Fisher carcass submission mandatory."
+   ],
+   "notes": ""
+  },
+  {
+   "common_name": "Mink",
+   "iac_reference": "2026 CT Hunting and Trapping Guide, p. 36 (Furbearer Seasons table)",
+   "scientific_name": "Neogale vison",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the 2026 CT Hunting and Trapping Guide.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-01-01",
+     "close_date": "2026-03-15",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "CT-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limits. Pelt must be tagged by a DEEP representative before it is sold, exchanged, given away, otherwise disposed of, or retained for personal use (by the last scheduled tagging date of the season)."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-08",
+     "close_date": "2026-12-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "CT-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limits. Pelt must be tagged by a DEEP representative before it is sold, exchanged, given away, otherwise disposed of, or retained for personal use (by the last scheduled tagging date of the season)."
+     },
+     "notes": ""
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Muskrat",
+   "iac_reference": "2026 CT Hunting and Trapping Guide, p. 36 (Furbearer Seasons table)",
+   "scientific_name": "Ondatra zibethicus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the 2026 CT Hunting and Trapping Guide.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-01-01",
+     "close_date": "2026-03-15",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "CT-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limits."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-08",
+     "close_date": "2026-12-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "CT-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limits."
+     },
+     "notes": ""
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Weasel",
+   "iac_reference": "2026 CT Hunting and Trapping Guide, p. 36 (Furbearer Seasons table)",
+   "scientific_name": "Neogale frenata; Mustela erminea",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Regulations group weasels without distinguishing species; standard taxonomy, not stated in the guide.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-01-01",
+     "close_date": "2026-03-15",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "CT-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limits. Regulations group weasels without distinguishing species; standard taxonomy, not stated in the guide."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-08",
+     "close_date": "2026-12-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "CT-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limits. Regulations group weasels without distinguishing species; standard taxonomy, not stated in the guide."
+     },
+     "notes": ""
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Coyote",
+   "iac_reference": "2026 CT Hunting and Trapping Guide, p. 36 (Furbearer Seasons table)",
+   "scientific_name": "Canis latrans",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the 2026 CT Hunting and Trapping Guide.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-01-01",
+     "close_date": "2026-03-15",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "CT-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limits. Pelt must be tagged by a DEEP representative before it is sold, exchanged, given away, otherwise disposed of, or retained for personal use (by the last scheduled tagging date of the season). Foxes and coyotes taken by HUNTERS may be reported online or by phone (1-877-337-4868) in lieu of a pelt tag."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-08",
+     "close_date": "2026-12-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "CT-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limits. Pelt must be tagged by a DEEP representative before it is sold, exchanged, given away, otherwise disposed of, or retained for personal use (by the last scheduled tagging date of the season). Foxes and coyotes taken by HUNTERS may be reported online or by phone (1-877-337-4868) in lieu of a pelt tag."
+     },
+     "notes": ""
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Gray fox",
+   "iac_reference": "2026 CT Hunting and Trapping Guide, p. 36 (Furbearer Seasons table)",
+   "scientific_name": "Urocyon cinereoargenteus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the 2026 CT Hunting and Trapping Guide.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-01-01",
+     "close_date": "2026-03-15",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "CT-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limits. Pelt must be tagged by a DEEP representative before it is sold, exchanged, given away, otherwise disposed of, or retained for personal use (by the last scheduled tagging date of the season). Foxes and coyotes taken by HUNTERS may be reported online or by phone (1-877-337-4868) in lieu of a pelt tag. Gray fox carcass submission requested for research (voluntary)."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-08",
+     "close_date": "2026-12-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "CT-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limits. Pelt must be tagged by a DEEP representative before it is sold, exchanged, given away, otherwise disposed of, or retained for personal use (by the last scheduled tagging date of the season). Foxes and coyotes taken by HUNTERS may be reported online or by phone (1-877-337-4868) in lieu of a pelt tag. Gray fox carcass submission requested for research (voluntary)."
+     },
+     "notes": ""
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Red fox",
+   "iac_reference": "2026 CT Hunting and Trapping Guide, p. 36 (Furbearer Seasons table)",
+   "scientific_name": "Vulpes vulpes",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the 2026 CT Hunting and Trapping Guide.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-01-01",
+     "close_date": "2026-03-15",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "CT-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limits. Pelt must be tagged by a DEEP representative before it is sold, exchanged, given away, otherwise disposed of, or retained for personal use (by the last scheduled tagging date of the season). Foxes and coyotes taken by HUNTERS may be reported online or by phone (1-877-337-4868) in lieu of a pelt tag."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-08",
+     "close_date": "2026-12-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "CT-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limits. Pelt must be tagged by a DEEP representative before it is sold, exchanged, given away, otherwise disposed of, or retained for personal use (by the last scheduled tagging date of the season). Foxes and coyotes taken by HUNTERS may be reported online or by phone (1-877-337-4868) in lieu of a pelt tag."
+     },
+     "notes": ""
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Raccoon",
+   "iac_reference": "2026 CT Hunting and Trapping Guide, p. 36 (Furbearer Seasons table)",
+   "scientific_name": "Procyon lotor",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the 2026 CT Hunting and Trapping Guide.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-01-01",
+     "close_date": "2026-03-15",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "CT-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limits."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-08",
+     "close_date": "2026-12-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "CT-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limits."
+     },
+     "notes": ""
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Virginia opossum",
+   "iac_reference": "2026 CT Hunting and Trapping Guide, p. 36 (Furbearer Seasons table)",
+   "scientific_name": "Didelphis virginiana",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the 2026 CT Hunting and Trapping Guide.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-01-01",
+     "close_date": "2026-03-15",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "CT-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limits."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-08",
+     "close_date": "2026-12-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "CT-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limits."
+     },
+     "notes": ""
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Striped skunk",
+   "iac_reference": "2026 CT Hunting and Trapping Guide, p. 36 (Furbearer Seasons table)",
+   "scientific_name": "Mephitis mephitis",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the 2026 CT Hunting and Trapping Guide.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-01-01",
+     "close_date": "2026-03-15",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "CT-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limits."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-08",
+     "close_date": "2026-12-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "CT-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limits."
+     },
+     "notes": ""
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Bobcat",
+   "iac_reference": "2026 CT Hunting and Trapping Guide, p. 36 (Furbearer Seasons table)",
+   "scientific_name": "Lynx rufus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the 2026 CT Hunting and Trapping Guide.",
+   "season_status": "closed",
+   "seasons": [],
+   "permit_requirements": [],
+   "notes": "Closed: bobcat is a PROTECTED species in Connecticut (guide p.36). Pelts/carcasses may not be sold, purchased, or possessed unless legally acquired with full acquisition tagging."
+  }
+ ],
+ "verification": {
+  "regulation_year_confirmed": true,
+  "confirmation_notes": "2026 CT Hunting and Trapping Guide (final, calendar-year). Furbearer Seasons table p.36: otter Jan 1-Mar 15 & Nov 8-Dec 31 (limit 8); beaver Jan 1-Mar 31 & Dec 1-Dec 31 (no limit); mink/muskrat/weasel/coyote/gray fox/red fox/raccoon/opossum/skunk Jan 1-Mar 15 & Nov 8-Dec 31 (no limits); fisher Nov 20-Dec 31 (limit 2, carcass submission mandatory); pelt-tagging species list; bobcat confirmed PROTECTED (no open season) via the protected-species pelt rule on p.36.",
+  "known_gaps": [
+   "CT publishes calendar-year guides; the 2027 guide (setting January-March 2027 furbearer dates) is not published as of 2026-09-18. season_year='2026', provisional=true; only the two published 2026 segments are modeled and nothing about 2027 is inferred.",
+   "Scientific names are standard taxonomy, NOT stated in the guide; all marked scientific_name_verified=false.",
+   "Black bear excluded as big game, not a furbearer.",
+   "No administrative-code cross-check performed; the DEEP guide is the published authority."
+  ]
+ },
+ "license_url": "https://ct.aspirafocus.com/internetsales",
+ "license_vendor": "Aspira",
+ "regs_url": "https://portal.ct.gov/-/media/deep/hunting_trapping/pdf_files/2026-ct-hunting-guide.pdf?rev=0bd45223c84a41bc88f35e9082d16340&",
+ "regs_kind": "pdf"
+,
+ "warden_directory": {
+  "label": "Report a violation",
+  "url": "https://portal.ct.gov/deep/about/contact-us/24-hour-emergency-and-information-phone-numbers",
+  "kind": "hotline",
+  "note": "Connecticut TIP: 800-842-4357 (800-842-HELP); DEEP dispatch 860-424-3333"
+ }
+}

@@ -1,0 +1,572 @@
+{
+ "schema_version": "1.1",
+ "state": "OK",
+ "state_name": "Oklahoma",
+ "season_year": "2026-27",
+ "retrieved_at": "2026-09-18",
+ "disclaimer": "Reminder reference only \u2014 NOT legal authority. Season dates, zones, and limits are set annually and can change. Always verify current regulations with the Oklahoma Department of Wildlife Conservation before hunting or trapping.",
+ "sources": [
+  {
+   "id": "ok-furbearer-regs",
+   "title": "ODWC: Furbearer & Coyote Regulations",
+   "url": "http://www.wildlifedepartment.com/hunting/regs/furbearercoyote-regulations",
+   "type": "agency_webpage",
+   "notes": "Official ODWC page: Dec 1\u2013Feb 28 furbearer group; year-round beaver/nutria/raccoon/striped skunk/coyote; closed swift fox/spotted skunk/ringtail; river otter season limit 6."
+  },
+  {
+   "id": "ok-2026-poster",
+   "title": "ODWC 2026/2027 Hunting Season Poster",
+   "url": "https://www.wildlifedepartment.com/sites/default/files/2026-08/20262027%20Hunting%20Season%20Poster%20%2812%20x%2018%20in%29.pdf",
+   "type": "agency_booklet",
+   "notes": "Official 2026-27 season poster; archived locally."
+  }
+ ],
+ "license_summary": {
+  "fur_license": "A fur license is required to take furbearers; hunters pursuing furbearers with hounds during the open season must also possess a valid hunting license (unless exempt).",
+  "bobcat_otter_tagging": "Bobcat and river otter must be tagged at bobcat/river otter tagging stations (utilize private tagging stations or a local game warden)."
+ },
+ "species": [
+  {
+   "common_name": "Badger",
+   "scientific_name": "Taxidea taxus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Oklahoma Department of Wildlife Conservation regulations.",
+   "iac_reference": "Okla. Admin. Code \u00a7 800:25-7-61",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "both",
+     "land_type": "all",
+     "open_date": "2026-12-01",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "OK-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Dec. 1, 2026 \u2013 Feb. 28, 2027."
+     },
+     "notes": "Dec. 1, 2026 \u2013 Feb. 28, 2027."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Beaver",
+   "scientific_name": "Castor canadensis",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Oklahoma Department of Wildlife Conservation regulations.",
+   "iac_reference": "Okla. Admin. Code \u00a7 800:25-7-61",
+   "season_status": "continuous",
+   "seasons": [
+    {
+     "method": "both",
+     "land_type": "all",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "OK-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Year-round, statewide; no bag limit."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Bobcat",
+   "scientific_name": "Lynx rufus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Oklahoma Department of Wildlife Conservation regulations.",
+   "iac_reference": "Okla. Admin. Code \u00a7 800:25-7-61",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "both",
+     "land_type": "all",
+     "open_date": "2026-12-01",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "OK-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": 20,
+      "possession_limit": null,
+      "limit_notes": "season/possession limit 20."
+     },
+     "notes": "Dec. 1, 2026 \u2013 Feb. 28, 2027; season/possession limit 20."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Coyote",
+   "scientific_name": "Canis latrans",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Oklahoma Department of Wildlife Conservation regulations.",
+   "iac_reference": "Okla. Admin. Code \u00a7 800:25-7-61",
+   "season_status": "continuous",
+   "seasons": [
+    {
+     "method": "both",
+     "land_type": "all",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "OK-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Year-round, statewide; no bag limit."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Gray fox",
+   "scientific_name": "Urocyon cinereoargenteus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Oklahoma Department of Wildlife Conservation regulations.",
+   "iac_reference": "Okla. Admin. Code \u00a7 800:25-7-61",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "both",
+     "land_type": "all",
+     "open_date": "2026-12-01",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "OK-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": "2",
+      "season_bag": "6",
+      "possession_limit": null,
+      "limit_notes": "Gray fox and red fox combined: daily bag 2; season bag 6 combined, of which no more than 2 red foxes."
+     },
+     "notes": "Dec. 1, 2026 \u2013 Feb. 28, 2027; daily bag 2 combined with red fox; season bag 6 combined, no more than 2 red foxes."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Mink",
+   "scientific_name": "Neogale vison",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Oklahoma Department of Wildlife Conservation regulations.",
+   "iac_reference": "Okla. Admin. Code \u00a7 800:25-7-61",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "both",
+     "land_type": "all",
+     "open_date": "2026-12-01",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "OK-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Dec. 1, 2026 \u2013 Feb. 28, 2027."
+     },
+     "notes": "Dec. 1, 2026 \u2013 Feb. 28, 2027."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Muskrat",
+   "scientific_name": "Ondatra zibethicus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Oklahoma Department of Wildlife Conservation regulations.",
+   "iac_reference": "Okla. Admin. Code \u00a7 800:25-7-61",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "both",
+     "land_type": "all",
+     "open_date": "2026-12-01",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "OK-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Dec. 1, 2026 \u2013 Feb. 28, 2027."
+     },
+     "notes": "Dec. 1, 2026 \u2013 Feb. 28, 2027."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Nutria",
+   "scientific_name": "Myocastor coypus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Oklahoma Department of Wildlife Conservation regulations.",
+   "iac_reference": "Okla. Admin. Code \u00a7 800:25-7-61",
+   "season_status": "continuous",
+   "seasons": [
+    {
+     "method": "both",
+     "land_type": "all",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "OK-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Year-round, statewide; no bag limit."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Opossum",
+   "scientific_name": "Didelphis virginiana",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Oklahoma Department of Wildlife Conservation regulations.",
+   "iac_reference": "Okla. Admin. Code \u00a7 800:25-7-61",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "both",
+     "land_type": "all",
+     "open_date": "2026-12-01",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "OK-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Dec. 1, 2026 \u2013 Feb. 28, 2027."
+     },
+     "notes": "Dec. 1, 2026 \u2013 Feb. 28, 2027."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Raccoon",
+   "scientific_name": "Procyon lotor",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Oklahoma Department of Wildlife Conservation regulations.",
+   "iac_reference": "Okla. Admin. Code \u00a7 800:25-7-61",
+   "season_status": "continuous",
+   "seasons": [
+    {
+     "method": "both",
+     "land_type": "all",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "OK-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Year-round, statewide; no bag limit."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Red fox",
+   "scientific_name": "Vulpes vulpes",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Oklahoma Department of Wildlife Conservation regulations.",
+   "iac_reference": "Okla. Admin. Code \u00a7 800:25-7-61",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "both",
+     "land_type": "all",
+     "open_date": "2026-12-01",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "OK-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": "2",
+      "season_bag": "6",
+      "possession_limit": null,
+      "limit_notes": "Gray fox and red fox combined: daily bag 2 (no more than 1 red fox per day); season bag 6 combined (no more than 2 red foxes)."
+     },
+     "notes": "Dec. 1, 2026 \u2013 Feb. 28, 2027; daily bag 2 combined with gray fox (no more than 1 red); season bag 6 combined (no more than 2 red)."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Ringtail",
+   "scientific_name": "Bassariscus astutus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Oklahoma Department of Wildlife Conservation regulations.",
+   "iac_reference": "Okla. Admin. Code \u00a7 800:25-7-61",
+   "season_status": "closed",
+   "seasons": [],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "River otter",
+   "scientific_name": "Lontra canadensis",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Oklahoma Department of Wildlife Conservation regulations.",
+   "iac_reference": "Okla. Admin. Code \u00a7 800:25-7-61",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "both",
+     "land_type": "all",
+     "open_date": "2026-12-01",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "OK-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": 6,
+      "possession_limit": null,
+      "limit_notes": "season bag 6."
+     },
+     "notes": "Dec. 1, 2026 \u2013 Feb. 28, 2027; season bag 6."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Spotted skunk",
+   "scientific_name": "Spilogale gracilis",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Oklahoma Department of Wildlife Conservation regulations.",
+   "iac_reference": "Okla. Admin. Code \u00a7 800:25-7-61",
+   "season_status": "closed",
+   "seasons": [],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Striped skunk",
+   "scientific_name": "Mephitis mephitis",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Oklahoma Department of Wildlife Conservation regulations.",
+   "iac_reference": "Okla. Admin. Code \u00a7 800:25-7-61",
+   "season_status": "continuous",
+   "seasons": [
+    {
+     "method": "both",
+     "land_type": "all",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "OK-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Year-round, statewide; no bag limit."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Swift fox",
+   "scientific_name": "Vulpes velox",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the Oklahoma Department of Wildlife Conservation regulations.",
+   "iac_reference": "Okla. Admin. Code \u00a7 800:25-7-61",
+   "season_status": "closed",
+   "seasons": [],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Weasel",
+   "scientific_name": null,
+   "scientific_name_verified": false,
+   "scientific_name_note": "Oklahoma regulations do not distinguish weasel species; no single standard taxon applies.",
+   "iac_reference": "Okla. Admin. Code \u00a7 800:25-7-61",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "both",
+     "land_type": "all",
+     "open_date": "2026-12-01",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "OK-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Dec. 1, 2026 \u2013 Feb. 28, 2027."
+     },
+     "notes": "Dec. 1, 2026 \u2013 Feb. 28, 2027."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  }
+ ],
+ "verification": {
+  "regulation_year_confirmed": true,
+  "confirmation_notes": "Official ODWC 2026/2027 Hunting Season Poster and ODWC furbearer & coyote regulations page, read 2026-09-18, cross-checked with OAC 800:25-7-61. River otter season limit 6 confirmed from the official ODWC page. Bag limits (bobcat 20/season; gray/red fox combined daily 2, season 6 with \u22642 red) were cross-checked against the official 2026-27 season poster; the third-party mirror of OAC 800:25-7-61 was used only as a finding aid and is not cited.",
+  "known_gaps": [
+   "Scientific names are standard taxonomy, not stated in ODWC regulations."
+  ]
+ },
+ "provisional": false,
+ "license_url": "https://license.gooutdoorsoklahoma.com",
+ "license_vendor": "Go Outdoors Oklahoma (official ODWC portal)",
+ "regs_url": "https://www.wildlifedepartment.com/sites/default/files/2026-08/20262027%20Hunting%20Season%20Poster%20%2812%20x%2018%20in%29.pdf",
+ "regs_kind": "pdf"
+,
+ "warden_directory": {
+  "label": "Report a violation",
+  "url": "http://www.wildlifedepartment.com/law/operation-game-thief",
+  "kind": "hotline",
+  "note": "Operation Game Thief: 1-800-522-8039"
+ }
+}

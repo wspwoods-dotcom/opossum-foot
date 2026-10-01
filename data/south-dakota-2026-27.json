@@ -1,0 +1,988 @@
+{
+ "disclaimer": "Reminder reference only — NOT legal authority. Season dates, zones, limits, and quotas are set annually and can change. Always verify current regulations with South Dakota Game, Fish and Parks before hunting or trapping.",
+ "license_summary": {
+  "general": "A valid South Dakota hunting or furbearer license is required (plus Habitat Stamp). River otter trapping is RESIDENTS ONLY with a furbearer license. Nonresidents may take only raccoon, beaver, and muskrat (Dec. 1, 2026–Mar. 15, 2027) and bobcats (Jan. 9–Feb. 15, 2027); mink and weasel may be trapped by nonresidents Dec. 1, 2026–Jan. 31, 2027. Raw furs may be kept after season close if checked with a GFP representative within 10 days."
+ },
+ "provisional": false,
+ "retrieved_at": "2026-09-18",
+ "schema_version": "1.1",
+ "season_year": "2026-27",
+ "sources": [
+  {
+   "id": "sd-handbook-2026",
+   "notes": "Official 2026 SD Hunting and Trapping Handbook: furbearer seasons table (p. 48), footnotes (p. 49), furbearer regulations incl. bobcat/otter carcass registration, protected animals, wolf ID (pp. 50–52). Confirms final 2026 seasons incl. river otter harvest limit increased from 20 to 30.",
+   "title": "2026 South Dakota Hunting and Trapping Handbook (SDGFP)",
+   "type": "agency_booklet",
+   "url": "https://gfp.sd.gov/userdocs/docs/huntingandtrappinghandbook.pdf"
+  },
+  {
+   "id": "sdar-41-08",
+   "notes": "SD Administrative Rules Article 41:08: mink/weasel hunting and trapping season (41:08:01:01); muskrat season by river side (41:08:01:02).",
+   "title": "SDAR Article 41:08 — Fur-bearing animals and methods",
+   "type": "administrative_code",
+   "url": "http://sdlegislature.gov/api/Rules/Rule/41:08.html?all=true"
+  },
+  {
+   "id": "sd-otter-news",
+   "notes": "GFP news release finalizing the river otter trapping season framework: East River counties, 1-per-trapper limit, 24-hour reporting, carcass/pelt check-in and tagging rules.",
+   "title": "GFP Commission Finalizes River Otter Trapping Season",
+   "type": "agency_news",
+   "url": "https://news.sd.gov/news?id=news_kb_article_view&sysparm_article=KB0036641"
+  }
+ ],
+ "species": [
+  {
+   "common_name": "Mink",
+   "iac_reference": "41:08:01:01",
+   "notes": "SDAR: 'The season is open from sunrise on November 1 through sunset on January 31 to hunt and trap mink and weasel in all counties of the state.'",
+   "permit_requirements": [],
+   "scientific_name": "Neogale vison",
+   "scientific_name_note": "Standard taxonomy; not stated in the SD sources used.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-01-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "",
+     "open_date": "2026-11-01",
+     "open_time": "sunrise",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "SD-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-01-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "",
+     "open_date": "2026-11-01",
+     "open_time": "sunrise",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "SD-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ],
+   "county_notes": "Method restrictions do not apply in Haakon, Jackson, Jones, Lyman, and Stanley counties."
+  },
+  {
+   "common_name": "Weasel",
+   "iac_reference": "41:08:01:01",
+   "notes": "The rule says 'weasel' without specifying species; modeled as Weasel with no scientific name.",
+   "permit_requirements": [],
+   "scientific_name": null,
+   "scientific_name_note": "The rule does not specify which weasel species; no scientific name modeled.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-01-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "",
+     "open_date": "2026-11-01",
+     "open_time": "sunrise",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "SD-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-01-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "",
+     "open_date": "2026-11-01",
+     "open_time": "sunrise",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "SD-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Muskrat",
+   "iac_reference": "41:08:01:02",
+   "notes": "Landowner/lessee muskrat shooting window (Apr. 1–Aug. 31) and Custer State Park/other special-area rules are recorded here, not modeled as separate seasons.",
+   "permit_requirements": [
+    "Shooting muskrats is allowed only for landowners and lessees (incl. SD School and Public land surface lease holders) on land they own or operate and state, county, or township highway officials within road rights-of-way, Apr. 1–Aug. 31, statewide (rimfire .22 caliber or smaller, muzzleloaders .45 caliber or smaller, legal archery, or shotguns with nontoxic shot)."
+   ],
+   "scientific_name": "Ondatra zibethicus",
+   "scientific_name_note": "Standard taxonomy; not stated in the SD sources used.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "West River: all counties west of the Missouri River, except portions of the Black Hills Fire Protection District. Year-round. Exact BHFPD boundary not in dataset — verify with SDGFP maps.",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "SD-muskrat-west",
+       "zone_name": "West River (all counties west of the Missouri River, except portions of the Black Hills Fire Protection District)"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-04-30",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "In the Black Hills Fire Protection District and all counties east of the Missouri River.",
+     "open_date": "2026-11-01",
+     "open_time": "sunrise",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "SD-muskrat-bh-east",
+       "zone_name": "Black Hills Fire Protection District and all counties east of the Missouri River"
+      }
+     ]
+    }
+   ],
+   "county_notes": "Method restrictions do not apply in Haakon, Jackson, Jones, Lyman, and Stanley counties."
+  },
+  {
+   "common_name": "Beaver",
+   "iac_reference": "2026 SD Handbook p. 48",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Castor canadensis",
+   "scientific_name_note": "Standard taxonomy; not stated in the SD sources used.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Statewide year-round EXCEPT areas within the Black Hills Fire Protection District, which is closed to beaver hunting and trapping.",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "SD-statewide-except-bhfpd",
+       "zone_name": "Statewide except the Black Hills Fire Protection District (closed)"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "River otter",
+   "iac_reference": "2026 SD Handbook pp. 48–49",
+   "notes": "River otters are a CITES Appendix II species — SDGFP requires reporting, tagging, and carcass surrender. Nonresidents may not take otters (residents only).",
+   "permit_requirements": [
+    "Limit of one river otter per resident hunter/trapper.",
+    "Statewide harvest limit of 30 — season ends prior to Dec. 31, 2026 if the harvest limit is reached.",
+    "RESIDENTS ONLY.",
+    "Any harvested river otter must be reported to GFP within 24 hours of harvest. The entire carcass with the detached pelt must be submitted to GFP personnel within 5 days of capture. Once the season closes, an individual has 24 hours to notify a department representative of any untagged river otter harvested during the season. The pelt will be inspected, tagged, and registered; the tagged pelt is returned. The carcass is surrendered to GFP (may be returned upon request after biological data collection).",
+    "No person may possess, purchase, or sell raw river otter pelts that are not legally tagged."
+   ],
+   "scientific_name": "Lontra canadensis",
+   "scientific_name_note": "Standard taxonomy; not stated in the SD sources used.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "1 per resident trapper; statewide harvest limit of 30 (season may close early).",
+      "possession_limit": null,
+      "season_bag": 1
+     },
+     "close_date": "2026-12-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "East River only: Aurora, Beadle, Bon Homme, Brookings, Brown, Charles Mix, Clark, Clay, Codington, Davison, Day, Deuel, Douglas, Grant, Hamlin, Hanson, Hutchinson, Jerauld, Kingsbury, Lake, Lincoln, Marshall, McCook, Miner, Minnehaha, Moody, Roberts, Sanborn, Spink, Turner, Union, and Yankton counties.",
+     "open_date": "2026-11-01",
+     "open_time": "sunrise",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "SD-otter-eastriver",
+       "zone_name": "East River otter area (Aurora, Beadle, Bon Homme, Brookings, Brown, Charles Mix, Clark, Clay, Codington, Davison, Day, Deuel, Douglas, Grant, Hamlin, Hanson, Hutchinson, Jerauld, Kingsbury, Lake, Lincoln, Marshall, McCook, Miner, Minnehaha, Moody, Roberts, Sanborn, Spink, Turner, Union, and Yankton counties)"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Bobcat",
+   "iac_reference": "2026 SD Handbook pp. 48–49",
+   "notes": "Any person harvesting a bobcat must submit the entire carcass with the detached pelt to GFP personnel within 5 days of capture. Once the season closes, an individual has 24 hours to notify a department representative of any untagged bobcats harvested during the season. The pelt will be inspected, tagged, and registered; the lower jaw is removed from the carcass. The tagged pelt is returned; the carcass may be returned upon request.",
+   "permit_requirements": [
+    "Season bag limit: one bobcat East River and in the Black Hills; unlimited bobcats West River, excluding the Black Hills.",
+    "Bobcat carcass submission and pelt tagging required (see notes)."
+   ],
+   "scientific_name": "Lynx rufus",
+   "scientific_name_note": "Standard taxonomy; not stated in the SD sources used.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "1 bobcat per season East River.",
+      "possession_limit": null,
+      "season_bag": 1
+     },
+     "close_date": "2027-02-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "East River (east of the Missouri River). Dec. 26–Feb. 15, sunrise to sunset.",
+     "open_date": "2026-12-26",
+     "open_time": "sunrise",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "SD-bobcat-er",
+       "zone_name": "East River"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "1 bobcat per season in the Black Hills.",
+      "possession_limit": null,
+      "season_bag": 1
+     },
+     "close_date": "2027-02-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Black Hills (Black Hills Fire Protection District). Dec. 26–Feb. 15, sunrise to sunset.",
+     "open_date": "2026-12-26",
+     "open_time": "sunrise",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "SD-bobcat-bh",
+       "zone_name": "Black Hills"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Unlimited West River excluding the Black Hills.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "West River excluding the Black Hills. Dec. 26–Feb. 15, sunrise to sunset.",
+     "open_date": "2026-12-26",
+     "open_time": "sunrise",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "SD-bobcat-wr",
+       "zone_name": "West River excluding the Black Hills"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "1 bobcat per season East River.",
+      "possession_limit": null,
+      "season_bag": 1
+     },
+     "close_date": "2027-02-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "East River (east of the Missouri River). Dec. 26–Feb. 15, sunrise to sunset.",
+     "open_date": "2026-12-26",
+     "open_time": "sunrise",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "SD-bobcat-er",
+       "zone_name": "East River"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "1 bobcat per season in the Black Hills.",
+      "possession_limit": null,
+      "season_bag": 1
+     },
+     "close_date": "2027-02-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Black Hills (Black Hills Fire Protection District). Dec. 26–Feb. 15, sunrise to sunset.",
+     "open_date": "2026-12-26",
+     "open_time": "sunrise",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "SD-bobcat-bh",
+       "zone_name": "Black Hills"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "Unlimited West River excluding the Black Hills.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "West River excluding the Black Hills. Dec. 26–Feb. 15, sunrise to sunset.",
+     "open_date": "2026-12-26",
+     "open_time": "sunrise",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "SD-bobcat-wr",
+       "zone_name": "West River excluding the Black Hills"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Red fox",
+   "iac_reference": "2026 SD Handbook p. 48",
+   "notes": "Year-round; no closed season.",
+   "permit_requirements": [],
+   "scientific_name": "Vulpes vulpes",
+   "scientific_name_note": "Standard taxonomy; not stated in the SD sources used.",
+   "scientific_name_verified": false,
+   "season_status": "continuous",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "SD-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "SD-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Gray fox",
+   "iac_reference": "2026 SD Handbook p. 48",
+   "notes": "Year-round; no closed season.",
+   "permit_requirements": [],
+   "scientific_name": "Urocyon cinereoargenteus",
+   "scientific_name_note": "Standard taxonomy; not stated in the SD sources used.",
+   "scientific_name_verified": false,
+   "season_status": "continuous",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "SD-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "SD-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Badger",
+   "iac_reference": "2026 SD Handbook p. 48",
+   "notes": "Year-round; no closed season. Note: nonresidents may not shoot badgers without a nonresident furbearer license (license summary).",
+   "permit_requirements": [],
+   "scientific_name": "Taxidea taxus",
+   "scientific_name_note": "Standard taxonomy; not stated in the SD sources used.",
+   "scientific_name_verified": false,
+   "season_status": "continuous",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "SD-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "SD-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Raccoon",
+   "iac_reference": "2026 SD Handbook p. 48",
+   "notes": "Year-round; no closed season. Note: nonresidents may not shoot raccoons without a nonresident furbearer license (license summary).",
+   "permit_requirements": [],
+   "scientific_name": "Procyon lotor",
+   "scientific_name_note": "Standard taxonomy; not stated in the SD sources used.",
+   "scientific_name_verified": false,
+   "season_status": "continuous",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "SD-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "SD-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Striped skunk",
+   "iac_reference": "2026 SD Handbook p. 48",
+   "notes": "The handbook says 'Skunk'; modeled as striped skunk.",
+   "permit_requirements": [],
+   "scientific_name": "Mephitis mephitis",
+   "scientific_name_note": "Standard taxonomy; not stated in the SD sources used.",
+   "scientific_name_verified": false,
+   "season_status": "continuous",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "SD-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "SD-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Opossum",
+   "iac_reference": "2026 SD Handbook p. 48",
+   "notes": "Year-round; no closed season.",
+   "permit_requirements": [],
+   "scientific_name": "Didelphis virginiana",
+   "scientific_name_note": "Standard taxonomy; not stated in the SD sources used.",
+   "scientific_name_verified": false,
+   "season_status": "continuous",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "SD-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "SD-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "White-tailed jackrabbit",
+   "iac_reference": "2026 SD Handbook p. 48",
+   "notes": "The handbook says 'Jackrabbit'; modeled as white-tailed jackrabbit.",
+   "permit_requirements": [],
+   "scientific_name": "Lepus townsendii",
+   "scientific_name_note": "Standard taxonomy; not stated in the SD sources used.",
+   "scientific_name_verified": false,
+   "season_status": "continuous",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "SD-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "SD-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Coyote",
+   "iac_reference": "2026 SD Handbook p. 48",
+   "notes": "Year-round statewide; no closed season. Custer State Park has a Nov. 1, 2026–Apr. 30, 2027 coyote season with additional restrictions — not modeled as a separate season.",
+   "permit_requirements": [],
+   "scientific_name": "Canis latrans",
+   "scientific_name_note": "Standard taxonomy; not stated in the SD sources used.",
+   "scientific_name_verified": false,
+   "season_status": "continuous",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "SD-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "SD-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Gray wolf",
+   "iac_reference": "2026 SD Handbook p. 48 (Closed); p. 52 (Wolf ID)",
+   "notes": "Table lists Wolf as 'Closed'. Handbook p. 52: wolves are under federal ESA protection (2022 district court reinstatement) — SDGFP has no management authority and they can no longer be hunted or trapped in South Dakota. Included so the app flags any logged take as out of season.",
+   "permit_requirements": [],
+   "scientific_name": "Canis lupus",
+   "scientific_name_note": "Standard taxonomy; not stated in the SD sources used.",
+   "scientific_name_verified": false,
+   "season_status": "closed",
+   "seasons": []
+  },
+  {
+   "common_name": "Pacific marten",
+   "iac_reference": "2026 SD Handbook p. 52 (Protected animals)",
+   "notes": "'No person may take pine (Pacific) marten, black-footed ferret, swift fox, fisher, or wolves.' Accidental catches must be released alive; dead animals left undisturbed and GFP contacted within 12 hours. Included so the app flags any logged take as out of season.",
+   "permit_requirements": [],
+   "scientific_name": "Martes caurina",
+   "scientific_name_note": "Standard taxonomy; not stated in the SD sources used.",
+   "scientific_name_verified": false,
+   "season_status": "closed",
+   "seasons": []
+  },
+  {
+   "common_name": "Black-footed ferret",
+   "iac_reference": "2026 SD Handbook p. 52 (Protected animals)",
+   "notes": "'No person may take pine (Pacific) marten, black-footed ferret, swift fox, fisher, or wolves.' Federally endangered. Included so the app flags any logged take as out of season.",
+   "permit_requirements": [],
+   "scientific_name": "Mustela nigripes",
+   "scientific_name_note": "Standard taxonomy; not stated in the SD sources used.",
+   "scientific_name_verified": false,
+   "season_status": "closed",
+   "seasons": []
+  },
+  {
+   "common_name": "Swift fox",
+   "iac_reference": "2026 SD Handbook p. 52 (Protected animals)",
+   "notes": "'No person may take pine (Pacific) marten, black-footed ferret, swift fox, fisher, or wolves.' Included so the app flags any logged take as out of season.",
+   "permit_requirements": [],
+   "scientific_name": "Vulpes velox",
+   "scientific_name_note": "Standard taxonomy; not stated in the SD sources used.",
+   "scientific_name_verified": false,
+   "season_status": "closed",
+   "seasons": []
+  },
+  {
+   "common_name": "Fisher",
+   "iac_reference": "2026 SD Handbook p. 52 (Protected animals)",
+   "notes": "'No person may take pine (Pacific) marten, black-footed ferret, swift fox, fisher, or wolves.' Included so the app flags any logged take as out of season.",
+   "permit_requirements": [],
+   "scientific_name": "Pekania pennanti",
+   "scientific_name_note": "Standard taxonomy; not stated in the SD sources used.",
+   "scientific_name_verified": false,
+   "season_status": "closed",
+   "seasons": []
+  }
+ ],
+ "state": "SD",
+ "state_name": "South Dakota",
+ "verification": {
+  "confirmation_notes": "Data taken from the official 2026 South Dakota Hunting and Trapping Handbook (SDGFP): furbearer seasons table (p. 48), footnotes incl. nonresident windows, sunrise/sunset rule, otter limit 30/quota, bobcat bag limits (p. 49), bobcat/otter carcass registration and protected-animal list (pp. 50–52), and license table (p. 8). SDAR Article 41:08 confirms mink/weasel season language and the river-split muskrat season. Calendar check: Nov 1, 2026 Sunday; Jan 31, 2027 Sunday; Apr 30, 2027 Friday; Dec 31, 2026 Thursday; Dec 26, 2026 Saturday; Feb 15, 2027 Monday.",
+  "known_gaps": [
+   "Scientific names are standard taxonomy, NOT stated in the SD sources used.",
+   "Nonresident reduced windows are recorded in notes/permit_requirements, not modeled as separate season objects (schema has no residency field).",
+   "Landowner/lessee muskrat shooting window (Apr. 1–Aug. 31) recorded in notes only.",
+   "Custer State Park coyote season (Nov. 1, 2026–Apr. 30, 2027) recorded in notes only.",
+   "Exact Black Hills Fire Protection District boundary is not in the dataset — verify with SDGFP maps.",
+   "'Skunk' modeled as striped skunk; 'Jackrabbit' modeled as white-tailed jackrabbit; 'weasel' unspecified in the rule.",
+   "Nuisance/depredation rules are not modeled.",
+   "Mountain Time caveat: western SD (Black Hills, west of the Missouri River) observes Mountain Time; seasons begin/end at sunrise/sunset local time."
+  ],
+  "regulation_year_confirmed": true
+ },
+ "license_url": "https://license.gooutdoorssouthdakota.com/Licensing/CustomerLookup.aspx",
+ "license_vendor": "Go Outdoors (Aspira/Kalkomey)",
+ "regs_url": "https://gfp.sd.gov/userdocs/docs/huntingandtrappinghandbook.pdf",
+ "regs_kind": "pdf"
+,
+ "warden_directory": {
+  "label": "Report a violation",
+  "url": "https://tips.sd.gov",
+  "kind": "hotline",
+  "note": "SD GFP Turn In Poachers (TIPs): 1-888-683-7224 (1-888-OVERBAG), 24/7 toll-free"
+ }
+}

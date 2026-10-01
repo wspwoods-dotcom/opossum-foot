@@ -1,0 +1,992 @@
+{
+ "disclaimer": "Reminder reference only \u2014 NOT legal authority. Season dates, zones, and limits are set annually and can change. Always verify current regulations with the Pennsylvania Game Commission before hunting or trapping.",
+ "license_summary": {
+  "bobcat_fisher_otter_permits": "In addition to a furtaker license, a special permit is required for bobcat, fisher, and river otter. Licensed furtakers may obtain one permit each per license year.",
+  "coyote_hunting": "A furtaker license is NOT required to hunt coyotes \u2014 a general hunting license suffices. A furtaker license IS required to trap coyotes.",
+  "furtaker_license": "A furtaker license is required to hunt or trap any furbearer, except that coyotes may be hunted on a hunting license and porcupines may be hunted with a hunting or furtaker license. Licenses valid July 1, 2026 \u2013 June 30, 2027.",
+  "porcupine": "Porcupines may be hunted with a hunting or furtaker license."
+ },
+ "provisional": false,
+ "retrieved_at": "2026-09-18",
+ "schema_version": "1.0",
+ "season_year": "2026-27",
+ "sources": [
+  {
+   "id": "pgc-seasons-page",
+   "notes": "Official current 2026\u201327 furbearer hunting and trapping tables.",
+   "title": "Seasons and Bag Limits (Pennsylvania Game Commission, pa.gov)",
+   "type": "agency_page",
+   "url": "https://www.pa.gov/agencies/pgc/huntingandtrapping/regulations/seasons-and-bag-limits"
+  },
+  {
+   "id": "pgc-final-seasons-news",
+   "notes": "Official final approved 2026\u201327 furbearer hunting and trapping seasons; confirms species labels, WMU changes (bobcat 5A added; otter 2G, 3A, 4C added), and permit rules.",
+   "title": "Final 2026\u201327 hunting seasons approved (PGC newsroom, pa.gov)",
+   "type": "agency_announcement",
+   "url": "https://www.pa.gov/agencies/pgc/newsroom/final-2026-27-hunting-seasons-approved"
+  },
+  {
+   "id": "pgc-digest-2026-27-furtaking",
+   "notes": "Official digest furtaking pages as crawled from a third-party host (pa.gov digest download unreachable 2026-09-18). Used for the beaver WMU limit table and license/convention details \u2014 beaver limit numbers carry a provenance caveat; confirm against the official digest.",
+   "title": "2026\u201327 PA Hunting & Trapping Digest, Furtaking section",
+   "type": "agency_booklet",
+   "url": "https://ftig.isportsman.net/files/pa%20game%20hunttrap%20digest%2026-27.pdf"
+  },
+  {
+   "id": "pgc-digest-furtaker-extract",
+   "notes": "2022\u201323 edition; used ONLY for standing license, Sunday-hunting, and cable-restraint conventions, not for dates.",
+   "title": "Digest furtaker extract (pa.gov PDF)",
+   "type": "agency_booklet",
+   "url": "https://www.pa.gov/content/dam/copapwp-pagov/en/pgc/documents/hunttrap/law/digestfurtaker.pdf"
+  },
+  {
+   "id": "pa-code-141-62",
+   "notes": "Legal authority for beaver/otter trap limits during season overlap.",
+   "title": "58 Pa. Code \u00a7 141.62 \u2014 Beaver and otter trapping",
+   "type": "administrative_code",
+   "url": "https://www.law.cornell.edu/regulations/pennsylvania/58-Pa-Code-SS-141-62"
+  }
+ ],
+ "species": [
+  {
+   "common_name": "Coyote",
+   "iac_reference": "2026-27 PA Hunting & Trapping Digest, Furtaking pages; PGC Final 2026-27 Seasons (pa.gov)",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Canis latrans",
+   "scientific_name_note": "Standard taxonomy; not stated in the cited PGC sources.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No daily bag or possession limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "No closed season. Outside of any big game season (deer, bear, elk, turkey), coyotes may be taken with a hunting license or furtaker license without wearing orange. During any big game season, coyotes may be taken while lawfully hunting big game (big-game orange required) or with a furtaker license. Coyotes may be hunted on all Sundays.",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "PA-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No daily bag or possession limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-21",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Furtaker license required to trap coyotes. Cable restraints may be used Dec 26, 2026 \u2013 Feb 21, 2027; trappers must pass the cable restraint certification course (restraints permitted only for foxes and coyotes).",
+     "open_date": "2026-10-24",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "PA-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Virginia opossum",
+   "iac_reference": "2026-27 PA Hunting & Trapping Digest, Furtaking pages; PGC Final 2026-27 Seasons (pa.gov)",
+   "notes": "",
+   "permit_requirements": [
+    "Furtaker license required to hunt or trap."
+   ],
+   "scientific_name": "Didelphis virginiana",
+   "scientific_name_note": "Standard taxonomy; not stated in the cited PGC sources.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No daily bag or possession limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-06-30",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "No closed season EXCEPT during the firearms deer season (Nov 28 \u2013 Dec 13, 2026). May be hunted any hour, day or night, July 1\u2013Nov 27 and Dec 14\u2013June 30, 2027; night-only (1/2 hr after sunset to 1/2 hr before sunrise) Nov 28\u2013Dec 13. Only on Sundays open to additional Sunday hunting each fall.",
+     "open_date": "2026-07-01",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "PA-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No daily bag or possession limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-21",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Furtaker license required.",
+     "open_date": "2026-10-24",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "PA-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Striped skunk",
+   "iac_reference": "2026-27 PA Hunting & Trapping Digest, Furtaking pages; PGC Final 2026-27 Seasons (pa.gov)",
+   "notes": "",
+   "permit_requirements": [
+    "Furtaker license required to hunt or trap."
+   ],
+   "scientific_name": "Mephitis mephitis",
+   "scientific_name_note": "Standard taxonomy; not stated in the cited PGC sources.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No daily bag or possession limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-06-30",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "No closed season EXCEPT during the firearms deer season (Nov 28 \u2013 Dec 13, 2026). May be hunted any hour, day or night, July 1\u2013Nov 27 and Dec 14\u2013June 30, 2027; night-only (1/2 hr after sunset to 1/2 hr before sunrise) Nov 28\u2013Dec 13. Only on Sundays open to additional Sunday hunting each fall.",
+     "open_date": "2026-07-01",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "PA-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No daily bag or possession limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-21",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Furtaker license required.",
+     "open_date": "2026-10-24",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "PA-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Weasel",
+   "iac_reference": "2026-27 PA Hunting & Trapping Digest, Furtaking pages; PGC Final 2026-27 Seasons (pa.gov)",
+   "notes": "",
+   "permit_requirements": [
+    "Furtaker license required to hunt or trap."
+   ],
+   "scientific_name": null,
+   "scientific_name_note": "PGC regulations list 'weasel' without distinguishing species (long-tailed and short-tailed/ermine occur in PA). Left null rather than guessing.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No daily bag or possession limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-06-30",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "No closed season EXCEPT during the firearms deer season (Nov 28 \u2013 Dec 13, 2026). May be hunted any hour, day or night, July 1\u2013Nov 27 and Dec 14\u2013June 30, 2027; night-only (1/2 hr after sunset to 1/2 hr before sunrise) Nov 28\u2013Dec 13. Only on Sundays open to additional Sunday hunting each fall.",
+     "open_date": "2026-07-01",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "PA-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No daily bag or possession limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-21",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Furtaker license required.",
+     "open_date": "2026-10-24",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "PA-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Red fox",
+   "iac_reference": "2026-27 PA Hunting & Trapping Digest, Furtaking pages; PGC Final 2026-27 Seasons (pa.gov)",
+   "notes": "",
+   "permit_requirements": [
+    "Furtaker license required to hunt or trap."
+   ],
+   "scientific_name": "Vulpes vulpes",
+   "scientific_name_note": "Standard taxonomy; not stated in the cited PGC sources.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No daily bag or possession limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-21",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "May be hunted any hour, day or night, Oct 24\u2013Nov 27 and Dec 14\u2013Feb 21, 2027; night-only (1/2 hr after sunset to 1/2 hr before sunrise) Nov 28\u2013Dec 13. Foxes may be hunted on all Sundays within the season.",
+     "open_date": "2026-10-24",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "PA-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No daily bag or possession limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-21",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Furtaker license required. Cable restraints may be used Dec 26, 2026 \u2013 Feb 21, 2027; trappers must pass the cable restraint certification course (restraints permitted only for foxes and coyotes).",
+     "open_date": "2026-10-24",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "PA-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Gray fox",
+   "iac_reference": "2026-27 PA Hunting & Trapping Digest, Furtaking pages; PGC Final 2026-27 Seasons (pa.gov)",
+   "notes": "",
+   "permit_requirements": [
+    "Furtaker license required to hunt or trap."
+   ],
+   "scientific_name": "Urocyon cinereoargenteus",
+   "scientific_name_note": "Standard taxonomy; not stated in the cited PGC sources.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No daily bag or possession limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-21",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "May be hunted any hour, day or night, Oct 24\u2013Nov 27 and Dec 14\u2013Feb 21, 2027; night-only (1/2 hr after sunset to 1/2 hr before sunrise) Nov 28\u2013Dec 13. Foxes may be hunted on all Sundays within the season.",
+     "open_date": "2026-10-24",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "PA-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No daily bag or possession limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-21",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Furtaker license required. Cable restraints may be used Dec 26, 2026 \u2013 Feb 21, 2027; trappers must pass the cable restraint certification course (restraints permitted only for foxes and coyotes).",
+     "open_date": "2026-10-24",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "PA-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Raccoon",
+   "iac_reference": "2026-27 PA Hunting & Trapping Digest, Furtaking pages; PGC Final 2026-27 Seasons (pa.gov)",
+   "notes": "",
+   "permit_requirements": [
+    "Furtaker license required to hunt or trap."
+   ],
+   "scientific_name": "Procyon lotor",
+   "scientific_name_note": "Standard taxonomy; not stated in the cited PGC sources.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No daily bag or possession limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-21",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "May be hunted any hour, day or night, Oct 24\u2013Nov 27 and Dec 14\u2013Feb 21, 2027; night-only (1/2 hr after sunset to 1/2 hr before sunrise) Nov 28\u2013Dec 13. Only on Sundays open to additional Sunday hunting each fall.",
+     "open_date": "2026-10-24",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "PA-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No daily bag or possession limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-21",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Furtaker license required.",
+     "open_date": "2026-10-24",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "PA-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Bobcat",
+   "iac_reference": "2026-27 PA Hunting & Trapping Digest, Furtaking pages; PGC Final 2026-27 Seasons (pa.gov) (permit required)",
+   "notes": "2026\u201327 adds WMU 5A to the bobcat units.",
+   "permit_requirements": [
+    "Furtaker license required.",
+    "Bobcat permit required \u2014 licensed furtakers may obtain one permit each per license year."
+   ],
+   "scientific_name": "Lynx rufus",
+   "scientific_name_note": "Standard taxonomy; not stated in the cited PGC sources.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "One bobcat per license year.",
+      "possession_limit": null,
+      "season_bag": 1
+     },
+     "close_date": "2027-02-03",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Bobcat permit required. Open only in listed WMUs.",
+     "open_date": "2027-01-09",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "management_units",
+       "wmus": [
+        "2A",
+        "2B",
+        "2C",
+        "2D",
+        "2E",
+        "2F",
+        "2G",
+        "3A",
+        "3B",
+        "3C",
+        "3D",
+        "4A",
+        "4B",
+        "4C",
+        "4D",
+        "4E",
+        "5A"
+       ],
+       "zone_id": "PA-bobcat-WMUs",
+       "zone_name": "WMUs 2A, 2B, 2C, 2D, 2E, 2F, 2G, 3A, 3B, 3C, 3D, 4A, 4B, 4C, 4D, 4E and 5A"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "One bobcat per license year.",
+      "possession_limit": null,
+      "season_bag": 1
+     },
+     "close_date": "2027-01-10",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Bobcat permit required. Open only in listed WMUs.",
+     "open_date": "2026-12-19",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "management_units",
+       "wmus": [
+        "2A",
+        "2B",
+        "2C",
+        "2D",
+        "2E",
+        "2F",
+        "2G",
+        "3A",
+        "3B",
+        "3C",
+        "3D",
+        "4A",
+        "4B",
+        "4C",
+        "4D",
+        "4E",
+        "5A"
+       ],
+       "zone_id": "PA-bobcat-WMUs",
+       "zone_name": "WMUs 2A, 2B, 2C, 2D, 2E, 2F, 2G, 3A, 3B, 3C, 3D, 4A, 4B, 4C, 4D, 4E and 5A"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Porcupine",
+   "iac_reference": "2026-27 PA Hunting & Trapping Digest, Furtaking pages; PGC Final 2026-27 Seasons (pa.gov)",
+   "notes": "Listed by PGC under furbearer seasons; hunting only, no trapping season.",
+   "permit_requirements": [
+    "Hunting license or furtaker license."
+   ],
+   "scientific_name": "Erethizon dorsatum",
+   "scientific_name_note": "Standard taxonomy; not stated in the cited PGC sources.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": 3,
+      "limit_notes": "3 daily, season limit of 10.",
+      "possession_limit": null,
+      "season_bag": 10
+     },
+     "close_date": "2026-11-27",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "May not be hunted at night. First season segment.",
+     "open_date": "2026-10-10",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "PA-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": 3,
+      "limit_notes": "3 daily, season limit of 10 for the combined season.",
+      "possession_limit": null,
+      "season_bag": 10
+     },
+     "close_date": "2026-12-24",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "May not be hunted at night. Second season segment.",
+     "open_date": "2026-12-14",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "PA-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": 3,
+      "limit_notes": "3 daily, season limit of 10 for the combined season.",
+      "possession_limit": null,
+      "season_bag": 10
+     },
+     "close_date": "2027-01-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "May not be hunted at night. Third season segment.",
+     "open_date": "2026-12-26",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "PA-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "American mink",
+   "iac_reference": "2026-27 PA Hunting & Trapping Digest, Furtaking pages; PGC Final 2026-27 Seasons (pa.gov)",
+   "notes": "",
+   "permit_requirements": [
+    "Furtaker license required."
+   ],
+   "scientific_name": "Neogale vison",
+   "scientific_name_note": "Standard taxonomy (formerly Neovison vison); not stated in the cited PGC sources.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No daily bag or possession limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-01-10",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Trapping only \u2014 no mink hunting season.",
+     "open_date": "2026-11-21",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "PA-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Muskrat",
+   "iac_reference": "2026-27 PA Hunting & Trapping Digest, Furtaking pages; PGC Final 2026-27 Seasons (pa.gov)",
+   "notes": "",
+   "permit_requirements": [
+    "Furtaker license required."
+   ],
+   "scientific_name": "Ondatra zibethicus",
+   "scientific_name_note": "Standard taxonomy; not stated in the cited PGC sources.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No daily bag or possession limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-01-10",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Trapping only \u2014 no muskrat hunting season.",
+     "open_date": "2026-11-21",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "PA-statewide",
+       "zone_name": "Entire state"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "American beaver",
+   "iac_reference": "58 Pa. Code \u00a7 141.62",
+   "notes": "",
+   "permit_requirements": [
+    "Furtaker license required."
+   ],
+   "scientific_name": "Castor canadensis",
+   "scientific_name_note": "Standard taxonomy; not stated in the cited PGC sources.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": 20,
+      "limit_notes": "20 daily, 60 per season. PROVENANCE CAVEAT: per-WMU limit numbers transcribed from a third-party-hosted copy of the official 2026\u201327 digest; confirm against the official digest.",
+      "possession_limit": null,
+      "season_bag": 60
+     },
+     "close_date": "2027-03-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Trapping only \u2014 no beaver hunting season. Statewide season Dec 19, 2026 \u2013 Mar 31, 2027; limits vary by WMU group.",
+     "open_date": "2026-12-19",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "management_units",
+       "wmus": [
+        "1A",
+        "1B"
+       ],
+       "zone_id": "PA-beaver-WMU-1A-1B",
+       "zone_name": "WMUs 1A and 1B"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": 20,
+      "limit_notes": "20 daily, 40 per season (combined across the WMUs in this group). PROVENANCE CAVEAT: numbers transcribed from a third-party-hosted copy of the official 2026\u201327 digest; confirm against the official digest.",
+      "possession_limit": null,
+      "season_bag": 40
+     },
+     "close_date": "2027-03-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Trapping only.",
+     "open_date": "2026-12-19",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "management_units",
+       "wmus": [
+        "2A",
+        "2B",
+        "3C"
+       ],
+       "zone_id": "PA-beaver-WMU-2A-2B-3C",
+       "zone_name": "WMUs 2A, 2B and 3C"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": 20,
+      "limit_notes": "20 daily, 20 per season (combined across the WMUs in this group). PROVENANCE CAVEAT: numbers transcribed from a third-party-hosted copy of the official 2026\u201327 digest; confirm against the official digest.",
+      "possession_limit": null,
+      "season_bag": 20
+     },
+     "close_date": "2027-03-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Trapping only.",
+     "open_date": "2026-12-19",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "management_units",
+       "wmus": [
+        "2C",
+        "2D",
+        "2E",
+        "2F",
+        "3A",
+        "3B",
+        "3D",
+        "5C",
+        "5D"
+       ],
+       "zone_id": "PA-beaver-WMU-group-C",
+       "zone_name": "WMUs 2C, 2D, 2E, 2F, 3A, 3B, 3D, 5C and 5D"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": 5,
+      "limit_notes": "5 daily, 5 per season (combined across the WMUs in this group). PROVENANCE CAVEAT: numbers transcribed from a third-party-hosted copy of the official 2026\u201327 digest; confirm against the official digest.",
+      "possession_limit": null,
+      "season_bag": 5
+     },
+     "close_date": "2027-03-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Trapping only. In WMUs with an open river otter season, beaver trappers are limited to 5 traps/snares (max 2 body-gripping) during the overlap (58 Pa. Code \u00a7 141.62).",
+     "open_date": "2026-12-19",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "management_units",
+       "wmus": [
+        "2G",
+        "4A",
+        "4B",
+        "4C",
+        "4D",
+        "4E",
+        "5A",
+        "5B"
+       ],
+       "zone_id": "PA-beaver-WMU-group-D",
+       "zone_name": "WMUs 2G, 4A, 4B, 4C, 4D, 4E, 5A and 5B"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Fisher",
+   "iac_reference": "2026-27 PA Hunting & Trapping Digest, Furtaking pages; PGC Final 2026-27 Seasons (pa.gov) (permit required)",
+   "notes": "Trapping only \u2014 Pennsylvania has no fisher hunting season.",
+   "permit_requirements": [
+    "Furtaker license required.",
+    "Fisher permit required \u2014 licensed furtakers may obtain one permit each per license year."
+   ],
+   "scientific_name": "Pekania pennanti",
+   "scientific_name_note": "Standard taxonomy; not stated in the cited PGC sources.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "One fisher per license year.",
+      "possession_limit": null,
+      "season_bag": 1
+     },
+     "close_date": "2027-01-10",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Fisher permit required. Open only in listed WMUs.",
+     "open_date": "2026-12-19",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "management_units",
+       "wmus": [
+        "1B",
+        "2C",
+        "2D",
+        "2E",
+        "2F",
+        "2G",
+        "3A",
+        "3B",
+        "3C",
+        "3D",
+        "4A",
+        "4B",
+        "4C",
+        "4D",
+        "4E"
+       ],
+       "zone_id": "PA-fisher-WMUs",
+       "zone_name": "WMUs 1B, 2C, 2D, 2E, 2F, 2G, 3A, 3B, 3C, 3D, 4A, 4B, 4C, 4D and 4E"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "North American river otter",
+   "iac_reference": "58 Pa. Code \u00a7 141.62",
+   "notes": "2026\u201327 adds WMUs 2G, 3A, and 4C to the otter units.",
+   "permit_requirements": [
+    "Furtaker license required.",
+    "River otter permit required \u2014 licensed furtakers may obtain one permit each per license year."
+   ],
+   "scientific_name": "Lontra canadensis",
+   "scientific_name_note": "Standard taxonomy; not stated in the cited PGC sources.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "One river otter per license year.",
+      "possession_limit": null,
+      "season_bag": 1
+     },
+     "close_date": "2027-02-21",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "River otter permit required. Open only in listed WMUs. Trapping only.",
+     "open_date": "2027-02-13",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "zones": [
+      {
+       "area_type": "management_units",
+       "wmus": [
+        "1A",
+        "1B",
+        "2F",
+        "2G",
+        "3A",
+        "3B",
+        "3C",
+        "3D",
+        "4C",
+        "4E"
+       ],
+       "zone_id": "PA-otter-WMUs",
+       "zone_name": "WMUs 1A, 1B, 2F, 2G, 3A, 3B, 3C, 3D, 4C and 4E"
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "state": "PA",
+ "state_name": "Pennsylvania",
+ "verification": {
+  "confirmation_notes": "All season dates, WMU lists, and permit rules are from final approved 2026\u201327 seasons published by the PA Game Commission (pa.gov newsroom release and the PGC seasons-and-bag-limits page, both current). Fisher confirmed as trapping-only (listed under trapping seasons, not hunting). Porcupine confirmed under PGC furbearer seasons (hunting only). Beaver season dates and 'limits vary by WMU' officially confirmed; per-WMU limit numbers carry a provenance caveat (see known_gaps).",
+  "known_gaps": [
+   "Per-WMU beaver daily/season limits were transcribed from a third-party-hosted copy of the official 2026\u201327 digest (the pa.gov digest PDF download failed on 2026-09-18). Dates and 'limits vary by WMU' are officially confirmed, but the limit NUMBERS must be confirmed against the official digest before being treated as authoritative.",
+   "Bobcat/fisher/river otter pelt tagging and check-in mechanics for 2026\u201327 were not confirmed from an official source in hand; the permit requirement is confirmed.",
+   "No explicitly closed furbearer species found in official PA sources; none modeled.",
+   "Scientific names are standard taxonomy, NOT stated in the PGC sources used; all marked scientific_name_verified=false. Weasel is null because regulations do not distinguish weasel species.",
+   "Nuisance/depredation take is noted but not modeled as a season.",
+   "Full trap-device regulations (cable-restraint specs, body-grip placement, trap tending intervals) are excluded per schema scope; only the brief cable-restraint season note is included."
+  ],
+  "regulation_year_confirmed": true
+ },
+ "license_url": "https://www.huntfish.pa.gov",
+ "license_vendor": "HuntFishPA (Aspira)",
+ "regs_url": "https://www.pa.gov/content/dam/copapwp-pagov/en/pgc/documents/hunttrap/law/digestfurtaker.pdf",
+ "regs_kind": "pdf"
+,
+ "warden_directory": {
+  "label": "Report a violation",
+  "url": "https://www.pa.gov/agencies/pgc/huntingandtrapping/regulations/operation-game-thief",
+  "kind": "hotline",
+  "note": "Operation Game Thief: 888-PGC-8001; toll-free 24/7/365"
+ }
+}

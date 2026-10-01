@@ -1,0 +1,883 @@
+{
+ "schema_version": "1.0",
+ "state": "ME",
+ "state_name": "Maine",
+ "season_year": "2026-27",
+ "provisional": false,
+ "retrieved_at": "2026-09-18",
+ "disclaimer": "Reminder reference only \u2014 NOT legal authority. Season dates, zones, and limits are set annually and can change. Always verify current regulations with the Maine Department of Inland Fisheries & Wildlife before hunting or trapping.",
+ "sources": [
+  {
+   "id": "me-lawbook-2026-27",
+   "title": "2026-2027 State of Maine Summary of Laws & Rules \u2014 Trapping (MDIFW)",
+   "url": "http://www.maine.gov/ifw/docs/26-MDIFW-9-TRAPPING-LAWBOOK-2026-27.pdf",
+   "type": "agency_booklet",
+   "notes": "Official MDIFW trapping lawbook. Season table on p.4; beaver closures pp.20-21; tagging/samples p.12; lynx pp.14-15. Archived locally in hidden_files/season-research/maine/."
+  }
+ ],
+ "license_summary": {
+  "trapping_license": "Trapping license required (resident 16+ $36; nonresident 16+ $318; junior/apprentice available). Resident landowners and immediate family may trap without a license on their own contiguous 10+ acre land where they live. Children under 10 trap without a license (not bear). License year July 1-June 30.",
+  "beaver_nonresident": "U.S. nonresidents may trap beaver only if their home state allows Maine residents to trap beaver; non-U.S. citizens may trap in Maine only for beaver and only with provincial reciprocity.",
+  "harvest_reports": "Trappers 16+ (incl. lifetime license holders) must complete fall and spring harvest reports even if they did not trap (due Jan 31 / May 31).",
+  "tagging": "Bobcat and otter must be tagged by Department personnel. Biological samples required: lower jaw/tooth from every bobcat, fisher, marten, and otter, plus a tissue sample from bobcats."
+ },
+ "species": [
+  {
+   "common_name": "Beaver",
+   "iac_reference": "2026-2027 MDIFW Summary of Laws & Rules - Trapping, p. 4 (season table); pp. 20-21 (WMD closures)",
+   "scientific_name": "Castor canadensis",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the 2026-27 Maine trapping lawbook.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-18",
+     "close_date": "2027-04-30",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ME-beaver-north",
+       "zone_name": "WMDs 1-4",
+       "area_type": "management_units",
+       "wmds": [
+        "1",
+        "2",
+        "3",
+        "4"
+       ]
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag limit. Beaver sets restricted to killer-type traps and drowning sets; no meat/fish bait. No advanced preparation on the trapping grounds before the open season."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-25",
+     "close_date": "2027-04-30",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ME-beaver-central",
+       "zone_name": "WMDs 5, 6, 8-11",
+       "area_type": "management_units",
+       "wmds": [
+        "5",
+        "6",
+        "8",
+        "9",
+        "10",
+        "11"
+       ]
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag limit. Beaver sets restricted to killer-type traps and drowning sets; no meat/fish bait. No advanced preparation on the trapping grounds before the open season."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-25",
+     "close_date": "2027-04-15",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ME-beaver-south",
+       "zone_name": "WMDs 7, 12-29",
+       "area_type": "management_units",
+       "wmds": [
+        "7",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19",
+        "20",
+        "21",
+        "22",
+        "23",
+        "24",
+        "25",
+        "26",
+        "27",
+        "28",
+        "29"
+       ],
+       "note": "Perkins Twp. (Swan Island) in WMD 22 is completely closed to beaver trapping."
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag limit. Beaver sets restricted to killer-type traps and drowning sets; no meat/fish bait. No advanced preparation on the trapping grounds before the open season."
+     },
+     "notes": ""
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "Town/property-level beaver closures listed on lawbook pp. 20-21 (closed parcels within otherwise-open towns); verify locally. Perkins Twp. (Swan Island), WMD 22, is completely closed."
+  },
+  {
+   "common_name": "River otter",
+   "iac_reference": "2026-2027 MDIFW Summary of Laws & Rules - Trapping, p. 4 (season table); p. 12 (registration/tagging)",
+   "scientific_name": "Lontra canadensis",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the 2026-27 Maine trapping lawbook.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2026-12-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ME-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag limit. No advanced preparation on the trapping grounds before the open season."
+     },
+     "notes": "Otter must be tagged by Department personnel; lower jaw or canine tooth sample required at registration."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "Otter may also be kept if caught incidentally during the beaver trapping season. Any otter caught January 1 through April 30 must be registered with the Department within 10 days of harvest."
+  },
+  {
+   "common_name": "Mink",
+   "iac_reference": "2026-2027 MDIFW Summary of Laws & Rules - Trapping, p. 4 (season table)",
+   "scientific_name": "Neogale vison",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the 2026-27 Maine trapping lawbook.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2026-12-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ME-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag limit. No advanced preparation on the trapping grounds before the open season."
+     },
+     "notes": "Mink may be kept if caught incidentally during the beaver trapping season; mink caught incidentally in early muskrat traps may be kept."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Muskrat",
+   "iac_reference": "2026-2027 MDIFW Summary of Laws & Rules - Trapping, p. 4 (season table); p. 11 (late muskrat)",
+   "scientific_name": "Ondatra zibethicus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the 2026-27 Maine trapping lawbook.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-25",
+     "close_date": "2026-10-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ME-early-muskrat",
+       "zone_name": "Early muskrat WMDs 1-6, 9-11",
+       "area_type": "management_units",
+       "wmds": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "9",
+        "10",
+        "11"
+       ]
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag limit."
+     },
+     "notes": "Early season rules: traps at/below ground or water level; only foothold traps (3 11/16 in.-5 3/8 in. inside jaw spread), killer-type traps <=5 in. jaw spread, or colony traps; no exposed bait or visible attractors (fruits/vegetables excepted). Incidental mink, otter, or raccoon may be kept."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2026-12-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ME-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag limit. No advanced preparation on the trapping grounds before the open season."
+     },
+     "notes": ""
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2027-01-01",
+     "close_date": "2027-04-30",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ME-late-muskrat-north",
+       "zone_name": "Late muskrat where beaver open thru Apr 30",
+       "area_type": "management_units",
+       "wmds": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "8",
+        "9",
+        "10",
+        "11"
+       ]
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag limit."
+     },
+     "notes": "Late season: only in areas open to beaver trapping. After February 28, restricted to (1) killer-type, foothold, or colony traps set/placed/tended to remain underwater, or (2) foothold traps on covered floats (one trap per float; trap recessed >=3 in. from any cover opening; chain/wire >=3 ft; max No. 1 1/2 foothold)."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2027-01-01",
+     "close_date": "2027-04-15",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ME-late-muskrat-south",
+       "zone_name": "Late muskrat where beaver open thru Apr 15",
+       "area_type": "management_units",
+       "wmds": [
+        "7",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19",
+        "20",
+        "21",
+        "23",
+        "24",
+        "25",
+        "26",
+        "27",
+        "28",
+        "29"
+       ],
+       "note": "Excludes WMD 22 (Perkins Twp./Swan Island, closed to beaver trapping)."
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag limit."
+     },
+     "notes": "Late season: only in areas open to beaver trapping. After February 28, restricted to underwater sets or covered floats (see northern late-season entry). Town/property-level beaver closures listed on lawbook pp. 20-21 (closed parcels within otherwise-open towns); verify locally. Perkins Twp. (Swan Island), WMD 22, is completely closed."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Fisher",
+   "iac_reference": "2026-2027 MDIFW Summary of Laws & Rules - Trapping, p. 4 (season table); p. 12 (bag limit)",
+   "scientific_name": "Pekania pennanti",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the 2026-27 Maine trapping lawbook.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2026-12-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ME-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": 25,
+      "possession_limit": null,
+      "limit_notes": "Season bag/possession limit of 25. No advanced preparation on the trapping grounds before the open season."
+     },
+     "notes": "Lower jaw or canine tooth sample required from each animal at fur tagging."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "American marten",
+   "iac_reference": "2026-2027 MDIFW Summary of Laws & Rules - Trapping, p. 4 (season table); p. 12 (bag limit)",
+   "scientific_name": "Martes americana",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the 2026-27 Maine trapping lawbook.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2026-12-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ME-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": 25,
+      "possession_limit": null,
+      "limit_notes": "Season bag/possession limit of 25. No advanced preparation on the trapping grounds before the open season."
+     },
+     "notes": "Lower jaw or canine tooth sample required from each animal at fur tagging."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Bobcat",
+   "iac_reference": "2026-2027 MDIFW Summary of Laws & Rules - Trapping, p. 4 (season table); p. 12 (tagging)",
+   "scientific_name": "Lynx rufus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the 2026-27 Maine trapping lawbook.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2026-12-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ME-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag limit. No advanced preparation on the trapping grounds before the open season."
+     },
+     "notes": "Bobcat must be tagged by Department personnel. Lower jaw, canine tooth, or lateral incisor tooth plus a tissue sample (tongue/meat) required."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Coyote",
+   "iac_reference": "2026-2027 MDIFW Summary of Laws & Rules - Trapping, p. 4 (season table)",
+   "scientific_name": "Canis latrans",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the 2026-27 Maine trapping lawbook.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-18",
+     "close_date": "2026-10-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ME-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag limit."
+     },
+     "notes": "Early season rules: no killer-type traps; no traps in water; no exposed bait or visible attractors. Incidental opossum or skunk may be kept; other incidentally caught furbearers must be released alive or left in the trap and reported (lynx: call the lynx hotline (207) 592-4734)."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2026-12-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ME-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag limit. No advanced preparation on the trapping grounds before the open season."
+     },
+     "notes": ""
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Red fox",
+   "iac_reference": "2026-2027 MDIFW Summary of Laws & Rules - Trapping, p. 4 (season table)",
+   "scientific_name": "Vulpes vulpes",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the 2026-27 Maine trapping lawbook.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-18",
+     "close_date": "2026-10-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ME-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag limit."
+     },
+     "notes": "Early season rules: no killer-type traps; no traps in water; no exposed bait or visible attractors. Incidental opossum or skunk may be kept; other incidentally caught furbearers must be released alive or left in the trap and reported (lynx: call the lynx hotline (207) 592-4734)."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2026-12-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ME-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag limit. No advanced preparation on the trapping grounds before the open season."
+     },
+     "notes": ""
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Gray fox",
+   "iac_reference": "2026-2027 MDIFW Summary of Laws & Rules - Trapping, p. 4 (season table)",
+   "scientific_name": "Urocyon cinereoargenteus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the 2026-27 Maine trapping lawbook.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-18",
+     "close_date": "2026-10-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ME-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag limit."
+     },
+     "notes": "Early season rules: no killer-type traps; no traps in water; no exposed bait or visible attractors. Incidental opossum or skunk may be kept; other incidentally caught furbearers must be released alive or left in the trap and reported (lynx: call the lynx hotline (207) 592-4734)."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2026-12-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ME-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag limit. No advanced preparation on the trapping grounds before the open season."
+     },
+     "notes": ""
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Raccoon",
+   "iac_reference": "2026-2027 MDIFW Summary of Laws & Rules - Trapping, p. 4 (season table)",
+   "scientific_name": "Procyon lotor",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the 2026-27 Maine trapping lawbook.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-18",
+     "close_date": "2026-10-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ME-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag limit."
+     },
+     "notes": "Raccoon added to the early season as NEW for 2026-27. Early season rules: no killer-type traps; no traps in water; no exposed bait or visible attractors. Incidental opossum or skunk may be kept; other incidentally caught furbearers must be released alive or left in the trap and reported (lynx: call the lynx hotline (207) 592-4734)."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2026-12-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ME-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag limit. No advanced preparation on the trapping grounds before the open season."
+     },
+     "notes": ""
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "Raccoon added to the early season as NEW for 2026-27."
+  },
+  {
+   "common_name": "Virginia opossum",
+   "iac_reference": "2026-2027 MDIFW Summary of Laws & Rules - Trapping, p. 4 (General Trapping)",
+   "scientific_name": "Didelphis virginiana",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the 2026-27 Maine trapping lawbook.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2026-12-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ME-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag limit. No advanced preparation on the trapping grounds before the open season."
+     },
+     "notes": ""
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Red squirrel",
+   "iac_reference": "2026-2027 MDIFW Summary of Laws & Rules - Trapping, p. 4 (General Trapping)",
+   "scientific_name": "Tamiasciurus hudsonicus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the 2026-27 Maine trapping lawbook.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2026-12-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ME-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag limit. No advanced preparation on the trapping grounds before the open season."
+     },
+     "notes": ""
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Striped skunk",
+   "iac_reference": "2026-2027 MDIFW Summary of Laws & Rules - Trapping, p. 4 (General Trapping)",
+   "scientific_name": "Mephitis mephitis",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the 2026-27 Maine trapping lawbook.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2026-12-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ME-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag limit. No advanced preparation on the trapping grounds before the open season."
+     },
+     "notes": ""
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Weasel",
+   "iac_reference": "2026-2027 MDIFW Summary of Laws & Rules - Trapping, p. 4 (General Trapping)",
+   "scientific_name": "Neogale frenata; Mustela erminea",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Regulations group weasels without distinguishing species; standard taxonomy, not stated in the lawbook.",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-11-01",
+     "close_date": "2026-12-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "ME-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag limit. No advanced preparation on the trapping grounds before the open season."
+     },
+     "notes": ""
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Canada lynx",
+   "iac_reference": "2026-2027 MDIFW Summary of Laws & Rules - Trapping, p. 14 (closed - federally Threatened)",
+   "scientific_name": "Lynx canadensis",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the 2026-27 Maine trapping lawbook.",
+   "season_status": "closed",
+   "seasons": [],
+   "permit_requirements": [],
+   "notes": "No open season: federally listed Threatened Species. Lynx exclusion devices required for certain traps; any lynx caught must be reported via the lynx hotline (207) 592-4734."
+  },
+  {
+   "common_name": "Gray wolf",
+   "iac_reference": "2026-2027 MDIFW Summary of Laws & Rules - Trapping, p. 15 (closed)",
+   "scientific_name": "Canis lupus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the 2026-27 Maine trapping lawbook.",
+   "season_status": "closed",
+   "seasons": [],
+   "permit_requirements": [],
+   "notes": "No open season: wolves were extirpated in Maine by the late 1800s; occasional reports near Maine are investigated by MDIFW. Very large canids should be reported, not trapped as coyotes."
+  }
+ ],
+ "verification": {
+  "regulation_year_confirmed": true,
+  "confirmation_notes": "2026-2027 MDIFW trapping lawbook (final). Season table p.4: early raccoon/fox/coyote Oct 18-31 statewide (raccoon NEW for 2026-27); early muskrat Oct 25-31 in WMDs 1-6 & 9-11; beaver WMDs 1-4 Oct 18-Apr 30, WMDs 5,6,8-11 Oct 25-Apr 30, WMDs 7,12-29 Oct 25-Apr 15; general trapping Nov 1-Dec 31 statewide (bobcat, coyote, fisher, fox, marten, mink, muskrat, opossum, otter, raccoon, red squirrel, skunk, weasel); fisher/marten bag 25 each (p.12); lynx no open season (p.14); wolf extirpated/no season (p.15); beaver town-level closures pp.20-21 with Perkins Twp. (Swan Island, WMD 22) fully closed; late muskrat rules p.11 (beaver-open areas only; post-Feb-28 method restrictions); otter Jan 1-Apr 30 registration rule p.12; hunting prohibitions for beaver/fisher/marten/mink/muskrat/otter/weasel p.5.",
+  "known_gaps": [
+   "HUNTING seasons for furbearers (bobcat, coyote, red/gray fox, opossum, raccoon, red squirrel, skunk) are published in the separate Maine Summary of Hunting Laws, not in this trapping lawbook \u2014 hunting methods are NOT YET included for Maine.",
+   "Scientific names are standard taxonomy, NOT stated in the lawbook; all marked scientific_name_verified=false.",
+   "Beaver town/property-level closures (pp.20-21) are carried as a warning, not modeled as zones; Perkins Twp. (Swan Island) full closure is modeled via zone note.",
+   "Black bear trapping (Sept 1-Oct 31, permit required) is excluded as big game, not a furbearer \u2014 consistent with the furbearer scope of this dataset.",
+   "No administrative-code (CMR) cross-check performed; the MDIFW lawbook is the published season authority."
+  ]
+ },
+ "license_url": "https://apps1.web.maine.gov/cgi-bin/online/moses_v3/index",
+ "license_vendor": "MOSES (Maine Online Sportsmen Electronic System)",
+ "license_note": "First-time adult trapping license must be bought in person in Augusta; renewals work online.",
+ "regs_url": "http://www.maine.gov/ifw/docs/26-MDIFW-9-TRAPPING-LAWBOOK-2026-27.pdf",
+ "regs_kind": "pdf"
+,
+ "warden_directory": {
+  "label": "Report a violation",
+  "url": "https://www.maine.gov/ifw/warden-service/",
+  "kind": "hotline",
+  "note": "Maine Warden Service: 24-hr dispatch 1-800-452-4664 (Augusta), 1-800-432-7381 (Bangor), 1-800-924-2261 (Houlton); OGT 1-800-253-7887 (1-800-ALERT-US)"
+ }
+}

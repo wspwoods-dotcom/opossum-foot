@@ -1,0 +1,1302 @@
+{
+ "disclaimer": "Reminder reference only \u2014 NOT legal authority. Season dates, zones, limits, and quotas are set annually and can change; bobcat/fisher/otter seasons may close early when quotas are reached. Always verify current regulations with the Wisconsin DNR before hunting or trapping.",
+ "license_summary": {
+  "general": "A Wisconsin trapping license (trapping authorization) is required to trap. Bobcat requires a bobcat permit + pelt tag from the annual drawing (application deadline Aug. 1). Fisher and river otter require a current valid harvest authorization from the department (NR 10.145). Harvest registration via GameReg; CITES certification applies to bobcat and otter pelts."
+ },
+ "provisional": false,
+ "retrieved_at": "2026-09-18",
+ "schema_version": "1.1",
+ "season_year": "2026-27",
+ "sources": [
+  {
+   "id": "wi-trap-dates",
+   "notes": "Official 2026 trapping season dates and permit application deadlines: bobcat, fisher, otter, coyote, fox, beaver, mink/muskrat, raccoon; unprotected species list.",
+   "title": "Trapping season dates and application deadlines (Wisconsin DNR)",
+   "type": "agency_web",
+   "url": "https://dnr.wisconsin.gov/topic/trap/dates"
+  },
+  {
+   "id": "wi-season-sheet-2026",
+   "notes": "Official 2026 Wisconsin Hunting and Trapping Seasons sheet (PUB-CS-076-2026, updated 06/08/2026): confirms all 2026\u201327 furbearer dates, unprotected year-round species, snowshoe hare year-round.",
+   "title": "2026 Wisconsin Hunting and Trapping Seasons (PUB-CS-076-2026)",
+   "type": "agency_booklet",
+   "url": "https://gowildagent.wi.gov/Documents/Season%20Sheet.pdf"
+  },
+  {
+   "id": "wi-nr10",
+   "notes": "Wis. Admin. Code ch. NR 10: NR 10.02 protected wild animals (badger, Canada lynx, cougar, wolverine, flying squirrel; endangered/threatened via NR 27); NR 10.04 unprotected wild animals (opossum, porcupine, skunk, weasel, woodchuck); NR 10.086 registration (by 5 p.m. day after recovery); NR 10.087 certification/CITES seals for bobcat and otter; NR 10.145 bobcat permit + pelt tags / fisher and otter harvest authorizations.",
+   "title": "Wisconsin Administrative Code ch. NR 10 (current)",
+   "type": "administrative_code",
+   "url": "https://docs.legis.wisconsin.gov/document/administrativecode/NR%2010.145"
+  },
+  {
+   "id": "wi-2025-regs",
+   "notes": "OLD-DATE DEPENDENCY (2025 regulations): used only for limit structures \u2014 'One bobcat per permit', 'One fisher per harvest authorization', 'One otter per harvest authorization; authorizations valid statewide', pelt-tag sealing/registration/certification procedures, protected-animal list (badger, Canada lynx, cougar, flying squirrel, American marten, wolverine), North/South zone structure, and mink/muskrat zone framework. 2026 season dates come from the 2026 sources above.",
+   "title": "2025 Wisconsin Trapping Regulations (PUB-WM-002-2025) \u2014 old-date reference",
+   "type": "agency_booklet",
+   "url": "https://widnr.widen.net/s/pwmrrrp7kg/2025-trapping-regulations"
+  }
+ ],
+ "species": [
+  {
+   "common_name": "Bobcat",
+   "iac_reference": "NR 10.145",
+   "notes": "Bobcat hunting/trapping only by permit drawing (application deadline Aug. 1). Permit is valid only in the area and time period specified. Pelt tag must be sealed immediately mouth-to-eye when the animal is killed. Harvest must be registered via GameReg by 5 p.m. the day after recovery; pelt presented to a DNR warden within 7 days after the month of harvest for certification and CITES tag. North/South zone boundary is approximately State Highway 64.",
+   "permit_requirements": [
+    "Current and valid bobcat permit and pelt tag from the annual drawing required; one bobcat per permit (2025 regs structure; 2026 permit structure confirmed by DNR dates page).",
+    "Immediately validate and attach/seal the pelt tag through the mouth-to-eye openings.",
+    "Register the harvest via GameReg by 5 p.m. the day after recovery.",
+    "Present the skinned pelt to a DNR warden or authorized staff within 7 days after the month of harvest for certification (CITES tag). No raw bobcat pelt may be possessed longer than 7 days after the month of harvest without certification; no transfer/sale of a raw pelt without the certification seal."
+   ],
+   "scientific_name": "Lynx rufus",
+   "scientific_name_note": "Standard taxonomy; not stated in the WI sources used.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "One bobcat per permit.",
+      "possession_limit": null,
+      "season_bag": 1
+     },
+     "close_date": "2026-12-25",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "North and South zones; boundary approximately State Highway 64 (verify with DNR zone maps).",
+     "open_date": "2026-10-17",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "WI-bobcat-n",
+       "zone_name": "North zone"
+      },
+      {
+       "area_type": "special_areas",
+       "zone_id": "WI-bobcat-s",
+       "zone_name": "South zone"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "One bobcat per permit.",
+      "possession_limit": null,
+      "season_bag": 1
+     },
+     "close_date": "2027-01-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "North and South zones.",
+     "open_date": "2026-12-26",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "WI-bobcat-n",
+       "zone_name": "North zone"
+      },
+      {
+       "area_type": "special_areas",
+       "zone_id": "WI-bobcat-s",
+       "zone_name": "South zone"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "One bobcat per permit.",
+      "possession_limit": null,
+      "season_bag": 1
+     },
+     "close_date": "2026-12-25",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "North and South zones.",
+     "open_date": "2026-10-17",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "WI-bobcat-n",
+       "zone_name": "North zone"
+      },
+      {
+       "area_type": "special_areas",
+       "zone_id": "WI-bobcat-s",
+       "zone_name": "South zone"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "One bobcat per permit.",
+      "possession_limit": null,
+      "season_bag": 1
+     },
+     "close_date": "2027-01-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "North and South zones.",
+     "open_date": "2026-12-26",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "WI-bobcat-n",
+       "zone_name": "North zone"
+      },
+      {
+       "area_type": "special_areas",
+       "zone_id": "WI-bobcat-s",
+       "zone_name": "South zone"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Fisher",
+   "iac_reference": "NR 10.145",
+   "notes": "Fisher trapping only with a current and valid harvest authorization from the department (application deadline Aug. 1). Beaver, fisher, mink, muskrat, and otter may be taken only by trapping or snaring (2025 regs).",
+   "permit_requirements": [
+    "Current and valid fisher harvest authorization required.",
+    "Season limit: one fisher per harvest authorization (2025 regs structure).",
+    "Register the harvest via GameReg by 5 p.m. the day following recovery."
+   ],
+   "scientific_name": "Pekania pennanti",
+   "scientific_name_note": "Standard taxonomy; not stated in the WI sources used.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "One fisher per harvest authorization.",
+      "possession_limit": null,
+      "season_bag": 1
+     },
+     "close_date": "2027-01-03",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "North and South fisher management zones (NR 10.38).",
+     "open_date": "2026-10-17",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "WI-fisher-n",
+       "zone_name": "North fisher management zone"
+      },
+      {
+       "area_type": "special_areas",
+       "zone_id": "WI-fisher-s",
+       "zone_name": "South fisher management zone"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "River otter",
+   "iac_reference": "NR 10.145",
+   "notes": "As of 2020 there is no longer a drawing for otters \u2014 otters are a bag limit/quota species. A current and valid otter harvest authorization is required (NR 10.145). River otters are a CITES Appendix II species. A statewide harvest quota applies and the season may close early \u2014 check the DNR hotline (855-299-9653) before trapping.",
+   "permit_requirements": [
+    "Current and valid otter harvest authorization required.",
+    "Season limit: one otter per harvest authorization; authorizations are valid statewide (2025 regs structure).",
+    "Register the harvest via GameReg by 5 p.m. the day following recovery. A CITES tag is mailed to the trapper; it must be immediately affixed to the head portion of the pelt upon receipt.",
+    "No raw otter pelt may be possessed after the 7th day of the month following season closure without a certification seal; no transfer/sale of a raw pelt without the seal (NR 10.087)."
+   ],
+   "scientific_name": "Lontra canadensis",
+   "scientific_name_note": "Standard taxonomy; not stated in the WI sources used.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "One otter per harvest authorization; statewide harvest quota applies \u2014 season may close early.",
+      "possession_limit": null,
+      "season_bag": 1
+     },
+     "close_date": "2027-04-30",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "North zone.",
+     "open_date": "2026-11-07",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "WI-otter-n",
+       "zone_name": "North zone"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "One otter per harvest authorization; statewide harvest quota applies \u2014 season may close early.",
+      "possession_limit": null,
+      "season_bag": 1
+     },
+     "close_date": "2027-03-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "South zone.",
+     "open_date": "2026-11-07",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "WI-otter-s",
+       "zone_name": "South zone"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Coyote",
+   "iac_reference": "2026 WI season sheet",
+   "notes": "Coyote hunting is year-round statewide; trapping has a defined season.",
+   "permit_requirements": [],
+   "scientific_name": "Canis latrans",
+   "scientific_name_note": "Standard taxonomy; not stated in the WI sources used.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "",
+     "open_date": "2026-10-17",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "WI-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Continuous open season (year-round).",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "WI-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Red fox",
+   "iac_reference": "2026 WI season sheet",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Vulpes vulpes",
+   "scientific_name_note": "Standard taxonomy; not stated in the WI sources used.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "",
+     "open_date": "2026-10-17",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "WI-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "",
+     "open_date": "2026-10-17",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "WI-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Gray fox",
+   "iac_reference": "2026 WI season sheet",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Urocyon cinereoargenteus",
+   "scientific_name_note": "Standard taxonomy; not stated in the WI sources used.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "",
+     "open_date": "2026-10-17",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "WI-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "",
+     "open_date": "2026-10-17",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "WI-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Raccoon",
+   "iac_reference": "2026 WI season sheet",
+   "notes": "Residency affects the opening date: residents open Oct 17, nonresidents open Oct 31 (same Feb 15 close). Modeled as two season objects with residency in the notes.",
+   "permit_requirements": [],
+   "scientific_name": "Procyon lotor",
+   "scientific_name_note": "Standard taxonomy; not stated in the WI sources used.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Residents: Oct. 17, 2026 \u2013 Feb. 15, 2027.",
+     "open_date": "2026-10-17",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "WI-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Residents: Oct. 17, 2026 \u2013 Feb. 15, 2027.",
+     "open_date": "2026-10-17",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "WI-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Nonresidents: Oct. 31, 2026 \u2013 Feb. 15, 2027.",
+     "open_date": "2026-10-31",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "WI-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Nonresidents: Oct. 31, 2026 \u2013 Feb. 15, 2027.",
+     "open_date": "2026-10-31",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "WI-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Beaver",
+   "iac_reference": "2026 WI season sheet",
+   "notes": "Beaver may be taken only by trapping or snaring. Incidental muskrat salvage rules apply while beaver trapping (recorded here, not modeled as a season). Exact zone boundaries per DNR maps \u2014 verify.",
+   "permit_requirements": [],
+   "scientific_name": "Castor canadensis",
+   "scientific_name_note": "Standard taxonomy; not stated in the WI sources used.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-04-30",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Zone A (northwest) and Zone B (northeast).",
+     "open_date": "2026-11-07",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "WI-beaver-a",
+       "zone_name": "Zone A (northwest)"
+      },
+      {
+       "area_type": "special_areas",
+       "zone_id": "WI-beaver-b",
+       "zone_name": "Zone B (northeast)"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-31",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Zone C (south).",
+     "open_date": "2026-11-07",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "WI-beaver-c",
+       "zone_name": "Zone C (south)"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Zone D (Mississippi River).",
+     "open_date": "2026-12-07",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "WI-beaver-d",
+       "zone_name": "Zone D (Mississippi River)"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Mink",
+   "iac_reference": "2026 WI season sheet",
+   "notes": "No bag limit statewide. Exact zone boundaries per DNR maps \u2014 verify.",
+   "permit_requirements": [],
+   "scientific_name": "Neogale vison",
+   "scientific_name_note": "Standard taxonomy; not stated in the WI sources used.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit statewide.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-04-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Northern Zone.",
+     "open_date": "2026-10-24",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "WI-mm-n",
+       "zone_name": "Northern Zone"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit statewide.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-22",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Central Zone.",
+     "open_date": "2026-10-31",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "WI-mm-c",
+       "zone_name": "Central Zone"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit statewide.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Southern Zone.",
+     "open_date": "2026-11-07",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "WI-mm-s",
+       "zone_name": "Southern Zone"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit statewide.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-07",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Mississippi River Zone \u2014 permits required and special regulations apply (2025 regs); verify current federal-lands rules with DNR.",
+     "open_date": "2026-11-09",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "WI-mm-mr",
+       "zone_name": "Mississippi River Zone"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Muskrat",
+   "iac_reference": "2026 WI season sheet",
+   "notes": "No bag limit statewide. During the closed muskrat season, licensed trappers may retain muskrats taken incidentally while trapping beaver in open beaver zones. Exact zone boundaries per DNR maps \u2014 verify.",
+   "permit_requirements": [],
+   "scientific_name": "Ondatra zibethicus",
+   "scientific_name_note": "Standard taxonomy; not stated in the WI sources used.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit statewide.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-04-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Northern Zone.",
+     "open_date": "2026-10-24",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "WI-mm-n",
+       "zone_name": "Northern Zone"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit statewide.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-22",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Central Zone.",
+     "open_date": "2026-10-31",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "WI-mm-c",
+       "zone_name": "Central Zone"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit statewide.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Southern Zone.",
+     "open_date": "2026-11-07",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "WI-mm-s",
+       "zone_name": "Southern Zone"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag limit statewide.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-07",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Mississippi River Zone \u2014 permits required and special regulations apply (2025 regs); verify current federal-lands rules with DNR.",
+     "open_date": "2026-11-09",
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "WI-mm-mr",
+       "zone_name": "Mississippi River Zone"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Opossum",
+   "iac_reference": "NR 10.04",
+   "notes": "Unprotected wild animal (NR 10.04): no closed season, bag limit, size limit, or possession limit. Trapping/hunting license still required.",
+   "permit_requirements": [],
+   "scientific_name": "Didelphis virginiana",
+   "scientific_name_note": "Standard taxonomy; not stated in the WI sources used.",
+   "scientific_name_verified": false,
+   "season_status": "continuous",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag, size, or possession limits.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "WI-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag, size, or possession limits.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "WI-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Striped skunk",
+   "iac_reference": "NR 10.04",
+   "notes": "Unprotected wild animal (NR 10.04): no closed season, bag limit, size limit, or possession limit. All skunks taken must be immediately killed in a humane manner and may not be sold live (NR 16.18(5)(b)).",
+   "permit_requirements": [],
+   "scientific_name": "Mephitis mephitis",
+   "scientific_name_note": "Standard taxonomy; not stated in the WI sources used.",
+   "scientific_name_verified": false,
+   "season_status": "continuous",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag, size, or possession limits.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "WI-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag, size, or possession limits.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "WI-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Weasel",
+   "iac_reference": "NR 10.04",
+   "notes": "Unprotected wild animal (NR 10.04): no closed season, bag limit, size limit, or possession limit. Rule does not specify weasel species; modeled as Weasel with no scientific name.",
+   "permit_requirements": [],
+   "scientific_name": null,
+   "scientific_name_note": "NR 10.04 does not specify which weasel species; no scientific name modeled.",
+   "scientific_name_verified": false,
+   "season_status": "continuous",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag, size, or possession limits.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "WI-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag, size, or possession limits.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "WI-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Porcupine",
+   "iac_reference": "WI DNR trap dates page",
+   "notes": "DNR trap dates page: 'Opossums, skunk, weasels, porcupines, snowshoe hares and woodchucks \u2014 There are no season, bag, size, or possession limits but a license is required.'",
+   "permit_requirements": [],
+   "scientific_name": "Erethizon dorsatum",
+   "scientific_name_note": "Standard taxonomy; not stated in the WI sources used.",
+   "scientific_name_verified": false,
+   "season_status": "continuous",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No season, bag, size, or possession limits.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "WI-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No season, bag, size, or possession limits.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "WI-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Snowshoe hare",
+   "iac_reference": "2026 WI season sheet",
+   "notes": "2026 season sheet: 'Snowshoe Hare Statewide Yearround'. DNR trap dates page: no season, bag, size, or possession limits (license required).",
+   "permit_requirements": [],
+   "scientific_name": "Lepus americanus",
+   "scientific_name_note": "Standard taxonomy; not stated in the WI sources used.",
+   "scientific_name_verified": false,
+   "season_status": "continuous",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No season, bag, size, or possession limits.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "WI-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No season, bag, size, or possession limits.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "WI-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Woodchuck",
+   "iac_reference": "NR 10.04",
+   "notes": "Unprotected wild animal (NR 10.04): no closed season, bag limit, size limit, or possession limit.",
+   "permit_requirements": [],
+   "scientific_name": "Marmota monax",
+   "scientific_name_note": "Standard taxonomy; not stated in the WI sources used.",
+   "scientific_name_verified": false,
+   "season_status": "continuous",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag, size, or possession limits.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "WI-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No bag, size, or possession limits.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "WI-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Badger",
+   "iac_reference": "NR 10.02(1)",
+   "notes": "NR 10.02: designated protected wild animal \u2014 'No person may take, attempt to take, transport or possess any protected wild animal or its carcass at any time except as authorized by state or federal law.' Included so the app flags any logged take as out of season.",
+   "permit_requirements": [],
+   "scientific_name": "Taxidea taxus",
+   "scientific_name_note": "Standard taxonomy; not stated in the WI sources used.",
+   "scientific_name_verified": false,
+   "season_status": "closed",
+   "seasons": []
+  },
+  {
+   "common_name": "American marten",
+   "iac_reference": "2025 WI Trapping Regs p. 4 (protected list); NR 10.02(2)",
+   "notes": "Listed as protected/endangered with no open season. Marten restoration areas are open to certain dryland trapping forms but there is no marten harvest season. Included so the app flags any logged take as out of season.",
+   "permit_requirements": [],
+   "scientific_name": "Martes americana",
+   "scientific_name_note": "Standard taxonomy; not stated in the WI sources used.",
+   "scientific_name_verified": false,
+   "season_status": "closed",
+   "seasons": []
+  },
+  {
+   "common_name": "Canada lynx",
+   "iac_reference": "NR 10.02(1)",
+   "notes": "Protected wild animal and U.S. federally threatened species; rare visitor to Wisconsin. DNR requests sighting reports. Included so the app flags any logged take as out of season.",
+   "permit_requirements": [],
+   "scientific_name": "Lynx canadensis",
+   "scientific_name_note": "Standard taxonomy; not stated in the WI sources used.",
+   "scientific_name_verified": false,
+   "season_status": "closed",
+   "seasons": []
+  },
+  {
+   "common_name": "Gray wolf",
+   "iac_reference": "NR 10.14; NR 10.08 Note",
+   "notes": "No wolf season on the 2026 season sheet. NR 10.14 (wolf harvest licensing framework, eff. 11-1-25) exists, but the NR 10.08 Note states the department lacks authority to issue wolf carcass tags while wolves are on the federal or state endangered list. Modeled closed. Included so the app flags any logged take as out of season.",
+   "permit_requirements": [],
+   "scientific_name": "Canis lupus",
+   "scientific_name_note": "Standard taxonomy; not stated in the WI sources used.",
+   "scientific_name_verified": false,
+   "season_status": "closed",
+   "seasons": []
+  },
+  {
+   "common_name": "Cougar",
+   "iac_reference": "NR 10.02(1)",
+   "notes": "Protected wild animal \u2014 no take at any time except as authorized by law. Included so the app flags any logged take as out of season.",
+   "permit_requirements": [],
+   "scientific_name": "Puma concolor",
+   "scientific_name_note": "Standard taxonomy; not stated in the WI sources used.",
+   "scientific_name_verified": false,
+   "season_status": "closed",
+   "seasons": []
+  },
+  {
+   "common_name": "Wolverine",
+   "iac_reference": "NR 10.02(1)",
+   "notes": "Protected wild animal \u2014 no take at any time except as authorized by law. Included so the app flags any logged take as out of season.",
+   "permit_requirements": [],
+   "scientific_name": "Gulo gulo",
+   "scientific_name_note": "Standard taxonomy; not stated in the WI sources used.",
+   "scientific_name_verified": false,
+   "season_status": "closed",
+   "seasons": []
+  },
+  {
+   "common_name": "Flying squirrel",
+   "iac_reference": "NR 10.02(1)",
+   "notes": "Protected wild animal \u2014 no take at any time except as authorized by law. Included so the app flags any logged take as out of season.",
+   "permit_requirements": [],
+   "scientific_name": "Glaucomys sabrinus",
+   "scientific_name_note": "Standard taxonomy; not stated in the WI sources used.",
+   "scientific_name_verified": false,
+   "season_status": "closed",
+   "seasons": []
+  }
+ ],
+ "state": "WI",
+ "state_name": "Wisconsin",
+ "verification": {
+  "confirmation_notes": "2026\u201327 dates from the official WI DNR trapping dates page and the 2026 season sheet (PUB-CS-076-2026, updated 06/08/2026). Registration/certification rules from current NR 10.086, NR 10.087, and NR 10.145 (docs.legis.wisconsin.gov). Protected/unprotected lists from NR 10.02 and NR 10.04. Limit structures ('one bobcat per permit', 'one fisher/otter per harvest authorization') are OLD-DATE DEPENDENCIES from the 2025 trapping regulations \u2014 2026 permit/harvest-authorization structure confirmed, per-unit counts assumed unchanged. Calendar check verified for all 2026\u201327 open/close dates (America/Chicago).",
+  "known_gaps": [
+   "Scientific names are standard taxonomy, NOT stated in the WI sources used.",
+   "2026 otter statewide quota number and per-person harvest-authorization count not confirmed from official 2026 sources; season may close early on quota.",
+   "Bobcat 'one per permit' and fisher 'one per authorization' are old-date dependencies (2025 regs).",
+   "Exact mink/muskrat zone and beaver zone boundaries come from DNR maps not extracted here.",
+   "Beaver Zone D opens the day after duck season closes (sheet lists Dec. 7); cross-check with 2026 waterfowl dates if needed.",
+   "Tribal/ceded-territory regulations (NR 13.37) are not modeled.",
+   "State-park trapping windows and federal-lands special rules recorded here, not modeled.",
+   "Nuisance/depredation rules (NR 12) are not modeled."
+  ],
+  "regulation_year_confirmed": true
+ },
+ "license_url": "https://gowild.wi.gov/",
+ "license_vendor": "Wisconsin DNR (Go Wild)",
+ "regs_url": "https://widnr.widen.net/s/pwmrrrp7kg/2025-trapping-regulations",
+ "regs_kind": "pdf"
+,
+ "warden_directory": {
+  "label": "Report a violation",
+  "url": "https://dnrx.wisconsin.gov/rav",
+  "kind": "hotline",
+  "note": "WDNR violation reporting: 1-800-847-9367 (1-800-TIP-WDNR), 24/7 confidential; text TIPWDNR to 847411"
+ }
+}

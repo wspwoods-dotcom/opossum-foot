@@ -1,0 +1,1341 @@
+{
+ "disclaimer": "Reminder reference only \u2014 NOT legal authority. Season dates, zones, and limits are set annually and can change. Always verify current regulations with the Minnesota DNR before hunting or trapping.",
+ "license_summary": {
+  "general": "Residents and nonresidents 16 and over need a small game license AND a trapping license to take furbearers with traps. Residents under 13 need no trapping license; ages 13-17 need a junior trapping license. Persons born after December 31, 1989 need a trapper education certificate (or apprentice trapper validation) to obtain a trapping license. Nonresidents may trap only on land they own in Minnesota. A person may not take pine marten, fisher, mink, muskrat, beaver, or otter by firearms or archery hunting (a firearm may be used to dispatch an animal already taken in a trap).",
+  "trapping_hours": "Trapping hours are 5 a.m. to 10 p.m. Traps may not be set or tended for fox, badger, opossum, mink, muskrat, beaver, otter, or raccoon before 9 a.m. on opening day."
+ },
+ "provisional": false,
+ "retrieved_at": "2026-09-18",
+ "schema_version": "1.1",
+ "season_year": "2026-27",
+ "sources": [
+  {
+   "id": "guide-2026",
+   "notes": "2026 Minnesota Hunting Regulations (official mndnr.gov edition). Furbearer hunting seasons and trapping seasons tables (pp.65-66 of guide); furbearer zone boundary description; 2026 furbearer registration requirements; closed mammals list. Archived locally in hidden_files/season-research/minnesota/.",
+   "title": "2026 Minnesota Hunting Regulations (Minnesota DNR)",
+   "type": "agency_booklet",
+   "url": "http://files.dnr.state.mn.us/rlp/regulations/hunting/full_regs.pdf"
+  }
+ ],
+ "species": [
+  {
+   "common_name": "Raccoon",
+   "iac_reference": "Minnesota Rules 6234; 2026 MN Hunting Regulations pp.65-66",
+   "notes": "Artificial lights may be used to locate/attempt to locate/shoot a raccoon only if the raccoon has been treed or put at bay by dogs; rifles/handguns must be .17 or .22 caliber rimfire; shotgun shells No. 4 shot or smaller; raccoon hunting is between 1/2 hour after sunset and 1/2 hour before sunrise.",
+   "permit_requirements": [],
+   "scientific_name": "Procyon lotor",
+   "scientific_name_note": "Standard taxonomy; not stated in the Minnesota guide.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Zone boundary: North Furbearer Zone is north of the Interstate 94 / Hwy 10 line; South Furbearer Zone is south of it.",
+     "open_date": "2026-10-17",
+     "open_time": "09:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "MN-furb-north",
+       "zone_name": "North Furbearer Zone (north of the Interstate 94 / Hwy 10 line)"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "",
+     "open_date": "2026-10-24",
+     "open_time": "09:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "MN-furb-south",
+       "zone_name": "South Furbearer Zone (south of the Interstate 94 / Hwy 10 line)"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Shooting hours: 1/2 hour before sunrise to sunset, except 9 a.m. to sunset on opening day. Combined 'Raccoon and red/gray fox' hunting row.",
+     "open_date": "2026-10-17",
+     "open_time": "09:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "MN-furb-north",
+       "zone_name": "North Furbearer Zone (north of the Interstate 94 / Hwy 10 line)"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Shooting hours: 1/2 hour before sunrise to sunset, except 9 a.m. to sunset on opening day.",
+     "open_date": "2026-10-24",
+     "open_time": "09:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "MN-furb-south",
+       "zone_name": "South Furbearer Zone (south of the Interstate 94 / Hwy 10 line)"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Red fox",
+   "iac_reference": "Minnesota Rules 6234; 2026 MN Hunting Regulations pp.65-66",
+   "notes": "A light may be used to hunt coyote or fox from January 1 to March 15.",
+   "permit_requirements": [],
+   "scientific_name": "Vulpes vulpes",
+   "scientific_name_note": "Standard taxonomy; not stated in the Minnesota guide.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "",
+     "open_date": "2026-10-17",
+     "open_time": "09:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "MN-furb-north",
+       "zone_name": "North Furbearer Zone (north of the Interstate 94 / Hwy 10 line)"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "",
+     "open_date": "2026-10-24",
+     "open_time": "09:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "MN-furb-south",
+       "zone_name": "South Furbearer Zone (south of the Interstate 94 / Hwy 10 line)"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Combined 'Raccoon and red/gray fox' hunting row. Shooting hours: 1/2 hour before sunrise to sunset, except 9 a.m. to sunset on opening day.",
+     "open_date": "2026-10-17",
+     "open_time": "09:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "MN-furb-north",
+       "zone_name": "North Furbearer Zone (north of the Interstate 94 / Hwy 10 line)"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "",
+     "open_date": "2026-10-24",
+     "open_time": "09:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "MN-furb-south",
+       "zone_name": "South Furbearer Zone (south of the Interstate 94 / Hwy 10 line)"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Gray fox",
+   "iac_reference": "Minnesota Rules 6234; 2026 MN Hunting Regulations pp.65-66",
+   "notes": "A light may be used to hunt coyote or fox from January 1 to March 15.",
+   "permit_requirements": [],
+   "scientific_name": "Urocyon cinereoargenteus",
+   "scientific_name_note": "Standard taxonomy; not stated in the Minnesota guide.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "",
+     "open_date": "2026-10-17",
+     "open_time": "09:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "MN-furb-north",
+       "zone_name": "North Furbearer Zone (north of the Interstate 94 / Hwy 10 line)"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "",
+     "open_date": "2026-10-24",
+     "open_time": "09:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "MN-furb-south",
+       "zone_name": "South Furbearer Zone (south of the Interstate 94 / Hwy 10 line)"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Combined 'Raccoon and red/gray fox' hunting row. Shooting hours: 1/2 hour before sunrise to sunset, except 9 a.m. to sunset on opening day.",
+     "open_date": "2026-10-17",
+     "open_time": "09:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "MN-furb-north",
+       "zone_name": "North Furbearer Zone (north of the Interstate 94 / Hwy 10 line)"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "",
+     "open_date": "2026-10-24",
+     "open_time": "09:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "MN-furb-south",
+       "zone_name": "South Furbearer Zone (south of the Interstate 94 / Hwy 10 line)"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Badger",
+   "iac_reference": "Minnesota Rules 6234; 2026 MN Hunting Regulations pp.65-66",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Taxidea taxus",
+   "scientific_name_note": "Standard taxonomy; not stated in the Minnesota guide.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "",
+     "open_date": "2026-10-17",
+     "open_time": "09:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "MN-furb-north",
+       "zone_name": "North Furbearer Zone (north of the Interstate 94 / Hwy 10 line)"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "",
+     "open_date": "2026-10-24",
+     "open_time": "09:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "MN-furb-south",
+       "zone_name": "South Furbearer Zone (south of the Interstate 94 / Hwy 10 line)"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Combined 'Badger, opossum, long-tailed and short-tailed weasels' hunting row. Shooting hours: 1/2 hour before sunrise to sunset, except 9 a.m. to sunset on opening day.",
+     "open_date": "2026-10-17",
+     "open_time": "09:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "MN-furb-north",
+       "zone_name": "North Furbearer Zone (north of the Interstate 94 / Hwy 10 line)"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "",
+     "open_date": "2026-10-24",
+     "open_time": "09:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "MN-furb-south",
+       "zone_name": "South Furbearer Zone (south of the Interstate 94 / Hwy 10 line)"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Opossum",
+   "iac_reference": "Minnesota Rules 6234; 2026 MN Hunting Regulations pp.65-66",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Didelphis virginiana",
+   "scientific_name_note": "Standard taxonomy; not stated in the Minnesota guide.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "",
+     "open_date": "2026-10-17",
+     "open_time": "09:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "MN-furb-north",
+       "zone_name": "North Furbearer Zone (north of the Interstate 94 / Hwy 10 line)"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "",
+     "open_date": "2026-10-24",
+     "open_time": "09:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "MN-furb-south",
+       "zone_name": "South Furbearer Zone (south of the Interstate 94 / Hwy 10 line)"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Combined 'Badger, opossum, long-tailed and short-tailed weasels' hunting row. Shooting hours: 1/2 hour before sunrise to sunset, except 9 a.m. to sunset on opening day.",
+     "open_date": "2026-10-17",
+     "open_time": "09:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "MN-furb-north",
+       "zone_name": "North Furbearer Zone (north of the Interstate 94 / Hwy 10 line)"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "",
+     "open_date": "2026-10-24",
+     "open_time": "09:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "MN-furb-south",
+       "zone_name": "South Furbearer Zone (south of the Interstate 94 / Hwy 10 line)"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Long-tailed weasel",
+   "iac_reference": "Minnesota Rules 6234; 2026 MN Hunting Regulations pp.65-66",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Neogale frenata",
+   "scientific_name_note": "Standard taxonomy; not stated in the Minnesota guide.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "",
+     "open_date": "2026-10-17",
+     "open_time": "09:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "MN-furb-north",
+       "zone_name": "North Furbearer Zone (north of the Interstate 94 / Hwy 10 line)"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "",
+     "open_date": "2026-10-24",
+     "open_time": "09:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "MN-furb-south",
+       "zone_name": "South Furbearer Zone (south of the Interstate 94 / Hwy 10 line)"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Combined 'Badger, opossum, long-tailed and short-tailed weasels' hunting row. Shooting hours: 1/2 hour before sunrise to sunset, except 9 a.m. to sunset on opening day.",
+     "open_date": "2026-10-17",
+     "open_time": "09:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "MN-furb-north",
+       "zone_name": "North Furbearer Zone (north of the Interstate 94 / Hwy 10 line)"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "",
+     "open_date": "2026-10-24",
+     "open_time": "09:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "MN-furb-south",
+       "zone_name": "South Furbearer Zone (south of the Interstate 94 / Hwy 10 line)"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Short-tailed weasel (ermine)",
+   "iac_reference": "Minnesota Rules 6234; 2026 MN Hunting Regulations pp.65-66",
+   "notes": "",
+   "permit_requirements": [],
+   "scientific_name": "Mustela erminea",
+   "scientific_name_note": "Standard taxonomy; not stated in the Minnesota guide.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "",
+     "open_date": "2026-10-17",
+     "open_time": "09:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "MN-furb-north",
+       "zone_name": "North Furbearer Zone (north of the Interstate 94 / Hwy 10 line)"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "",
+     "open_date": "2026-10-24",
+     "open_time": "09:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "MN-furb-south",
+       "zone_name": "South Furbearer Zone (south of the Interstate 94 / Hwy 10 line)"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Combined 'Badger, opossum, long-tailed and short-tailed weasels' hunting row. Shooting hours: 1/2 hour before sunrise to sunset, except 9 a.m. to sunset on opening day.",
+     "open_date": "2026-10-17",
+     "open_time": "09:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "MN-furb-north",
+       "zone_name": "North Furbearer Zone (north of the Interstate 94 / Hwy 10 line)"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-03-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "",
+     "open_date": "2026-10-24",
+     "open_time": "09:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "MN-furb-south",
+       "zone_name": "South Furbearer Zone (south of the Interstate 94 / Hwy 10 line)"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Bobcat",
+   "iac_reference": "Minnesota Rules 6234; 2026 MN Hunting Regulations pp.65-66",
+   "notes": "2026 change: trappers present only the HEADS of bobcats at furbearer registration (full carcasses no longer required). Keep male and female heads separated for placement in bins.",
+   "permit_requirements": [
+    "Season bag limit: 5 bobcats combined (hunting + trapping), with no more than 1 bobcat from south of I-94.",
+    "Pelts, heads, and completed site-validated trapping coupons (electronic or paper) must be presented for registration at a DNR registration station or area wildlife office before the pelt is sold or removed from the state, and no more than 48 hours after the season closes.",
+    "Fisher, otter, bobcat, or pine marten taken by a resident under age 5 must be included in the limit of the accompanying parent or guardian."
+   ],
+   "scientific_name": "Lynx rufus",
+   "scientific_name_note": "Standard taxonomy; not stated in the Minnesota guide.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "5 combined (hunting + trapping) per season; only 1 may come from south of I-94.",
+      "possession_limit": null,
+      "season_bag": 5
+     },
+     "close_date": "2027-01-17",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Trapping hours 5 a.m. to 10 p.m.; traps may not be set or tended before 9 a.m. on opening day.",
+     "open_date": "2026-12-12",
+     "open_time": "09:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "MN-furb-north",
+       "zone_name": "North Furbearer Zone (north of the Interstate 94 / Hwy 10 line)"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "5 combined (hunting + trapping) per season; only 1 may come from south of I-94.",
+      "possession_limit": null,
+      "season_bag": 5
+     },
+     "close_date": "2027-01-17",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Trapping hours 5 a.m. to 10 p.m.; traps may not be set or tended before 9 a.m. on opening day.",
+     "open_date": "2027-01-02",
+     "open_time": "09:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "MN-furb-south",
+       "zone_name": "South Furbearer Zone (south of the Interstate 94 / Hwy 10 line)"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "5 combined (hunting + trapping) per season; only 1 may come from south of I-94.",
+      "possession_limit": null,
+      "season_bag": 5
+     },
+     "close_date": "2027-01-17",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Shooting hours: 1/2 hour before sunrise to sunset, except 9 a.m. to sunset on opening day.",
+     "open_date": "2026-12-12",
+     "open_time": "09:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "MN-furb-north",
+       "zone_name": "North Furbearer Zone (north of the Interstate 94 / Hwy 10 line)"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "5 combined (hunting + trapping) per season; only 1 may come from south of I-94.",
+      "possession_limit": null,
+      "season_bag": 5
+     },
+     "close_date": "2027-01-17",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Shooting hours: 1/2 hour before sunrise to sunset, except 9 a.m. to sunset on opening day.",
+     "open_date": "2027-01-02",
+     "open_time": "09:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "MN-furb-south",
+       "zone_name": "South Furbearer Zone (south of the Interstate 94 / Hwy 10 line)"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Fisher",
+   "iac_reference": "Minnesota Rules 6234; 2026 MN Hunting Regulations pp.65-66",
+   "notes": "A person may not take fisher by firearms or archery hunting (a firearm may be used to dispatch an animal already taken in a trap).",
+   "permit_requirements": [
+    "Season bag limit: 2 combined fisher + pine marten (1 fisher and 1 pine marten, or 2 fishers, or 2 pine martens), with no more than 1 fisher from south of I-94.",
+    "Pelts, heads, and completed site-validated trapping coupons (electronic or paper) must be presented for registration at a DNR registration station or area wildlife office before the pelt is sold or removed from the state, and no more than 48 hours after the season closes."
+   ],
+   "scientific_name": "Pekania pennanti",
+   "scientific_name_note": "Standard taxonomy; not stated in the Minnesota guide.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "2 combined fisher + pine marten; only 1 fisher may come from south of I-94.",
+      "possession_limit": null,
+      "season_bag": 2
+     },
+     "close_date": "2026-12-20",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Trapping hours 5 a.m. to 10 p.m.; traps may not be set or tended before 9 a.m. on opening day.",
+     "open_date": "2026-12-12",
+     "open_time": "09:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "MN-furb-north",
+       "zone_name": "North Furbearer Zone (north of the Interstate 94 / Hwy 10 line)"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "2 combined fisher + pine marten; only 1 fisher may come from south of I-94.",
+      "possession_limit": null,
+      "season_bag": 2
+     },
+     "close_date": "2027-01-17",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "South Furbearer Zone: FISHER ONLY (no pine marten). Trapping hours 5 a.m. to 10 p.m.; traps may not be set or tended before 9 a.m. on opening day.",
+     "open_date": "2027-01-02",
+     "open_time": "09:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "MN-furb-south",
+       "zone_name": "South Furbearer Zone (south of the Interstate 94 / Hwy 10 line)"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Pine marten",
+   "iac_reference": "Minnesota Rules 6234; 2026 MN Hunting Regulations pp.65-66",
+   "notes": "A person may not take pine marten by firearms or archery hunting (a firearm may be used to dispatch an animal already taken in a trap). Pine marten may NOT be taken in the South Furbearer Zone (the Jan 2-17 south season is fisher only).",
+   "permit_requirements": [
+    "Season bag limit: 2 combined fisher + pine marten (1 fisher and 1 pine marten, or 2 fishers, or 2 pine martens), with no more than 1 fisher from south of I-94.",
+    "Pelts, heads, and completed site-validated trapping coupons (electronic or paper) must be presented for registration at a DNR registration station or area wildlife office before the pelt is sold or removed from the state, and no more than 48 hours after the season closes."
+   ],
+   "scientific_name": "Martes americana",
+   "scientific_name_note": "Standard taxonomy; not stated in the Minnesota guide.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "2 combined fisher + pine marten; only 1 fisher may come from south of I-94.",
+      "possession_limit": null,
+      "season_bag": 2
+     },
+     "close_date": "2026-12-20",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Trapping hours 5 a.m. to 10 p.m.; traps may not be set or tended before 9 a.m. on opening day.",
+     "open_date": "2026-12-12",
+     "open_time": "09:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "MN-furb-north",
+       "zone_name": "North Furbearer Zone (north of the Interstate 94 / Hwy 10 line)"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Mink",
+   "iac_reference": "Minnesota Rules 6234; 2026 MN Hunting Regulations pp.65-66",
+   "notes": "A person may not take mink by firearms or archery hunting (a firearm may be used to dispatch an animal already taken in a trap).",
+   "permit_requirements": [],
+   "scientific_name": "Neogale vison",
+   "scientific_name_note": "Standard taxonomy; not stated in the Minnesota guide.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Trapping hours 5 a.m. to 10 p.m.; traps may not be set or tended before 9 a.m. on opening day.",
+     "open_date": "2026-10-24",
+     "open_time": "09:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "MN-furb-north",
+       "zone_name": "North Furbearer Zone (north of the Interstate 94 / Hwy 10 line)"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Trapping hours 5 a.m. to 10 p.m.; traps may not be set or tended before 9 a.m. on opening day.",
+     "open_date": "2026-10-31",
+     "open_time": "09:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "MN-furb-south",
+       "zone_name": "South Furbearer Zone (south of the Interstate 94 / Hwy 10 line)"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Muskrat",
+   "iac_reference": "Minnesota Rules 6234; 2026 MN Hunting Regulations pp.65-66",
+   "notes": "A person may not take muskrat by firearms or archery hunting (a firearm may be used to dispatch an animal already taken in a trap).",
+   "permit_requirements": [],
+   "scientific_name": "Ondatra zibethicus",
+   "scientific_name_note": "Standard taxonomy; not stated in the Minnesota guide.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Trapping hours 5 a.m. to 10 p.m.; traps may not be set or tended before 9 a.m. on opening day.",
+     "open_date": "2026-10-24",
+     "open_time": "09:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "MN-furb-north",
+       "zone_name": "North Furbearer Zone (north of the Interstate 94 / Hwy 10 line)"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-02-28",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Trapping hours 5 a.m. to 10 p.m.; traps may not be set or tended before 9 a.m. on opening day.",
+     "open_date": "2026-10-31",
+     "open_time": "09:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "MN-furb-south",
+       "zone_name": "South Furbearer Zone (south of the Interstate 94 / Hwy 10 line)"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Beaver",
+   "iac_reference": "Minnesota Rules 6234; 2026 MN Hunting Regulations pp.65-66",
+   "notes": "A person may not take beaver by firearms or archery hunting (a firearm may be used to dispatch an animal already taken in a trap).",
+   "permit_requirements": [],
+   "scientific_name": "Castor canadensis",
+   "scientific_name_note": "Standard taxonomy; not stated in the Minnesota guide.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-05-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Trapping hours 5 a.m. to 10 p.m.; traps may not be set or tended before 9 a.m. on opening day.",
+     "open_date": "2026-10-24",
+     "open_time": "09:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "MN-furb-north",
+       "zone_name": "North Furbearer Zone (north of the Interstate 94 / Hwy 10 line)"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": "2027-05-15",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Trapping hours 5 a.m. to 10 p.m.; traps may not be set or tended before 9 a.m. on opening day.",
+     "open_date": "2026-10-31",
+     "open_time": "09:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "MN-furb-south",
+       "zone_name": "South Furbearer Zone (south of the Interstate 94 / Hwy 10 line)"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "River otter",
+   "iac_reference": "Minnesota Rules 6234; 2026 MN Hunting Regulations pp.65-66",
+   "notes": "A person may not take otter by firearms or archery hunting (a firearm may be used to dispatch an animal already taken in a trap).",
+   "permit_requirements": [
+    "Season bag limit: 4 otters statewide.",
+    "River otters may be registered through May 17, 2027."
+   ],
+   "scientific_name": "Lontra canadensis",
+   "scientific_name_note": "Standard taxonomy; not stated in the Minnesota guide.",
+   "scientific_name_verified": false,
+   "season_status": "open",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "4 statewide per season.",
+      "possession_limit": null,
+      "season_bag": 4
+     },
+     "close_date": "2027-01-17",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Trapping hours 5 a.m. to 10 p.m.; traps may not be set or tended before 9 a.m. on opening day.",
+     "open_date": "2026-12-12",
+     "open_time": "09:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "MN-furb-north",
+       "zone_name": "North Furbearer Zone (north of the Interstate 94 / Hwy 10 line)"
+      }
+     ]
+    },
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "4 statewide per season.",
+      "possession_limit": null,
+      "season_bag": 4
+     },
+     "close_date": "2027-01-17",
+     "continuous_open": false,
+     "land_type": "all",
+     "method": "trapping",
+     "notes": "Trapping hours 5 a.m. to 10 p.m.; traps may not be set or tended before 9 a.m. on opening day.",
+     "open_date": "2027-01-02",
+     "open_time": "09:00",
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "special_areas",
+       "zone_id": "MN-furb-south",
+       "zone_name": "South Furbearer Zone (south of the Interstate 94 / Hwy 10 line)"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Coyote",
+   "iac_reference": "Minnesota Rules 6234; 2026 MN Hunting Regulations p.65",
+   "notes": "Listed as an unprotected animal for hunting. A light may be used to hunt coyote from January 1 to March 15. Trapping provisions for coyote were not stated in the extracted guide sections \u2014 verify against Minnesota Rules 6234 before trapping.",
+   "permit_requirements": [],
+   "scientific_name": "Canis latrans",
+   "scientific_name_note": "Standard taxonomy; not stated in the Minnesota guide.",
+   "scientific_name_verified": false,
+   "season_status": "continuous",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Continuous (unprotected animal). Shooting hours: 1/2 hour before sunrise to sunset, except 9 a.m. to sunset on opening day.",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "MN-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Striped skunk",
+   "iac_reference": "Minnesota Rules 6234; 2026 MN Hunting Regulations p.65",
+   "notes": "Listed as an unprotected animal for hunting. Trapping provisions for striped skunk were not stated in the extracted guide sections \u2014 verify against Minnesota Rules 6234 before trapping.",
+   "permit_requirements": [],
+   "scientific_name": "Mephitis mephitis",
+   "scientific_name_note": "Standard taxonomy; not stated in the Minnesota guide.",
+   "scientific_name_verified": false,
+   "season_status": "continuous",
+   "seasons": [
+    {
+     "bag_limits": {
+      "daily_bag": null,
+      "limit_notes": "No limit.",
+      "possession_limit": null,
+      "season_bag": null
+     },
+     "close_date": null,
+     "continuous_open": true,
+     "land_type": "all",
+     "method": "hunting",
+     "notes": "Continuous (unprotected animal). Shooting hours: 1/2 hour before sunrise to sunset, except 9 a.m. to sunset on opening day.",
+     "open_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "zones": [
+      {
+       "area_type": "statewide",
+       "zone_id": "MN-statewide",
+       "zone_name": "Statewide"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "common_name": "Lynx",
+   "iac_reference": "2026 MN Hunting Regulations p.40",
+   "notes": "There is no open season on lynx. A person may not possess or transport a lynx that was incidentally killed. Lynx management zone regulations apply in the northeast (see guide pp.71-72). Included so the app flags any logged take as out of season.",
+   "permit_requirements": [],
+   "scientific_name": "Lynx canadensis",
+   "scientific_name_note": "Not stated in the guide; left as standard taxonomy.",
+   "scientific_name_verified": false,
+   "season_status": "closed",
+   "seasons": []
+  },
+  {
+   "common_name": "Gray wolf",
+   "iac_reference": "2026 MN Hunting Regulations p.40",
+   "notes": "There is no open season on wolf. Included so the app flags any logged take as out of season.",
+   "permit_requirements": [],
+   "scientific_name": "Canis lupus",
+   "scientific_name_note": "Not stated in the guide; left as standard taxonomy.",
+   "scientific_name_verified": false,
+   "season_status": "closed",
+   "seasons": []
+  },
+  {
+   "common_name": "Wolverine",
+   "iac_reference": "2026 MN Hunting Regulations p.40",
+   "notes": "There is no open season on wolverine. Included so the app flags any logged take as out of season.",
+   "permit_requirements": [],
+   "scientific_name": "Gulo gulo",
+   "scientific_name_note": "Not stated in the guide; left as standard taxonomy.",
+   "scientific_name_verified": false,
+   "season_status": "closed",
+   "seasons": []
+  },
+  {
+   "common_name": "Cougar",
+   "iac_reference": "2026 MN Hunting Regulations p.40",
+   "notes": "There is no open season on cougar. Included so the app flags any logged take as out of season.",
+   "permit_requirements": [],
+   "scientific_name": "Puma concolor",
+   "scientific_name_note": "Not stated in the guide; left as standard taxonomy.",
+   "scientific_name_verified": false,
+   "season_status": "closed",
+   "seasons": []
+  },
+  {
+   "common_name": "Spotted skunk (civet cat)",
+   "iac_reference": "2026 MN Hunting Regulations p.40",
+   "notes": "There is no open season on spotted skunk ('civet cat'). Included so the app flags any logged take as out of season.",
+   "permit_requirements": [],
+   "scientific_name": "Spilogale putorius",
+   "scientific_name_note": "Not stated in the guide; left as standard taxonomy.",
+   "scientific_name_verified": false,
+   "season_status": "closed",
+   "seasons": []
+  }
+ ],
+ "state": "MN",
+ "state_name": "Minnesota",
+ "verification": {
+  "confirmation_notes": "Data taken from the official 2026 Minnesota Hunting Regulations (mndnr.gov PDF, downloaded 2026-09-18, archived locally). Furbearer hunting seasons table and trapping seasons table (pp.65-66); furbearer zone boundary ('North Furbearer Zone is north of the Interstate 94 / Hwy 10 line'); 2026 furbearer registration requirements (bobcat heads-only rule, 48-hour post-close registration for fisher/pine marten/bobcat, otter registration through May 17, 2027); no-open-season mammal list (lynx, wolverine, cougar, wolf, spotted skunk). Trapping hours 5 a.m.-10 p.m. with a 9 a.m. opening-day restriction for listed species.",
+  "known_gaps": [
+   "Scientific names are standard taxonomy, NOT stated in the Minnesota guide.",
+   "Coyote and striped skunk are listed as continuous under HUNTING (unprotected animals). Their trapping seasons were not stated in the extracted guide sections; only hunting seasons were modeled \u2014 verify against Minnesota Rules 6234 for trapping.",
+   "The 48-hour post-close registration deadlines for fisher/pine marten/bobcat are: register before the pelt is sold or removed from the state AND no more than 48 hours after the season closes (with appointment option for unavoidable conflicts).",
+   "Season close dates that fall after the current compilation date but in the same season year (e.g., beaver through May 15, 2027) are as published.",
+   "Nuisance/depredation rules are not modeled."
+  ],
+  "regulation_year_confirmed": true
+ },
+ "license_url": "https://licenses.dnr.state.mn.us/",
+ "license_vendor": "Minnesota DNR Electronic Licensing System (ELS)",
+ "regs_url": "http://files.dnr.state.mn.us/rlp/regulations/hunting/full_regs.pdf",
+ "regs_kind": "pdf"
+,
+ "warden_directory": {
+  "label": "Report a violation",
+  "url": "http://www.dnr.state.mn.us/enforcement/tip.html",
+  "kind": "hotline",
+  "note": "Turn in Poachers (TIP): 800-652-9093, 24 hr; #TIP on cell"
+ }
+}

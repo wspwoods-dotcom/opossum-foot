@@ -1,0 +1,647 @@
+{
+ "schema_version": "1.1",
+ "state": "NC",
+ "state_name": "North Carolina",
+ "season_year": "2026-27",
+ "retrieved_at": "2026-09-18",
+ "disclaimer": "Reminder reference only — NOT legal authority. Season dates, zones, and limits are set annually and can change. Always verify current regulations with the North Carolina Wildlife Resources Commission before hunting or trapping.",
+ "sources": [
+  {
+   "id": "nc-season-glance",
+   "title": "NCWRC 2026-2027 Season-Dates-at-a-Glance",
+   "url": "https://www.ncwildlife.gov/index.php/regulations/2026-2027-season-dates-glance/download?attachment",
+   "type": "agency_booklet",
+   "notes": "Official NCWRC season dates summary."
+  },
+  {
+   "id": "nc-10b-0303",
+   "title": "15A NCAC 10B .0303 (open seasons — trapping)",
+   "url": "http://reports.oah.state.nc.us/ncac/title%2015a%20-%20environmental%20quality/chapter%2010%20-%20wildlife%20resources%20and%20water%20safety/subchapter%20b/15a%20ncac%2010b%20.0303.pdf",
+   "type": "administrative_code",
+   "notes": "Trapping Oct 1–last day of February; nutria no closed season east of I-77."
+  },
+  {
+   "id": "nc-10b-0205",
+   "title": "15A NCAC 10B .0205 (raccoon and opossum hunting)",
+   "url": "http://reports.oah.state.nc.us/ncac/title%2015a%20-%20environmental%20quality/chapter%2010%20-%20wildlife%20resources%20and%20water%20safety/chapter%2010%20rules.html",
+   "type": "administrative_code",
+   "notes": "Raccoon and opossum hunting from the Monday on or nearest Oct 15–last day of February."
+  },
+  {
+   "id": "nc-gs-113-129",
+   "title": "N.C.G.S. § 113-129(7a) (fur-bearing animals defined)",
+   "url": "https://www.ncleg.net/EnactedLegislation/Statutes/HTML/BySection/Chapter_113/GS_113-129.html",
+   "type": "statute",
+   "notes": "Official statute listing fur-bearing animals: beaver, mink, muskrat, nutria, otter, skunk, weasel, and bobcat/opossum/raccoon when trapped. Ringtail is NOT listed and is excluded from this dataset."
+  }
+ ],
+ "license_summary": {
+  "trapping_license": "A trapping license is required to trap furbearers. Coyote trapping is also allowed during local fox trapping seasons in counties with locally established fox seasons.",
+  "depredation": "Outside the trapping season, animals can be trapped only under a free Depredation Permit; landowners whose property has been damaged by beavers may take beaver on their property anytime by any lawful method without a depredation permit (depredation provisions are noted here, not modeled as seasons)."
+ },
+ "species": [
+  {
+   "common_name": "Armadillo",
+   "scientific_name": "Dasypus novemcinctus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the North Carolina Wildlife Resources Commission regulations.",
+   "iac_reference": "15A NCAC 10B .0303",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-01",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "NC-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Trapping: Oct. 1, 2026 – Feb. 28, 2027, statewide."
+     },
+     "notes": "Trapping: Oct. 1, 2026 – Feb. 28, 2027, statewide."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Beaver",
+   "scientific_name": "Castor canadensis",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the North Carolina Wildlife Resources Commission regulations.",
+   "iac_reference": "15A NCAC 10B .0303",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-01",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "NC-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Trapping: Oct. 1, 2026 – Feb. 28, 2027, statewide."
+     },
+     "notes": "Trapping: Oct. 1, 2026 – Feb. 28, 2027, statewide."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Bobcat",
+   "scientific_name": "Lynx rufus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the North Carolina Wildlife Resources Commission regulations.",
+   "iac_reference": "15A NCAC 10B .0303",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-01",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "NC-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Trapping: Oct. 1, 2026 – Feb. 28, 2027, statewide."
+     },
+     "notes": "Trapping: Oct. 1, 2026 – Feb. 28, 2027, statewide."
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-10-12",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "NC-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Hunting: Oct. 12, 2026 – Feb. 28, 2027, statewide."
+     },
+     "notes": "Hunting: Oct. 12, 2026 – Feb. 28, 2027, statewide."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Coyote",
+   "scientific_name": "Canis latrans",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the North Carolina Wildlife Resources Commission regulations.",
+   "iac_reference": "15A NCAC 10B .0303",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-01",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "NC-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Trapping: Oct. 1, 2026 – Feb. 28, 2027, statewide. County fox local laws may also apply to coyote where specified."
+     },
+     "notes": "Trapping: Oct. 1, 2026 – Feb. 28, 2027, statewide. County fox local laws may also apply to coyote where specified."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Fox",
+   "scientific_name": null,
+   "scientific_name_verified": false,
+   "scientific_name_note": "North Carolina regulations do not distinguish red and gray fox; no single standard taxon applies.",
+   "iac_reference": "15A NCAC 10B .0303",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-01",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "NC-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Trapping: Oct. 1, 2026 – Feb. 28, 2027, statewide. County fox seasons established by local law vary by county (see ‘Foxes’ in the Regulations Digest); not modeled county-by-county."
+     },
+     "notes": "Trapping: Oct. 1, 2026 – Feb. 28, 2027, statewide. County fox seasons established by local law vary by county (see ‘Foxes’ in the Regulations Digest); not modeled county-by-county."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": "County fox seasons set by local law vary by county and were not verified county-by-county for 2026-27; the statewide trapping season is modeled.",
+   "county_notes": "Fox trapping seasons exist only in about 55 of 100 counties, set by General Assembly local laws (the NCWRC cannot create fox seasons) — check ncwildlife.gov/foxseasons for your county."
+  },
+  {
+   "common_name": "Groundhog",
+   "scientific_name": "Marmota monax",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the North Carolina Wildlife Resources Commission regulations.",
+   "iac_reference": "15A NCAC 10B .0303",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-01",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "NC-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Trapping: Oct. 1, 2026 – Feb. 28, 2027, statewide."
+     },
+     "notes": "Trapping: Oct. 1, 2026 – Feb. 28, 2027, statewide."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Mink",
+   "scientific_name": "Neogale vison",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the North Carolina Wildlife Resources Commission regulations.",
+   "iac_reference": "15A NCAC 10B .0303",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-01",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "NC-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Trapping: Oct. 1, 2026 – Feb. 28, 2027, statewide."
+     },
+     "notes": "Trapping: Oct. 1, 2026 – Feb. 28, 2027, statewide."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Muskrat",
+   "scientific_name": "Ondatra zibethicus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the North Carolina Wildlife Resources Commission regulations.",
+   "iac_reference": "15A NCAC 10B .0303",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-01",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "NC-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Trapping: Oct. 1, 2026 – Feb. 28, 2027, statewide."
+     },
+     "notes": "Trapping: Oct. 1, 2026 – Feb. 28, 2027, statewide."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Nutria",
+   "scientific_name": "Myocastor coypus",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the North Carolina Wildlife Resources Commission regulations.",
+   "iac_reference": "15A NCAC 10B .0303",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-01",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "NC-west-of-i-77",
+       "zone_name": "West of I-77",
+       "area_type": "special_areas"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "West of I-77: Trapping: Oct. 1, 2026 – Feb. 28, 2027, statewide."
+     },
+     "notes": "West of I-77: Trapping: Oct. 1, 2026 – Feb. 28, 2027, statewide."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "NC-east-of-i-77",
+       "zone_name": "East of I-77",
+       "area_type": "special_areas"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "East of I-77: no closed season (year-round)."
+     },
+     "notes": "East of I-77: no closed season (year-round)."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Opossum",
+   "scientific_name": "Didelphis virginiana",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the North Carolina Wildlife Resources Commission regulations.",
+   "iac_reference": "15A NCAC 10B .0303",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-01",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "NC-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Trapping: Oct. 1, 2026 – Feb. 28, 2027, statewide."
+     },
+     "notes": "Trapping: Oct. 1, 2026 – Feb. 28, 2027, statewide."
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-10-12",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "NC-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No bag or possession limit."
+     },
+     "notes": "Hunting: Oct. 12, 2026 – Feb. 28, 2027; no bag limit."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "River otter",
+   "scientific_name": "Lontra canadensis",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the North Carolina Wildlife Resources Commission regulations.",
+   "iac_reference": "15A NCAC 10B .0303",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-01",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "NC-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Trapping: Oct. 1, 2026 – Feb. 28, 2027, statewide."
+     },
+     "notes": "Trapping: Oct. 1, 2026 – Feb. 28, 2027, statewide."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Raccoon",
+   "scientific_name": "Procyon lotor",
+   "scientific_name_verified": false,
+   "scientific_name_note": "Standard taxonomy; not stated in the North Carolina Wildlife Resources Commission regulations.",
+   "iac_reference": "15A NCAC 10B .0303",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-01",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "NC-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Trapping: Oct. 1, 2026 – Feb. 28, 2027, statewide."
+     },
+     "notes": "Trapping: Oct. 1, 2026 – Feb. 28, 2027, statewide."
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-10-12",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "NC-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": 3,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "daily bag 3."
+     },
+     "notes": "Hunting: Oct. 12, 2026 – Feb. 28, 2027; daily bag 3."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Skunk",
+   "scientific_name": null,
+   "scientific_name_verified": false,
+   "scientific_name_note": "North Carolina regulations do not distinguish skunk species; no single standard taxon applies.",
+   "iac_reference": "15A NCAC 10B .0303",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-01",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "NC-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Trapping: Oct. 1, 2026 – Feb. 28, 2027, statewide."
+     },
+     "notes": "Trapping: Oct. 1, 2026 – Feb. 28, 2027, statewide."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  },
+  {
+   "common_name": "Weasel",
+   "scientific_name": null,
+   "scientific_name_verified": false,
+   "scientific_name_note": "North Carolina regulations do not distinguish weasel species; no single standard taxon applies.",
+   "iac_reference": "15A NCAC 10B .0303",
+   "season_status": "open",
+   "seasons": [
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2026-10-01",
+     "close_date": "2027-02-28",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "NC-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Trapping: Oct. 1, 2026 – Feb. 28, 2027, statewide."
+     },
+     "notes": "Trapping: Oct. 1, 2026 – Feb. 28, 2027, statewide."
+    }
+   ],
+   "permit_requirements": [],
+   "notes": ""
+  }
+ ],
+ "verification": {
+  "regulation_year_confirmed": true,
+  "confirmation_notes": "NCWRC 2026-2027 Season-Dates-at-a-Glance, 15A NCAC 10B .0303/.0205, and N.C.G.S. § 113-129(7a) (official statute; ringtail not listed — dropped from dataset), read 2026-09-18.",
+  "known_gaps": [
+   "Fox hunting seasons are set by county local law; the NCWRC 'Fox Season Hunting and Trapping Seasons' publication (ncwildlife.gov/foxseasons) could not be fetched for verification — county fox seasons are a known gap.",
+   "Scientific names are standard taxonomy, not stated in NCWRC regulations."
+  ]
+ },
+ "provisional": true,
+ "license_url": "https://gooutdoorsnorthcarolina.com",
+ "license_vendor": "Go Outdoors North Carolina (Brandt)",
+ "regs_url": "https://www.ncwildlife.gov/regulations/2026-2027-season-dates-glance/open",
+ "regs_kind": "pdf"
+,
+ "warden_directory": {
+  "label": "Report a violation",
+  "url": "https://www.ncwildlife.gov/enforcement/nc-wildtip-turn-poachers-reward-program",
+  "kind": "hotline",
+  "note": "NC WILDTIP: 800-662-7137, 24/7/365; text WILDTIP to TIP411 (847411)"
+ }
+}
