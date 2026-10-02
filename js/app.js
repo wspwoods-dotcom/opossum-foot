@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-10-01cd';
+var APP_VERSION = 'beta 0.1 · build 2026-10-02ce';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -2868,12 +2868,17 @@ var detailSetId = null;
 /* Q140 (2026-10-01): Tanner — five pins on top of each other. Tapping a
    stack opens a menu listing every set at that spot (name, status, trap
    type); tapping a row opens that set's detail. Lone pins keep today's
-   straight-to-detail behavior. Same ~20 m tolerance as the duplicate check;
-   nearby-but-legitimate sets are never blocked, only listed. */
+   straight-to-detail behavior.
+   Q140b (2026-10-01, Tanner's phone verdict): the menu must ONLY appear
+   when pins are almost exactly on top of each other (~1 m). The 20 m
+   duplicate tolerance showed the menu for merely-nearby pins — then you
+   can't tell which of the three you tapped. Nearby-but-distinct sets now
+   open straight to detail. */
+var STACK_TOL_DEG = 0.00001;
 function setsAtSpot(lat, lng) {
   return activeSets().filter(function (s) {
     if (!mapStatusFilter[normStatus(s.status)]) return false;
-    return Math.abs(s.lat - lat) <= PIN_DUP_TOL_DEG && Math.abs(s.lng - lng) <= PIN_DUP_TOL_DEG;
+    return Math.abs(s.lat - lat) <= STACK_TOL_DEG && Math.abs(s.lng - lng) <= STACK_TOL_DEG;
   });
 }
 function openSetOrStack(id) {
