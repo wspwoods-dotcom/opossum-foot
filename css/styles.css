@@ -17,6 +17,10 @@
   --red: #d05245;
   --amber: #d19a2f;
   --gray: #8a8a8a;
+  --pin-active: #7fa650;   /* Q145 default scheme = Earthy */
+  --pin-sprung: #d19a2f;
+  --pin-pulled: #7d7663;
+  --pin-missing: #5b8dd9;
   --line: #3a4330;
   --radius: 12px;
   --tap: 52px;            /* minimum touch target */
@@ -235,10 +239,15 @@ select.select-hint { color: var(--faint); }
 
 /* set pins */
 .pin { width: 30px; height: 30px; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 2px 8px rgba(0,0,0,.6); position: relative; }
-.pin-active { background: #4caf50; }
-.pin-sprung { background: #d19a2f; }
-.pin-pulled { background: #8a8a8a; }
-.pin-missing { background: #3b82f6; }
+/* Q145: pin colors are scheme-driven (Settings → Appearance). Earthy is default. */
+.pin-active { background: var(--pin-active); }
+.pin-sprung { background: var(--pin-sprung); }
+.pin-pulled { background: var(--pin-pulled); }
+.pin-missing { background: var(--pin-missing); }
+/* Q145 scheme overrides — Earthy lives in :root above. */
+body[data-pinscheme="classic"] { --pin-active:#4caf50; --pin-sprung:#d19a2f; --pin-pulled:#8a8a8a; --pin-missing:#3b82f6; }
+body[data-pinscheme="bold"] { --pin-active:#2ecc40; --pin-sprung:#f5a623; --pin-pulled:#a8a8a8; --pin-missing:#2f7bff; }
+body[data-pinscheme="pastel"] { --pin-active:#a9d6a5; --pin-sprung:#eacd7d; --pin-pulled:#c9c9c9; --pin-missing:#a9c6f2; }
 /* Q68: trap-check clock — a set past its check interval without any activity
    turns its pin red, whatever its status color was. */
 .pin-overdue { background: #e5484d; }
@@ -261,28 +270,35 @@ select.select-hint { color: var(--faint); }
 /* Q133 (2026-10-01): Tanner — the status chips read in all caps like the
    rest of the map header. */
 .map-status-filters .chip { text-transform: uppercase; }
-/* Q138 (2026-10-01): Tanner — thicker black borders on the four trap-status
-   buttons. Same specificity as the per-status border-color rules but later in
-   the file, so black wins in both on and off states. */
+/* Q138/Q146 (2026-10-02): Tanner — the four trap-status buttons wear the same
+   3px white border as the map pins, so buttons and pins read as one language. */
 .map-status-filters .chip.mst-active,
 .map-status-filters .chip.mst-sprung,
 .map-status-filters .chip.mst-pulled,
-.map-status-filters .chip.mst-missing { border: 2px solid #000; }
+.map-status-filters .chip.mst-missing { border: 3px solid #fff; }
 .map-status-filters .chip.on { background: var(--accent); border-color: var(--accent); color: #fff; }
 /* Map status filter chips carry their pin colors so the buttons read the
    same as the pins on the map. Off state keeps the color as an outline. */
-.chip.mst-active.on { background: #4caf50; border-color: #4caf50; color: #0e150a; }
-.chip.mst-sprung.on { background: #d19a2f; border-color: #d19a2f; color: #0e150a; }
-.chip.mst-pulled.on { background: #8a8a8a; border-color: #8a8a8a; color: #0e150a; }
-.chip.mst-missing.on { background: #3b82f6; border-color: #3b82f6; color: #0e150a; } /* Q94b: Tanner 2026-10-01 — black lettering like the other three */
-.chip.mst-active:not(.on) { border-color: #4caf50; color: #4caf50; }
-.chip.mst-sprung:not(.on) { border-color: #d19a2f; color: #d19a2f; }
-.chip.mst-pulled:not(.on) { border-color: #8a8a8a; color: #8a8a8a; }
-.chip.mst-missing:not(.on) { border-color: #3b82f6; color: #7aa8f0; }
-/* Q94 (2026-10-01): Tanner — the map status chips wear a black border whether
-   toggled on or off; fills and text keep their pin colors. */
+/* Q145: chips follow the active pin scheme. */
+.chip.mst-active.on { background: var(--pin-active); border-color: var(--pin-active); color: #0e150a; }
+.chip.mst-sprung.on { background: var(--pin-sprung); border-color: var(--pin-sprung); color: #0e150a; }
+.chip.mst-pulled.on { background: var(--pin-pulled); border-color: var(--pin-pulled); color: #0e150a; }
+.chip.mst-missing.on { background: var(--pin-missing); border-color: var(--pin-missing); color: #0e150a; }
+.chip.mst-active:not(.on) { border-color: var(--pin-active); color: var(--pin-active); }
+.chip.mst-sprung:not(.on) { border-color: var(--pin-sprung); color: var(--pin-sprung); }
+.chip.mst-pulled:not(.on) { border-color: var(--pin-pulled); color: var(--pin-pulled); }
+.chip.mst-missing:not(.on) { border-color: var(--pin-missing); color: var(--pin-missing); }
+/* Q145: pin scheme picker rows (Settings → Appearance). */
+.scheme-row { display:flex; align-items:center; gap:10px; width:100%; text-align:left; background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:12px 14px; margin:0 0 8px; color:var(--ink); font-size:16px; font-weight:600; cursor:pointer; }
+.scheme-row[aria-pressed="true"] { border-color: var(--accent); }
+.scheme-dots { display:flex; gap:6px; margin-left:auto; }
+.scheme-dots i { width:22px; height:22px; border-radius:50%; border:2px solid #fff; }
+.scheme-check { color: var(--accent); font-weight:700; }
+/* Q146 (2026-10-02): Tanner reversed Q94 — the map status chips now wear the
+   white pin border in both on and off states; fills and text keep their
+   pin-scheme colors. */
 .map-status-filters .chip.on,
-.map-status-filters .chip:not(.on) { border-color: #000; }
+.map-status-filters .chip:not(.on) { border-color: #fff; }
 /* Q11: saved-entry suggestions under the bait/lure/urine inputs */
 .suggest { display: none; margin-top: -2px; }
 .suggest.show { display: block; }
@@ -786,6 +802,15 @@ body.placing .leaflet-control-layers { pointer-events: none; opacity: .45; }
 .sc-row { display: flex; align-items: baseline; gap: 10px; padding: 10px 2px; border-bottom: 1px solid var(--line); }
 .sc-name { font-weight: 600; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
 .sc-rate { font-size: 14px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+/* Sponsor chip on Scorecard rows: the maker's logo, tappable for their bio.
+   The chip never affects rank — it only marks products whose maker sponsors. */
+.sc-chip { flex: 0 0 auto; align-self: center; width: 30px; height: 30px; padding: 0;
+  border: none; border-radius: 8px; background: #fff; cursor: pointer; }
+.sc-chip img { width: 100%; height: 100%; object-fit: contain; border-radius: 8px; display: block; }
+/* Scorecard honesty rule: ranks are earned, never bought. */
+.scorecard-honesty { margin-top: 14px; padding: 14px 12px; text-align: center;
+  border: 2px solid var(--accent); border-radius: 14px; color: var(--accent); font-size: 15px; }
+.scorecard-honesty strong { color: var(--accent); }
 
 /* ---- equal-size History disposition filter chips, scrollable row ---- */
 #hist-disp-chips { overflow-x: auto; justify-content: flex-start; }
