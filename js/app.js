@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-10-02ce';
+var APP_VERSION = 'beta 0.1 · build 2026-10-02cf';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -2589,6 +2589,18 @@ function sponsorById(id) {
   for (var i = 0; i < SPONSORS.length; i++) if (SPONSORS[i].id === id) return SPONSORS[i];
   return null;
 }
+/* Scorecard sponsor chips: match a ranked attractant name to a sponsor's
+   product (normalized). The chip never affects the rank — it only marks
+   products whose maker sponsors the app. */
+function sponsorForProduct(name) {
+  var n = String(name == null ? '' : name).toLowerCase().trim();
+  if (!n) return null;
+  for (var i = 0; i < SPONSORS.length; i++) {
+    var sp = SPONSORS[i];
+    if (String(sp.product == null ? '' : sp.product).toLowerCase().trim() === n) return sp;
+  }
+  return null;
+}
 /* Q67: the old standalone sponsor badge row under the Bait field is gone —
    sponsors live inside the suggestion menus now (see sponsorSuggests). */
 /* Q32: tap-for-bio — name, short bio, link to website/place of sale. */
@@ -3980,6 +3992,48 @@ function normStatus(v) {
 /* Map-view status filters: independent multi-select toggles. Several can be
    on at once; a set shows when its current status is toggled on. */
 var mapStatusFilter = { active: true, sprung: true, pulled: true, missing: true };
+/* Q145 — pin color schemes (Lydia's ask, Tanner approved 2026-10-02).
+   Earthy is the default. Every scheme keeps the same hue→status mapping
+   (greenish=Active, goldish=Sprung, grayish=Pulled, blueish=Missing) so the
+   status language survives. Colors live in CSS vars; JS only flips
+   body[data-pinscheme] and persists the choice in Store.data (rides backup). */
+var PIN_SCHEMES = [
+  { id: 'earthy', name: 'Earthy', colors: { active:'#7fa650', sprung:'#d19a2f', pulled:'#7d7663', missing:'#5b8dd9' } },
+  { id: 'classic', name: 'Classic', colors: { active:'#4caf50', sprung:'#d19a2f', pulled:'#8a8a8a', missing:'#3b82f6' } },
+  { id: 'bold', name: 'Bold', colors: { active:'#2ecc40', sprung:'#f5a623', pulled:'#a8a8a8', missing:'#2f7bff' } },
+  { id: 'pastel', name: 'Pastel', colors: { active:'#a9d6a5', sprung:'#eacd7d', pulled:'#c9c9c9', missing:'#a9c6f2' } }
+];
+function pinSchemeById(id) {
+  for (var i = 0; i < PIN_SCHEMES.length; i++) if (PIN_SCHEMES[i].id === id) return PIN_SCHEMES[i];
+  return PIN_SCHEMES[0];
+}
+function pinSchemeId() {
+  var id = Store.data && Store.data.pinScheme;
+  return pinSchemeById(id).id;
+}
+function applyPinScheme(id) {
+  id = pinSchemeById(id).id;
+  document.body.setAttribute('data-pinscheme', id);
+  if (Store.data) { Store.data.pinScheme = id; Store.save(); }
+  renderPinSchemeList();
+}
+function renderPinSchemeList() {
+  var host = $('pinscheme-list');
+  if (!host) return;
+  var cur = pinSchemeId();
+  host.innerHTML = PIN_SCHEMES.map(function (s) {
+    var dots = ['active', 'sprung', 'pulled', 'missing'].map(function (k) {
+      return '<i style="background:' + s.colors[k] + '"></i>';
+    }).join('');
+    return '<button type="button" class="scheme-row" data-scheme="' + s.id + '" aria-pressed="' + (s.id === cur) + '">' +
+      '<span>' + esc(s.name) + '</span><span class="scheme-dots">' + dots + '</span>' +
+      (s.id === cur ? '<span class="scheme-check">✓</span>' : '') + '</button>';
+  }).join('');
+  var btns = host.querySelectorAll('button[data-scheme]');
+  for (var i = 0; i < btns.length; i++) {
+    btns[i].onclick = function () { applyPinScheme(this.getAttribute('data-scheme')); };
+  }
+}
 function renderMapStatusFilters() {
   var host = $('map-status-filters');
   if (!host) return;
@@ -4433,7 +4487,12 @@ function renderScorecardTab() {
       (u.season === 'all' ? ' yet.' : ' for this filter yet.') + '<br>Log a catch and the scorecard fills in.</div>';
   } else {
     html += data.rows.map(function (g) {
-      return '<div class="sc-row"><span class="sc-name">' + esc(g.name) + '</span>' +
+      var sp = sponsorForProduct(g.name);
+      var chip = (sp && sp.brandLogo)
+        ? '<button type="button" class="sc-chip" data-sp="' + esc(sp.id) + '" aria-label="About ' + esc(sp.name) + '">' +
+          '<img src="' + esc(sp.brandLogo) + '" alt="' + esc(sp.name) + ' logo"></button>'
+        : '';
+      return '<div class="sc-row">' + chip + '<span class="sc-name">' + esc(g.name) + '</span>' +
         '<span class="dim">' + g.nsets + ' set' + (g.nsets === 1 ? '' : 's') + '</span>' +
         '<span class="sc-rate"><strong>' + g.catches + '</strong> caught</span></div>';
     }).join('');
@@ -4469,8 +4528,13 @@ function renderScorecardTab() {
     '<div><label class="field" for="sc-h2h-b">Second</label>' +
     '<select id="sc-h2h-b"><option value="">Pick one…</option>' + h2hOpts(u.h2hB) + '</select></div></div>' +
     h2h + '</div>';
+  html += '<div class="scorecard-honesty"><strong>Ranks are earned by catch data.</strong><br>They can\u2019t be bought.</div>';
   box.innerHTML = html;
   var sub = $('scorecard-sub');
+  box.addEventListener('click', function (e) {
+    var b = e.target && e.target.closest ? e.target.closest('.sc-chip') : null;
+    if (b) openSponsorBio(b.getAttribute('data-sp'));
+  });
   if (sub) sub.textContent = seasonLabel + ' · ' + total + ' caught' + (u.species ? ' · ' + u.species : '') + '.';
   function segWire(id, key, attr) {
     var seg = $(id);
@@ -7092,6 +7156,10 @@ function wireUp() {
       h.addEventListener('click', function () { toggleSettingsSection(h.getAttribute('data-sec')); });
     })(secHeads[shi]);
   }
+
+  /* Q145: apply the saved pin scheme (default Earthy) and paint the picker. */
+  try { document.body.setAttribute('data-pinscheme', pinSchemeId()); } catch (e) {}
+  renderPinSchemeList();
 
   /* trap lines */
   $('btn-add-line').onclick = showAddLineModal;
