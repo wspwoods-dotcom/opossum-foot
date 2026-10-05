@@ -61,6 +61,13 @@ textarea{min-height:80px;resize:vertical}
   background:rgba(20,24,16,.9);padding:12px 20px;border-radius:var(--radius);
   border:1px solid var(--accent);display:none;text-align:center;font-size:.9em}
 .hint.show{display:block}
+/* --- Place bar (Opossum Foot pattern: drop, drag to fine-tune, confirm) --- */
+#placebar{position:absolute;z-index:30;left:16px;right:16px;bottom:calc(24px + env(safe-area-inset-bottom));
+  background:var(--sheet);border:1px solid var(--accent);border-radius:var(--radius);
+  padding:12px 16px;display:none;align-items:center;gap:12px;box-shadow:0 4px 20px rgba(0,0,0,.5)}
+#placebar.show{display:flex}
+#placebar span{flex:1;font-size:.9em;color:var(--ink)}
+#placebar .btn{flex:0 0 auto;padding:0 18px;min-height:48px}
 /* --- Splash screen --- */
 .leaflet-marker-icon{touch-action:none !important}
 #splash{position:absolute;inset:0;z-index:100;overflow:hidden;
@@ -156,6 +163,11 @@ textarea{min-height:80px;resize:vertical}
   <p>Spring Lake Park · Greene County, Iowa</p>
 </div>
 <div class="hint" id="hint">Tap the map to place the box</div>
+<div id="placebar">
+  <span>Drag the pin onto the exact spot.</span>
+  <button class="btn primary" id="btn-place-ok">Looks right</button>
+  <button class="btn" id="btn-place-x" aria-label="Cancel">✕</button>
+</div>
 <div class="statusbar" id="statusbar">
   <button class="chip on" data-s="all">All</button>
   <button class="chip" data-s="proposed"><span class="dot"></span>Proposed</button>
@@ -259,22 +271,52 @@ function updateStats(){
   el.textContent = `${boxes.length} box${boxes.length===1?'':'es'} · ${active} active`;
 }
 
-// --- Add box: tap + then tap map, drag pin to fine-tune ---
+// --- Add box: Opossum Foot pattern — drop, drag to fine-tune, confirm ---
+let tempMarker = null;
 document.getElementById('btn-add').onclick = ()=>{
   closeSheet();
+  cancelPlace();
   const hint = document.getElementById('hint');
   hint.textContent = 'Tap the map to drop the box';
   hint.classList.add('show');
   const placeOnce = (e)=>{
     hint.classList.remove('show');
     map.off('click', placeOnce);
-    const n = boxes.length + 1;
-    const b = { id:uid(), name:'Box '+n, lat:e.latlng.lat, lng:e.latlng.lng,
-      status:'proposed', habitat:'', visits:[],
-      events:[{date:new Date().toISOString().slice(0,10), type:'proposed', note:'Location picked on map'}] };
-    boxes.push(b); save(); renderPins(); openBox(b.id);
+    // Drop a temporary draggable pin
+    const icon = L.divIcon({
+      className:'', html:`<div style="filter:drop-shadow(0 2px 6px rgba(0,0,0,.6))">${birdhouseSVG('#8a8a8a')}</div>`,
+      iconSize:[34,42], iconAnchor:[17,40]
+    });
+    tempMarker = L.marker(e.latlng, {icon, draggable:true}).addTo(map);
+    const iconEl = tempMarker.getElement();
+    tempMarker.on('dragstart', ()=>{
+      map.dragging.disable();
+      if(iconEl) iconEl.style.transform += ' translateY(-48px)';
+    });
+    tempMarker.on('dragend', ()=>{
+      map.dragging.enable();
+      if(iconEl) iconEl.style.transform = iconEl.style.transform.replace(' translateY(-48px)','');
+    });
+    document.getElementById('placebar').classList.add('show');
   };
   map.on('click', placeOnce);
+};
+function cancelPlace(){
+  if(tempMarker){ map.removeLayer(tempMarker); tempMarker = null; }
+  document.getElementById('placebar').classList.remove('show');
+  document.getElementById('hint').classList.remove('show');
+}
+document.getElementById('btn-place-x').onclick = cancelPlace;
+document.getElementById('btn-place-ok').onclick = ()=>{
+  if(!tempMarker) return;
+  const ll = tempMarker.getLatLng();
+  const n = boxes.length + 1;
+  const b = { id:uid(), name:'Box '+n, lat:ll.lat, lng:ll.lng,
+    status:'proposed', habitat:'', visits:[],
+    events:[{date:new Date().toISOString().slice(0,10), type:'proposed', note:'Location picked on map'}] };
+  boxes.push(b); save();
+  cancelPlace();
+  renderPins(); openBox(b.id);
 };
 
 // --- Sheet ---
