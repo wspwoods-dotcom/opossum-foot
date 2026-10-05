@@ -85,7 +85,7 @@ textarea{min-height:80px;resize:vertical}
 <body>
 <div id="map"></div>
 <div class="topbar">
-  <h1>🪺 Bluebird Box Tracker</h1>
+  <h1><svg width="22" height="27" viewBox="0 0 34 42" style="vertical-align:-4px" xmlns="http://www.w3.org/2000/svg"><polygon points="17,1 32,11 2,11" fill="#d19a2f"/><rect x="5" y="11" width="24" height="21" rx="2" fill="#7fa650" stroke="#f2ead8" stroke-width="2"/><circle cx="17" cy="20" r="5" fill="#141810"/><rect x="14" y="32" width="6" height="9" fill="#6b5426"/></svg> Bluebird Box Tracker</h1>
   <p>Spring Lake Park · Greene County, Iowa</p>
 </div>
 <div class="hint" id="hint">Tap the map to place the box</div>
@@ -148,12 +148,21 @@ const markers = {};
 function pinColor(status){
   return status==='active' ? '#7fa650' : status==='placed' ? '#5b8dd9' : '#8a8a8a';
 }
+function birdhouseSVG(color){
+  return `<svg width="34" height="42" viewBox="0 0 34 42" xmlns="http://www.w3.org/2000/svg">`
+    + `<polygon points="17,1 32,11 2,11" fill="#d19a2f" stroke="#f2ead8" stroke-width="1.5"/>`
+    + `<rect x="5" y="11" width="24" height="21" rx="2" fill="${color}" stroke="#f2ead8" stroke-width="2"/>`
+    + `<circle cx="17" cy="20" r="5" fill="#141810"/>`
+    + `<rect x="14.5" y="26.5" width="5" height="3.5" rx="1" fill="#d19a2f"/>`
+    + `<rect x="14" y="32" width="6" height="9" fill="#6b5426"/>`
+    + `</svg>`;
+}
 function renderPins(){
   Object.values(markers).forEach(m=>map.removeLayer(m));
   boxes.filter(b=>statusFilter==='all'||b.status===statusFilter).forEach(b=>{
     const icon = L.divIcon({
-      className:'', html:`<div style="width:28px;height:28px;border-radius:50%;background:${pinColor(b.status)};border:3px solid #f2ead8;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 2px 8px rgba(0,0,0,.5)">🪺</div>`,
-      iconSize:[28,28], iconAnchor:[14,14]
+      className:'', html:`<div style="filter:drop-shadow(0 2px 6px rgba(0,0,0,.6))">${birdhouseSVG(pinColor(b.status))}</div>`,
+      iconSize:[34,42], iconAnchor:[17,40]
     });
     const m = L.marker([b.lat, b.lng], {icon, draggable:true}).addTo(map);
     m.on('dragend', ()=>{ b.lat = m.getLatLng().lat; b.lng = m.getLatLng().lng; save(); });
@@ -213,7 +222,7 @@ function openBox(id){
   [...b.visits].reverse().forEach((v,i)=>{
     html += `<div class="visit">
       <div class="vhead">${esc(v.date)} — ${esc(v.observer)}</div>
-      <div class="vmeta">${esc(v.species)} · 🥚 ${v.eggs} · 🐣 ${v.young} · 🕊️ ${v.fledged}${v.invasive!=='none'?' · ⚠️ '+esc(v.invasive):''}</div>
+      <div class="vmeta">${esc(v.species)} · Eggs ${v.eggs} · Young ${v.young} · Fledged ${v.fledged}${v.invasive!=='none'?' · ⚠ '+esc(v.invasive):''}</div>
       ${v.notes?`<div class="vnotes">${esc(v.notes)}</div>`:''}
     </div>`;
   });
