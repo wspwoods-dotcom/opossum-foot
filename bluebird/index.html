@@ -195,14 +195,16 @@ const sheet = document.getElementById('sheet');
 function openSheet(){ sheet.classList.add('open'); }
 function closeSheet(){ sheet.classList.remove('open'); selectedId=null; }
 
-function openBox(id){
+function openBox(id, tab){
   selectedId = id;
   const b = boxes.find(x=>x.id===id);
   if(!b) return;
+  if(!b.events) b.events = [];
+  tab = tab || 'checks';
   document.getElementById('sheet-title').innerHTML =
     `${esc(b.name)} <span class="badge ${b.status}">${b.status}</span>`;
   document.getElementById('sheet-sub').textContent =
-    `${b.lat.toFixed(5)}, ${b.lng.toFixed(5)} · ${b.visits.length} visit${b.visits.length===1?'':'s'} · drag pin to move`;
+    `${b.lat.toFixed(5)}, ${b.lng.toFixed(5)}`;
 
   let html = `
     <label>Box name</label>
@@ -215,30 +217,94 @@ function openBox(id){
     </select>
     <label>Habitat notes (what's around the box?)</label>
     <textarea id="f-habitat" placeholder="e.g. Open mowed field, scattered oaks 30 yds east, near lake trail">${esc(b.habitat)}</textarea>
-    <h3 style="margin:20px 0 4px">Nest checks</h3>`;
-
-  if(!b.visits.length) html += `<p style="color:var(--faint)">No checks yet. Tap "+ Log check" after visiting the box.</p>`;
-
-  [...b.visits].reverse().forEach((v,i)=>{
-    html += `<div class="visit">
-      <div class="vhead">${esc(v.date)} — ${esc(v.observer)}</div>
-      <div class="vmeta">${esc(v.species)} · Eggs ${v.eggs} · Young ${v.young} · Fledged ${v.fledged}${v.invasive!=='none'?' · ⚠ '+esc(v.invasive):''}</div>
-      ${v.notes?`<div class="vnotes">${esc(v.notes)}</div>`:''}
+    <div class="row" style="margin-top:16px">
+      <button class="btn${tab==='checks'?' primary':''}" onclick="openBox(selectedId,'checks')">Nest checks</button>
+      <button class="btn${tab==='history'?' primary':''}" onclick="openBox(selectedId,'history')">Box history</button>
     </div>`;
-  });
+
+  if(tab==='checks'){
+    html += `<h3 style="margin:16px 0 4px">Nest checks <span style="color:var(--faint);font-weight:normal;font-size:.8em">— science data</span></h3>`;
+    if(!b.visits.length) html += `<p style="color:var(--faint)">No checks yet. Tap "+ Log check" after visiting the box.</p>`;
+    [...b.visits].reverse().forEach((v)=>{
+      html += `<div class="visit">
+        <div class="vhead">${esc(v.date)} — ${esc(v.observer)}</div>
+        <div class="vmeta">${esc(v.species)} · Eggs ${v.eggs} · Young ${v.young} · Fledged ${v.fledged}${v.invasive!=='none'?' · ⚠ '+esc(v.invasive):''}</div>
+        ${v.notes?`<div class="vnotes">${esc(v.notes)}</div>`:''}
+      </div>`;
+    });
+  } else {
+    html += `<h3 style="margin:16px 0 4px">Box history <span style="color:var(--faint);font-weight:normal;font-size:.8em">— maintenance log</span></h3>`;
+    if(!b.events.length) html += `<p style="color:var(--faint)">Nothing logged yet. Tap "+ Log event" to record a repair, cleaning, move, etc.</p>`;
+    [...b.events].reverse().forEach((ev)=>{
+      html += `<div class="visit">
+        <div class="vhead">${esc(ev.date)} — ${esc(eventLabel(ev.type))}</div>
+        ${ev.note?`<div class="vnotes">${esc(ev.note)}</div>`:''}
+      </div>`;
+    });
+  }
 
   document.getElementById('sheet-body').innerHTML = html + `
     <button class="btn danger" style="margin-top:20px" onclick="deleteBox()">Delete this box</button>`;
   document.getElementById('sheet-foot').innerHTML = `
     <button class="btn" onclick="closeSheet()">Close</button>
-    <button class="btn" onclick="startMove()">📍 Move pin</button>
-    <button class="btn primary" onclick="openVisit()">+ Log check</button>`;
+    <button class="btn" onclick="startMove()">Move pin</button>
+    ${tab==='checks'
+      ? `<button class="btn primary" onclick="openVisit()">+ Log check</button>`
+      : `<button class="btn primary" onclick="openEvent()">+ Log event</button>`}`;
   openSheet();
 
   // Save name/status/habitat on change
   document.getElementById('f-name').onchange = e=>{ b.name=e.target.value; save(); renderPins(); };
-  document.getElementById('f-status').onchange = e=>{ b.status=e.target.value; save(); renderPins(); openBox(id); };
+  document.getElementById('f-status').onchange = e=>{ b.status=e.target.value; save(); renderPins(); openBox(id, tab); };
   document.getElementById('f-habitat').onchange = e=>{ b.habitat=e.target.value; save(); };
+}
+
+function eventLabel(t){
+  return {installed:'Box installed', proposed:'Location proposed', moved:'Box moved',
+    cleaned:'Box cleaned', repaired:'Box repaired', destroyed:'Box destroyed',
+    note:'Note'}[t] || t;
+}
+function logEvent(boxId, type, note){
+  const b = boxes.find(x=>x.id===boxId);
+  if(!b) return;
+  if(!b.events) b.events = [];
+  b.events.push({date:new Date().toISOString().slice(0,10), type, note:note||''});
+  save();
+}
+
+function openEvent(){
+  const b = boxes.find(x=>x.id===selectedId);
+  const today = new Date().toISOString().slice(0,10);
+  document.getElementById('sheet-title').textContent = 'Log box event — ' + b.name;
+  document.getElementById('sheet-sub').textContent = 'Maintenance and activity log (separate from science data)';
+  document.getElementById('sheet-body').innerHTML = `
+    <label>Date</label><input type="date" id="e-date" value="${today}">
+    <label>Event type</label>
+    <select id="e-type">
+      <option value="installed">Box installed</option>
+      <option value="cleaned">Box cleaned out</option>
+      <option value="repaired">Box repaired</option>
+      <option value="moved">Box moved</option>
+      <option value="destroyed">Box destroyed / lost</option>
+      <option value="note">Note</option>
+    </select>
+    <label>Details</label>
+    <textarea id="e-note" placeholder="What was done?"></textarea>`;
+  document.getElementById('sheet-foot').innerHTML = `
+    <button class="btn" onclick="openBox(selectedId,'history')">Back</button>
+    <button class="btn primary" onclick="saveEvent()">Save event</button>`;
+  openSheet();
+}
+
+function saveEvent(){
+  const b = boxes.find(x=>x.id===selectedId);
+  if(!b.events) b.events = [];
+  b.events.push({
+    date: document.getElementById('e-date').value,
+    type: document.getElementById('e-type').value,
+    note: document.getElementById('e-note').value
+  });
+  save(); openBox(b.id, 'history');
 }
 
 function openVisit(){
@@ -319,7 +385,8 @@ function endMove(commit){
     const c = map.getCenter();
     const n = boxes.length + 1;
     const b = { id:uid(), name:'Box '+n, lat:c.lat, lng:c.lng,
-      status:'proposed', habitat:'', visits:[] };
+      status:'proposed', habitat:'', visits:[],
+      events:[{date:new Date().toISOString().slice(0,10), type:'proposed', note:'Location picked on map'}] };
     boxes.push(b); save(); renderPins();
     placingNew = false;
     document.getElementById('crosshair').classList.remove('show');
@@ -338,9 +405,13 @@ function endMove(commit){
   const b = boxes.find(x=>x.id===movingId);
   if(commit && b){
     const c = map.getCenter();
+    const oldLat = b.lat.toFixed(5), oldLng = b.lng.toFixed(5);
     b.lat = c.lat; b.lng = c.lng;
     // Field move = this box is now real
     if(b.status==='proposed') b.status='placed';
+    if(!b.events) b.events = [];
+    b.events.push({date:new Date().toISOString().slice(0,10), type:'moved',
+      note:`Pin moved from ${oldLat}, ${oldLng} to ${c.lat.toFixed(5)}, ${c.lng.toFixed(5)}`});
     save(); renderPins();
   }
   movingId = null;
@@ -352,30 +423,43 @@ function endMove(commit){
 document.getElementById('btn-move-set').onclick = ()=>endMove(true);
 document.getElementById('btn-move-cancel').onclick = ()=>endMove(false);
 
-// --- Export ---
+// --- Export: two separate data subsets ---
 document.getElementById('btn-export').onclick = ()=>{
-  const rows = ['Box,Lat,Lng,Status,Habitat,Date,Observer,Species,Eggs,Young,Fledged,Invasive,Notes'];
+  const q = s=>'"'+(s||'').replace(/"/g,'""')+'"';
+  const today = new Date().toISOString().slice(0,10);
+
+  // Subset 1: science data (nest checks)
+  const sci = ['Box,Lat,Lng,Status,Habitat,Date,Observer,Species,Eggs,Young,Fledged,Invasive,Notes'];
   boxes.forEach(b=>{
     if(!b.visits.length){
-      rows.push([b.name,b.lat.toFixed(5),b.lng.toFixed(5),b.status,'"'+b.habitat.replace(/"/g,'""')+'"','','','','','','','',''].join(','));
+      sci.push([b.name,b.lat.toFixed(5),b.lng.toFixed(5),b.status,q(b.habitat),'','','','','','','',''].join(','));
     } else b.visits.forEach(v=>{
-      rows.push([b.name,b.lat.toFixed(5),b.lng.toFixed(5),b.status,'"'+b.habitat.replace(/"/g,'""')+'"',
-        v.date,'"'+v.observer.replace(/"/g,'""')+'"','"'+v.species+'"',v.eggs,v.young,v.fledged,v.invasive,
-        '"'+(v.notes||'').replace(/"/g,'""')+'"'].join(','));
+      sci.push([b.name,b.lat.toFixed(5),b.lng.toFixed(5),b.status,q(b.habitat),
+        v.date,q(v.observer),q(v.species),v.eggs,v.young,v.fledged,v.invasive,q(v.notes)].join(','));
     });
   });
-  const blob = new Blob([rows.join('\n')], {type:'text/csv'});
+  download(new Blob([sci.join('\n')],{type:'text/csv'}), `bluebird-science-${today}.csv`);
+
+  // Subset 2: maintenance / box history
+  const maint = ['Box,Lat,Lng,Status,Date,Event,Details'];
+  boxes.forEach(b=>{
+    (b.events||[]).forEach(ev=>{
+      maint.push([b.name,b.lat.toFixed(5),b.lng.toFixed(5),b.status,ev.date,eventLabel(ev.type),q(ev.note)].join(','));
+    });
+  });
+  setTimeout(()=>download(new Blob([maint.join('\n')],{type:'text/csv'}), `bluebird-maintenance-${today}.csv`), 500);
+
+  // Full JSON backup
+  setTimeout(()=>download(new Blob([JSON.stringify({exported:new Date().toISOString(),boxes},null,2)],{type:'application/json'}),
+    'bluebird-boxes-backup.json'), 1000);
+};
+
+function download(blob, name){
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = 'bluebird-boxes-'+new Date().toISOString().slice(0,10)+'.csv';
+  a.download = name;
   a.click();
-
-  // Also offer JSON backup
-  const jb = new Blob([JSON.stringify({exported:new Date().toISOString(),boxes},null,2)],{type:'application/json'});
-  const ja = document.createElement('a');
-  ja.href = URL.createObjectURL(jb); ja.download='bluebird-boxes-backup.json';
-  setTimeout(()=>ja.click(), 500);
-};
+}
 
 function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
