@@ -86,6 +86,8 @@ ol.rotlist li.me{font-weight:bold;color:var(--gold)}
 /* Opossum Foot Sponsor Rotation Engine — pure logic, no DOM.
  * Encodes every rotation rule Tanner settled on 2026-10-04:
  *  - Tiers 1-3 rotate (shared) or run exclusive; Tier 4 exclusive only, never rotates
+ *  - Tier 4 also exclusively owns the MAP BANNER for its whole term. Tier 3
+ *    never touches the map — its headline is the Scorecard + Totals.
  *  - Rotation starts the first Monday on/after the first shared payment, swaps Mondays
  *  - Max 4 sponsors per rotation; payment order = queue order
  *  - Terms strictly 6 or 12 months, paid upfront
@@ -195,6 +197,55 @@ ol.rotlist li.me{font-weight:bold;color:var(--gold)}
     var weekIndex = Math.round((W.getTime() - anchor.getTime()) / (7 * DAY));
     if (weekIndex < 0) return { kind: 'open', sponsor: null, rotation: active, weekIndex: weekIndex };
     return { kind: 'shared', sponsor: active[weekIndex % active.length], rotation: active, weekIndex: weekIndex };
+  }
+
+  /**
+   * Turf map: each advertising placement belongs to exactly one tier.
+   * Higher tiers never share a lower tier's turf — but an EMPTY spot gets
+   * backfilled (free) by the nearest upper tier with a live sponsor, yielding
+   * instantly when the owning tier sells it. Map and splash never backfill:
+   * they are the title sponsor's alone.
+   */
+  var PLACEMENTS = {
+    history:  { tier: 2, backfill: true,  label: 'History tab' },
+    settings: { tier: 3, backfill: true,  label: 'Settings tab' },
+    scorecard:{ tier: 3, backfill: true,  label: 'Scorecard tab' },
+    totals:   { tier: 3, backfill: true,  label: 'Totals tab' },
+    map:      { tier: 4, backfill: false, label: 'Map banner' },
+    splash:   { tier: 4, backfill: false, label: 'Splash screen' }
+  };
+
+  /**
+   * Who is actually on a placement in the week starting weekMondayISO.
+   * Returns { holder, source, tier } where source is 'owner' | 'backfill' | 'open'.
+   */
+  function placementLive(placement, weekMondayISO, state) {
+    var p = PLACEMENTS[placement];
+    if (!p) return null;
+    var own = liveForWeek(p.tier, weekMondayISO, state);
+    if (own.sponsor) return { holder: own.sponsor, source: 'owner', tier: p.tier };
+    if (!p.backfill) return { holder: null, source: 'open', tier: p.tier };
+    for (var t = p.tier + 1; t <= 4; t++) {
+      var up = liveForWeek(t, weekMondayISO, state);
+      if (up.sponsor) return { holder: up.sponsor, source: 'backfill', tier: t };
+    }
+    return { holder: null, source: 'open', tier: p.tier };
+  }
+
+  /**
+   * Who owns the MAP BANNER in the week starting weekMondayISO.
+   * Tier 4-only: the active title sponsor owns it exclusively for their whole
+   * term; otherwise the banner is unsold (OPEN). Tier 3 never touches the map.
+   * Returns { holder, source } where source is 'title' | 'open'.
+   */
+  function mapBannerForWeek(weekMondayISO, state) {
+    var W = parseISO(weekMondayISO);
+    var title = null;
+    (state.sponsors || []).forEach(function (s) {
+      if (s.tier === 4 && s.plan === 'exclusive' && isActive(s, W)) title = s;
+    });
+    if (title) return { holder: title, source: 'title' };
+    return { holder: null, source: 'open' };
   }
 
   /**
@@ -320,7 +371,8 @@ ol.rotlist li.me{font-weight:bold;color:var(--gold)}
     parseISO: parseISO, toISO: toISO, mondayOf: mondayOf, nextMondayOnOrAfter: nextMondayOnOrAfter, addDays: addDays, addMonths: addMonths,
     TIER_NAMES: TIER_NAMES, PRICES: PRICES, priceFor: priceFor,
     termEnd: termEnd, isActive: isActive, rotationOrder: rotationOrder,
-    liveForWeek: liveForWeek, validateAdd: validateAdd, upgradeQuote: upgradeQuote,
+    liveForWeek: liveForWeek, mapBannerForWeek: mapBannerForWeek, placementLive: placementLive, PLACEMENTS: PLACEMENTS,
+    validateAdd: validateAdd, upgradeQuote: upgradeQuote,
     availability: availability, weeksLive: weeksLive, isPeakMonth: isPeakMonth
   };
 });
@@ -420,6 +472,33 @@ ol.rotlist li.me{font-weight:bold;color:var(--gold)}
         inner += '<div class="term">Term ends ' + fmtD(E.toISO(E.termEnd(s))) + ' (' + daysLeft(s) + ' days left)</div>';
       }
       h += '<div class="card"><div class="tier">' + E.TIER_NAMES[tier] + '</div>' + inner + '</div>';
+    });
+    h += '</div>';
+
+    // map banner ownership this week (Tier 4-only)
+    var mb = E.mapBannerForWeek(mon, state);
+    var mbLine;
+    if (mb.source === 'title') {
+      mbLine = '<div class="mapbanner title"><b>Map banner:</b> <span class="dot" style="background:' + colorFor(mb.holder) + '"></span>' + esc(mb.holder.name) + ' <span class="plan">title sponsor — exclusive for the whole term</span></div>';
+    } else {
+      mbLine = '<div class="mapbanner open"><b>Map banner:</b> OPEN — Tier 4-only placement, no title sponsor live</div>';
+    }
+    h += mbLine;
+
+    // placements: who is actually on each screen this week (turf + backfill)
+    h += '<h2>Placements <span class="wk">who is on each screen this week</span></h2><div class="cards">';
+    Object.keys(E.PLACEMENTS).forEach(function (pk) {
+      var pl = E.PLACEMENTS[pk];
+      var r = E.placementLive(pk, mon, state);
+      var inner;
+      if (r.source === 'owner') {
+        inner = '<div class="live"><span class="dot" style="background:' + colorFor(r.holder) + '"></span><b>' + esc(r.holder.name) + '</b><span class="plan">Tier ' + r.tier + ' turf</span></div>';
+      } else if (r.source === 'backfill') {
+        inner = '<div class="live"><span class="dot" style="background:' + colorFor(r.holder) + '"></span><b>' + esc(r.holder.name) + '</b><span class="plan">backfill · Tier ' + r.tier + ' · free</span></div>';
+      } else {
+        inner = '<div class="live open">OPEN — unsold this week</div>';
+      }
+      h += '<div class="card"><div class="tier">' + pl.label + ' <span class="quiet">(Tier ' + pl.tier + ' turf)</span></div>' + inner + '</div>';
     });
     h += '</div>';
 
@@ -625,11 +704,19 @@ ol.rotlist li.me{font-weight:bold;color:var(--gold)}
       var pE = E.priceFor(tier, 'exclusive', 12, false), pE6 = E.priceFor(tier, 'exclusive', 6, false);
       var pF = E.priceFor(tier, 'exclusive', 12, true);
       h += '<div class="card bigcard"><div class="tier">' + E.TIER_NAMES[tier] + '</div>';
+      var turfNote = {
+        1: 'Your products in the New/Edit Set dropdowns, with your company bio.',
+        2: 'Your tab: History — badges + banner, your turf alone. Plus per-product bios and website tap-through.',
+        3: 'Your tabs: Settings, Scorecard, Totals — badges + banners, your turf alone. Backfill: empty lower-tier spots get filled by you, free.',
+        4: 'Splash "Presented by" + exclusive map banner. Backfill: empty lower-tier spots get filled by you, free.'
+      }[tier];
+      h += '<p>' + turfNote + '</p>';
       if (av.mode === 'exclusive-booked') {
         h += '<div class="pstatus booked">BOOKED exclusive through ' + fmtD(av.exclusiveUntil) + '</div>';
         h += '<p class="quiet">Next opening: ' + fmtD(av.nextOpening) + '</p>';
       } else if (tier === 4) {
         h += '<div class="pstatus open">AVAILABLE — exclusive only, never rotates</div>';
+        h += '<p class="quiet">Owns the splash screen and the map banner on every map view for the whole term. Other tiers keep selling everywhere else.</p>';
       } else {
         h += '<div class="pstatus ' + (av.openSlots ? 'open' : 'full') + '">' +
           (av.openSlots ? av.openSlots + ' of 4 rotation slots OPEN' : 'Rotation FULL (4/4)') + '</div>';
@@ -652,14 +739,14 @@ ol.rotlist li.me{font-weight:bold;color:var(--gold)}
     var nx = function (n) { return E.toISO(E.addDays(mon, 7 * n)); };
     state = {
       sponsors: [
-        { id: uid(), name: 'Pine Hollow', tier: 1, plan: 'shared', termMonths: 12, start: ago(8), founding: true, createdAt: 1, notes: 'EXAMPLE' },
-        { id: uid(), name: 'Caven\u2019s', tier: 1, plan: 'shared', termMonths: 12, start: ago(6), founding: false, createdAt: 2, notes: 'EXAMPLE' },
-        { id: uid(), name: 'Dunlap Lures', tier: 1, plan: 'shared', termMonths: 6, start: ago(3), founding: false, createdAt: 3, notes: 'EXAMPLE' },
-        { id: uid(), name: 'NO-BS Lures', tier: 2, plan: 'shared', termMonths: 12, start: ago(5), founding: false, createdAt: 4, notes: 'EXAMPLE' },
-        { id: uid(), name: 'F&T Trading Post', tier: 3, plan: 'exclusive', termMonths: 12, start: ago(2), founding: false, createdAt: 5, notes: 'EXAMPLE' }
+        { id: uid(), name: 'Maker A', tier: 1, plan: 'shared', termMonths: 12, start: ago(8), founding: true, createdAt: 1, notes: 'EXAMPLE' },
+        { id: uid(), name: 'Maker B', tier: 1, plan: 'shared', termMonths: 12, start: ago(6), founding: false, createdAt: 2, notes: 'EXAMPLE' },
+        { id: uid(), name: 'Maker C', tier: 1, plan: 'shared', termMonths: 6, start: ago(3), founding: false, createdAt: 3, notes: 'EXAMPLE' },
+        { id: uid(), name: 'Maker D', tier: 2, plan: 'shared', termMonths: 12, start: ago(5), founding: false, createdAt: 4, notes: 'EXAMPLE' },
+        { id: uid(), name: 'Maker E', tier: 3, plan: 'exclusive', termMonths: 12, start: ago(2), founding: false, createdAt: 5, notes: 'EXAMPLE' }
       ],
       waitlist: [
-        { id: uid(), name: 'Exline River Bottom', tier: 1, plan: 'shared', termMonths: 6, founding: false, addedAt: todayISO(), notes: 'EXAMPLE' }
+        { id: uid(), name: 'Maker F', tier: 1, plan: 'shared', termMonths: 6, founding: false, addedAt: todayISO(), notes: 'EXAMPLE' }
       ],
       rotationAnchor: { 1: ago(8), 2: ago(5) },
       seq: 100
