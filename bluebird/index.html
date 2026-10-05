@@ -61,6 +61,13 @@ textarea{min-height:80px;resize:vertical}
   background:rgba(20,24,16,.9);padding:12px 20px;border-radius:var(--radius);
   border:1px solid var(--accent);display:none;text-align:center;font-size:.9em}
 .hint.show{display:block}
+.crosshair{position:absolute;z-index:15;top:50%;left:50%;transform:translate(-50%,-50%);
+  display:none;pointer-events:none;font-size:40px;text-shadow:0 2px 8px rgba(0,0,0,.8)}
+.crosshair.show{display:block}
+.movebar{position:absolute;z-index:16;left:16px;right:16px;bottom:calc(24px + env(safe-area-inset-bottom));
+  display:none;gap:10px}
+.movebar.show{display:flex}
+.movebar .btn{min-height:56px;font-size:1.05em}
 .stats{position:absolute;z-index:10;bottom:calc(100px + env(safe-area-inset-bottom));left:16px;
   background:rgba(20,24,16,.85);padding:8px 14px;border-radius:20px;font-size:.8em;color:var(--muted);
   border:1px solid var(--line)}
@@ -82,6 +89,11 @@ textarea{min-height:80px;resize:vertical}
   <p>Spring Lake Park · Greene County, Iowa</p>
 </div>
 <div class="hint" id="hint">Tap the map to place the box</div>
+<div class="crosshair" id="crosshair">✛</div>
+<div class="movebar" id="movebar">
+  <button class="btn" id="btn-move-cancel">Cancel</button>
+  <button class="btn primary" id="btn-move-set">Set here</button>
+</div>
 <div class="statusbar" id="statusbar">
   <button class="chip on" data-s="all">All</button>
   <button class="chip" data-s="proposed"><span class="dot"></span>Proposed</button>
@@ -106,7 +118,6 @@ textarea{min-height:80px;resize:vertical}
 // --- Data ---
 const KEY = 'bluebird-boxes-v1';
 let boxes = JSON.parse(localStorage.getItem(KEY) || '[]');
-let placing = false;
 let selectedId = null;
 let statusFilter = 'all';
 
@@ -146,7 +157,7 @@ function renderPins(){
     });
     const m = L.marker([b.lat, b.lng], {icon, draggable:true}).addTo(map);
     m.on('dragend', ()=>{ b.lat = m.getLatLng().lat; b.lng = m.getLatLng().lng; save(); });
-    m.on('click', ()=>{ if(!placing) openBox(b.id); });
+    m.on('click', ()=>{ if(!placingNew && !movingId) openBox(b.id); });
     markers[b.id] = m;
   });
   updateStats();
@@ -157,20 +168,18 @@ function updateStats(){
   el.textContent = `${boxes.length} box${boxes.length===1?'':'es'} · ${active} active`;
 }
 
-// --- Add box ---
+// --- Add box (crosshair placement) ---
+let placingNew = false;
 document.getElementById('btn-add').onclick = ()=>{
-  placing = true;
-  document.getElementById('hint').classList.add('show');
+  placingNew = true;
+  movingId = null;
+  closeSheet();
+  document.getElementById('crosshair').classList.add('show');
+  document.getElementById('movebar').classList.add('show');
+  const hint = document.getElementById('hint');
+  hint.textContent = 'Drag the map to center the crosshairs where the box should go';
+  hint.classList.add('show');
 };
-map.on('click', e=>{
-  if(!placing) return;
-  placing = false;
-  document.getElementById('hint').classList.remove('show');
-  const n = boxes.length + 1;
-  const b = { id:uid(), name:'Box '+n, lat:e.latlng.lat, lng:e.latlng.lng,
-    status:'proposed', habitat:'', visits:[] };
-  boxes.push(b); save(); renderPins(); openBox(b.id);
-});
 
 // --- Sheet ---
 const sheet = document.getElementById('sheet');
@@ -209,10 +218,11 @@ function openBox(id){
     </div>`;
   });
 
-  document.getElementById('sheet-body').innerHTML = html;
+  document.getElementById('sheet-body').innerHTML = html + `
+    <button class="btn danger" style="margin-top:20px" onclick="deleteBox()">Delete this box</button>`;
   document.getElementById('sheet-foot').innerHTML = `
     <button class="btn" onclick="closeSheet()">Close</button>
-    <button class="btn" onclick="deleteBox()">Delete</button>
+    <button class="btn" onclick="startMove()">📍 Move pin</button>
     <button class="btn primary" onclick="openVisit()">+ Log check</button>`;
   openSheet();
 
@@ -280,6 +290,58 @@ function deleteBox(){
   boxes = boxes.filter(x=>x.id!==selectedId);
   save(); renderPins(); closeSheet();
 }
+
+// --- Move pin (crosshair precision mode) ---
+let movingId = null;
+function startMove(){
+  movingId = selectedId;
+  const b = boxes.find(x=>x.id===movingId);
+  if(!b) return;
+  closeSheet();
+  map.setView([b.lat, b.lng], Math.max(map.getZoom(), 17), {animate:true});
+  document.getElementById('crosshair').classList.add('show');
+  document.getElementById('movebar').classList.add('show');
+  const hint = document.getElementById('hint');
+  hint.textContent = 'Drag the map to center the crosshairs on the exact spot';
+  hint.classList.add('show');
+}
+function endMove(commit){
+  if(placingNew && commit){
+    const c = map.getCenter();
+    const n = boxes.length + 1;
+    const b = { id:uid(), name:'Box '+n, lat:c.lat, lng:c.lng,
+      status:'proposed', habitat:'', visits:[] };
+    boxes.push(b); save(); renderPins();
+    placingNew = false;
+    document.getElementById('crosshair').classList.remove('show');
+    document.getElementById('movebar').classList.remove('show');
+    document.getElementById('hint').classList.remove('show');
+    openBox(b.id);
+    return;
+  }
+  if(placingNew && !commit){
+    placingNew = false;
+    document.getElementById('crosshair').classList.remove('show');
+    document.getElementById('movebar').classList.remove('show');
+    document.getElementById('hint').classList.remove('show');
+    return;
+  }
+  const b = boxes.find(x=>x.id===movingId);
+  if(commit && b){
+    const c = map.getCenter();
+    b.lat = c.lat; b.lng = c.lng;
+    // Field move = this box is now real
+    if(b.status==='proposed') b.status='placed';
+    save(); renderPins();
+  }
+  movingId = null;
+  document.getElementById('crosshair').classList.remove('show');
+  document.getElementById('movebar').classList.remove('show');
+  document.getElementById('hint').classList.remove('show');
+  if(b) openBox(b.id);
+}
+document.getElementById('btn-move-set').onclick = ()=>endMove(true);
+document.getElementById('btn-move-cancel').onclick = ()=>endMove(false);
 
 // --- Export ---
 document.getElementById('btn-export').onclick = ()=>{
