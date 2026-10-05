@@ -154,9 +154,14 @@ function renderPins(){
     });
     const m = L.marker([b.lat, b.lng], {icon, draggable:true}).addTo(map);
     const iconEl = m.getElement();
-    // Lift the birdhouse above the finger while dragging so you can see the spot
-    m.on('dragstart', ()=>{ if(iconEl) iconEl.style.transform += ' translateY(-48px)'; });
+    // One-finger pin drag: lock the map the moment a finger lands on a pin,
+    // so the pin gets the drag instead of the map panning underneath.
+    m.on('dragstart', ()=>{
+      map.dragging.disable();
+      if(iconEl) iconEl.style.transform += ' translateY(-48px)';
+    });
     m.on('dragend', ()=>{
+      map.dragging.enable();
       if(iconEl) iconEl.style.transform = iconEl.style.transform.replace(' translateY(-48px)','');
       const oldLat = b.lat.toFixed(5), oldLng = b.lng.toFixed(5);
       b.lat = m.getLatLng().lat; b.lng = m.getLatLng().lng;
