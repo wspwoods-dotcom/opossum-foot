@@ -61,13 +61,6 @@ textarea{min-height:80px;resize:vertical}
   background:rgba(20,24,16,.9);padding:12px 20px;border-radius:var(--radius);
   border:1px solid var(--accent);display:none;text-align:center;font-size:.9em}
 .hint.show{display:block}
-.crosshair{position:absolute;z-index:15;top:50%;left:50%;transform:translate(-50%,-50%);
-  display:none;pointer-events:none;font-size:40px;text-shadow:0 2px 8px rgba(0,0,0,.8)}
-.crosshair.show{display:block}
-.movebar{position:absolute;z-index:16;left:16px;right:16px;bottom:calc(24px + env(safe-area-inset-bottom));
-  display:none;gap:10px}
-.movebar.show{display:flex}
-.movebar .btn{min-height:56px;font-size:1.05em}
 .stats{position:absolute;z-index:10;bottom:calc(100px + env(safe-area-inset-bottom));left:16px;
   background:rgba(20,24,16,.85);padding:8px 14px;border-radius:20px;font-size:.8em;color:var(--muted);
   border:1px solid var(--line)}
@@ -89,11 +82,6 @@ textarea{min-height:80px;resize:vertical}
   <p>Spring Lake Park · Greene County, Iowa</p>
 </div>
 <div class="hint" id="hint">Tap the map to place the box</div>
-<div class="crosshair" id="crosshair">✛</div>
-<div class="movebar" id="movebar">
-  <button class="btn" id="btn-move-cancel">Cancel</button>
-  <button class="btn primary" id="btn-move-set">Set here</button>
-</div>
 <div class="statusbar" id="statusbar">
   <button class="chip on" data-s="all">All</button>
   <button class="chip" data-s="proposed"><span class="dot"></span>Proposed</button>
@@ -165,8 +153,23 @@ function renderPins(){
       iconSize:[34,42], iconAnchor:[17,40]
     });
     const m = L.marker([b.lat, b.lng], {icon, draggable:true}).addTo(map);
-    m.on('dragend', ()=>{ b.lat = m.getLatLng().lat; b.lng = m.getLatLng().lng; save(); });
-    m.on('click', ()=>{ if(!placingNew && !movingId) openBox(b.id); });
+    const iconEl = m.getElement();
+    // Lift the birdhouse above the finger while dragging so you can see the spot
+    m.on('dragstart', ()=>{ if(iconEl) iconEl.style.transform += ' translateY(-48px)'; });
+    m.on('dragend', ()=>{
+      if(iconEl) iconEl.style.transform = iconEl.style.transform.replace(' translateY(-48px)','');
+      const oldLat = b.lat.toFixed(5), oldLng = b.lng.toFixed(5);
+      b.lat = m.getLatLng().lat; b.lng = m.getLatLng().lng;
+      // A drag = a field move: log it, flip proposed -> placed
+      if(Math.abs(b.lat - parseFloat(oldLat)) > 0.00001 || Math.abs(b.lng - parseFloat(oldLng)) > 0.00001){
+        if(b.status==='proposed') b.status='placed';
+        if(!b.events) b.events = [];
+        b.events.push({date:new Date().toISOString().slice(0,10), type:'moved',
+          note:`Pin dragged from ${oldLat}, ${oldLng} to ${b.lat.toFixed(5)}, ${b.lng.toFixed(5)}`});
+      }
+      save(); renderPins();
+    });
+    m.on('click', ()=>openBox(b.id));
     markers[b.id] = m;
   });
   updateStats();
@@ -177,17 +180,22 @@ function updateStats(){
   el.textContent = `${boxes.length} box${boxes.length===1?'':'es'} · ${active} active`;
 }
 
-// --- Add box (crosshair placement) ---
-let placingNew = false;
+// --- Add box: tap + then tap map, drag pin to fine-tune ---
 document.getElementById('btn-add').onclick = ()=>{
-  placingNew = true;
-  movingId = null;
   closeSheet();
-  document.getElementById('crosshair').classList.add('show');
-  document.getElementById('movebar').classList.add('show');
   const hint = document.getElementById('hint');
-  hint.textContent = 'Drag the map to center the crosshairs where the box should go';
+  hint.textContent = 'Tap the map to drop the box';
   hint.classList.add('show');
+  const placeOnce = (e)=>{
+    hint.classList.remove('show');
+    map.off('click', placeOnce);
+    const n = boxes.length + 1;
+    const b = { id:uid(), name:'Box '+n, lat:e.latlng.lat, lng:e.latlng.lng,
+      status:'proposed', habitat:'', visits:[],
+      events:[{date:new Date().toISOString().slice(0,10), type:'proposed', note:'Location picked on map'}] };
+    boxes.push(b); save(); renderPins(); openBox(b.id);
+  };
+  map.on('click', placeOnce);
 };
 
 // --- Sheet ---
@@ -247,7 +255,6 @@ function openBox(id, tab){
     <button class="btn danger" style="margin-top:20px" onclick="deleteBox()">Delete this box</button>`;
   document.getElementById('sheet-foot').innerHTML = `
     <button class="btn" onclick="closeSheet()">Close</button>
-    <button class="btn" onclick="startMove()">Move pin</button>
     ${tab==='checks'
       ? `<button class="btn primary" onclick="openVisit()">+ Log check</button>`
       : `<button class="btn primary" onclick="openEvent()">+ Log event</button>`}`;
@@ -365,63 +372,6 @@ function deleteBox(){
   boxes = boxes.filter(x=>x.id!==selectedId);
   save(); renderPins(); closeSheet();
 }
-
-// --- Move pin (crosshair precision mode) ---
-let movingId = null;
-function startMove(){
-  movingId = selectedId;
-  const b = boxes.find(x=>x.id===movingId);
-  if(!b) return;
-  closeSheet();
-  map.setView([b.lat, b.lng], Math.max(map.getZoom(), 17), {animate:true});
-  document.getElementById('crosshair').classList.add('show');
-  document.getElementById('movebar').classList.add('show');
-  const hint = document.getElementById('hint');
-  hint.textContent = 'Drag the map to center the crosshairs on the exact spot';
-  hint.classList.add('show');
-}
-function endMove(commit){
-  if(placingNew && commit){
-    const c = map.getCenter();
-    const n = boxes.length + 1;
-    const b = { id:uid(), name:'Box '+n, lat:c.lat, lng:c.lng,
-      status:'proposed', habitat:'', visits:[],
-      events:[{date:new Date().toISOString().slice(0,10), type:'proposed', note:'Location picked on map'}] };
-    boxes.push(b); save(); renderPins();
-    placingNew = false;
-    document.getElementById('crosshair').classList.remove('show');
-    document.getElementById('movebar').classList.remove('show');
-    document.getElementById('hint').classList.remove('show');
-    openBox(b.id);
-    return;
-  }
-  if(placingNew && !commit){
-    placingNew = false;
-    document.getElementById('crosshair').classList.remove('show');
-    document.getElementById('movebar').classList.remove('show');
-    document.getElementById('hint').classList.remove('show');
-    return;
-  }
-  const b = boxes.find(x=>x.id===movingId);
-  if(commit && b){
-    const c = map.getCenter();
-    const oldLat = b.lat.toFixed(5), oldLng = b.lng.toFixed(5);
-    b.lat = c.lat; b.lng = c.lng;
-    // Field move = this box is now real
-    if(b.status==='proposed') b.status='placed';
-    if(!b.events) b.events = [];
-    b.events.push({date:new Date().toISOString().slice(0,10), type:'moved',
-      note:`Pin moved from ${oldLat}, ${oldLng} to ${c.lat.toFixed(5)}, ${c.lng.toFixed(5)}`});
-    save(); renderPins();
-  }
-  movingId = null;
-  document.getElementById('crosshair').classList.remove('show');
-  document.getElementById('movebar').classList.remove('show');
-  document.getElementById('hint').classList.remove('show');
-  if(b) openBox(b.id);
-}
-document.getElementById('btn-move-set').onclick = ()=>endMove(true);
-document.getElementById('btn-move-cancel').onclick = ()=>endMove(false);
 
 // --- Export: two separate data subsets ---
 document.getElementById('btn-export').onclick = ()=>{
