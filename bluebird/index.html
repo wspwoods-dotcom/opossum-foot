@@ -61,6 +61,60 @@ textarea{min-height:80px;resize:vertical}
   background:rgba(20,24,16,.9);padding:12px 20px;border-radius:var(--radius);
   border:1px solid var(--accent);display:none;text-align:center;font-size:.9em}
 .hint.show{display:block}
+/* --- Splash screen --- */
+#splash{position:absolute;inset:0;z-index:100;overflow:hidden;
+  background:linear-gradient(180deg,#2a4a6b 0%,#4a7a9b 35%,#8ab86a 62%,#5a8a3f 78%,#3d6b2a 100%);
+  transition:opacity .8s ease;cursor:pointer}
+#splash.gone{opacity:0;pointer-events:none}
+#splash .sun{position:absolute;top:8%;right:12%;width:90px;height:90px;border-radius:50%;
+  background:radial-gradient(circle,#ffe9a0 0%,#ffd24a 60%,#f0b429 100%);
+  box-shadow:0 0 60px 20px rgba(255,210,74,.45)}
+#splash .cloud{position:absolute;background:#f2ead8;border-radius:40px;opacity:.85}
+#splash .cloud.c1{top:12%;left:8%;width:110px;height:34px;animation:spdrift 26s linear infinite}
+#splash .cloud.c2{top:22%;left:55%;width:80px;height:26px;animation:spdrift 38s linear infinite}
+#splash .cloud.c1::before,#splash .cloud.c2::before{content:'';position:absolute;background:#f2ead8;border-radius:50%}
+#splash .cloud.c1::before{width:44px;height:44px;top:-20px;left:18px}
+#splash .cloud.c2::before{width:32px;height:32px;top:-14px;left:14px}
+@keyframes spdrift{from{transform:translateX(-30px)}to{transform:translateX(420px)}}
+#splash .ground{position:absolute;bottom:0;left:0;right:0;height:34%;
+  background:linear-gradient(180deg,#6aa04c 0%,#4a7d33 55%,#35611f 100%)}
+#splash .grass{position:absolute;bottom:0;width:100%;height:100%;pointer-events:none}
+#splash .birdhouse{position:absolute;bottom:24%;width:140px;text-align:center;z-index:3}
+#splash .birdhouse.bh1{left:8%}
+#splash .birdhouse.bh2{right:8%}
+#splash .birdhouse svg{filter:drop-shadow(0 6px 14px rgba(0,0,0,.45))}
+#splash .flyer{position:absolute;width:110px;z-index:5;filter:drop-shadow(0 4px 10px rgba(0,0,0,.4))}
+#splash .flyer img{width:100%;display:block}
+#splash .flyer.f1{animation:spfly1 3.2s ease-out forwards}
+#splash .flyer.f2{animation:spfly2 3.2s .9s ease-out forwards}
+@keyframes spfly1{
+  0%{left:-140px;top:6%;transform:rotate(-14deg) scale(.7);opacity:0}
+  12%{opacity:1}
+  55%{left:24%;top:28%;transform:rotate(6deg) scale(.9)}
+  80%{left:12%;top:42%;transform:rotate(-4deg) scale(.95)}
+  100%{left:8%;top:45%;transform:rotate(0) scale(.95);opacity:1}
+}
+@keyframes spfly2{
+  0%{right:-140px;top:2%;transform:rotate(14deg) scale(.7);opacity:0}
+  12%{opacity:1}
+  55%{right:26%;top:24%;transform:rotate(-6deg) scale(.9)}
+  80%{right:13%;top:38%;transform:rotate(4deg) scale(.95)}
+  100%{right:8%;top:41%;transform:rotate(0) scale(.95);opacity:1}
+}
+#splash .sptitle{position:absolute;bottom:6%;left:0;right:0;text-align:center;z-index:10;
+  opacity:0;animation:spfadeup 1.2s 3.4s ease-out forwards}
+@keyframes spfadeup{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+#splash .sptitle h1{color:#f2ead8;font-size:1.9em;text-shadow:0 2px 12px rgba(0,0,0,.7);margin:0 0 4px}
+#splash .sptitle p{color:#f2ead8;font-size:1em;text-shadow:0 1px 8px rgba(0,0,0,.7);opacity:.92;margin:0}
+#splash .bird{position:absolute;z-index:4;animation:spflit 9s ease-in-out infinite}
+@keyframes spflit{
+  0%,100%{transform:translate(0,0)}
+  25%{transform:translate(40px,-30px)}
+  50%{transform:translate(-30px,-55px)}
+  75%{transform:translate(25px,-20px)}
+}
+#splash .tap{position:absolute;bottom:1%;left:0;right:0;text-align:center;z-index:11;
+  color:#f2ead8;font-size:.75em;opacity:.6}
 .stats{position:absolute;z-index:10;bottom:calc(100px + env(safe-area-inset-bottom));left:16px;
   background:rgba(20,24,16,.85);padding:8px 14px;border-radius:20px;font-size:.8em;color:var(--muted);
   border:1px solid var(--line)}
@@ -76,6 +130,25 @@ textarea{min-height:80px;resize:vertical}
 </style>
 </head>
 <body>
+<div id="splash">
+  <div class="sun"></div>
+  <div class="cloud c1"></div><div class="cloud c2"></div>
+  <svg class="bird" style="top:18%;left:20%" width="34" height="22" viewBox="0 0 34 22"><ellipse cx="15" cy="12" rx="10" ry="6" fill="#5b8dd9"/><circle cx="24" cy="9" r="5" fill="#5b8dd9"/><circle cx="25.5" cy="8.5" r="1.2" fill="#141810"/><polygon points="29,9 34,10.5 29,12" fill="#d19a2f"/><ellipse cx="15" cy="15" rx="7" ry="3" fill="#c96a2f"/></svg>
+  <svg class="bird" style="top:30%;left:64%;animation-delay:3s" width="28" height="18" viewBox="0 0 34 22"><ellipse cx="15" cy="12" rx="10" ry="6" fill="#5b8dd9"/><circle cx="24" cy="9" r="5" fill="#5b8dd9"/><circle cx="25.5" cy="8.5" r="1.2" fill="#141810"/><polygon points="29,9 34,10.5 29,12" fill="#d19a2f"/><ellipse cx="15" cy="15" rx="7" ry="3" fill="#c96a2f"/></svg>
+  <svg class="bird" style="top:38%;left:8%;animation-delay:1.2s" width="26" height="17" viewBox="0 0 34 22"><ellipse cx="15" cy="12" rx="10" ry="6" fill="#5b8dd9"/><circle cx="24" cy="9" r="5" fill="#5b8dd9"/><circle cx="25.5" cy="8.5" r="1.2" fill="#141810"/><polygon points="29,9 34,10.5 29,12" fill="#d19a2f"/><ellipse cx="15" cy="15" rx="7" ry="3" fill="#c96a2f"/></svg>
+  <svg class="bird" style="top:44%;left:22%;animation-delay:2.1s" width="22" height="15" viewBox="0 0 34 22"><ellipse cx="15" cy="12" rx="10" ry="6" fill="#5b8dd9"/><circle cx="24" cy="9" r="5" fill="#5b8dd9"/><circle cx="25.5" cy="8.5" r="1.2" fill="#141810"/><polygon points="29,9 34,10.5 29,12" fill="#d19a2f"/><ellipse cx="15" cy="15" rx="7" ry="3" fill="#c96a2f"/></svg>
+  <svg class="bird" style="top:36%;left:30%;animation-delay:4s" width="24" height="16" viewBox="0 0 34 22"><ellipse cx="15" cy="12" rx="10" ry="6" fill="#5b8dd9"/><circle cx="24" cy="9" r="5" fill="#5b8dd9"/><circle cx="25.5" cy="8.5" r="1.2" fill="#141810"/><polygon points="29,9 34,10.5 29,12" fill="#d19a2f"/><ellipse cx="15" cy="15" rx="7" ry="3" fill="#c96a2f"/></svg>
+  <div class="flyer f1"><img src="logo/gcc-logo-nobg.png" alt="Greene County Conservation"></div>
+  <div class="flyer f2"><img src="logo/rams-logo-nobg.png" alt="Greene County Rams"></div>
+  <div class="birdhouse bh1"><svg width="120" height="150" viewBox="0 0 34 42" xmlns="http://www.w3.org/2000/svg"><polygon points="17,1 32,11 2,11" fill="#d19a2f" stroke="#f2ead8" stroke-width="1"/><rect x="5" y="11" width="24" height="21" rx="2" fill="#7fa650" stroke="#f2ead8" stroke-width="1.2"/><circle cx="17" cy="20" r="5" fill="#1a1408"/><rect x="14.5" y="26.5" width="5" height="3.5" rx="1" fill="#d19a2f"/><rect x="14" y="32" width="6" height="10" fill="#5a4322"/></svg></div>
+  <div class="birdhouse bh2"><svg width="120" height="150" viewBox="0 0 34 42" xmlns="http://www.w3.org/2000/svg"><polygon points="17,1 32,11 2,11" fill="#d19a2f" stroke="#f2ead8" stroke-width="1"/><rect x="5" y="11" width="24" height="21" rx="2" fill="#c0392b" stroke="#f2ead8" stroke-width="1.2"/><circle cx="17" cy="20" r="5" fill="#1a1408"/><rect x="14.5" y="26.5" width="5" height="3.5" rx="1" fill="#d19a2f"/><rect x="14" y="32" width="6" height="10" fill="#5a4322"/></svg></div>
+  <div class="ground">
+    <svg style="position:absolute;bottom:32%;left:0;width:100%;height:26%" viewBox="0 0 390 100" preserveAspectRatio="none"><g stroke="#3d6b2a" stroke-width="2.5" fill="none" opacity=".8"><path d="M30,100 Q32,70 28,45 M44,100 Q42,72 48,50 M58,100 Q60,68 56,42"/><path d="M150,100 Q152,70 148,45 M164,100 Q162,72 168,50"/><path d="M260,100 Q262,70 258,45 M274,100 Q272,72 278,50 M288,100 Q290,68 286,42"/><path d="M340,100 Q342,70 338,48 M354,100 Q352,72 358,52"/></g><g><circle cx="28" cy="42" r="7" fill="#b06a9e"/><circle cx="28" cy="42" r="2.5" fill="#7a3f66"/><circle cx="56" cy="39" r="7" fill="#b06a9e"/><circle cx="56" cy="39" r="2.5" fill="#7a3f66"/><circle cx="148" cy="42" r="7" fill="#c9a0d0"/><circle cx="148" cy="42" r="2.5" fill="#7a3f66"/><circle cx="278" cy="47" r="7" fill="#b06a9e"/><circle cx="278" cy="47" r="2.5" fill="#7a3f66"/><circle cx="338" cy="45" r="7" fill="#c9a0d0"/><circle cx="338" cy="45" r="2.5" fill="#7a3f66"/></g><g stroke="#8a6d3a" stroke-width="2" fill="none" opacity=".85"><path d="M100,100 L96,55 M100,100 L104,55 M100,100 L100,50"/><path d="M215,100 L211,58 M215,100 L219,58 M215,100 L215,52"/><path d="M315,100 L311,58 M315,100 L319,58 M315,100 L315,52"/></g></svg>
+    <svg class="grass" viewBox="0 0 390 200" preserveAspectRatio="none"><g stroke="#4a7d33" stroke-width="3" fill="none"><path d="M20,200 Q24,150 18,120 M34,200 Q30,160 38,130 M52,200 Q56,145 50,115"/><path d="M120,200 Q124,150 118,120 M136,200 Q132,160 140,130 M154,200 Q158,145 152,115"/><path d="M230,200 Q234,150 228,120 M246,200 Q242,160 250,130 M264,200 Q268,145 262,115"/><path d="M330,200 Q334,150 328,120 M346,200 Q342,160 350,130 M364,200 Q368,145 362,115"/></g><g fill="#e8e4d0"><circle cx="70" cy="150" r="5"/><circle cx="200" cy="160" r="5"/><circle cx="300" cy="145" r="5"/><circle cx="90" cy="170" r="4"/><circle cx="250" cy="175" r="4"/><circle cx="40" cy="165" r="4"/></g><g fill="#d19a2f"><circle cx="70" cy="150" r="2"/><circle cx="200" cy="160" r="2"/><circle cx="300" cy="145" r="2"/></g></svg>
+  </div>
+  <div class="sptitle"><h1>Bluebird Box Tracker</h1><p>Spring Lake Park · Greene County, Iowa</p></div>
+  <div class="tap">tap to continue</div>
+</div>
 <div id="map"></div>
 <div class="topbar">
   <h1><svg width="22" height="27" viewBox="0 0 34 42" style="vertical-align:-4px" xmlns="http://www.w3.org/2000/svg"><polygon points="17,1 32,11 2,11" fill="#d19a2f"/><rect x="5" y="11" width="24" height="21" rx="2" fill="#7fa650" stroke="#f2ead8" stroke-width="2"/><circle cx="17" cy="20" r="5" fill="#141810"/><rect x="14" y="32" width="6" height="9" fill="#6b5426"/></svg> Bluebird Box Tracker</h1>
@@ -417,6 +490,12 @@ function download(blob, name){
 }
 
 function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+// --- Splash: auto-dismiss after animation, tap to skip ---
+setTimeout(()=>document.getElementById('splash').classList.add('gone'), 6000);
+document.getElementById('splash').addEventListener('click', function(){
+  this.classList.add('gone');
+});
 
 renderPins();
 </script>
