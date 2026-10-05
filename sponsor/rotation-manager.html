@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sponsor Rotation Manager — Opossum Foot</title>
+<style>
+:root{--bg:#141310;--card:#1e1c17;--gold:#c9a227;--ink:#efe9dc;--dim:#a89e8a;--line:#3a352a;--red:#e07a5f;--green:#7fb069}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;padding:16px 14px 92px;line-height:1.45}
+header h1{margin:0 0 2px;font-size:22px;color:var(--gold)}
+.quiet{color:var(--dim);font-size:13px}
+h2{font-size:18px;margin:22px 0 8px;color:var(--gold)}
+h2 .wk{font-size:13px;color:var(--dim);font-weight:normal}
+h3{font-size:15px;margin:18px 0 8px}
+.draft{display:inline-block;background:#3a2f10;color:var(--gold);border:1px solid var(--gold);border-radius:6px;padding:3px 10px;font-size:12px;margin:4px 0 10px}
+.cards{display:grid;gap:10px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.tier{font-size:12px;color:var(--dim);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+.live{font-size:16px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.live.open{color:var(--dim)}
+.dot{width:12px;height:12px;border-radius:50%;display:inline-block;flex:none}
+.plan{font-size:12px;color:var(--dim);border:1px solid var(--line);border-radius:20px;padding:1px 8px}
+.rot{font-size:13px;color:var(--dim);margin-top:6px}
+.rot .me{color:var(--gold);font-weight:bold}
+.term{font-size:13px;color:var(--dim);margin-top:4px}
+.alerts{display:grid;gap:8px}
+.alert{background:var(--card);border:1px solid var(--gold);border-radius:10px;padding:10px 12px;font-size:14px}
+.alert.bad{border-color:var(--red)}
+.alert.ok{border-color:var(--green)}
+button{background:#2a261d;color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:9px 14px;font-size:14px;cursor:pointer}
+button.on{background:var(--gold);color:#141310;border-color:var(--gold);font-weight:bold}
+button.big{background:var(--gold);color:#141310;font-weight:bold;border:none;padding:12px 18px;margin:4px 4px 4px 0}
+button:disabled{opacity:.4}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+.pills button{padding:8px 14px}
+.calnav{display:flex;gap:8px;margin:10px 0}
+.month{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px;margin:12px 0}
+.month.peak{border-color:var(--gold)}
+.mhead{font-weight:bold;font-size:16px;margin-bottom:8px}
+.peakbadge{background:var(--gold);color:#141310;font-size:11px;border-radius:6px;padding:2px 8px;margin-left:6px}
+.dow,.days{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
+.dow span{font-size:11px;color:var(--dim);text-align:center;padding:2px 0}
+.day{border:1px solid var(--line);border-radius:6px;min-height:44px;padding:2px 3px;font-size:11px;position:relative;cursor:pointer}
+.day.out{opacity:.28}
+.day.today .dnum{background:var(--gold);color:#141310;border-radius:50%;width:20px;height:20px;display:inline-block;text-align:center;line-height:20px;font-weight:bold}
+.dnum{font-size:11px;color:var(--dim)}
+.wlabel{display:block;font-size:9px;font-weight:bold;margin-top:2px;line-height:1.2}
+.tabbar{position:fixed;left:0;right:0;bottom:0;background:#1e1c17;border-top:1px solid var(--line);display:flex;padding:8px 6px calc(8px + env(safe-area-inset-bottom))}
+.tabbar button{flex:1;border:none;background:none;font-size:13px;padding:10px 4px;color:var(--dim)}
+.tabbar button.on{color:var(--gold);font-weight:bold}
+.srow{display:flex;gap:10px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:8px 0}
+.srow .dot{margin-top:4px}
+.srow.expired{opacity:.6}
+.sinfo{flex:1;font-size:14px}
+.smeta{font-size:12px;color:var(--dim);margin-top:2px}
+.smeta .st{text-transform:uppercase;font-size:11px}
+.srow.active .smeta .st{color:var(--green)}
+.srow.expired .smeta .st{color:var(--red)}
+.sactions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.sactions button{padding:7px 10px;font-size:12px}
+.found{font-size:11px;color:var(--gold);border:1px solid var(--gold);border-radius:10px;padding:0 7px}
+.sheet{background:var(--card);border:1px solid var(--gold);border-radius:14px;padding:16px;margin:14px 0}
+.sheet label{display:block;font-size:14px;margin:10px 0}
+.sheet input{width:100%;background:#141310;color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:10px;font-size:15px;margin-top:4px}
+.sheet input[type=checkbox]{width:auto}
+.chk{display:flex;align-items:center;gap:8px}
+.err{color:var(--red);font-size:14px;margin:8px 0}
+.price{font-size:15px;color:var(--gold);margin:8px 0;font-weight:bold}
+table.q,table.ptable{width:100%;border-collapse:collapse;margin:10px 0;font-size:14px}
+table.q td,table.ptable td{border-bottom:1px solid var(--line);padding:8px 4px}
+table.q tr.tot td{font-weight:bold;color:var(--gold);font-size:16px}
+ol.rotlist{margin:8px 0;padding-left:22px;font-size:14px}
+ol.rotlist li.me{font-weight:bold;color:var(--gold)}
+.pstatus{font-size:16px;font-weight:bold;padding:10px;border-radius:8px;margin:8px 0}
+.pstatus.open{background:#1d2b1d;color:var(--green)}
+.pstatus.full{background:#2b1d1d;color:var(--red)}
+.pstatus.booked{background:#2b2415;color:var(--gold)}
+.bigcard{margin:14px 0}
+.filebtn{display:inline-block;background:#2a261d;border:1px solid var(--line);border-radius:10px;padding:9px 14px;font-size:14px;cursor:pointer;margin:0 4px}
+</style>
+</head>
+<body>
+<div id="app"><p class="quiet">Loading…</p></div>
+<script>
+/* Opossum Foot Sponsor Rotation Engine — pure logic, no DOM.
+ * Encodes every rotation rule Tanner settled on 2026-10-04:
+ *  - Tiers 1-3 rotate (shared) or run exclusive; Tier 4 exclusive only, never rotates
+ *  - Rotation starts the first Monday on/after the first shared payment, swaps Mondays
+ *  - Max 4 sponsors per rotation; payment order = queue order
+ *  - Terms strictly 6 or 12 months, paid upfront
+ *  - Nobody with an active paid term gets displaced, ever
+ *  - Shared -> exclusive upgrades happen at renewal (first dibs); a lone sponsor in a
+ *    rotation may upgrade immediately with credit for unused shared-term value
+ *  - Waitlist (first-paid first-served) backfills expired positions
+ * All dates are UTC ISO YYYY-MM-DD; weeks always start Monday.
+ */
+(function (root, factory) {
+  if (typeof module !== 'undefined' && module.exports) module.exports = factory();
+  else root.RotationEngine = factory();
+})(typeof self !== 'undefined' ? self : this, function () {
+  'use strict';
+
+  var DAY = 86400000;
+
+  function parseISO(s) {
+    var p = s.split('-');
+    return new Date(Date.UTC(+p[0], +p[1] - 1, +p[2]));
+  }
+  function toISO(d) {
+    return d.toISOString().slice(0, 10);
+  }
+  function mondayOf(d) {
+    var x = new Date(d.getTime());
+    var dow = (x.getUTCDay() + 6) % 7; // 0 = Monday
+    x.setUTCDate(x.getUTCDate() - dow);
+    x.setUTCHours(0, 0, 0, 0);
+    return x;
+  }
+  function addDays(d, n) {
+    var x = new Date(d.getTime());
+    x.setUTCDate(x.getUTCDate() + n);
+    return x;
+  }
+  function addMonths(d, n) {
+    var x = new Date(d.getTime());
+    x.setUTCMonth(x.getUTCMonth() + n);
+    return x;
+  }
+  function nextMondayOnOrAfter(d) {
+    // first Monday on or after d (d itself if d is a Monday)
+    var x = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()));
+    x.setUTCDate(x.getUTCDate() + ((8 - x.getUTCDay()) % 7));
+    return x;
+  }
+
+  var TIER_NAMES = {
+    1: 'Tier 1 — Field slots',
+    2: 'Tier 2 — App presence',
+    3: 'Tier 3 — Rankings & reports',
+    4: 'Tier 4 — Title sponsor'
+  };
+
+  // DRAFT pricing, 2026-10-04. Nothing offered.
+  var PRICES = {
+    1: { exclusive: { 12: 1000, 6: 600 }, foundingExcl: { 12: 650, 6: 390 }, shared: { 12: 350, 6: 210 } },
+    2: { exclusive: { 12: 1500, 6: 900 }, foundingExcl: { 12: 1000, 6: 600 }, shared: { 12: 500, 6: 300 } },
+    3: { exclusive: { 12: 2750, 6: 1650 }, foundingExcl: { 12: 1750, 6: 1050 }, shared: { 12: 900, 6: 540 } },
+    4: { exclusive: { 12: 5000, 6: 3000 }, foundingExcl: { 12: 3000, 6: 1800 }, shared: null }
+  };
+
+  function priceFor(tier, plan, termMonths, founding) {
+    var t = PRICES[tier];
+    if (!t) return null;
+    if (plan === 'exclusive') return (founding ? t.foundingExcl : t.exclusive)[termMonths] ?? null;
+    if (!t.shared) return null;
+    return t.shared[termMonths] ?? null;
+  }
+
+  function termEnd(sponsor) {
+    return addMonths(parseISO(sponsor.start), sponsor.termMonths);
+  }
+  function isActive(sponsor, weekMonday) {
+    var w = weekMonday instanceof Date ? weekMonday : parseISO(weekMonday);
+    return w >= parseISO(sponsor.start) && w < termEnd(sponsor);
+  }
+  // Payment order = queue order. Sort shared sponsors by start, then by creation.
+  function rotationOrder(sharedSponsors) {
+    return sharedSponsors.slice().sort(function (a, b) {
+      if (a.start !== b.start) return a.start < b.start ? -1 : 1;
+      return (a.createdAt || 0) - (b.createdAt || 0);
+    });
+  }
+
+  /**
+   * Who is live for a tier in the week starting weekMondayISO.
+   * state = { sponsors:[], rotationAnchor: {1:iso,2:iso,3:iso} }
+   * Returns { kind:'exclusive'|'shared'|'open', sponsor, rotation:[...], weekIndex }
+   */
+  function liveForWeek(tier, weekMondayISO, state) {
+    var W = parseISO(weekMondayISO);
+    var sponsors = state.sponsors || [];
+    var excl = null;
+    sponsors.forEach(function (s) {
+      if (s.tier === tier && s.plan === 'exclusive' && isActive(s, W)) excl = s;
+    });
+    if (excl) return { kind: 'exclusive', sponsor: excl, rotation: [excl], weekIndex: 0 };
+    if (tier === 4) return { kind: 'open', sponsor: null, rotation: [], weekIndex: 0 };
+    var active = rotationOrder(sponsors.filter(function (s) {
+      return s.tier === tier && s.plan === 'shared' && isActive(s, W);
+    }));
+    if (!active.length) return { kind: 'open', sponsor: null, rotation: [], weekIndex: 0 };
+    var anchorISO = (state.rotationAnchor && state.rotationAnchor[tier]) || active[0].start;
+    var anchor = parseISO(anchorISO);
+    var weekIndex = Math.round((W.getTime() - anchor.getTime()) / (7 * DAY));
+    if (weekIndex < 0) return { kind: 'open', sponsor: null, rotation: active, weekIndex: weekIndex };
+    return { kind: 'shared', sponsor: active[weekIndex % active.length], rotation: active, weekIndex: weekIndex };
+  }
+
+  /**
+   * Validate adding a sponsor. Returns { ok:true, start } or { ok:false, reason, suggestStart }.
+   * newSponsor = { name, tier, plan, termMonths, start (ISO, any day -> snapped to Monday), founding }
+   */
+  function validateAdd(newSponsor, state, todayISO) {
+    var today = todayISO ? parseISO(todayISO) : new Date();
+    if (!newSponsor.name || !newSponsor.name.trim()) return { ok: false, reason: 'Name the sponsor.' };
+    if (![1, 2, 3, 4].includes(newSponsor.tier)) return { ok: false, reason: 'Pick a tier.' };
+    if (![6, 12].includes(newSponsor.termMonths)) return { ok: false, reason: 'Terms are 6 or 12 months — no exceptions.' };
+    var plan = newSponsor.plan;
+    if (newSponsor.tier === 4 && plan !== 'exclusive')
+      return { ok: false, reason: 'Tier 4 is exclusive-only and never rotates.' };
+    if (plan !== 'shared' && plan !== 'exclusive')
+      return { ok: false, reason: 'Pick shared or exclusive.' };
+
+    var start = mondayOf(parseISO(newSponsor.start));
+    var firstMonday = nextMondayOnOrAfter(today);
+    if (start < firstMonday) start = firstMonday; // starts the first Monday on/after payment
+    var end = addMonths(start, newSponsor.termMonths);
+    var sponsors = state.sponsors || [];
+
+    if (plan === 'exclusive') {
+      // Nobody paid gets displaced: no active sponsor may overlap the new exclusive term.
+      var clash = sponsors.filter(function (s) {
+        return s.tier === newSponsor.tier && parseISO(s.start) < end && termEnd(s) > start;
+      });
+      if (clash.length) {
+        var lastEnd = clash.map(termEnd).sort(function (a, b) { return b - a; })[0];
+        var suggest = nextMondayOnOrAfter(lastEnd); // first Monday with no paid term left
+        return {
+          ok: false,
+          reason: 'That would displace a paid sponsor (' + clash.map(function (s) { return s.name; }).join(', ') + '). Nobody paid gets bumped — exclusive starts after their term ends.',
+          suggestStart: toISO(suggest)
+        };
+      }
+      return { ok: true, start: toISO(start) };
+    }
+
+    // shared: max 4 per rotation in any week of the new term
+    var w = new Date(start.getTime());
+    var worst = null, worstCount = 0;
+    while (w < end) {
+      var n = sponsors.filter(function (s) {
+        return s.tier === newSponsor.tier && s.plan === 'shared' && isActive(s, w);
+      }).length;
+      if (n > worstCount) { worstCount = n; worst = new Date(w.getTime()); }
+      w = addDays(w, 7);
+    }
+    if (worstCount >= 4) {
+      return {
+        ok: false,
+        reason: 'That tier\u2019s rotation is full (4 sponsors) during the requested term. They join the waitlist — first-paid, first-served.',
+        waitlist: true
+      };
+    }
+    return { ok: true, start: toISO(start) };
+  }
+
+  /**
+   * Upgrade math for a lone shared sponsor moving to exclusive immediately.
+   * Returns { credit, dueNow, newTermMonths } or { ok:false, reason }.
+   */
+  function upgradeQuote(sponsor, state, todayISO, newTermMonths) {
+    var today = parseISO(todayISO);
+    var tier = sponsor.tier;
+    var others = (state.sponsors || []).filter(function (s) {
+      return s.id !== sponsor.id && s.tier === tier && s.plan === 'shared' && termEnd(s) > today && parseISO(s.start) <= today;
+    });
+    if (others.length > 0)
+      return { ok: false, reason: 'Immediate upgrades are only for a lone sponsor. With others in the rotation, the upgrade happens at renewal — first dibs.' };
+    var start = parseISO(sponsor.start), end = termEnd(sponsor);
+    var totalDays = Math.max(1, Math.round((end - start) / DAY));
+    var remainingDays = Math.max(0, Math.round((end - today) / DAY));
+    var sharedPrice = priceFor(tier, 'shared', sponsor.termMonths, sponsor.founding);
+    var exclPrice = priceFor(tier, 'exclusive', newTermMonths, sponsor.founding);
+    if (sharedPrice == null || exclPrice == null) return { ok: false, reason: 'No price for that combination.' };
+    var credit = Math.round(sharedPrice * (remainingDays / totalDays));
+    return { ok: true, credit: credit, dueNow: Math.max(0, exclPrice - credit), newTermMonths: newTermMonths, newStart: todayISO };
+  }
+
+  /**
+   * Availability snapshot for prospects.
+   * Returns per-tier: { mode:'exclusive-booked'|'shared'|'open', exclusiveUntil, sharedCount, openSlots, nextOpening }
+   */
+  function availability(tier, todayISO, state) {
+    var W = mondayOf(parseISO(todayISO));
+    var sponsors = state.sponsors || [];
+    var excl = sponsors.filter(function (s) {
+      return s.tier === tier && s.plan === 'exclusive' && termEnd(s) > W;
+    }).sort(function (a, b) { return termEnd(a) - termEnd(b); })[0];
+    if (excl) {
+      return { mode: 'exclusive-booked', exclusiveUntil: toISO(termEnd(excl)), exclusiveName: excl.name, sharedCount: 0, openSlots: 0, nextOpening: toISO(termEnd(excl)) };
+    }
+    var active = sponsors.filter(function (s) {
+      return s.tier === tier && s.plan === 'shared' && isActive(s, W);
+    });
+    var openSlots = Math.max(0, 4 - active.length);
+    var nextOpening = null;
+    if (openSlots === 0 && active.length) {
+      var soonest = active.map(termEnd).sort(function (a, b) { return a - b; })[0];
+      nextOpening = toISO(soonest);
+    }
+    return { mode: active.length ? 'shared' : 'open', sharedCount: active.length, openSlots: openSlots, nextOpening: nextOpening };
+  }
+
+  function weeksLive(sponsor, state) {
+    // How many weeks is this sponsor the live one during their term?
+    var count = 0;
+    var w = parseISO(sponsor.start), end = termEnd(sponsor);
+    while (w < end) {
+      var live = liveForWeek(sponsor.tier, toISO(w), state);
+      if (live.sponsor && live.sponsor.id === sponsor.id) count++;
+      w = addDays(w, 7);
+    }
+    return count;
+  }
+
+  function isPeakMonth(m) { return m === 10 || m === 11 || m === 12 || m === 1; } // Oct-Jan
+
+  return {
+    parseISO: parseISO, toISO: toISO, mondayOf: mondayOf, nextMondayOnOrAfter: nextMondayOnOrAfter, addDays: addDays, addMonths: addMonths,
+    TIER_NAMES: TIER_NAMES, PRICES: PRICES, priceFor: priceFor,
+    termEnd: termEnd, isActive: isActive, rotationOrder: rotationOrder,
+    liveForWeek: liveForWeek, validateAdd: validateAdd, upgradeQuote: upgradeQuote,
+    availability: availability, weeksLive: weeksLive, isPeakMonth: isPeakMonth
+  };
+});
+
+</script>
+<script>
+/* Sponsor Rotation Manager — UI layer. Depends on RotationEngine (inlined above). */
+(function () {
+  'use strict';
+  var E = window.RotationEngine;
+  var LS_KEY = 'of_rotation_v1';
+
+  var PALETTE = ['#c9a227', '#7fb069', '#5b8def', '#c678dd', '#e07a5f', '#4db6ac', '#f2cc8f', '#81c784'];
+
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+  function uid() { return 's' + Date.now().toString(36) + Math.floor(Math.random() * 1e6).toString(36); }
+
+  function defaultState() {
+    return { sponsors: [], waitlist: [], rotationAnchor: {}, seq: 0 };
+  }
+  function load() {
+    try {
+      var raw = localStorage.getItem(LS_KEY);
+      if (raw) { var s = JSON.parse(raw); s.sponsors = s.sponsors || []; s.waitlist = s.waitlist || []; s.rotationAnchor = s.rotationAnchor || {}; return s; }
+    } catch (e) {}
+    return defaultState();
+  }
+  function save() { localStorage.setItem(LS_KEY, JSON.stringify(state)); }
+
+  var state = load();
+  var ui = { tab: 'dash', calTier: 1, calOffset: 0, editingId: null, upgradeId: null };
+
+  function todayISO() { return E.toISO(new Date()); }
+  function thisMondayISO() { return E.toISO(E.mondayOf(new Date())); }
+
+  function colorFor(sponsor) {
+    var idx = 0;
+    for (var i = 0; i < sponsor.id.length; i++) idx = (idx * 31 + sponsor.id.charCodeAt(i)) % 997;
+    return PALETTE[idx % PALETTE.length];
+  }
+  function fmtD(iso) {
+    var d = E.parseISO(iso);
+    var days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    var mos = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    return days[d.getUTCDay()] + ' ' + mos[d.getUTCMonth()] + ' ' + d.getUTCDate() + ', ' + d.getUTCFullYear();
+  }
+  function fmtShort(iso) {
+    var d = E.parseISO(iso);
+    var mos = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    return mos[d.getUTCMonth()] + ' ' + d.getUTCDate();
+  }
+  function money(n) { return '$' + n.toLocaleString('en-US'); }
+
+  function statusOf(s) {
+    var t = todayISO();
+    if (t < s.start) return 'upcoming';
+    if (E.parseISO(t) >= E.termEnd(s)) return 'expired';
+    return 'active';
+  }
+  function daysLeft(s) {
+    var t = E.parseISO(todayISO());
+    return Math.max(0, Math.round((E.termEnd(s) - t) / 86400000));
+  }
+
+  /* ---------- shared chrome ---------- */
+  function tabBar() {
+    var tabs = [['dash', 'This week'], ['cal', 'Calendar'], ['spon', 'Sponsors'], ['pros', 'For prospects']];
+    return '<nav class="tabbar">' + tabs.map(function (t) {
+      return '<button class="' + (ui.tab === t[0] ? 'on' : '') + '" data-tab="' + t[0] + '">' + t[1] + '</button>';
+    }).join('') + '</nav>';
+  }
+  function draftBadge() { return '<span class="draft">DRAFT PRICING — nothing offered</span>'; }
+
+  /* ---------- dashboard ---------- */
+  function renderDash() {
+    var mon = thisMondayISO();
+    var h = '<h2>This week <span class="wk">week of ' + fmtD(mon) + '</span></h2>' + draftBadge();
+    h += '<div class="cards">';
+    [1, 2, 3, 4].forEach(function (tier) {
+      var live = E.liveForWeek(tier, mon, state);
+      var inner;
+      if (live.kind === 'open') {
+        inner = '<div class="live open">OPEN — no sponsor live</div>';
+      } else {
+        var s = live.sponsor;
+        inner = '<div class="live"><span class="dot" style="background:' + colorFor(s) + '"></span><b>' + esc(s.name) + '</b>' +
+          '<span class="plan">' + (live.kind === 'exclusive' ? 'exclusive' : 'shared rotation') + '</span></div>';
+        if (live.kind === 'shared') {
+          inner += '<div class="rot">Rotation: ' + live.rotation.map(function (r) {
+            return '<span class="' + (r.id === s.id ? 'me' : '') + '">' + esc(r.name) + '</span>';
+          }).join(' → ') + '</div>';
+        }
+        inner += '<div class="term">Term ends ' + fmtD(E.toISO(E.termEnd(s))) + ' (' + daysLeft(s) + ' days left)</div>';
+      }
+      h += '<div class="card"><div class="tier">' + E.TIER_NAMES[tier] + '</div>' + inner + '</div>';
+    });
+    h += '</div>';
+
+    // alerts
+    var alerts = [];
+    state.sponsors.forEach(function (s) {
+      var st = statusOf(s);
+      if (st === 'active' && daysLeft(s) <= 45) alerts.push({ t: 'expiring', s: s });
+      if (st === 'expired') alerts.push({ t: 'expired', s: s });
+    });
+    [1, 2, 3].forEach(function (tier) {
+      var av = E.availability(tier, todayISO(), state);
+      if (av.mode !== 'exclusive-booked' && av.openSlots > 0)
+        alerts.push({ t: 'slots', tier: tier, n: av.openSlots });
+    });
+    state.waitlist.forEach(function (w) {
+      var av = E.availability(w.tier, todayISO(), state);
+      if (av.mode !== 'exclusive-booked' && av.openSlots > 0) alerts.push({ t: 'waitlist', w: w });
+    });
+    if (alerts.length) {
+      h += '<h2>Needs attention</h2><div class="alerts">';
+      alerts.forEach(function (a) {
+        if (a.t === 'expiring') h += '<div class="alert">“' + esc(a.s.name) + '” (' + E.TIER_NAMES[a.s.tier] + ') ends in ' + daysLeft(a.s) + ' days — <button data-act="renew" data-id="' + a.s.id + '">Renew</button></div>';
+        else if (a.t === 'expired') h += '<div class="alert bad">“' + esc(a.s.name) + '” (' + E.TIER_NAMES[a.s.tier] + ') term ended ' + fmtD(E.toISO(E.termEnd(a.s))) + ' — <button data-act="renew" data-id="' + a.s.id + '">Renew</button> <button data-act="del" data-id="' + a.s.id + '">Remove</button></div>';
+        else if (a.t === 'slots') h += '<div class="alert ok">' + E.TIER_NAMES[a.tier] + ' rotation has ' + a.n + ' open slot' + (a.n > 1 ? 's' : '') + '</div>';
+        else if (a.t === 'waitlist') h += '<div class="alert ok">“' + esc(a.w.name) + '” is on the waitlist and a ' + E.TIER_NAMES[a.w.tier] + ' slot is open — <button data-act="promote" data-id="' + a.w.id + '">Promote</button></div>';
+      });
+      h += '</div>';
+    } else {
+      h += '<p class="quiet">Nothing needs attention. Rotation is running clean.</p>';
+    }
+    return h;
+  }
+
+  /* ---------- calendar ---------- */
+  function monthGrid(y, m, tier) {
+    // m: 0-11
+    var first = new Date(Date.UTC(y, m, 1));
+    var startCell = E.mondayOf(new Date(Date.UTC(y, m, 1 - ((first.getUTCDay() + 6) % 7))));
+    var peak = E.isPeakMonth(m + 1);
+    var mos = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    var h = '<div class="month' + (peak ? ' peak' : '') + '"><div class="mhead">' + mos[m] + ' ' + y + (peak ? ' <span class="peakbadge">PEAK</span>' : '') + '</div>';
+    h += '<div class="dow"><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span><span>Su</span></div><div class="days">';
+    var today = todayISO();
+    for (var i = 0; i < 42; i++) {
+      var d = E.addDays(startCell, i);
+      var iso = E.toISO(d);
+      var inMonth = d.getUTCMonth() === m;
+      var live = null;
+      if (inMonth || true) {
+        var wk = E.toISO(E.mondayOf(d));
+        var lr = E.liveForWeek(tier, wk, state);
+        live = lr.sponsor;
+      }
+      var cls = 'day' + (inMonth ? '' : ' out') + (iso === today ? ' today' : '');
+      var bg = '';
+      if (live) bg = ' style="background:' + colorFor(live) + '22;border-color:' + colorFor(live) + '"';
+      var label = (d.getUTCDay() === 1) ? '<span class="wlabel">' + (live ? esc(shortName(live.name)) : 'open') + '</span>' : '';
+      h += '<div class="' + cls + '"' + bg + ' data-week="' + E.toISO(E.mondayOf(d)) + '"><span class="dnum">' + d.getUTCDate() + '</span>' + label + '</div>';
+      if (i === 41) break;
+      // stop after the last week that touches this month
+      if (i >= 27 && E.addDays(startCell, i + 1).getUTCMonth() !== m && new Date(E.addDays(startCell, i + 1).getTime()).getUTCDay() === 1) break;
+    }
+    h += '</div></div>';
+    return h;
+  }
+  function shortName(n) { return n.length > 12 ? n.slice(0, 11) + '…' : n; }
+
+  function renderCal() {
+    var h = '<h2>Rotation calendar</h2>' + draftBadge();
+    h += '<div class="pills">' + [1, 2, 3, 4].map(function (t) {
+      return '<button class="' + (ui.calTier === t ? 'on' : '') + '" data-caltier="' + t + '">Tier ' + t + '</button>';
+    }).join('') + '</div>';
+    h += '<div class="calnav"><button data-calnav="-1">← Prev</button><button data-calnav="0">Today</button><button data-calnav="1">Next →</button></div>';
+    h += '<p class="quiet">Each week is tinted with the sponsor who is live that week. Gold PEAK badge = Oct–Jan buying season. Tap any week for detail.</p>';
+    h += '<div id="months">';
+    var base = new Date(Date.UTC(new Date().getUTCFullYear(), new Date().getUTCMonth() + ui.calOffset, 1));
+    for (var i = -1; i < 5; i++) {
+      var d = new Date(Date.UTC(base.getUTCFullYear(), base.getUTCMonth() + i, 1));
+      h += monthGrid(d.getUTCFullYear(), d.getUTCMonth(), ui.calTier);
+    }
+    h += '</div><div id="weekdetail"></div>';
+    return h;
+  }
+
+  function weekDetail(weekISO) {
+    var tier = ui.calTier;
+    var live = E.liveForWeek(tier, weekISO, state);
+    var h = '<div class="sheet"><h3>Week of ' + fmtD(weekISO) + ' — ' + E.TIER_NAMES[tier] + '</h3>';
+    if (live.kind === 'open') {
+      h += '<p><b>OPEN</b> — no sponsor live this week. This slot can be sold.</p>';
+    } else if (live.kind === 'exclusive') {
+      var s = live.sponsor;
+      h += '<p><span class="dot" style="background:' + colorFor(s) + '"></span><b>' + esc(s.name) + '</b> — exclusive, all week.</p>';
+      h += '<p class="quiet">Term: ' + fmtD(s.start) + ' → ' + fmtD(E.toISO(E.termEnd(s))) + '</p>';
+    } else {
+      h += '<p><span class="dot" style="background:' + colorFor(live.sponsor) + '"></span><b>' + esc(live.sponsor.name) + '</b> is live this week.</p>';
+      h += '<p>Full rotation (payment order):</p><ol class="rotlist">';
+      live.rotation.forEach(function (r, i) {
+        h += '<li class="' + (r.id === live.sponsor.id ? 'me' : '') + '"><span class="dot" style="background:' + colorFor(r) + '"></span>' + esc(r.name) +
+          ' <span class="quiet">term ends ' + fmtShort(E.toISO(E.termEnd(r))) + '</span></li>';
+      });
+      h += '</ol>';
+    }
+    h += '<button data-act="closeweek">Close</button></div>';
+    return h;
+  }
+
+  /* ---------- sponsors ---------- */
+  function sponsorRow(s) {
+    var st = statusOf(s);
+    var price = E.priceFor(s.tier, s.plan, s.termMonths, s.founding);
+    var h = '<div class="srow ' + st + '"><span class="dot" style="background:' + colorFor(s) + '"></span>';
+    h += '<div class="sinfo"><b>' + esc(s.name) + '</b>' + (s.founding ? ' <span class="found">founding</span>' : '') +
+      '<div class="smeta">' + s.plan + ' · ' + s.termMonths + ' mo · ' + fmtShort(s.start) + ' → ' + fmtShort(E.toISO(E.termEnd(s))) +
+      (price ? ' · ' + money(price) : '') + ' · <span class="st">' + st + '</span></div></div>';
+    h += '<div class="sactions"><button data-act="renew" data-id="' + s.id + '">Renew</button>';
+    if (s.plan === 'shared' && [1, 2, 3].includes(s.tier)) h += ' <button data-act="upgrade" data-id="' + s.id + '">To exclusive</button>';
+    h += ' <button data-act="del" data-id="' + s.id + '">Remove</button></div></div>';
+    return h;
+  }
+
+  function renderSpon() {
+    var h = '<h2>Sponsors</h2>' + draftBadge();
+    h += '<button class="big" data-act="add">+ Add sponsor</button> <button data-act="example">Load example rotation</button>';
+    h += '<div id="formslot"></div><div id="upgradeslot"></div>';
+    [1, 2, 3, 4].forEach(function (tier) {
+      var list = state.sponsors.filter(function (s) { return s.tier === tier; })
+        .sort(function (a, b) { return a.start < b.start ? -1 : 1; });
+      h += '<h3>' + E.TIER_NAMES[tier] + ' <span class="quiet">(' + list.length + ')</span></h3>';
+      if (!list.length) h += '<p class="quiet">No sponsors in this tier yet.</p>';
+      else h += list.map(sponsorRow).join('');
+    });
+    var wl = state.waitlist;
+    h += '<h3>Waitlist <span class="quiet">(' + wl.length + ')</span></h3>';
+    if (!wl.length) h += '<p class="quiet">Nobody waiting.</p>';
+    else h += wl.map(function (w) {
+      return '<div class="srow"><span class="dot" style="background:#666"></span><div class="sinfo"><b>' + esc(w.name) + '</b>' +
+        '<div class="smeta">' + E.TIER_NAMES[w.tier] + ' · ' + w.plan + ' · ' + w.termMonths + ' mo · waiting since ' + fmtShort(w.addedAt) + '</div></div>' +
+        '<div class="sactions"><button data-act="promote" data-id="' + w.id + '">Promote</button> <button data-act="deltwait" data-id="' + w.id + '">Remove</button></div></div>';
+    }).join('');
+    h += '<h3>Backup</h3><p class="quiet">Your data lives in this browser on this device. Export a backup file before switching devices.</p>';
+    h += '<button data-act="export">Export backup</button> <label class="filebtn">Import backup<input type="file" id="importfile" accept=".json" hidden></label> <button data-act="wipe">Clear everything</button>';
+    return h;
+  }
+
+  function sponsorForm(editing) {
+    var s = editing || { name: '', tier: 1, plan: 'shared', termMonths: 12, start: E.toISO(E.nextMondayOnOrAfter(new Date())), founding: false, notes: '' };
+    var h = '<div class="sheet"><h3>' + (editing ? 'Edit sponsor' : 'Add sponsor') + '</h3>';
+    h += '<label>Name / company<input id="f-name" value="' + esc(s.name) + '" placeholder="Pine Hollow Trapping & Supplies"></label>';
+    h += '<label>Tier<div class="pills">' + [1, 2, 3, 4].map(function (t) {
+      return '<button type="button" data-ftier="' + t + '" class="' + (s.tier === t ? 'on' : '') + '">Tier ' + t + '</button>';
+    }).join('') + '</div></label>';
+    h += '<label>Plan<div class="pills" id="f-planpills">' + ['shared', 'exclusive'].map(function (p) {
+      var dis = (s.tier === 4 && p === 'shared') ? ' disabled' : '';
+      return '<button type="button" data-fplan="' + p + '" class="' + (s.plan === p ? 'on' : '') + '"' + dis + '>' + p + '</button>';
+    }).join('') + '</div>' + (s.tier === 4 ? '<span class="quiet">Tier 4 is exclusive-only.</span>' : '') + '</label>';
+    h += '<label>Term<div class="pills">' + [6, 12].map(function (m) {
+      return '<button type="button" data-fterm="' + m + '" class="' + (s.termMonths === m ? 'on' : '') + '">' + m + ' months</button>';
+    }).join('') + '</div></label>';
+    h += '<label>Start date <span class="quiet">(snaps to Monday)</span><input type="date" id="f-start" value="' + s.start + '"></label>';
+    h += '<label class="chk"><input type="checkbox" id="f-founding"' + (s.founding ? ' checked' : '') + '> Founding rate</label>';
+    h += '<label>Notes<input id="f-notes" value="' + esc(s.notes || '') + '" placeholder="optional"></label>';
+    h += '<div id="f-price" class="price"></div><div id="f-err" class="err"></div>';
+    h += '<button class="big" data-act="saveform" data-id="' + (editing ? editing.id : '') + '">Save sponsor</button> <button data-act="closeform">Cancel</button></div>';
+    return h;
+  }
+
+  function refreshFormPrice() {
+    var tier = +document.querySelector('[data-ftier].on').dataset.ftier;
+    var plan = document.querySelector('[data-fplan].on').dataset.fplan;
+    var term = +document.querySelector('[data-fterm].on').dataset.fterm;
+    var founding = document.getElementById('f-founding').checked;
+    var price = E.priceFor(tier, plan, term, founding);
+    document.getElementById('f-price').textContent = price ? 'Price: ' + money(price) + (founding ? ' (founding rate)' : '') + ' — DRAFT' : 'No shared price at Tier 4.';
+  }
+
+  function upgradeSheet(s) {
+    var q = E.upgradeQuote(s, state, todayISO(), s.termMonths);
+    var h = '<div class="sheet"><h3>Upgrade “' + esc(s.name) + '” to exclusive</h3>';
+    if (!q.ok) { h += '<p class="err">' + esc(q.reason) + '</p>'; }
+    else {
+      var exclPrice = E.priceFor(s.tier, 'exclusive', q.newTermMonths, s.founding);
+      h += '<p>Immediate upgrade — new ' + q.newTermMonths + '-month exclusive term starts ' + fmtD(q.newStart) + '.</p>';
+      h += '<table class="q"><tr><td>Exclusive price (' + q.newTermMonths + ' mo' + (s.founding ? ', founding' : '') + ')</td><td>' + money(exclPrice) + '</td></tr>' +
+        '<tr><td>Credit for unused shared term</td><td>−' + money(q.credit) + '</td></tr>' +
+        '<tr class="tot"><td>Due now</td><td>' + money(q.dueNow) + '</td></tr></table>';
+      h += '<label>New term<div class="pills">' + [6, 12].map(function (m) {
+        return '<button type="button" data-qterm="' + m + '" class="' + (q.newTermMonths === m ? 'on' : '') + '">' + m + ' months</button>';
+      }).join('') + '</div></label>';
+      h += '<button class="big" data-act="doupgrade" data-id="' + s.id + '">Apply upgrade</button> ';
+    }
+    h += '<button data-act="closeupgrade">Cancel</button></div>';
+    return h;
+  }
+
+  /* ---------- prospects ---------- */
+  function renderPros() {
+    var h = '<h2>For prospects</h2><p class="quiet">Show this across the table. Big, simple, current.</p>' + draftBadge();
+    [1, 2, 3, 4].forEach(function (tier) {
+      var av = E.availability(tier, todayISO(), state);
+      var pS = E.priceFor(tier, 'shared', 12, false), pS6 = E.priceFor(tier, 'shared', 6, false);
+      var pE = E.priceFor(tier, 'exclusive', 12, false), pE6 = E.priceFor(tier, 'exclusive', 6, false);
+      var pF = E.priceFor(tier, 'exclusive', 12, true);
+      h += '<div class="card bigcard"><div class="tier">' + E.TIER_NAMES[tier] + '</div>';
+      if (av.mode === 'exclusive-booked') {
+        h += '<div class="pstatus booked">BOOKED exclusive through ' + fmtD(av.exclusiveUntil) + '</div>';
+        h += '<p class="quiet">Next opening: ' + fmtD(av.nextOpening) + '</p>';
+      } else if (tier === 4) {
+        h += '<div class="pstatus open">AVAILABLE — exclusive only, never rotates</div>';
+      } else {
+        h += '<div class="pstatus ' + (av.openSlots ? 'open' : 'full') + '">' +
+          (av.openSlots ? av.openSlots + ' of 4 rotation slots OPEN' : 'Rotation FULL (4/4)') + '</div>';
+        if (av.nextOpening) h += '<p class="quiet">Next opening: ' + fmtD(av.nextOpening) + '</p>';
+      }
+      h += '<table class="ptable">';
+      if (pS) h += '<tr><td>Shared rotation</td><td>' + money(pS6) + ' / 6 mo</td><td>' + money(pS) + ' / yr</td></tr>';
+      h += '<tr><td>Exclusive</td><td>' + money(pE6) + ' / 6 mo</td><td>' + money(pE) + ' / yr</td></tr>';
+      h += '<tr><td>Founding exclusive</td><td colspan="2">' + money(pF) + ' / yr — first 10 sponsors, locked forever</td></tr>';
+      h += '</table><p class="quiet">6 or 12 months, paid upfront. No trials, no monthly deals.</p></div>';
+    });
+    return h;
+  }
+
+  /* ---------- example data ---------- */
+  function loadExample() {
+    if (!confirm('Load an example rotation so you can see how this works? Your current data will be replaced.')) return;
+    var mon = E.mondayOf(new Date());
+    var ago = function (n) { return E.toISO(E.addDays(mon, -7 * n)); };
+    var nx = function (n) { return E.toISO(E.addDays(mon, 7 * n)); };
+    state = {
+      sponsors: [
+        { id: uid(), name: 'Pine Hollow', tier: 1, plan: 'shared', termMonths: 12, start: ago(8), founding: true, createdAt: 1, notes: 'EXAMPLE' },
+        { id: uid(), name: 'Caven\u2019s', tier: 1, plan: 'shared', termMonths: 12, start: ago(6), founding: false, createdAt: 2, notes: 'EXAMPLE' },
+        { id: uid(), name: 'Dunlap Lures', tier: 1, plan: 'shared', termMonths: 6, start: ago(3), founding: false, createdAt: 3, notes: 'EXAMPLE' },
+        { id: uid(), name: 'NO-BS Lures', tier: 2, plan: 'shared', termMonths: 12, start: ago(5), founding: false, createdAt: 4, notes: 'EXAMPLE' },
+        { id: uid(), name: 'F&T Trading Post', tier: 3, plan: 'exclusive', termMonths: 12, start: ago(2), founding: false, createdAt: 5, notes: 'EXAMPLE' }
+      ],
+      waitlist: [
+        { id: uid(), name: 'Exline River Bottom', tier: 1, plan: 'shared', termMonths: 6, founding: false, addedAt: todayISO(), notes: 'EXAMPLE' }
+      ],
+      rotationAnchor: { 1: ago(8), 2: ago(5) },
+      seq: 100
+    };
+    save();
+    ui.tab = 'cal';
+    render();
+  }
+
+  /* ---------- actions ---------- */
+  function doSaveForm(id) {
+    var name = document.getElementById('f-name').value.trim();
+    var tier = +document.querySelector('[data-ftier].on').dataset.ftier;
+    var plan = document.querySelector('[data-fplan].on').dataset.fplan;
+    var term = +document.querySelector('[data-fterm].on').dataset.fterm;
+    var start = document.getElementById('f-start').value;
+    var founding = document.getElementById('f-founding').checked;
+    var notes = document.getElementById('f-notes').value.trim();
+    var err = document.getElementById('f-err');
+    if (!start) { err.textContent = 'Pick a start date.'; return; }
+    var cand = { name: name, tier: tier, plan: plan, termMonths: term, start: start, founding: founding, notes: notes };
+    // when editing, exclude self from clash checks
+    var probe = { sponsors: state.sponsors.filter(function (s) { return s.id !== id; }), rotationAnchor: state.rotationAnchor };
+    var v = E.validateAdd(cand, probe, todayISO());
+    if (!v.ok) {
+      if (v.waitlist) {
+        err.innerHTML = esc(v.reason) + ' <button class="big" data-act="addwait" style="margin-top:8px">Add to waitlist instead</button>';
+        ui.pendingWait = cand;
+      } else {
+        err.innerHTML = esc(v.reason) + (v.suggestStart ? ' Suggested start: <b>' + fmtD(v.suggestStart) + '</b> <button data-act="usestart" data-d="' + v.suggestStart + '">Use it</button>' : '');
+      }
+      err.querySelectorAll('[data-act]').forEach(function (x) {
+        x.onclick = function () { handleAct(x.dataset.act, x, null); };
+      });
+      return;
+    }
+    cand.start = v.start;
+    if (id) {
+      var ex = state.sponsors.find(function (s) { return s.id === id; });
+      Object.assign(ex, cand);
+    } else {
+      cand.id = uid(); cand.createdAt = Date.now();
+      state.sponsors.push(cand);
+      if (plan === 'shared' && !state.rotationAnchor[tier]) state.rotationAnchor[tier] = cand.start;
+    }
+    save(); render();
+  }
+
+  function doPromote(wid) {
+    var w = state.waitlist.find(function (x) { return x.id === wid; });
+    if (!w) return;
+    var cand = { name: w.name, tier: w.tier, plan: w.plan, termMonths: w.termMonths, start: E.toISO(E.nextMondayOnOrAfter(new Date())), founding: w.founding, notes: w.notes };
+    var v = E.validateAdd(cand, state, todayISO());
+    if (!v.ok) { alert(v.reason); return; }
+    cand.id = uid(); cand.createdAt = Date.now(); cand.start = v.start;
+    state.sponsors.push(cand);
+    if (cand.plan === 'shared' && !state.rotationAnchor[cand.tier]) state.rotationAnchor[cand.tier] = cand.start;
+    state.waitlist = state.waitlist.filter(function (x) { return x.id !== wid; });
+    save(); render();
+  }
+
+  function doRenew(id, months) {
+    var s = state.sponsors.find(function (x) { return x.id === id; });
+    if (!s) return;
+    var oldEnd = E.termEnd(s);
+    var newStart = E.toISO(E.nextMondayOnOrAfter(oldEnd));
+    // renewal keeps the same plan; validate against everyone else
+    var probe = { sponsors: state.sponsors.filter(function (x) { return x.id !== id; }), rotationAnchor: state.rotationAnchor };
+    var cand = { name: s.name, tier: s.tier, plan: s.plan, termMonths: months || s.termMonths, start: newStart, founding: s.founding, notes: s.notes };
+    var v = E.validateAdd(cand, probe, todayISO());
+    if (!v.ok) { alert(v.reason); return; }
+    s.start = v.start; s.termMonths = cand.termMonths;
+    save(); render();
+  }
+
+  function doUpgrade(id) {
+    var s = state.sponsors.find(function (x) { return x.id === id; });
+    var termEl = document.querySelector('[data-qterm].on');
+    var newTerm = termEl ? +termEl.dataset.qterm : s.termMonths;
+    var q = E.upgradeQuote(s, state, todayISO(), newTerm);
+    if (!q.ok) { alert(q.reason); return; }
+    if (!confirm('Upgrade “' + s.name + '” to ' + newTerm + '-month exclusive for ' + money(q.dueNow) + ' due now (' + money(q.credit) + ' credit)?')) return;
+    state.sponsors = state.sponsors.filter(function (x) { return x.id !== id; });
+    var ns = { id: uid(), name: s.name, tier: s.tier, plan: 'exclusive', termMonths: newTerm, start: E.toISO(E.nextMondayOnOrAfter(new Date())), founding: s.founding, createdAt: Date.now(), notes: (s.notes || '') + ' [upgraded, credit ' + money(q.credit) + ']' };
+    state.sponsors.push(ns);
+    save(); render();
+  }
+
+  /* ---------- render root ---------- */
+  function render() {
+    var app = document.getElementById('app');
+    var h = '<header><h1>Sponsor Rotation Manager</h1><p class="quiet">Opossum Foot LLC · rotations, terms & availability</p></header>';
+    if (ui.tab === 'dash') h += renderDash();
+    else if (ui.tab === 'cal') h += renderCal();
+    else if (ui.tab === 'spon') h += renderSpon();
+    else h += renderPros();
+    h += tabBar();
+    app.innerHTML = h;
+    bind();
+    if (ui.tab === 'spon' && document.querySelector('[data-ftier]')) refreshFormPrice();
+  }
+
+  function bind() {
+    document.querySelectorAll('[data-tab]').forEach(function (b) {
+      b.onclick = function () { ui.tab = b.dataset.tab; render(); window.scrollTo(0, 0); };
+    });
+    document.querySelectorAll('[data-caltier]').forEach(function (b) {
+      b.onclick = function () { ui.calTier = +b.dataset.caltier; render(); };
+    });
+    document.querySelectorAll('[data-calnav]').forEach(function (b) {
+      b.onclick = function () {
+        var n = +b.dataset.calnav;
+        ui.calOffset = (n === 0) ? 0 : ui.calOffset + n;
+        render();
+      };
+    });
+    document.querySelectorAll('.day').forEach(function (d) {
+      d.onclick = function () {
+        document.getElementById('weekdetail').innerHTML = weekDetail(d.dataset.week);
+        bindSheet();
+        document.getElementById('weekdetail').scrollIntoView({ block: 'nearest' });
+      };
+    });
+    document.querySelectorAll('[data-act]').forEach(function (b) {
+      b.onclick = function (ev) { handleAct(b.dataset.act, b, ev); };
+    });
+    var imp = document.getElementById('importfile');
+    if (imp) imp.onchange = function () {
+      var f = imp.files[0]; if (!f) return;
+      var r = new FileReader();
+      r.onload = function () {
+        try {
+          var s = JSON.parse(r.result);
+          if (!s.sponsors) throw 0;
+          state = s; save(); render();
+        } catch (e) { alert('That file is not a valid backup.'); }
+      };
+      r.readAsText(f);
+    };
+  }
+
+  function bindSheet() {
+    document.querySelectorAll('#weekdetail [data-act]').forEach(function (b) {
+      b.onclick = function () { handleAct(b.dataset.act, b, null); };
+    });
+  }
+
+  function handleAct(act, b, ev) {
+    var id = b.dataset ? b.dataset.id : null;
+    if (act === 'add') { document.getElementById('formslot').innerHTML = sponsorForm(null); bindForm(); }
+    else if (act === 'closeform') { document.getElementById('formslot').innerHTML = ''; }
+    else if (act === 'saveform') { doSaveForm(id || null); }
+    else if (act === 'usestart') { document.getElementById('f-start').value = b.dataset.d; document.getElementById('f-err').innerHTML = ''; }
+    else if (act === 'addwait') {
+      var c = ui.pendingWait;
+      state.waitlist.push({ id: uid(), name: c.name, tier: c.tier, plan: c.plan, termMonths: c.termMonths, founding: c.founding, notes: c.notes, addedAt: todayISO() });
+      ui.pendingWait = null; save(); render();
+    }
+    else if (act === 'del') { if (confirm('Remove this sponsor entirely?')) { state.sponsors = state.sponsors.filter(function (s) { return s.id !== id; }); save(); render(); } }
+    else if (act === 'renew') {
+      var months = prompt('Renew for how many months? (6 or 12)', '12');
+      if (months === null) return;
+      months = +months;
+      if (months !== 6 && months !== 12) { alert('Terms are 6 or 12 months.'); return; }
+      doRenew(id, months);
+    }
+    else if (act === 'upgrade') { document.getElementById('upgradeslot').innerHTML = upgradeSheet(state.sponsors.find(function (s) { return s.id === id; })); bindUpgrade(); }
+    else if (act === 'closeupgrade') { document.getElementById('upgradeslot').innerHTML = ''; }
+    else if (act === 'doupgrade') { doUpgrade(id); }
+    else if (act === 'promote') { doPromote(id); }
+    else if (act === 'deltwait') { if (confirm('Remove from waitlist?')) { state.waitlist = state.waitlist.filter(function (w) { return w.id !== id; }); save(); render(); } }
+    else if (act === 'closeweek') { document.getElementById('weekdetail').innerHTML = ''; }
+    else if (act === 'example') { loadExample(); }
+    else if (act === 'export') {
+      var blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(blob); a.download = 'sponsor-rotation-backup.json'; a.click();
+    }
+    else if (act === 'wipe') { if (confirm('Delete ALL sponsors, waitlist and history?')) { state = defaultState(); save(); render(); } }
+  }
+
+  function bindForm() {
+    document.querySelectorAll('[data-ftier]').forEach(function (b) {
+      b.onclick = function () {
+        document.querySelectorAll('[data-ftier]').forEach(function (x) { x.classList.remove('on'); });
+        b.classList.add('on');
+        var tier = +b.dataset.ftier;
+        // Tier 4 locks to exclusive
+        document.querySelectorAll('[data-fplan]').forEach(function (x) {
+          if (tier === 4 && x.dataset.fplan === 'shared') { x.disabled = true; x.classList.remove('on'); }
+          else x.disabled = false;
+        });
+        if (tier === 4) document.querySelector('[data-fplan="exclusive"]').classList.add('on');
+        refreshFormPrice();
+      };
+    });
+    document.querySelectorAll('[data-fplan]').forEach(function (b) {
+      b.onclick = function () {
+        if (b.disabled) return;
+        document.querySelectorAll('[data-fplan]').forEach(function (x) { x.classList.remove('on'); });
+        b.classList.add('on'); refreshFormPrice();
+      };
+    });
+    document.querySelectorAll('[data-fterm]').forEach(function (b) {
+      b.onclick = function () {
+        document.querySelectorAll('[data-fterm]').forEach(function (x) { x.classList.remove('on'); });
+        b.classList.add('on'); refreshFormPrice();
+      };
+    });
+    document.getElementById('f-founding').onchange = refreshFormPrice;
+    document.querySelectorAll('#formslot [data-act]').forEach(function (x) {
+      x.onclick = function () { handleAct(x.dataset.act, x, null); };
+    });
+    refreshFormPrice();
+  }
+
+  function bindUpgrade() {
+    document.querySelectorAll('[data-qterm]').forEach(function (b) {
+      b.onclick = function () {
+        document.querySelectorAll('[data-qterm]').forEach(function (x) { x.classList.remove('on'); });
+        b.classList.add('on');
+        var id = document.querySelector('[data-act="doupgrade"]').dataset.id;
+        document.getElementById('upgradeslot').innerHTML = upgradeSheet(state.sponsors.find(function (s) { return s.id === id; }));
+        bindUpgrade();
+      };
+    });
+    document.querySelectorAll('#upgradeslot [data-act]').forEach(function (x) {
+      x.onclick = function () { handleAct(x.dataset.act, x, null); };
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', render);
+})();
+
+</script>
+</body>
+</html>
