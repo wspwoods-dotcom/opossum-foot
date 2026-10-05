@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#141810">
+<title>Bluebird Box Tracker — Spring Lake Park</title>
+<link rel="stylesheet" href="lib/leaflet.css">
+<style>
+:root{
+  --bg:#141810; --bg2:#1d2418; --panel:#232b1c; --sheet:#262e1f;
+  --ink:#f2ead8; --muted:#b3a98f; --faint:#7d7663;
+  --accent:#d19a2f; --accent-ink:#1a1408;
+  --green:#7fa650; --blue:#5b8dd9; --red:#d05245;
+  --line:#3a4330; --radius:12px; --tap:52px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;height:100%;overflow:hidden;background:var(--bg);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;font-size:17px;line-height:1.45}
+#map{position:absolute;top:0;left:0;right:0;bottom:0;z-index:1}
+.topbar{position:absolute;top:0;left:0;right:0;z-index:10;background:rgba(20,24,16,.92);
+  padding:calc(10px + env(safe-area-inset-top)) 16px 10px;border-bottom:1px solid var(--line)}
+.topbar h1{margin:0;font-size:1.15em;color:var(--ink)}
+.topbar p{margin:2px 0 0;font-size:.8em;color:var(--muted)}
+.fab{position:absolute;z-index:10;bottom:calc(24px + env(safe-area-inset-bottom));right:16px;
+  width:60px;height:60px;border-radius:50%;background:var(--accent);color:var(--accent-ink);
+  border:none;font-size:28px;font-weight:bold;box-shadow:0 4px 16px rgba(0,0,0,.5);cursor:pointer}
+.fab2{position:absolute;z-index:10;bottom:calc(24px + env(safe-area-inset-bottom));left:16px;
+  height:60px;padding:0 20px;border-radius:30px;background:var(--panel);color:var(--ink);
+  border:1px solid var(--line);font-size:.9em;cursor:pointer}
+.sheet{position:absolute;z-index:20;left:0;right:0;bottom:0;max-height:82%;background:var(--sheet);
+  border-radius:16px 16px 0 0;border-top:1px solid var(--line);transform:translateY(105%);
+  transition:transform .25s ease;display:flex;flex-direction:column}
+.sheet.open{transform:translateY(0)}
+.sheet-head{padding:16px 20px 8px;border-bottom:1px solid var(--line)}
+.sheet-head h2{margin:0 0 4px;font-size:1.2em}
+.sheet-head .sub{color:var(--muted);font-size:.85em}
+.sheet-body{overflow-y:auto;padding:16px 20px;-webkit-overflow-scrolling:touch}
+.sheet-foot{padding:12px 20px calc(12px + env(safe-area-inset-bottom));border-top:1px solid var(--line);
+  display:flex;gap:10px}
+.btn{flex:1;min-height:var(--tap);border-radius:var(--radius);border:1px solid var(--line);
+  background:var(--panel);color:var(--ink);font-size:1em;cursor:pointer}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border:none;font-weight:600}
+.btn.danger{background:transparent;color:var(--red);border-color:var(--red)}
+label{display:block;margin:14px 0 6px;color:var(--muted);font-size:.9em}
+input,select,textarea{width:100%;min-height:var(--tap);background:var(--bg2);color:var(--ink);
+  border:1px solid var(--line);border-radius:var(--radius);padding:12px;font-size:1em;font-family:inherit}
+textarea{min-height:80px;resize:vertical}
+.row{display:flex;gap:10px}
+.row>div{flex:1}
+.visit{background:var(--bg2);border:1px solid var(--line);border-radius:var(--radius);
+  padding:12px;margin:10px 0}
+.visit .vhead{font-weight:600;margin-bottom:4px}
+.visit .vmeta{color:var(--muted);font-size:.85em}
+.visit .vnotes{margin-top:6px;font-size:.9em}
+.badge{display:inline-block;padding:2px 10px;border-radius:10px;font-size:.75em;font-weight:600;margin-left:8px}
+.badge.proposed{background:#3a3b3c;color:var(--muted)}
+.badge.placed{background:var(--blue);color:#fff}
+.badge.active{background:var(--green);color:#0f1a0a}
+.hint{position:absolute;z-index:10;top:50%;left:50%;transform:translate(-50%,-50%);
+  background:rgba(20,24,16,.9);padding:12px 20px;border-radius:var(--radius);
+  border:1px solid var(--accent);display:none;text-align:center;font-size:.9em}
+.hint.show{display:block}
+.stats{position:absolute;z-index:10;bottom:calc(100px + env(safe-area-inset-bottom));left:16px;
+  background:rgba(20,24,16,.85);padding:8px 14px;border-radius:20px;font-size:.8em;color:var(--muted);
+  border:1px solid var(--line)}
+</style>
+</head>
+<body>
+<div id="map"></div>
+<div class="topbar">
+  <h1>🪺 Bluebird Box Tracker</h1>
+  <p>Spring Lake Park · Greene County, Iowa</p>
+</div>
+<div class="hint" id="hint">Tap the map to place the box</div>
+<div class="stats" id="stats"></div>
+<button class="fab" id="btn-add" title="Add box">+</button>
+<button class="fab2" id="btn-export">⤓ Export</button>
+
+<div class="sheet" id="sheet">
+  <div class="sheet-head">
+    <h2 id="sheet-title">Box</h2>
+    <div class="sub" id="sheet-sub"></div>
+  </div>
+  <div class="sheet-body" id="sheet-body"></div>
+  <div class="sheet-foot" id="sheet-foot"></div>
+</div>
+
+<script src="lib/leaflet.js"></script>
+<script>
+// --- Data ---
+const KEY = 'bluebird-boxes-v1';
+let boxes = JSON.parse(localStorage.getItem(KEY) || '[]');
+let placing = false;
+let selectedId = null;
+
+function save(){ localStorage.setItem(KEY, JSON.stringify(boxes)); updateStats(); }
+function uid(){ return 'box-' + Date.now().toString(36) + Math.floor(Math.random()*999); }
+
+// --- Map ---
+const map = L.map('map', {zoomControl:false}).setView([42.066, -94.290], 14);
+L.control.zoom({position:'topright'}).addTo(map);
+const sat = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+  attribution:'Esri', maxZoom:19
+}).addTo(map);
+const street = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution:'© OpenStreetMap', maxZoom:19
+});
+// Fallback to street map if satellite fails
+sat.on('tileerror', ()=>{ if(!map.hasLayer(street)){ map.removeLayer(sat); street.addTo(map); } });
+
+const markers = {};
+function pinColor(status){
+  return status==='active' ? '#7fa650' : status==='placed' ? '#5b8dd9' : '#8a8a8a';
+}
+function renderPins(){
+  Object.values(markers).forEach(m=>map.removeLayer(m));
+  boxes.forEach(b=>{
+    const icon = L.divIcon({
+      className:'', html:`<div style="width:28px;height:28px;border-radius:50%;background:${pinColor(b.status)};border:3px solid #f2ead8;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 2px 8px rgba(0,0,0,.5)">🪺</div>`,
+      iconSize:[28,28], iconAnchor:[14,14]
+    });
+    const m = L.marker([b.lat, b.lng], {icon, draggable:true}).addTo(map);
+    m.on('dragend', ()=>{ b.lat = m.getLatLng().lat; b.lng = m.getLatLng().lng; save(); });
+    m.on('click', ()=>{ if(!placing) openBox(b.id); });
+    markers[b.id] = m;
+  });
+  updateStats();
+}
+function updateStats(){
+  const el = document.getElementById('stats');
+  const active = boxes.filter(b=>b.status==='active').length;
+  el.textContent = `${boxes.length} box${boxes.length===1?'':'es'} · ${active} active`;
+}
+
+// --- Add box ---
+document.getElementById('btn-add').onclick = ()=>{
+  placing = true;
+  document.getElementById('hint').classList.add('show');
+};
+map.on('click', e=>{
+  if(!placing) return;
+  placing = false;
+  document.getElementById('hint').classList.remove('show');
+  const n = boxes.length + 1;
+  const b = { id:uid(), name:'Box '+n, lat:e.latlng.lat, lng:e.latlng.lng,
+    status:'proposed', habitat:'', visits:[] };
+  boxes.push(b); save(); renderPins(); openBox(b.id);
+});
+
+// --- Sheet ---
+const sheet = document.getElementById('sheet');
+function openSheet(){ sheet.classList.add('open'); }
+function closeSheet(){ sheet.classList.remove('open'); selectedId=null; }
+
+function openBox(id){
+  selectedId = id;
+  const b = boxes.find(x=>x.id===id);
+  if(!b) return;
+  document.getElementById('sheet-title').innerHTML =
+    `${esc(b.name)} <span class="badge ${b.status}">${b.status}</span>`;
+  document.getElementById('sheet-sub').textContent =
+    `${b.lat.toFixed(5)}, ${b.lng.toFixed(5)} · ${b.visits.length} visit${b.visits.length===1?'':'s'} · drag pin to move`;
+
+  let html = `
+    <label>Box name</label>
+    <input id="f-name" value="${esc(b.name)}">
+    <label>Status</label>
+    <select id="f-status">
+      <option value="proposed"${b.status==='proposed'?' selected':''}>Proposed — picked in class, not yet placed</option>
+      <option value="placed"${b.status==='placed'?' selected':''}>Placed — box is up, no activity yet</option>
+      <option value="active"${b.status==='active'?' selected':''}>Active — birds using it</option>
+    </select>
+    <label>Habitat notes (what's around the box?)</label>
+    <textarea id="f-habitat" placeholder="e.g. Open mowed field, scattered oaks 30 yds east, near lake trail">${esc(b.habitat)}</textarea>
+    <h3 style="margin:20px 0 4px">Nest checks</h3>`;
+
+  if(!b.visits.length) html += `<p style="color:var(--faint)">No checks yet. Tap "+ Log check" after visiting the box.</p>`;
+
+  [...b.visits].reverse().forEach((v,i)=>{
+    html += `<div class="visit">
+      <div class="vhead">${esc(v.date)} — ${esc(v.observer)}</div>
+      <div class="vmeta">${esc(v.species)} · 🥚 ${v.eggs} · 🐣 ${v.young} · 🕊️ ${v.fledged}${v.invasive!=='none'?' · ⚠️ '+esc(v.invasive):''}</div>
+      ${v.notes?`<div class="vnotes">${esc(v.notes)}</div>`:''}
+    </div>`;
+  });
+
+  document.getElementById('sheet-body').innerHTML = html;
+  document.getElementById('sheet-foot').innerHTML = `
+    <button class="btn" onclick="closeSheet()">Close</button>
+    <button class="btn" onclick="deleteBox()">Delete</button>
+    <button class="btn primary" onclick="openVisit()">+ Log check</button>`;
+  openSheet();
+
+  // Save name/status/habitat on change
+  document.getElementById('f-name').onchange = e=>{ b.name=e.target.value; save(); renderPins(); };
+  document.getElementById('f-status').onchange = e=>{ b.status=e.target.value; save(); renderPins(); openBox(id); };
+  document.getElementById('f-habitat').onchange = e=>{ b.habitat=e.target.value; save(); };
+}
+
+function openVisit(){
+  const b = boxes.find(x=>x.id===selectedId);
+  const today = new Date().toISOString().slice(0,10);
+  document.getElementById('sheet-title').textContent = 'Log nest check — ' + b.name;
+  document.getElementById('sheet-sub').textContent = 'Fill in what you found at the box';
+  document.getElementById('sheet-body').innerHTML = `
+    <label>Date</label><input type="date" id="v-date" value="${today}">
+    <label>Observer (your name or initials)</label><input id="v-observer" placeholder="e.g. Tanner">
+    <label>Species in box</label>
+    <select id="v-species">
+      <option>Eastern bluebird</option><option>Tree swallow</option>
+      <option>Chickadee</option><option>House wren</option>
+      <option>House sparrow (invasive)</option><option>European starling (invasive)</option>
+      <option>Empty — no nest</option><option>Unknown</option>
+    </select>
+    <div class="row">
+      <div><label>Eggs</label><input type="number" id="v-eggs" min="0" value="0"></div>
+      <div><label>Live young</label><input type="number" id="v-young" min="0" value="0"></div>
+      <div><label>Fledged</label><input type="number" id="v-fledged" min="0" value="0"></div>
+    </div>
+    <label>Invasive competitor sign?</label>
+    <select id="v-invasive">
+      <option value="none">None seen</option>
+      <option value="house sparrow">House sparrow nest/material</option>
+      <option value="starling">Starling evidence</option>
+      <option value="blowfly">Blowfly / parasites</option>
+      <option value="predation">Predation (raccoon, snake, cat)</option>
+    </select>
+    <label>Notes</label>
+    <textarea id="v-notes" placeholder="Anything else — adult behavior, box condition, etc."></textarea>`;
+  document.getElementById('sheet-foot').innerHTML = `
+    <button class="btn" onclick="openBox(selectedId)">Back</button>
+    <button class="btn primary" onclick="saveVisit()">Save check</button>`;
+  openSheet();
+}
+
+function saveVisit(){
+  const b = boxes.find(x=>x.id===selectedId);
+  b.visits.push({
+    date: document.getElementById('v-date').value,
+    observer: document.getElementById('v-observer').value || '—',
+    species: document.getElementById('v-species').value,
+    eggs: +document.getElementById('v-eggs').value || 0,
+    young: +document.getElementById('v-young').value || 0,
+    fledged: +document.getElementById('v-fledged').value || 0,
+    invasive: document.getElementById('v-invasive').value,
+    notes: document.getElementById('v-notes').value
+  });
+  if(b.status==='proposed') b.status='placed';
+  if(b.visits.some(v=>v.species==='Eastern bluebird'&&(v.eggs>0||v.young>0))) b.status='active';
+  save(); renderPins(); openBox(b.id);
+}
+
+function deleteBox(){
+  if(!confirm('Delete this box and all its checks?')) return;
+  boxes = boxes.filter(x=>x.id!==selectedId);
+  save(); renderPins(); closeSheet();
+}
+
+// --- Export ---
+document.getElementById('btn-export').onclick = ()=>{
+  const rows = ['Box,Lat,Lng,Status,Habitat,Date,Observer,Species,Eggs,Young,Fledged,Invasive,Notes'];
+  boxes.forEach(b=>{
+    if(!b.visits.length){
+      rows.push([b.name,b.lat.toFixed(5),b.lng.toFixed(5),b.status,'"'+b.habitat.replace(/"/g,'""')+'"','','','','','','','',''].join(','));
+    } else b.visits.forEach(v=>{
+      rows.push([b.name,b.lat.toFixed(5),b.lng.toFixed(5),b.status,'"'+b.habitat.replace(/"/g,'""')+'"',
+        v.date,'"'+v.observer.replace(/"/g,'""')+'"','"'+v.species+'"',v.eggs,v.young,v.fledged,v.invasive,
+        '"'+(v.notes||'').replace(/"/g,'""')+'"'].join(','));
+    });
+  });
+  const blob = new Blob([rows.join('\n')], {type:'text/csv'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'bluebird-boxes-'+new Date().toISOString().slice(0,10)+'.csv';
+  a.click();
+
+  // Also offer JSON backup
+  const jb = new Blob([JSON.stringify({exported:new Date().toISOString(),boxes},null,2)],{type:'application/json'});
+  const ja = document.createElement('a');
+  ja.href = URL.createObjectURL(jb); ja.download='bluebird-boxes-backup.json';
+  setTimeout(()=>ja.click(), 500);
+};
+
+function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+renderPins();
+</script>
+</body>
+</html>
