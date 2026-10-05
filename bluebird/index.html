@@ -64,6 +64,15 @@ textarea{min-height:80px;resize:vertical}
 .stats{position:absolute;z-index:10;bottom:calc(100px + env(safe-area-inset-bottom));left:16px;
   background:rgba(20,24,16,.85);padding:8px 14px;border-radius:20px;font-size:.8em;color:var(--muted);
   border:1px solid var(--line)}
+.statusbar{position:absolute;z-index:10;top:calc(76px + env(safe-area-inset-top));left:0;right:0;
+  display:flex;gap:8px;padding:10px 16px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.chip{flex:0 0 auto;min-height:40px;padding:8px 16px;border-radius:20px;border:2px solid var(--line);
+  background:rgba(20,24,16,.9);color:var(--muted);font-size:.85em;font-weight:600;cursor:pointer;white-space:nowrap}
+.chip.on{color:var(--ink);border-color:var(--accent)}
+.chip .dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:baseline}
+.chip[data-s="proposed"] .dot{background:#8a8a8a}
+.chip[data-s="placed"] .dot{background:var(--blue)}
+.chip[data-s="active"] .dot{background:var(--green)}
 </style>
 </head>
 <body>
@@ -73,6 +82,12 @@ textarea{min-height:80px;resize:vertical}
   <p>Spring Lake Park · Greene County, Iowa</p>
 </div>
 <div class="hint" id="hint">Tap the map to place the box</div>
+<div class="statusbar" id="statusbar">
+  <button class="chip on" data-s="all">All</button>
+  <button class="chip" data-s="proposed"><span class="dot"></span>Proposed</button>
+  <button class="chip" data-s="placed"><span class="dot"></span>Placed</button>
+  <button class="chip" data-s="active"><span class="dot"></span>Active</button>
+</div>
 <div class="stats" id="stats"></div>
 <button class="fab" id="btn-add" title="Add box">+</button>
 <button class="fab2" id="btn-export">⤓ Export</button>
@@ -93,6 +108,15 @@ const KEY = 'bluebird-boxes-v1';
 let boxes = JSON.parse(localStorage.getItem(KEY) || '[]');
 let placing = false;
 let selectedId = null;
+let statusFilter = 'all';
+
+document.getElementById('statusbar').addEventListener('click', e=>{
+  const chip = e.target.closest('.chip');
+  if(!chip) return;
+  statusFilter = chip.dataset.s;
+  document.querySelectorAll('#statusbar .chip').forEach(c=>c.classList.toggle('on', c===chip));
+  renderPins();
+});
 
 function save(){ localStorage.setItem(KEY, JSON.stringify(boxes)); updateStats(); }
 function uid(){ return 'box-' + Date.now().toString(36) + Math.floor(Math.random()*999); }
@@ -115,7 +139,7 @@ function pinColor(status){
 }
 function renderPins(){
   Object.values(markers).forEach(m=>map.removeLayer(m));
-  boxes.forEach(b=>{
+  boxes.filter(b=>statusFilter==='all'||b.status===statusFilter).forEach(b=>{
     const icon = L.divIcon({
       className:'', html:`<div style="width:28px;height:28px;border-radius:50%;background:${pinColor(b.status)};border:3px solid #f2ead8;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 2px 8px rgba(0,0,0,.5)">🪺</div>`,
       iconSize:[28,28], iconAnchor:[14,14]
