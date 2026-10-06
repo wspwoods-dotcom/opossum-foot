@@ -1953,7 +1953,36 @@ function initMap() {
   /* Q74 (2026-10-01): Tanner — left-side stack is layers, zoom, weather, top
      to bottom. Leaflet stacks same-corner controls in add order. The weather
      chip joins as a real control so it rides the stack instead of floating. */
-  L.control.layers({ 'Street': streetL, 'Satellite': satL, 'Topo': topoL }, null, { position: 'bottomleft' }).addTo(map);
+  /* Q148 (2026-10-06): Tanner — the stock L.control.layers tap toggle is
+     unreliable on iOS Safari (its expand/collapse handshake can open-then-
+     instantly-close, so taps appear to do nothing). Replaced with an explicit
+     tap-to-cycle button: Satellite → Street → Topo → Satellite. One tap,
+     one layer, no panel, no hover-dependent behavior. */
+  var baseLayers = [
+    { name: 'Satellite', layer: satL },
+    { name: 'Street', layer: streetL },
+    { name: 'Topo', layer: topoL }
+  ];
+  var baseIdx = 0; /* satL is already on the map */
+  var layerCtl = L.control({ position: 'bottomleft' });
+  layerCtl.onAdd = function () {
+    var el = L.DomUtil.create('div', 'leaflet-bar leaflet-control');
+    el.innerHTML = '<a class="leaflet-control-layers-toggle layer-cycle" href="#" role="button" title="Map style" aria-label="Change map style"></a>';
+    var link = el.firstChild;
+    L.DomEvent.disableClickPropagation(el);
+    function paint() { link.textContent = baseLayers[baseIdx].name; }
+    paint();
+    L.DomEvent.on(link, 'click', function (e) {
+      L.DomEvent.preventDefault(e);
+      L.DomEvent.stopPropagation(e);
+      map.removeLayer(baseLayers[baseIdx].layer);
+      baseIdx = (baseIdx + 1) % baseLayers.length;
+      map.addLayer(baseLayers[baseIdx].layer);
+      paint();
+    });
+    return el;
+  };
+  layerCtl.addTo(map);
   L.control.zoom({ position: 'bottomleft' }).addTo(map);
   var wxCtl = L.control({ position: 'bottomleft' });
   wxCtl.onAdd = function () { return $('weather-chip'); };
@@ -4528,7 +4557,7 @@ function renderScorecardTab() {
     '<div><label class="field" for="sc-h2h-b">Second</label>' +
     '<select id="sc-h2h-b"><option value="">Pick one…</option>' + h2hOpts(u.h2hB) + '</select></div></div>' +
     h2h + '</div>';
-  html += '<div class="scorecard-honesty"><strong>Ranks are earned by catch data.</strong><br>They can\u2019t be bought.</div>';
+  html += '<div class="scorecard-honesty"><strong>Scorecard rankings are earned from real catch data \u2014 never bought.</strong></div>';
   box.innerHTML = html;
   var sub = $('scorecard-sub');
   box.addEventListener('click', function (e) {
@@ -4723,7 +4752,7 @@ function renderSeasons(filter) {
   if (d.regs_url) {
     rl.hidden = false;
     rl.href = d.regs_url;
-    rl.innerHTML = '📄 Official ' + esc(d.state_name) + ' trapping regulations' +
+    rl.innerHTML = 'Official ' + esc(d.state_name) + ' trapping regulations' +
       (d.regs_kind === 'page' ? ' <span class="dim">(agency site)</span>' : ' <span class="dim">(PDF)</span>');
   } else {
     rl.hidden = true;
@@ -5899,19 +5928,48 @@ function deleteLine(id) {
   d.sets.forEach(function (s) { if (s.lineId === id) nSets++; });
   d.logs.forEach(function (l) { if (l.lineId === id) nLogs++; });
   (d.trips || []).forEach(function (t) { if (t && t.lineId === id) nTrips++; });
-  if (nSets || nLogs) {
-    toast('\u201C' + ln.name + '\u201D still has ' + nSets + ' set' + (nSets === 1 ? '' : 's') +
-      ' and ' + nLogs + ' catch' + (nLogs === 1 ? '' : 'es') + ' \u2014 empty it first.');
-    return;
-  }
+  /* Q154 (2026-10-06): Tanner's ruling — deleting a line deletes ALL of
+     its data: sets, catch logs (History included), photos, voice memos,
+     mileage trips, everything. One gone-forever warning; no empty-first. */
+  var what = [];
+  if (nSets) what.push(nSets + ' set' + (nSets === 1 ? '' : 's'));
+  if (nLogs) what.push(nLogs + ' catch log' + (nLogs === 1 ? '' : 's') + ' (removed from History too)');
+  if (nTrips) what.push(nTrips + ' mileage trip' + (nTrips === 1 ? '' : 's'));
   confirmModal('Delete \u201C' + esc(ln.name) + '\u201D?',
-    'The empty line will be removed.' +
-    (nTrips ? ' Its ' + nTrips + ' mileage trip' + (nTrips === 1 ? '' : 's') + ' will be deleted too.' : '') +
-    ' This cannot be undone.',
+    (what.length
+      ? 'This will permanently delete the line and <b>everything on it</b>: ' + what.join(', ') + ', plus their photos and voice memos.'
+      : 'The empty line will be removed.') +
+    ' This cannot be undone \u2014 deleted data is gone forever.',
     'Delete line', function () {
+      var deadSetIds = {}, deadLogIds = {}, deadMemoIds = {};
+      d.sets.forEach(function (x) { if (x.lineId === id) deadSetIds[x.id] = true; });
+      d.logs.forEach(function (l) {
+        if (l.lineId === id || deadSetIds[l.setId]) {
+          deadLogIds[l.id] = true;
+          (l.memoIds || []).forEach(function (mid) { deadMemoIds[mid] = true; });
+        }
+      });
       d.lines = d.lines.filter(function (x) { return x.id !== id; });
+      d.sets = d.sets.filter(function (x) { return x.lineId !== id; });
+      d.logs = d.logs.filter(function (l) { return !(l.lineId === id || deadSetIds[l.setId]); });
       /* Q8: a line's trips go with it. */
       d.trips = (d.trips || []).filter(function (t) { return !t || t.lineId !== id; });
+      /* photos + voice memos on the line's sets/logs go too (Q38: gone everywhere) */
+      IDB.all('photos').then(function (all) {
+        all.forEach(function (ph) {
+          if (!(deadSetIds[ph.setId] || deadLogIds[ph.logId])) return;
+          if (photoURLs[ph.id]) { URL.revokeObjectURL(photoURLs[ph.id]); delete photoURLs[ph.id]; }
+          delete photoById[ph.id];
+          IDB.del('photos', ph.id);
+        });
+      }).catch(function () { /* noop */ });
+      IDB.all('memos').then(function (all) {
+        all.forEach(function (m) {
+          if (!(deadSetIds[m.setId] || deadMemoIds[m.id])) return;
+          if (memoURLs[m.id]) { URL.revokeObjectURL(memoURLs[m.id]); delete memoURLs[m.id]; }
+          IDB.del('memos', m.id);
+        });
+      }).catch(function () { /* noop */ });
       if (d.activeLineId === id) d.activeLineId = d.lines[0].id;
       Store.save();
       refreshForLine();
@@ -6904,7 +6962,7 @@ function wireUp() {
        can't be undone. */
     var s = getSet(detailSetId);
     var name = s ? s.name : 'this set';
-    confirmModal('Are you sure there\u2019s no changes?',
+    confirmModal('Are you sure there are no changes?',
       'This restarts the check clock for <b>' + esc(name) + '</b> \u2014 no going back.',
       'Yes', function () { quickEmptyCheck(); });
     /* Tanner 2026-09-30: arm the confirm's OK button after a beat, so a fast
