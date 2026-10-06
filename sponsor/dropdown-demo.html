@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Pine Hollow — Interactive Dropdown Demo</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  body { background: #101410; color: #f2ecdc; font-family: -apple-system, "Segoe UI", system-ui, sans-serif; min-height: 100vh; display: flex; justify-content: center; }
+  .page { width: 100%; max-width: 430px; min-height: 100vh; position: relative; }
+  .demo-tag { text-align: center; padding: 14px 16px 6px; font-size: 11px; letter-spacing: 3px; color: #8a8f7e; }
+  .demo-tag b { color: #c9a227; }
+
+  /* Edit Set sheet */
+  .sheet { background: #2b332a; border-radius: 26px 26px 0 0; margin-top: 10px; padding: 18px 18px 40px; min-height: calc(100vh - 60px); position: relative; }
+  .sheet::before { content: ""; display: block; width: 44px; height: 5px; border-radius: 3px; background: #5a6157; margin: 0 auto 14px; }
+  .sheet h1 { text-align: center; font-size: 26px; font-weight: 700; letter-spacing: .5px; margin-bottom: 22px; }
+  .sheet .close-x { position: absolute; top: 26px; right: 22px; font-size: 26px; color: #b9bfae; }
+
+  .field { margin-bottom: 26px; }
+  .field-label { text-align: center; font-size: 17px; color: #cfd3bd; margin-bottom: 8px; }
+  .field-hint { font-size: 15px; color: #9aa08a; margin-bottom: 8px; }
+  .field-input { background: #181d17; border: 1px solid #454c42; border-radius: 16px; padding: 16px; font-size: 16px; min-height: 58px; color: #f2ecdc; cursor: pointer; }
+  .field-input .placeholder { color: #6f7565; }
+
+  .suggest { display: none; margin-top: 10px; border-top: 1px solid #3d443b; }
+  .field.open .suggest { display: block; }
+  .row { display: flex; align-items: center; gap: 12px; padding: 14px 6px; border-bottom: 1px solid #3d443b; cursor: pointer; }
+  .row:active { background: #333b31; }
+  .row .name { flex: 1; font-size: 18px; }
+  .row.plain .name { color: #a8ad99; }
+  .pill { background: #c9a227; color: #221d08; font-size: 12px; font-weight: 800; letter-spacing: 1px; padding: 6px 12px; border-radius: 20px; white-space: nowrap; }
+  .logo-chip { width: 52px; height: 52px; border-radius: 14px; overflow: hidden; flex-shrink: 0; background: #111; border: 1px solid #4a5049; }
+  .logo-chip img { width: 100%; height: 100%; object-fit: cover; }
+
+  /* Bio sheet */
+  .bio-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.6); z-index: 40; }
+  .bio-backdrop.show { display: block; }
+  .bio { display: none; position: fixed; left: 50%; transform: translateX(-50%); bottom: 0; width: 100%; max-width: 430px; max-height: 88vh; overflow-y: auto; background: #0d0d0c; border-radius: 26px 26px 0 0; z-index: 50; padding: 20px 26px 30px; text-align: center; }
+  .bio.show { display: block; animation: slideup .25s ease-out; }
+  @keyframes slideup { from { transform: translate(-50%, 30px); opacity: .5; } to { transform: translate(-50%, 0); opacity: 1; } }
+  .bio .close-x { position: absolute; top: 16px; right: 20px; font-size: 28px; color: #b9bfae; cursor: pointer; }
+  .bio-logo { width: 130px; height: 130px; border-radius: 50%; overflow: hidden; margin: 26px auto 18px; background: #111; }
+  .bio-logo img { width: 100%; height: 100%; object-fit: cover; }
+  .bio h2 { font-size: 30px; letter-spacing: 6px; font-weight: 800; }
+  .bio .sub { color: #c9a227; letter-spacing: 4px; font-size: 14px; font-weight: 700; margin: 8px 0 18px; }
+  .bio .rule { border: none; border-top: 1px solid #3a3a38; margin: 0 10px 20px; }
+  .bio .story { color: #b9bfae; font-size: 15px; line-height: 1.5; margin-bottom: 22px; padding: 0 6px; }
+  .bio h3 { color: #c9a227; letter-spacing: 5px; font-size: 14px; margin-bottom: 18px; }
+  .prod { margin-bottom: 20px; }
+  .prod .pname { font-size: 19px; font-weight: 700; margin-bottom: 6px; }
+  .prod .pdesc { color: #a8ad99; font-size: 15px; line-height: 1.5; }
+  .visit { display: inline-block; margin: 8px 0 26px; background: #c9a227; color: #221d08; font-weight: 800; letter-spacing: 2px; font-size: 16px; padding: 16px 52px; border-radius: 40px; text-decoration: none; }
+  .sponsored-foot { color: #c9a227; letter-spacing: 6px; font-size: 13px; }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="demo-tag"><b>INTERACTIVE DEMO</b> — tap a field, then a sponsored row</div>
+
+  <div class="sheet">
+    <div class="close-x">×</div>
+    <h1>Edit Set</h1>
+
+    <div class="field" id="f-bait">
+      <div class="field-label">Bait</div>
+      <div class="field-hint">e.g. fish-based paste</div>
+      <div class="field-input" data-field="bait"><span class="placeholder">Choose bait…</span></div>
+      <div class="suggest">
+        <div class="row sponsored" data-product="raccoon-paste">
+          <div class="name">Black Hat Raccoon Paste</div>
+          <span class="pill">SPONSORED</span>
+          <div class="logo-chip"><img src="final/pine-hollow-logo.png" alt="Pine Hollow"></div>
+        </div>
+        <div class="row plain"><div class="name">Generic fish paste</div></div>
+        <div class="row plain"><div class="name">Sardines in oil</div></div>
+      </div>
+    </div>
+
+    <div class="field" id="f-lure">
+      <div class="field-label">Lure</div>
+      <div class="field-hint">e.g. gland lure</div>
+      <div class="field-input" data-field="lure"><span class="placeholder">Choose lure…</span></div>
+      <div class="suggest">
+        <div class="row sponsored" data-product="k9-hitter">
+          <div class="name">Black Hat K9 Hitter</div>
+          <span class="pill">SPONSORED</span>
+          <div class="logo-chip"><img src="final/pine-hollow-logo.png" alt="Pine Hollow"></div>
+        </div>
+        <div class="row sponsored" data-product="toe-jam">
+          <div class="name">Black Hat Toe Jam</div>
+          <span class="pill">SPONSORED</span>
+          <div class="logo-chip"><img src="final/pine-hollow-logo.png" alt="Pine Hollow"></div>
+        </div>
+        <div class="row sponsored" data-product="dream-catcher">
+          <div class="name">Black Hat Dream Catcher</div>
+          <span class="pill">SPONSORED</span>
+          <div class="logo-chip"><img src="final/pine-hollow-logo.png" alt="Pine Hollow"></div>
+        </div>
+        <div class="row plain"><div class="name">Generic gland lure</div></div>
+      </div>
+    </div>
+
+    <div class="field" id="f-urine">
+      <div class="field-label">Urine</div>
+      <div class="field-hint">e.g. red fox urine</div>
+      <div class="field-input" data-field="urine"><span class="placeholder">Choose urine…</span></div>
+      <div class="suggest">
+        <div class="row sponsored" data-product="fox-urine">
+          <div class="name">Black Hat Fox Urine</div>
+          <span class="pill">SPONSORED</span>
+          <div class="logo-chip"><img src="final/pine-hollow-logo.png" alt="Pine Hollow"></div>
+        </div>
+        <div class="row sponsored" data-product="coyote-urine">
+          <div class="name">Black Hat Coyote Urine</div>
+          <span class="pill">SPONSORED</span>
+          <div class="logo-chip"><img src="final/pine-hollow-logo.png" alt="Pine Hollow"></div>
+        </div>
+        <div class="row plain"><div class="name">Generic red fox urine</div></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="bio-backdrop" id="bioBackdrop"></div>
+  <div class="bio" id="bioSheet">
+    <div class="close-x" id="bioClose">×</div>
+    <div class="bio-logo"><img src="final/pine-hollow-logo.png" alt="Pine Hollow Trapping & Supplies"></div>
+    <h2>PINE HOLLOW</h2>
+    <div class="sub">TRAPPING &amp; SUPPLIES</div>
+    <hr class="rule">
+    <div class="story">Makers of the Black Hat bait &amp; lure line — built by trappers, for trappers.</div>
+    <h3>PRODUCTS</h3>
+    <div class="prod">
+      <div class="pname">Black Hat Raccoon Paste</div>
+      <div class="pdesc">A sweet, fishy paste built for coon — strong enough to pull them from a distance, sticky enough to stay on the trap.</div>
+    </div>
+    <div class="prod">
+      <div class="pname">Black Hat K9 Hitter</div>
+      <div class="pdesc">A loud canine call lure, built to pull coyotes and fox across the line.</div>
+    </div>
+    <div class="prod">
+      <div class="pname">Black Hat Toe Jam</div>
+      <div class="pdesc">A sweet, skunky foot lure for coon and skunk sets.</div>
+    </div>
+    <div class="prod">
+      <div class="pname">Black Hat Dream Catcher</div>
+      <div class="pdesc">A long-range curiosity lure for cats and coyotes.</div>
+    </div>
+    <div class="prod">
+      <div class="pname">Black Hat Fox Urine</div>
+      <div class="pdesc">Pure red fox urine, collected fresh. The curiosity scent that stops a fox in its tracks at the set.</div>
+    </div>
+    <div class="prod">
+      <div class="pname">Black Hat Coyote Urine</div>
+      <div class="pdesc">Territorial marker from dominant coyotes. Tells every passing dog this ground is claimed.</div>
+    </div>
+    <a class="visit" href="#" onclick="return false;">VISIT WEBSITE</a>
+    <div class="sponsored-foot">SPONSORED</div>
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll('.field-input').forEach(function(input) {
+    input.addEventListener('click', function() {
+      var field = input.closest('.field');
+      var wasOpen = field.classList.contains('open');
+      document.querySelectorAll('.field.open').forEach(function(f) { f.classList.remove('open'); });
+      if (!wasOpen) field.classList.add('open');
+    });
+  });
+  document.querySelectorAll('.row.sponsored').forEach(function(row) {
+    row.addEventListener('click', function() {
+      document.getElementById('bioSheet').classList.add('show');
+      document.getElementById('bioBackdrop').classList.add('show');
+    });
+  });
+  document.querySelectorAll('.row.plain').forEach(function(row) {
+    row.addEventListener('click', function() {
+      var field = row.closest('.field');
+      var input = field.querySelector('.field-input');
+      input.innerHTML = row.querySelector('.name').textContent;
+      field.classList.remove('open');
+    });
+  });
+  function closeBio() {
+    document.getElementById('bioSheet').classList.remove('show');
+    document.getElementById('bioBackdrop').classList.remove('show');
+  }
+  document.getElementById('bioClose').addEventListener('click', closeBio);
+  document.getElementById('bioBackdrop').addEventListener('click', closeBio);
+</script>
+</body>
+</html>
