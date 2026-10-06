@@ -91,10 +91,13 @@ button, .btn {
 /* Prominent official-regulations link at the top of the Seasons tab. */
 .regs-link {
   display: flex; align-items: center; justify-content: center; gap: 8px;
-  margin: 12px 0; padding: 14px 18px; min-height: var(--tap);
+  margin: 12px 0; padding: 14px 18px; min-height: 84px;
   border-radius: var(--radius); background: var(--accent); color: var(--accent-ink);
   font-weight: 700; font-size: 16px; text-decoration: none; text-align: center;
 }
+/* 2026-10-02: Tanner — the three gold Seasons buttons share one thickness
+   (84px) so the two-line regulations label doesn't make its button taller
+   than the others; all labels stay centered. */
 /* Q134 (2026-10-01): Tanner — gold-button lettering is ALL CAPS by rule, not
    by memory. text-transform on the class means any label dropped into a gold
    button renders capped automatically; title case can't sneak through again. */
@@ -379,6 +382,20 @@ body.route-locked #tabbar { pointer-events: none; opacity: .35; }
 .leaflet-control-layers { background: transparent; border: none; box-shadow: none; border-radius: 14px; }
 .leaflet-control-layers-toggle { border-radius: 14px; background-color: var(--green); background-clip: padding-box; }
 .leaflet-control-layers-expanded { background: var(--panel); color: var(--ink); border: 1px solid var(--line); }
+/* Q148 (2026-10-06): tap-to-cycle base-layer button — a text label replaces
+   the stock layers-panel toggle glyph. Plain click handler, no hover-
+   dependent behavior, iOS-Safari-safe. */
+.leaflet-control-layers-toggle.layer-cycle {
+  background-image: none; width: auto; min-width: 44px; height: 44px;
+  line-height: 44px; padding: 0 12px; font-size: 12px; font-weight: 800;
+  letter-spacing: .04em; text-transform: uppercase; white-space: nowrap;
+  color: #0e150a; text-decoration: none; text-align: center; display: block;
+}
+/* Q149 (2026-10-06): Tanner — thin black outline on the three left-side
+   green map buttons (weather chip, zoom +/-, layers), matching the
+   right-side fab border treatment. Outline, not border, so sizing is
+   untouched. */
+#weather-chip, .leaflet-bar, .leaflet-control-layers-toggle { outline: 1px solid #0d0d0d; }
 
 /* set-detail status control (changed manually at check time) */
 .status-row { display: flex; align-items: center; gap: 10px; margin: 10px 0 4px; }
@@ -416,7 +433,7 @@ body.route-locked #tabbar { pointer-events: none; opacity: .35; }
 #seasons-rules .card.setsec { background: none; border: none; padding: 0; margin: 12px 0; }
 #seasons-rules .setsec-head {
   position: relative; display: flex; align-items: center; justify-content: center;
-  width: 100%; min-height: var(--tap); padding: 14px 44px 14px 18px; margin: 0;
+  width: 100%; min-height: 84px; padding: 14px 44px 14px 18px; margin: 0;
   background: var(--accent); color: var(--accent-ink); border: none; border-radius: var(--radius);
   font-size: 16px; font-weight: 700; text-transform: uppercase; text-align: center; cursor: pointer;
 }
