@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-10-06ci';
+var APP_VERSION = 'beta 0.1 · build 2026-10-06cj';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -2673,6 +2673,10 @@ function openSetForm(coords, setId) {
   /* Carry-forward: a new set starts as a copy of the last set on this line —
      same rig, next number. Name still gets the smart number; status/date stay fresh. */
   var tmpl = s ? null : lastSetOnLine();
+  /* Q162 (2026-10-06): Tanner — a field toggled off in Settings carries
+     nothing forward: the new set starts blank there even when the last set
+     had a value. Edit mode is untouched (it shows the set's real data). */
+  if (tmpl) tmpl = carryTemplate(tmpl);
   $('setform-title').textContent = s ? 'Edit Set' : 'New Set';
   $('sf-name').value = s ? s.name : nextSetName();
   $('sf-name').placeholder = s ? '' : 'e.g. Creek crossing';
@@ -2775,6 +2779,25 @@ function showLogFormError(msg) {
 function hideLogFormError() {
   var el = $('logform-error');
   if (el) { el.textContent = ''; el.classList.remove('show'); }
+}
+
+/* Q162 (2026-10-06): Tanner — the carry-forward template for a NEW set, with
+   every field the user toggled off in Settings blanked. A toggled-off field
+   never inherits the last set's value, no matter what was entered there. */
+function carryTemplate(t) {
+  var c = {}, k;
+  for (k in t) if (Object.prototype.hasOwnProperty.call(t, k)) c[k] = t[k];
+  if (!setFieldOn('traptype')) { c.trapMaker = ''; c.trapType = ''; }
+  if (!setFieldOn('trapdetail')) {
+    c.trapSpring = ''; c.trapSize = ''; c.snareDia = ''; c.snareLock = '';
+    c.snareLen = ''; c.snarePurpose = ''; c.trapModel = ''; c.trapMods = [];
+    c.panSize = ''; c.jawShape = ''; c.jawClose = '';
+  }
+  if (!setFieldOn('settype')) c.setType = '';
+  ['bait', 'lure', 'urine', 'visual', 'audio', 'other'].forEach(function (kk) {
+    if (!setFieldOn(kk)) c[kk] = [];
+  });
+  return c;
 }
 
 /* Most recently created set on the active line (the carry-forward template). */
@@ -2967,18 +2990,28 @@ function openSetDetail(id) {
   $('sd-badges').innerHTML =
     '<span class="badge status-' + esc(st) + '">' + esc(statusLabel(st)) + '</span>';
   /* Q71: status is display-only here — changes go through "Edit this set". */
-  $('sd-fields').innerHTML =
-    '<dt>Trap</dt><dd>' + esc(s.trapType) + (function () { var d = trapDetailSummary(s); return d ? ' · ' + esc(d) : ''; })() + '</dd>' +
-    '<dt>Set type</dt><dd>' + esc(s.setType || '—') + '</dd>' +
-    '<dt>Bait</dt><dd>' + esc(joinAttr(s.bait) || '—') + '</dd>' +
-    '<dt>Lure</dt><dd>' + esc(joinAttr(s.lure) || '—') + '</dd>' +
-    '<dt>Urine</dt><dd>' + esc(joinAttr(s.urine) || '—') + '</dd>' +
-    '<dt>Visual</dt><dd>' + esc(joinAttr(s.visual) || '—') + '</dd>' +
-    '<dt>Audio</dt><dd>' + esc(joinAttr(s.audio) || '—') + '</dd>' +
-    '<dt>Other Attractants</dt><dd>' + esc(joinAttr(s.other) || '—') + '</dd>' +
-    '<dt>Date set</dt><dd>' + esc(fmtDate(s.dateSet)) + '</dd>' +
-    (showCoords() ? '<dt>Location</dt><dd>' + (s.county ? esc(s.county) + ' Co. · ' : '') + s.lat.toFixed(5) + ', ' + s.lng.toFixed(5) + '</dd>' : '') +
-    '<dt>Weather</dt><dd>' + esc(weatherText(s.weather)) + '</dd>';
+  /* Q167 (2026-10-07): Tanner — the detail sheet only shows rows that were
+     actually logged. A field left empty at creation (or emptied in Edit)
+     gets no row at all, instead of a "—" placeholder eating screen space. */
+  var sdHtml = '';
+  function sdRow(label, val) {
+    if (val) sdHtml += '<dt>' + esc(label) + '</dt><dd>' + esc(val) + '</dd>';
+  }
+  var sdTrapDet = trapDetailSummary(s);
+  sdRow('Trap', (s.trapType || '') + (sdTrapDet ? ' · ' + sdTrapDet : ''));
+  sdRow('Set type', s.setType || '');
+  sdRow('Bait', joinAttr(s.bait));
+  sdRow('Lure', joinAttr(s.lure));
+  sdRow('Urine', joinAttr(s.urine));
+  sdRow('Visual', joinAttr(s.visual));
+  sdRow('Audio', joinAttr(s.audio));
+  sdRow('Other Attractants', joinAttr(s.other));
+  sdRow('Date set', fmtDate(s.dateSet));
+  if (showCoords()) {
+    sdRow('Location', (s.county ? s.county + ' Co. · ' : '') + s.lat.toFixed(5) + ', ' + s.lng.toFixed(5));
+  }
+  sdRow('Weather', s.weather ? weatherText(s.weather) : '');
+  $('sd-fields').innerHTML = sdHtml;
   /* Q36: show the missing reason on the set detail sheet */
   if (st === 'missing' && s.missingReason) {
     $('sd-fields').innerHTML += '<dt>Missing reason</dt><dd>' + esc(missingReasonLabel(s.missingReason)) +
@@ -4094,6 +4127,13 @@ function renderMapStatusFilters() {
       mapStatusFilter[v] = !mapStatusFilter[v];
       renderMapStatusFilters();
       refreshMarkers();
+      /* Q168 (2026-10-07): Tanner — if the route is up while he toggles, the
+         route redraws live against the new filter instead of going stale. */
+      if (typeof routeShownFor !== 'undefined' && routeShownFor &&
+          typeof drawRouteEstimate === 'function') {
+        var rl = routeShownFor;
+        if (!drawRouteEstimate(rl)) toast('Not enough visible sets for a route.');
+      }
     };
   }
 }
@@ -6536,7 +6576,12 @@ function bearingDeg(lat1, lon1, lat2, lon2) {
    coordinates are left out of the route entirely. */
 function checkOrderSets(lineId) {
   var sets = Store.data.sets.filter(function (s) {
-    return s && s.lineId === lineId && isFinite(+s.lat) && isFinite(+s.lng) && (+s.lat !== 0 || +s.lng !== 0);
+    /* Q164 (2026-10-07): Tanner — only sets visible under the current map
+       status toggles count toward the route. The toggles double as mileage
+       configurations (e.g. kill "pulled" and the estimate covers just the
+       run you're actually making). */
+    return s && s.lineId === lineId && isFinite(+s.lat) && isFinite(+s.lng) && (+s.lat !== 0 || +s.lng !== 0) &&
+      (typeof mapStatusFilter === 'undefined' || mapStatusFilter[normStatus(s.status)]);
   });
   sets.sort(function (a, b) { return (a.createdAt || 0) - (b.createdAt || 0); });
   var ordered = [], rest = sets.slice(), cur = rest.shift();
@@ -6632,11 +6677,17 @@ function renderMileageModal(lineId) {
       '<button type="button" class="btn-small btn-secondary line-edit" data-trip-del="' + esc(t.id) + '">Delete</button>' +
       '</div>';
   }).join('');
+  /* Q166 (2026-10-07): Tanner — no more "20-40% under" claim. The disclaimer
+     just says the straight-line number is skewed and the odometer is the
+     truth; when both exist we also show their average. */
+  var avgLine = (total > 0 && est.miles > 0)
+    ? '<br>Average of the two: <strong>' + esc(fmtMiles((total + est.miles) / 2)) + '</strong>'
+    : '';
   showModal(
     '<h3>Mileage \u2014 ' + esc(ln.name) + '</h3>' +
     '<p class="dim" style="margin-top:0">Odometer total: <strong>' + esc(fmtMiles(total)) + '</strong><br>' +
     'Route estimate: <strong>' + esc(fmtMiles(est.miles)) + '</strong>' +
-    ' <span class="dim">(straight-line estimate \u2014 typically 20\u201340% under road miles)</span></p>' +
+    ' <span class="dim">(straight-line \u2014 skewed vs road miles; trust your odometer)</span>' + avgLine + '</p>' +
     (rows || '<p class="dim">No trips logged yet.</p>') +
     '<div class="btn-row mbtns" style="margin-top:14px">' +
     '<button class="btn-primary" id="m-trip-add" type="button">+ Odometer</button>' +
@@ -6780,7 +6831,7 @@ function buildMileageRows(lineId) {
   rows.push(['TOTAL', lname, '', '', Math.round(lineTripTotal(lineId) * 10) / 10, '']);
   var est = routeEstimate(lineId);
   rows.push(['ROUTE ESTIMATE', lname, '', '', Math.round(est.miles * 10) / 10,
-    'Straight-line estimate \u2014 typically 20-40% under road miles']);
+    'Straight-line estimate \u2014 skewed vs road miles; trust your odometer']);
   return rows;
 }
 function exportMileage() {
