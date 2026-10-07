@@ -70,7 +70,7 @@
   <div id="pin-hint">Tap the map to place your set pin.</div>
   <div id="place-bar"><span>Drag the pin onto the exact spot.</span><button class="btn-small btn-primary" id="btn-place-ok" type="button"><img class="pb-ic" src="assets/icons/check.png" alt="">Looks right</button><button class="btn-small btn-ghost" id="btn-place-cancel" type="button" aria-label="Cancel"><img class="pb-ic" src="assets/icons/x.png" alt=""></button></div>
   <!-- B26: home-ground picker — two clear choices, not steps; cancel stays inline; tight bar -->
-  <div id="home-bar"><span id="home-bar-prompt">Where's your home ground?</span><div class="home-bar-actions"><button class="btn-small btn-primary" id="btn-home-ok" type="button" hidden>Set home here</button><button class="btn-small btn-ghost" id="btn-home-cancel" type="button" aria-label="Cancel"><img class="pb-ic" src="assets/icons/x.png" alt=""></button></div></div>
+  <div id="home-bar"><span id="home-bar-prompt">Where's your home ground?</span><div class="home-bar-actions"><input id="home-zip" class="zip-jump" type="text" inputmode="numeric" maxlength="5" placeholder="ZIP" aria-label="Jump to ZIP code" autocomplete="off"><button class="btn-small btn-secondary" id="btn-home-zip" type="button">Go</button><button class="btn-small btn-primary" id="btn-home-ok" type="button" hidden>Set home here</button><button class="btn-small btn-ghost" id="btn-home-cancel" type="button" aria-label="Cancel"><img class="pb-ic" src="assets/icons/x.png" alt=""></button></div></div>
 
   <!-- MAP PANE -->
   <div id="pane-map" class="pane active">
@@ -652,6 +652,7 @@
 <script src="js/season-data.js"></script>
 <script src="js/guide-content.js"></script>
 <script src="js/trap-catalog.js"></script>
+<script src="js/zipdb.js"></script>
 <script src="js/app.js"></script>
 </body>
 </html>
