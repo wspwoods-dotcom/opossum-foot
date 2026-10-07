@@ -385,10 +385,11 @@ body.route-locked #tabbar { pointer-events: none; opacity: .35; }
 /* Q148 (2026-10-06): tap-to-cycle base-layer button — a text label replaces
    the stock layers-panel toggle glyph. Plain click handler, no hover-
    dependent behavior, iOS-Safari-safe. */
+/* Q155 (2026-10-06): Tanner — icon per view replaces the truncated text
+   label. Fixed 44px square, emoji glyph centered, no text styling. */
 .leaflet-control-layers-toggle.layer-cycle {
-  background-image: none; width: auto; min-width: 44px; height: 44px;
-  line-height: 44px; padding: 0 12px; font-size: 12px; font-weight: 800;
-  letter-spacing: .04em; text-transform: uppercase; white-space: nowrap;
+  background-image: none; width: 44px; height: 44px;
+  line-height: 44px; padding: 0; font-size: 22px;
   color: #0e150a; text-decoration: none; text-align: center; display: block;
 }
 /* Q149 (2026-10-06): Tanner — thin black outline on the three left-side
@@ -931,4 +932,3 @@ body.placing #route-back-chip { display: none; }
 .lo-notes-box { border: 1px solid var(--line); border-radius: var(--radius); padding: 10px 12px; }
 
 /* One-tap remove for a single landowner phone number (Tanner 2026-09-30). */
-.lo-phone-x { background: none; border: none; color: #c0392b; font-size: 18px; line-height: 1; padding: 4px 8px; cursor: pointer; }
