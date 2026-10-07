@@ -345,7 +345,11 @@ body[data-pinscheme="pastel"] { --pin-active:#a9d6a5; --pin-sprung:#eacd7d; --pi
 
 /* Q72 (2026-10-01): odometer photo button sits below the full-width input;
    live miles readout. */
-.odo-photo-row { display: flex; align-items: center; gap: 8px; margin: 6px 0 4px; }
+.odo-photo-row { display: flex; align-items: center; gap: 8px; margin: 6px 0 4px; flex-wrap: wrap; }
+/* Tanner 2026-10-07: the just-attached thumbnail drops BELOW the button, like
+   the license/documents grid — never squeezed half off the right edge. */
+.odo-photo-row .dim { flex: 1 1 100%; min-height: 0; }
+.odo-photo-row .dim:empty { display: none; }
 .odo-photo-btn { flex: 0 0 auto; padding: 6px 12px; font-size: 13px; }
 .odo-miles { text-align: center; font-weight: 700; font-size: 16px; margin: 8px 0 2px; min-height: 20px; }
 /* Tanner 2026-10-01: route mode — tab bar locked while a route estimate is
