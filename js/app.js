@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-10-02cf';
+var APP_VERSION = 'beta 0.1 · build 2026-10-06ch';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -1958,10 +1958,15 @@ function initMap() {
      instantly-close, so taps appear to do nothing). Replaced with an explicit
      tap-to-cycle button: Satellite → Street → Topo → Satellite. One tap,
      one layer, no panel, no hover-dependent behavior. */
+  /* Q155 (2026-10-06): Tanner — the tap-cycle button's text label is
+     unreadable (truncated "SATE" behind the button). Drop the text entirely:
+     the button becomes an icon that changes per active view — satellite
+     glyph on Satellite, road-map glyph on Street, mountain/topo glyph on
+     Topo. Tap-cycle behavior unchanged. */
   var baseLayers = [
-    { name: 'Satellite', layer: satL },
-    { name: 'Street', layer: streetL },
-    { name: 'Topo', layer: topoL }
+    { name: 'Satellite', layer: satL, icon: '🛰️' },
+    { name: 'Street', layer: streetL, icon: '🗺️' },
+    { name: 'Topo', layer: topoL, icon: '⛰️' }
   ];
   var baseIdx = 0; /* satL is already on the map */
   var layerCtl = L.control({ position: 'bottomleft' });
@@ -1970,7 +1975,10 @@ function initMap() {
     el.innerHTML = '<a class="leaflet-control-layers-toggle layer-cycle" href="#" role="button" title="Map style" aria-label="Change map style"></a>';
     var link = el.firstChild;
     L.DomEvent.disableClickPropagation(el);
-    function paint() { link.textContent = baseLayers[baseIdx].name; }
+    function paint() {
+      link.textContent = baseLayers[baseIdx].icon;
+      link.setAttribute('aria-label', 'Map style: ' + baseLayers[baseIdx].name + '. Tap to change.');
+    }
     paint();
     L.DomEvent.on(link, 'click', function (e) {
       L.DomEvent.preventDefault(e);
@@ -5055,13 +5063,14 @@ function formatPhoneDisplay(s) {
 function landownerPhoneHtml(lo) {
   var nums = landownerPhoneList(lo.phones);
   if (nums.length) {
-    /* Tanner 2026-09-30: every number is one tap from a call or a text. */
+    /* Tanner 2026-09-30: every number is one tap from a call or a text.
+       Q158 (2026-10-06): Tanner — no delete X on the card; a number is
+       removed by editing it out in the Edit screen. */
     return nums.map(function (n) {
       var d = landownerPhoneDigits(n);
       return '<div class="lo-phone"><span class="lo-phone-num">' + esc(formatPhoneDisplay(n)) + '</span>' +
         '<span class="lo-phone-btns"><a class="btn-small btn-primary" href="tel:' + esc(d) + '">Call</a>' +
-        '<a class="btn-small btn-secondary" href="sms:' + esc(d) + '">Text</a>' +
-        '<button class="lo-phone-x" type="button" data-lo-phone-del="' + esc(n) + '" aria-label="Remove this number">✕</button></span></div>';
+        '<a class="btn-small btn-secondary" href="sms:' + esc(d) + '">Text</a></span></div>';
     }).join('');
   }
   if (lo.phones) return '<p style="margin:4px 0"><strong>' + esc(lo.phones) + '</strong></p>';
@@ -5089,39 +5098,52 @@ function renderLandowners() {
 function landownerCard(lo, photos) {
   var card = document.createElement('div');
   card.className = 'card';
-  var slips = photos.filter(function (p) { return p.kind === 'slip'; }).length;
-  var hasBoundary = !!lo.boundaryNote || photos.some(function (p) { return p.kind === 'boundary'; });
+  var slips = photos.filter(function (p) { return p.kind === 'slip'; });
+  var bounds = photos.filter(function (p) { return p.kind === 'boundary'; });
   var html = '<h3 style="text-align:left">' + esc(lo.name) + '</h3>';
   html += landownerPhoneHtml(lo);
   if (lo.notes) html += '<p class="dim lo-notes-box" style="margin:4px 0">' + esc(lo.notes) + '</p>';
-  var bits = [];
-  if (slips) bits.push(slips + ' slip photo' + (slips === 1 ? '' : 's'));
-  if (hasBoundary) bits.push('boundary on file');
-  if (bits.length) html += '<p class="dim" style="margin:4px 0">' + bits.join(' · ') + '</p>';
+  /* Q158 (2026-10-06): Tanner — slip and boundary photos viewable right on
+     the card, like the license wallet: thumbnails, tap for full screen.
+     No delete X anywhere on the card — photo and number removal happens
+     in the Edit screen only. */
+  var viewable = slips.concat(bounds);
+  if (viewable.length) {
+    html += '<div class="lic-grid" data-lo-photos></div>';
+  } else if (lo.boundaryNote) {
+    html += '<p class="dim" style="margin:4px 0">boundary on file</p>';
+  }
   html += '<div class="btn-row"><button class="btn-secondary" data-lo-edit type="button">Edit</button>' +
     '<button class="btn-secondary" data-lo-del type="button">Delete</button></div>';
   card.innerHTML = html;
+  var grid = card.querySelector('[data-lo-photos]');
+  if (grid) {
+    viewable.forEach(function (p) {
+      var title = p.kind === 'slip' ? 'Permission slip' : 'Boundary map';
+      var item = document.createElement('div');
+      item.className = 'lic-item';
+      var img = document.createElement('img');
+      img.src = loPhotoURL(p); img.alt = title;
+      img.onclick = function () { openLoPhotoCardViewer(p, title); };
+      item.appendChild(img);
+      grid.appendChild(item);
+    });
+  }
   card.querySelector('[data-lo-edit]').onclick = function () { openLandownerForm(lo.id); };
   card.querySelector('[data-lo-del]').onclick = function () { deleteLandowner(lo.id); };
-  card.querySelectorAll('[data-lo-phone-del]').forEach(function (b) {
-    b.onclick = function () { deleteLandownerPhone(lo.id, b.getAttribute('data-lo-phone-del')); };
-  });
   return card;
 }
-/* Tanner 2026-09-30: one-tap remove for a single phone number, with the
-   usual gone-forever warning. */
-function deleteLandownerPhone(loId, num) {
-  var rec = landownerById(loId);
-  if (!rec) return;
-  confirmModal('Remove this number?',
-    esc(num) + ' will be removed from ' + esc(rec.name) + '. The landowner and everything else stay.',
-    'Remove',
-    function () {
-      rec.phones = landownerPhoneList(rec.phones).filter(function (n) { return n !== num; }).join(',');
-      rec.updatedAt = Date.now();
-      Store.save();
-      renderLandowners();
-    });
+/* Q158 (2026-10-06): Tanner — view-only photo viewer for the landowner
+   card. No Delete button here; removing a photo happens in the Edit
+   screen. Mirrors the license-wallet viewer. */
+function openLoPhotoCardViewer(p, title) {
+  var src = loPhotoURL(p);
+  showModal('<h3>' + esc(title) + '</h3>' +
+    (src ? '<img src="' + src + '" style="width:100%;border-radius:8px" alt="' + esc(title) + '">' : '<p class="dim">Photo would not load.</p>') +
+    '<div class="btn-row" style="margin-top:10px"><button class="btn-secondary" id="m-ph-save" type="button">Save Photo</button>' +
+    '<button class="btn-secondary" id="m-close" type="button">Close</button></div>');
+  $('m-close').onclick = closeModal;
+  $('m-ph-save').onclick = function () { if (p && p.blob) sharePhotoFile(p.blob, 'opossum-foot-photo'); };
 }
 /* Add/edit form. New photos sit in pendingLoPhotos (Q37's pattern) and are
    flushed to IDB on save; existing photos delete straight away. */
