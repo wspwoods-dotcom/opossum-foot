@@ -518,7 +518,12 @@ body.route-locked #tabbar { pointer-events: none; opacity: .35; }
 .form-error.show { display: block; }
 .warnbox .wb-title { font-weight: 800; margin-bottom: 4px; }
 /* Q97 (2026-10-01): the bait-rule head is a standalone collapsible row, not
-   inside a .setsec — slim, amber, chevron rotates on expand. */
+   inside a .setsec — slim, amber, chevron rotates on expand.
+   Q160 (2026-10-06): Tanner — the rule box showed empty on his phone. Root
+   cause: .setsec-head's `display:flex` beats the UA `[hidden]{display:none}`,
+   so the header never hid; its stale tap handler then revealed the emptied
+   box. Explicit guard, matching the .attr-add pattern. */
+.baitrule-head[hidden] { display: none; }
 .baitrule-head { font-size: 16px; padding: 10px 0; color: #f5cf7a; }
 .baitrule-head.open .setsec-chev { transform: rotate(90deg); }
 .reminder-tag { font-size: 13px; color: var(--muted); font-style: italic; margin-top: 8px; }
@@ -554,7 +559,12 @@ body.route-locked #tabbar { pointer-events: none; opacity: .35; }
 .sheet-head h2 { margin: 0; font-size: 21px; }
 .sheet-x { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); }
 .sheet-x { background: none; border: none; color: var(--muted); font-size: 26px; min-height: 48px; width: 48px; padding: 0; }
-.sheet-body { overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; padding: 4px 16px 24px; }
+.sheet-body { overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; padding: 4px 16px 24px; min-height: 0; }
+/* Q161 (2026-10-06): Tanner — a giant warnbox (e.g. the coyote county-rules
+   alert in Log a Catch) made the sheet content taller than the sheet, and
+   without min-height:0 the flex item refused to shrink, so the sheet never
+   scrolled and the Save button was unreachable below the fold. One-line
+   global fix: every sheet now scrolls no matter how tall its warnings get. */
 .sheet-actions { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
 .btn-row { display: flex; gap: 10px; }
 .btn-row > * { flex: 1; min-width: 0; }
