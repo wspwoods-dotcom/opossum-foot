@@ -216,8 +216,12 @@ select.select-hint { color: var(--faint); }
   display: flex; align-items: center; justify-content: center; gap: 10px; }
 .mflow-n { display: inline-flex; align-items: center; justify-content: center;
   width: 26px; height: 26px; border-radius: 50%; background: rgba(0,0,0,.28);
-  font-size: 15px; font-weight: 700; flex: 0 0 auto; }
-.btn-secondary .mflow-n { background: rgba(255,255,255,.16); }
+  font-size: 15px; font-weight: 700; flex: 0 0 auto; color: #f2ead8; }
+/* Tanner 2026-10-07: the three steps each get their own app-palette color. */
+.mflow-btn-1 { background: var(--accent); color: var(--accent-ink); border: 1px solid var(--accent); }
+.mflow-btn-2 { background: var(--green); color: #131c0b; border: 1px solid var(--green); }
+.mflow-btn-3 { background: var(--panel); color: var(--ink); border: 1px solid var(--line); }
+.mflow-btn-3 .mflow-n { background: rgba(255,255,255,.16); }
 .mflow-close { margin-top: 2px; }
 .flow-steps { font-size: 13px; line-height: 1.55; margin-top: 0; }
 #home-bar .zip-jump { width: 76px; padding: 6px 8px; border-radius: 8px; border: 1px solid var(--line); background: #0f150a; color: #fff; font-size: 15px; text-align: center; }
@@ -639,12 +643,12 @@ body.route-locked #tabbar { pointer-events: none; opacity: .35; }
 /* ---------- modal ---------- */
 #modal { position: fixed; inset: 0; z-index: 1000; display: none; align-items: center; justify-content: center; padding: 24px; background: rgba(0,0,0,.6); }
 #modal.show { display: flex; }
-#modal .modal-card { background: var(--sheet); border: 1px solid var(--line); border-radius: 16px; padding: 22px; width: 100%; max-width: 420px; max-height: 84%; max-height: 84dvh; overflow-y: auto; }
+#modal .modal-card { background: var(--sheet); border: 1px solid var(--line); border-radius: 16px; padding: 22px; width: 100%; max-width: 420px; max-height: 84%; max-height: 84dvh; overflow-y: auto; overflow-x: hidden; }
 #modal h3 { margin-top: 0; }
 /* Second modal layer: sits above #modal for the landowner photo viewer. */
 #modal2 { position: fixed; inset: 0; z-index: 1100; display: none; align-items: center; justify-content: center; padding: 24px; background: rgba(0,0,0,.75); }
 #modal2.show { display: flex; }
-#modal2 .modal-card { background: var(--sheet); border: 1px solid var(--line); border-radius: 16px; padding: 22px; width: 100%; max-width: 420px; max-height: 84%; max-height: 84dvh; overflow-y: auto; }
+#modal2 .modal-card { background: var(--sheet); border: 1px solid var(--line); border-radius: 16px; padding: 22px; width: 100%; max-width: 420px; max-height: 84%; max-height: 84dvh; overflow-y: auto; overflow-x: hidden; }
 #modal2 h3 { margin-top: 0; }
 
 /* ---------- toast ---------- */
