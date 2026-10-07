@@ -217,6 +217,11 @@ select.select-hint { color: var(--faint); }
 .mflow-n { display: inline-flex; align-items: center; justify-content: center;
   width: 26px; height: 26px; border-radius: 50%; background: rgba(0,0,0,.28);
   font-size: 15px; font-weight: 700; flex: 0 0 auto; color: #f2ead8; }
+/* Tanner 2026-10-07: the trip form walks a numbered flow like the mileage
+   screen — step headers reuse the .mflow-n badge. */
+.tflow-step { display: flex; align-items: center; gap: 10px; font-weight: 700;
+  font-size: 16px; margin: 14px 0 6px; }
+.tflow-step .dim { font-weight: 400; font-size: 13px; }
 /* Tanner 2026-10-07: the three steps each get their own app-palette color. */
 .mflow-btn-1 { background: var(--accent); color: var(--accent-ink); border: 1px solid var(--accent); }
 .mflow-btn-2 { background: var(--green); color: #131c0b; border: 1px solid var(--green); }
