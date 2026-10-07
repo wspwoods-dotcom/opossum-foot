@@ -220,8 +220,7 @@ select.select-hint { color: var(--faint); }
 /* Tanner 2026-10-07: the three steps each get their own app-palette color. */
 .mflow-btn-1 { background: var(--accent); color: var(--accent-ink); border: 1px solid var(--accent); }
 .mflow-btn-2 { background: var(--green); color: #131c0b; border: 1px solid var(--green); }
-.mflow-btn-3 { background: var(--panel); color: var(--ink); border: 1px solid var(--line); }
-.mflow-btn-3 .mflow-n { background: rgba(255,255,255,.16); }
+.mflow-btn-3 { background: var(--blue); color: #0e1626; border: 1px solid var(--blue); }
 .mflow-close { margin-top: 2px; }
 .flow-steps { font-size: 13px; line-height: 1.55; margin-top: 0; }
 #home-bar .zip-jump { width: 76px; padding: 6px 8px; border-radius: 8px; border: 1px solid var(--line); background: #0f150a; color: #fff; font-size: 15px; text-align: center; }
