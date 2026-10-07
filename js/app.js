@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-10-07cw';
+var APP_VERSION = 'beta 0.1 · build 2026-10-07cx';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -1145,11 +1145,14 @@ function applyFeatureToggles() {
   var wchip = $('weather-chip');
   if (wchip) wchip.style.display = wOn ? '' : 'none';
   if (!wOn && $('sheet-weather') && $('sheet-weather').classList.contains('show')) closeSheets();
-  /* Q8: mileage toggle — hides the standalone mileage CSV export. The
-     per-line Mileage buttons are gated in renderLines. */
+  /* Q8: mileage toggle — hides the standalone mileage CSV export and the
+     Paperwork mileage card. (2026-10-07: mileage moved off the Lines tab —
+     it's paperwork.) */
   var mOn = Store.data.mileageOn !== false;
   var mexp = $('btn-export-mileage');
   if (mexp) mexp.style.display = mOn ? '' : 'none';
+  var pmc = $('paperwork-mileage-card');
+  if (pmc) pmc.style.display = mOn ? '' : 'none';
 }
 
 /* ---- new-set field toggles ---- */
@@ -4928,6 +4931,32 @@ function isLicenseWalletPhoto(p, lid, firstId) {
   if (!p || p.setId || p.logId || p.landownerId) return false;
   return (p.lineId || firstId) === lid;
 }
+/* Tanner 2026-10-07: mileage is paperwork. The per-line Mileage buttons
+   moved off the Lines tab into this card — one row per line with its
+   odometer total, opening the same trip screen. */
+function renderPaperworkMileage() {
+  var box = $('paperwork-mileage-lines');
+  if (!box) return;
+  var card = $('paperwork-mileage-card');
+  var on = Store.data.mileageOn !== false;
+  if (card) card.style.display = on ? '' : 'none';
+  if (!on) return;
+  var lines = (Store.data.lines || []);
+  if (!lines.length) { box.innerHTML = '<p class="dim">No lines yet.</p>'; return; }
+  box.innerHTML = lines.map(function (ln) {
+    var n = tripsForLine(ln.id).length;
+    return '<div class="line-row">' +
+      '<span class="line-main"><span class="line-name">' + esc(ln.name) + '</span>' +
+      '<span class="dim">' + esc(fmtMiles(lineTripTotal(ln.id))) + ' \u00b7 ' + n + ' trip' + (n === 1 ? '' : 's') + '</span></span>' +
+      '<button type="button" class="btn-small btn-secondary line-edit" data-pm-line="' + esc(ln.id) + '">Mileage</button></div>';
+  }).join('');
+  var btns = box.querySelectorAll('[data-pm-line]');
+  for (var i = 0; i < btns.length; i++) {
+    (function (el) {
+      el.onclick = function () { showMileageModal(el.getAttribute('data-pm-line')); };
+    })(btns[i]);
+  }
+}
 function renderLicenses() {
   var grid = $('license-grid');
   IDB.all('photos').then(function (all) {
@@ -5830,7 +5859,7 @@ function switchTab(name) {
   if (name === 'scorecard') renderScorecardTab();
   if (name === 'totals') renderTotals();
   if (name === 'seasons') renderSeasons($('seasons-search').value);
-  if (name === 'licenses') { renderLicenses(); renderLandowners(); }
+  if (name === 'licenses') { renderLicenses(); renderLandowners(); renderPaperworkMileage(); }
   if (name === 'lines') renderLines();
 }
 
@@ -5895,7 +5924,6 @@ function renderLines() {
       ' · ' + nLogs + ' catch' + (nLogs === 1 ? '' : 'es') + '</span>' +
       (ln.id === lid ? '<span class="badge alive">Active</span>' : '') +
       '</button>' +
-      '<button type="button" class="btn-small btn-secondary line-edit" data-act="mileage"' + (Store.data.mileageOn !== false ? '' : ' hidden') + '>Mileage</button>' +
       '<button type="button" class="btn-small btn-secondary line-edit" data-act="edit">Edit</button>' +
       '</div>';
   }).join('');
@@ -5905,7 +5933,6 @@ function renderLines() {
       var id = row.getAttribute('data-line');
       row.querySelector('[data-act="switch"]').onclick = function () { activateLine(id); };
       row.querySelector('[data-act="edit"]').onclick = function () { showLineEditModal(id); };
-      row.querySelector('[data-act="mileage"]').onclick = function () { showMileageModal(id); };
     })(rows[i]);
   }
 }
@@ -6730,7 +6757,8 @@ function renderMileageModal(lineId) {
     '<button class="btn-ghost mflow-btn mflow-close" id="m-trip-close" type="button">Close</button></div>' +
     /* Tanner 2026-10-07: the flow explainer lives down here, below everything. */
     '<p class="dim flow-steps" style="margin:14px 2px 0">1. <strong>Change home</strong> sets where your map opens (once).<br>' +
-    '2. <strong>Odometer</strong> logs the trip \u2014 snap each reading, add a route map photo if you want one.</p>'
+    '2. <strong>Odometer</strong> logs the trip \u2014 snap each reading, add a route map photo if you want one.<br>' +
+    'Export the trip log anytime from Settings \u2192 Export mileage (CSV).</p>'
     /* NOTE 2026-10-07: Tanner scrapped the straight-line "Show route on map"
        estimate — in the mountains road miles can be 10x air miles, so the
        number lies. drawRouteEstimate/clearRouteEstimate stay parked in the
@@ -6947,8 +6975,9 @@ function deleteTrip(lineId, tripId) {
     });
 }
 
-/* --- CSV export: one row per trip for the active line, then TOTAL and
-   ROUTE ESTIMATE summary rows. --- */
+/* --- CSV export: one row per trip for the active line, then a TOTAL row.
+   Tanner 2026-10-07: the straight-line ROUTE ESTIMATE row is cut -- it lies
+   in the mountains, and the odometer is the truth. --- */
 function buildMileageRows(lineId) {
   var ln = lineById(Store.data, lineId);
   var lname = ln ? ln.name : '';
@@ -6957,9 +6986,6 @@ function buildMileageRows(lineId) {
     rows.push([t.date, lname, t.startOdo, t.endOdo, Math.round(tripMiles(t) * 10) / 10, t.notes || '']);
   });
   rows.push(['TOTAL', lname, '', '', Math.round(lineTripTotal(lineId) * 10) / 10, '']);
-  var est = routeEstimate(lineId);
-  rows.push(['ROUTE ESTIMATE', lname, '', '', Math.round(est.miles * 10) / 10,
-    'Straight-line estimate \u2014 skewed vs road miles; trust your odometer']);
   return rows;
 }
 function exportMileage() {
