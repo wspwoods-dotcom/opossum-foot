@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-10-07cv';
+var APP_VERSION = 'beta 0.1 · build 2026-10-07cw';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -6718,8 +6718,6 @@ function renderMileageModal(lineId) {
        odometer. The Google Maps directions link-out is scrapped (Google caps
        a route at 9 stops); the trip screen still takes a route-map photo if
        he wants one. */
-    '<p class="dim flow-steps">1. <strong>Change home</strong> sets where your map opens (once).<br>' +
-    '2. <strong>Odometer</strong> logs the trip \u2014 snap each reading, add a route map photo if you want one.</p>' +
     (rows || '<p class="dim">No trips logged yet.</p>') +
     '<input type="file" id="m-trip-photo-input" class="hidden-file" accept="image/*">' +
     /* Tanner 2026-10-07: directions scrapped — Google caps a route at 9 stops,
@@ -6729,7 +6727,10 @@ function renderMileageModal(lineId) {
     '<button class="mflow-btn mflow-btn-1" id="m-trip-home" type="button"><span class="mflow-n">1</span>' +
     (lineHasHome(lineId) ? 'Change home' : 'Set home') + '</button>' +
     '<button class="mflow-btn mflow-btn-3" id="m-trip-add" type="button"><span class="mflow-n">2</span>Odometer</button>' +
-    '<button class="btn-ghost mflow-btn mflow-close" id="m-trip-close" type="button">Close</button></div>'
+    '<button class="btn-ghost mflow-btn mflow-close" id="m-trip-close" type="button">Close</button></div>' +
+    /* Tanner 2026-10-07: the flow explainer lives down here, below everything. */
+    '<p class="dim flow-steps" style="margin:14px 2px 0">1. <strong>Change home</strong> sets where your map opens (once).<br>' +
+    '2. <strong>Odometer</strong> logs the trip \u2014 snap each reading, add a route map photo if you want one.</p>'
     /* NOTE 2026-10-07: Tanner scrapped the straight-line "Show route on map"
        estimate — in the mountains road miles can be 10x air miles, so the
        number lies. drawRouteEstimate/clearRouteEstimate stay parked in the
