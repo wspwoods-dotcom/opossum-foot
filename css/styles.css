@@ -211,6 +211,7 @@ select.select-hint { color: var(--faint); }
    cancel × pins to the right edge of the button row. */
 #home-bar .home-bar-actions { display: flex; align-items: center; justify-content: center; width: 100%; position: relative; }
 #home-bar .home-bar-actions .btn-ghost { position: absolute; right: 0; margin-left: 0; }
+.flow-steps { font-size: 13px; line-height: 1.55; margin-top: 0; }
 #home-bar .zip-jump { width: 76px; padding: 6px 8px; border-radius: 8px; border: 1px solid var(--line); background: #0f150a; color: #fff; font-size: 15px; text-align: center; }
 /* Q118b (2026-10-01): Tanner — the home pin was rendering at 30px because the
    later `.pin` rule (same specificity) beat `.pin-home`'s 52px. Doubling the
