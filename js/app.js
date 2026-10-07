@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-10-06ch';
+var APP_VERSION = 'beta 0.1 · build 2026-10-06ci';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -1195,7 +1195,15 @@ function updateBaitWarn() {
       var b = $('sf-bait-warn');
       var open = !b.hasAttribute('hidden');
       if (open) { b.setAttribute('hidden', ''); head.classList.remove('open'); }
-      else { b.removeAttribute('hidden'); head.classList.add('open'); }
+      else {
+        /* Q160 (2026-10-06): Tanner — refill from the live rule on every
+           expand, so the box can never be shown with stale/empty content. */
+        var c2 = (typeof activeStateCode === 'function') ? activeStateCode() : null;
+        var r2 = c2 && BAIT_RULES[c2];
+        if (r2) b.innerHTML = esc(r2) +
+          '<div class="reminder-tag">Reminder only, not legal advice \u2014 check your state\u2019s current regulations.</div>';
+        b.removeAttribute('hidden'); head.classList.add('open');
+      }
     };
   }
   box.innerHTML = esc(rule) +
