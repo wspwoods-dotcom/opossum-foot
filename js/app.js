@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-10-07cm';
+var APP_VERSION = 'beta 0.1 · build 2026-10-07cn';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -2257,6 +2257,20 @@ function cancelHomePick() {
   if (homeMarker && map) { try { map.removeLayer(homeMarker); } catch (e) {} homeMarker = null; }
   var bar = $('home-bar'); if (bar) bar.classList.remove('show');
   setPlacingLock(false);
+}
+/* Tanner 2026-10-07: type a ZIP in the home picker and the map jumps there —
+   then drag the house to the exact spot as usual. The ZIP table is bundled
+   (js/zipdb.js), so this works offline with zero tracking. Shows up everywhere
+   the picker does: first-run onboarding, Settings, and the mileage Set home. */
+function homeZipJump() {
+  var inp = $('home-zip');
+  var z = inp ? inp.value.replace(/\D/g, '').slice(0, 5) : '';
+  if (z.length < 5) { toast('Type a 5-digit ZIP.'); return; }
+  var ll = (typeof zipLookup === 'function') ? zipLookup(z) : null;
+  if (!ll) { toast('That ZIP is not on the list — drag the map instead.'); return; }
+  if (map) map.setView([ll.lat, ll.lng], Math.min(map.getZoom(), 11));
+  $('home-bar-prompt').textContent = 'Jumped to ' + z + ' — tap the map to drop your home pin, then drag it onto the exact spot.';
+  toast('Jumped to ZIP ' + z + '.');
 }
 function placeHomePin(latlng) {
   if (!map) return;
@@ -7019,6 +7033,11 @@ function wireUp() {
   /* Q53: home picker bar on the map. */
   $('btn-home-ok').onclick = confirmHomePin;
   $('btn-home-cancel').onclick = cancelHomePick;
+  /* Tanner 2026-10-07: ZIP jump in the home picker. */
+  $('btn-home-zip').onclick = homeZipJump;
+  $('home-zip').addEventListener('keydown', function (ev) {
+    if (ev.key === 'Enter') { ev.preventDefault(); homeZipJump(); }
+  });
   /* Q53: change home from Settings — re-settable, never permanent. */
   $('btn-change-home').onclick = function () { switchTab('map'); startHomePick(); };
 
