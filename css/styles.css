@@ -211,6 +211,14 @@ select.select-hint { color: var(--faint); }
    cancel × pins to the right edge of the button row. */
 #home-bar .home-bar-actions { display: flex; align-items: center; justify-content: center; width: 100%; position: relative; }
 #home-bar .home-bar-actions .btn-ghost { position: absolute; right: 0; margin-left: 0; }
+.mflow { display: flex; flex-direction: column; gap: 10px; margin-top: 14px; }
+.mflow-btn { width: 100%; min-height: 56px; font-size: 17px; border-radius: 14px;
+  display: flex; align-items: center; justify-content: center; gap: 10px; }
+.mflow-n { display: inline-flex; align-items: center; justify-content: center;
+  width: 26px; height: 26px; border-radius: 50%; background: rgba(0,0,0,.28);
+  font-size: 15px; font-weight: 700; flex: 0 0 auto; }
+.btn-secondary .mflow-n { background: rgba(255,255,255,.16); }
+.mflow-close { margin-top: 2px; }
 .flow-steps { font-size: 13px; line-height: 1.55; margin-top: 0; }
 #home-bar .zip-jump { width: 76px; padding: 6px 8px; border-radius: 8px; border: 1px solid var(--line); background: #0f150a; color: #fff; font-size: 15px; text-align: center; }
 /* Q118b (2026-10-01): Tanner — the home pin was rendering at 30px because the
