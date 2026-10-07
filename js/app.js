@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-10-07co';
+var APP_VERSION = 'beta 0.1 · build 2026-10-07cp';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -6751,8 +6751,14 @@ function renderMileageModal(lineId) {
     '4. Screenshot the route, come back here, tap the \uD83D\uDCF7 on the trip to attach it.</p>' +
     (rows || '<p class="dim">No trips logged yet.</p>') +
     '<input type="file" id="m-trip-photo-input" class="hidden-file" accept="image/*">' +
-    '<div class="btn-row mbtns" style="margin-top:14px">' +
-    '<button class="btn-primary" id="m-trip-add" type="button">+ Odometer</button></div>' +
+    /* Tanner 2026-10-07: the buttons march down the screen in step order,
+       numbered to match the flow above. */
+    '<div class="mflow">' +
+    '<button class="btn-secondary mflow-btn" id="m-trip-home" type="button"><span class="mflow-n">1</span>' +
+    (lineHomeForDirections(lineId) ? 'Change home' : 'Set home') + '</button>' +
+    '<button class="btn-primary mflow-btn" id="m-trip-add" type="button"><span class="mflow-n">2</span>+ Odometer</button>' +
+    '<button class="btn-primary mflow-btn" id="m-trip-dirs" type="button"><span class="mflow-n">3</span>Road directions</button>' +
+    '<button class="btn-secondary mflow-btn mflow-close" id="m-trip-close" type="button">Close</button></div>'
     /* Q163 (revised 2026-10-07): Road directions via Google Maps link-out.
        Q169: the line's home is the round-trip anchor; the Set home button
        reuses the drag-the-house picker.
@@ -6760,11 +6766,6 @@ function renderMileageModal(lineId) {
        estimate — in the mountains road miles can be 10x air miles, so the
        number lies. drawRouteEstimate/clearRouteEstimate stay parked in the
        tree in case he ever wants it back. */
-    '<div class="btn-row mbtns" style="margin-top:10px">' +
-    '<button class="btn-primary" id="m-trip-dirs" type="button">Road directions</button>' +
-    '<button class="btn-secondary" id="m-trip-home" type="button">' +
-    (lineHomeForDirections(lineId) ? 'Change home' : 'Set home') + '</button></div>' +
-    '<div class="btn-row mbtns" style="margin-top:10px"><button class="btn-primary" id="m-trip-close" type="button">Close</button></div>'
   );
   $('m-trip-add').onclick = function () { showTripModal(lineId, null); };
   $('m-trip-close').onclick = closeModal;
