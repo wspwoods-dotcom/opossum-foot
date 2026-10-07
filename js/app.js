@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-10-07cr';
+var APP_VERSION = 'beta 0.1 · build 2026-10-07cs';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -6747,7 +6747,7 @@ function renderMileageModal(lineId) {
     /* Tanner 2026-10-07: the screen walks the flow — odometer, directions, snap, attach. */
     '<p class="dim flow-steps">1. <strong>Change home</strong> sets your round-trip start (once).<br>' +
     '2. <strong>Road directions</strong> opens the route in Google Maps \u2014 screenshot it.<br>' +
-    '3. <strong>Odometer</strong> logs the trip \u2014 attach the road direction screenshot with the \uD83D\uDCF7.</p>' +
+    '3. <strong>Odometer</strong> logs the trip \u2014 attach the road direction screenshot with the \uD83D\uDCF7 on the way in.</p>' +
     (rows || '<p class="dim">No trips logged yet.</p>') +
     '<input type="file" id="m-trip-photo-input" class="hidden-file" accept="image/*">' +
     /* Tanner 2026-10-07: road directions goes SECOND — screenshot first, then
