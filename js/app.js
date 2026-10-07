@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-10-07cl';
+var APP_VERSION = 'beta 0.1 · build 2026-10-07cm';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -6714,35 +6714,33 @@ function renderMileageModal(lineId) {
   if (!ln) return;
   var trips = tripsForLine(lineId);
   var total = lineTripTotal(lineId);
-  var est = routeEstimate(lineId);
   var rows = trips.map(function (t) {
     return '<div class="line-row">' +
       '<button type="button" class="line-main" data-trip-edit="' + esc(t.id) + '">' +
       '<span class="line-name">' + esc(fmtDate(t.date)) + ' \u00b7 ' + esc(fmtMiles(tripMiles(t))) + '</span>' +
       '<span class="dim">' + esc(String(t.startOdo) + ' \u2192 ' + String(t.endOdo) + (t.notes ? ' \u00b7 ' + t.notes : '')) + '</span>' +
+      /* Tanner 2026-10-07: the snapped Google Maps photo lives right here on
+         the mileage tab — thumbnails on each trip row, camera button to add. */
+      '<span class="trip-thumbs" data-trip-thumbs="' + esc(t.id) + '"></span>' +
       '</button>' +
+      '<button type="button" class="btn-small btn-secondary line-edit" data-trip-photo="' + esc(t.id) + '">\uD83D\uDCF7</button>' +
       '<button type="button" class="btn-small btn-secondary line-edit" data-trip-del="' + esc(t.id) + '">Delete</button>' +
       '</div>';
   }).join('');
-  /* Q166 (2026-10-07): Tanner — no more "20-40% under" claim. The disclaimer
-     just says the straight-line number is skewed and the odometer is the
-     truth; when both exist we also show their average. */
-  var avgLine = (total > 0 && est.miles > 0)
-    ? '<br>Average of the two: <strong>' + esc(fmtMiles((total + est.miles) / 2)) + '</strong>'
-    : '';
   showModal(
     '<h3>Mileage \u2014 ' + esc(ln.name) + '</h3>' +
-    '<p class="dim" style="margin-top:0">Odometer total: <strong>' + esc(fmtMiles(total)) + '</strong><br>' +
-    'Route estimate: <strong>' + esc(fmtMiles(est.miles)) + '</strong>' +
-    ' <span class="dim">(straight-line \u2014 skewed vs road miles; trust your odometer)</span>' + avgLine + '</p>' +
+    '<p class="dim" style="margin-top:0">Odometer total: <strong>' + esc(fmtMiles(total)) + '</strong></p>' +
     (rows || '<p class="dim">No trips logged yet.</p>') +
+    '<input type="file" id="m-trip-photo-input" class="hidden-file" accept="image/*">' +
     '<div class="btn-row mbtns" style="margin-top:14px">' +
-    '<button class="btn-primary" id="m-trip-add" type="button">+ Odometer</button>' +
-    '<button class="btn-primary" id="m-trip-route" type="button">' +
-    (routeShownFor === lineId ? 'Hide route' : 'Show route on map') + '</button></div>' +
-    /* Q163 (revised 2026-10-07): third mileage option — road directions via
-       Google Maps link-out. Q169: the line's home is the round-trip anchor;
-       the Set home button reuses the drag-the-house picker. */
+    '<button class="btn-primary" id="m-trip-add" type="button">+ Odometer</button></div>' +
+    /* Q163 (revised 2026-10-07): Road directions via Google Maps link-out.
+       Q169: the line's home is the round-trip anchor; the Set home button
+       reuses the drag-the-house picker.
+       NOTE 2026-10-07: Tanner scrapped the straight-line "Show route on map"
+       estimate — in the mountains road miles can be 10x air miles, so the
+       number lies. drawRouteEstimate/clearRouteEstimate stay parked in the
+       tree in case he ever wants it back. */
     '<div class="btn-row mbtns" style="margin-top:10px">' +
     '<button class="btn-primary" id="m-trip-dirs" type="button">Road directions</button>' +
     '<button class="btn-secondary" id="m-trip-home" type="button">' +
@@ -6753,13 +6751,6 @@ function renderMileageModal(lineId) {
   $('m-trip-close').onclick = closeModal;
   $('m-trip-dirs').onclick = function () { openRoadDirections(lineId); };
   $('m-trip-home').onclick = function () { closeModal(); switchTab('map'); startHomePick(); };
-  $('m-trip-route').onclick = function () {
-    if (routeShownFor === lineId) { clearRouteEstimate(); renderMileageModal(lineId); return; }
-    closeModal();
-    switchTab('map');
-    if (drawRouteEstimate(lineId)) toast('Route estimate drawn \u2014 straight-line, not road miles.');
-    else toast('Need at least two sets with locations to draw a route.');
-  };
   var box = $('modal-card');
   var edits = box.querySelectorAll('[data-trip-edit]');
   for (var i = 0; i < edits.length; i++) {
@@ -6773,6 +6764,56 @@ function renderMileageModal(lineId) {
       el.onclick = function () { deleteTrip(lineId, el.getAttribute('data-trip-del')); };
     })(dels[j]);
   }
+  /* Tanner 2026-10-07: the snapped Google Maps photo attaches right here on
+     the mileage tab — camera button per trip row, thumbnails on the row. */
+  var photoTripId = null;
+  var photoBtns = box.querySelectorAll('[data-trip-photo]');
+  for (var k = 0; k < photoBtns.length; k++) {
+    (function (el) {
+      el.onclick = function (ev) {
+        ev.stopPropagation();
+        photoTripId = el.getAttribute('data-trip-photo');
+        $('m-trip-photo-input').click();
+      };
+    })(photoBtns[k]);
+  }
+  $('m-trip-photo-input').onchange = function () {
+    var f = this.files[0];
+    this.value = '';
+    if (!f || !photoTripId) return;
+    var tid = photoTripId;
+    photoTripId = null;
+    try {
+      downscalePhoto(f, function (blob) {
+        if (!blob) return;
+        IDB.put('photos', { id: uid('p'), tripId: tid, kind: 'map',
+          blob: blob, mime: blob.type || 'image/jpeg', createdAt: Date.now() })
+          .then(function () { renderMileageModal(lineId); toast('Map photo saved to the trip.'); })
+          .catch(function () { toast('Photo could not be saved.'); });
+      });
+    } catch (e) { /* noop — the trip is what matters */ }
+  };
+  IDB.all('photos').then(function (all) {
+    var byTrip = {};
+    all.forEach(function (p) {
+      if (!p || !p.tripId || !p.blob) return;
+      (byTrip[p.tripId] = byTrip[p.tripId] || []).push(p);
+    });
+    var slots = box.querySelectorAll('[data-trip-thumbs]');
+    for (var s = 0; s < slots.length; s++) {
+      (function (slot) {
+        var list = byTrip[slot.getAttribute('data-trip-thumbs')] || [];
+        list.slice(0, 4).forEach(function (p) {
+          var img = document.createElement('img');
+          img.src = photoURL(p);
+          img.alt = p.kind === 'map' ? 'Map photo' : 'Odometer photo';
+          img.style.cssText = 'width:44px;height:44px;object-fit:cover;border-radius:6px;margin:4px 4px 0 0;cursor:pointer;';
+          img.onclick = function (ev) { ev.stopPropagation(); openFullPhoto(p.blob); };
+          slot.appendChild(img);
+        });
+      })(slots[s]);
+    }
+  }).catch(function () { /* photos are optional */ });
 }
 function showTripModal(lineId, tripId) {
   var t = tripId ? tripById(tripId) : null;
