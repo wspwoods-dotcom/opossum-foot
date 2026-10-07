@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-10-07cs';
+var APP_VERSION = 'beta 0.1 · build 2026-10-07ct';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -6677,45 +6677,15 @@ function drawRouteEstimate(lineId) {
    check order become the waypoints. The driver snaps the map in Google
    Maps, comes back via the iOS back-link, and attaches the screenshot to
    the trip as a photo (Q72's infrastructure). */
-function lineHomeForDirections(lineId) {
+/* Tanner 2026-10-07: the line home marks where the map opens (Q53). It
+   briefly served as the Google Maps round-trip anchor, but the directions
+   link-out is scrapped — Google caps a route at 9 stops, so long lines
+   can't ride one link, and we're sitting with the odometer. The home
+   button stays: it sets the map launch point. */
+function lineHasHome(lineId) {
   var ln = (typeof lineById === 'function') ? lineById(Store.data, lineId) : null;
   var h = ln && ln.home;
-  if (h && isFinite(+h.lat) && isFinite(+h.lng)) return { lat: +h.lat, lng: +h.lng };
-  return null;
-}
-function mapsDirectionsURL(lineId) {
-  var order = checkOrderSets(lineId);
-  if (!order.length) return null;
-  var home = lineHomeForDirections(lineId);
-  function pt(s) { return (+s.lat).toFixed(5) + ',' + (+s.lng).toFixed(5); }
-  var origin, dest, waypts;
-  if (home) {
-    origin = home.lat.toFixed(5) + ',' + home.lng.toFixed(5);
-    dest = origin;
-    waypts = order.map(pt);
-  } else {
-    if (order.length < 2) return null;
-    origin = pt(order[0]);
-    dest = pt(order[order.length - 1]);
-    waypts = order.slice(1, -1).map(pt);
-  }
-  /* Universal URLs get unwieldy past ~20 waypoints — cap it and let the
-     driver fill the rest in Maps. */
-  waypts = waypts.slice(0, 20);
-  var u = 'https://www.google.com/maps/dir/?api=1' +
-    '&origin=' + encodeURIComponent(origin) +
-    '&destination=' + encodeURIComponent(dest) +
-    '&travelmode=driving';
-  if (waypts.length) u += '&waypoints=' + encodeURIComponent(waypts.join('|'));
-  return { url: u, roundTrip: !!home };
-}
-function openRoadDirections(lineId) {
-  var d = mapsDirectionsURL(lineId);
-  if (!d) { toast('Set your home first, or need at least two sets with locations.'); return; }
-  window.open(d.url, '_blank');
-  toast(d.roundTrip
-    ? 'Round trip opened in Maps — snap it, come back, attach the photo to your trip.'
-    : 'One-way directions opened — set home for round trips.');
+  return !!(h && isFinite(+h.lat) && isFinite(+h.lng));
 }
 
 /* --- mileage modal (per line) --- */
@@ -6744,32 +6714,30 @@ function renderMileageModal(lineId) {
   showModal(
     '<h3>Mileage \u2014 ' + esc(ln.name) + '</h3>' +
     '<p class="dim" style="margin-top:0">Odometer total: <strong>' + esc(fmtMiles(total)) + '</strong></p>' +
-    /* Tanner 2026-10-07: the screen walks the flow — odometer, directions, snap, attach. */
-    '<p class="dim flow-steps">1. <strong>Change home</strong> sets your round-trip start (once).<br>' +
-    '2. <strong>Road directions</strong> opens the route in Google Maps \u2014 screenshot it.<br>' +
-    '3. <strong>Odometer</strong> logs the trip \u2014 attach the road direction screenshot with the \uD83D\uDCF7 on the way in.</p>' +
+    /* Tanner 2026-10-07: the screen walks the flow — home once, then the
+       odometer. The Google Maps directions link-out is scrapped (Google caps
+       a route at 9 stops); the trip screen still takes a route-map photo if
+       he wants one. */
+    '<p class="dim flow-steps">1. <strong>Change home</strong> sets where your map opens (once).<br>' +
+    '2. <strong>Odometer</strong> logs the trip \u2014 snap each reading, add a route map photo if you want one.</p>' +
     (rows || '<p class="dim">No trips logged yet.</p>') +
     '<input type="file" id="m-trip-photo-input" class="hidden-file" accept="image/*">' +
-    /* Tanner 2026-10-07: road directions goes SECOND — screenshot first, then
-       log the trip with the photo in hand. Three step colors from the app
-       palette: brass, green, dark. */
+    /* Tanner 2026-10-07: directions scrapped — Google caps a route at 9 stops,
+       so long lines can't ride one link. Sitting with the odometer: home
+       sets the map launch point (once), Odometer logs the trip (blue). */
     '<div class="mflow">' +
     '<button class="mflow-btn mflow-btn-1" id="m-trip-home" type="button"><span class="mflow-n">1</span>' +
-    (lineHomeForDirections(lineId) ? 'Change home' : 'Set home') + '</button>' +
-    '<button class="mflow-btn mflow-btn-2" id="m-trip-dirs" type="button"><span class="mflow-n">2</span>Road directions</button>' +
-    '<button class="mflow-btn mflow-btn-3" id="m-trip-add" type="button"><span class="mflow-n">3</span>Odometer</button>' +
+    (lineHasHome(lineId) ? 'Change home' : 'Set home') + '</button>' +
+    '<button class="mflow-btn mflow-btn-3" id="m-trip-add" type="button"><span class="mflow-n">2</span>Odometer</button>' +
     '<button class="btn-ghost mflow-btn mflow-close" id="m-trip-close" type="button">Close</button></div>'
-    /* Q163 (revised 2026-10-07): Road directions via Google Maps link-out.
-       Q169: the line's home is the round-trip anchor; the Set home button
-       reuses the drag-the-house picker.
-       NOTE 2026-10-07: Tanner scrapped the straight-line "Show route on map"
+    /* NOTE 2026-10-07: Tanner scrapped the straight-line "Show route on map"
        estimate — in the mountains road miles can be 10x air miles, so the
        number lies. drawRouteEstimate/clearRouteEstimate stay parked in the
-       tree in case he ever wants it back. */
+       tree in case he ever wants it back. Same day he scrapped the Google
+       Maps directions link-out too — 9-stop cap. Odometer only. */
   );
   $('m-trip-add').onclick = function () { showTripModal(lineId, null); };
   $('m-trip-close').onclick = closeModal;
-  $('m-trip-dirs').onclick = function () { openRoadDirections(lineId); };
   $('m-trip-home').onclick = function () { closeModal(); switchTab('map'); startHomePick(); };
   var box = $('modal-card');
   var edits = box.querySelectorAll('[data-trip-edit]');
@@ -6808,7 +6776,7 @@ function renderMileageModal(lineId) {
         if (!blob) return;
         IDB.put('photos', { id: uid('p'), tripId: tid, kind: 'map',
           blob: blob, mime: blob.type || 'image/jpeg', createdAt: Date.now() })
-          .then(function () { renderMileageModal(lineId); toast('Map photo saved to the trip.'); })
+          .then(function () { renderMileageModal(lineId); toast('Road directions screenshot saved to the trip.'); })
           .catch(function () { toast('Photo could not be saved.'); });
       });
     } catch (e) { /* noop — the trip is what matters */ }
@@ -6826,7 +6794,7 @@ function renderMileageModal(lineId) {
         list.slice(0, 4).forEach(function (p) {
           var img = document.createElement('img');
           img.src = photoURL(p);
-          img.alt = p.kind === 'map' ? 'Map photo' : 'Odometer photo';
+          img.alt = p.kind === 'map' ? 'Road directions screenshot' : 'Odometer photo';
           img.style.cssText = 'width:44px;height:44px;object-fit:cover;border-radius:6px;margin:4px 4px 0 0;cursor:pointer;';
           img.onclick = function (ev) { ev.stopPropagation(); openFullPhoto(p.blob); };
           slot.appendChild(img);
@@ -6856,19 +6824,21 @@ function showTripModal(lineId, tripId) {
     '<h3>' + (t ? 'Edit trip' : 'Log a trip') + '</h3>' +
     '<label class="field" for="m-trip-date">Date</label>' +
     '<input type="date" id="m-trip-date" value="' + esc(t ? t.date : todayISO()) + '">' +
-    '<label class="field" for="m-trip-start">Starting odometer</label>' +
+    /* Tanner 2026-10-07: the trip form walks the same kind of numbered flow as
+       the mileage screen — start reading + photo, end reading + photo, then
+       optional documentation at the end. */
+    '<div class="tflow-step"><span class="mflow-n">1</span>Starting odometer</div>' +
     '<input type="number" id="m-trip-start" inputmode="decimal" min="0" step="any" placeholder="e.g. 48210" value="' + esc(t ? t.startOdo : lastEnd) + '">' +
-    '<div class="odo-photo-row"><button type="button" class="btn-secondary odo-photo-btn" id="m-start-photo">📷 Photo</button>' +
+    '<div class="odo-photo-row"><button type="button" class="btn-secondary odo-photo-btn" id="m-start-photo">📷 Photo of the reading</button>' +
     '<span class="dim" id="m-start-photo-note"></span></div>' +
-    '<label class="field" for="m-trip-end">Ending odometer</label>' +
+    '<div class="tflow-step"><span class="mflow-n">2</span>Ending odometer</div>' +
     '<input type="number" id="m-trip-end" inputmode="decimal" min="0" step="any" placeholder="e.g. 48296" value="' + esc(t ? t.endOdo : '') + '">' +
-    '<div class="odo-photo-row"><button type="button" class="btn-secondary odo-photo-btn" id="m-end-photo">📷 Photo</button>' +
+    '<div class="odo-photo-row"><button type="button" class="btn-secondary odo-photo-btn" id="m-end-photo">📷 Photo of the reading</button>' +
     '<span class="dim" id="m-end-photo-note"></span></div>' +
     '<div class="odo-miles" id="m-trip-miles"></div>' +
-    /* Q163 (revised 2026-10-07): the Google Maps snapshot lands here — same
-       photo infrastructure as the odometer pictures. */
-    '<label class="field">Map photo <span class="dim">(optional — your snapped directions)</span></label>' +
-    '<div class="odo-photo-row"><button type="button" class="btn-secondary odo-photo-btn" id="m-map-photo">🗺 Map photo</button>' +
+    '<div class="tflow-step"><span class="mflow-n">3</span>More photos <span class="dim">(optional)</span></div>' +
+    '<p class="dim" style="margin:0 0 4px">Route map screenshot, paperwork — anything for the record.</p>' +
+    '<div class="odo-photo-row"><button type="button" class="btn-secondary odo-photo-btn" id="m-map-photo">🗺 Road directions screenshot</button>' +
     '<span class="dim" id="m-map-photo-note"></span></div>' +
     '<div class="lic-grid" id="m-trip-photos"></div>' +
     '<label class="field" for="m-trip-notes">Notes <span class="dim">(optional)</span></label>' +
@@ -6934,7 +6904,7 @@ function showTripModal(lineId, tripId) {
         if (!p || p.tripId !== t.id || !p.blob) return;
         var img = document.createElement('img');
         img.src = photoURL(p);
-        img.alt = p.kind === 'map' ? 'Map photo' : 'Odometer photo';
+        img.alt = p.kind === 'map' ? 'Road directions screenshot' : 'Odometer photo';
         img.style.cssText = 'width:72px;height:72px;object-fit:cover;border-radius:8px;cursor:pointer;';
         img.onclick = function () { openFullPhoto(p.blob); };
         grid.appendChild(img);
@@ -6960,7 +6930,7 @@ function showTripModal(lineId, tripId) {
     /* Q72: attach odometer photos if any — failures are swallowed, the trip is already saved. */
     if (startPhoto) IDB.put('photos', { id: uid('p'), tripId: rec.id, kind: 'odo-start', blob: startPhoto, mime: startPhoto.type || 'image/jpeg', createdAt: Date.now() }).catch(function () {});
     if (endPhoto) IDB.put('photos', { id: uid('p'), tripId: rec.id, kind: 'odo-end', blob: endPhoto, mime: endPhoto.type || 'image/jpeg', createdAt: Date.now() }).catch(function () {});
-    /* Q163 (revised): the snapped Google Maps directions ride along the same way. */
+    /* The route-map screenshot rides along the same way (directions link-out scrapped 2026-10-07). */
     if (mapPhoto) IDB.put('photos', { id: uid('p'), tripId: rec.id, kind: 'map', blob: mapPhoto, mime: mapPhoto.type || 'image/jpeg', createdAt: Date.now() }).catch(function () {});
     renderMileageModal(lineId);
     toast(t ? 'Trip updated.' : 'Trip logged.');
