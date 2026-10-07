@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-10-07cp';
+var APP_VERSION = 'beta 0.1 · build 2026-10-07cq';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -6746,19 +6746,19 @@ function renderMileageModal(lineId) {
     '<p class="dim" style="margin-top:0">Odometer total: <strong>' + esc(fmtMiles(total)) + '</strong></p>' +
     /* Tanner 2026-10-07: the screen walks the flow — odometer, directions, snap, attach. */
     '<p class="dim flow-steps">1. <strong>Change home</strong> sets your round-trip start (once).<br>' +
-    '2. <strong>+ Odometer</strong> logs the trip.<br>' +
-    '3. <strong>Road directions</strong> opens the route in Google Maps.<br>' +
-    '4. Screenshot the route, come back here, tap the \uD83D\uDCF7 on the trip to attach it.</p>' +
+    '2. <strong>Road directions</strong> opens the route in Google Maps \u2014 screenshot it.<br>' +
+    '3. <strong>Odometer</strong> logs the trip \u2014 attach the screenshot with the \uD83D\uDCF7 on the way in.</p>' +
     (rows || '<p class="dim">No trips logged yet.</p>') +
     '<input type="file" id="m-trip-photo-input" class="hidden-file" accept="image/*">' +
-    /* Tanner 2026-10-07: the buttons march down the screen in step order,
-       numbered to match the flow above. */
+    /* Tanner 2026-10-07: road directions goes SECOND — screenshot first, then
+       log the trip with the photo in hand. Three step colors from the app
+       palette: brass, green, dark. */
     '<div class="mflow">' +
-    '<button class="btn-secondary mflow-btn" id="m-trip-home" type="button"><span class="mflow-n">1</span>' +
+    '<button class="mflow-btn mflow-btn-1" id="m-trip-home" type="button"><span class="mflow-n">1</span>' +
     (lineHomeForDirections(lineId) ? 'Change home' : 'Set home') + '</button>' +
-    '<button class="btn-primary mflow-btn" id="m-trip-add" type="button"><span class="mflow-n">2</span>+ Odometer</button>' +
-    '<button class="btn-primary mflow-btn" id="m-trip-dirs" type="button"><span class="mflow-n">3</span>Road directions</button>' +
-    '<button class="btn-secondary mflow-btn mflow-close" id="m-trip-close" type="button">Close</button></div>'
+    '<button class="mflow-btn mflow-btn-2" id="m-trip-dirs" type="button"><span class="mflow-n">2</span>Road directions</button>' +
+    '<button class="mflow-btn mflow-btn-3" id="m-trip-add" type="button"><span class="mflow-n">3</span>Odometer</button>' +
+    '<button class="btn-ghost mflow-btn mflow-close" id="m-trip-close" type="button">Close</button></div>'
     /* Q163 (revised 2026-10-07): Road directions via Google Maps link-out.
        Q169: the line's home is the round-trip anchor; the Set home button
        reuses the drag-the-house picker.
@@ -6895,6 +6895,19 @@ function showTripModal(lineId, tripId) {
   $('m-start-photo').onclick = function () { photoTarget = 'start'; $('m-odo-photo-input').click(); };
   $('m-end-photo').onclick = function () { photoTarget = 'end'; $('m-odo-photo-input').click(); };
   $('m-map-photo').onclick = function () { photoTarget = 'map'; $('m-odo-photo-input').click(); };
+  /* Tanner 2026-10-07: attaching a photo pops a thumbnail right there, like
+     everywhere else in the app — no "Photo attached." text getting shoved
+     off the edge (that was also dragging the modal sideways). */
+  function setPhotoThumb(noteId, blob) {
+    var note = $(noteId);
+    if (!note) return;
+    note.textContent = '';
+    var img = document.createElement('img');
+    img.src = URL.createObjectURL(blob);
+    img.alt = 'Photo attached';
+    img.style.cssText = 'width:44px;height:44px;object-fit:cover;border-radius:6px;flex:0 0 auto;';
+    note.appendChild(img);
+  }
   $('m-odo-photo-input').onchange = function () {
     var f = this.files[0];
     this.value = '';
@@ -6905,9 +6918,9 @@ function showTripModal(lineId, tripId) {
     try {
       downscalePhoto(f, function (blob) {
         if (!blob) return;
-        if (target === 'start') { startPhoto = blob; $('m-start-photo-note').textContent = 'Photo attached.'; }
-        else if (target === 'map') { mapPhoto = blob; $('m-map-photo-note').textContent = 'Photo attached.'; }
-        else { endPhoto = blob; $('m-end-photo-note').textContent = 'Photo attached.'; }
+        if (target === 'start') { startPhoto = blob; setPhotoThumb('m-start-photo-note', blob); }
+        else if (target === 'map') { mapPhoto = blob; setPhotoThumb('m-map-photo-note', blob); }
+        else { endPhoto = blob; setPhotoThumb('m-end-photo-note', blob); }
       });
     } catch (e) { /* noop — saving the trip matters, the photo doesn't */ }
   };
