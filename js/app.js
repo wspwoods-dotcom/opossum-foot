@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-10-07cu';
+var APP_VERSION = 'beta 0.1 · build 2026-10-07cv';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -6828,13 +6828,13 @@ function showTripModal(lineId, tripId) {
        the mileage screen — start reading + photo, end reading + photo, then
        optional documentation at the end. */
     '<div class="tflow-step"><span class="mflow-n">1</span>Starting odometer</div>' +
-    '<input type="number" id="m-trip-start" inputmode="decimal" min="0" step="any" placeholder="e.g. 48210" value="' + esc(t ? t.startOdo : lastEnd) + '">' +
     '<div class="odo-photo-row"><button type="button" class="btn-secondary odo-photo-btn" id="m-start-photo">📷 Photo of the reading</button>' +
     '<span class="dim" id="m-start-photo-note"></span></div>' +
+    '<input type="number" id="m-trip-start" inputmode="decimal" min="0" step="any" placeholder="e.g. 48210" value="' + esc(t ? t.startOdo : lastEnd) + '">' +
     '<div class="tflow-step"><span class="mflow-n">2</span>Ending odometer</div>' +
-    '<input type="number" id="m-trip-end" inputmode="decimal" min="0" step="any" placeholder="e.g. 48296" value="' + esc(t ? t.endOdo : '') + '">' +
     '<div class="odo-photo-row"><button type="button" class="btn-secondary odo-photo-btn" id="m-end-photo">📷 Photo of the reading</button>' +
     '<span class="dim" id="m-end-photo-note"></span></div>' +
+    '<input type="number" id="m-trip-end" inputmode="decimal" min="0" step="any" placeholder="e.g. 48296" value="' + esc(t ? t.endOdo : '') + '">' +
     '<div class="odo-miles" id="m-trip-miles"></div>' +
     '<div class="tflow-step"><span class="mflow-n">3</span>More photos <span class="dim">(optional)</span></div>' +
     '<p class="dim" style="margin:0 0 4px">Route map screenshot, paperwork — anything for the record.</p>' +
