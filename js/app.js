@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-10-07ck';
+var APP_VERSION = 'beta 0.1 · build 2026-10-07cl';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -6657,6 +6657,53 @@ function drawRouteEstimate(lineId) {
   return true;
 }
 
+/* Q163 (revised 2026-10-07): third mileage option — road directions via a
+   Google Maps link-out. No API key, no routing of our own: the line's
+   assigned home is the round-trip anchor (origin + destination); sets in
+   check order become the waypoints. The driver snaps the map in Google
+   Maps, comes back via the iOS back-link, and attaches the screenshot to
+   the trip as a photo (Q72's infrastructure). */
+function lineHomeForDirections(lineId) {
+  var ln = (typeof lineById === 'function') ? lineById(Store.data, lineId) : null;
+  var h = ln && ln.home;
+  if (h && isFinite(+h.lat) && isFinite(+h.lng)) return { lat: +h.lat, lng: +h.lng };
+  return null;
+}
+function mapsDirectionsURL(lineId) {
+  var order = checkOrderSets(lineId);
+  if (!order.length) return null;
+  var home = lineHomeForDirections(lineId);
+  function pt(s) { return (+s.lat).toFixed(5) + ',' + (+s.lng).toFixed(5); }
+  var origin, dest, waypts;
+  if (home) {
+    origin = home.lat.toFixed(5) + ',' + home.lng.toFixed(5);
+    dest = origin;
+    waypts = order.map(pt);
+  } else {
+    if (order.length < 2) return null;
+    origin = pt(order[0]);
+    dest = pt(order[order.length - 1]);
+    waypts = order.slice(1, -1).map(pt);
+  }
+  /* Universal URLs get unwieldy past ~20 waypoints — cap it and let the
+     driver fill the rest in Maps. */
+  waypts = waypts.slice(0, 20);
+  var u = 'https://www.google.com/maps/dir/?api=1' +
+    '&origin=' + encodeURIComponent(origin) +
+    '&destination=' + encodeURIComponent(dest) +
+    '&travelmode=driving';
+  if (waypts.length) u += '&waypoints=' + encodeURIComponent(waypts.join('|'));
+  return { url: u, roundTrip: !!home };
+}
+function openRoadDirections(lineId) {
+  var d = mapsDirectionsURL(lineId);
+  if (!d) { toast('Set your home first, or need at least two sets with locations.'); return; }
+  window.open(d.url, '_blank');
+  toast(d.roundTrip
+    ? 'Round trip opened in Maps — snap it, come back, attach the photo to your trip.'
+    : 'One-way directions opened — set home for round trips.');
+}
+
 /* --- mileage modal (per line) --- */
 function showMileageModal(lineId) {
   if (!lineById(Store.data, lineId)) return;
@@ -6693,10 +6740,19 @@ function renderMileageModal(lineId) {
     '<button class="btn-primary" id="m-trip-add" type="button">+ Odometer</button>' +
     '<button class="btn-primary" id="m-trip-route" type="button">' +
     (routeShownFor === lineId ? 'Hide route' : 'Show route on map') + '</button></div>' +
+    /* Q163 (revised 2026-10-07): third mileage option — road directions via
+       Google Maps link-out. Q169: the line's home is the round-trip anchor;
+       the Set home button reuses the drag-the-house picker. */
+    '<div class="btn-row mbtns" style="margin-top:10px">' +
+    '<button class="btn-primary" id="m-trip-dirs" type="button">Road directions</button>' +
+    '<button class="btn-secondary" id="m-trip-home" type="button">' +
+    (lineHomeForDirections(lineId) ? 'Change home' : 'Set home') + '</button></div>' +
     '<div class="btn-row mbtns" style="margin-top:10px"><button class="btn-primary" id="m-trip-close" type="button">Close</button></div>'
   );
   $('m-trip-add').onclick = function () { showTripModal(lineId, null); };
   $('m-trip-close').onclick = closeModal;
+  $('m-trip-dirs').onclick = function () { openRoadDirections(lineId); };
+  $('m-trip-home').onclick = function () { closeModal(); switchTab('map'); startHomePick(); };
   $('m-trip-route').onclick = function () {
     if (routeShownFor === lineId) { clearRouteEstimate(); renderMileageModal(lineId); return; }
     closeModal();
@@ -6734,7 +6790,7 @@ function showTripModal(lineId, tripId) {
      phones); the camera button sits below the input; a live miles readout lets
      him calculate right there. Typed readings are required; a photo (or failed
      photo) never blocks saving. */
-  var startPhoto = null, endPhoto = null;
+  var startPhoto = null, endPhoto = null, mapPhoto = null;
   showModal(
     '<h3>' + (t ? 'Edit trip' : 'Log a trip') + '</h3>' +
     '<label class="field" for="m-trip-date">Date</label>' +
@@ -6748,6 +6804,12 @@ function showTripModal(lineId, tripId) {
     '<div class="odo-photo-row"><button type="button" class="btn-secondary odo-photo-btn" id="m-end-photo">📷 Photo</button>' +
     '<span class="dim" id="m-end-photo-note"></span></div>' +
     '<div class="odo-miles" id="m-trip-miles"></div>' +
+    /* Q163 (revised 2026-10-07): the Google Maps snapshot lands here — same
+       photo infrastructure as the odometer pictures. */
+    '<label class="field">Map photo <span class="dim">(optional — your snapped directions)</span></label>' +
+    '<div class="odo-photo-row"><button type="button" class="btn-secondary odo-photo-btn" id="m-map-photo">🗺 Map photo</button>' +
+    '<span class="dim" id="m-map-photo-note"></span></div>' +
+    '<div class="lic-grid" id="m-trip-photos"></div>' +
     '<label class="field" for="m-trip-notes">Notes <span class="dim">(optional)</span></label>' +
     '<input type="text" id="m-trip-notes" maxlength="80" placeholder="e.g. River bottoms check" value="' + esc(t ? t.notes || '' : '') + '">' +
     '<input type="file" id="m-odo-photo-input" class="hidden-file" accept="image/*">' +
@@ -6767,10 +6829,11 @@ function showTripModal(lineId, tripId) {
   $('m-trip-start').oninput = updateOdoMiles;
   $('m-trip-end').oninput = updateOdoMiles;
   updateOdoMiles();
-  /* Q72: wire the camera buttons — one hidden input, reused for both. */
+  /* Q72: wire the camera buttons — one hidden input, reused for all three. */
   var photoTarget = null;
   $('m-start-photo').onclick = function () { photoTarget = 'start'; $('m-odo-photo-input').click(); };
   $('m-end-photo').onclick = function () { photoTarget = 'end'; $('m-odo-photo-input').click(); };
+  $('m-map-photo').onclick = function () { photoTarget = 'map'; $('m-odo-photo-input').click(); };
   $('m-odo-photo-input').onchange = function () {
     var f = this.files[0];
     this.value = '';
@@ -6782,10 +6845,28 @@ function showTripModal(lineId, tripId) {
       downscalePhoto(f, function (blob) {
         if (!blob) return;
         if (target === 'start') { startPhoto = blob; $('m-start-photo-note').textContent = 'Photo attached.'; }
+        else if (target === 'map') { mapPhoto = blob; $('m-map-photo-note').textContent = 'Photo attached.'; }
         else { endPhoto = blob; $('m-end-photo-note').textContent = 'Photo attached.'; }
       });
     } catch (e) { /* noop — saving the trip matters, the photo doesn't */ }
   };
+  /* Q163 (revised): show already-attached trip photos as thumbnails; tap
+     opens full-size in a new tab (back-link returns to the app). */
+  if (t) {
+    IDB.all('photos').then(function (all) {
+      var grid = $('m-trip-photos');
+      if (!grid) return;
+      all.forEach(function (p) {
+        if (!p || p.tripId !== t.id || !p.blob) return;
+        var img = document.createElement('img');
+        img.src = photoURL(p);
+        img.alt = p.kind === 'map' ? 'Map photo' : 'Odometer photo';
+        img.style.cssText = 'width:72px;height:72px;object-fit:cover;border-radius:8px;cursor:pointer;';
+        img.onclick = function () { openFullPhoto(p.blob); };
+        grid.appendChild(img);
+      });
+    }).catch(function () { /* photos are optional */ });
+  }
   $('m-cancel').onclick = function () { renderMileageModal(lineId); };
   $('m-ok').onclick = function () {
     var date = $('m-trip-date').value;
@@ -6805,6 +6886,8 @@ function showTripModal(lineId, tripId) {
     /* Q72: attach odometer photos if any — failures are swallowed, the trip is already saved. */
     if (startPhoto) IDB.put('photos', { id: uid('p'), tripId: rec.id, kind: 'odo-start', blob: startPhoto, mime: startPhoto.type || 'image/jpeg', createdAt: Date.now() }).catch(function () {});
     if (endPhoto) IDB.put('photos', { id: uid('p'), tripId: rec.id, kind: 'odo-end', blob: endPhoto, mime: endPhoto.type || 'image/jpeg', createdAt: Date.now() }).catch(function () {});
+    /* Q163 (revised): the snapped Google Maps directions ride along the same way. */
+    if (mapPhoto) IDB.put('photos', { id: uid('p'), tripId: rec.id, kind: 'map', blob: mapPhoto, mime: mapPhoto.type || 'image/jpeg', createdAt: Date.now() }).catch(function () {});
     renderMileageModal(lineId);
     toast(t ? 'Trip updated.' : 'Trip logged.');
   };
