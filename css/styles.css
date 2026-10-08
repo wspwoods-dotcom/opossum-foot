@@ -545,7 +545,7 @@ body.route-locked #tabbar { pointer-events: none; opacity: .35; }
 .facility-grid button img { width: 30px; height: 30px; object-fit: contain; }
 .facility-grid button.sel { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
 .pin-facility { background: #b98a2f; }
-.pin-facility img { width: 18px; height: 18px; object-fit: contain; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); filter: brightness(0) invert(1); }
+.pin-facility img { width: 20px; height: 20px; object-fit: contain; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); background: #fff; border-radius: 6px; }
 #log-disposition button { white-space: nowrap; font-size: 14px; padding: 12px 4px; }
 
 .warnbox { background: #3d2c10; border: 1px solid #6b4d1c; color: #f5cf7a; border-radius: var(--radius); padding: 12px 14px; margin: 12px 0; font-size: 15px; }
