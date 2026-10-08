@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-10-07da';
+var APP_VERSION = 'beta 0.1 · build 2026-10-07db';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -5270,23 +5270,23 @@ function landownerCard(lo, photos) {
   card.className = 'card';
   var slips = photos.filter(function (p) { return p.kind === 'slip'; });
   var bounds = photos.filter(function (p) { return p.kind === 'boundary'; });
-  var html = '<h3 style="text-align:left">' + esc(lo.name) + '</h3>';
+  var html = '<h3 style="text-align:left;cursor:pointer" data-lo-name title="Tap to edit">' + esc(lo.name) + '</h3>';
   html += landownerPhoneHtml(lo);
   if (lo.notes) html += '<p class="dim lo-notes-box" style="margin:4px 0">' + esc(lo.notes) + '</p>';
   /* Q158 (2026-10-06): Tanner — slip and boundary photos viewable right on
      the card, like the license wallet: thumbnails, tap for full screen.
      Tanner 2026-10-07 (later): every photo on this tab gets the X too —
-     tap the image to view, X deletes just that photo. */
-  var viewable = slips.concat(bounds);
+     tap the image to view, X deletes just that photo.
+     Tanner 2026-10-07 (db): Edit/Delete buttons off the card — tap the
+     name to edit; deleting a landowner moved into the Edit screen. */
   var viewable = slips.concat(bounds);
   if (viewable.length) {
     html += '<div class="lic-grid" data-lo-photos></div>';
   } else if (lo.boundaryNote) {
     html += '<p class="dim" style="margin:4px 0">boundary on file</p>';
   }
-  html += '<div class="btn-row"><button class="btn-secondary" data-lo-edit type="button">Edit</button>' +
-    '<button class="btn-secondary" data-lo-del type="button">Delete</button></div>';
   card.innerHTML = html;
+  card.querySelector('[data-lo-name]').onclick = function () { openLandownerForm(lo.id); };
   var grid = card.querySelector('[data-lo-photos]');
   if (grid) {
     viewable.forEach(function (p) {
@@ -5315,8 +5315,6 @@ function landownerCard(lo, photos) {
       grid.appendChild(item);
     });
   }
-  card.querySelector('[data-lo-edit]').onclick = function () { openLandownerForm(lo.id); };
-  card.querySelector('[data-lo-del]').onclick = function () { deleteLandowner(lo.id); };
   return card;
 }
 /* Q158 (2026-10-06): Tanner — view-only photo viewer for the landowner
@@ -5358,7 +5356,10 @@ function openLandownerForm(id) {
     '<button class="btn-secondary" id="lo-slip-btn" type="button"><img class="bi" src="assets/icons/camera.png" alt="">Add permission slip photo</button>' +
     '<div class="lic-grid" id="lo-slip-grid"></div>' +
     '<div class="btn-row" style="margin-top:14px"><button class="btn-secondary" id="m-cancel" type="button">Cancel</button>' +
-    '<button class="btn-primary" id="lo-save" type="button">Save landowner</button></div>'
+    '<button class="btn-primary" id="lo-save" type="button">Save landowner</button></div>' +
+    /* Tanner 2026-10-07 (db): card buttons are gone — deleting a landowner
+       happens here in the Edit screen. New landowners have nothing to delete. */
+    (isNew ? '' : '<button class="btn-danger" id="lo-del" type="button" style="margin-top:10px;width:100%">Delete landowner</button>')
   );
   $('m-cancel').onclick = closeModal;
   /* Tanner 2026-09-30: phone field takes digits only (commas between
@@ -5373,6 +5374,7 @@ function openLandownerForm(id) {
   $('lo-slip-input').onchange = function () { loTakePhotos(this.files, 'slip'); this.value = ''; };
   $('lo-boundary-input').onchange = function () { loTakePhotos(this.files, 'boundary'); this.value = ''; };
   $('lo-save').onclick = function () { saveLandownerForm(lo.id, isNew); };
+  if (!isNew) $('lo-del').onclick = function () { deleteLandowner(lo.id); };
   renderLoFormPhotos(lo.id);
 }
 function loTakePhotos(files, kind) {
