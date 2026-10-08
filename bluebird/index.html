@@ -241,15 +241,15 @@ PARK_BOUNDARY.forEach(ring=>{
 // --- 100-foot scale bar (updates with zoom) ---
 const scaleDiv = document.createElement('div');
 scaleDiv.className = 'scale100';
-scaleDiv.innerHTML = '<div class="bar"></div><div>100 ft</div>';
+scaleDiv.innerHTML = '<div class="bar"></div><div>100 yd</div>';
 document.body.appendChild(scaleDiv);
 function updateScale(){
   const y = map.getSize().y / 2;
   const p1 = map.containerPointToLatLng(L.point(0, y));
   const p2 = map.containerPointToLatLng(L.point(100, y));
   const metersPerPixel = p1.distanceTo(p2) / 100;
-  const feetPerPixel = metersPerPixel * 3.28084;
-  const px = Math.max(20, Math.round(100 / feetPerPixel));
+  const yardsPerPixel = metersPerPixel * 1.09361;
+  const px = Math.max(20, Math.round(100 / yardsPerPixel));
   scaleDiv.querySelector('.bar').style.width = px + 'px';
 }
 map.on('zoomend moveend', updateScale);
