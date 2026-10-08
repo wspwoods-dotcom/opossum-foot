@@ -877,6 +877,16 @@ body.placing .leaflet-control-layers { pointer-events: none; opacity: .45; }
   border: 2px solid var(--accent); border-radius: 14px; color: var(--accent); font-size: 15px; }
 .scorecard-honesty strong { color: var(--accent); }
 
+/* Q170: Sponsored Products directory on the Scorecard tab */
+#sc-sp-q { width: 100%; margin-top: 10px; }
+.sp-card { display: flex; align-items: center; gap: 10px; padding: 10px; margin-top: 8px;
+  border: 1px solid var(--line); border-radius: 12px; cursor: pointer; }
+.sp-card:active { opacity: .75; }
+.sp-logo { width: 44px; height: 44px; border-radius: 10px; object-fit: cover; flex: 0 0 auto; }
+.sp-info { flex: 1 1 auto; min-width: 0; }
+.sp-product { font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sp-brand { font-size: 12px; }
+
 /* ---- equal-size History disposition filter chips, scrollable row ---- */
 #hist-disp-chips { overflow-x: auto; justify-content: flex-start; }
 #hist-disp-chips .chip { flex: 0 0 auto; width: 172px; text-align: center; padding: 10px 8px; font-size: 13px; white-space: nowrap; }
