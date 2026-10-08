@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-10-07df';
+var APP_VERSION = 'beta 0.1 · build 2026-10-07dg';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -4934,16 +4934,17 @@ function isLicenseWalletPhoto(p, lid, firstId) {
 /* Tanner 2026-10-07: trips live on the Paperwork tab, not in a modal.
    Each line gets its trip rows right here with info + thumbnails, like the
    License Wallet above. Tanner 2026-10-07 (later): every photo on this tab
-   is a license-style card — tap the image to view, X to delete just it. */
+   is a license-style card — tap the image to view, X to delete just it.
+   Tanner 2026-10-07 (dg): like the other two sections — no camera/delete
+   buttons on the trip; tap the trip box to edit it. Deleting a trip moved
+   into the trip form. */
 function tripRowHTML(tr) {
-  return '<div class="trip-block">' +
+  return '<div class="trip-block" data-trip-edit="' + esc(tr.id) + '" title="Tap to edit">' +
     '<div class="line-row">' +
-    '<button type="button" class="line-main" data-trip-edit="' + esc(tr.id) + '">' +
+    '<div class="line-main">' +
     '<span class="line-name">' + esc(fmtDate(tr.date)) + ' \u00b7 ' + esc(fmtMiles(tripMiles(tr))) + '</span>' +
     '<span class="dim">' + esc(String(tr.startOdo) + ' \u2192 ' + String(tr.endOdo) + (tr.notes ? ' \u00b7 ' + tr.notes : '')) + '</span>' +
-    '</button>' +
-    '<button type="button" class="btn-small btn-secondary line-edit" data-trip-photo="' + esc(tr.id) + '">\uD83D\uDCF7</button>' +
-    '<button type="button" class="btn-small btn-secondary line-edit" data-trip-del="' + esc(tr.id) + '">Delete</button>' +
+    '</div>' +
     '</div>' +
     '<div class="lic-grid trip-photogrid" data-trip-thumbs="' + esc(tr.id) + '"></div>' +
     '</div>';
@@ -4965,7 +4966,8 @@ function fillTripThumbs(box) {
           var img = document.createElement('img');
           img.src = photoURL(p);
           img.alt = p.kind === 'map' ? 'Road directions screenshot' : 'Odometer photo';
-          img.onclick = function () { openFullPhoto(p.blob); };
+          /* dg: the trip box opens the edit form — photo taps must not bubble. */
+          img.onclick = function (ev) { ev.stopPropagation(); openFullPhoto(p.blob); };
           var del = document.createElement('button');
           del.type = 'button'; del.textContent = '\u00d7'; del.setAttribute('aria-label', 'Delete photo');
           del.onclick = function (e) { e.stopPropagation(); deleteTripPhoto(p.id); };
@@ -4983,7 +4985,6 @@ function deleteTripPhoto(photoId) {
     IDB.del('photos', photoId).then(function () { renderPaperworkMileage(); });
   });
 }
-var pmPhotoTripId = null;
 function renderPaperworkMileage() {
   var box = $('paperwork-mileage-lines');
   if (!box) return;
@@ -5000,11 +5001,13 @@ function renderPaperworkMileage() {
   if (!ln) { box.innerHTML = '<p class="dim">No active line.</p>'; return; }
   var trips = tripsForLine(ln.id);
   var rows = trips.map(tripRowHTML).join('') || '<p class="dim">No trips logged yet.</p>';
+  /* Tanner 2026-10-07 (dg): like the other two sections — the add button is
+     full-width below the last trip; the trip box itself is the edit target. */
   box.innerHTML = '<div class="pm-line" data-pm-line-block="' + esc(ln.id) + '">' +
     '<div class="pm-line-head"><span><strong>' + esc(ln.name) + '</strong> ' +
-    '<span class="dim">' + esc(fmtMiles(lineTripTotal(ln.id))) + '</span></span>' +
-    '<button type="button" class="btn-small btn-secondary" data-pm-logtrip="' + esc(ln.id) + '">+ Log trip</button></div>' +
-    rows + '</div>';
+    '<span class="dim">' + esc(fmtMiles(lineTripTotal(ln.id))) + '</span></span></div>' +
+    rows +
+    '<button type="button" class="btn-secondary" data-pm-logtrip="' + esc(ln.id) + '" style="margin-top:10px">\uFF0B Log Trip</button></div>';
   function lineOf(el) {
     var b = el.closest ? el.closest('[data-pm-line-block]') : null;
     return b ? b.getAttribute('data-pm-line-block') : null;
@@ -5020,22 +5023,6 @@ function renderPaperworkMileage() {
     (function (el) {
       el.onclick = function () { showTripModal(lineOf(el), el.getAttribute('data-trip-edit')); };
     })(edits[e]);
-  }
-  var dels = box.querySelectorAll('[data-trip-del]');
-  for (var d = 0; d < dels.length; d++) {
-    (function (el) {
-      el.onclick = function () { deleteTrip(lineOf(el), el.getAttribute('data-trip-del')); };
-    })(dels[d]);
-  }
-  var pbs = box.querySelectorAll('[data-trip-photo]');
-  for (var k = 0; k < pbs.length; k++) {
-    (function (el) {
-      el.onclick = function (ev) {
-        ev.stopPropagation();
-        pmPhotoTripId = el.getAttribute('data-trip-photo');
-        $('pm-trip-photo-input').click();
-      };
-    })(pbs[k]);
   }
   fillTripThumbs(box);
 }
@@ -6849,7 +6836,10 @@ function showTripModal(lineId, tripId) {
     '<input type="text" id="m-trip-notes" maxlength="80" placeholder="e.g. River bottoms check" value="' + esc(t ? t.notes || '' : '') + '">' +
     '<input type="file" id="m-odo-photo-input" class="hidden-file" accept="image/*">' +
     '<div class="btn-row" style="margin-top:14px"><button class="btn-secondary" id="m-cancel" type="button">Cancel</button>' +
-    '<button class="btn-primary" id="m-ok" type="button">' + (t ? 'Save' : 'Add trip') + '</button></div>'
+    '<button class="btn-primary" id="m-ok" type="button">' + (t ? 'Save' : 'Add trip') + '</button></div>' +
+    /* Tanner 2026-10-07 (dg): the trip box lost its Delete button — deleting
+       a trip happens here in the form, like the landowner Edit screen. */
+    (t ? '<button class="btn-danger" id="m-trip-del" type="button" style="margin-top:10px;width:100%">Delete trip</button>' : '')
   );
   /* Live miles readout — updates as he types. */
   function updateOdoMiles() {
@@ -6916,6 +6906,7 @@ function showTripModal(lineId, tripId) {
     }).catch(function () { /* photos are optional */ });
   }
   $('m-cancel').onclick = function () { closeModal(); switchTab('licenses'); };
+  if (t && $('m-trip-del')) $('m-trip-del').onclick = function () { deleteTrip(lineId, tripId); };
   $('m-ok').onclick = function () {
     var date = $('m-trip-date').value;
     var s = $('m-trip-start').value.trim(), e = $('m-trip-end').value.trim();
@@ -7412,24 +7403,6 @@ function wireUp() {
   $('btn-export-catches').onclick = exportCatches;
   $('btn-export-sets').onclick = exportSets;
   $('btn-export-mileage').onclick = exportMileage; /* Q8 */
-  /* Tanner 2026-10-07: photo attach for existing trips, from the Paperwork tab. */
-  var pmpi = $('pm-trip-photo-input');
-  if (pmpi) pmpi.onchange = function () {
-    var f = this.files[0];
-    this.value = '';
-    if (!f || !pmPhotoTripId) return;
-    var tid = pmPhotoTripId;
-    pmPhotoTripId = null;
-    try {
-      downscalePhoto(f, function (blob) {
-        if (!blob) return;
-        IDB.put('photos', { id: uid('p'), tripId: tid, kind: 'map',
-          blob: blob, mime: blob.type || 'image/jpeg', createdAt: Date.now() })
-          .then(function () { renderPaperworkMileage(); toast('Road directions screenshot saved to the trip.'); })
-          .catch(function () { toast('Photo could not be saved.'); });
-      });
-    } catch (e) { /* noop */ }
-  };
   $('btn-import').onclick = function () { $('import-file').click(); };
   $('import-file').onchange = function () {
     if (this.files && this.files[0]) importDataFile(this.files[0]);
