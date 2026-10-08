@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-10-07dj';
+var APP_VERSION = 'beta 0.1 · build 2026-10-08dk';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -2642,7 +2642,8 @@ function renderMissingReasonRow() {
    itself is never pay-to-play. Badge in the bait section; tap opens the bio. */
 var SPONSORS = [
   { id: 'awesome-opossum', name: 'Awesome Opossum', product: 'Awesome Opossum raccoon bait',
-    section: 'bait', badge: 'assets/sponsors/awesome-opossum.webp',
+    section: 'bait', tier: 2,
+    badge: 'assets/sponsors/awesome-opossum.webp',
     brandLogo: 'assets/sponsors/awesome-opossum.webp', /* product and brand are one here; future sponsors can differ */
     bio: 'Awesome Opossum was developed as a raccoon bait with a sweet and musky scent. Originally it was effective on most nest predators, but ended up catching more opossums than anything.',
     url: 'https://opossumfoot.com', urlLabel: 'opossumfoot.com' }
@@ -2670,17 +2671,22 @@ function openSponsorBio(id) {
   var sp = sponsorById(id);
   if (!sp) return;
   var logo = sp.brandLogo || sp.badge; /* bio shows the brand logo; picker row shows the product badge */
+  /* Q170 (2026-10-08): bio depth is tier-gated — Tier 1 = bio only, Tier 2+ adds the website link. */
+  var tier = sp.tier || 1;
+  var linkHtml = (tier >= 2 && sp.url)
+    ? '<div class="btn-row" style="justify-content:center"><a class="btn-small btn-secondary" href="' + sp.url +
+      '" target="_blank" rel="noopener">Visit ' + esc(sp.urlLabel || sp.url) + '</a></div>'
+    : '';
   showModal('<div class="sponsor-bio">' +
     '<img class="sponsor-bio-badge" src="' + logo + '" alt="' + esc(sp.name) + ' logo">' +
     '<h3>' + esc(sp.name) + '</h3>' +
     '<p>' + esc(sp.bio) + '</p>' +
-    '<div class="btn-row" style="justify-content:center"><a class="btn-small btn-secondary" href="' + sp.url +
-    '" target="_blank" rel="noopener">Visit ' + esc(sp.urlLabel) + '</a></div>' +
+    linkHtml +
     '<div class="btn-row" style="margin-top:10px;justify-content:center">' +
-    '<button class="btn-primary" id="m-sp-use" type="button">Use this bait</button>' +
+    '<button class="btn-primary" id="m-sp-use" type="button">Use this ' + esc(sp.section) + '</button>' +
     '<button class="btn-secondary" id="m-close" type="button">Close</button></div></div>');
   $('m-close').onclick = closeModal;
-  $('m-sp-use').onclick = function () { renderAttrRows('bait', [sp.name].concat(collectAttrRows('bait'))); closeModal(); };
+  $('m-sp-use').onclick = function () { renderAttrRows(sp.section, [sp.name].concat(collectAttrRows(sp.section))); closeModal(); };
 }
 
 function openSetForm(coords, setId) {
@@ -4498,7 +4504,7 @@ function renderHistory() {
    attractants mid-season never rewrites past catches. Unstamped catches sit
    in an "Unspecified" bucket below the rankings: honest numbers, never
    competing in them. */
-var scoreUI = { season: 'this', by: 'lure', species: '', h2hA: '', h2hB: '' };
+var scoreUI = { season: 'this', by: 'lure', species: '', h2hA: '', h2hB: '', spCat: '', spQ: '' };
 function prevSeasonYear(sy) {
   var y = parseInt((sy || '').split('-')[0], 10) || 0;
   return (y - 1) + '-' + String(y).slice(2);
@@ -4565,8 +4571,18 @@ function renderScorecardTab() {
   if (u.species && !seen[u.species]) u.species = '';
   var data = scorecardGroups(u.by, u.season, u.species);
   var names = data.rows.map(function (r) { return r.name; });
-  if (u.h2hA && names.indexOf(u.h2hA) === -1) u.h2hA = '';
-  if (u.h2hB && names.indexOf(u.h2hB) === -1) u.h2hB = '';
+  /* Q170 (2026-10-08): head-to-head can also compare sponsored products, even
+     ones with no logged catches yet — sponsor names join the picker options. */
+  function h2hNames() {
+    var opts = names.slice();
+    SPONSORS.forEach(function (sp) {
+      if (sp.section === u.by && opts.indexOf(sp.product) === -1) opts.push(sp.product);
+    });
+    return opts;
+  }
+  var h2hAll = h2hNames();
+  if (u.h2hA && h2hAll.indexOf(u.h2hA) === -1) u.h2hA = '';
+  if (u.h2hB && h2hAll.indexOf(u.h2hB) === -1) u.h2hB = '';
   function segBtns(id, attr, opts) {
     return '<div class="seg compact" id="' + id + '">' + opts.map(function (o) {
       return '<button type="button" data-' + attr + '="' + o[0] + '">' + o[1] + '</button>';
@@ -4620,7 +4636,7 @@ function renderScorecardTab() {
     h2h = '<p class="dim" style="margin-top:10px">Pick two different ' + (u.by === 'lure' ? 'lures' : (u.by === 'bait' ? 'baits' : (u.by === 'urine' ? 'urines' : phrase))) + ' to compare.</p>';
   }
   function h2hOpts(sel) {
-    return names.map(function (n) {
+    return h2hNames().map(function (n) {
       return '<option value="' + esc(n) + '"' + (sel === n ? ' selected' : '') + '>' + esc(n) + '</option>';
     }).join('');
   }
@@ -4630,6 +4646,15 @@ function renderScorecardTab() {
     '<div><label class="field" for="sc-h2h-b">Second</label>' +
     '<select id="sc-h2h-b"><option value="">Pick one…</option>' + h2hOpts(u.h2hB) + '</select></div></div>' +
     h2h + '</div>';
+  /* Q170 (2026-10-08): Sponsored Products — a searchable, sponsor-only directory
+     sitting between head-to-head and the honesty line (which stays dead last).
+     One search box + category chips; every card wears the gold SPONSORED pill;
+     Compare drops the product into the head-to-head picker. */
+  var spCat = u.spCat || u.by;
+  html += '<div class="card" style="margin-top:12px"><h3>Sponsored Products</h3>' +
+    segBtns('sc-sp-seg', 'spcat', [['lure', 'Lures'], ['bait', 'Bait'], ['urine', 'Urine'], ['visual', 'Visual'], ['audio', 'Audio'], ['other', 'Other']]) +
+    '<input type="search" id="sc-sp-q" placeholder="Search sponsored products…" value="' + esc(u.spQ || '') + '" aria-label="Search sponsored products">' +
+    '<div id="sc-sp-list"></div></div>';
   html += '<div class="scorecard-honesty"><strong>Scorecard rankings are earned from real catch data \u2014 never bought.</strong></div>';
   box.innerHTML = html;
   var sub = $('scorecard-sub');
@@ -4658,6 +4683,74 @@ function renderScorecardTab() {
   $('sc-species').onchange = function () { u.species = this.value; u.h2hA = ''; u.h2hB = ''; renderScorecardTab(); };
   $('sc-h2h-a').onchange = function () { u.h2hA = this.value; renderScorecardTab(); };
   $('sc-h2h-b').onchange = function () { u.h2hB = this.value; renderScorecardTab(); };
+  /* Q170: Sponsored Products wiring — chips re-render the tab, search filters
+     the list in place (no re-render, so the keyboard stays up). */
+  renderSpList();
+  (function () {
+    var seg = $('sc-sp-seg');
+    if (!seg) return;
+    var btns = seg.querySelectorAll('button');
+    for (var i = 0; i < btns.length; i++) {
+      btns[i].classList.toggle('selected', btns[i].getAttribute('data-spcat') === (u.spCat || u.by));
+      btns[i].onclick = (function (b) {
+        return function () { u.spCat = b.getAttribute('data-spcat'); renderScorecardTab(); };
+      })(btns[i]);
+    }
+  })();
+  var spq = $('sc-sp-q');
+  if (spq) spq.oninput = function () { u.spQ = this.value; renderSpList(); };
+  var splist = $('sc-sp-list');
+  if (splist) splist.addEventListener('click', function (e) {
+    var cmp = e.target && e.target.closest ? e.target.closest('[data-sp-compare]') : null;
+    if (cmp) { e.stopPropagation(); spCompare(cmp.getAttribute('data-sp-compare')); return; }
+    var card = e.target && e.target.closest ? e.target.closest('[data-sp]') : null;
+    if (card) openSponsorBio(card.getAttribute('data-sp'));
+  });
+  if (splist) splist.addEventListener('keydown', function (e) {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    if (e.target && e.target.closest && e.target.closest('[data-sp-compare]')) return;
+    var card = e.target && e.target.closest ? e.target.closest('[data-sp]') : null;
+    if (card) { e.preventDefault(); openSponsorBio(card.getAttribute('data-sp')); }
+  });
+}
+/* Q170 (2026-10-08): sponsor-only product list for the Scorecard tab.
+   Only real sponsors appear — typed-in/autofilled products never do. */
+function renderSpList() {
+  var list = $('sc-sp-list');
+  if (!list) return;
+  var u = scoreUI;
+  var cat = u.spCat || u.by;
+  var q = String(u.spQ || '').toLowerCase().trim();
+  var PHRASE = { lure: 'lures', bait: 'baits', urine: 'urines', visual: 'visual attractants', audio: 'audio attractants', other: 'other attractants' };
+  var items = SPONSORS.filter(function (sp) {
+    if (sp.section !== cat) return false;
+    if (!q) return true;
+    return (String(sp.product) + ' ' + String(sp.name)).toLowerCase().indexOf(q) !== -1;
+  });
+  if (!items.length) {
+    list.innerHTML = '<p class="dim" style="margin:8px 0 0">No sponsored ' + esc(PHRASE[cat] || cat) + ' yet.</p>';
+    return;
+  }
+  list.innerHTML = items.map(function (sp) {
+    var logo = sp.badge || sp.brandLogo || '';
+    return '<div class="sp-card" data-sp="' + esc(sp.id) + '" role="button" tabindex="0" aria-label="About ' + esc(sp.name) + '">' +
+      (logo ? '<img class="sp-logo" src="' + esc(logo) + '" alt="' + esc(sp.name) + ' logo">' : '') +
+      '<div class="sp-info"><div class="sp-product">' + esc(sp.product) + '</div>' +
+      '<div class="sp-brand dim">' + esc(sp.name) + '</div></div>' +
+      '<span class="pill">Sponsored</span>' +
+      '<button type="button" class="btn-small btn-secondary" data-sp-compare="' + esc(sp.id) + '">Compare</button></div>';
+  }).join('');
+}
+/* Q170: drop a sponsored product into head-to-head — the scorecard switches
+   to the product's section and it becomes the First pick. */
+function spCompare(id) {
+  var sp = sponsorById(id);
+  if (!sp) return;
+  scoreUI.by = sp.section;
+  scoreUI.spCat = sp.section;
+  scoreUI.h2hA = sp.product;
+  scoreUI.h2hB = '';
+  renderScorecardTab();
 }
 /* Q5: one-tap backfill — when a set's attractants are filled in from blank,
    offer to stamp them onto that set's past unstamped catches. Q26: values
