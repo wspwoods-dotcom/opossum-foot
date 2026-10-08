@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-10-08dk';
+var APP_VERSION = 'beta 0.1 · build 2026-10-08dl';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -469,6 +469,7 @@ function closeSheets() {
 /* modal — dialogs close only via their buttons, never a backdrop tap (Q105). */
 function showModal(html) {
   $('modal-card').innerHTML = html;
+  $('modal').classList.remove('sponsor-sheet'); /* Q171: sheet mode is opt-in per open */
   $('modal').classList.add('show');
 }
 function closeModal() { $('modal').classList.remove('show'); }
@@ -2642,10 +2643,12 @@ function renderMissingReasonRow() {
    itself is never pay-to-play. Badge in the bait section; tap opens the bio. */
 var SPONSORS = [
   { id: 'awesome-opossum', name: 'Awesome Opossum', product: 'Awesome Opossum raccoon bait',
-    section: 'bait', tier: 2,
+    section: 'bait', tier: 2, tagline: 'Raccoon Bait',
     badge: 'assets/sponsors/awesome-opossum.webp',
     brandLogo: 'assets/sponsors/awesome-opossum.webp', /* product and brand are one here; future sponsors can differ */
-    bio: 'Awesome Opossum was developed as a raccoon bait with a sweet and musky scent. Originally it was effective on most nest predators, but ended up catching more opossums than anything.',
+    story: ['Awesome Opossum was developed as a raccoon bait with a sweet and musky scent. Originally it was effective on most nest predators, but ended up catching more opossums than anything.'],
+    products: [{ name: 'Awesome Opossum raccoon bait',
+      description: 'Sweet and musky raccoon bait — built for nest predators, famous for catching more opossums than anything.' }],
     url: 'https://opossumfoot.com', urlLabel: 'opossumfoot.com' }
 ];
 function sponsorById(id) {
@@ -2666,27 +2669,39 @@ function sponsorForProduct(name) {
 }
 /* Q67: the old standalone sponsor badge row under the Bait field is gone —
    sponsors live inside the suggestion menus now (see sponsorSuggests). */
-/* Q32: tap-for-bio — name, short bio, link to website/place of sale. */
+/* Q171 (2026-10-08): sponsor bio is the full-screen demo sheet — X close, logo,
+   name, gold tagline, OUR STORY, PRODUCTS, tier-gated extras, SPONSORED footer.
+   Tier 1 = bio + product names only; Tier 2+ adds product descriptions and the
+   gold VISIT WEBSITE button. Every caller (pickers, scorecard, directory) rides
+   this one function. */
 function openSponsorBio(id) {
   var sp = sponsorById(id);
   if (!sp) return;
-  var logo = sp.brandLogo || sp.badge; /* bio shows the brand logo; picker row shows the product badge */
-  /* Q170 (2026-10-08): bio depth is tier-gated — Tier 1 = bio only, Tier 2+ adds the website link. */
   var tier = sp.tier || 1;
-  var linkHtml = (tier >= 2 && sp.url)
-    ? '<div class="btn-row" style="justify-content:center"><a class="btn-small btn-secondary" href="' + sp.url +
-      '" target="_blank" rel="noopener">Visit ' + esc(sp.urlLabel || sp.url) + '</a></div>'
-    : '';
-  showModal('<div class="sponsor-bio">' +
-    '<img class="sponsor-bio-badge" src="' + logo + '" alt="' + esc(sp.name) + ' logo">' +
-    '<h3>' + esc(sp.name) + '</h3>' +
-    '<p>' + esc(sp.bio) + '</p>' +
-    linkHtml +
-    '<div class="btn-row" style="margin-top:10px;justify-content:center">' +
-    '<button class="btn-primary" id="m-sp-use" type="button">Use this ' + esc(sp.section) + '</button>' +
-    '<button class="btn-secondary" id="m-close" type="button">Close</button></div></div>');
-  $('m-close').onclick = closeModal;
-  $('m-sp-use').onclick = function () { renderAttrRows(sp.section, [sp.name].concat(collectAttrRows(sp.section))); closeModal(); };
+  var logo = sp.brandLogo || sp.badge;
+  var story = sp.story || (sp.bio ? [sp.bio] : []);
+  var products = sp.products || (sp.product ? [{ name: sp.product }] : []);
+  var html = '<div class="sp-bio-sheet">' +
+    '<button type="button" class="sp-bio-x" id="m-sp-x" aria-label="Close">\u00d7</button>' +
+    (logo ? '<img class="sp-bio-logo" src="' + esc(logo) + '" alt="' + esc(sp.name) + ' logo">' : '') +
+    '<h2 class="sp-bio-name">' + esc(sp.name) + '</h2>' +
+    (sp.tagline ? '<div class="sp-bio-tagline">' + esc(sp.tagline) + '</div>' : '') +
+    '<hr class="sp-bio-div">' +
+    '<h4 class="sp-bio-h">Our Story</h4>' +
+    story.map(function (p) { return '<p class="sp-bio-p">' + esc(p) + '</p>'; }).join('') +
+    '<h4 class="sp-bio-h">Products</h4>' +
+    products.map(function (pr) {
+      return '<div class="sp-bio-prod"><div class="sp-bio-prodname">' + esc(pr.name) + '</div>' +
+        ((tier >= 2 && pr.description) ? '<div class="sp-bio-proddesc dim">' + esc(pr.description) + '</div>' : '') + '</div>';
+    }).join('') +
+    ((tier >= 2 && sp.url)
+      ? '<a class="sp-bio-visit" href="' + esc(sp.url) + '" target="_blank" rel="noopener">Visit Website</a>'
+      : '<p class="sp-bio-upgrade dim">Upgrade to Tier 2 for product descriptions + website link</p>') +
+    '<div class="sp-bio-sponsored">Sponsored</div>' +
+    '</div>';
+  showModal(html);
+  $('modal').classList.add('sponsor-sheet');
+  $('m-sp-x').onclick = function () { $('modal').classList.remove('sponsor-sheet'); closeModal(); };
 }
 
 function openSetForm(coords, setId) {
