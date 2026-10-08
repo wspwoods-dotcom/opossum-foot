@@ -390,16 +390,7 @@
     <label class="field" for="sf-name">Set Name <span class="req">*</span></label>
     <input type="text" id="sf-name" placeholder="e.g. Creek crossing" autocomplete="off">
     <div class="suggest" id="sf-name-suggest"></div>
-    <label class="field">Pin Kind</label>
-    <div class="seg" id="sf-kind-seg" role="group" aria-label="Pin kind">
-      <button type="button" data-kind="set">Trap Set</button>
-      <button type="button" data-kind="facility">Facility</button>
-    </div>
-    <div class="setfield" id="setfield-facility" hidden>
-      <label class="field">Facility Type <span class="req">*</span></label>
-      <div id="sf-facility-grid" class="facility-grid"></div>
-    </div>
-    <div class="setfield trap-only" id="setfield-traptype">
+    <div class="setfield" id="setfield-traptype">
     <label class="field" for="sf-maker">Trap Manufacturer</label>
     <select id="sf-maker" data-has-other="1"></select>
     <div class="other-wrap" id="sf-maker-otherwrap" hidden><label class="field" for="sf-maker-othertext">What is it?</label><input type="text" id="sf-maker-othertext" placeholder="Type the manufacturer" autocomplete="off"></div>
@@ -410,18 +401,18 @@
     </select>
     <div class="other-wrap" id="sf-type-otherwrap" hidden><label class="field" for="sf-type-othertext">What is it?</label><input type="text" id="sf-type-othertext" placeholder="Type the trap type" autocomplete="off"></div>
     </div>
-    <div class="setfield trap-only" id="setfield-trapdetail">
+    <div class="setfield" id="setfield-trapdetail">
     <label class="field">Trap Details</label>
     <div id="trapdetail-fields"></div>
     </div>
-    <div class="setfield trap-only" id="setfield-settype">
+    <div class="setfield" id="setfield-settype">
     <label class="field" for="sf-settype">Set Type</label>
     <select id="sf-settype" data-has-other="1">
       <!-- options built by renderSetTypeOptions() — Q29 researched taxonomy -->
     </select>
     <div class="other-wrap" id="sf-settype-otherwrap" hidden><label class="field" for="sf-settype-othertext">What is it?</label><input type="text" id="sf-settype-othertext" placeholder="Type the set type" autocomplete="off"></div>
     </div>
-    <div class="setfield trap-only" id="setfield-bait">
+    <div class="setfield" id="setfield-bait">
     <label class="field">Bait</label>
     <!-- Q78 (2026-10-01): Tanner — the example lives here at the top, never inside the box. -->
     <p class="dim attr-hint">e.g. sardines</p>
@@ -433,45 +424,45 @@
     <div class="warnbox" id="sf-bait-warn" hidden></div>
     <!-- Q67: sponsors moved inside the suggestion menus — no separate row -->
     </div>
-    <div class="setfield trap-only" id="setfield-lure">
+    <div class="setfield" id="setfield-lure">
     <label class="field">Lure</label>
     <p class="dim attr-hint">e.g. gland lure</p>
     <div id="sf-lure-rows"></div>
     <button type="button" class="btn-small btn-ghost attr-add" id="sf-lure-add" hidden>+ Add Another Lure</button>
     </div>
-    <div class="setfield trap-only" id="setfield-urine">
+    <div class="setfield" id="setfield-urine">
     <label class="field">Urine</label>
     <p class="dim attr-hint">e.g. fox urine</p>
     <div id="sf-urine-rows"></div>
     <button type="button" class="btn-small btn-ghost attr-add" id="sf-urine-add" hidden>+ Add Another Urine</button>
     </div>
-    <div class="setfield trap-only" id="setfield-visual">
+    <div class="setfield" id="setfield-visual">
     <label class="field">Visual</label>
     <p class="dim attr-hint">e.g. flagging tape</p>
     <div id="sf-visual-rows"></div>
     <button type="button" class="btn-small btn-ghost attr-add" id="sf-visual-add" hidden>+ Add Another Visual</button>
     </div>
-    <div class="setfield trap-only" id="setfield-audio">
+    <div class="setfield" id="setfield-audio">
     <label class="field">Audio</label>
     <p class="dim attr-hint">e.g. squeaker</p>
     <div id="sf-audio-rows"></div>
     <button type="button" class="btn-small btn-ghost attr-add" id="sf-audio-add" hidden>+ Add Another Audio</button>
     </div>
-    <div class="setfield trap-only" id="setfield-other">
+    <div class="setfield" id="setfield-other">
     <label class="field">Other Attractants</label>
     <p class="dim attr-hint">e.g. t-bone</p>
     <div id="sf-other-rows"></div>
     <button type="button" class="btn-small btn-ghost attr-add" id="sf-other-add" hidden>+ Add Another Attractant</button>
     </div>
-    <label class="field trap-only">Status <span class="req">*</span></label>
-    <div class="seg status-seg trap-only" id="sf-status-seg" role="group" aria-label="Trap status">
+    <label class="field">Status <span class="req">*</span></label>
+    <div class="seg status-seg" id="sf-status-seg" role="group" aria-label="Trap status">
       <button type="button" data-st="active" class="st-active">Active</button>
       <button type="button" data-st="sprung" class="st-sprung">Sprung</button>
       <button type="button" data-st="pulled" class="st-pulled">Pulled</button>
       <button type="button" data-st="missing" class="st-missing">Missing</button>
     </div>
     <input type="hidden" id="sf-status" value="active">
-    <div id="setfield-missing" class="trap-only" hidden>
+    <div id="setfield-missing" hidden>
     <label class="field">Why Missing <span class="req">*</span></label>
     <div class="seg" id="sf-missing-reason">
       <button type="button" data-mr="stolen">Stolen</button>
@@ -489,9 +480,9 @@
       <input type="file" id="sf-missing-photo-input" class="hidden-file" accept="image/*">
     </div>
     </div>
-    <label class="field trap-only" for="sf-date">Date Set <span class="req">*</span></label>
-    <input type="date" id="sf-date" class="trap-only">
-    <div class="dow-line trap-only"><span id="sf-date-dow"></span></div>
+    <label class="field" for="sf-date">Date Set <span class="req">*</span></label>
+    <input type="date" id="sf-date">
+    <div class="dow-line"><span id="sf-date-dow"></span></div>
     <!-- Q99 (2026-10-01): Tanner — notes + memos + photos collapse into one box -->
     <div class="setsec" id="setform-notessec">
     <button type="button" class="setsec-head" id="setform-notessec-head" data-sec="setform-notessec" aria-expanded="false"><span>Notes, Memos &amp; Photos</span><span class="setsec-chev" aria-hidden="true">›</span></button>
