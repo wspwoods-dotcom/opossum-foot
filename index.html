@@ -149,27 +149,36 @@
   <div id="pane-licenses" class="pane">
     <div class="pane-head"><h2>Paperwork</h2><p>Licenses and landowner info, kept on this phone only.</p></div>
     <div class="scroll">
-      <div class="card">
-        <h3>License Wallet</h3>
-        <button class="btn-secondary" id="btn-add-license" type="button"><img class="bi" src="assets/icons/camera.png" alt="">Add license photo</button>
-        <p class="dim" style="margin:8px 0 0">Tap a photo to view it — or attach its website link, like the DNR page where you bought it.</p>
-        <input type="file" id="license-input" class="hidden-file" accept="image/*" multiple>
-        <div class="lic-grid" id="license-grid"></div>
+      <!-- Tanner 2026-10-07: each Paperwork section is a collapsible dropdown,
+           like the Settings tab sections. -->
+      <div class="card setsec" id="setsec-license">
+        <button type="button" class="setsec-head" id="setsec-license-head" data-sec="setsec-license" aria-expanded="false"><span>License Wallet</span><span class="setsec-chev" aria-hidden="true">›</span></button>
+        <div class="setsec-body" id="setsec-license-body" hidden>
+          <button class="btn-secondary" id="btn-add-license" type="button"><img class="bi" src="assets/icons/camera.png" alt="">Add license photo</button>
+          <p class="dim" style="margin:8px 0 0">Tap a photo to view it — or attach its website link, like the DNR page where you bought it.</p>
+          <input type="file" id="license-input" class="hidden-file" accept="image/*" multiple>
+          <div class="lic-grid" id="license-grid"></div>
+        </div>
       </div>
-      <div class="card">
-        <h3>Landowner Notebook</h3>
-        <p class="dim" style="margin:0 0 8px">Who owns the ground you trap — phone numbers, permission slips, boundaries, and the notes you don't want to forget.</p>
-        <input type="search" id="landowner-search" placeholder="Search landowners…" aria-label="Search landowners">
-        <div style="height:10px"></div>
-        <div id="landowner-list"></div>
-        <button class="btn-secondary" id="btn-add-landowner" type="button">＋ Add landowner</button>
-        <input type="file" id="lo-slip-input" class="hidden-file" accept="image/*" multiple>
-        <input type="file" id="lo-boundary-input" class="hidden-file" accept="image/*">
+      <div class="card setsec" id="setsec-landowner">
+        <button type="button" class="setsec-head" id="setsec-landowner-head" data-sec="setsec-landowner" aria-expanded="false"><span>Landowner Notebook</span><span class="setsec-chev" aria-hidden="true">›</span></button>
+        <div class="setsec-body" id="setsec-landowner-body" hidden>
+          <p class="dim" style="margin:0 0 8px">Who owns the ground you trap — phone numbers, permission slips, boundaries, and the notes you don't want to forget.</p>
+          <input type="search" id="landowner-search" placeholder="Search landowners…" aria-label="Search landowners">
+          <div style="height:10px"></div>
+          <div id="landowner-list"></div>
+          <button class="btn-secondary" id="btn-add-landowner" type="button">＋ Add landowner</button>
+          <input type="file" id="lo-slip-input" class="hidden-file" accept="image/*" multiple>
+          <input type="file" id="lo-boundary-input" class="hidden-file" accept="image/*">
+        </div>
       </div>
-      <div class="card" id="paperwork-mileage-card">
-        <h3>Mileage</h3>
-        <p class="dim" style="margin:0 0 8px">Odometer trip logs by line — for the tax book. Export any line's log anytime from Settings &rarr; Export mileage (CSV).</p>
-        <div id="paperwork-mileage-lines"></div>
+      <div class="card setsec" id="setsec-mileage">
+        <button type="button" class="setsec-head" id="setsec-mileage-head" data-sec="setsec-mileage" aria-expanded="false"><span>Mileage</span><span class="setsec-chev" aria-hidden="true">›</span></button>
+        <div class="setsec-body" id="setsec-mileage-body" hidden>
+          <p class="dim" style="margin:0 0 8px">Odometer trip logs by line — for the tax book. Snap each reading, type it in later; export any line's log from Settings → Export mileage (CSV).</p>
+          <div id="paperwork-mileage-lines"></div>
+          <input type="file" id="pm-trip-photo-input" class="hidden-file" accept="image/*">
+        </div>
       </div>
     </div>
   </div>
