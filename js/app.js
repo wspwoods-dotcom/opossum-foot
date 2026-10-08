@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-10-07cx';
+var APP_VERSION = 'beta 0.1 · build 2026-10-07cy';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -6741,24 +6741,18 @@ function renderMileageModal(lineId) {
   showModal(
     '<h3>Mileage \u2014 ' + esc(ln.name) + '</h3>' +
     '<p class="dim" style="margin-top:0">Odometer total: <strong>' + esc(fmtMiles(total)) + '</strong></p>' +
-    /* Tanner 2026-10-07: the screen walks the flow — home once, then the
-       odometer. The Google Maps directions link-out is scrapped (Google caps
-       a route at 9 stops); the trip screen still takes a route-map photo if
-       he wants one. */
-    (rows || '<p class="dim">No trips logged yet.</p>') +
-    '<input type="file" id="m-trip-photo-input" class="hidden-file" accept="image/*">' +
-    /* Tanner 2026-10-07: directions scrapped — Google caps a route at 9 stops,
-       so long lines can't ride one link. Sitting with the odometer: home
-       sets the map launch point (once), Odometer logs the trip (blue). */
+    /* Tanner 2026-10-07: flip-flop — explainer and buttons up top, the trip
+       log lives at the bottom. */
+    '<p class="dim flow-steps" style="margin:2px 2px 0">1. <strong>Change home</strong> sets where your map opens (once).<br>' +
+    '2. <strong>Odometer</strong> logs the trip \u2014 snap each reading, add a route map photo if you want one.<br>' +
+    'Export the trip log anytime from Settings \u2192 Export mileage (CSV).</p>' +
     '<div class="mflow">' +
     '<button class="mflow-btn mflow-btn-1" id="m-trip-home" type="button"><span class="mflow-n">1</span>' +
     (lineHasHome(lineId) ? 'Change home' : 'Set home') + '</button>' +
     '<button class="mflow-btn mflow-btn-3" id="m-trip-add" type="button"><span class="mflow-n">2</span>Odometer</button>' +
     '<button class="btn-ghost mflow-btn mflow-close" id="m-trip-close" type="button">Close</button></div>' +
-    /* Tanner 2026-10-07: the flow explainer lives down here, below everything. */
-    '<p class="dim flow-steps" style="margin:14px 2px 0">1. <strong>Change home</strong> sets where your map opens (once).<br>' +
-    '2. <strong>Odometer</strong> logs the trip \u2014 snap each reading, add a route map photo if you want one.<br>' +
-    'Export the trip log anytime from Settings \u2192 Export mileage (CSV).</p>'
+    '<input type="file" id="m-trip-photo-input" class="hidden-file" accept="image/*">' +
+    (rows || '<p class="dim">No trips logged yet.</p>')
     /* NOTE 2026-10-07: Tanner scrapped the straight-line "Show route on map"
        estimate — in the mountains road miles can be 10x air miles, so the
        number lies. drawRouteEstimate/clearRouteEstimate stay parked in the
