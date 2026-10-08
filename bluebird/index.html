@@ -135,6 +135,12 @@ textarea{min-height:80px;resize:vertical}
 .chip[data-s="proposed"] .dot{background:#8a8a8a}
 .chip[data-s="placed"] .dot{background:var(--blue)}
 .chip[data-s="active"] .dot{background:var(--green)}
+/* --- 100-foot scale bar --- */
+.scale100{position:absolute;z-index:10;left:50%;transform:translateX(-50%);
+  bottom:calc(24px + env(safe-area-inset-bottom));background:rgba(20,24,16,.88);
+  padding:8px 14px 6px;border-radius:8px;border:1px solid var(--line);
+  font-size:.75em;color:var(--ink);text-align:center;pointer-events:none;white-space:nowrap}
+.scale100 .bar{height:6px;background:var(--ink);margin:0 auto 4px;border-left:2px solid var(--ink);border-right:2px solid var(--ink)}
 </style>
 </head>
 <body>
@@ -217,6 +223,37 @@ const street = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 });
 // Fallback to street map if satellite fails
 sat.on('tileerror', ()=>{ if(!map.hasLayer(street)){ map.removeLayer(sat); street.addTo(map); } });
+
+// --- Spring Lake Park boundary (Greene County Conservation parcels, from county assessor GIS) ---
+const PARK_BOUNDARY = [
+  [[42.0704677,-94.2909029],[42.0704676,-94.2908972],[42.0674614,-94.2908556],[42.0669970,-94.2908492],[42.0669971,-94.2908557],[42.0670686,-94.2957007],[42.0705412,-94.2957513]],
+  [[42.0703934,-94.2860160],[42.0691549,-94.2859984],[42.0669248,-94.2859667],[42.0669647,-94.2886585],[42.0669714,-94.2891126],[42.0669845,-94.2900016],[42.0669970,-94.2908492],[42.0674614,-94.2908556],[42.0704676,-94.2908972],[42.0704098,-94.2870926]],
+  [[42.0669970,-94.2908492],[42.0669268,-94.2908482],[42.0633892,-94.2907992],[42.0634587,-94.2956480],[42.0670686,-94.2957007],[42.0669971,-94.2908557]],
+  [[42.0669248,-94.2859667],[42.0633189,-94.2859155],[42.0633465,-94.2878321],[42.0633794,-94.2901193],[42.0633892,-94.2907992],[42.0669268,-94.2908482],[42.0669970,-94.2908492],[42.0669845,-94.2900016],[42.0669714,-94.2891126],[42.0669647,-94.2886585]],
+  [[42.0633189,-94.2859155],[42.0606107,-94.2858738],[42.0597079,-94.2858598],[42.0597255,-94.2871597],[42.0597544,-94.2893028],[42.0597555,-94.2893839],[42.0597696,-94.2904293],[42.0597732,-94.2907000],[42.0633892,-94.2907992],[42.0633794,-94.2901193],[42.0633465,-94.2878321]],
+  [[42.0597079,-94.2858598],[42.0561875,-94.2858055],[42.0562479,-94.2905986],[42.0562479,-94.2906032],[42.0597732,-94.2907000],[42.0597696,-94.2904293],[42.0597555,-94.2893839],[42.0597544,-94.2893028],[42.0597255,-94.2871597]]
+];
+PARK_BOUNDARY.forEach(ring=>{
+  L.polygon(ring, {color:'#d19a2f', weight:3, opacity:.95,
+    fillColor:'#d19a2f', fillOpacity:.07, interactive:false}).addTo(map);
+});
+
+// --- 100-foot scale bar (updates with zoom) ---
+const scaleDiv = document.createElement('div');
+scaleDiv.className = 'scale100';
+scaleDiv.innerHTML = '<div class="bar"></div><div>100 ft</div>';
+document.body.appendChild(scaleDiv);
+function updateScale(){
+  const y = map.getSize().y / 2;
+  const p1 = map.containerPointToLatLng(L.point(0, y));
+  const p2 = map.containerPointToLatLng(L.point(100, y));
+  const metersPerPixel = p1.distanceTo(p2) / 100;
+  const feetPerPixel = metersPerPixel * 3.28084;
+  const px = Math.max(20, Math.round(100 / feetPerPixel));
+  scaleDiv.querySelector('.bar').style.width = px + 'px';
+}
+map.on('zoomend moveend', updateScale);
+updateScale();
 
 const markers = {};
 function pinColor(status){
@@ -421,8 +458,15 @@ function openBox(id, tab){
       : `<button class="btn primary" onclick="openEvent()">+ Log event</button>`}`;
   openSheet();
 
-  // Save name/status/habitat on change
-  document.getElementById('f-name').onchange = e=>{ b.name=e.target.value; save(); renderPins(); };
+  // Save name/status/habitat on change (name saves as-you-type for reliability on touch)
+  const nameInput = document.getElementById('f-name');
+  const saveName = e=>{
+    b.name = e.target.value; save(); renderPins();
+    document.getElementById('sheet-title').innerHTML =
+      `${esc(b.name)} <span class="badge ${b.status}">${b.status}</span>`;
+  };
+  nameInput.oninput = saveName;
+  nameInput.onchange = saveName;
   document.getElementById('f-status').onchange = e=>{ b.status=e.target.value; save(); renderPins(); openBox(id, tab); };
   document.getElementById('f-habitat').onchange = e=>{ b.habitat=e.target.value; save(); };
 }
