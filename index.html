@@ -154,10 +154,12 @@
       <div class="card setsec" id="setsec-license">
         <button type="button" class="setsec-head" id="setsec-license-head" data-sec="setsec-license" aria-expanded="false"><span>License Wallet</span><span class="setsec-chev" aria-hidden="true">›</span></button>
         <div class="setsec-body" id="setsec-license-body" hidden>
-          <button class="btn-secondary" id="btn-add-license" type="button"><img class="bi" src="assets/icons/camera.png" alt="">Add license photo</button>
-          <p class="dim" style="margin:8px 0 0">Tap a photo to view it — or attach its website link, like the DNR page where you bought it.</p>
+          <!-- Tanner 2026-10-07: the add button sits below the photos and looks
+               like the + Add landowner button. Title case on the label. -->
+          <p class="dim" style="margin:0 0 8px">Tap a photo to view it — or attach its website link, like the DNR page where you bought it.</p>
           <input type="file" id="license-input" class="hidden-file" accept="image/*" multiple>
           <div class="lic-grid" id="license-grid"></div>
+          <button class="btn-secondary" id="btn-add-license" type="button">＋ Add Document</button>
         </div>
       </div>
       <div class="card setsec" id="setsec-landowner">
