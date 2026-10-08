@@ -537,15 +537,6 @@ body.route-locked #tabbar { pointer-events: none; opacity: .35; }
 /* B31: per-status colors removed from the form — the standard brass segmented
    treatment is the only selected state. Color coding lives on the map. */
 .seg button[hidden], #log-disposition[hidden], #log-disposition-label[hidden] { display: none; }
-/* Facility pins: the park-brochure map builder (build dh). Trap-only form
-   fields hide in facility mode; the facility grid + brass pin carry the type. */
-#sheet-setform.facility-mode .trap-only { display: none !important; }
-.facility-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 2px 0 14px; }
-.facility-grid button { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 10px 4px; border-radius: 10px; border: 1px solid var(--line); background: var(--panel); color: var(--ink); font-size: 12px; font-weight: 600; line-height: 1.15; text-align: center; }
-.facility-grid button img { width: 30px; height: 30px; object-fit: contain; }
-.facility-grid button.sel { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
-.pin-facility { background: #b98a2f; }
-.pin-facility img { width: 20px; height: 20px; object-fit: contain; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); background: #fff; border-radius: 6px; }
 #log-disposition button { white-space: nowrap; font-size: 14px; padding: 12px 4px; }
 
 .warnbox { background: #3d2c10; border: 1px solid #6b4d1c; color: #f5cf7a; border-radius: var(--radius); padding: 12px 14px; margin: 12px 0; font-size: 15px; }
