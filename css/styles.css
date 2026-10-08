@@ -448,6 +448,11 @@ body.route-locked #tabbar { pointer-events: none; opacity: .35; }
 .setsec.open .setsec-chev { transform: rotate(90deg); }
 .setsec-body { padding-bottom: 14px; }
 .setsec-body[hidden] { display: none; }
+/* Tanner 2026-10-07: per-line blocks inside the Paperwork Mileage section —
+   line header with total + Log trip, trip rows below like everywhere else. */
+.pm-line { border-top: 1px solid var(--line); padding: 10px 0 4px; margin-top: 10px; }
+.pm-line:first-child { border-top: none; padding-top: 0; margin-top: 0; }
+.pm-line-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 6px; }
 /* Q135 (2026-10-01): Tanner — the Trap & Snare Rules control matches the two
    gold buttons above it: gold, caps, centered. It stays the only collapsible
    one (Q119); the chevron pins right so the label stays truly centered, and
