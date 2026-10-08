@@ -891,8 +891,8 @@ body.placing .leaflet-control-layers { pointer-events: none; opacity: .45; }
 #modal.sponsor-sheet { padding: 0; background: rgba(0,0,0,.92); }
 #modal.sponsor-sheet .modal-card { width: 100%; max-width: none; height: 100%; max-height: none;
   border: none; border-radius: 0; background: transparent; padding: 0; }
-.sp-bio-sheet { position: relative; min-height: 100%; padding: 60px 30px 44px; text-align: center; }
-.sp-bio-x { position: absolute; top: 12px; right: 16px; background: none; border: none;
+.sp-bio-sheet { position: relative; min-height: 100%; padding: 110px 30px 44px; text-align: center; }
+.sp-bio-x { position: absolute; top: 56px; right: 16px; background: none; border: none;
   color: var(--muted); font-size: 36px; line-height: 1; padding: 10px; cursor: pointer; }
 .sp-bio-logo { width: 124px; height: 124px; border-radius: 50%; object-fit: cover; }
 .sp-bio-name { text-transform: uppercase; letter-spacing: .1em; font-size: 30px; margin: 20px 0 8px; }
