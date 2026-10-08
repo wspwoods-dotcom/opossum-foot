@@ -887,6 +887,31 @@ body.placing .leaflet-control-layers { pointer-events: none; opacity: .45; }
 .sp-product { font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .sp-brand { font-size: 12px; }
 
+/* Q171: sponsor bio full-screen sheet (the demo design) */
+#modal.sponsor-sheet { padding: 0; background: rgba(0,0,0,.92); }
+#modal.sponsor-sheet .modal-card { width: 100%; max-width: none; height: 100%; max-height: none;
+  border: none; border-radius: 0; background: transparent; padding: 0; }
+.sp-bio-sheet { position: relative; min-height: 100%; padding: 60px 30px 44px; text-align: center; }
+.sp-bio-x { position: absolute; top: 12px; right: 16px; background: none; border: none;
+  color: var(--muted); font-size: 36px; line-height: 1; padding: 10px; cursor: pointer; }
+.sp-bio-logo { width: 124px; height: 124px; border-radius: 50%; object-fit: cover; }
+.sp-bio-name { text-transform: uppercase; letter-spacing: .1em; font-size: 30px; margin: 20px 0 8px; }
+.sp-bio-tagline { color: var(--accent); text-transform: uppercase; letter-spacing: .2em;
+  font-weight: 700; font-size: 15px; }
+.sp-bio-div { border: none; border-top: 1px solid var(--line); margin: 24px 44px; }
+.sp-bio-h { color: var(--accent); text-transform: uppercase; letter-spacing: .24em;
+  font-size: 15px; margin: 28px 0 16px; }
+.sp-bio-p { line-height: 1.65; font-size: 16px; margin: 0 0 14px; }
+.sp-bio-prod { margin: 0 0 20px; }
+.sp-bio-prodname { font-weight: 700; font-size: 17px; }
+.sp-bio-proddesc { font-size: 14px; margin-top: 6px; line-height: 1.55; }
+.sp-bio-upgrade { font-size: 14px; margin: 24px 0 0; line-height: 1.5; }
+.sp-bio-visit { display: inline-block; margin-top: 28px; background: var(--accent);
+  color: var(--accent-ink); font-weight: 800; text-transform: uppercase; letter-spacing: .06em;
+  font-size: 16px; padding: 17px 52px; border-radius: 999px; text-decoration: none; }
+.sp-bio-sponsored { margin-top: 56px; color: var(--accent); text-transform: uppercase;
+  letter-spacing: .32em; font-size: 13px; }
+
 /* ---- equal-size History disposition filter chips, scrollable row ---- */
 #hist-disp-chips { overflow-x: auto; justify-content: flex-start; }
 #hist-disp-chips .chip { flex: 0 0 auto; width: 172px; text-align: center; padding: 10px 8px; font-size: 13px; white-space: nowrap; }
