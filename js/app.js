@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-10-07de';
+var APP_VERSION = 'beta 0.1 · build 2026-10-07df';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -4993,15 +4993,18 @@ function renderPaperworkMileage() {
   if (!on) return;
   var lines = (Store.data.lines || []);
   if (!lines.length) { box.innerHTML = '<p class="dim">No lines yet.</p>'; return; }
-  box.innerHTML = lines.map(function (ln) {
-    var trips = tripsForLine(ln.id);
-    var rows = trips.map(tripRowHTML).join('') || '<p class="dim">No trips logged yet.</p>';
-    return '<div class="pm-line" data-pm-line-block="' + esc(ln.id) + '">' +
-      '<div class="pm-line-head"><span><strong>' + esc(ln.name) + '</strong> ' +
-      '<span class="dim">' + esc(fmtMiles(lineTripTotal(ln.id))) + '</span></span>' +
-      '<button type="button" class="btn-small btn-secondary" data-pm-logtrip="' + esc(ln.id) + '">+ Log trip</button></div>' +
-      rows + '</div>';
-  }).join('');
+  /* Tanner 2026-10-07 (df): the Mileage section follows the active line only —
+     switch lines and it shows that line's trips. The all-lines export lives
+     in Settings. */
+  var ln = activeLine();
+  if (!ln) { box.innerHTML = '<p class="dim">No active line.</p>'; return; }
+  var trips = tripsForLine(ln.id);
+  var rows = trips.map(tripRowHTML).join('') || '<p class="dim">No trips logged yet.</p>';
+  box.innerHTML = '<div class="pm-line" data-pm-line-block="' + esc(ln.id) + '">' +
+    '<div class="pm-line-head"><span><strong>' + esc(ln.name) + '</strong> ' +
+    '<span class="dim">' + esc(fmtMiles(lineTripTotal(ln.id))) + '</span></span>' +
+    '<button type="button" class="btn-small btn-secondary" data-pm-logtrip="' + esc(ln.id) + '">+ Log trip</button></div>' +
+    rows + '</div>';
   function lineOf(el) {
     var b = el.closest ? el.closest('[data-pm-line-block]') : null;
     return b ? b.getAttribute('data-pm-line-block') : null;
@@ -5978,6 +5981,7 @@ function refreshForLine() {
   renderSeasons($('seasons-search') ? $('seasons-search').value : '');
   renderLicenses();
   renderLandowners();
+  renderPaperworkMileage(); /* df: mileage follows the active line */
   renderMapStatusFilters();
   buildStateSelect($('settings-state'), activeStateCode());
   renderSettingsLineName();
@@ -6946,23 +6950,27 @@ function deleteTrip(lineId, tripId) {
     });
 }
 
-/* --- CSV export: one row per trip for the active line, then a TOTAL row.
-   Tanner 2026-10-07: the straight-line ROUTE ESTIMATE row is cut -- it lies
-   in the mountains, and the odometer is the truth. --- */
-function buildMileageRows(lineId) {
-  var ln = lineById(Store.data, lineId);
-  var lname = ln ? ln.name : '';
+/* --- CSV export: one row per trip for every line, then a TOTAL row per line.
+   Tanner 2026-10-07 (df): the export covers all lines at once; the Paperwork
+   tab shows the active line only. The straight-line ROUTE ESTIMATE row stays
+   cut -- it lies in the mountains, and the odometer is the truth. --- */
+function buildMileageRows() {
   var rows = [['Date', 'Line', 'Start odometer', 'End odometer', 'Miles', 'Notes']];
-  tripsForLine(lineId).forEach(function (t) {
-    rows.push([t.date, lname, t.startOdo, t.endOdo, Math.round(tripMiles(t) * 10) / 10, t.notes || '']);
+  (Store.data.lines || []).forEach(function (ln) {
+    var trips = tripsForLine(ln.id);
+    if (!trips.length) return;
+    trips.forEach(function (t) {
+      rows.push([t.date, ln.name, t.startOdo, t.endOdo, Math.round(tripMiles(t) * 10) / 10, t.notes || '']);
+    });
+    rows.push(['TOTAL', ln.name, '', '', Math.round(lineTripTotal(ln.id) * 10) / 10, '']);
   });
-  rows.push(['TOTAL', lname, '', '', Math.round(lineTripTotal(lineId) * 10) / 10, '']);
   return rows;
 }
 function exportMileage() {
-  var id = activeLineId();
-  if (!tripsForLine(id).length) { toast('No trips logged on this line yet.'); return; }
-  downloadCSV('opossum-foot-mileage-' + lineFileSlug() + '-' + todayISO() + '.csv', buildMileageRows(id));
+  var n = 0;
+  (Store.data.lines || []).forEach(function (ln) { n += tripsForLine(ln.id).length; });
+  if (!n) { toast('No trips logged on any line yet.'); return; }
+  downloadCSV('opossum-foot-mileage-all-lines-' + todayISO() + '.csv', buildMileageRows());
   toast('Mileage CSV downloaded.');
 }
 
