@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-10-07di';
+var APP_VERSION = 'beta 0.1 · build 2026-10-07dj';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -2103,80 +2103,7 @@ function refreshPinWinds() {
   });
 }
 
-/* ---------- Facility pins: the park-brochure map builder (build dh) ----------
-   A set flagged with facility=<slug> is a park facility, not a trap: brass pin
-   with a facility pictogram, draggable on the map, trap fields hidden in the
-   form. Tanner maps one line per park; the facilities export feeds the
-   illustrated brochure overlays. */
-var FACILITIES = [
-  { slug: 'shelter-house', label: 'Shelter House' },
-  { slug: 'pedestrian-bridge', label: 'Pedestrian Bridge' },
-  { slug: 'campsite', label: 'Campsite' },
-  { slug: 'restroom', label: 'Restroom' },
-  { slug: 'parking', label: 'Parking' },
-  { slug: 'trailhead', label: 'Trailhead' },
-  { slug: 'playground', label: 'Playground' },
-  { slug: 'boat-ramp', label: 'Boat Ramp' },
-  { slug: 'fishing-dock', label: 'Fishing Dock' },
-  { slug: 'picnic-area', label: 'Picnic Area' },
-  { slug: 'vault-toilets', label: 'Vault Toilets' },
-  { slug: 'shower-house', label: 'Shower House' },
-  { slug: 'electric-campsite', label: 'Electric Campsite' },
-  { slug: 'equestrian-area', label: 'Equestrian Area' },
-  { slug: 'hydrant', label: 'Hydrant' },
-  { slug: 'primitive-campsite', label: 'Primitive Campsite' },
-  { slug: 'dump-station', label: 'Dump Station' },
-  { slug: 'office', label: 'Office' },
-  { slug: 'ranger-residence', label: 'Ranger Residence' },
-  { slug: 'swimming-beach', label: 'Swimming Beach' },
-  { slug: 'concessions', label: 'Concessions' },
-  { slug: 'wildlife-area', label: 'Wildlife Area' }
-];
-function facilityLabel(slug) {
-  for (var i = 0; i < FACILITIES.length; i++) if (FACILITIES[i].slug === slug) return FACILITIES[i].label;
-  return slug || '';
-}
-var setFormKind = 'set';    /* 'set' | 'facility' — the Pin Kind seg */
-var setFacilitySlug = null; /* chosen facility type while the form is open */
-
-function renderFacilityGrid() {
-  var g = $('sf-facility-grid'); if (!g) return;
-  g.innerHTML = FACILITIES.map(function (f) {
-    return '<button type="button" data-fac="' + f.slug + '"' +
-      (setFacilitySlug === f.slug ? ' class="sel"' : '') + '>' +
-      '<img src="assets/facilities/' + f.slug + '.png" alt="" onerror="this.style.display=\'none\'">' +
-      '<span>' + esc(f.label) + '</span></button>';
-  }).join('');
-  var btns = g.querySelectorAll('button');
-  for (var i = 0; i < btns.length; i++) {
-    btns[i].onclick = function () { setFacilitySlug = this.getAttribute('data-fac'); renderFacilityGrid(); };
-  }
-}
-
-function setFormKindSeg(kind) {
-  setFormKind = kind;
-  var btns = document.querySelectorAll('#sf-kind-seg button');
-  for (var i = 0; i < btns.length; i++) btns[i].classList.toggle('selected', btns[i].getAttribute('data-kind') === kind);
-  $('sheet-setform').classList.toggle('facility-mode', kind === 'facility');
-  var fw = $('setfield-facility'); if (fw) fw.hidden = (kind !== 'facility');
-  var nm = $('sf-name');
-  if (kind === 'facility') {
-    /* an auto-numbered trap name means nothing on a shower house — clear it */
-    if (nm && (/^Set \d+$/i.test(nm.value.trim()) || !nm.value.trim())) { nm.value = ''; nm.placeholder = 'e.g. North shelter house'; }
-  } else if (nm && !nm.value.trim()) {
-    nm.value = nextSetName(); nm.placeholder = 'e.g. Creek crossing';
-  }
-}
-
 function setIcon(set) {
-  /* Facilities get the brass pin + pictogram — no status color, no check clock. */
-  if (set.facility) {
-    return L.divIcon({
-      className: '',
-      html: '<div class="pin pin-facility"><img src="assets/facilities/' + esc(set.facility) + '.png" alt=""></div>',
-      iconSize: [30, 30], iconAnchor: [15, 15]
-    });
-  }
   /* Q68: an overdue check turns the pin red, whatever the status color was. */
   var pinCls = isCheckOverdue(set) ? 'pin-overdue' : 'pin-' + esc(normStatus(set.status));
   return L.divIcon({
@@ -2191,19 +2118,7 @@ function refreshMarkers() {
   markersLayer.clearLayers();
   activeSets().forEach(function (s) {
     if (!mapStatusFilter[normStatus(s.status)]) return;
-    /* Facilities stay draggable after placement — GPS gets you close, the
-       finger dials the pin onto the true spot for the brochure overlay. */
-    var m = L.marker([s.lat, s.lng], { icon: setIcon(s), title: s.name, draggable: !!s.facility });
-    if (s.facility) {
-      m.on('dragend', function () {
-        var rec = getSet(s.id);
-        if (!rec) return;
-        var ll = m.getLatLng();
-        rec.lat = ll.lat; rec.lng = ll.lng;
-        touchSet(rec); Store.save();
-        toast('Pin moved.');
-      });
-    }
+    var m = L.marker([s.lat, s.lng], { icon: setIcon(s), title: s.name });
     /* B15: no opening set details mid-placement — finish the pin first. */
     m.on('click', function () { if (document.body.classList.contains('placing')) return; openSetOrStack(s.id); });
     m._setId = s.id;
@@ -2847,12 +2762,6 @@ function openSetForm(coords, setId) {
   var fc = s ? { lat: s.lat, lng: s.lng } : pendingCoords;
   wireCoordsBottom('setform-coords-bottom', showCoords() &&
     (fc && isFinite(+fc.lat) && isFinite(+fc.lng)) ? fmtCoords(fc.lat, fc.lng) : '');
-  /* Facility mode: editing a facility opens in facility mode; a new pin placed
-     right after a facility starts in facility mode too (park-mapping runs),
-     with no type preselected. */
-  setFacilitySlug = s ? (s.facility || null) : null;
-  renderFacilityGrid();
-  setFormKindSeg((s && s.facility) ? 'facility' : (tmpl && tmpl.facility ? 'facility' : 'set'));
   openSheet('sheet-setform');
 }
 
@@ -2933,15 +2842,12 @@ function nextSetName() {
 }
 function saveSetForm() {
   var name = $('sf-name').value.trim();
-  var isFac = (setFormKind === 'facility');
-  /* Facilities run no trap status and no check clock — active, dated today. */
-  var status = isFac ? 'active' : $('sf-status').value;
-  var dateSet = isFac ? ($('sf-date').value || todayISO()) : $('sf-date').value;
+  var status = $('sf-status').value;
+  var dateSet = $('sf-date').value;
   if (!name) {
     if (editingSetId) { showSetFormError('Set name is required — give this set a name.'); return; }
     name = nextSetName(); /* speed lines: never block on the name, just number it */
   }
-  if (isFac && !setFacilitySlug) { showSetFormError('Pick the facility type — what is this pin?'); return; }
   if (!status) { showSetFormError('Status is required — pick one.'); return; }
   if (!dateSet) { showSetFormError('Date set is required — pick the date.'); return; }
   if (status === 'missing' && !setMissingReason) { showSetFormError('Pick why this set is missing.'); return; }
@@ -2953,19 +2859,7 @@ function saveSetForm() {
     if (!s) { closeSheets(); return; }
     s.name = name;
     rememberEntry('setname', name); /* Q12 */
-    if (isFac) {
-      /* A facility carries no trap rig — the type is the whole identity. */
-      s.facility = setFacilitySlug;
-      s.trapType = ''; s.trapMaker = ''; s.trapSpring = ''; s.trapSize = '';
-      s.snareDia = ''; s.snareLock = ''; s.snareLen = ''; s.snarePurpose = '';
-      s.trapModel = ''; s.trapMods = []; s.panSize = ''; s.jawShape = ''; s.jawClose = '';
-      s.setType = '';
-      s.bait = []; s.lure = []; s.urine = []; s.visual = []; s.audio = []; s.other = [];
-      s.status = 'active'; s.missingReason = null; s.missingDetail = null;
-      if (s.datePulled) delete s.datePulled;
-    } else {
-      s.facility = null;
-      s.trapType = rt.t;
+    s.trapType = rt.t;
     s.trapMaker = td.trapMaker;
     s.trapSpring = td.trapSpring || rt.spring || ''; s.trapSize = td.trapSize;
     s.snareDia = td.snareDia; s.snareLock = td.snareLock; s.snareLen = td.snareLen;
@@ -2991,7 +2885,6 @@ function saveSetForm() {
     if (s.missingDetail) rememberEntry('missingdetail', s.missingDetail); /* Q12 */
     if (s.status === 'pulled' && !s.datePulled) s.datePulled = todayISO();
     if (s.status !== 'pulled' && s.datePulled) delete s.datePulled;
-    } /* end trap-set branch of the facility if/else */
     touchSet(s); /* Q68: any edit restarts the check clock */
     Store.save(); refreshMarkers();
     /* Q71: photos added on the Edit Set form (plain or citation) attach here. */
@@ -3009,21 +2902,7 @@ function saveSetForm() {
     rememberAttractants(s);
   } else {
     if (!pendingCoords) { toast('No location for this set.'); return; }
-    var ns;
-    if (isFac) {
-      /* Lean facility record — no trap rig, no attractants, no check clock. */
-      ns = {
-        id: uid('s'), name: name,
-        lat: pendingCoords.lat, lng: pendingCoords.lng, county: null,
-        facility: setFacilitySlug,
-        status: 'active',
-        dateSet: dateSet,
-        notes: $('sf-notes').value.trim(),
-        createdAt: Date.now(),
-        lastActivity: Date.now()
-      };
-    } else {
-    ns = {
+    var ns = {
       id: uid('s'), name: name,
       lat: pendingCoords.lat, lng: pendingCoords.lng, county: null,
       trapType: rt.t,
@@ -3046,8 +2925,7 @@ function saveSetForm() {
       createdAt: Date.now(),
       lastActivity: Date.now() /* Q68: check clock starts at creation */
     };
-    } /* end trap-set branch of the new-record facility if/else */
-    if (!isFac) normalizeTrapDetail(ns);
+    normalizeTrapDetail(ns);
     if (ns.status === 'pulled') ns.datePulled = ns.dateSet;
     ns.lineId = activeLineId();
     Store.data.sets.push(ns);
@@ -3112,7 +2990,7 @@ function openSetOrStack(id) {
     return '<button type="button" class="stack-row" data-stack-id="' + x.id + '">' +
       '<span class="stack-name">' + esc(x.name) + '</span>' +
       '<span class="badge status-' + esc(st) + '">' + esc(statusLabel(st)) + '</span>' +
-      '<span class="dim">' + esc(x.facility ? facilityLabel(x.facility) : (x.trapType || '—')) + '</span></button>';
+      '<span class="dim">' + esc(x.trapType || '—') + '</span></button>';
   }).join('');
   openSheet('sheet-stackmenu');
 }
@@ -3126,10 +3004,8 @@ function openSetDetail(id) {
   wireCoordsBottom('sd-coords-bottom', showCoords() ? fmtCoords(s.lat, s.lng) : '');
   var st = normStatus(s.status);
   /* Q103d: no county badge — the county rides on the Location row instead. */
-  /* Facilities wear their type as the badge — trap status means nothing there. */
-  $('sd-badges').innerHTML = s.facility
-    ? '<span class="badge">' + esc(facilityLabel(s.facility)) + '</span>'
-    : '<span class="badge status-' + esc(st) + '">' + esc(statusLabel(st)) + '</span>';
+  $('sd-badges').innerHTML =
+    '<span class="badge status-' + esc(st) + '">' + esc(statusLabel(st)) + '</span>';
   /* Q71: status is display-only here — changes go through "Edit this set". */
   /* Q167 (2026-10-07): Tanner — the detail sheet only shows rows that were
      actually logged. A field left empty at creation (or emptied in Edit)
@@ -3139,7 +3015,6 @@ function openSetDetail(id) {
     if (val) sdHtml += '<dt>' + esc(label) + '</dt><dd>' + esc(val) + '</dd>';
   }
   var sdTrapDet = trapDetailSummary(s);
-  sdRow('Facility', s.facility ? facilityLabel(s.facility) : '');
   sdRow('Trap', (s.trapType || '') + (sdTrapDet ? ' · ' + sdTrapDet : ''));
   sdRow('Set type', s.setType || '');
   sdRow('Bait', joinAttr(s.bait));
@@ -3163,15 +3038,14 @@ function openSetDetail(id) {
      active sets run the clock; sprung keeps its amber pin instead. Hidden
      entirely when the alert is toggled off. */
   var clockOn = !Store.data || Store.data.checkClockOn !== false;
-  /* Facilities run no check rhythm — no clock line, no check-in button. */
-  if (st === 'active' && clockOn && !s.facility) {
+  if (st === 'active' && clockOn) {
     var dueMs = checkDueInMs(s);
     var overdue = dueMs < 0;
     $('sd-fields').innerHTML += '<dt>Trap check</dt><dd' + (overdue ? ' class="check-overdue"' : '') + '>' +
       (overdue ? 'Overdue by ' + esc(fmtCheckDur(dueMs)) : 'Due in ' + esc(fmtCheckDur(dueMs))) + '</dd>';
   }
   /* Q68: the one-tap check-in only exists where a check rhythm exists. */
-  $('btn-sd-emptycheck').hidden = (st !== 'active' || !clockOn || !!s.facility);
+  $('btn-sd-emptycheck').hidden = (st !== 'active' || !clockOn);
   loadSetPhotos(s.id, function (setPhotos, byLog) {
     renderSetPhotos(setPhotos);
     renderSetLogs(s, byLog);
@@ -5626,9 +5500,9 @@ function exportSets() {
   /* Q47: one set = one trap — the Trap count column is gone. Q26: Other
      Attractants column after Urine; lists join with ' | '. */
   var ec2 = exportCoords();
-  var rows = [['Name'].concat(ec2 ? ['Latitude', 'Longitude'] : []).concat(['County', 'Set type', 'Trap type', 'Trap spring', 'Trap size', 'Snare diameter', 'Snare lock', 'Snare length', 'Snare purpose', 'Trap model', 'Weather', 'Bait', 'Lure', 'Urine', 'Visual', 'Audio', 'Other Attractants', 'Status', 'Date set', 'Notes', 'Trap maker', 'Pan size', 'Jaw shape', 'Jaw closure', 'Trap mods', 'Missing reason', 'Missing detail', 'Facility'])];
+  var rows = [['Name'].concat(ec2 ? ['Latitude', 'Longitude'] : []).concat(['County', 'Set type', 'Trap type', 'Trap spring', 'Trap size', 'Snare diameter', 'Snare lock', 'Snare length', 'Snare purpose', 'Trap model', 'Weather', 'Bait', 'Lure', 'Urine', 'Visual', 'Audio', 'Other Attractants', 'Status', 'Date set', 'Notes', 'Trap maker', 'Pan size', 'Jaw shape', 'Jaw closure', 'Trap mods', 'Missing reason', 'Missing detail'])];
   activeSets().forEach(function (s) {
-    rows.push([s.name].concat(ec2 ? [s.lat, s.lng] : []).concat([s.county, s.setType, s.trapType, (s.trapSpring || ''), (s.trapSize || ''), (s.snareDia || ''), (s.snareLock || ''), (s.snareLen || ''), (s.snarePurpose || ''), (s.trapModel || ''), weatherText(s.weather), joinAttr(s.bait), joinAttr(s.lure), joinAttr(s.urine), joinAttr(s.visual), joinAttr(s.audio), joinAttr(s.other), s.status, s.dateSet, s.notes, (s.trapMaker || ''), (s.panSize || ''), (s.jawShape || ''), (s.jawClose || ''), (s.trapMods || []).join(' | '), missingReasonLabel(s.missingReason || ''), (s.missingDetail || ''), facilityLabel(s.facility || '')]));
+    rows.push([s.name].concat(ec2 ? [s.lat, s.lng] : []).concat([s.county, s.setType, s.trapType, (s.trapSpring || ''), (s.trapSize || ''), (s.snareDia || ''), (s.snareLock || ''), (s.snareLen || ''), (s.snarePurpose || ''), (s.trapModel || ''), weatherText(s.weather), joinAttr(s.bait), joinAttr(s.lure), joinAttr(s.urine), joinAttr(s.visual), joinAttr(s.audio), joinAttr(s.other), s.status, s.dateSet, s.notes, (s.trapMaker || ''), (s.panSize || ''), (s.jawShape || ''), (s.jawClose || ''), (s.trapMods || []).join(' | '), missingReasonLabel(s.missingReason || ''), (s.missingDetail || '')]));
   });
   downloadCSV('opossum-foot-sets-' + lineFileSlug() + '-' + todayISO() + '.csv', rows);
   toast('Sets CSV downloaded.');
@@ -7236,13 +7110,6 @@ function wireUp() {
 
   /* set form */
   $('btn-save-set').onclick = saveSetForm;
-  /* Facility pin kind seg: one wiring, the per-open state lives in openSetForm. */
-  (function () {
-    var kb = document.querySelectorAll('#sf-kind-seg button');
-    for (var i = 0; i < kb.length; i++) {
-      kb[i].onclick = function () { setFormKindSeg(this.getAttribute('data-kind')); };
-    }
-  })();
   /* Q26: attractant rows wire their own suggestions in renderAttrRows */
   /* Q12: app-wide saved-entry suggestions — tap-to-fill, never auto-fill.
      Each kind is scoped to its own field. */
