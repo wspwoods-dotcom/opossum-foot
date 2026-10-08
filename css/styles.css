@@ -676,6 +676,11 @@ body.route-locked #tabbar { pointer-events: none; opacity: .35; }
 
 /* ---------- licenses ---------- */
 .lic-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
+/* Tanner 2026-10-07: trip photos render in the same lic-grid below the row.
+   Hide the grid entirely when the trip has no photos attached. */
+.trip-photogrid { margin-top: 0; }
+.trip-photogrid:empty { display: none; }
+.trip-block + .trip-block { margin-top: 4px; }
 .lic-item { position: relative; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--line); background: #000; aspect-ratio: 4/3; }
 .lic-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .lic-item button { position: absolute; top: 6px; right: 6px; width: 40px; height: 40px; min-height: 0; border-radius: 50%; background: rgba(0,0,0,.65); color: #fff; font-size: 18px; padding: 0; }
