@@ -91,13 +91,13 @@ button, .btn {
 /* Prominent official-regulations link at the top of the Seasons tab. */
 .regs-link {
   display: flex; align-items: center; justify-content: center; gap: 8px;
-  margin: 12px 0; padding: 14px 18px; min-height: 84px;
+  margin: 12px 0; padding: 12px 18px; min-height: var(--tap);
   border-radius: var(--radius); background: var(--accent); color: var(--accent-ink);
-  font-weight: 700; font-size: 16px; text-decoration: none; text-align: center;
+  font-weight: 700; font-size: 17px; text-decoration: none; text-align: center;
 }
-/* 2026-10-02: Tanner — the three gold Seasons buttons share one thickness
-   (84px) so the two-line regulations label doesn't make its button taller
-   than the others; all labels stay centered. */
+/* Tanner 2026-10-07: the 84px uniform thickness is gone — these are way too
+   big next to the other buttons in the tabs. Standard button proportions now
+   (52px min-height), same as everywhere else. */
 /* Q134 (2026-10-01): Tanner — gold-button lettering is ALL CAPS by rule, not
    by memory. text-transform on the class means any label dropped into a gold
    button renders capped automatically; title case can't sneak through again. */
@@ -682,7 +682,7 @@ body.route-locked #tabbar { pointer-events: none; opacity: .35; }
 .trip-photogrid:empty { display: none; }
 /* Tanner 2026-10-07 (dc): each trip's photos live inside the same box as
    the trip's data — one card per trip so trips don't flow together. */
-.trip-block { border: 1px solid var(--line); border-radius: 12px; padding: 8px; margin-bottom: 10px; background: var(--panel); }
+.trip-block { border: 1px solid var(--line); border-radius: 12px; padding: 8px; margin-bottom: 10px; background: var(--panel); cursor: pointer; }
 .trip-block .line-row { border: none; padding: 0; margin-bottom: 0; }
 .trip-block .trip-photogrid:not(:empty) { margin-top: 8px; }
 .trip-block + .trip-block { margin-top: 10px; }
