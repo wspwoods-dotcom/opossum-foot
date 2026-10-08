@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-10-07cz';
+var APP_VERSION = 'beta 0.1 · build 2026-10-07da';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -4933,16 +4933,19 @@ function isLicenseWalletPhoto(p, lid, firstId) {
 }
 /* Tanner 2026-10-07: trips live on the Paperwork tab, not in a modal.
    Each line gets its trip rows right here with info + thumbnails, like the
-   License Wallet above. */
+   License Wallet above. Tanner 2026-10-07 (later): every photo on this tab
+   is a license-style card — tap the image to view, X to delete just it. */
 function tripRowHTML(tr) {
-  return '<div class="line-row">' +
+  return '<div class="trip-block">' +
+    '<div class="line-row">' +
     '<button type="button" class="line-main" data-trip-edit="' + esc(tr.id) + '">' +
     '<span class="line-name">' + esc(fmtDate(tr.date)) + ' \u00b7 ' + esc(fmtMiles(tripMiles(tr))) + '</span>' +
     '<span class="dim">' + esc(String(tr.startOdo) + ' \u2192 ' + String(tr.endOdo) + (tr.notes ? ' \u00b7 ' + tr.notes : '')) + '</span>' +
-    '<span class="trip-thumbs" data-trip-thumbs="' + esc(tr.id) + '"></span>' +
     '</button>' +
     '<button type="button" class="btn-small btn-secondary line-edit" data-trip-photo="' + esc(tr.id) + '">\uD83D\uDCF7</button>' +
     '<button type="button" class="btn-small btn-secondary line-edit" data-trip-del="' + esc(tr.id) + '">Delete</button>' +
+    '</div>' +
+    '<div class="lic-grid trip-photogrid" data-trip-thumbs="' + esc(tr.id) + '"></div>' +
     '</div>';
 }
 function fillTripThumbs(box) {
@@ -4956,17 +4959,29 @@ function fillTripThumbs(box) {
     for (var s = 0; s < slots.length; s++) {
       (function (slot) {
         var list = byTrip[slot.getAttribute('data-trip-thumbs')] || [];
-        list.slice(0, 4).forEach(function (p) {
+        list.forEach(function (p) {
+          var item = document.createElement('div');
+          item.className = 'lic-item';
           var img = document.createElement('img');
           img.src = photoURL(p);
           img.alt = p.kind === 'map' ? 'Road directions screenshot' : 'Odometer photo';
-          img.style.cssText = 'width:44px;height:44px;object-fit:cover;border-radius:6px;margin:4px 4px 0 0;cursor:pointer;';
-          img.onclick = function (ev) { ev.stopPropagation(); openFullPhoto(p.blob); };
-          slot.appendChild(img);
+          img.onclick = function () { openFullPhoto(p.blob); };
+          var del = document.createElement('button');
+          del.type = 'button'; del.textContent = '\u00d7'; del.setAttribute('aria-label', 'Delete photo');
+          del.onclick = function (e) { e.stopPropagation(); deleteTripPhoto(p.id); };
+          item.appendChild(img); item.appendChild(del);
+          slot.appendChild(item);
         });
       })(slots[s]);
     }
-  }).catch(function () { /* photos are optional */ });
+  }).catch(function () { /* photos optional */ });
+}
+/* Tanner 2026-10-07: the X on a trip photo deletes just that photo —
+   the whole trip still deletes from the trip row's Delete button. */
+function deleteTripPhoto(photoId) {
+  confirmModal('Delete this photo?', 'It will be removed from this phone.', 'Delete', function () {
+    IDB.del('photos', photoId).then(function () { renderPaperworkMileage(); });
+  });
 }
 var pmPhotoTripId = null;
 function renderPaperworkMileage() {
@@ -5260,8 +5275,9 @@ function landownerCard(lo, photos) {
   if (lo.notes) html += '<p class="dim lo-notes-box" style="margin:4px 0">' + esc(lo.notes) + '</p>';
   /* Q158 (2026-10-06): Tanner — slip and boundary photos viewable right on
      the card, like the license wallet: thumbnails, tap for full screen.
-     No delete X anywhere on the card — photo and number removal happens
-     in the Edit screen only. */
+     Tanner 2026-10-07 (later): every photo on this tab gets the X too —
+     tap the image to view, X deletes just that photo. */
+  var viewable = slips.concat(bounds);
   var viewable = slips.concat(bounds);
   if (viewable.length) {
     html += '<div class="lic-grid" data-lo-photos></div>';
@@ -5281,6 +5297,21 @@ function landownerCard(lo, photos) {
       img.src = loPhotoURL(p); img.alt = title;
       img.onclick = function () { openLoPhotoCardViewer(p, title); };
       item.appendChild(img);
+      /* Tanner 2026-10-07: X on every photo on this tab — deletes just it. */
+      (function (photo) {
+        var del = document.createElement('button');
+        del.type = 'button'; del.textContent = '\u00d7'; del.setAttribute('aria-label', 'Delete photo');
+        del.onclick = function (e) {
+          e.stopPropagation();
+          confirmModal('Delete this photo?', 'It will be removed from this phone.', 'Delete', function () {
+            IDB.del('photos', photo.id).then(function () {
+              if (photo.id && loPhotoURLs[photo.id]) { URL.revokeObjectURL(loPhotoURLs[photo.id]); delete loPhotoURLs[photo.id]; }
+              renderLandowners();
+            });
+          });
+        };
+        item.appendChild(del);
+      })(p);
       grid.appendChild(item);
     });
   }
