@@ -549,7 +549,10 @@
     <button type="button" class="setsec-head" id="setdetail-notessec-head" data-sec="setdetail-notessec" aria-expanded="false"><span>Notes, Memos &amp; Photos</span><span class="setsec-chev" aria-hidden="true">›</span></button>
     <div class="setsec-body" id="setdetail-notessec-body" hidden>
     <h3 style="margin:6px 0" id="sd-notes-head">Set Notes</h3>
-    <textarea id="sd-notes" placeholder="Optional…" readonly></textarea>
+    <!-- Q178 (2026-10-08): Tanner — detail sheet is view-only. Notes are
+         added/edited in New Set, Edit Set, or Log Catch — never here. Plain
+         text, not a box. -->
+    <div id="sd-notes" class="notes-view"></div>
     <!-- Q71: summary is view-only — notes/memo/photo edits happen in "Edit this set" -->
     <!-- Q177 (2026-10-08): Tanner — small field labels like the Edit form, not big subheadings -->
     <label class="field" style="margin-top:18px" id="sd-memos-label">Voice memos</label>
