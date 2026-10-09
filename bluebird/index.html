@@ -32,9 +32,12 @@ html,body{margin:0;padding:0;height:100%;overflow:hidden;background:var(--bg);co
   border-radius:16px 16px 0 0;border-top:1px solid var(--line);transform:translateY(105%);
   transition:transform .25s ease;display:flex;flex-direction:column}
 .sheet.open{transform:translateY(0)}
-.sheet-head{padding:16px 20px 8px;border-bottom:1px solid var(--line)}
-.sheet-head h2{margin:0 0 4px;font-size:1.2em}
+.sheet-head{padding:16px 20px 8px;border-bottom:1px solid var(--line);position:relative}
+.sheet-head h2{margin:0 0 4px;font-size:1.2em;padding-right:44px}
 .sheet-head .sub{color:var(--muted);font-size:.85em}
+.sheet-x{position:absolute;top:12px;right:12px;width:36px;height:36px;border-radius:50%;
+  border:1px solid var(--line);background:var(--panel);color:var(--ink);font-size:18px;
+  cursor:pointer;display:flex;align-items:center;justify-content:center}
 .sheet-body{overflow-y:auto;padding:16px 20px;-webkit-overflow-scrolling:touch}
 .sheet-foot{padding:12px 20px calc(12px + env(safe-area-inset-bottom));border-top:1px solid var(--line);
   display:flex;gap:10px}
@@ -199,6 +202,7 @@ textarea{min-height:80px;resize:vertical}
   <div class="sheet-head">
     <h2 id="sheet-title">Box</h2>
     <div class="sub" id="sheet-sub"></div>
+    <button class="sheet-x" onclick="closeSheet()" aria-label="Close">✕</button>
   </div>
   <div class="sheet-body" id="sheet-body"></div>
   <div class="sheet-foot" id="sheet-foot"></div>
@@ -306,6 +310,8 @@ function startMeasure(){
   hint.textContent = 'Measure: tap two points on the map';
   hint.classList.add('show');
   map.on('click', measureTap);
+  // Lock pins: no taps, no drags while measuring
+  Object.values(markers).forEach(m=>{ if(m.dragging) m.dragging.disable(); });
 }
 function stopMeasure(){
   measuring = false; measurePts = [];
@@ -314,6 +320,7 @@ function stopMeasure(){
   map.off('click', measureTap);
   if(measureLine){ map.removeLayer(measureLine); measureLine = null; }
   if(measureLabel){ map.removeLayer(measureLabel); measureLabel = null; }
+  Object.values(markers).forEach(m=>{ if(m.dragging) m.dragging.enable(); });
 }
 function measureTap(e){
   measurePts.push(e.latlng);
@@ -373,7 +380,7 @@ function renderPins(){
       }
       save(); renderPins();
     });
-    m.on('click', ()=>openBox(b.id));
+    m.on('click', ()=>{ if(measuring) return; openBox(b.id); });
     markers[b.id] = m;
   });
   updateStats();
@@ -467,7 +474,7 @@ document.getElementById('btn-place-ok').onclick = ()=>{
       events:[{date:new Date().toISOString().slice(0,10), type:'proposed', note:'Location picked on map'}] };
     boxes.push(b); save();
     cancelPlace();
-    renderPins(); openBox(b.id);
+    renderPins(); openBox(b.id, 'checks', false, 'edit');
   }
 };
 
@@ -476,18 +483,21 @@ const sheet = document.getElementById('sheet');
 function openSheet(){ sheet.classList.add('open'); }
 function closeSheet(){ sheet.classList.remove('open'); selectedId=null; }
 
-function openBox(id, tab, tabChosen){
+function openBox(id, tab, tabChosen, mode){
   selectedId = id;
   const b = boxes.find(x=>x.id===id);
   if(!b) return;
   if(!b.events) b.events = [];
   tab = tab || 'checks';
+  mode = mode || 'view';
   document.getElementById('sheet-title').innerHTML =
     `${esc(b.name)} <span class="badge ${b.status}">${b.status}</span>`;
   document.getElementById('sheet-sub').textContent =
     `${b.lat.toFixed(5)}, ${b.lng.toFixed(5)}`;
 
-  let html = `
+  let html = '';
+  if(mode==='edit'){
+    html = `
     <label>Box name</label>
     <input id="f-name" value="${esc(b.name)}">
     <label>Status</label>
@@ -508,10 +518,21 @@ function openBox(id, tab, tabChosen){
       </select>
     </div>
     <label>Habitat notes (what's around the box?)</label>
-    <textarea id="f-habitat" placeholder="e.g. Open mowed field, scattered oaks 30 yds east, near lake trail">${esc(b.habitat)}</textarea>
+    <textarea id="f-habitat" placeholder="e.g. Open mowed field, scattered oaks 30 yds east, near lake trail">${esc(b.habitat)}</textarea>`;
+  } else {
+    const statusLabel = {proposed:'Proposed — picked in class, not yet placed', placed:'Placed — box is up, no activity yet', active:'Active — birds using it', removed:'Removed — box taken down'}[b.status] || b.status;
+    const reasonLabel = {habitat:'Change in habitat', destroyed:'Destroyed', 'too-close':'Too close to other nests', other:'Other'}[b.removalReason];
+    html = `
+    <div style="margin-bottom:12px"><strong>Status:</strong> ${esc(statusLabel)}</div>
+    ${b.status==='removed'&&reasonLabel?`<div style="margin-bottom:12px"><strong>Removal reason:</strong> ${esc(reasonLabel)}</div>`:''}
+    <div style="margin-bottom:4px"><strong>Habitat notes:</strong></div>
+    <div style="color:var(--muted);margin-bottom:16px">${b.habitat?esc(b.habitat):'<em>None yet</em>'}</div>`;
+  }
+
+  html += `
     <div class="row" style="margin-top:16px">
-      <button class="btn${tab==='checks'?' primary':''}" onclick="openBox(selectedId,'checks',true)">Nest checks</button>
-      <button class="btn${tab==='history'?' primary':''}" onclick="openBox(selectedId,'history',true)">Box history</button>
+      <button class="btn${tab==='checks'?' primary':''}" onclick="openBox(selectedId,'checks',true,'${mode}')">Nest checks</button>
+      <button class="btn${tab==='history'?' primary':''}" onclick="openBox(selectedId,'history',true,'${mode}')">Box history</button>
     </div>`;
 
   if(tab==='checks'){
@@ -535,29 +556,37 @@ function openBox(id, tab, tabChosen){
     });
   }
 
-  document.getElementById('sheet-body').innerHTML = html + `
-    <button class="btn danger" style="margin-top:20px" onclick="deleteBox()">Delete this box</button>`;
-  document.getElementById('sheet-foot').innerHTML = `
-    <button class="btn${tabChosen?'':' primary'}" onclick="closeSheet()">Set box</button>
-    <button class="btn" onclick="startMovePin(selectedId)">Move pin</button>
-    ${tab==='checks'
-      ? `<button class="btn${tabChosen?' primary':''}" onclick="openVisit()">+ Log check</button>`
-      : `<button class="btn${tabChosen?' primary':''}" onclick="openEvent()">+ Log event</button>`}`;
+  document.getElementById('sheet-body').innerHTML = html + (mode==='edit' ? `
+    <button class="btn danger" style="margin-top:20px" onclick="deleteBox()">Delete this box</button>` : '');
+
+  if(mode==='edit'){
+    document.getElementById('sheet-foot').innerHTML = `
+      <button class="btn primary" onclick="openBox(selectedId,'${tab}',${tabChosen?'true':'false'},'view')">Done</button>
+      <button class="btn" onclick="startMovePin(selectedId)">Move pin</button>`;
+  } else {
+    document.getElementById('sheet-foot').innerHTML = `
+      <button class="btn" onclick="openBox(selectedId,'${tab}',${tabChosen?'true':'false'},'edit')">Edit</button>
+      ${tab==='checks'
+        ? `<button class="btn primary" onclick="openVisit()">+ Log check</button>`
+        : `<button class="btn primary" onclick="openEvent()">+ Log event</button>`}`;
+  }
   openSheet();
 
-  // Save name/status/habitat on change (name saves as-you-type for reliability on touch)
-  const nameInput = document.getElementById('f-name');
-  const saveName = e=>{
-    b.name = e.target.value; save(); renderPins();
-    document.getElementById('sheet-title').innerHTML =
-      `${esc(b.name)} <span class="badge ${b.status}">${b.status}</span>`;
-  };
-  nameInput.oninput = saveName;
-  nameInput.onchange = saveName;
-  document.getElementById('f-status').onchange = e=>{ b.status=e.target.value; save(); renderPins(); openBox(id, tab); };
-  document.getElementById('f-habitat').onchange = e=>{ b.habitat=e.target.value; save(); };
-  const reasonSel = document.getElementById('f-removal-reason');
-  if(reasonSel) reasonSel.onchange = e=>{ b.removalReason=e.target.value; save(); };
+  if(mode==='edit'){
+    // Save name/status/habitat on change (name saves as-you-type for reliability on touch)
+    const nameInput = document.getElementById('f-name');
+    const saveName = e=>{
+      b.name = e.target.value; save(); renderPins();
+      document.getElementById('sheet-title').innerHTML =
+        `${esc(b.name)} <span class="badge ${b.status}">${b.status}</span>`;
+    };
+    nameInput.oninput = saveName;
+    nameInput.onchange = saveName;
+    document.getElementById('f-status').onchange = e=>{ b.status=e.target.value; save(); renderPins(); openBox(id, tab, tabChosen, 'edit'); };
+    document.getElementById('f-habitat').onchange = e=>{ b.habitat=e.target.value; save(); };
+    const reasonSel = document.getElementById('f-removal-reason');
+    if(reasonSel) reasonSel.onchange = e=>{ b.removalReason=e.target.value; save(); };
+  }
 }
 
 function eventLabel(t){
