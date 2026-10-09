@@ -202,15 +202,30 @@ textarea{min-height:80px;resize:vertical}
 const KEY = 'bluebird-boxes-v1';
 let boxes = JSON.parse(localStorage.getItem(KEY) || '[]');
 let selectedId = null;
-let statusFilter = 'all';
+const ALL_STATUSES = ['proposed','placed','active','removed'];
+let statusFilter = new Set(ALL_STATUSES);
 
 document.getElementById('statusbar').addEventListener('click', e=>{
   const chip = e.target.closest('.chip');
   if(!chip) return;
-  statusFilter = chip.dataset.s;
-  document.querySelectorAll('#statusbar .chip').forEach(c=>c.classList.toggle('on', c===chip));
+  const s = chip.dataset.s;
+  if(s==='all'){
+    const allOn = ALL_STATUSES.every(x=>statusFilter.has(x));
+    statusFilter = new Set(allOn ? [] : ALL_STATUSES);
+  } else {
+    statusFilter.has(s) ? statusFilter.delete(s) : statusFilter.add(s);
+  }
+  updateChips();
   renderPins();
 });
+
+function updateChips(){
+  document.querySelectorAll('#statusbar .chip').forEach(c=>{
+    const s = c.dataset.s;
+    const on = s==='all' ? ALL_STATUSES.every(x=>statusFilter.has(x)) : statusFilter.has(s);
+    c.classList.toggle('on', on);
+  });
+}
 
 function save(){ localStorage.setItem(KEY, JSON.stringify(boxes)); updateStats(); }
 function uid(){ return 'box-' + Date.now().toString(36) + Math.floor(Math.random()*999); }
@@ -284,7 +299,7 @@ function birdhouseSVG(color){
 }
 function renderPins(){
   Object.values(markers).forEach(m=>map.removeLayer(m));
-  boxes.filter(b=>statusFilter==='all'||b.status===statusFilter).forEach(b=>{
+  boxes.filter(b=>statusFilter.has(b.status)).forEach(b=>{
     const icon = L.divIcon({
       className:'', html:`<div style="filter:drop-shadow(0 2px 6px rgba(0,0,0,.6))">${birdhouseSVG(pinColor(b.status))}</div>`,
       iconSize:[34,42], iconAnchor:[17,40]
