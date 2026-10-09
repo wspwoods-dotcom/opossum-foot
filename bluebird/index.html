@@ -23,8 +23,8 @@ html,body{margin:0;padding:0;height:100%;overflow:hidden;background:var(--bg);co
 .topbar h1{margin:0;font-size:1.15em;color:var(--ink)}
 .topbar p{margin:2px 0 0;font-size:.8em;color:var(--muted)}
 .fab{position:absolute;z-index:10;bottom:calc(24px + env(safe-area-inset-bottom));right:16px;
-  width:60px;height:60px;border-radius:50%;background:var(--accent);color:var(--accent-ink);
-  border:none;font-size:28px;font-weight:bold;box-shadow:0 4px 16px rgba(0,0,0,.5);cursor:pointer}
+  width:76px;height:76px;border-radius:50%;background:var(--accent);color:var(--accent-ink);
+  border:none;font-size:36px;font-weight:bold;box-shadow:0 4px 16px rgba(0,0,0,.5);cursor:pointer}
 .fab2{position:absolute;z-index:10;bottom:calc(24px + env(safe-area-inset-bottom));left:16px;
   height:60px;padding:0 20px;border-radius:30px;background:var(--panel);color:var(--ink);
   border:1px solid var(--line);font-size:.9em;cursor:pointer}
@@ -124,9 +124,9 @@ textarea{min-height:80px;resize:vertical}
 }
 #splash .tap{position:absolute;bottom:1%;left:0;right:0;text-align:center;z-index:11;
   color:#f2ead8;font-size:.75em;opacity:.6}
-.stats{position:absolute;z-index:10;top:calc(140px + env(safe-area-inset-top));left:16px;
+.stats{position:absolute;z-index:10;top:calc(140px + env(safe-area-inset-top));left:50%;transform:translateX(-50%);
   background:rgba(20,24,16,.92);padding:10px 18px;border-radius:20px;font-size:.95em;font-weight:700;color:var(--ink);
-  border:2px solid var(--accent)}
+  border:2px solid var(--accent);white-space:nowrap}
 /* Leaflet zoom control sits bottom-left, above the Export/Import buttons */
 .leaflet-bottom.leaflet-left .leaflet-control-zoom{margin-bottom:calc(150px + env(safe-area-inset-bottom));margin-left:16px}
 .statusbar{position:absolute;z-index:10;top:calc(76px + env(safe-area-inset-top));left:0;right:0;
