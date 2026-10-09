@@ -538,13 +538,14 @@
   <div class="sheet-body">
     <div id="sd-badges" style="margin-bottom:6px"></div>
     <!-- Q71: summary is strictly read-only — status changes go through "Edit this set" -->
-    <dl class="kv" id="sd-fields"></dl>
+    <!-- Q176 (2026-10-08): Tanner — card separation between sections, like Settings -->
+    <div class="card"><dl class="kv" id="sd-fields"></dl></div>
     <div class="sheet-actions">
       <button class="btn-primary" id="btn-sd-log" type="button">＋ Log a catch</button>
       <button class="btn-primary" id="btn-sd-emptycheck" type="button">✓ Checked — nothing changed</button>
     </div>
     <!-- Q99 (2026-10-01): Tanner — notes + memos + photos collapse into one box -->
-    <div class="setsec" id="setdetail-notessec">
+    <div class="card setsec" id="setdetail-notessec">
     <button type="button" class="setsec-head" id="setdetail-notessec-head" data-sec="setdetail-notessec" aria-expanded="false"><span>Notes, Memos &amp; Photos</span><span class="setsec-chev" aria-hidden="true">›</span></button>
     <div class="setsec-body" id="setdetail-notessec-body" hidden>
     <h3 style="margin:6px 0" id="sd-notes-head">Set Notes</h3>
@@ -556,8 +557,10 @@
     <div class="photo-strip" id="sd-photos"></div>
     </div>
     </div>
-    <h3 style="margin:18px 0 6px">Catches at This Set</h3>
+    <div class="card">
+    <h3 style="margin:6px 0">Catches at This Set</h3>
     <div id="sd-logs"></div>
+    </div>
     <div class="sheet-actions">
       <div class="btn-row">
         <button class="btn-secondary" id="btn-sd-edit" type="button">Edit this set</button>
