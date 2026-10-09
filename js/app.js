@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-10-08dv';
+var APP_VERSION = 'beta 0.1 · build 2026-10-08dw';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -3951,7 +3951,10 @@ function renderMemos(setId, boxId, editable) {
   IDB.all('memos').then(function (all) {
     var memos = all.filter(function (m) { return m.setId === setId; })
       .sort(function (a, b) { return a.createdAt - b.createdAt; });
-    if (!memos.length) { box.innerHTML = '<p class="dim">No memos yet.</p>'; return; }
+    /* Q179 (2026-10-08): Tanner — no "No memos yet." placeholder. Empty is
+       implied; the list simply appears below the Record button when memos
+       exist. */
+    if (!memos.length) { box.innerHTML = ''; return; }
     box.innerHTML = '';
     memos.forEach(function (m) {
       var wrap = document.createElement('div');
