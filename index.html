@@ -383,10 +383,20 @@
     </div>
   </div>
 
+  <!-- Q174 (2026-10-08): multi-select checklist sheet for report filters -->
+  <div id="sheet-ms" class="sheet">
+    <div class="sheet-grab"></div>
+    <div class="sheet-head"><h2 id="sheet-ms-title">Filter</h2><button class="sheet-x" data-close type="button">×</button></div>
+    <div class="sheet-body" id="sheet-ms-list"></div>
+    <div class="sheet-actions">
+      <button class="btn-secondary" id="sheet-ms-clear" type="button">Clear</button>
+      <button class="btn-primary" id="sheet-ms-done" type="button">Done</button>
+    </div>
+  </div>
+
 <div id="sheet-setform" class="sheet">
   <div class="sheet-grab"></div>
-  <div class="sheet-head"><h2 id="setform-title">New Set</h2><button class="sheet-x" data-close type="button">×</button></div>
-  <div class="sheet-body">
+  <div class="sheet-head"><h2 id="setform-title">New Set</h2><button class="sheet-x" data-close type="button">×</button></div>  <div class="sheet-body">
     <label class="field" for="sf-name">Set Name <span class="req">*</span></label>
     <input type="text" id="sf-name" placeholder="e.g. Creek crossing" autocomplete="off">
     <div class="suggest" id="sf-name-suggest"></div>
