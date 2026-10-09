@@ -57,6 +57,7 @@ textarea{min-height:80px;resize:vertical}
 .badge.proposed{background:#3a3b3c;color:var(--muted)}
 .badge.placed{background:var(--blue);color:#fff}
 .badge.active{background:var(--green);color:#0f1a0a}
+.badge.removed{background:#5a2a2a;color:#e8a0a0}
 .hint{position:absolute;z-index:10;top:50%;left:50%;transform:translate(-50%,-50%);
   background:rgba(20,24,16,.9);padding:12px 20px;border-radius:var(--radius);
   border:1px solid var(--accent);display:none;text-align:center;font-size:.9em}
@@ -135,6 +136,7 @@ textarea{min-height:80px;resize:vertical}
 .chip[data-s="proposed"] .dot{background:#8a8a8a}
 .chip[data-s="placed"] .dot{background:var(--blue)}
 .chip[data-s="active"] .dot{background:var(--green)}
+.chip[data-s="removed"] .dot{background:#c0392b}
 /* --- 100-foot scale bar --- */
 .scale100{position:absolute;z-index:10;left:50%;transform:translateX(-50%);
   bottom:calc(24px + env(safe-area-inset-bottom));background:rgba(20,24,16,.88);
@@ -179,6 +181,7 @@ textarea{min-height:80px;resize:vertical}
   <button class="chip" data-s="proposed"><span class="dot"></span>Proposed</button>
   <button class="chip" data-s="placed"><span class="dot"></span>Placed</button>
   <button class="chip" data-s="active"><span class="dot"></span>Active</button>
+  <button class="chip" data-s="removed"><span class="dot"></span>Removed</button>
 </div>
 <div class="stats" id="stats"></div>
 <button class="fab" id="btn-add" title="Add box">+</button>
@@ -268,7 +271,7 @@ updateScale();
 
 const markers = {};
 function pinColor(status){
-  return status==='active' ? '#7fa650' : status==='placed' ? '#5b8dd9' : '#8a8a8a';
+  return status==='active' ? '#7fa650' : status==='placed' ? '#5b8dd9' : status==='removed' ? '#c0392b' : '#8a8a8a';
 }
 function birdhouseSVG(color){
   return `<svg width="34" height="42" viewBox="0 0 34 42" xmlns="http://www.w3.org/2000/svg">`
@@ -430,6 +433,7 @@ function openBox(id, tab, tabChosen){
       <option value="proposed"${b.status==='proposed'?' selected':''}>Proposed — picked in class, not yet placed</option>
       <option value="placed"${b.status==='placed'?' selected':''}>Placed — box is up, no activity yet</option>
       <option value="active"${b.status==='active'?' selected':''}>Active — birds using it</option>
+      <option value="removed"${b.status==='removed'?' selected':''}>Removed — box taken down</option>
     </select>
     <label>Habitat notes (what's around the box?)</label>
     <textarea id="f-habitat" placeholder="e.g. Open mowed field, scattered oaks 30 yds east, near lake trail">${esc(b.habitat)}</textarea>
