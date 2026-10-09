@@ -507,7 +507,7 @@
     </div>
     <!-- Q71: memo recording + playback + deletion on the Edit Set form (edit mode only) -->
     <div id="setform-memos" hidden>
-    <h3 style="margin:18px 0 6px" id="se-memos-head">Voice Memos</h3>
+    <label class="field" for="btn-se-memo" id="se-memos-label">Voice memos</label>
     <div id="se-memos"></div>
     <div class="btn-row" style="margin-top:8px">
       <button class="btn-small btn-secondary" id="btn-se-memo" type="button"><img class="bi" src="assets/icons/mic.png" alt="">Record memo</button>
@@ -551,9 +551,10 @@
     <h3 style="margin:6px 0" id="sd-notes-head">Set Notes</h3>
     <textarea id="sd-notes" placeholder="Optional…" readonly></textarea>
     <!-- Q71: summary is view-only — notes/memo/photo edits happen in "Edit this set" -->
-    <h3 style="margin:18px 0 6px" id="sd-memos-head">Voice Memos</h3>
+    <!-- Q177 (2026-10-08): Tanner — small field labels like the Edit form, not big subheadings -->
+    <label class="field" style="margin-top:18px" id="sd-memos-label">Voice memos</label>
     <div id="sd-memos"></div>
-    <h3 style="margin:18px 0 6px" id="sd-photos-head">Photos</h3>
+    <label class="field" style="margin-top:18px">Photos</label>
     <div class="photo-strip" id="sd-photos"></div>
     </div>
     </div>
@@ -643,9 +644,14 @@
     <textarea id="log-notes" placeholder="Optional…"></textarea>
     <div class="btn-row" style="margin-top:8px">
       <button class="btn-small btn-secondary" id="btn-voice-lognotes" type="button"><img class="bi" src="assets/icons/mic.png" alt="">Voice → notes</button>
-      <button class="btn-small btn-secondary" id="btn-log-memo" type="button"><img class="bi" src="assets/icons/mic.png" alt="">Record memo</button>
     </div>
     <div class="voice-preview" id="voice-lognotes-preview"></div>
+    <!-- Q177 (2026-10-08): Tanner — small field labels, consistent with Edit Set -->
+    <label class="field" for="btn-log-memo" style="margin-top:12px">Voice memos</label>
+    <div class="btn-row" style="margin-top:8px">
+      <button class="btn-small btn-secondary" id="btn-log-memo" type="button"><img class="bi" src="assets/icons/mic.png" alt="">Record memo</button>
+    </div>
+    <label class="field" for="btn-log-photo" style="margin-top:12px">Photos</label>
     <div class="photo-strip" id="log-photos"></div>
     <div class="btn-row" style="margin-top:8px">
       <button class="btn-small btn-secondary" id="btn-log-photo" type="button"><img class="bi" src="assets/icons/camera.png" alt="">Add photo</button>
