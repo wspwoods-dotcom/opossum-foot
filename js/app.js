@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-10-08dq';
+var APP_VERSION = 'beta 0.1 · build 2026-10-08dr';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -4062,9 +4062,9 @@ var histUI = { q: '', disp: 'all', view: 'date', season: 'this', collapsed: {}, 
    Settings. This independent state drives the catches CSV export only —
    it shares the same criteria but never affects the History tab. */
 var exportUI = { from: '', to: '', fSetType: [], fTrapType: [], fLure: [], fBait: [], fUrine: [], fOther: [], fStatus: [] };
-/* Q173 (2026-10-08): which report-filter dimensions are expanded. Collapsed by
-   default so the list stays compact as products grow. */
-var exportExpanded = {};
+/* Q174 (2026-10-08): multi-select checklist sheets — which dimension's sheet
+   is open (null when closed). */
+var msOpenKey = null;
 var DOWS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 var MONS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 function dayLabel(iso) {
@@ -4270,28 +4270,49 @@ function exportFilteredLogs() {
     return true;
   });
 }
+/* Q174 (2026-10-08): Tanner — report filters look like the app's other dropdowns
+   but stay multi-select: each dimension is a dropdown-style button showing its
+   current pick; tapping opens a checklist sheet. Clean at rest, full power
+   when opened. Scales as products grow. */
+function msSummary(def) {
+  var sel = exportUI[def.key];
+  if (!sel.length) return 'All';
+  if (sel.length === 1) return dimLabel(def, sel[0]);
+  return sel.length + ' selected';
+}
 function renderExportDimChips() {
   var host = $('exp-dim-filters');
   if (!host) return;
   host.innerHTML = DIM_DEFS.map(function (def) {
     var vals = dimValues(def);
     if (!vals.length) return '';
-    var sel = exportUI[def.key];
-    var summary = !sel.length ? 'All' :
-      sel.map(function (v) { return dimLabel(def, v); }).join(', ');
-    var open = !!exportExpanded[def.key];
-    return '<div class="dim-group' + (open ? ' open' : '') + '">' +
-      '<button type="button" class="dim-head" data-efhead="' + esc(def.key) + '">' +
-        '<span class="dim-label">' + esc(def.label) + '</span>' +
-        '<span class="dim-summary">' + esc(summary) + '</span>' +
-        '<span class="setsec-chev">›</span>' +
-      '</button>' +
-      '<div class="dim-body"' + (open ? '' : ' hidden') + '><div class="chip-row">' + vals.map(function (v) {
-        return '<button type="button" class="chip' + (sel.indexOf(v) !== -1 ? ' on' : '') +
-          '" data-efdim="' + esc(def.key) + '" data-efval="' + esc(v) + '">' +
-          esc(dimLabel(def, v)) + '</button>';
-      }).join('') + '</div></div></div>';
+    return '<label class="field" for="ms-' + esc(def.key) + '">' + esc(def.label) + '</label>' +
+      '<button type="button" class="ms-select" id="ms-' + esc(def.key) + '" data-msbtn="' + esc(def.key) + '">' +
+      '<span class="ms-value">' + esc(msSummary(def)) + '</span>' +
+      '<span class="ms-chev">⌄</span></button>';
   }).join('');
+}
+function msDef(key) {
+  for (var i = 0; i < DIM_DEFS.length; i++) if (DIM_DEFS[i].key === key) return DIM_DEFS[i];
+  return null;
+}
+function renderMsList() {
+  var def = msDef(msOpenKey);
+  var list = $('sheet-ms-list');
+  if (!def || !list) return;
+  $('sheet-ms-title').textContent = def.label;
+  var sel = exportUI[def.key];
+  list.innerHTML = dimValues(def).map(function (v) {
+    var on = sel.indexOf(v) !== -1;
+    return '<button type="button" class="ms-row' + (on ? ' on' : '') + '" data-msval="' + esc(v) + '">' +
+      '<span class="ms-check">' + (on ? '✓' : '') + '</span>' +
+      '<span>' + esc(dimLabel(def, v)) + '</span></button>';
+  }).join('');
+}
+function openMsSheet(key) {
+  msOpenKey = key;
+  renderMsList();
+  openSheet('sheet-ms');
 }
 function renderExportFilterBar() {
   var n = countExportFilters();
@@ -4313,7 +4334,7 @@ function renderExportFilterBar() {
 }
 function clearExportFilters() {
   exportUI.from = ''; exportUI.to = '';
-  exportUI.fSetType = []; exportUI.fTrapType = []; exportUI.fLure = []; exportUI.fBait = []; exportUI.fStatus = [];
+  exportUI.fSetType = []; exportUI.fTrapType = []; exportUI.fLure = []; exportUI.fBait = []; exportUI.fUrine = []; exportUI.fOther = []; exportUI.fStatus = [];
 }
 
 function renderHistChips() {
@@ -7380,23 +7401,23 @@ function wireUp() {
   $('exp-to').onchange = function () { exportUI.to = this.value; renderExportFilterBar(); };
   $('exp-filters-clear').onclick = function () { clearExportFilters(); renderExportDimChips(); renderExportFilterBar(); };
   $('pane-settings').addEventListener('click', function (e) {
-    var fhead = e.target.closest ? e.target.closest('[data-efhead]') : null;
-    if (fhead) {
-      var hkey = fhead.getAttribute('data-efhead');
-      exportExpanded[hkey] = !exportExpanded[hkey];
-      renderExportDimChips();
-      return;
-    }
-    var fchip = e.target.closest ? e.target.closest('[data-efdim]') : null;
-    if (fchip) {
-      var fkey = fchip.getAttribute('data-efdim'), fval = fchip.getAttribute('data-efval');
-      var farr = exportUI[fkey];
-      var fix = farr.indexOf(fval);
-      if (fix === -1) farr.push(fval); else farr.splice(fix, 1);
-      renderExportDimChips(); renderExportFilterBar();
+    var msbtn = e.target.closest ? e.target.closest('[data-msbtn]') : null;
+    if (msbtn) { openMsSheet(msbtn.getAttribute('data-msbtn')); return; }
+    var msrow = e.target.closest ? e.target.closest('[data-msval]') : null;
+    if (msrow && msOpenKey) {
+      var mval = msrow.getAttribute('data-msval');
+      var marr = exportUI[msOpenKey];
+      var mix = marr.indexOf(mval);
+      if (mix === -1) marr.push(mval); else marr.splice(mix, 1);
+      renderMsList(); renderExportDimChips(); renderExportFilterBar();
       return;
     }
   });
+  $('sheet-ms-done').onclick = function () { closeSheets(); msOpenKey = null; };
+  $('sheet-ms-clear').onclick = function () {
+    if (msOpenKey) exportUI[msOpenKey] = [];
+    renderMsList(); renderExportDimChips(); renderExportFilterBar();
+  };
   $('pane-totals').addEventListener('click', function (e) {
     var chip = e.target.closest ? e.target.closest('#totals-sec-chips .chip') : null;
     if (chip) {
