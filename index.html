@@ -189,7 +189,7 @@
   <!-- Q180 (2026-10-08): Tanner — Reports gets its own tab. Backup and CSV
        exports move out of Settings; they're reporting, not settings. -->
   <div id="pane-reports" class="pane">
-    <div class="pane-head"><h2>Reports</h2><p>Back up your data and download reports.</p></div>
+    <div class="pane-head"><h2>Data</h2><p>Back up your data and download reports.</p></div>
     <div class="scroll">
       <div class="card">
         <h3>Full backup</h3>
@@ -268,7 +268,7 @@
       <div class="card setsec" id="setsec-tabs">
         <button type="button" class="setsec-head" id="setsec-tabs-head" data-sec="setsec-tabs" aria-expanded="false"><span>Tab Toggles</span><span class="setsec-chev" aria-hidden="true">›</span></button>
         <div class="setsec-body" id="setsec-tabs-body" hidden>
-        <p class="dim" style="margin:0 0 8px">Choose which tabs appear on the bottom bar for the active trap line (<strong id="tabs-line-name"></strong>). Map, Reports, and Settings always show.</p>
+        <p class="dim" style="margin:0 0 8px">Choose which tabs appear on the bottom bar for the active trap line (<strong id="tabs-line-name"></strong>). Map, Data, and Settings always show.</p>
         <div class="checkgrid">
         <label class="checkline"><input type="checkbox" id="settings-tab-history"> History tab</label>
         <label class="checkline"><input type="checkbox" id="settings-tab-scorecard"> Scorecard tab</label>
@@ -362,8 +362,8 @@
     <button type="button" data-tab="totals"><img class="ti-img" src="assets/icons/barchart.png" alt="">Totals</button>
     <button type="button" data-tab="seasons"><img class="ti-img" src="assets/species/opossum.png" alt="">Seasons</button>
     <button type="button" data-tab="licenses"><img class="ti-img" src="assets/icons/idcard.png" alt="">Paperwork</button>
-    <!-- Q180 (2026-10-08): Tanner — Lines tab removed (redundant with top TRAP LINE bar); Reports tab added with document icon (his pick) -->
-    <button type="button" data-tab="reports"><svg class="ti-img ti-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 2h9l5 5v15H6z"/><path d="M14 2v6h6"/><path d="M9 13h7M9 17h7"/></svg>Reports</button>
+    <!-- Q181 (2026-10-08): Tanner — download icon (subtler 1.5px stroke), labeled Data -->
+    <button type="button" data-tab="reports"><svg class="ti-img ti-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v11m0 0l-3.5-3.5M12 14l3.5-3.5"/><path d="M5 20h14"/></svg>Data</button>
     <button type="button" data-tab="settings"><img class="ti-img" src="assets/icons/gear.png" alt="">Settings</button>
   </nav>
 </div>
