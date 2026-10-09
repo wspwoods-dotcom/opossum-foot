@@ -89,6 +89,8 @@ button, .btn {
    [hidden] rule, so hidden buttons (like the check-in on pulled sets) stayed
    visible. Enforce hidden globally. */
 [hidden] { display: none !important; }
+/* Q178 (2026-10-08): view-only notes on the detail sheet — plain text, not a box. */
+.notes-view { font-size: 17px; color: var(--ink); white-space: pre-wrap; word-wrap: break-word; margin: 0 0 8px; }
 .btn-primary { background: var(--accent); color: var(--accent-ink); width: 100%; }
 .btn-secondary { background: var(--panel); color: var(--ink); border: 1px solid var(--line); width: 100%; }
 .btn-ghost { background: transparent; color: var(--accent); border: 1px solid var(--accent); }
