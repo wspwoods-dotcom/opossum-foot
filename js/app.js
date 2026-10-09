@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-10-08du';
+var APP_VERSION = 'beta 0.1 · build 2026-10-08dv';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -3073,7 +3073,8 @@ function openSetDetail(id) {
   });
   /* Q71: summary memos are playback-only — recording/deletion are in Edit. */
   renderMemos(s.id, 'sd-memos', false);
-  $('sd-notes').value = s.notes || '';
+  /* Q178 (2026-10-08): view-only div, not a textarea. */
+  $('sd-notes').textContent = s.notes || '—';
   refreshNotesBox('setdetail-notessec', 'sd-notes', 'sd-memos', 'sd-photos'); /* Q99 */
   openSheet('sheet-setdetail');
 }
@@ -3083,7 +3084,7 @@ function appendTranscriptToSetNotes(setId, tr) {
   s.notes = (s.notes ? s.notes.replace(/\s+$/, '') + ' ' : '') + tr;
   touchSet(s); /* Q68 */
   Store.save();
-  if (setId === detailSetId && $('sd-notes')) { $('sd-notes').value = s.notes; refreshNotesBox('setdetail-notessec', 'sd-notes', 'sd-memos', 'sd-photos'); /* Q99 */ }
+  if (setId === detailSetId && $('sd-notes')) { $('sd-notes').textContent = s.notes || '—'; refreshNotesBox('setdetail-notessec', 'sd-notes', 'sd-memos', 'sd-photos'); /* Q99 */ }
 }
 
 function renderSetLogs(s, byLog) {
@@ -6421,7 +6422,9 @@ function setSectionOpen(secId, open) {
 }
 function refreshNotesBox(secId, notesId, memosId, photosId) {
   var nv = $(notesId);
-  var hasNotes = !!(nv && (nv.value || '').trim());
+  /* Q178: notesId may be a textarea (edit forms) or a view-only div (detail sheet). */
+  var ntxt = nv ? (nv.value !== undefined ? nv.value : nv.textContent) || '' : '';
+  var hasNotes = !!(ntxt.trim() && ntxt.trim() !== '—');
   var mb = memosId && $(memosId);
   var hasMemos = !!(mb && mb.querySelector('.memo-card'));
   var pb = photosId && $(photosId);
