@@ -775,6 +775,42 @@ document.getElementById('splash').addEventListener('click', function(){
 });
 
 renderPins();
+
+// --- In-app update check (Opossum Foot pattern) ---
+const BLUEBIRD_VERSION = '2026-10-09a';
+let _updateBannerShown = false;
+function showUpdateBanner(){
+  if(_updateBannerShown) return;
+  _updateBannerShown = true;
+  const d = document.createElement('div');
+  d.id = 'update-banner';
+  d.style.cssText = 'position:fixed;z-index:100;top:calc(10px + env(safe-area-inset-top));left:50%;transform:translateX(-50%);'
+    + 'background:#262e1f;border:2px solid #d19a2f;border-radius:12px;padding:10px 16px;'
+    + 'display:flex;align-items:center;gap:12px;box-shadow:0 4px 16px rgba(0,0,0,.5);white-space:nowrap';
+  const s = document.createElement('span');
+  s.textContent = 'New version ready.';
+  s.style.cssText = 'color:#f2ead8;font-weight:600';
+  const b = document.createElement('button');
+  b.textContent = 'Update';
+  b.style.cssText = 'background:#d19a2f;color:#1a1408;border:none;border-radius:8px;'
+    + 'padding:8px 18px;font-weight:700;font-size:1em;cursor:pointer';
+  b.onclick = ()=>window.location.reload();
+  d.appendChild(s); d.appendChild(b);
+  document.body.appendChild(d);
+}
+function checkForUpdate(){
+  if(_updateBannerShown) return;
+  fetch('version.txt', {cache:'no-store'}).then(r=>{
+    if(!r.ok) throw 0;
+    return r.text();
+  }).then(t=>{
+    t = (t||'').trim();
+    if(t && t !== BLUEBIRD_VERSION) showUpdateBanner();
+  }).catch(()=>{ /* offline: stay quiet */ });
+}
+document.addEventListener('visibilitychange', ()=>{ if(!document.hidden) checkForUpdate(); });
+setInterval(checkForUpdate, 5*60*1000);
+setTimeout(checkForUpdate, 8000);
 </script>
 </body>
 </html>
