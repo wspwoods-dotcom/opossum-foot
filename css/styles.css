@@ -461,9 +461,9 @@ body.route-locked #tabbar { pointer-events: none; opacity: .35; }
 #seasons-rules .card.setsec { background: none; border: none; padding: 0; margin: 12px 0; }
 #seasons-rules .setsec-head {
   position: relative; display: flex; align-items: center; justify-content: center;
-  width: 100%; min-height: 84px; padding: 14px 44px 14px 18px; margin: 0;
+  width: 100%; min-height: var(--tap); padding: 12px 40px; margin: 12px 0;
   background: var(--accent); color: var(--accent-ink); border: none; border-radius: var(--radius);
-  font-size: 16px; font-weight: 700; text-transform: uppercase; text-align: center; cursor: pointer;
+  font-size: 17px; font-weight: 700; text-transform: uppercase; text-align: center; cursor: pointer;
 }
 #seasons-rules .setsec-chev {
   position: absolute; right: 16px; top: 50%; transform: translateY(-50%);
