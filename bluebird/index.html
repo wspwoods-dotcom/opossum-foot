@@ -435,6 +435,16 @@ function openBox(id, tab, tabChosen){
       <option value="active"${b.status==='active'?' selected':''}>Active — birds using it</option>
       <option value="removed"${b.status==='removed'?' selected':''}>Removed — box taken down</option>
     </select>
+    <div id="removal-reason-wrap" style="display:${b.status==='removed'?'block':'none'}">
+      <label>Removal reason</label>
+      <select id="f-removal-reason">
+        <option value=""${!b.removalReason?' selected':''}>— pick a reason —</option>
+        <option value="habitat"${b.removalReason==='habitat'?' selected':''}>Change in habitat</option>
+        <option value="destroyed"${b.removalReason==='destroyed'?' selected':''}>Destroyed</option>
+        <option value="too-close"${b.removalReason==='too-close'?' selected':''}>Too close to other nests</option>
+        <option value="other"${b.removalReason==='other'?' selected':''}>Other</option>
+      </select>
+    </div>
     <label>Habitat notes (what's around the box?)</label>
     <textarea id="f-habitat" placeholder="e.g. Open mowed field, scattered oaks 30 yds east, near lake trail">${esc(b.habitat)}</textarea>
     <div class="row" style="margin-top:16px">
@@ -484,6 +494,8 @@ function openBox(id, tab, tabChosen){
   nameInput.onchange = saveName;
   document.getElementById('f-status').onchange = e=>{ b.status=e.target.value; save(); renderPins(); openBox(id, tab); };
   document.getElementById('f-habitat').onchange = e=>{ b.habitat=e.target.value; save(); };
+  const reasonSel = document.getElementById('f-removal-reason');
+  if(reasonSel) reasonSel.onchange = e=>{ b.removalReason=e.target.value; save(); };
 }
 
 function eventLabel(t){
@@ -599,12 +611,12 @@ document.getElementById('btn-export').onclick = ()=>{
   const today = new Date().toISOString().slice(0,10);
 
   // Subset 1: science data (nest checks)
-  const sci = ['Box,Lat,Lng,Status,Habitat,Date,Observer,Species,Eggs,Young,Fledged,Invasive,Notes'];
+  const sci = ['Box,Lat,Lng,Status,RemovalReason,Habitat,Date,Observer,Species,Eggs,Young,Fledged,Invasive,Notes'];
   boxes.forEach(b=>{
     if(!b.visits.length){
-      sci.push([b.name,b.lat.toFixed(5),b.lng.toFixed(5),b.status,q(b.habitat),'','','','','','','',''].join(','));
+      sci.push([b.name,b.lat.toFixed(5),b.lng.toFixed(5),b.status,q(b.removalReason||''),q(b.habitat),'','','','','','','',''].join(','));
     } else b.visits.forEach(v=>{
-      sci.push([b.name,b.lat.toFixed(5),b.lng.toFixed(5),b.status,q(b.habitat),
+      sci.push([b.name,b.lat.toFixed(5),b.lng.toFixed(5),b.status,q(b.removalReason||''),q(b.habitat),
         v.date,q(v.observer),q(v.species),v.eggs,v.young,v.fledged,v.invasive,q(v.notes)].join(','));
     });
   });
