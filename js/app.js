@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-10-08do';
+var APP_VERSION = 'beta 0.1 · build 2026-10-08dp';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -4062,6 +4062,9 @@ var histUI = { q: '', disp: 'all', view: 'date', season: 'this', collapsed: {}, 
    Settings. This independent state drives the catches CSV export only —
    it shares the same criteria but never affects the History tab. */
 var exportUI = { from: '', to: '', fSetType: [], fTrapType: [], fLure: [], fBait: [], fUrine: [], fOther: [], fStatus: [] };
+/* Q173 (2026-10-08): which report-filter dimensions are expanded. Collapsed by
+   default so the list stays compact as products grow. */
+var exportExpanded = {};
 var DOWS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 var MONS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 function dayLabel(iso) {
@@ -4274,12 +4277,20 @@ function renderExportDimChips() {
     var vals = dimValues(def);
     if (!vals.length) return '';
     var sel = exportUI[def.key];
-    return '<div class="dim-label">' + esc(def.label) + '</div>' +
-      '<div class="chip-row">' + vals.map(function (v) {
+    var summary = !sel.length ? 'All' :
+      sel.map(function (v) { return dimLabel(def, v); }).join(', ');
+    var open = !!exportExpanded[def.key];
+    return '<div class="dim-group' + (open ? ' open' : '') + '">' +
+      '<button type="button" class="dim-head" data-efhead="' + esc(def.key) + '">' +
+        '<span class="dim-label">' + esc(def.label) + '</span>' +
+        '<span class="dim-summary">' + esc(summary) + '</span>' +
+        '<span class="setsec-chev">›</span>' +
+      '</button>' +
+      '<div class="dim-body"' + (open ? '' : ' hidden') + '><div class="chip-row">' + vals.map(function (v) {
         return '<button type="button" class="chip' + (sel.indexOf(v) !== -1 ? ' on' : '') +
           '" data-efdim="' + esc(def.key) + '" data-efval="' + esc(v) + '">' +
           esc(dimLabel(def, v)) + '</button>';
-      }).join('') + '</div>';
+      }).join('') + '</div></div></div>';
   }).join('');
 }
 function renderExportFilterBar() {
@@ -7369,6 +7380,13 @@ function wireUp() {
   $('exp-to').onchange = function () { exportUI.to = this.value; renderExportFilterBar(); };
   $('exp-filters-clear').onclick = function () { clearExportFilters(); renderExportDimChips(); renderExportFilterBar(); };
   $('pane-settings').addEventListener('click', function (e) {
+    var fhead = e.target.closest ? e.target.closest('[data-efhead]') : null;
+    if (fhead) {
+      var hkey = fhead.getAttribute('data-efhead');
+      exportExpanded[hkey] = !exportExpanded[hkey];
+      renderExportDimChips();
+      return;
+    }
     var fchip = e.target.closest ? e.target.closest('[data-efdim]') : null;
     if (fchip) {
       var fkey = fchip.getAttribute('data-efdim'), fval = fchip.getAttribute('data-efval');
