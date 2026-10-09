@@ -142,6 +142,10 @@ textarea{min-height:80px;resize:vertical}
 .chip[data-s="placed"] .dot{background:var(--blue)}
 .chip[data-s="active"] .dot{background:var(--green)}
 .chip[data-s="removed"] .dot{background:#c0392b}
+/* --- map layer chips (top-right, below the stats pill) --- */
+.layerbar{position:absolute;z-index:10;top:calc(192px + env(safe-area-inset-top));right:12px;
+  display:flex;gap:6px}
+.layerbar .chip{min-height:34px;padding:6px 12px;font-size:.78em}
 /* --- 100-foot scale bar --- */
 .scale100{position:absolute;z-index:10;left:50%;transform:translateX(-50%);
   bottom:calc(24px + env(safe-area-inset-bottom));background:rgba(20,24,16,.88);
@@ -193,6 +197,11 @@ textarea{min-height:80px;resize:vertical}
   <button class="chip" data-s="removed"><span class="dot"></span>Removed</button>
 </div>
 <div class="stats" id="stats"></div>
+<div class="layerbar" id="layerbar">
+  <button class="chip on" data-l="sat">Satellite</button>
+  <button class="chip" data-l="street">Street</button>
+  <button class="chip" data-l="topo">Topo</button>
+</div>
 <button class="fab" id="btn-add" title="Add box">+</button>
 <button class="fab2" id="btn-export">⤓ Export</button>
 <button class="fab2" id="btn-import" style="bottom:calc(84px + env(safe-area-inset-bottom))">⤒ Import</button>
@@ -245,14 +254,43 @@ function uid(){ return 'box-' + Date.now().toString(36) + Math.floor(Math.random
 // --- Map ---
 const map = L.map('map', {zoomControl:false}).setView([42.066, -94.290], 14);
 L.control.zoom({position:'bottomleft'}).addTo(map);
-const sat = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-  attribution:'Esri', maxZoom:19
-}).addTo(map);
-const street = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  attribution:'© OpenStreetMap', maxZoom:19
+// --- Base layers (Esri trio, same as Opossum Foot) ---
+function esriRef(svc){
+  return L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/'+svc+'/MapServer/tile/{z}/{y}/{x}',
+    {maxZoom:19, attribution:'© Esri'});
+}
+const satL = L.layerGroup([
+  L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+    {attribution:'Imagery © Esri', maxZoom:19}),
+  esriRef('Reference/World_Boundaries_and_Places'),
+  esriRef('Reference/World_Transportation')
+]);
+const streetL = L.layerGroup([
+  esriRef('World_Street_Map')
+]);
+const topoL = L.layerGroup([
+  L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
+    {attribution:'© OpenTopoMap © OpenStreetMap contributors', maxZoom:19}),
+  esriRef('Reference/World_Transportation')
+]);
+const baseLayers = {sat:satL, street:streetL, topo:topoL};
+// Saved layer choice wins; default Satellite. (The old silent tileerror
+// fallback is gone — it flipped users to Street with no way back.)
+let baseKey = 'sat';
+try{ const s = localStorage.getItem('bluebird-baselayer'); if(s && baseLayers[s]) baseKey = s; }catch(e){}
+baseLayers[baseKey].addTo(map);
+function setBase(key){
+  if(!baseLayers[key] || key===baseKey) return;
+  map.removeLayer(baseLayers[baseKey]);
+  baseKey = key;
+  map.addLayer(baseLayers[baseKey]);
+  try{ localStorage.setItem('bluebird-baselayer', key); }catch(e){}
+  document.querySelectorAll('#layerbar .chip').forEach(c=>c.classList.toggle('on', c.dataset.l===key));
+}
+document.querySelectorAll('#layerbar .chip').forEach(c=>{
+  c.classList.toggle('on', c.dataset.l===baseKey);
+  c.addEventListener('click', ()=>setBase(c.dataset.l));
 });
-// Fallback to street map if satellite fails
-sat.on('tileerror', ()=>{ if(!map.hasLayer(street)){ map.removeLayer(sat); street.addTo(map); } });
 
 // --- Spring Lake Park outer boundary (merged from county assessor GIS parcels) ---
 const PARK_BOUNDARY = [
