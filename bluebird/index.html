@@ -124,9 +124,11 @@ textarea{min-height:80px;resize:vertical}
 }
 #splash .tap{position:absolute;bottom:1%;left:0;right:0;text-align:center;z-index:11;
   color:#f2ead8;font-size:.75em;opacity:.6}
-.stats{position:absolute;z-index:10;bottom:calc(100px + env(safe-area-inset-bottom));left:16px;
-  background:rgba(20,24,16,.85);padding:8px 14px;border-radius:20px;font-size:.8em;color:var(--muted);
-  border:1px solid var(--line)}
+.stats{position:absolute;z-index:10;top:calc(140px + env(safe-area-inset-top));left:16px;
+  background:rgba(20,24,16,.92);padding:10px 18px;border-radius:20px;font-size:.95em;font-weight:700;color:var(--ink);
+  border:2px solid var(--accent)}
+/* Leaflet zoom control sits bottom-left, above the Export button */
+.leaflet-bottom.leaflet-left .leaflet-control-zoom{margin-bottom:calc(90px + env(safe-area-inset-bottom));margin-left:16px}
 .statusbar{position:absolute;z-index:10;top:calc(76px + env(safe-area-inset-top));left:0;right:0;
   display:flex;gap:8px;padding:10px 16px;overflow-x:auto;-webkit-overflow-scrolling:touch}
 .chip{flex:0 0 auto;min-height:40px;padding:8px 16px;border-radius:20px;border:2px solid var(--line);
@@ -141,8 +143,12 @@ textarea{min-height:80px;resize:vertical}
 .scale100{position:absolute;z-index:10;left:50%;transform:translateX(-50%);
   bottom:calc(24px + env(safe-area-inset-bottom));background:rgba(20,24,16,.88);
   padding:8px 14px 6px;border-radius:8px;border:1px solid var(--line);
-  font-size:.75em;color:var(--ink);text-align:center;pointer-events:none;white-space:nowrap}
+  font-size:.75em;color:var(--ink);text-align:center;pointer-events:auto;white-space:nowrap}
 .scale100 .bar{height:6px;background:var(--ink);margin:0 auto 4px;border-left:2px solid var(--ink);border-right:2px solid var(--ink)}
+.scale100.measuring{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent)}
+.measure-label{background:rgba(20,24,16,.92)!important;border:1px solid var(--accent)!important;
+  color:var(--ink)!important;font-weight:700;font-size:14px;border-radius:8px;padding:4px 10px}
+.measure-label:before{display:none}
 </style>
 </head>
 <body>
@@ -232,7 +238,7 @@ function uid(){ return 'box-' + Date.now().toString(36) + Math.floor(Math.random
 
 // --- Map ---
 const map = L.map('map', {zoomControl:false}).setView([42.066, -94.290], 14);
-L.control.zoom({position:'topright'}).addTo(map);
+L.control.zoom({position:'bottomleft'}).addTo(map);
 const sat = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
   attribution:'Esri', maxZoom:19
 }).addTo(map);
@@ -283,6 +289,45 @@ function updateScale(){
 }
 map.on('zoomend moveend', updateScale);
 updateScale();
+
+// --- Tap scale bar for measure tool ---
+let measuring = false, measurePts = [], measureLine = null, measureLabel = null;
+scaleDiv.style.cursor = 'pointer';
+scaleDiv.title = 'Tap to measure distance';
+scaleDiv.addEventListener('click', ()=>{
+  measuring ? stopMeasure() : startMeasure();
+});
+function startMeasure(){
+  measuring = true; measurePts = [];
+  scaleDiv.classList.add('measuring');
+  const hint = document.getElementById('hint');
+  hint.textContent = 'Measure: tap two points on the map';
+  hint.classList.add('show');
+  map.on('click', measureTap);
+}
+function stopMeasure(){
+  measuring = false; measurePts = [];
+  scaleDiv.classList.remove('measuring');
+  document.getElementById('hint').classList.remove('show');
+  map.off('click', measureTap);
+  if(measureLine){ map.removeLayer(measureLine); measureLine = null; }
+  if(measureLabel){ map.removeLayer(measureLabel); measureLabel = null; }
+}
+function measureTap(e){
+  measurePts.push(e.latlng);
+  if(measureLine){ map.removeLayer(measureLine); measureLine = null; }
+  if(measureLabel){ map.removeLayer(measureLabel); measureLabel = null; }
+  if(measurePts.length === 1){
+    measureLine = L.circleMarker(measurePts[0], {radius:6, color:'#ffd24a', weight:2, fillColor:'#ffd24a', fillOpacity:.8}).addTo(map);
+  } else if(measurePts.length === 2){
+    const yds = Math.round(measurePts[0].distanceTo(measurePts[1]) * 1.09361);
+    const mid = L.latLng((measurePts[0].lat+measurePts[1].lat)/2, (measurePts[0].lng+measurePts[1].lng)/2);
+    measureLine = L.polyline(measurePts, {color:'#ffd24a', weight:3}).addTo(map);
+    measureLabel = L.tooltip({permanent:true, direction:'top', className:'measure-label'})
+      .setLatLng(mid).setContent(yds + ' yd').addTo(map);
+    measurePts = []; // ready for a new measurement
+  }
+}
 
 const markers = {};
 function pinColor(status){
