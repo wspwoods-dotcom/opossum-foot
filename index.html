@@ -186,6 +186,48 @@
 
   <!-- WEATHER PANE -->
   <!-- SETTINGS PANE -->
+  <!-- Q180 (2026-10-08): Tanner — Reports gets its own tab. Backup and CSV
+       exports move out of Settings; they're reporting, not settings. -->
+  <div id="pane-reports" class="pane">
+    <div class="pane-head"><h2>Reports</h2><p>Back up your data and download reports.</p></div>
+    <div class="scroll">
+      <div class="card">
+        <h3>Full backup</h3>
+        <div class="sheet-actions">
+          <button class="btn-secondary" id="btn-backup" type="button"><img class="bi" src="assets/icons/disk.png" alt="">Back up all data (JSON)</button>
+          <p class="imp-cap">Saves a full Opossum Foot backup file (.json) — import it back after a reinstall.</p>
+          <button class="btn-secondary" id="btn-import" type="button"><img class="bi" src="assets/icons/upload.png" alt="">Import data (JSON)</button>
+          <p class="imp-cap">Reads back an Opossum Foot backup file (.json) from this phone.</p>
+          <input type="file" id="import-file" class="hidden-file" accept=".json,application/json">
+          <button class="btn-secondary" id="btn-import-pins" type="button"><img class="bi" src="assets/icons/mappin.png" alt="">Import pins from Google Maps</button>
+          <p class="imp-cap">Reads pin files (.kml / .geojson) from Google Maps, My Maps, or Google Takeout.</p>
+          <input type="file" id="import-pins-file" class="hidden-file" accept=".kml,.geojson,.json,application/vnd.google-earth.kml+xml,application/geo+json">
+        </div>
+      </div>
+      <div class="card">
+        <h3>Reports</h3>
+        <p class="dim" style="margin-top:0">Set the filters, watch the match count, then download the report you want. The filters shape the <strong>catches</strong> report only — the sets and mileage downloads always include everything.</p>
+        <div class="date-row">
+          <div class="date-col"><label class="field" for="exp-from">From</label><input type="date" id="exp-from" aria-label="Export start date"></div>
+          <div class="date-col"><label class="field" for="exp-to">To</label><input type="date" id="exp-to" aria-label="Export end date"></div>
+        </div>
+        <div id="exp-dim-filters"></div>
+        <div class="sheet-actions">
+          <button class="btn-secondary" id="exp-filters-clear" type="button">Clear all filters</button>
+        </div>
+        <p class="dim" id="exp-match-count" style="margin:8px 0 0"></p>
+        <div class="sheet-actions">
+          <button class="btn-secondary" id="btn-export-catches" type="button">⬇ Export catches (CSV)<span id="exp-filters-count" class="dim"></span></button>
+          <p class="imp-cap">Downloads your catches as a spreadsheet file (.csv), honoring the filters above.</p>
+          <button class="btn-secondary" id="btn-export-sets" type="button">⬇ Export sets (CSV)</button>
+          <p class="imp-cap">Downloads your sets as a spreadsheet file (.csv).</p>
+          <button class="btn-secondary" id="btn-export-mileage" type="button">⬇ Export mileage (CSV)</button>
+          <p class="imp-cap">Downloads this line's trip log as a spreadsheet file (.csv).</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div id="pane-settings" class="pane">
     <div class="pane-head"><h2>Settings</h2><p>Opossum Foot beta.</p></div>
     <div class="scroll">
@@ -226,7 +268,7 @@
       <div class="card setsec" id="setsec-tabs">
         <button type="button" class="setsec-head" id="setsec-tabs-head" data-sec="setsec-tabs" aria-expanded="false"><span>Tab Toggles</span><span class="setsec-chev" aria-hidden="true">›</span></button>
         <div class="setsec-body" id="setsec-tabs-body" hidden>
-        <p class="dim" style="margin:0 0 8px">Choose which tabs appear on the bottom bar for the active trap line (<strong id="tabs-line-name"></strong>). Map, Lines, and Settings always show.</p>
+        <p class="dim" style="margin:0 0 8px">Choose which tabs appear on the bottom bar for the active trap line (<strong id="tabs-line-name"></strong>). Map, Reports, and Settings always show.</p>
         <div class="checkgrid">
         <label class="checkline"><input type="checkbox" id="settings-tab-history"> History tab</label>
         <label class="checkline"><input type="checkbox" id="settings-tab-scorecard"> Scorecard tab</label>
@@ -291,41 +333,7 @@
         </div>
         </div>
       </div>
-      <div class="card setsec" id="setsec-backup-reports">
-        <button type="button" class="setsec-head" id="setsec-backup-reports-head" data-sec="setsec-backup-reports" aria-expanded="false"><span>Backup &amp; Reports</span><span class="setsec-chev" aria-hidden="true">›</span></button>
-        <div class="setsec-body" id="setsec-backup-reports-body" hidden>
-        <p class="setsec-sub">Full backup</p>
-        <div class="sheet-actions">
-          <button class="btn-secondary" id="btn-backup" type="button"><img class="bi" src="assets/icons/disk.png" alt="">Back up all data (JSON)</button>
-          <p class="imp-cap">Saves a full Opossum Foot backup file (.json) — import it back after a reinstall.</p>
-          <button class="btn-secondary" id="btn-import" type="button"><img class="bi" src="assets/icons/upload.png" alt="">Import data (JSON)</button>
-          <p class="imp-cap">Reads back an Opossum Foot backup file (.json) from this phone.</p>
-          <input type="file" id="import-file" class="hidden-file" accept=".json,application/json">
-          <button class="btn-secondary" id="btn-import-pins" type="button"><img class="bi" src="assets/icons/mappin.png" alt="">Import pins from Google Maps</button>
-          <p class="imp-cap">Reads pin files (.kml / .geojson) from Google Maps, My Maps, or Google Takeout.</p>
-          <input type="file" id="import-pins-file" class="hidden-file" accept=".kml,.geojson,.json,application/vnd.google-earth.kml+xml,application/geo+json">
-        </div>
-        <p class="setsec-sub">Reports</p>
-        <p class="dim" style="margin-top:0">Set the filters, watch the match count, then download the report you want. The filters shape the <strong>catches</strong> report only — the sets and mileage downloads always include everything.</p>
-        <div class="date-row">
-          <div class="date-col"><label class="field" for="exp-from">From</label><input type="date" id="exp-from" aria-label="Export start date"></div>
-          <div class="date-col"><label class="field" for="exp-to">To</label><input type="date" id="exp-to" aria-label="Export end date"></div>
-        </div>
-        <div id="exp-dim-filters"></div>
-        <div class="sheet-actions">
-          <button class="btn-secondary" id="exp-filters-clear" type="button">Clear all filters</button>
-        </div>
-        <p class="dim" id="exp-match-count" style="margin:8px 0 0"></p>
-        <div class="sheet-actions">
-          <button class="btn-secondary" id="btn-export-catches" type="button">⬇ Export catches (CSV)<span id="exp-filters-count" class="dim"></span></button>
-          <p class="imp-cap">Downloads your catches as a spreadsheet file (.csv), honoring the filters above.</p>
-          <button class="btn-secondary" id="btn-export-sets" type="button">⬇ Export sets (CSV)</button>
-          <p class="imp-cap">Downloads your sets as a spreadsheet file (.csv).</p>
-          <button class="btn-secondary" id="btn-export-mileage" type="button">⬇ Export mileage (CSV)</button>
-          <p class="imp-cap">Downloads this line's trip log as a spreadsheet file (.csv).</p>
-        </div>
-        </div>
-      </div>
+      <!-- Q180 (2026-10-08): Backup & Reports moved to the Reports tab -->
       <div class="card setsec" id="setsec-danger">
         <button type="button" class="setsec-head" id="setsec-danger-head" data-sec="setsec-danger" aria-expanded="false"><span>Erase Everything</span><span class="setsec-chev" aria-hidden="true">›</span></button>
         <div class="setsec-body" id="setsec-danger-body" hidden>
@@ -349,12 +357,13 @@
   <!-- TAB BAR -->
   <nav id="tabbar">
     <button type="button" data-tab="map" class="active"><img class="ti-img" src="assets/icons/compass.png" alt="">Map</button>
-    <button type="button" data-tab="lines"><svg class="ti-img ti-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="5" cy="6" r="2.2"/><circle cx="19" cy="6" r="2.2"/><circle cx="12" cy="18" r="2.2"/><path d="M7 6.8h10M6.2 7.8l4.6 8M17.8 7.8l-4.6 8"/></svg>Lines</button>
     <button type="button" data-tab="history"><img class="ti-img" src="assets/icons/logbook.png" alt="">History</button>
     <button type="button" data-tab="scorecard"><svg class="ti-img ti-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/></svg>Scorecard</button>
     <button type="button" data-tab="totals"><img class="ti-img" src="assets/icons/barchart.png" alt="">Totals</button>
     <button type="button" data-tab="seasons"><img class="ti-img" src="assets/species/opossum.png" alt="">Seasons</button>
     <button type="button" data-tab="licenses"><img class="ti-img" src="assets/icons/idcard.png" alt="">Paperwork</button>
+    <!-- Q180 (2026-10-08): Tanner — Lines tab removed (redundant with top TRAP LINE bar); Reports tab added with document icon (his pick) -->
+    <button type="button" data-tab="reports"><svg class="ti-img ti-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 2h9l5 5v15H6z"/><path d="M14 2v6h6"/><path d="M9 13h7M9 17h7"/></svg>Reports</button>
     <button type="button" data-tab="settings"><img class="ti-img" src="assets/icons/gear.png" alt="">Settings</button>
   </nav>
 </div>
