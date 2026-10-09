@@ -224,14 +224,25 @@ const street = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 // Fallback to street map if satellite fails
 sat.on('tileerror', ()=>{ if(!map.hasLayer(street)){ map.removeLayer(sat); street.addTo(map); } });
 
-// --- Spring Lake Park boundary (Greene County Conservation parcels, from county assessor GIS) ---
+// --- Spring Lake Park outer boundary (merged from county assessor GIS parcels) ---
 const PARK_BOUNDARY = [
-  [[42.0704677,-94.2909029],[42.0704676,-94.2908972],[42.0674614,-94.2908556],[42.0669970,-94.2908492],[42.0669971,-94.2908557],[42.0670686,-94.2957007],[42.0705412,-94.2957513]],
-  [[42.0703934,-94.2860160],[42.0691549,-94.2859984],[42.0669248,-94.2859667],[42.0669647,-94.2886585],[42.0669714,-94.2891126],[42.0669845,-94.2900016],[42.0669970,-94.2908492],[42.0674614,-94.2908556],[42.0704676,-94.2908972],[42.0704098,-94.2870926]],
-  [[42.0669970,-94.2908492],[42.0669268,-94.2908482],[42.0633892,-94.2907992],[42.0634587,-94.2956480],[42.0670686,-94.2957007],[42.0669971,-94.2908557]],
-  [[42.0669248,-94.2859667],[42.0633189,-94.2859155],[42.0633465,-94.2878321],[42.0633794,-94.2901193],[42.0633892,-94.2907992],[42.0669268,-94.2908482],[42.0669970,-94.2908492],[42.0669845,-94.2900016],[42.0669714,-94.2891126],[42.0669647,-94.2886585]],
-  [[42.0633189,-94.2859155],[42.0606107,-94.2858738],[42.0597079,-94.2858598],[42.0597255,-94.2871597],[42.0597544,-94.2893028],[42.0597555,-94.2893839],[42.0597696,-94.2904293],[42.0597732,-94.2907000],[42.0633892,-94.2907992],[42.0633794,-94.2901193],[42.0633465,-94.2878321]],
-  [[42.0597079,-94.2858598],[42.0561875,-94.2858055],[42.0562479,-94.2905986],[42.0562479,-94.2906032],[42.0597732,-94.2907000],[42.0597696,-94.2904293],[42.0597555,-94.2893839],[42.0597544,-94.2893028],[42.0597255,-94.2871597]]
+  [[42.0704677,-94.2909029],
+  [42.0704676,-94.2908972],
+  [42.0704098,-94.2870926],
+  [42.0703934,-94.286016],
+  [42.0691549,-94.2859984],
+  [42.0669248,-94.2859667],
+  [42.0633189,-94.2859155],
+  [42.0606107,-94.2858738],
+  [42.0597079,-94.2858598],
+  [42.0561875,-94.2858055],
+  [42.0562479,-94.2905986],
+  [42.0562479,-94.2906032],
+  [42.0597732,-94.2907],
+  [42.0633892,-94.2907992],
+  [42.0634587,-94.295648],
+  [42.0670686,-94.2957007],
+  [42.0705412,-94.2957513]]
 ];
 PARK_BOUNDARY.forEach(ring=>{
   L.polygon(ring, {color:'#d19a2f', weight:3, opacity:.95,
@@ -400,7 +411,7 @@ const sheet = document.getElementById('sheet');
 function openSheet(){ sheet.classList.add('open'); }
 function closeSheet(){ sheet.classList.remove('open'); selectedId=null; }
 
-function openBox(id, tab){
+function openBox(id, tab, tabChosen){
   selectedId = id;
   const b = boxes.find(x=>x.id===id);
   if(!b) return;
@@ -423,8 +434,8 @@ function openBox(id, tab){
     <label>Habitat notes (what's around the box?)</label>
     <textarea id="f-habitat" placeholder="e.g. Open mowed field, scattered oaks 30 yds east, near lake trail">${esc(b.habitat)}</textarea>
     <div class="row" style="margin-top:16px">
-      <button class="btn${tab==='checks'?' primary':''}" onclick="openBox(selectedId,'checks')">Nest checks</button>
-      <button class="btn${tab==='history'?' primary':''}" onclick="openBox(selectedId,'history')">Box history</button>
+      <button class="btn${tab==='checks'?' primary':''}" onclick="openBox(selectedId,'checks',true)">Nest checks</button>
+      <button class="btn${tab==='history'?' primary':''}" onclick="openBox(selectedId,'history',true)">Box history</button>
     </div>`;
 
   if(tab==='checks'){
@@ -451,11 +462,11 @@ function openBox(id, tab){
   document.getElementById('sheet-body').innerHTML = html + `
     <button class="btn danger" style="margin-top:20px" onclick="deleteBox()">Delete this box</button>`;
   document.getElementById('sheet-foot').innerHTML = `
-    <button class="btn" onclick="closeSheet()">Close</button>
+    <button class="btn${tabChosen?'':' primary'}" onclick="closeSheet()">Set box</button>
     <button class="btn" onclick="startMovePin(selectedId)">Move pin</button>
     ${tab==='checks'
-      ? `<button class="btn primary" onclick="openVisit()">+ Log check</button>`
-      : `<button class="btn primary" onclick="openEvent()">+ Log event</button>`}`;
+      ? `<button class="btn${tabChosen?' primary':''}" onclick="openVisit()">+ Log check</button>`
+      : `<button class="btn${tabChosen?' primary':''}" onclick="openEvent()">+ Log event</button>`}`;
   openSheet();
 
   // Save name/status/habitat on change (name saves as-you-type for reliability on touch)
