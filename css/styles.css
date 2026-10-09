@@ -85,6 +85,10 @@ button, .btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 8px;
   text-decoration: none;
 }
+/* Q175 (2026-10-08): the button rule's display:inline-flex overrides the UA
+   [hidden] rule, so hidden buttons (like the check-in on pulled sets) stayed
+   visible. Enforce hidden globally. */
+[hidden] { display: none !important; }
 .btn-primary { background: var(--accent); color: var(--accent-ink); width: 100%; }
 .btn-secondary { background: var(--panel); color: var(--ink); border: 1px solid var(--line); width: 100%; }
 .btn-ghost { background: transparent; color: var(--accent); border: 1px solid var(--accent); }
