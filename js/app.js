@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-10-08dr';
+var APP_VERSION = 'beta 0.1 · build 2026-10-08du';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -1130,8 +1130,8 @@ function renderTabToggles() {
 function applyFeatureToggles() {
   var vOn = Store.data.voiceOn !== false;
   ['btn-voice-setnotes', 'voice-setnotes-preview', 'btn-voice-lognotes', 'voice-lognotes-preview',
-   'btn-se-memo', 'se-memos-head', 'se-memos', 'setform-memos',
-   'sd-memos-head', 'sd-memos',
+   'btn-se-memo', 'se-memos-label', 'se-memos', 'setform-memos',
+   'sd-memos-label', 'sd-memos',
    'sd-notes-head', 'sd-notes'].forEach(function (id) {
     var el = $(id);
     if (el) el.style.display = vOn ? '' : 'none';
