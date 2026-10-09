@@ -127,8 +127,8 @@ textarea{min-height:80px;resize:vertical}
 .stats{position:absolute;z-index:10;top:calc(140px + env(safe-area-inset-top));left:16px;
   background:rgba(20,24,16,.92);padding:10px 18px;border-radius:20px;font-size:.95em;font-weight:700;color:var(--ink);
   border:2px solid var(--accent)}
-/* Leaflet zoom control sits bottom-left, above the Export button */
-.leaflet-bottom.leaflet-left .leaflet-control-zoom{margin-bottom:calc(90px + env(safe-area-inset-bottom));margin-left:16px}
+/* Leaflet zoom control sits bottom-left, above the Export/Import buttons */
+.leaflet-bottom.leaflet-left .leaflet-control-zoom{margin-bottom:calc(150px + env(safe-area-inset-bottom));margin-left:16px}
 .statusbar{position:absolute;z-index:10;top:calc(76px + env(safe-area-inset-top));left:0;right:0;
   display:flex;gap:8px;padding:10px 16px;overflow-x:auto;-webkit-overflow-scrolling:touch}
 .chip{flex:0 0 auto;min-height:40px;padding:8px 16px;border-radius:20px;border:2px solid var(--line);
@@ -192,6 +192,8 @@ textarea{min-height:80px;resize:vertical}
 <div class="stats" id="stats"></div>
 <button class="fab" id="btn-add" title="Add box">+</button>
 <button class="fab2" id="btn-export">⤓ Export</button>
+<button class="fab2" id="btn-import" style="bottom:calc(84px + env(safe-area-inset-bottom))">⤒ Import</button>
+<input type="file" id="import-file" accept=".json,application/json" style="display:none">
 
 <div class="sheet" id="sheet">
   <div class="sheet-head">
@@ -702,6 +704,38 @@ function download(blob, name){
   a.download = name;
   a.click();
 }
+
+// --- Import: merge boxes from another bluebird-boxes-backup.json ---
+document.getElementById('btn-import').onclick = ()=>document.getElementById('import-file').click();
+document.getElementById('import-file').addEventListener('change', e=>{
+  const f = e.target.files[0];
+  if(!f) return;
+  const r = new FileReader();
+  r.onload = ()=>{
+    try{
+      const data = JSON.parse(r.result);
+      const incoming = data.boxes || data;
+      if(!Array.isArray(incoming)) throw new Error('no boxes array');
+      const existingIds = new Set(boxes.map(b=>b.id));
+      let added = 0, skipped = 0;
+      incoming.forEach(b=>{
+        if(!b || !b.id || !b.name){ skipped++; return; }
+        if(existingIds.has(b.id)){ skipped++; return; }
+        b.visits = b.visits || [];
+        b.events = b.events || [];
+        boxes.push(b);
+        existingIds.add(b.id);
+        added++;
+      });
+      save(); renderPins();
+      alert(`Import complete: ${added} box${added===1?'':'es'} added` + (skipped ? `, ${skipped} skipped (already here)` : ''));
+    }catch(err){
+      alert('Could not read that file — please pick a bluebird-boxes-backup.json file.');
+    }
+    e.target.value = '';
+  };
+  r.readAsText(f);
+});
 
 function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
