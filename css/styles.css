@@ -541,6 +541,10 @@ body.route-locked #tabbar { pointer-events: none; opacity: .35; }
 
 .warnbox { background: #3d2c10; border: 1px solid #6b4d1c; color: #f5cf7a; border-radius: var(--radius); padding: 12px 14px; margin: 12px 0; font-size: 15px; }
 .warnbox.red { background: #3a1f1b; border-color: #6e2f28; color: #f0a49c; }
+/* Q172 (2026-10-08): green notice variant — the Scorecard "Unspecified" bucket
+   wears this so it reads as a notice, never as a feature card. */
+.warnbox.green { background: #1c2b18; border-color: #435c38; color: var(--ink); }
+.warnbox.green .wb-title { color: var(--muted); }
 .form-error { display: none; color: #f0a49c; font-weight: 700; font-size: 15px; margin: 10px 0 2px; }
 .form-error.show { display: block; }
 .warnbox .wb-title { font-weight: 800; margin-bottom: 4px; }
@@ -865,6 +869,12 @@ body.placing .leaflet-control-layers { pointer-events: none; opacity: .45; }
 .log-photos { display: flex; gap: 6px; margin-top: 6px; }
 #pane-map { position: relative; }
 .sc-row { display: flex; align-items: baseline; gap: 10px; padding: 10px 2px; border-bottom: 1px solid var(--line); }
+/* Q172 (2026-10-08): clear separation between the Scorecard filter controls
+   (season/category toggles + species search) and the results below them. */
+.sc-results { margin-top: 22px; }
+.sc-results-head { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+.sc-results-head::before, .sc-results-head::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+.sc-results-head span { font-size: 12px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: var(--accent); white-space: nowrap; }
 .sc-name { font-weight: 600; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
 .sc-rate { font-size: 14px; font-variant-numeric: tabular-nums; white-space: nowrap; }
 /* Sponsor chip on Scorecard rows: the maker's logo, tappable for their bio.
