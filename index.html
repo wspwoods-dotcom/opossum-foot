@@ -508,17 +508,19 @@
     <!-- Q71: memo recording + playback + deletion on the Edit Set form (edit mode only) -->
     <div id="setform-memos" hidden>
     <label class="field" for="btn-se-memo" id="se-memos-label">Voice memos</label>
-    <div id="se-memos"></div>
     <div class="btn-row" style="margin-top:8px">
       <button class="btn-small btn-secondary" id="btn-se-memo" type="button"><img class="bi" src="assets/icons/mic.png" alt="">Record memo</button>
     </div>
+    <!-- Q179 (2026-10-08): Tanner — memos list below the Record button -->
+    <div id="se-memos" style="margin-top:8px"></div>
     </div>
     <div id="setform-photos">
     <label class="field">Photos</label>
-    <div class="photo-strip" id="sf-photos"></div>
     <div class="btn-row" style="margin-top:8px">
       <button class="btn-small btn-secondary" id="btn-sf-photo" type="button"><img class="bi" src="assets/icons/camera.png" alt="">Take a photo</button>
     </div>
+    <!-- Q179: photos below the Take a photo button -->
+    <div class="photo-strip" id="sf-photos" style="margin-top:8px"></div>
     <input type="file" id="sf-photo-input" class="hidden-file" accept="image/*">
     </div>
     </div>
@@ -655,10 +657,11 @@
       <button class="btn-small btn-secondary" id="btn-log-memo" type="button"><img class="bi" src="assets/icons/mic.png" alt="">Record memo</button>
     </div>
     <label class="field" for="btn-log-photo" style="margin-top:12px">Photos</label>
-    <div class="photo-strip" id="log-photos"></div>
     <div class="btn-row" style="margin-top:8px">
       <button class="btn-small btn-secondary" id="btn-log-photo" type="button"><img class="bi" src="assets/icons/camera.png" alt="">Add photo</button>
     </div>
+    <!-- Q179: photos below the Add photo button -->
+    <div class="photo-strip" id="log-photos" style="margin-top:8px"></div>
     <input type="file" id="log-photo-input" class="hidden-file" accept="image/*">
     </div>
     </div>
