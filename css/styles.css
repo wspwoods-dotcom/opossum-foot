@@ -930,16 +930,22 @@ body.placing .leaflet-control-layers { pointer-events: none; opacity: .45; }
 #exp-filters-clear { width: 100%; margin: 4px 0; }
 #exp-dim-filters .dim-label { font-size: 13px; font-weight: 700; color: var(--muted); margin: 12px 0 2px; text-align: center; }
 #exp-dim-filters .btn-row > div { min-width: 0; }
-/* Q173 (2026-10-08): report filters consolidated into collapsible rows — one
-   tidy row per dimension, chips hidden until tapped. Scales as products grow. */
-#exp-dim-filters .dim-group { border-bottom: 1px solid var(--line); }
-#exp-dim-filters .dim-head { display: flex; align-items: center; gap: 10px; width: 100%;
-  background: none; border: none; padding: 12px 2px; cursor: pointer; text-align: left; }
-#exp-dim-filters .dim-head .dim-label { margin: 0; flex: 0 0 auto; }
-#exp-dim-filters .dim-summary { flex: 1; font-size: 14px; color: var(--ink);
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: right; }
-#exp-dim-filters .dim-group.open .setsec-chev { transform: rotate(90deg); }
-#exp-dim-filters .dim-body .chip-row { justify-content: flex-start; flex-wrap: wrap; overflow-x: visible; }
+/* Q174 (2026-10-08): multi-select dropdown buttons — look like the app's other
+   dropdowns at rest; tap to open the checklist sheet. */
+.ms-select { display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  width: 100%; min-height: var(--tap); background: #10140c; color: var(--ink);
+  border: 1px solid var(--line); border-radius: var(--radius);
+  font-family: inherit; font-size: 17px; padding: 12px 14px; cursor: pointer; text-align: left; }
+.ms-select .ms-value { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ms-select .ms-chev { color: var(--muted); font-size: 20px; line-height: 1; flex: 0 0 auto; }
+.ms-row { display: flex; align-items: center; gap: 12px; width: 100%;
+  background: none; border: none; border-bottom: 1px solid var(--line);
+  color: var(--ink); font-size: 17px; padding: 14px 4px; cursor: pointer; text-align: left; }
+.ms-check { flex: 0 0 28px; height: 28px; border: 1px solid var(--line); border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--accent-ink); font-size: 18px; font-weight: 700; }
+.ms-row.on .ms-check { background: var(--accent); border-color: var(--accent); }
+.ms-row.on { font-weight: 600; }
 
 /* ---- demo mode phone framing (build am, ?demo=1 only) ---- */
 body.demo-shot { background: #05070a; }
