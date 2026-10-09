@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-10-08dm';
+var APP_VERSION = 'beta 0.1 · build 2026-10-08dn';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -4619,7 +4619,9 @@ function renderScorecardTab() {
     html += '<div class="empty"><div class="big">🎯</div>No catches logged' +
       (u.season === 'all' ? ' yet.' : ' for this filter yet.') + '<br>Log a catch and the scorecard fills in.</div>';
   } else {
-    html += data.rows.map(function (g) {
+    var seasonShort = u.season === 'this' ? 'This Season' : (u.season === 'last' ? 'Last Season' : 'All-Time');
+    html += '<div class="sc-results"><div class="sc-results-head"><span>' + nounCap + ' · ' + seasonShort + '</span></div>' +
+    data.rows.map(function (g) {
       var sp = sponsorForProduct(g.name);
       var chip = (sp && sp.brandLogo)
         ? '<button type="button" class="sc-chip" data-sp="' + esc(sp.id) + '" aria-label="About ' + esc(sp.name) + '">' +
@@ -4628,14 +4630,14 @@ function renderScorecardTab() {
       return '<div class="sc-row">' + chip + '<span class="sc-name">' + esc(g.name) + '</span>' +
         '<span class="dim">' + g.nsets + ' set' + (g.nsets === 1 ? '' : 's') + '</span>' +
         '<span class="sc-rate"><strong>' + g.catches + '</strong> caught</span></div>';
-    }).join('');
+    }).join('') + '</div>';
     html += '<p class="dim" style="margin-top:8px">A catch credits every ' + phrase + ' on the set — totals can exceed the catch count.</p>';
   }
   /* unspecified bucket: below the rankings, never competing in them */
   if (data.unspec.catches) {
-    html += '<div class="card" style="margin-top:12px"><h3>Unspecified ' + nounCap + '</h3>' +
-      '<p class="dim">' + data.unspec.catches + ' caught across ' + data.unspec.nsets + ' set' + (data.unspec.nsets === 1 ? '' : 's') +
-      ' with no ' + phrase + ' recorded. Fill in the ' + phrase + ' on those sets and apply it to past catches to move them into the rankings.</p></div>';
+    html += '<div class="warnbox green"><div class="wb-title">Unspecified ' + nounCap + '</div>' +
+      data.unspec.catches + ' caught across ' + data.unspec.nsets + ' set' + (data.unspec.nsets === 1 ? '' : 's') +
+      ' with no ' + phrase + ' recorded. Fill in the ' + phrase + ' on those sets and apply it to past catches to move them into the rankings.</div>';
   }
   /* head-to-head */
   var h2h = '';
