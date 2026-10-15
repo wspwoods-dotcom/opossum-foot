@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-10-08dy';
+var APP_VERSION = 'beta 0.1 · build 2026-10-14dz';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -94,7 +94,11 @@ var Store = {
     });
     normalizeLandowners(this.data); /* Q52: landowner notebook records */
     normalizeHome(this.data); /* Q53: home ground */
-    if (typeof this.data.weatherOn !== 'boolean') this.data.weatherOn = false;
+    /* Q183 (2026-10-14): weather defaults ON for a fresh install — the
+       Surface's blank copy surprised Tanner with the chip missing. This
+       fill only fires when the key is absent, so existing installs keep
+       whatever they chose. */
+    if (typeof this.data.weatherOn !== 'boolean') this.data.weatherOn = true;
     if (typeof this.data.voiceOn !== 'boolean') this.data.voiceOn = true;
     if (typeof this.data.windArrowsOn !== 'boolean') this.data.windArrowsOn = true; /* Q17: on by default */
     /* Q68: trap check clock — hours between required checks, default 24. */
@@ -174,6 +178,11 @@ function migrateLines(d) {
         if (typeof ln.tabs[k] !== 'boolean') ln.tabs[k] = true;
       });
     }
+    /* Q182: per-line catch-log alerts. Default on — the reminders have
+       always been on for everyone; a line only goes quiet when its
+       owner turns them off for that line. Old backups lack the flag
+       and land here, so they keep the old behavior. */
+    if (typeof ln.catchAlerts !== 'boolean') ln.catchAlerts = true;
   });
   var firstId = d.lines[0].id;
   if (!lineById(d, d.activeLineId)) d.activeLineId = firstId;
@@ -256,7 +265,7 @@ function seedDemoStore() {
     L('l-demo-06', 's-demo-10', 'Striped skunk', 1, 'kept-alive', '2026-11-21', 'For essence collection.')
   ];
   Store.data = {
-    onboarded: true, state: 'IA', weatherOn: false, voiceOn: true,
+    onboarded: true, state: 'IA', weatherOn: true, voiceOn: true,
     setFields: { traptype: true, settype: true, bait: true, lure: true, urine: true, visual: true, audio: true, other: true, notes: true },
     lines: [{ id: 'line-1', name: 'Line 1', state: 'IA' }],
     activeLineId: 'line-1',
@@ -1125,6 +1134,22 @@ function renderTabToggles() {
     var cb = $('settings-tab-' + k);
     if (cb) cb.checked = t[k];
   });
+}
+/* Q182: the active line's catch-alerts switch. A line normalized before
+   this build has no flag — missing reads as on (the old behavior). */
+function lineCatchAlerts() {
+  var l = activeLine();
+  return !l || l.catchAlerts !== false;
+}
+/* Q182: syncs the Settings Catch alerts switch to the active line.
+   Called from the same places as renderTabToggles so a line switch
+   re-binds it to the new line. */
+function renderCatchAlertsToggle() {
+  var l = activeLine();
+  var cb = $('settings-catchalerts');
+  if (cb) cb.checked = lineCatchAlerts();
+  var nameEl = $('catchalerts-line-name');
+  if (nameEl) nameEl.textContent = l ? l.name : '';
 }
 /* ---- feature toggles ---- */
 function applyFeatureToggles() {
@@ -3520,6 +3545,10 @@ function countyRuleText(sp) {
 function renderLogWarnings() {
   var box = $('log-warnings');
   box.innerHTML = '';
+  /* Q182: the active line can quiet these catch-log reminders. Only the
+     pop-up boxes are gated — the season badges on the animal list are
+     information and stay visible for everybody, always. */
+  if (!lineCatchAlerts()) return;
   if (logEventType === 'other') return; /* bag limits don't apply to Other events */
   if (!logSpecies) return;
   var sp = findSpecies(logSpecies);
@@ -5796,6 +5825,94 @@ function pinNearSet(pin, s) {
 function validPinCoord(lat, lng) {
   return isFinite(lat) && isFinite(lng) && lat >= -90 && lat <= 90 && lng >= -180 && lng <= 180;
 }
+/* Q185: coordinates hiding inside a Google Maps URL. Tries, in order:
+   the !3d<lat>!4d<lng> pair in place URLs, ?q=<lat>,<lng> (or &q=),
+   the /@<lat>,<lng> viewport center, and ll=<lat>,<lng>. A 0,0 pair is
+   Google's "no location" placeholder and never counts as a hit. */
+function coordsFromMapsUrl(url) {
+  if (!url) return null;
+  var s = String(url), m;
+  function take(latS, lngS) {
+    var lat = parseFloat(latS), lng = parseFloat(lngS);
+    if (!validPinCoord(lat, lng)) return null;
+    if (lat === 0 && lng === 0) return null;
+    return { lat: lat, lng: lng };
+  }
+  var hit = null;
+  m = /!3d(-?\d+(?:\.\d+)?)!4d(-?\d+(?:\.\d+)?)/.exec(s);
+  if (m) hit = take(m[1], m[2]);
+  if (!hit) { m = /[?&]q=(-?\d+(?:\.\d+)?),\s*(-?\d+(?:\.\d+)?)/.exec(s); if (m) hit = take(m[1], m[2]); }
+  if (!hit) { m = /@(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)/.exec(s); if (m) hit = take(m[1], m[2]); }
+  if (!hit) { m = /[?&]ll=(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)/.exec(s); if (m) hit = take(m[1], m[2]); }
+  return hit;
+}
+function isShortMapsLink(url) {
+  return /(maps\.app\.goo\.gl|goo\.gl)\//i.test(String(url || ''));
+}
+/* Q185: short Maps links hide the location behind a redirect. Follow it
+   (needs a connection) and read the coordinates off the final URL. */
+function resolveMapsLink(url) {
+  if (typeof fetch !== 'function') return Promise.resolve(null);
+  return fetch(url, { redirect: 'follow' }).then(function (res) {
+    return coordsFromMapsUrl(res && res.url ? res.url : url);
+  }).catch(function () { return null; });
+}
+/* The place name riding in a /place/<name>/ Maps URL, when there is one. */
+function placeNameFromMapsUrl(url) {
+  var m = /\/place\/([^/]+)/.exec(String(url || ''));
+  if (!m) return '';
+  var raw = m[1].replace(/\+/g, ' ');
+  try { return decodeURIComponent(raw).trim(); } catch (e) { return raw.trim(); }
+}
+/* Q185: KMZ is a zip archive holding one KML file. Minimal reader — no
+   libraries: stored entries pass straight through, deflate entries
+   inflate through the browser's built-in DecompressionStream. Returns
+   a Promise of the KML text, or null when no readable KML is inside. */
+function kmzToKmlText(buf) {
+  try {
+    var bytes = new Uint8Array(buf);
+    var view = new DataView(buf);
+    /* End Of Central Directory record: scan the tail for its signature. */
+    var eocd = -1, minPos = Math.max(0, bytes.length - 65558);
+    for (var i = bytes.length - 22; i >= minPos; i--) {
+      if (view.getUint32(i, true) === 0x06054b50) { eocd = i; break; }
+    }
+    if (eocd < 0) return Promise.resolve(null);
+    var count = view.getUint16(eocd + 10, true);
+    var off = view.getUint32(eocd + 16, true);
+    var decoder = new TextDecoder();
+    var target = null, fallback = null;
+    for (var n = 0; n < count; n++) {
+      if (view.getUint32(off, true) !== 0x02014b50) break;
+      var nameLen = view.getUint16(off + 28, true);
+      var extraLen = view.getUint16(off + 30, true);
+      var commentLen = view.getUint16(off + 32, true);
+      var name = decoder.decode(bytes.subarray(off + 46, off + 46 + nameLen));
+      if (/\.kml$/i.test(name)) {
+        var entry = {
+          method: view.getUint16(off + 10, true),
+          compSize: view.getUint32(off + 20, true),
+          localOff: view.getUint32(off + 42, true)
+        };
+        if (/doc\.kml$/i.test(name)) { target = entry; break; }
+        if (!fallback) fallback = entry;
+      }
+      off += 46 + nameLen + extraLen + commentLen;
+    }
+    var pick = target || fallback;
+    if (!pick) return Promise.resolve(null);
+    var lo = pick.localOff;
+    if (view.getUint32(lo, true) !== 0x04034b50) return Promise.resolve(null);
+    var start = lo + 30 + view.getUint16(lo + 26, true) + view.getUint16(lo + 28, true);
+    var comp = bytes.subarray(start, start + pick.compSize);
+    if (pick.method === 0) return Promise.resolve(decoder.decode(comp));
+    if (pick.method === 8 && typeof DecompressionStream !== 'undefined' && typeof Blob !== 'undefined') {
+      var stream = new Blob([comp]).stream().pipeThrough(new DecompressionStream('deflate-raw'));
+      return new Response(stream).text().catch(function () { return null; });
+    }
+    return Promise.resolve(null);
+  } catch (e) { return Promise.resolve(null); }
+}
 /* KML: one pin per <Placemark>. Name from <name> (CDATA-safe), coordinates
    from the first <coordinates> tuple (lon,lat[,alt] — KML order). Placemarks
    without a parseable point are skipped. */
@@ -5821,23 +5938,110 @@ function parseKmlPins(text) {
 }
 /* GeoJSON: Point features only. Name from properties.name, then Name, then
    title (Takeout and My Maps vary). FeatureCollections and single Features
-   both accepted. */
+   both accepted. The returned array carries a .noLoc list — the names of
+   Point features that had no usable location, so the import summary can
+   name them instead of dropping them silently. */
 function parseGeoJsonPins(text) {
   var data = JSON.parse(text);
   var feats = Array.isArray(data.features) ? data.features
     : (data && data.type === 'Feature' ? [data] : []);
-  var pins = [];
+  var pins = [], noLoc = [];
   feats.forEach(function (f) {
     if (!f || !f.geometry || f.geometry.type !== 'Point') return;
-    var c = f.geometry.coordinates;
-    if (!c || c.length < 2) return;
-    var lng = +c[0], lat = +c[1];
-    if (!validPinCoord(lat, lng)) return;
     var p = f.properties || {};
     var name = p.name != null ? p.name : (p.Name != null ? p.Name : (p.title != null ? p.title : ''));
-    pins.push({ name: String(name).trim(), lat: lat, lng: lng });
+    name = String(name).trim();
+    var c = f.geometry.coordinates;
+    var lng = (c && c.length >= 2) ? +c[0] : NaN;
+    var lat = (c && c.length >= 2) ? +c[1] : NaN;
+    if (validPinCoord(lat, lng) && !(lat === 0 && lng === 0)) {
+      pins.push({ name: name, lat: lat, lng: lng });
+      return;
+    }
+    /* Q184: Google sometimes exports a saved place with coordinates
+       [0,0] — its "no location available" placeholder — while the real
+       spot rides along in the google_maps_url property. Rescue it from
+       there; never plant a set in the ocean at 0,0. */
+    var rescued = coordsFromMapsUrl(p.google_maps_url || '');
+    if (rescued) { pins.push({ name: name, lat: rescued.lat, lng: rescued.lng }); return; }
+    noLoc.push(name || 'Unnamed place');
   });
+  pins.noLoc = noLoc;
   return pins;
+}
+/* Q185: Google Takeout "Saved" lists arrive as spreadsheets (CSV) —
+   Title, Note, URL, Comment. Small quoted-field CSV reader; enough for
+   what Google writes. */
+function parseCsvTable(text) {
+  var rows = [], row = [], field = '', inQ = false;
+  var s = String(text || '').replace(/^\uFEFF/, '');
+  for (var i = 0; i < s.length; i++) {
+    var c = s[i];
+    if (inQ) {
+      if (c === '"') {
+        if (s[i + 1] === '"') { field += '"'; i++; }
+        else inQ = false;
+      } else field += c;
+    } else if (c === '"') { inQ = true; }
+    else if (c === ',') { row.push(field); field = ''; }
+    else if (c === '\n' || c === '\r') {
+      if (c === '\r' && s[i + 1] === '\n') i++;
+      row.push(field); field = ''; rows.push(row); row = [];
+    } else field += c;
+  }
+  if (field.length || row.length) { row.push(field); rows.push(row); }
+  return rows;
+}
+/* Splits a Saved-list CSV into: pins (coordinates read straight out of
+   the row's URL), jobs (short links that still need resolving online),
+   and noLoc (rows with no location to give, kept by name). */
+function savedCsvJobs(text) {
+  var rows = parseCsvTable(text);
+  var out = { pins: [], jobs: [], noLoc: [] };
+  if (!rows.length) return out;
+  var head = rows[0].map(function (h) { return String(h).trim().toLowerCase(); });
+  var ti = head.indexOf('title'), ui = head.indexOf('url');
+  if (ui === -1) return out;
+  for (var r = 1; r < rows.length; r++) {
+    var row = rows[r];
+    var name = ti >= 0 ? String(row[ti] || '').trim() : '';
+    var url = String(row[ui] || '').trim();
+    if (!url) { if (name) out.noLoc.push(name); continue; }
+    var hit = coordsFromMapsUrl(url);
+    if (hit) { out.pins.push({ name: name, lat: hit.lat, lng: hit.lng }); continue; }
+    if (isShortMapsLink(url)) { out.jobs.push({ name: name, url: url }); continue; }
+    out.noLoc.push(name || placeNameFromMapsUrl(url) || 'Unnamed place');
+  }
+  return out;
+}
+function importSavedCsvText(text) {
+  var parsed;
+  try { parsed = savedCsvJobs(text); }
+  catch (e) { toast('Could not read that pin file.'); return; }
+  var pins = parsed.pins, noLoc = parsed.noLoc.slice();
+  if (!parsed.jobs.length) { finishPinParse(pins, noLoc); return; }
+  toast('Looking up ' + parsed.jobs.length + ' pin link' + (parsed.jobs.length === 1 ? '' : 's') + '…');
+  Promise.all(parsed.jobs.map(function (j) {
+    return resolveMapsLink(j.url).then(function (coords) {
+      if (coords) pins.push({ name: j.name, lat: coords.lat, lng: coords.lng });
+      else noLoc.push(j.name || 'Unnamed place');
+    });
+  })).then(function () { finishPinParse(pins, noLoc); });
+}
+/* Shared landing for every pin-file parse: import what was placed, and
+   say plainly — by name — what had no location to give. */
+function finishPinParse(pins, noLoc) {
+  pins = pins || []; noLoc = noLoc || [];
+  if (!pins.length) {
+    if (noLoc.length) {
+      toast('No pins could be placed from that file — Google left the location out of ' +
+        noLoc.length + ': ' + noLoc.slice(0, 3).join(', ') + (noLoc.length > 3 ? '…' : '') + '.');
+    } else {
+      toast('No pins found in that file.');
+    }
+    return;
+  }
+  runPinImport(pins, noLoc);
 }
 /* Pick the parser by file extension; sniff the content when the extension
    is unfamiliar (.json from Takeout is GeoJSON under the hood). */
@@ -5848,15 +6052,65 @@ function parsePinsFile(name, text) {
   return /^\s*\{/.test(text) ? parseGeoJsonPins(text) : parseKmlPins(text);
 }
 function importPinsFile(file) {
+  var lower = String((file && file.name) || '').toLowerCase();
+  /* Q185: KMZ is binary — read it as bytes and unzip in the browser. */
+  if (/\.kmz$/i.test(lower) && file.arrayBuffer) {
+    file.arrayBuffer().then(function (buf) { return kmzToKmlText(buf); }).then(function (kml) {
+      if (!kml) { toast('Could not read that pin file.'); return; }
+      var pins;
+      try { pins = parseKmlPins(kml); }
+      catch (e) { toast('Could not read that pin file.'); return; }
+      finishPinParse(pins, []);
+    }).catch(function () { toast('Could not read that pin file.'); });
+    return;
+  }
   var reader = new FileReader();
   reader.onload = function () {
+    var text = String(reader.result);
+    /* Q185: Takeout "Saved" lists are CSV spreadsheets, by extension or
+       by their unmistakable header row. */
+    if (/\.csv$/i.test(lower) || /^title,note,url/i.test(text.replace(/^\s+/, ''))) {
+      importSavedCsvText(text);
+      return;
+    }
     var pins;
-    try { pins = parsePinsFile(file.name, String(reader.result)); }
+    try { pins = parsePinsFile(file.name, text); }
     catch (e) { toast('Could not read that pin file.'); return; }
-    if (!pins || !pins.length) { toast('No pins found in that file.'); return; }
-    runPinImport(pins);
+    finishPinParse(pins, (pins && pins.noLoc) || []);
   };
   reader.readAsText(file);
+}
+/* Q185: paste-a-link — one pin from a Google Maps share link. In Maps:
+   Share → Copy link, paste it here. Same set-creation path and the same
+   duplicate check as a file import. */
+function importPinFromLink() {
+  showModal(
+    '<h3>Paste a Maps link</h3>' +
+    '<p>In Google Maps, open the place or dropped pin, tap <strong>Share</strong>, copy the link, and paste it here.</p>' +
+    '<input type="text" id="m-pinlink" placeholder="https://maps.app.goo.gl/…" autocomplete="off" style="width:100%;margin:8px 0">' +
+    '<div class="btn-row"><button class="btn-secondary" id="m-pinlink-cancel" type="button">Cancel</button>' +
+    '<button class="btn-primary" id="m-pinlink-go" type="button">Add pin</button></div>'
+  );
+  var inp = $('m-pinlink');
+  $('m-pinlink-cancel').onclick = closeModal;
+  $('m-pinlink-go').onclick = function () {
+    var url = (inp.value || '').trim();
+    if (!url) { toast('Paste the link first.'); return; }
+    function done(coords) {
+      if (!coords) { toast('Could not find a location in that link.'); return; }
+      closeModal();
+      runPinImport([{ name: placeNameFromMapsUrl(url), lat: coords.lat, lng: coords.lng }], []);
+    }
+    var hit = coordsFromMapsUrl(url);
+    if (hit) { done(hit); return; }
+    if (isShortMapsLink(url)) {
+      toast('Looking up that link…');
+      resolveMapsLink(url).then(done);
+      return;
+    }
+    toast('Could not find a location in that link.');
+  };
+  setTimeout(function () { try { inp.focus(); } catch (e) { /* noop */ } }, 150);
 }
 /* One set per pin on the active line. Trap type, set type, and every
    attractant list land "unspecified" ('' / []) so the Q5 scorecard buckets
@@ -5901,7 +6155,7 @@ function askPinDuplicate(pin, set, cb) {
   $('m-pin-merge').onclick = function () { closeModal(); cb('merge'); };
   $('m-pin-delete').onclick = function () { closeModal(); cb('delete'); };
 }
-function runPinImport(pins) {
+function runPinImport(pins, noLoc) {
   var lineId = activeLineId();
   if (!lineId) { toast('Add a trap line first.'); return; }
   var existing = activeSets().slice();
@@ -5909,7 +6163,14 @@ function runPinImport(pins) {
   var i = 0;
   function finish() {
     Store.save(); refreshMarkers(); renderHistory(); renderTotals();
-    toast('Pin import: ' + counts.imported + ' imported, ' + counts.skipped + ' skipped, ' + counts.merged + ' merged, ' + counts.deleted + ' deleted.');
+    var msg = 'Pin import: ' + counts.imported + ' imported, ' + counts.skipped + ' skipped, ' + counts.merged + ' merged, ' + counts.deleted + ' deleted.';
+    /* Q185: places Google left location-less are reported by name in
+       the same breath — never silently dropped. */
+    if (noLoc && noLoc.length) {
+      msg += ' ' + noLoc.length + ' had no location in the file: ' +
+        noLoc.slice(0, 3).join(', ') + (noLoc.length > 3 ? '…' : '') + '.';
+    }
+    toast(msg);
   }
   function next() {
     if (i >= pins.length) { finish(); return; }
@@ -6119,6 +6380,7 @@ function refreshForLine() {
   buildStateSelect($('settings-state'), activeStateCode());
   renderSettingsLineName();
   renderTabToggles();
+  renderCatchAlertsToggle(); /* Q182 */
   applyFeatureToggles();
   renderLineBar();
   fitMapHome(); /* Q53: the new line's home wins, else its trapping state */
@@ -6539,6 +6801,21 @@ function enterMain() {
     };
   });
   renderTabToggles();
+  /* Q182: per-line catch alerts — the Settings switch writes to the
+     active line, like the tab toggles above it. */
+  var caBox = $('settings-catchalerts');
+  if (caBox) {
+    caBox.onchange = function () {
+      var l = activeLine();
+      if (!l) return;
+      l.catchAlerts = this.checked;
+      Store.save();
+      toast(this.checked
+        ? 'Catch alerts are on for ' + l.name + '.'
+        : 'Catch alerts are off for ' + l.name + ' — the season badges still show.');
+    };
+  }
+  renderCatchAlertsToggle();
   var sfKeys = ['traptype', 'trapdetail', 'settype', 'bait', 'lure', 'urine', 'visual', 'audio', 'other', 'notes'];
   sfKeys.forEach(function (key) {
     var cb = $('settings-sf-' + key);
@@ -6589,14 +6866,14 @@ function buildGuideTOC() {
     confirmModal('Reset features to defaults?',
       'This puts all the feature toggles back to their defaults. It will not delete any of your sets, catches, lines, photos, or memos — and you can tap everything back on again afterwards.',
       'Reset', function () {
-    Store.data.weatherOn = false; Store.data.voiceOn = true; Store.data.windArrowsOn = true; /* Q17 */
+    Store.data.weatherOn = true; Store.data.voiceOn = true; Store.data.windArrowsOn = true; /* Q17; Q183: reset restores the fresh-install default (weather on) */
     Store.data.mileageOn = true; /* Q8 */
     /* Q14/Q62: tab reset is per-line — restores all five toggleable tabs on the active line. */
     var l = activeLine();
     if (l) l.tabs = { history: true, scorecard: true, seasons: true, licenses: true, totals: true };
     Store.data.setFields = { traptype: true, trapdetail: true, settype: true, bait: true, lure: true, urine: true, visual: true, audio: true, other: true, notes: true };
     Store.save();
-    $('settings-weather').checked = false; $('settings-voice').checked = true; $('settings-windarrows').checked = true;
+    $('settings-weather').checked = true; $('settings-voice').checked = true; $('settings-windarrows').checked = true;
     var mcb = $('settings-mileage'); if (mcb) mcb.checked = true;
     renderTabToggles();
     sfKeys.forEach(function (key) { var cb = $('settings-sf-' + key); if (cb) cb.checked = true; });
@@ -7568,6 +7845,7 @@ function wireUp() {
     if (this.files && this.files[0]) importPinsFile(this.files[0]);
     this.value = '';
   };
+  $('btn-paste-pin').onclick = importPinFromLink; /* Q185 */
   $('btn-erase').onclick = eraseAll;
   wirePurge(); /* Q82 */
 
