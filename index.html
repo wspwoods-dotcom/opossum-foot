@@ -200,8 +200,10 @@
           <p class="imp-cap">Reads back an Opossum Foot backup file (.json) from this phone.</p>
           <input type="file" id="import-file" class="hidden-file" accept=".json,application/json">
           <button class="btn-secondary" id="btn-import-pins" type="button"><img class="bi" src="assets/icons/mappin.png" alt="">Import pins from Google Maps</button>
-          <p class="imp-cap">Reads pin files (.kml / .geojson) from Google Maps, My Maps, or Google Takeout.</p>
-          <input type="file" id="import-pins-file" class="hidden-file" accept=".kml,.geojson,.json,application/vnd.google-earth.kml+xml,application/geo+json">
+          <p class="imp-cap">Reads pin files from Google Maps, My Maps, or Google Takeout — map files (.kml / .kmz), place files (.geojson / .json), and saved-list spreadsheets (.csv).</p>
+          <input type="file" id="import-pins-file" class="hidden-file" accept=".kml,.kmz,.geojson,.json,.csv,application/vnd.google-earth.kml+xml,application/vnd.google-earth.kmz,application/geo+json,text/csv">
+          <button class="btn-secondary" id="btn-paste-pin" type="button"><img class="bi" src="assets/icons/mappin.png" alt="">Paste a Maps link</button>
+          <p class="imp-cap">One pin at a time: in Google Maps tap Share, copy the link, and paste it here.</p>
         </div>
       </div>
       <div class="card">
@@ -254,6 +256,11 @@
           <input type="number" id="settings-checkinterval" min="1" step="1" inputmode="numeric" placeholder="24">
           <p class="dim" style="margin-top:8px">Sets past this long without any activity turn red on the map. Any edit, catch, or check-in restarts the clock. The quick &ldquo;Checked &mdash; nothing changed&rdquo; button only restarts the clock &mdash; it saves nothing to History. Turn alerts off to hide the red pins and countdowns.</p>
         </div>
+        <!-- Q182 (2026-10-14): per-line catch alerts — lives beside the trap
+             check alerts because it is the same kind of switch, but it writes
+             to the active trap line, not the whole app. -->
+        <label class="checkline"><input type="checkbox" id="settings-catchalerts"> Catch alerts</label>
+        <p class="dim" style="margin:-6px 0 10px">Season and bag-limit reminders while you log a catch — for the active trap line only (<strong id="catchalerts-line-name"></strong>). Turn it off on a line where you know the rules cold. The season badges on the animal list stay either way; they're just information.</p>
         <label class="checkline"><input type="checkbox" id="settings-weather"> Weather (map chip + auto-record)</label>
         <p class="dim" style="margin:-6px 0 10px">Map chip with current conditions and the next 12 hours; weather auto-attaches to new sets and catches. Sends coordinates to Open-Meteo, a free weather service — needs a connection.</p>
         <label class="checkline"><input type="checkbox" id="settings-windarrows"> Wind arrows on set pins</label>
