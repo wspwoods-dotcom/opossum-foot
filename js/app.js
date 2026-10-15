@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-10-14dz';
+var APP_VERSION = 'beta 0.1 · build 2026-10-14ea';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -5827,8 +5827,11 @@ function validPinCoord(lat, lng) {
 }
 /* Q185: coordinates hiding inside a Google Maps URL. Tries, in order:
    the !3d<lat>!4d<lng> pair in place URLs, ?q=<lat>,<lng> (or &q=),
-   the /@<lat>,<lng> viewport center, and ll=<lat>,<lng>. A 0,0 pair is
-   Google's "no location" placeholder and never counts as a hit. */
+   the /@<lat>,<lng> viewport center, and ll=<lat>,<lng>. Then (ea):
+   a bare "<lat>,<lng>" path segment — Google's Saved-list CSV writes
+   dropped pins as …/search/<lat>,<lng> — and the ?api=1&query=
+   parameter of share links. A 0,0 pair is Google's "no location"
+   placeholder and never counts as a hit. */
 function coordsFromMapsUrl(url) {
   if (!url) return null;
   var s = String(url), m;
@@ -5844,6 +5847,15 @@ function coordsFromMapsUrl(url) {
   if (!hit) { m = /[?&]q=(-?\d+(?:\.\d+)?),\s*(-?\d+(?:\.\d+)?)/.exec(s); if (m) hit = take(m[1], m[2]); }
   if (!hit) { m = /@(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)/.exec(s); if (m) hit = take(m[1], m[2]); }
   if (!hit) { m = /[?&]ll=(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)/.exec(s); if (m) hit = take(m[1], m[2]); }
+  if (!hit) {
+    /* Path portion only (query/fragment stripped): a segment that is
+       exactly "<lat>,<lng>", e.g. /search/41.9647303,-94.2002662 —
+       also covers /place/ and /dir/ style tails. */
+    var pathOnly = s.replace(/^[a-z][a-z0-9+.-]*:\/\/[^/?#]*/i, '').split(/[?#]/)[0];
+    m = /(?:^|\/)(-?\d{1,3}\.\d+),(-?\d{1,3}\.\d+)(?:\/|$)/.exec(pathOnly);
+    if (m) hit = take(m[1], m[2]);
+  }
+  if (!hit) { m = /[?&]query=(-?\d+(?:\.\d+)?),\s*(-?\d+(?:\.\d+)?)/.exec(s); if (m) hit = take(m[1], m[2]); }
   return hit;
 }
 function isShortMapsLink(url) {
