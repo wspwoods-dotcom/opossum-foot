@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-10-14ea';
+var APP_VERSION = 'beta 0.1 · build 2026-10-18eb';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -2033,17 +2033,28 @@ function initMap() {
   wxCtl.onAdd = function () { return $('weather-chip'); };
   wxCtl.addTo(map);
   markersLayer = L.layerGroup().addTo(map);
+  if (window.Markers) Markers.attach(map);
+  if (window.Tracking) Tracking.attach(map);
 
   map.on('click', function (e) {
     if (homePickMode && homeMapLive) {
       placeHomePin(e.latlng);
     } else if (dropPinMode) {
       startPlacePin(e.latlng);
+    } else if (window.Markers) {
+      Markers.onMapClick(e);
     }
   });
   map.on('zoomend', function () { refreshMarkers(); }); /* Q17: wind arrows are zoom-gated */
   refreshMarkers();
-  fitMapHome(); /* Q53: home ground wins on launch, else trapping state */
+  /* Q188 (2026-10-18): reopen where you left off — the last map view wins
+     on launch. Fresh installs (no saved view) keep the Q53 behavior:
+     home ground, else the trapping state. No auto-GPS-locate on open. */
+  if (!restoreLastView()) fitMapHome();
+  map.on('moveend', function () {
+    if (saveViewTimer) clearTimeout(saveViewTimer);
+    saveViewTimer = setTimeout(saveLastView, 700);
+  });
   if (DEMO_ACTIVE) {
     /* frame the fictional trapline and blur the tiles for screenshots */
     map.fitBounds([[41.700, -95.400], [41.740, -95.360]], { padding: [30, 30] });
@@ -2236,6 +2247,23 @@ function normalizeHome(d) {
     if (i === 0 && gAsked) ln.homeAsked = true;
   });
 }
+/* Q188: persist + restore the last map view. */
+var saveViewTimer = null;
+function saveLastView() {
+  if (!map || !Store.data) return;
+  try {
+    var c = map.getCenter();
+    Store.data.lastView = { lat: Math.round(c.lat * 1e5) / 1e5, lng: Math.round(c.lng * 1e5) / 1e5, zoom: map.getZoom() };
+    Store.save();
+  } catch (e) { /* a half-built map must never break saving */ }
+}
+function restoreLastView() {
+  var v = Store.data && Store.data.lastView;
+  if (!v || !isFinite(+v.lat) || !isFinite(+v.lng)) return false;
+  map.invalidateSize();
+  map.setView([+v.lat, +v.lng], isFinite(+v.zoom) ? +v.zoom : HOME_ZOOM);
+  return true;
+}
 function fitMapHome() {
   if (!map || typeof L === 'undefined') return;
   /* 2026-09-29 (B13): the home/place bars change the map container's height,
@@ -2300,6 +2328,55 @@ function homeZipJump() {
   if (map) map.setView([ll.lat, ll.lng], Math.min(map.getZoom(), 11));
   $('home-bar-prompt').textContent = 'Jumped to ' + z + ' — tap the map to drop your home pin, then drag it onto the exact spot.';
   toast('Jumped to ZIP ' + z + '.');
+}
+/* Q186 (2026-10-18): the home picker's third way in — type a US city.
+   Matches come from the bundled on-device city list (js/citydb.js,
+   GeoNames), largest first, shown with their state. Fully offline. */
+function cityMatches(q) {
+  q = (q || '').trim().toLowerCase();
+  if (q.length < 2 || typeof CITYDB === 'undefined') return [];
+  /* Rank: exact name first, then starts-with, then contains. Within a
+     tier, the user's own state comes first, then largest population
+     (CITYDB is pre-sorted by population) — a trapper typing "jefferson"
+     in Iowa means Jefferson, Iowa, not Jefferson City. */
+  var home = ((Store.data && Store.data.state) || '').toUpperCase();
+  var exact = [], starts = [], contains = [];
+  for (var i = 0; i < CITYDB.length; i++) {
+    var c = CITYDB[i], n = c[0].toLowerCase();
+    if (n === q) exact.push(c);
+    else if (n.indexOf(q) === 0) starts.push(c);
+    else if (n.indexOf(q) > 0) contains.push(c);
+  }
+  function stateFirst(arr) {
+    var a = [], b = [];
+    arr.forEach(function (c) { (c[1] === home ? a : b).push(c); });
+    return a.concat(b);
+  }
+  return stateFirst(exact).concat(stateFirst(starts), stateFirst(contains)).slice(0, 6);
+}
+function renderCityMatches() {
+  var inp = $('home-city'), host = $('home-city-matches');
+  if (!inp || !host) return;
+  var ms = cityMatches(inp.value);
+  if (!ms.length) { host.hidden = true; host.innerHTML = ''; return; }
+  host.innerHTML = ms.map(function (c, i) {
+    return '<button type="button" class="city-match" data-ci="' + i + '">' + esc(c[0]) + ', ' + esc(c[1]) + '</button>';
+  }).join('');
+  host.hidden = false;
+  var btns = host.querySelectorAll('.city-match');
+  for (var i = 0; i < btns.length; i++) {
+    btns[i].onclick = (function (c) {
+      return function () { homeCityJump(c); };
+    })(ms[i]);
+  }
+}
+function homeCityJump(c) {
+  if (!c || !map) return;
+  map.setView([c[2], c[3]], Math.min(Math.max(map.getZoom(), 11), 12));
+  var host = $('home-city-matches'); if (host) { host.hidden = true; host.innerHTML = ''; }
+  var inp = $('home-city'); if (inp) inp.value = c[0] + ', ' + c[1];
+  $('home-bar-prompt').textContent = 'Jumped to ' + c[0] + ', ' + c[1] + ' — tap the map to drop your home pin, then drag it onto the exact spot.';
+  toast('Jumped to ' + c[0] + ', ' + c[1] + '.');
 }
 function placeHomePin(latlng) {
   if (!map) return;
@@ -2441,6 +2518,7 @@ function stopFollow(silent) {
    stays on from this point. */
 function enterFollow() {
   hookFollowDrag();
+  setLocateSearching(false);
   locateState = 'following';
   var b = $('btn-locate');
   if (b) { b.classList.add('active-mode'); b.classList.remove('paused-mode'); }
@@ -2526,8 +2604,15 @@ function onFollowError(err) {
    early), throw away stale cached fixes, and settle on the most accurate
    fresh fix. Transient errors while the radio warms up are ignored; only a
    permission denial ends the attempt early. */
+/* Q187 (2026-10-18): acquiring must be VISIBLE — a pulsing crosshair and a
+   plain hint line — and every exit (fix, cancel, denial, timeout) clears it. */
+function setLocateSearching(on) {
+  var b = $('btn-locate'); if (b) b.classList.toggle('searching-mode', !!on);
+  var h = $('locate-hint'); if (h) h.classList.toggle('show', !!on);
+}
 function startAcquire() {
   locateState = 'acquiring';
+  setLocateSearching(true);
   var best = null, finished = false;
   /* Q70: acquire runs silent — the dot moves, no progress chatter.
      Denial and no-fix still speak up below. */
@@ -2549,6 +2634,7 @@ function startAcquire() {
     if (finished) return;
     finished = true;
     stopLocateWatch();
+    setLocateSearching(false);
     if (!best) { locateState = 'idle'; toast('No fresh GPS fix — move into open sky and try again.'); return; }
     drawFix(best, true);
     enterFollow(); /* one tap = acquire + follow, automatically */
@@ -2563,7 +2649,7 @@ function startAcquire() {
       /* transient iOS timeouts while the radio warms up are normal — keep
        * waiting; only a permission denial ends the attempt early. */
       if (err && err.code === 1 && !best && !finished) {
-        finished = true; stopLocateWatch(); locateState = 'idle';
+        finished = true; stopLocateWatch(); locateState = 'idle'; setLocateSearching(false);
         toast('Location permission denied. Allow it in Settings and try again.');
       }
     }, { enableHighAccuracy: true, timeout: 45000, maximumAge: 0 });
@@ -2597,7 +2683,7 @@ function locateMe() {
     return;
   }
   if (locateState === 'acquiring') {
-    stopLocateWatch(); locateState = 'idle'; toast('Cancelled.'); return;
+    stopLocateWatch(); locateState = 'idle'; setLocateSearching(false); toast('Location search cancelled.'); return;
   }
   if (lastFix && (Date.now() - (lastFix.at || 0) < 120000)) {
     centerOnFix();
@@ -2632,6 +2718,8 @@ function syncStatusSeg() {
   for (var i = 0; i < btns.length; i++) {
     btns[i].classList.toggle('selected', btns[i].getAttribute('data-st') === v);
   }
+  var hint = $('sf-prospect-hint');
+  if (hint) hint.hidden = v !== 'prospect'; /* Q189 */
 }
 /* Wire the status buttons once: tap sets the hidden sf-status value,
    highlights the button, refreshes the missing-reason row. */
@@ -4124,14 +4212,15 @@ function normCount(l) {
    (New/Edit set form, or the status control on the set-detail sheet at
    check time). Logging a catch or recording a Sprung event NEVER changes
    a set's status — no code path below may set s.status automatically. */
-var STATUS_VALUES = ['active', 'sprung', 'pulled', 'missing'];
-var STATUS_LABELS = { active: 'Active', sprung: 'Sprung', pulled: 'Pulled', missing: 'Missing' };
+var STATUS_VALUES = ['active', 'sprung', 'pulled', 'missing', 'prospect'];
+var STATUS_LABELS = { active: 'Active', sprung: 'Sprung', pulled: 'Pulled', missing: 'Missing', prospect: 'Prospect' };
 function statusLabel(v) { return STATUS_LABELS[normStatus(v)] || 'Missing'; }
 /* Map any saved status value onto the canonical four. Legacy/unknown
    values are never dropped — they land in the closest bucket. */
 function normStatus(v) {
   var s = (v === null || v === undefined) ? '' : String(v).toLowerCase().trim();
-  if (s === 'active' || s === 'sprung' || s === 'pulled' || s === 'missing') return s;
+  if (s === 'active' || s === 'sprung' || s === 'pulled' || s === 'missing' || s === 'prospect') return s;
+  if (s === 'scouted' || s === 'scouted spot' || s === 'staked') return 'prospect'; /* Q189 aliases */
   if (s === 'other') return 'missing'; /* 'Other' renamed to 'Missing' 2026-09-27 — same bucket */
   if (s === 'fresh') return 'active'; /* Fresh retired in build at — old Fresh sets read as Active */
   if (s === 'set' || s === 'live' || s === 'open' || s === 'working') return 'active';
@@ -4143,17 +4232,17 @@ function normStatus(v) {
 }
 /* Map-view status filters: independent multi-select toggles. Several can be
    on at once; a set shows when its current status is toggled on. */
-var mapStatusFilter = { active: true, sprung: true, pulled: true, missing: true };
+var mapStatusFilter = { active: true, sprung: true, pulled: true, missing: true, prospect: true };
 /* Q145 — pin color schemes (Lydia's ask, Tanner approved 2026-10-02).
    Earthy is the default. Every scheme keeps the same hue→status mapping
    (greenish=Active, goldish=Sprung, grayish=Pulled, blueish=Missing) so the
    status language survives. Colors live in CSS vars; JS only flips
    body[data-pinscheme] and persists the choice in Store.data (rides backup). */
 var PIN_SCHEMES = [
-  { id: 'earthy', name: 'Earthy', colors: { active:'#7fa650', sprung:'#d19a2f', pulled:'#7d7663', missing:'#5b8dd9' } },
-  { id: 'classic', name: 'Classic', colors: { active:'#4caf50', sprung:'#d19a2f', pulled:'#8a8a8a', missing:'#3b82f6' } },
-  { id: 'bold', name: 'Bold', colors: { active:'#2ecc40', sprung:'#f5a623', pulled:'#a8a8a8', missing:'#2f7bff' } },
-  { id: 'pastel', name: 'Pastel', colors: { active:'#a9d6a5', sprung:'#eacd7d', pulled:'#c9c9c9', missing:'#a9c6f2' } }
+  { id: 'earthy', name: 'Earthy', colors: { active:'#7fa650', sprung:'#d19a2f', pulled:'#7d7663', missing:'#5b8dd9', prospect:'#7a5fa0' } },
+  { id: 'classic', name: 'Classic', colors: { active:'#4caf50', sprung:'#d19a2f', pulled:'#8a8a8a', missing:'#3b82f6', prospect:'#7e57c2' } },
+  { id: 'bold', name: 'Bold', colors: { active:'#2ecc40', sprung:'#f5a623', pulled:'#a8a8a8', missing:'#2f7bff', prospect:'#9b59b6' } },
+  { id: 'pastel', name: 'Pastel', colors: { active:'#a9d6a5', sprung:'#eacd7d', pulled:'#c9c9c9', missing:'#a9c6f2', prospect:'#c3a6dd' } }
 ];
 function pinSchemeById(id) {
   for (var i = 0; i < PIN_SCHEMES.length; i++) if (PIN_SCHEMES[i].id === id) return PIN_SCHEMES[i];
@@ -4174,7 +4263,7 @@ function renderPinSchemeList() {
   if (!host) return;
   var cur = pinSchemeId();
   host.innerHTML = PIN_SCHEMES.map(function (s) {
-    var dots = ['active', 'sprung', 'pulled', 'missing'].map(function (k) {
+    var dots = ['active', 'sprung', 'pulled', 'missing', 'prospect'].map(function (k) {
       return '<i style="background:' + s.colors[k] + '"></i>';
     }).join('');
     return '<button type="button" class="scheme-row" data-scheme="' + s.id + '" aria-pressed="' + (s.id === cur) + '">' +
@@ -4186,29 +4275,124 @@ function renderPinSchemeList() {
     btns[i].onclick = function () { applyPinScheme(this.getAttribute('data-scheme')); };
   }
 }
-function renderMapStatusFilters() {
-  var host = $('map-status-filters');
-  if (!host) return;
-  host.innerHTML = STATUS_VALUES.map(function (v) {
-    return '<button type="button" class="chip mst-' + v + (mapStatusFilter[v] ? ' on' : '') +
-      '" data-mstatus="' + v + '" aria-pressed="' + (mapStatusFilter[v] ? 'true' : 'false') + '">' +
-      esc(STATUS_LABELS[v]) + '</button>';
+/* Q190/Show (2026-10-18, Tanner's design): the four status chips became ONE
+   "Show" button opening a checklist sheet ("Show on map"). The label names
+   what's on — "Show: All", the names themselves in their pin colors, or
+   "Show: N of 6" — and each sheet line carries its pin-color dot as the key.
+   The model persists in Store.data.mapShow; mapStatusFilter mirrors the set
+   statuses for the existing readers, and Markers reads the same model. */
+function showModel() {
+  var d = Store.data || {};
+  if (!d.mapShow) d.mapShow = {};
+  var m = d.mapShow;
+  STATUS_VALUES.forEach(function (k) { if (m[k] === undefined) m[k] = true; });
+  if (!m.fam) m.fam = {};
+  ['homes', 'ground', 'tree', 'feeding', 'scent', 'forage'].forEach(function (k) { if (m.fam[k] === undefined) m.fam[k] = true; });
+  STATUS_VALUES.forEach(function (k) { mapStatusFilter[k] = m[k] !== false; });
+  return m;
+}
+function saveShowModel() {
+  /* The model is the source of truth; showModel() syncs mapStatusFilter
+     from it. Writers set model values first, then call this. */
+  showModel();
+  Store.save();
+}
+function lighten(hex, amt) {
+  var n = parseInt(String(hex).replace('#', ''), 16);
+  if (isNaN(n)) return hex;
+  var r = (n >> 16) & 255, g = (n >> 8) & 255, b = n & 255;
+  r = Math.round(r + (255 - r) * amt); g = Math.round(g + (255 - g) * amt); b = Math.round(b + (255 - b) * amt);
+  return 'rgb(' + r + ',' + g + ',' + b + ')';
+}
+var SHOW_FAM_TINTS = { homes: '#c9a06a', ground: '#a8bf6f', tree: '#7fae5c', feeding: '#cf9455', scent: '#b48ec7', forage: '#e5c15c' };
+function showGroups() {
+  var m = showModel();
+  var groups = STATUS_VALUES.map(function (v) { return { key: v, label: STATUS_LABELS[v], on: m[v] !== false, color: pinSchemeById(pinSchemeId()).colors[v] }; });
+  var anyFam = ['homes', 'ground', 'tree', 'feeding', 'scent', 'forage'].some(function (k) { return m.fam[k] !== false; });
+  groups.push({ key: 'sign', label: 'Sign', on: anyFam, color: '#f0d28a' });
+  return groups;
+}
+function renderShowButton() {
+  var btn = $('btn-show'); if (!btn) return;
+  var groups = showGroups();
+  var on = groups.filter(function (g) { return g.on; });
+  var nameHtml = function (g) { return '<span style="color:' + lighten(g.color, 0.38) + '">' + esc(g.label) + '</span>'; };
+  if (on.length === groups.length) btn.innerHTML = 'Show: <span style="color:#f5efdd">All</span>';
+  else if (on.length === 0) btn.innerHTML = 'Show: <span style="color:#f5efdd">None</span>';
+  else if (on.length <= 3) btn.innerHTML = 'Show: ' + on.map(nameHtml).join(', ');
+  else btn.innerHTML = 'Show: ' + on.length + ' of ' + groups.length;
+}
+var showSignOpen = false;
+function renderShowList() {
+  var host = $('show-list'); if (!host) return;
+  var m = showModel();
+  var famCount = function (fam) {
+    if (!window.Markers || !window.SIGN_CATALOG) return '';
+    var n = 0;
+    if (fam === 'forage') n = FORAGE_CATALOG.length;
+    else SIGN_CATALOG.forEach(function (e) { if (e.fam === fam) n++; });
+    return ' <span class="show-count">' + n + ' kinds</span>';
+  };
+  var html = STATUS_VALUES.map(function (v) {
+    var c = pinSchemeById(pinSchemeId()).colors[v];
+    return '<label class="show-row"><span class="show-dot" style="background:' + c + '"></span>' +
+      '<span class="show-name">' + esc(STATUS_LABELS[v]) + '</span>' +
+      '<input type="checkbox" data-show-status="' + v + '"' + (m[v] !== false ? ' checked' : '') + '></label>';
   }).join('');
-  var btns = host.querySelectorAll('button[data-mstatus]');
-  for (var i = 0; i < btns.length; i++) {
-    btns[i].onclick = function () {
-      var v = this.getAttribute('data-mstatus');
-      mapStatusFilter[v] = !mapStatusFilter[v];
-      renderMapStatusFilters();
-      refreshMarkers();
-      /* Q168 (2026-10-07): Tanner — if the route is up while he toggles, the
-         route redraws live against the new filter instead of going stale. */
-      if (typeof routeShownFor !== 'undefined' && routeShownFor &&
-          typeof drawRouteEstimate === 'function') {
-        var rl = routeShownFor;
-        if (!drawRouteEstimate(rl)) toast('Not enough visible sets for a route.');
-      }
-    };
+  var famKeys = ['homes', 'ground', 'tree', 'feeding', 'scent', 'forage'];
+  var anyFam = famKeys.some(function (k) { return m.fam[k] !== false; });
+  html += '<div class="show-row show-sign-head"><span class="show-dot" style="background:#f0d28a"></span>' +
+    '<span class="show-name">Sign</span>' +
+    '<button type="button" class="show-expand" id="show-sign-toggle" aria-label="Show sign families">' + (showSignOpen ? '▾' : '▸') + '</button>' +
+    '<input type="checkbox" id="show-sign-all"' + (anyFam ? ' checked' : '') + '></div>';
+  if (showSignOpen) {
+    html += famKeys.map(function (k) {
+      var label = k === 'forage' ? 'Forage & finds' : Markers.famLabel[k];
+      return '<label class="show-row show-fam"><span class="show-dot" style="background:' + SHOW_FAM_TINTS[k] + '"></span>' +
+        '<span class="show-name">' + esc(label) + famCount(k) + '</span>' +
+        '<input type="checkbox" data-show-fam="' + k + '"' + (m.fam[k] !== false ? ' checked' : '') + '></label>';
+    }).join('');
+  }
+  host.innerHTML = html;
+  host.querySelectorAll('input[data-show-status]').forEach(function (cb) {
+    cb.addEventListener('change', function () {
+      showModel()[this.getAttribute('data-show-status')] = this.checked;
+      saveShowModel(); renderShowButton(); refreshMarkers(); afterShowToggle();
+    });
+  });
+  host.querySelectorAll('input[data-show-fam]').forEach(function (cb) {
+    cb.addEventListener('change', function () {
+      showModel().fam[this.getAttribute('data-show-fam')] = this.checked;
+      Store.save(); renderShowButton(); renderShowList();
+      if (window.Markers) Markers.render();
+    });
+  });
+  var all = $('show-sign-all');
+  if (all) all.addEventListener('change', function () {
+    var mm = showModel();
+    famKeys.forEach(function (k) { mm.fam[k] = all.checked; });
+    Store.save(); renderShowButton(); renderShowList();
+    if (window.Markers) Markers.render();
+  });
+  var tg = $('show-sign-toggle');
+  if (tg) tg.onclick = function () { showSignOpen = !showSignOpen; renderShowList(); };
+}
+function afterShowToggle() {
+  /* Q168 (2026-10-07): if the route is up while he toggles, it redraws live. */
+  if (typeof routeShownFor !== 'undefined' && routeShownFor &&
+      typeof drawRouteEstimate === 'function') {
+    var rl = routeShownFor;
+    if (!drawRouteEstimate(rl)) toast('Not enough visible sets for a route.');
+  }
+}
+function renderMapStatusFilters() {
+  /* Legacy name kept for existing callers — now renders the Show button. */
+  showModel();
+  renderShowButton();
+  var btn = $('btn-show');
+  if (btn && !btn._wired) {
+    btn._wired = true;
+    btn.onclick = function () { showSignOpen = false; renderShowList(); openSheet('sheet-show'); };
   }
 }
 function logStatus(l) {
@@ -7105,6 +7289,9 @@ function tripById(id) {
   return null;
 }
 function tripMiles(t) {
+  /* Q192: GPS-track trips carry their measured miles directly. */
+  var gm = parseFloat(t && t.miles);
+  if (isFinite(gm)) return gm;
   var s = parseFloat(t.startOdo), e = parseFloat(t.endOdo);
   if (!isFinite(s) || !isFinite(e)) return NaN;
   return e - s;
@@ -7460,6 +7647,15 @@ function wireUp() {
   $('btn-home-zip').onclick = homeZipJump;
   $('home-zip').addEventListener('keydown', function (ev) {
     if (ev.key === 'Enter') { ev.preventDefault(); homeZipJump(); }
+  });
+  /* Q186: city jump in the home picker (bundled city list, offline). */
+  $('home-city').addEventListener('input', renderCityMatches);
+  $('home-city').addEventListener('keydown', function (ev) {
+    if (ev.key === 'Enter') {
+      ev.preventDefault();
+      var ms = cityMatches(this.value);
+      if (ms.length) homeCityJump(ms[0]);
+    }
   });
   /* Q53: change home from Settings — re-settable, never permanent. */
   $('btn-change-home').onclick = function () { switchTab('map'); startHomePick(); };
