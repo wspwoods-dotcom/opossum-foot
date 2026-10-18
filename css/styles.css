@@ -1124,6 +1124,9 @@ body.placing #route-back-chip { display: none; }
 /* ===== Q192 live route tracking (2026-10-18) ===== */
 #track-bar { flex: 0 0 auto; z-index: 500; display: none; align-items: center; justify-content: center; gap: 10px; padding: 10px 14px; font-size: 15px; font-weight: 600; background: #2a1214; color: #fff; border-bottom: 1px solid var(--line); }
 #track-bar.show { display: flex; }
+/* Q200: the saved-route bar — same family as the place/track bars. */
+#route-bar { flex: 0 0 auto; z-index: 500; display: none; align-items: center; justify-content: center; gap: 10px; padding: 10px 14px; font-size: 15px; font-weight: 600; background: #1d2a12; color: #fff; border-bottom: 1px solid var(--line); }
+#route-bar.show { display: flex; }
 #track-dot { width: 11px; height: 11px; border-radius: 50%; background: #e5484d; flex: 0 0 auto; }
 #track-stats { font-variant-numeric: tabular-nums; }
 
