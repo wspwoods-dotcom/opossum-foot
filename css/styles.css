@@ -611,6 +611,18 @@ body.route-locked #tabbar { pointer-events: none; opacity: .35; }
 /* Q198: pinned search bar for picker sheets — sits between the sheet head and
    the scrolling body, so the field is always on screen while the list scrolls. */
 .sheet-search { flex: 0 0 auto; padding: 6px 16px 10px; }
+/* Q198/eg: the kind picker holds ONE fixed height. Tanner's screen recording
+   (2026-10-18) showed the sheet hugging its contents: as typed letters
+   narrowed the results, the sheet shrank and the head + search field rode
+   down the screen; deleting letters grew it back. Fixed height = the field
+   never travels, however many kinds match. */
+#sheet-marker-kinds { height: 92%; height: 92svh; }
+/* Q198/eg (app-wide, Tanner's order): the same no-jump rule for the pane
+   searches — History and Seasons fields stick to the top of their pane, so
+   they never scroll away and typing never moves them. (The Log a Catch
+   species list carries a fixed height in its markup for the same reason;
+   the landowner field tops a full-height pane card and never exhibited it.) */
+#history-search, #seasons-search { position: sticky; top: 0; z-index: 6; }
 /* Q161 (2026-10-06): Tanner — a giant warnbox (e.g. the coyote county-rules
    alert in Log a Catch) made the sheet content taller than the sheet, and
    without min-height:0 the flex item refused to shrink, so the sheet never
