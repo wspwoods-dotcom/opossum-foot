@@ -266,7 +266,7 @@ standing — tap the map, drag the pin onto the exact spot, hit "Looks right."
 Pins never save on a stale location: if the GPS can't get a fresh fix, the
 app says "Waiting for GPS…" and holds the save.
 
-## Mileage
+## Route and Mileage
 
 Every line has a Mileage button. Tap **+ ODOMETER** to log trips with start
 and end odometer readings — date, miles, notes — and the app keeps a running

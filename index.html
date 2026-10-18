@@ -89,7 +89,7 @@
       <button class="fab secondary" id="btn-drop-pin" type="button" aria-label="Drop a pin"><img src="assets/icons/mappin.png" alt=""></button>
       <button class="fab secondary" id="btn-add-gps" type="button" aria-label="Add set at my location"><img src="assets/icons/plus.png" alt=""></button>
       <button class="fab secondary" id="btn-mark" type="button" aria-label="Mark sign or forage"><svg viewBox="0 0 24 24" class="fab-diamond" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2.5" transform="rotate(45 12 12)" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="2.1" fill="currentColor"/></svg></button>
-      <button class="fab secondary" id="btn-track" type="button" aria-label="Track my route"><svg viewBox="0 0 24 24" class="fab-diamond" aria-hidden="true"><circle cx="12" cy="12" r="5" fill="#e5484d"/></svg></button>
+      <!-- Q196 (2026-10-18): the track fab moved off the map into Paperwork -> Route and Mileage (Tanner: the map screen is getting busy). -->
       <!-- Q95 (2026-10-01): Tanner — all three right-side fabs rest dark like the
            other two; green only while a mode is on (crosshair follow, pin-drop
            placing). The + button has no toggle state, so it rests dark. -->
@@ -182,9 +182,9 @@
         </div>
       </div>
       <div class="card setsec" id="setsec-mileage">
-        <button type="button" class="setsec-head" id="setsec-mileage-head" data-sec="setsec-mileage" aria-expanded="false"><span>Mileage</span><span class="setsec-chev" aria-hidden="true">›</span></button>
+        <button type="button" class="setsec-head" id="setsec-mileage-head" data-sec="setsec-mileage" aria-expanded="false"><span>Route and Mileage</span><span class="setsec-chev" aria-hidden="true">›</span></button>
         <div class="setsec-body" id="setsec-mileage-body" hidden>
-          <p class="dim" style="margin:0 0 8px">Odometer trip logs for the line you're on — for the tax book. Snap each reading, type it in later; export every line's log from Settings → Export mileage (CSV).</p>
+          <p class="dim" style="margin:0 0 8px">Odometer trips and tracked routes for the line you're on — for the tax book. Track a route follows you on the map and files its miles here when you stop. Export every line's log from Settings → Export mileage (CSV).</p>
           <div id="paperwork-mileage-lines"></div>
         </div>
       </div>
@@ -274,7 +274,7 @@
         <p class="dim" style="margin:-6px 0 10px">Small arrows at the edge of each pin show the downwind direction — where your scent goes. They appear when you're zoomed in close, and use live wind data when you're online.</p>
         <label class="checkline"><input type="checkbox" id="settings-voice"> Voice entry &amp; memos</label>
         <p class="dim" style="margin:-6px 0 12px">Dictate notes and record voice memos. Transcription uses your phone's speech recognition and needs a connection; recordings stay on this phone.</p>
-        <label class="checkline"><input type="checkbox" id="settings-mileage"> Mileage tracking</label>
+        <label class="checkline"><input type="checkbox" id="settings-mileage"> Route &amp; mileage tracking</label>
         <p class="dim" style="margin:-6px 0 12px">Odometer trips per line, the route estimate, and the standalone mileage CSV — its own report for your records or reimbursement.</p>
         <label class="checkline"><input type="checkbox" id="settings-markers" checked> Sign &amp; forage markers</label>
         <p class="dim" style="margin:-6px 0 10px">The map layer for animal sign, forage, and finds — 71 sign kinds and the Forage &amp; finds family, each with its own icon. Off hides the layer and its map button entirely.</p>
@@ -470,7 +470,7 @@
     <div class="sheet-body">
       <p id="track-done-stats" style="font-size:17px"></p>
       <div class="card"><p id="track-done-cov" style="margin:0"></p></div>
-      <p class="dim">Saving files this as a trip in the mileage log for the active line, with the route kept on the record.</p>
+      <p class="dim">Saving files this as a trip in Route and Mileage for the active line, with the route kept on the record.</p>
       <div class="sheet-actions" style="flex-direction:column;align-items:stretch;gap:10px">
         <button class="btn-primary" id="btn-track-save" type="button">Save to mileage log</button>
         <button class="btn-secondary" id="btn-track-show" type="button">Show the route on the map</button>
