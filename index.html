@@ -444,8 +444,13 @@
   <div id="sheet-marker-kinds" class="sheet">
     <div class="sheet-grab"></div>
     <div class="sheet-head"><h2>Choose the kind</h2><button class="sheet-x" data-close type="button">×</button></div>
-    <div class="sheet-body">
+    <!-- Q198: the search field is PINNED above the scroller — it used to live
+         inside .sheet-body, so scrolling the list carried it off-screen and
+         every keystroke's re-render fought iOS's focus pan. It never scrolls now. -->
+    <div class="sheet-search">
       <input type="search" id="mk-kind-search" placeholder="Search kinds… (den, scat, morel, grape)" aria-label="Search marker kinds">
+    </div>
+    <div class="sheet-body">
       <div id="mk-kind-list"></div>
     </div>
   </div>
