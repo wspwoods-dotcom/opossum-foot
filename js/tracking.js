@@ -67,6 +67,7 @@ var Tracking = (function () {
   function start() {
     if (state !== 'idle') return;
     if (!navigator.geolocation) { toast('This phone has no GPS available to the app.'); return; }
+    clearSaved();
     pts = []; distM = 0; startT = Date.now(); pauseAccum = 0;
     state = 'tracking';
     watchId = navigator.geolocation.watchPosition(onPos, onErr, { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 });
@@ -112,7 +113,7 @@ var Tracking = (function () {
       (cov.missed.length ? '<br><span class="mk-safety">Missed: ' + cov.missed.map(function (n) { return esc(n); }).join(', ') + '</span>' : '<br>Every active set on this line got a visit.');
     openSheet('sheet-track-done');
   }
-  function discard() { pending = null; if (layer) layer.clearLayers(); closeSheets(); }
+  function discard() { pending = null; if (layer) layer.clearLayers(); clearSaved(); closeSheets(); }
   function downsample(arr, max) {
     if (arr.length <= max) return arr.map(function (p) { return [Math.round(p.lat * 1e5) / 1e5, Math.round(p.lng * 1e5) / 1e5]; });
     var step = arr.length / max, out = [];
@@ -139,7 +140,14 @@ var Tracking = (function () {
     if (!savedLayer || !track || !track.length) return;
     savedLayer.clearLayers();
     L.polyline(track, { color: '#e5484d', weight: 4, opacity: 0.85 }).addTo(savedLayer);
+    var rb = $('route-bar'); if (rb) rb.classList.add('show');
     if (mapRef) mapRef.fitBounds(L.latLngBounds(track.map(function (p) { return L.latLng(p[0], p[1]); })), { padding: [30, 30] });
+  }
+  /* Q200 (2026-10-18): Tanner — a drawn route had NO way off the map. The
+     route bar's Hide button, a fresh track, and a discard all clear it. */
+  function clearSaved() {
+    if (savedLayer) savedLayer.clearLayers();
+    var rb = $('route-bar'); if (rb) rb.classList.remove('show');
   }
   function showLastRoute() {
     if (!pending || !pending.pts.length) { toast('No route recorded this time.'); return; }
@@ -158,8 +166,9 @@ var Tracking = (function () {
     var sv = $('btn-track-save'); if (sv) sv.onclick = saveToMileage;
     var sh = $('btn-track-show'); if (sh) sh.onclick = showLastRoute;
     var d = $('btn-track-discard'); if (d) d.onclick = discard;
+    var h = $('btn-route-hide'); if (h) h.onclick = clearSaved;
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', wire);
   else wire();
-  return { attach: attach, start: start, active: function () { return state !== 'idle'; }, drawSaved: drawSaved, _test: { hav: hav, start: start, onPos: onPos, stop: stop, state: function () { return state; }, pts: function () { return pts; }, miles: function () { return distM / 1609.344; } } };
+  return { attach: attach, start: start, active: function () { return state !== 'idle'; }, drawSaved: drawSaved, clearSaved: clearSaved, _test: { hav: hav, start: start, onPos: onPos, stop: stop, state: function () { return state; }, pts: function () { return pts; }, miles: function () { return distM / 1609.344; } } };
 })();

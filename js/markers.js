@@ -230,7 +230,13 @@ var Markers = (function () {
       formPhotoFiles = [];
     }
     closeSheets();
-    toast('Marker saved.');
+    /* Q199 (2026-10-18): Tanner saved a marker with its layer toggled off and
+       it looked broken — the app now SAYS why a saved marker won't show,
+       instead of leaving the trapper guessing. His words: "Perfect, I like that." */
+    var savedMk = data().filter(function (m) { return m.id === formCtx.editId; })[0];
+    if (!markersOn()) toast('Marker saved — but the Sign & forage markers layer is off in Settings, so it won\'t show on the map until you turn it back on.');
+    else if (savedMk && !visible(savedMk)) toast('Marker saved — but that kind is turned off in the Show list, so it won\'t show on the map until you turn it on there.');
+    else toast('Marker saved.');
   }
   var formPhotoFiles = [];
 
