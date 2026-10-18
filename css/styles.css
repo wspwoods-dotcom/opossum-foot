@@ -594,7 +594,10 @@ body.route-locked #tabbar { pointer-events: none; opacity: .35; }
   background: var(--sheet);
   border-top: 2px solid var(--line);
   border-radius: 20px 20px 0 0;
-  max-height: 92%; max-height: 92dvh;
+  /* Q198: svh, not dvh — dvh resizes as iOS viewport state changes (keyboard
+     opening/closing), which made sheets resize mid-typing and the screen
+     jump. svh is the stable small-viewport height: the sheet holds still. */
+  max-height: 92%; max-height: 92svh;
   display: none; flex-direction: column;
   padding-bottom: env(safe-area-inset-bottom);
 }
@@ -605,6 +608,9 @@ body.route-locked #tabbar { pointer-events: none; opacity: .35; }
 .sheet-x { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); }
 .sheet-x { background: none; border: none; color: var(--muted); font-size: 26px; min-height: 48px; width: 48px; padding: 0; }
 .sheet-body { overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; padding: 4px 16px 24px; min-height: 0; }
+/* Q198: pinned search bar for picker sheets — sits between the sheet head and
+   the scrolling body, so the field is always on screen while the list scrolls. */
+.sheet-search { flex: 0 0 auto; padding: 6px 16px 10px; }
 /* Q161 (2026-10-06): Tanner — a giant warnbox (e.g. the coyote county-rules
    alert in Log a Catch) made the sheet content taller than the sheet, and
    without min-height:0 the flex item refused to shrink, so the sheet never
