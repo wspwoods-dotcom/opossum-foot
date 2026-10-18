@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-10-18ed';
+var APP_VERSION = 'beta 0.1 · build 2026-10-18ee';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -4342,7 +4342,7 @@ function renderShowButton() {
   var nameHtml = function (g) { return '<span style="color:' + lighten(g.color, 0.38) + '">' + esc(g.label) + '</span>'; };
   if (on.length === groups.length) btn.innerHTML = 'Show: <span style="color:#f5efdd">All</span>';
   else if (on.length === 0) btn.innerHTML = 'Show: <span style="color:#f5efdd">None</span>';
-  else if (on.length <= 3) btn.innerHTML = 'Show: ' + on.map(nameHtml).join(', ');
+  else if (on.length <= 4) btn.innerHTML = 'Show: ' + on.map(nameHtml).join(', '); /* Q197: names up to four on; the count form is only for five */
   else btn.innerHTML = 'Show: ' + on.length + ' of ' + groups.length;
 }
 var showSignOpen = false;
@@ -5391,10 +5391,19 @@ function renderPaperworkMileage() {
     '<div class="pm-line-head"><span><strong>' + esc(ln.name) + '</strong> ' +
     '<span class="dim">' + esc(fmtMiles(lineTripTotal(ln.id))) + '</span></span></div>' +
     rows +
-    '<button type="button" class="btn-secondary" data-pm-logtrip="' + esc(ln.id) + '" style="margin-top:10px">\uFF0B Log Trip</button></div>';
+    '<button type="button" class="btn-secondary" data-pm-logtrip="' + esc(ln.id) + '" style="margin-top:10px">\uFF0B Log Trip</button>' +
+    '<button type="button" class="btn-secondary" data-pm-track="' + esc(ln.id) + '" style="margin-top:10px;margin-left:8px"><span style="color:#e5484d">\u25CF</span> Track a route</button></div>';
   function lineOf(el) {
     var b = el.closest ? el.closest('[data-pm-line-block]') : null;
     return b ? b.getAttribute('data-pm-line-block') : null;
+  }
+  var trk = box.querySelectorAll('[data-pm-track]');
+  for (var t = 0; t < trk.length; t++) {
+    trk[t].onclick = function () {
+      if (Store.data.mileageOn === false) { toast('Route & mileage tracking is off — turn it on in Settings \u2192 Feature Toggles.'); return; }
+      switchTab('map');
+      if (window.Tracking) Tracking.start();
+    };
   }
   var lts = box.querySelectorAll('[data-pm-logtrip]');
   for (var i = 0; i < lts.length; i++) {
