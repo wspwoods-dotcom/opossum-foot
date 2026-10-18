@@ -734,7 +734,10 @@
       <label class="field">Species <span class="req">*</span></label>
       <input type="search" id="log-species-search" placeholder="Search species…" autocomplete="off" aria-label="Search species">
       <div style="height:8px"></div>
-      <div id="log-species-list" style="max-height:280px; overflow-y:auto; -webkit-overflow-scrolling:touch;"></div>
+      <!-- Q198/eg: fixed height, not max-height — a max-height list shrank as
+           species results narrowed and the rest of the form jumped up/down
+           while typing. Fixed height keeps the form's geometry still. -->
+      <div id="log-species-list" style="height:280px; overflow-y:auto; -webkit-overflow-scrolling:touch;"></div>
     </div>
     <div id="log-species-other" hidden>
       <label class="field" for="log-species-free">Species <span class="dim">(optional)</span></label>
