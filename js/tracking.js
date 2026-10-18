@@ -161,5 +161,5 @@ var Tracking = (function () {
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', wire);
   else wire();
-  return { attach: attach, active: function () { return state !== 'idle'; }, drawSaved: drawSaved, _test: { hav: hav, start: start, onPos: onPos, stop: stop, state: function () { return state; }, pts: function () { return pts; }, miles: function () { return distM / 1609.344; } } };
+  return { attach: attach, start: start, active: function () { return state !== 'idle'; }, drawSaved: drawSaved, _test: { hav: hav, start: start, onPos: onPos, stop: stop, state: function () { return state; }, pts: function () { return pts; }, miles: function () { return distM / 1609.344; } } };
 })();
