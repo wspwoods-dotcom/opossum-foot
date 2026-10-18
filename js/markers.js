@@ -242,10 +242,22 @@ var Markers = (function () {
     detailId = id;
     var html = '<div class="mk-detail-head"><span class="mk-kind-ic big">' + glyphFor(mk) + '</span><div><h3>' + esc(mk.name) + '</h3>' +
       '<p class="dim">' + esc(mk.cat === 'sign' ? FAM_LABEL[mk.fam] : FORAGE_FAM_LABEL[(forageEntry(mk.ref) || {}).fam] || 'Forage & finds') + ' · ' + (mk.poly ? 'Area' : 'Pin') + ' · ' + new Date(mk.createdAt).toLocaleDateString() + '</p></div></div>';
-    if (mk.note) html += '<div class="card mk-note-card"><strong>Your note</strong><p>' + esc(mk.note) + '</p></div>';
-    html += '<div class="card mk-info-card">' + infoHtml(mk) + '</div>';
+    /* Q194 (2026-10-18): Tanner — his photo and his note come FIRST; the
+       catalog description lives as a tab at the bottom of the page. */
     html += '<div class="mk-detail-photos" id="mk-detail-photos"></div>';
+    if (mk.note) html += '<div class="card mk-note-card"><strong>Your note</strong><p>' + esc(mk.note) + '</p></div>';
     $('mk-detail-body').innerHTML = html;
+    var infoHost = $('mk-detail-info');
+    if (infoHost) {
+      infoHost.innerHTML = '<div class="setsec" style="margin-top:14px">' +
+        '<button type="button" class="setsec-head" id="mk-info-head" aria-expanded="false"><span>' + (mk.cat === 'sign' ? 'How to read it' : 'About this find') + '</span><span class="setsec-chev" aria-hidden="true">›</span></button>' +
+        '<div class="setsec-body" id="mk-info-body" hidden><div class="card mk-info-card">' + infoHtml(mk) + '</div></div></div>';
+      $('mk-info-head').onclick = function () {
+        var b = $('mk-info-body'); if (!b) return;
+        var open = b.hidden; b.hidden = !open;
+        this.setAttribute('aria-expanded', open ? 'true' : 'false');
+      };
+    }
     IDB.all('photos').then(function (all) {
       var host = $('mk-detail-photos'); if (!host) return;
       all.filter(function (p) { return p.markerId === id; }).forEach(function (p) {
