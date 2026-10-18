@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-10-18ec';
+var APP_VERSION = 'beta 0.1 · build 2026-10-18ed';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -463,6 +463,9 @@ function openSheet(id) {
 }
 function closeSheets() {
   var sheets = document.querySelectorAll('.sheet.show');
+  /* Q193: closing the Show sheet without Done discards its draft. */
+  var showEl = document.getElementById('sheet-show');
+  if (showEl && showEl.classList.contains('show') && typeof showDraft !== 'undefined') showDraft = null;
   var logWasOpen = !!document.getElementById('sheet-log').classList.contains('show');
   for (var i = 0; i < sheets.length; i++) sheets[i].classList.remove('show');
   $('scrim').classList.remove('show');
@@ -4297,6 +4300,26 @@ function saveShowModel() {
   showModel();
   Store.save();
 }
+/* Q193 (2026-10-18): the Show sheet edits a DRAFT — Done saves, the X throws
+   it away, like any other window (Tanner). While the sheet is open the live
+   model, the map, and the Show button label do not move. */
+var showDraft = null;
+function showWorking() {
+  if (!showDraft) return showModel();
+  STATUS_VALUES.forEach(function (k) { if (showDraft[k] === undefined) showDraft[k] = true; });
+  if (!showDraft.fam) showDraft.fam = {};
+  ['homes', 'ground', 'tree', 'feeding', 'scent', 'forage'].forEach(function (k) { if (showDraft.fam[k] === undefined) showDraft.fam[k] = true; });
+  return showDraft;
+}
+function snapshotShowDraft() { showDraft = JSON.parse(JSON.stringify(showModel())); }
+function commitShowDraft() {
+  if (showDraft) { Store.data.mapShow = showDraft; showDraft = null; }
+  saveShowModel();
+  renderShowButton();
+  refreshMarkers();
+  if (window.Markers) Markers.render();
+  afterShowToggle();
+}
 function lighten(hex, amt) {
   var n = parseInt(String(hex).replace('#', ''), 16);
   if (isNaN(n)) return hex;
@@ -4325,7 +4348,7 @@ function renderShowButton() {
 var showSignOpen = false;
 function renderShowList() {
   var host = $('show-list'); if (!host) return;
-  var m = showModel();
+  var m = showWorking();
   var famCount = function (fam) {
     if (!window.Markers || !window.SIGN_CATALOG) return '';
     var n = 0;
@@ -4356,23 +4379,20 @@ function renderShowList() {
   host.innerHTML = html;
   host.querySelectorAll('input[data-show-status]').forEach(function (cb) {
     cb.addEventListener('change', function () {
-      showModel()[this.getAttribute('data-show-status')] = this.checked;
-      saveShowModel(); renderShowButton(); refreshMarkers(); afterShowToggle();
+      showWorking()[this.getAttribute('data-show-status')] = this.checked;
     });
   });
   host.querySelectorAll('input[data-show-fam]').forEach(function (cb) {
     cb.addEventListener('change', function () {
-      showModel().fam[this.getAttribute('data-show-fam')] = this.checked;
-      Store.save(); renderShowButton(); renderShowList();
-      if (window.Markers) Markers.render();
+      showWorking().fam[this.getAttribute('data-show-fam')] = this.checked;
+      renderShowList();
     });
   });
   var all = $('show-sign-all');
   if (all) all.addEventListener('change', function () {
-    var mm = showModel();
+    var mm = showWorking();
     famKeys.forEach(function (k) { mm.fam[k] = all.checked; });
-    Store.save(); renderShowButton(); renderShowList();
-    if (window.Markers) Markers.render();
+    renderShowList();
   });
   var tg = $('show-sign-toggle');
   if (tg) tg.onclick = function () { showSignOpen = !showSignOpen; renderShowList(); };
@@ -4392,7 +4412,12 @@ function renderMapStatusFilters() {
   var btn = $('btn-show');
   if (btn && !btn._wired) {
     btn._wired = true;
-    btn.onclick = function () { showSignOpen = false; renderShowList(); openSheet('sheet-show'); };
+    btn.onclick = function () { showSignOpen = false; snapshotShowDraft(); renderShowList(); openSheet('sheet-show'); };
+  }
+  var done = $('btn-show-done');
+  if (done && !done._wired) {
+    done._wired = true;
+    done.onclick = function () { commitShowDraft(); closeSheets(); };
   }
 }
 function logStatus(l) {
