@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-10-18eh';
+var APP_VERSION = 'beta 0.1 · build 2026-10-18ei';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -476,6 +476,10 @@ function closeSheets() {
      (saveLog clears pendingLogMemos first), so any memos waiting for a
      catch are orphans — remove them from the phone. */
   if (logWasOpen) { logSheetLive = false; deletePendingLogMemos(); }
+  /* Q201: if the track-finish sheet went away with a route still unsaved,
+     the route surfaces itself on the map with a Save button in the route
+     bar — an unsaved route is never stranded behind a closed sheet. */
+  try { if (window.Tracking && Tracking.rescuePending) Tracking.rescuePending(); } catch (e) { /* noop */ }
 }
 
 /* modal — dialogs close only via their buttons, never a backdrop tap (Q105). */
@@ -5323,6 +5327,24 @@ function isLicenseWalletPhoto(p, lid, firstId) {
    buttons on the trip; tap the trip box to edit it. Deleting a trip moved
    into the trip form. */
 function tripRowHTML(tr) {
+  /* Q201: a GPS-track trip has no odometer readings — rendering it through
+     the odometer row produced "undefined → undefined" and tapping it opened
+     the odometer editor. It gets its own row: the record, a way to see the
+     saved route again, and a delete. */
+  if (tr.source === 'gps-track') {
+    return '<div class="trip-block">' +
+      '<div class="line-row">' +
+      '<div class="line-main">' +
+      '<span class="line-name">' + esc(fmtDate(tr.date)) + ' · ' + esc(fmtMiles(tripMiles(tr))) + '</span>' +
+      '<span class="dim">' + esc(tr.notes || 'GPS track') + '</span>' +
+      '</div>' +
+      '</div>' +
+      '<div class="btn-row" style="margin-top:8px">' +
+      '<button type="button" class="btn-secondary" data-trip-show="' + esc(tr.id) + '">Show on map</button>' +
+      '<button type="button" class="btn-ghost" data-trip-gdel="' + esc(tr.id) + '">Delete</button>' +
+      '</div>' +
+      '</div>';
+  }
   return '<div class="trip-block" data-trip-edit="' + esc(tr.id) + '" title="Tap to edit">' +
     '<div class="line-row">' +
     '<div class="line-main">' +
@@ -5416,6 +5438,23 @@ function renderPaperworkMileage() {
     (function (el) {
       el.onclick = function () { showTripModal(lineOf(el), el.getAttribute('data-trip-edit')); };
     })(edits[e]);
+  }
+  /* Q201: GPS-track rows — see the route again, or delete the trip. */
+  var shows = box.querySelectorAll('[data-trip-show]');
+  for (var s2 = 0; s2 < shows.length; s2++) {
+    (function (el) {
+      el.onclick = function () {
+        var tr = tripById(el.getAttribute('data-trip-show'));
+        if (tr && tr.track && tr.track.length > 1 && window.Tracking) { switchTab('map'); Tracking.drawSaved(tr.track); }
+        else toast('No route is saved on that trip.');
+      };
+    })(shows[s2]);
+  }
+  var gdels = box.querySelectorAll('[data-trip-gdel]');
+  for (var g = 0; g < gdels.length; g++) {
+    (function (el) {
+      el.onclick = function () { deleteTrip(lineOf(el), el.getAttribute('data-trip-gdel')); };
+    })(gdels[g]);
   }
   fillTripThumbs(box);
 }

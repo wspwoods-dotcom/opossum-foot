@@ -140,14 +140,46 @@ var Tracking = (function () {
     if (!savedLayer || !track || !track.length) return;
     savedLayer.clearLayers();
     L.polyline(track, { color: '#e5484d', weight: 4, opacity: 0.85 }).addTo(savedLayer);
-    var rb = $('route-bar'); if (rb) rb.classList.add('show');
+    syncRouteBar();
     if (mapRef) mapRef.fitBounds(L.latLngBounds(track.map(function (p) { return L.latLng(p[0], p[1]); })), { padding: [30, 30] });
   }
   /* Q200 (2026-10-18): Tanner — a drawn route had NO way off the map. The
      route bar's Hide button, a fresh track, and a discard all clear it. */
   function clearSaved() {
     if (savedLayer) savedLayer.clearLayers();
-    var rb = $('route-bar'); if (rb) rb.classList.remove('show');
+    syncRouteBar();
+  }
+  /* Q201: the route bar is the standing home of a drawn route AND of an
+     unsaved just-tracked route: it says which state things are in, offers
+     Save while a route is unsaved, and Hide always. */
+  function syncRouteBar() {
+    var bar = $('route-bar'); if (!bar) return;
+    var drawn = !!(savedLayer && savedLayer.getLayers().length);
+    bar.classList.toggle('show', drawn || !!pending);
+    var sv = $('btn-route-save'); if (sv) sv.style.display = pending ? '' : 'none';
+    var lb = $('route-bar-label'); if (lb) lb.textContent = pending ? 'Route — not saved yet' : 'Route on the map';
+  }
+  /* Q201: Hide while a route is still unsaved asks first — hiding is the
+     one tap that could throw the route away. */
+  function hideRoute() {
+    if (pending) {
+      if (!window.confirm('This route has not been saved to the mileage log. Hide it without saving?')) return;
+      pending = null;
+      if (layer) layer.clearLayers();
+    }
+    clearSaved();
+  }
+  /* Q201: called whenever sheets close (app.js closeSheets). If the
+     track-finish sheet went away with the route unsaved — Show button, X,
+     or scrim — the route draws itself and the bar carries the Save button,
+     so the choice is never stranded behind a closed sheet. Draws only
+     when nothing is drawn yet, so later sheet closes never yank the map. */
+  function rescuePending() {
+    if (!pending) return;
+    if (savedLayer && !savedLayer.getLayers().length && pending.pts && pending.pts.length) {
+      drawSaved(downsample(pending.pts, 400));
+    }
+    syncRouteBar();
   }
   function showLastRoute() {
     if (!pending || !pending.pts.length) { toast('No route recorded this time.'); return; }
@@ -166,9 +198,10 @@ var Tracking = (function () {
     var sv = $('btn-track-save'); if (sv) sv.onclick = saveToMileage;
     var sh = $('btn-track-show'); if (sh) sh.onclick = showLastRoute;
     var d = $('btn-track-discard'); if (d) d.onclick = discard;
-    var h = $('btn-route-hide'); if (h) h.onclick = clearSaved;
+    var h = $('btn-route-hide'); if (h) h.onclick = hideRoute;
+    var rs = $('btn-route-save'); if (rs) rs.onclick = function () { saveToMileage(); syncRouteBar(); };
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', wire);
   else wire();
-  return { attach: attach, start: start, active: function () { return state !== 'idle'; }, drawSaved: drawSaved, clearSaved: clearSaved, _test: { hav: hav, start: start, onPos: onPos, stop: stop, state: function () { return state; }, pts: function () { return pts; }, miles: function () { return distM / 1609.344; } } };
+  return { attach: attach, start: start, active: function () { return state !== 'idle'; }, drawSaved: drawSaved, clearSaved: clearSaved, rescuePending: rescuePending, _test: { hav: hav, start: start, onPos: onPos, stop: stop, state: function () { return state; }, pts: function () { return pts; }, miles: function () { return distM / 1609.344; } } };
 })();
