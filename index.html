@@ -455,11 +455,12 @@
     <div class="sheet-head"><h2>Marker</h2><button class="sheet-x" data-close type="button">×</button></div>
     <div class="sheet-body">
       <div id="mk-detail-body"></div>
-      <div class="sheet-actions">
+      <div class="sheet-actions" id="mk-detail-actions">
         <button class="btn-secondary" id="btn-mk-edit" type="button">Edit</button>
         <button class="btn-secondary" id="btn-mk-ref" type="button">Reference &amp; sources</button>
         <button class="btn-ghost" id="btn-mk-delete" type="button">Delete</button>
       </div>
+      <div id="mk-detail-info"></div>
     </div>
   </div>
 
@@ -485,7 +486,7 @@
       <div id="show-list"></div>
       <p class="dim" style="margin-top:10px">The colored dot on each line is that pin's color on the map.</p>
       <div class="sheet-actions">
-        <button class="btn-primary" data-close type="button">Done</button>
+        <button class="btn-primary" id="btn-show-done" type="button">Done</button>
       </div>
     </div>
   </div>
