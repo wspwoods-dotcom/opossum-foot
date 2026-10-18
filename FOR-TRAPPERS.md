@@ -278,12 +278,23 @@ exports to CSV from Backup & Reports.
 
 ## Bringing in Google Maps pins
 
-Got pins in Google Maps? Export them (KML or GeoJSON) and import them in
-Settings. Each pin becomes a set with its name carried over; you fill in the
-trap and attractant details by tapping each one on the map. If a pin lands
-on top of a set you already have, the app stops and asks — skip it, merge
-it, or delete the incoming pin. Your app data is never touched by an
-import.
+Got pins saved in Google Maps lists? You don't need to walk them in one
+by one. On your phone's browser, go to takeout.google.com, tap
+"Deselect all," check only **Saved**, and start the export. When Google
+emails you that it's ready, download it, tap the file in your Files app
+to unzip it, and look in the **Saved** folder — there's one spreadsheet
+(.csv) file per list. Then, in Opossum Foot: switch to the trap line the
+pins belong on first (imports land on the line that's active), tap the
+**Data** tab, and use **Import pins from Google Maps** to pick that
+file. The app digs each pin's coordinates out of its Maps link itself,
+carries the names over, and names any pin that truly has no location
+instead of planting it in the ocean. If a pin lands on top of a set you
+already have, the app stops and asks — skip it, merge it, or delete the
+incoming pin. Your app data is never touched by an import. Just one pin?
+Share it from Google Maps, copy the link, and use **Paste a Maps link**
+in the Data tab. Either way, you fill in the trap and attractant details
+afterward by tapping each pin on the map. The full slow, plain-language
+walkthrough lives in `google-pins-import-for-new-users.md`.
 
 ## Saving photos to your phone
 

@@ -68,13 +68,18 @@
   <div id="state-alert"><span id="state-alert-text"></span><button class="btn-small btn-ghost" id="btn-switch-state" type="button">Switch</button></div>
   <div id="offline-banner">You're offline. The app still works — map areas you've already viewed will render; new areas need a connection.</div>
   <div id="pin-hint">Tap the map to place your set pin.</div>
+  <div id="mk-hint">Tap the map to place your marker.</div>
+  <div id="mk-place-bar"><span>Drag the marker onto the exact spot.</span><button class="btn-small btn-primary" id="btn-mk-place-ok" type="button">Looks right</button><button class="btn-small btn-ghost" id="btn-mk-place-cancel" type="button" aria-label="Cancel">✕</button></div>
+  <div id="mk-area-bar"><span id="mk-area-count">No corners yet</span><button class="btn-small btn-secondary" id="btn-mk-area-undo" type="button">Undo corner</button><button class="btn-small btn-primary" id="btn-mk-area-done" type="button" disabled>Done</button><button class="btn-small btn-ghost" id="btn-mk-area-cancel" type="button" aria-label="Cancel">✕</button></div>
+  <div id="track-bar"><span id="track-dot" aria-hidden="true"></span><span>Tracking</span><span id="track-stats">0.0 mi · 0:00</span><button class="btn-small btn-secondary" id="btn-track-pause" type="button">Pause</button><button class="btn-small btn-primary" id="btn-track-stop" type="button">Stop</button></div>
   <div id="place-bar"><span>Drag the pin onto the exact spot.</span><button class="btn-small btn-primary" id="btn-place-ok" type="button"><img class="pb-ic" src="assets/icons/check.png" alt="">Looks right</button><button class="btn-small btn-ghost" id="btn-place-cancel" type="button" aria-label="Cancel"><img class="pb-ic" src="assets/icons/x.png" alt=""></button></div>
   <!-- B26: home-ground picker — two clear choices, not steps; cancel stays inline; tight bar -->
-  <div id="home-bar"><span id="home-bar-prompt">Where's your home ground?</span><div class="home-bar-actions"><input id="home-zip" class="zip-jump" type="text" inputmode="numeric" maxlength="5" placeholder="ZIP" aria-label="Jump to ZIP code" autocomplete="off"><button class="btn-small btn-secondary" id="btn-home-zip" type="button">Go</button><button class="btn-small btn-primary" id="btn-home-ok" type="button" hidden>Set home here</button><button class="btn-small btn-ghost" id="btn-home-cancel" type="button" aria-label="Cancel"><img class="pb-ic" src="assets/icons/x.png" alt=""></button></div></div>
+  <div id="home-bar"><span id="home-bar-prompt">Where's your home ground?</span><div class="home-bar-actions"><input id="home-zip" class="zip-jump" type="text" inputmode="numeric" maxlength="5" placeholder="ZIP" aria-label="Jump to ZIP code" autocomplete="off"><button class="btn-small btn-secondary" id="btn-home-zip" type="button">Go</button><button class="btn-small btn-primary" id="btn-home-ok" type="button" hidden>Set home here</button><button class="btn-small btn-ghost" id="btn-home-cancel" type="button" aria-label="Cancel"><img class="pb-ic" src="assets/icons/x.png" alt=""></button></div><div class="home-city-row"><input id="home-city" class="city-jump" type="text" placeholder="Or type a city…" aria-label="Jump to a city" autocomplete="off"><div id="home-city-matches" class="city-matches" hidden></div></div></div>
+  <div id="locate-hint">Finding you… tap the crosshair again to cancel.</div>
 
   <!-- MAP PANE -->
   <div id="pane-map" class="pane active">
-    <div id="map-status-filters" class="chip-row map-status-filters" aria-label="Filter sets by status"></div>
+    <button type="button" id="btn-show" class="chip show-btn" aria-label="Choose what shows on the map">Show: All</button>
     <button type="button" id="weather-chip" class="chip weather-chip" aria-label="Weather details">🌤️</button>
     <!-- Q8: way back to the mileage dialog while a route estimate is drawn -->
     <button type="button" id="route-back-chip" class="btn-primary" hidden>‹ Back to mileage</button>
@@ -83,6 +88,8 @@
       <button class="fab secondary" id="btn-locate" type="button" aria-label="Locate me"><img src="assets/icons/crosshair.png" alt=""></button>
       <button class="fab secondary" id="btn-drop-pin" type="button" aria-label="Drop a pin"><img src="assets/icons/mappin.png" alt=""></button>
       <button class="fab secondary" id="btn-add-gps" type="button" aria-label="Add set at my location"><img src="assets/icons/plus.png" alt=""></button>
+      <button class="fab secondary" id="btn-mark" type="button" aria-label="Mark sign or forage"><svg viewBox="0 0 24 24" class="fab-diamond" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2.5" transform="rotate(45 12 12)" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="2.1" fill="currentColor"/></svg></button>
+      <button class="fab secondary" id="btn-track" type="button" aria-label="Track my route"><svg viewBox="0 0 24 24" class="fab-diamond" aria-hidden="true"><circle cx="12" cy="12" r="5" fill="#e5484d"/></svg></button>
       <!-- Q95 (2026-10-01): Tanner — all three right-side fabs rest dark like the
            other two; green only while a mode is on (crosshair follow, pin-drop
            placing). The + button has no toggle state, so it rests dark. -->
@@ -269,6 +276,10 @@
         <p class="dim" style="margin:-6px 0 12px">Dictate notes and record voice memos. Transcription uses your phone's speech recognition and needs a connection; recordings stay on this phone.</p>
         <label class="checkline"><input type="checkbox" id="settings-mileage"> Mileage tracking</label>
         <p class="dim" style="margin:-6px 0 12px">Odometer trips per line, the route estimate, and the standalone mileage CSV — its own report for your records or reimbursement.</p>
+        <label class="checkline"><input type="checkbox" id="settings-markers" checked> Sign &amp; forage markers</label>
+        <p class="dim" style="margin:-6px 0 10px">The map layer for animal sign, forage, and finds — 71 sign kinds and the Forage &amp; finds family, each with its own icon. Off hides the layer and its map button entirely.</p>
+        <button class="btn-secondary" id="btn-open-signref" type="button">Sign &amp; Forage Reference</button>
+        <p class="dim" style="margin:6px 0 12px">Every kind, how to read it, and the sources behind the information.</p>
         <button class="btn-secondary" id="btn-features-reset" type="button">Reset features to defaults</button>
         </div>
       </div>
@@ -399,6 +410,92 @@
     </div>
   </div>
 
+  <!-- Q190/Q191 (2026-10-18): sign & forage markers -->
+  <div id="sheet-marker-add" class="sheet">
+    <div class="sheet-grab"></div>
+    <div class="sheet-head"><h2>Mark the map</h2><button class="sheet-x" data-close type="button">×</button></div>
+    <div class="sheet-body">
+      <p class="dim">Sign, forage, and finds — marked on the map, not as sets. They never join check rotations or catch counts.</p>
+      <div class="sheet-actions" style="flex-direction:column;align-items:stretch;gap:10px">
+        <button class="btn-primary" id="btn-mk-add-pin" type="button">Drop a pin</button>
+        <button class="btn-secondary" id="btn-mk-add-area" type="button">Mark an area (a patch too big for a pin)</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="sheet-marker-form" class="sheet">
+    <div class="sheet-grab"></div>
+    <div class="sheet-head"><h2>New marker</h2><button class="sheet-x" data-close type="button">×</button></div>
+    <div class="sheet-body">
+      <label class="field">Kind of sign</label>
+      <button type="button" class="mk-kind-choice" id="mk-kind-choice"><span id="mk-kind-name">Choose the kind of sign…</span><span aria-hidden="true">▾</span></button>
+      <label class="field" for="mk-note">Note (optional)</label>
+      <textarea id="mk-note" rows="3" placeholder="What you saw, how fresh, which way it was headed…"></textarea>
+      <label class="field">Photo (optional)</label>
+      <div class="mk-form-photos" id="mk-form-photos"></div>
+      <button type="button" class="btn-secondary" id="btn-mk-photo">📷 Add a photo</button>
+      <input type="file" id="mk-photo-input" class="hidden-file" accept="image/*" multiple>
+      <div class="sheet-actions">
+        <button class="btn-primary" id="btn-mk-save" type="button">Save marker</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="sheet-marker-kinds" class="sheet">
+    <div class="sheet-grab"></div>
+    <div class="sheet-head"><h2>Choose the kind</h2><button class="sheet-x" data-close type="button">×</button></div>
+    <div class="sheet-body">
+      <input type="search" id="mk-kind-search" placeholder="Search kinds… (den, scat, morel, grape)" aria-label="Search marker kinds">
+      <div id="mk-kind-list"></div>
+    </div>
+  </div>
+
+  <div id="sheet-marker-detail" class="sheet">
+    <div class="sheet-grab"></div>
+    <div class="sheet-head"><h2>Marker</h2><button class="sheet-x" data-close type="button">×</button></div>
+    <div class="sheet-body">
+      <div id="mk-detail-body"></div>
+      <div class="sheet-actions">
+        <button class="btn-secondary" id="btn-mk-edit" type="button">Edit</button>
+        <button class="btn-secondary" id="btn-mk-ref" type="button">Reference &amp; sources</button>
+        <button class="btn-ghost" id="btn-mk-delete" type="button">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="sheet-track-done" class="sheet">
+    <div class="sheet-grab"></div>
+    <div class="sheet-head"><h2>Track finished</h2><button class="sheet-x" data-close type="button">×</button></div>
+    <div class="sheet-body">
+      <p id="track-done-stats" style="font-size:17px"></p>
+      <div class="card"><p id="track-done-cov" style="margin:0"></p></div>
+      <p class="dim">Saving files this as a trip in the mileage log for the active line, with the route kept on the record.</p>
+      <div class="sheet-actions" style="flex-direction:column;align-items:stretch;gap:10px">
+        <button class="btn-primary" id="btn-track-save" type="button">Save to mileage log</button>
+        <button class="btn-secondary" id="btn-track-show" type="button">Show the route on the map</button>
+        <button class="btn-ghost" id="btn-track-discard" type="button">Discard this track</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="sheet-show" class="sheet">
+    <div class="sheet-grab"></div>
+    <div class="sheet-head"><h2>Show on map</h2><button class="sheet-x" data-close type="button">×</button></div>
+    <div class="sheet-body">
+      <div id="show-list"></div>
+      <p class="dim" style="margin-top:10px">The colored dot on each line is that pin's color on the map.</p>
+      <div class="sheet-actions">
+        <button class="btn-primary" data-close type="button">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="sheet-signref" class="sheet">
+    <div class="sheet-grab"></div>
+    <div class="sheet-head"><h2>Sign &amp; Forage Reference</h2><button class="sheet-x" data-close type="button">×</button></div>
+    <div class="sheet-body" id="signref-body"></div>
+  </div>
+
   <!-- Q174 (2026-10-08): multi-select checklist sheet for report filters -->
   <div id="sheet-ms" class="sheet">
     <div class="sheet-grab"></div>
@@ -486,7 +583,9 @@
       <button type="button" data-st="sprung" class="st-sprung">Sprung</button>
       <button type="button" data-st="pulled" class="st-pulled">Pulled</button>
       <button type="button" data-st="missing" class="st-missing">Missing</button>
+      <button type="button" data-st="prospect" class="st-prospect">Prospect</button>
     </div>
+    <p class="dim" id="sf-prospect-hint" hidden>Prospect = a scouted spot with no trap in the ground yet. It stays out of check rotations and catch counts until you set it.</p>
     <input type="hidden" id="sf-status" value="active">
     <div id="setfield-missing" hidden>
     <label class="field">Why Missing <span class="req">*</span></label>
@@ -708,7 +807,12 @@
 <script src="js/season-data.js"></script>
 <script src="js/guide-content.js"></script>
 <script src="js/trap-catalog.js"></script>
+<script src="js/catalog.js"></script>
+<script src="js/glyphs.js"></script>
+<script src="js/citydb.js"></script>
 <script src="js/zipdb.js"></script>
 <script src="js/app.js"></script>
+<script src="js/markers.js"></script>
+<script src="js/tracking.js"></script>
 </body>
 </html>
