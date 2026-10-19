@@ -73,6 +73,7 @@ var Tracking = (function () {
     watchId = navigator.geolocation.watchPosition(onPos, onErr, { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 });
     timer = setInterval(updateBar, 500);
     $('track-bar').classList.add('show');
+    syncFab();
     $('btn-track-pause').textContent = 'Pause';
     updateBar();
     toast('Tracking — your route and mileage are recording.');
@@ -105,6 +106,7 @@ var Tracking = (function () {
     if (timer) { clearInterval(timer); timer = null; }
     state = 'idle';
     $('track-bar').classList.remove('show');
+    syncFab();
     var cov = coverage();
     var miles = distM / 1609.344;
     pending = { miles: miles, elapsed: elapsedMs(), cov: cov, pts: pts.slice() };
@@ -187,12 +189,23 @@ var Tracking = (function () {
     drawSaved(downsample(pending.pts, 400));
     toast('Your route is on the map.');
   }
+  /* Q206 (2026-10-19): Tanner — the Track fab is back on the map (Q196 had
+     moved it into Paperwork), shown only while Route & mileage tracking is
+     toggled on in Settings, and hidden while a track is running (the track
+     bar owns the screen then). app.js calls syncFab when the toggle flips. */
+  function syncFab() {
+    var fab = $('btn-track');
+    if (!fab) return;
+    var off = window.Store && Store.data && Store.data.mileageOn === false;
+    fab.style.display = (off || state !== 'idle') ? 'none' : '';
+  }
   function wire() {
     var fab = $('btn-track');
     if (fab) fab.onclick = function () {
       if (Store.data && Store.data.mileageOn === false) { toast('Mileage tracking is off — turn it on in Settings → Feature Toggles.'); return; }
       start();
     };
+    syncFab();
     var p = $('btn-track-pause'); if (p) p.onclick = pauseResume;
     var s = $('btn-track-stop'); if (s) s.onclick = stop;
     var sv = $('btn-track-save'); if (sv) sv.onclick = saveToMileage;
@@ -203,5 +216,5 @@ var Tracking = (function () {
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', wire);
   else wire();
-  return { attach: attach, start: start, active: function () { return state !== 'idle'; }, drawSaved: drawSaved, clearSaved: clearSaved, rescuePending: rescuePending, _test: { hav: hav, start: start, onPos: onPos, stop: stop, state: function () { return state; }, pts: function () { return pts; }, miles: function () { return distM / 1609.344; } } };
+  return { attach: attach, start: start, syncFab: syncFab, active: function () { return state !== 'idle'; }, drawSaved: drawSaved, clearSaved: clearSaved, rescuePending: rescuePending, _test: { hav: hav, start: start, onPos: onPos, stop: stop, state: function () { return state; }, pts: function () { return pts; }, miles: function () { return distM / 1609.344; } } };
 })();

@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-10-19el';
+var APP_VERSION = 'beta 0.1 · build 2026-10-19em';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -1186,6 +1186,8 @@ function applyFeatureToggles() {
   if (mexp) mexp.style.display = mOn ? '' : 'none';
   var pmc = $('setsec-mileage');
   if (pmc) pmc.style.display = mOn ? '' : 'none';
+  /* Q206 (2026-10-19): the map's Track fab follows this same toggle. */
+  if (window.Tracking && Tracking.syncFab) Tracking.syncFab();
 }
 
 /* ---- new-set field toggles ---- */
@@ -7170,11 +7172,42 @@ function buildGuideTOC() {
     };
   }
 }
-  $('btn-guide').onclick = function () {
+  /* Q205 (2026-10-19): Tanner — the Sign & Forage Reference lives in the
+     Trapper's Guide as its own chapter (listed in the table of contents),
+     with a search bar pinned at the top of the chapter. The chapter is
+     rendered from the live marker catalogs (markers.js renderSignReference),
+     so it never drifts from the pins themselves. */
+  function fillGuideBody() {
     $('guide-title').textContent = "Trapper's guide";
-    $('guide-body').innerHTML = window.OPOSSUM_FOOT_GUIDE_HTML || '<p class="dim">Guide not loaded.</p>';
+    $('guide-body').innerHTML = (window.OPOSSUM_FOOT_GUIDE_HTML || '<p class="dim">Guide not loaded.</p>') +
+      '<h3>Sign &amp; Forage Reference</h3>' +
+      '<p>The field information behind every marker — how to read the sign, who makes it, and the sources it stands on.</p>' +
+      '<div class="guide-ref-search"><input type="search" id="guide-ref-q" placeholder="Search the reference — a kind, an animal, a food…" autocomplete="off"></div>' +
+      '<div id="guide-ref-host"></div>';
+    if (window.renderSignReference) window.renderSignReference($('guide-ref-host'), '');
+    var q = $('guide-ref-q');
+    if (q) q.addEventListener('input', function () {
+      if (window.renderSignReference) window.renderSignReference($('guide-ref-host'), q.value);
+    });
     buildGuideTOC(); /* Q88 (2026-10-01): Tanner — tap-a-section table of contents. */
+  }
+  $('btn-guide').onclick = function () {
+    fillGuideBody();
     openSheet('sheet-guide');
+  };
+  /* Q205: the marker sheet's "Reference & sources" lands here too — the
+     guide opened with the reference chapter scrolled into view. */
+  window.openGuideReference = function () {
+    fillGuideBody();
+    openSheet('sheet-guide');
+    var heads = $('guide-body').querySelectorAll('h3');
+    for (var i = 0; i < heads.length; i++) {
+      if (heads[i].textContent === 'Sign & Forage Reference') {
+        var t = heads[i];
+        setTimeout(function () { if (t.scrollIntoView) t.scrollIntoView({ block: 'start' }); }, 60);
+        break;
+      }
+    }
   };
   $('btn-legal').onclick = function () {
     $('guide-title').textContent = 'Legal notices';

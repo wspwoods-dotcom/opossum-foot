@@ -338,38 +338,62 @@ var Markers = (function () {
 /* ---------- Q190 wiring + reference (init) ---------- */
 (function () {
   function glyphSpan(inner) { return '<span class="mk-kind-ic">' + '<svg viewBox="0 0 24 24" class="mk-glyph">' + (inner || '') + '</svg></span>'; }
-  function renderReference() {
-    var host = $('signref-body'); if (!host) return;
-    var html = '<p class="dim">The field information behind every marker — how to read the sign, who makes it, and the sources it stands on.</p>';
+  /* Q205 (2026-10-19): Tanner — the reference lives in the Trapper's Guide
+     now (a chapter of the guide, rendered by app.js into the guide sheet),
+     with a search bar filtering it. This renderer takes any host + filter;
+     app.js owns the chapter shell and the search field, and calls this. */
+  function renderReference(host, filter) {
+    if (!host) return;
+    var q = String(filter || '').trim().toLowerCase();
+    function hit() {
+      if (!q) return true;
+      for (var i = 0; i < arguments.length; i++) {
+        if (String(arguments[i] || '').toLowerCase().indexOf(q) !== -1) return true;
+      }
+      return false;
+    }
+    var html = '';
+    var any = false;
     ['homes', 'ground', 'tree', 'feeding', 'scent'].forEach(function (fam) {
-      html += '<h3 class="mk-ref-fam">' + Markers.famLabel[fam] + '</h3>';
+      var rows = '';
       SIGN_CATALOG.forEach(function (e) {
         if (e.fam !== fam) return;
-        html += '<div class="mk-ref-row">' + glyphSpan(SIGN_GLYPHS[e.ref]) + '<div><strong>' + esc(e.name) + '</strong>' +
+        if (!hit(e.name, e.species, e.desc)) return;
+        rows += '<div class="mk-ref-row">' + glyphSpan(SIGN_GLYPHS[e.ref]) + '<div><strong>' + esc(e.name) + '</strong>' +
           '<p>' + esc(e.desc) + '</p><p class="dim">Who makes it: ' + esc(e.species) + ' · Skill: ' + esc(e.skill) + '</p></div></div>';
       });
+      if (rows) { html += '<h4 class="mk-ref-fam">' + Markers.famLabel[fam] + '</h4>' + rows; any = true; }
     });
-    html += '<h3 class="mk-ref-fam">Forage &amp; finds</h3>' +
-      '<p class="dim mk-disclaimer">Not a foraging guide: these pins mark where things grow and what feeds on them — not what is safe to eat. Never eat a wild plant or mushroom based on this app; confirm any identification with a trusted field guide or an expert first.</p>';
+    var frows = '';
     FORAGE_CATALOG.forEach(function (e) {
-      html += '<div class="mk-ref-row">' + glyphSpan(FORAGE_GLYPHS[e.glyph]) + '<div><strong>' + esc(e.name) + '</strong>' +
+      if (!hit(e.name, e.recog, e.animals)) return;
+      frows += '<div class="mk-ref-row">' + glyphSpan(FORAGE_GLYPHS[e.glyph]) + '<div><strong>' + esc(e.name) + '</strong>' +
         '<p>' + esc(e.recog) + '</p><p class="dim">' + esc(e.region) + ' · ' + esc(e.season) + ' · Skill: ' + esc(e.skill) + '</p>' +
         '<p class="dim">Who feeds on it: ' + esc(e.animals) + '</p>' +
         (e.safety ? '<p class="mk-safety">Caution: ' + esc(e.safety) + '</p>' : '') + '</div></div>';
     });
-    function srcList(title, arr) {
-      if (!arr || !arr.length) return '';
-      var h = '<h3 class="mk-ref-fam">' + title + '</h3><ul class="mk-src">';
-      arr.forEach(function (s) {
-        var m = String(s).match(/https?:\/\/[^\s)]+/);
-        var txt = esc(String(s).replace(/https?:\/\/[^\s)]+/, '').replace(/\s+—\s*$/, '').trim());
-        h += '<li>' + (m ? '<a href="' + esc(m[0]) + '" target="_blank" rel="noopener">' + txt + '</a>' : txt) + '</li>';
-      });
-      return h + '</ul>';
+    if (frows) {
+      html += '<h4 class="mk-ref-fam">Forage &amp; finds</h4>' +
+        '<p class="dim mk-disclaimer">Not a foraging guide: these pins mark where things grow and what feeds on them — not what is safe to eat. Never eat a wild plant or mushroom based on this app; confirm any identification with a trusted field guide or an expert first.</p>' + frows;
+      any = true;
     }
-    html += srcList('Sources — sign', CATALOG_SOURCES.sign) + srcList('Sources — forage &amp; finds', CATALOG_SOURCES.forage);
+    if (!any) html = '<p class="dim">Nothing in the reference matches that search.</p>';
+    if (!q) {
+      function srcList(title, arr) {
+        if (!arr || !arr.length) return '';
+        var h = '<h4 class="mk-ref-fam">' + title + '</h4><ul class="mk-src">';
+        arr.forEach(function (s) {
+          var m = String(s).match(/https?:\/\/[^\s)]+/);
+          var txt = esc(String(s).replace(/https?:\/\/[^\s)]+/, '').replace(/\s+—\s*$/, '').trim());
+          h += '<li>' + (m ? '<a href="' + esc(m[0]) + '" target="_blank" rel="noopener">' + txt + '</a>' : txt) + '</li>';
+        });
+        return h + '</ul>';
+      }
+      html += srcList('Sources — sign', CATALOG_SOURCES.sign) + srcList('Sources — forage &amp; finds', CATALOG_SOURCES.forage);
+    }
     host.innerHTML = html;
   }
+  window.renderSignReference = renderReference;
   function syncSettings() {
     var cb = $('settings-markers'); if (!cb || !window.Store || !Store.data) return false;
     cb.checked = Store.data.markersOn !== false;
@@ -396,8 +420,9 @@ var Markers = (function () {
     $('btn-mk-save').onclick = function () { Markers.saveForm(); };
     $('btn-mk-edit').onclick = function () { Markers.editDetail(); };
     $('btn-mk-delete').onclick = function () { Markers.deleteDetail(); };
-    $('btn-mk-ref').onclick = function () { renderReference(); openSheet('sheet-signref'); };
-    $('btn-open-signref').onclick = function () { renderReference(); openSheet('sheet-signref'); };
+    /* Q205: the marker sheet's Reference & sources opens the Trapper's Guide
+       at the Sign & Forage Reference chapter (app.js owns the guide). */
+    $('btn-mk-ref').onclick = function () { if (window.openGuideReference) window.openGuideReference(); };
     var cb = $('settings-markers');
     if (cb) cb.addEventListener('change', function () {
       Store.data.markersOn = this.checked; Store.save();
