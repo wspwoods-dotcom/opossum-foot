@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-10-19ej';
+var APP_VERSION = 'beta 0.1 · build 2026-10-19ek';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -1779,7 +1779,13 @@ function renderModsHtml(t, v, forceCheck) {
     return '<label class="checkline modline"><input type="checkbox" class="modchkbox" value="' + esc(val) + '"' +
       (checked[val] ? ' checked' : '') + '> ' + esc(val) + '</label>';
   }
-  var h = '<div class="mods-sect"><div class="mods-title">Modifications <span class="dim">— optional</span></div>' +
+  /* Q204 (2026-10-19): Tanner — Modifications folds up like the other
+     sections. Starts folded unless the set carries mods (Q99 rule: folded
+     when empty, open when there's something in it). */
+  var hasContent = saved.length > 0 || (v.panSize && v.panSize !== 'Stock') || !!v.jawShape || !!v.jawClose || !!(forceCheck && forceCheck.length);
+  var h = '<div class="setsec" id="setform-modssec"' + (hasContent ? ' data-has-content="1"' : '') + '>' +
+    '<button type="button" class="setsec-head" id="setform-modssec-head" data-sec="setform-modssec" aria-expanded="false"><span>Modifications <span class="dim">— optional</span></span><span class="setsec-chev" aria-hidden="true">›</span></button>' +
+    '<div class="setsec-body" id="setform-modssec-body" hidden>' +
     '<div class="mods-hint">Work you did after buying the trap. Factory options are already in the model name above.</div>';
   if (t === 'Foothold') {
     /* Q55: pan size is an Other-capable dropdown like the rest. */
@@ -1819,7 +1825,7 @@ function renderModsHtml(t, v, forceCheck) {
     h += '</div>';
   }
   h += '<div class="mod-addrow"><input type="text" id="sf-modcustom" placeholder="Add your own modification" autocomplete="off">' +
-    '<button type="button" class="btn-ghost btn-small" id="sf-modadd">Add</button></div></div>';
+    '<button type="button" class="btn-ghost btn-small" id="sf-modadd">Add</button></div></div></div>';
   return h;
 }
 function bindModAdd() {
@@ -1891,6 +1897,7 @@ function renderTrapDetailFields(saved, forceCheck) {
     }
   }
   h += renderModsHtml(rt.t, v, forceCheck);
+  var modsWasOpen = (function () { var b = $('setform-modssec-body'); return !!(b && !b.hidden); })();
   host.innerHTML = h;
   /* Q12: custom model text learns from use */
   if ($('sf-trapmodel')) attachSuggest('sf-trapmodel', 'sf-trapmodel-suggest', 'trapmodel');
@@ -1902,6 +1909,12 @@ function renderTrapDetailFields(saved, forceCheck) {
   var springEl = $('sf-trapspring');
   if (springEl) springEl.onchange = function () { renderTrapDetailFields(); };
   bindModAdd();
+  /* Q204: wire the Modifications fold + restore its open state — open if it
+     was open mid-edit, or the set carries mods; folded otherwise. */
+  var modsHead = $('setform-modssec-head');
+  if (modsHead) modsHead.onclick = function () { toggleSettingsSection('setform-modssec'); };
+  var modsSec = $('setform-modssec');
+  setSectionOpen('setform-modssec', !!(modsWasOpen || (forceCheck && forceCheck.length) || (modsSec && modsSec.getAttribute('data-has-content'))));
 }
 /* One-line human summary of a set's trap details, for set detail + logs. */
 function trapDetailSummary(s) {
@@ -3196,6 +3209,7 @@ function openSetDetail(id) {
   /* Q178 (2026-10-08): view-only div, not a textarea. */
   $('sd-notes').textContent = s.notes || '—';
   refreshNotesBox('setdetail-notessec', 'sd-notes', 'sd-memos', 'sd-photos'); /* Q99 */
+  setSectionOpen('setdetail-catchessec', false); /* Q203: every open starts folded */
   openSheet('sheet-setdetail');
 }
 function appendTranscriptToSetNotes(setId, tr) {
@@ -3210,7 +3224,8 @@ function appendTranscriptToSetNotes(setId, tr) {
 function renderSetLogs(s, byLog) {
   var logs = Store.data.logs.filter(function (l) { return l.setId === s.id; })
     .sort(function (a, b) { return b.date < a.date ? -1 : 1; });
-  if (!logs.length) { $('sd-logs').innerHTML = '<p class="dim">No catches logged at this set yet.</p>'; return; }
+  if (!logs.length) { $('sd-logs').innerHTML = '<p class="dim">No catches logged at this set yet.</p>'; if ($('sd-catches-count')) $('sd-catches-count').textContent = ''; return; }
+  if ($('sd-catches-count')) $('sd-catches-count').textContent = '· ' + logs.length;
   $('sd-logs').innerHTML = logs.map(function (l) {
     var ph = ((byLog && byLog[l.id]) || []).map(function (p) {
       return '<img class="photo-thumb sm" data-ph="' + p.id + '" src="' + photoURL(p) + '" alt="Catch photo">';
@@ -4758,6 +4773,7 @@ function renderHistByTrapType(list) {
 
 function renderHistory() {
   var box = $('history-list');
+  var histFiltering = !!(histUI.q && histUI.q.trim());
   var logs = activeLogs();
   renderHistChips();
   var seg = $('hist-view-seg');
@@ -4778,17 +4794,20 @@ function renderHistory() {
   if (!logs.length) {
     renderHistSummary([]);
     box.innerHTML = '<div class="empty"><div class="big"><img class="bi inv" src="assets/icons/logbook.png" alt=""></div>No catches logged yet.<br>Tap a set pin on the map to log your first catch.</div>';
+    holdListHeight(box, histFiltering);
     return;
   }
   var list = histFilteredLogs();
   renderHistSummary(list);
   if (!list.length) {
     box.innerHTML = '<div class="empty"><div class="big">🔍</div>No catches match those filters.</div>';
+    holdListHeight(box, histFiltering);
     return;
   }
   box.innerHTML = (histUI.view === 'species') ? renderHistBySpecies(list)
     : (histUI.view === 'traptype') ? renderHistByTrapType(list)
     : renderHistByDate(list);
+  holdListHeight(box, histFiltering);
 }
 
 /* ================= Q5. LURE SCORECARD TAB =================
@@ -5199,6 +5218,25 @@ function totalsSections() {
   return t;
 }
 
+/* Q202 (2026-10-19): hold a results list at its unfiltered height while a
+   search filter is active. A filtered list that collapses also collapses the
+   pane's scroll height; the browser clamps the scroll position and the search
+   field leaps down the screen mid-typing (Tanner, Seasons search: the field
+   fell 330px over "Rac"). The sheets solved this class with fixed geometry
+   (Q198); panes get the same hold. Unfiltered renders record the full height
+   (only while visible — a hidden pane measures 0); filtered renders pin it
+   as min-height so the scroll height, and the field, never move. */
+function holdListHeight(listEl, filtering) {
+  if (!listEl) return;
+  if (!filtering) {
+    listEl.style.minHeight = '';
+    var h = listEl.offsetHeight;
+    if (h > 0) listEl._fullH = h;
+  } else if (listEl._fullH) {
+    listEl.style.minHeight = listEl._fullH + 'px';
+  }
+}
+
 function renderSeasons(filter) {
   var d = stateData();
   var entry = stateEntry(activeStateCode());
@@ -5238,6 +5276,7 @@ function renderSeasons(filter) {
       showSpeciesDetail(this.getAttribute('data-sp'));
     };
   }
+  holdListHeight($('seasons-list'), !!q);
 }
 
 /* Iowa proof 2026-09-30: Trap & Snare Rules card + game-warden link.
@@ -5682,9 +5721,11 @@ function renderLandowners() {
     if (!all.length) {
       list.innerHTML = '<p class="dim" style="margin:8px 0">' +
         (q ? 'No landowners match that search.' : 'No landowners yet. Add the folks whose ground you trap.') + '</p>';
+      holdListHeight(list, !!q);
       return;
     }
     all.forEach(function (lo) { list.appendChild(landownerCard(lo, byLo[lo.id] || [])); });
+    holdListHeight(list, !!q);
   });
 }
 function landownerCard(lo, photos) {
