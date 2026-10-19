@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-10-19ek';
+var APP_VERSION = 'beta 0.1 · build 2026-10-19el';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -1897,7 +1897,14 @@ function renderTrapDetailFields(saved, forceCheck) {
     }
   }
   h += renderModsHtml(rt.t, v, forceCheck);
-  var modsWasOpen = (function () { var b = $('setform-modssec-body'); return !!(b && !b.hidden); })();
+  /* Q204: the fold survives re-renders within THIS form-open only. A fresh
+     load (saved values, or a new open of the form) decides from content
+     alone — otherwise a modded set's open section would leak into the next
+     set's form. */
+  var modsFresh = !!saved || modsRenderSeq !== setFormOpenSeq;
+  var modsWasOpen = false;
+  if (!modsFresh) { var mb = $('setform-modssec-body'); modsWasOpen = !!(mb && !mb.hidden); }
+  modsRenderSeq = setFormOpenSeq;
   host.innerHTML = h;
   /* Q12: custom model text learns from use */
   if ($('sf-trapmodel')) attachSuggest('sf-trapmodel', 'sf-trapmodel-suggest', 'trapmodel');
@@ -2716,6 +2723,7 @@ function locateMe() {
 
 /* ================= 7. SETS ================= */
 var editingSetId = null, pendingCoords = null, pendingSetPhotos = [], editSetPhotos = [];
+var setFormOpenSeq = 0, modsRenderSeq = -1; /* Q204: mods fold state is per form-open */
 var setMissingReason = null;
 
 /* Q36: why a set went missing. Structured field on the set (set.missingReason);
@@ -2838,6 +2846,7 @@ function openSponsorBio(id) {
 }
 
 function openSetForm(coords, setId) {
+  setFormOpenSeq++;
   editingSetId = setId || null;
   pendingCoords = coords || null;
   var s = setId ? getSet(setId) : null;
