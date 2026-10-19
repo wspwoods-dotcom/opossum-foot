@@ -375,6 +375,10 @@ body.route-locked #tabbar { pointer-events: none; opacity: .35; }
 .guide-toc-title { font-weight: 700; margin: 0 0 6px; font-size: 14px; }
 .guide-toc-item { display: block; width: 100%; text-align: left; background: none; border: none; color: var(--accent); padding: 6px 0; font-size: 14px; cursor: pointer; }
 .guide-toc-item:active { opacity: .6; }
+/* Q205 (2026-10-19): the Sign & Forage Reference chapter's search bar sticks
+   to the top of the guide sheet while the chapter scrolls under it — the
+   same no-jump sticky treatment as the pane searches (Q198/Q202). */
+.guide-ref-search { position: sticky; top: 0; z-index: 6; background: var(--sheet); padding: 8px 0 10px; }
 /* Q143 (2026-10-01): Tanner — fill the weather chip green like the other
    left-side map controls. NOTE: Leaflet adds the leaflet-control class ONTO
    the element returned by onAdd, so the old descendant selector
