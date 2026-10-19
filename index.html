@@ -687,9 +687,14 @@
     <div class="photo-strip" id="sd-photos"></div>
     </div>
     </div>
-    <div class="card">
-    <h3 style="margin:6px 0">Catches at This Set</h3>
+    <!-- Q203 (2026-10-19): Tanner — the catches list folds up like the notes
+         box above, so a busy set doesn't make a busy sheet. Starts folded;
+         the head carries the count. -->
+    <div class="card setsec" id="setdetail-catchessec">
+    <button type="button" class="setsec-head" id="setdetail-catchessec-head" data-sec="setdetail-catchessec" aria-expanded="false"><span>Catches at This Set <span class="dim" id="sd-catches-count"></span></span><span class="setsec-chev" aria-hidden="true">›</span></button>
+    <div class="setsec-body" id="setdetail-catchessec-body" hidden>
     <div id="sd-logs"></div>
+    </div>
     </div>
     <div class="sheet-actions">
       <div class="btn-row">
