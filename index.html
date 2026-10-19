@@ -92,7 +92,11 @@
       <button class="fab secondary" id="btn-drop-pin" type="button" aria-label="Drop a pin"><img src="assets/icons/mappin.png" alt=""></button>
       <button class="fab secondary" id="btn-add-gps" type="button" aria-label="Add set at my location"><img src="assets/icons/plus.png" alt=""></button>
       <button class="fab secondary" id="btn-mark" type="button" aria-label="Mark sign or forage"><svg viewBox="0 0 24 24" class="fab-diamond" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2.5" transform="rotate(45 12 12)" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="2.1" fill="currentColor"/></svg></button>
-      <!-- Q196 (2026-10-18): the track fab moved off the map into Paperwork -> Route and Mileage (Tanner: the map screen is getting busy). -->
+      <!-- Q196 (2026-10-18): the track fab moved off the map into Paperwork -> Route and Mileage (Tanner: the map screen is getting busy).
+           Q206 (2026-10-19): Tanner — the fab is back on the map, shown only
+           while Route & mileage tracking is toggled on in Settings (tracking.js
+           syncFab + applyFeatureToggles keep it in step with the toggle). -->
+      <button class="fab secondary" id="btn-track" type="button" aria-label="Track a route"><svg viewBox="0 0 24 24" class="fab-diamond" aria-hidden="true"><circle cx="12" cy="12" r="8.2" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="3.4" fill="#e5484d"/></svg></button>
       <!-- Q95 (2026-10-01): Tanner — all three right-side fabs rest dark like the
            other two; green only while a mode is on (crosshair follow, pin-drop
            placing). The + button has no toggle state, so it rests dark. -->
@@ -281,8 +285,8 @@
         <p class="dim" style="margin:-6px 0 12px">Odometer trips per line, the route estimate, and the standalone mileage CSV — its own report for your records or reimbursement.</p>
         <label class="checkline"><input type="checkbox" id="settings-markers" checked> Sign &amp; forage markers</label>
         <p class="dim" style="margin:-6px 0 10px">The map layer for animal sign, forage, and finds — 71 sign kinds and the Forage &amp; finds family, each with its own icon. Off hides the layer and its map button entirely.</p>
-        <button class="btn-secondary" id="btn-open-signref" type="button">Sign &amp; Forage Reference</button>
-        <p class="dim" style="margin:6px 0 12px">Every kind, how to read it, and the sources behind the information.</p>
+        <!-- Q205 (2026-10-19): the Sign & Forage Reference moved out of Settings
+             into the Trapper's Guide (its own chapter there, with search). -->
         <button class="btn-secondary" id="btn-features-reset" type="button">Reset features to defaults</button>
         </div>
       </div>
@@ -497,12 +501,6 @@
         <button class="btn-primary" id="btn-show-done" type="button">Done</button>
       </div>
     </div>
-  </div>
-
-  <div id="sheet-signref" class="sheet">
-    <div class="sheet-grab"></div>
-    <div class="sheet-head"><h2>Sign &amp; Forage Reference</h2><button class="sheet-x" data-close type="button">×</button></div>
-    <div class="sheet-body" id="signref-body"></div>
   </div>
 
   <!-- Q174 (2026-10-08): multi-select checklist sheet for report filters -->
