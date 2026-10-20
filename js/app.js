@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-10-19em';
+var APP_VERSION = 'beta 0.1 · build 2026-10-20en';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -2181,6 +2181,13 @@ function setIcon(set) {
 
 function refreshMarkers() {
   if (!map || !markersLayer) return;
+  /* Q207 (2026-10-20, Tanner): sync the status mirror from the saved Show
+     model BEFORE painting. The mirror used to start all-on and only picked
+     up his selections as a side effect of other calls, so a cold open
+     painted every pin, then removed the unselected ones a beat later (his
+     screenshot: "Show: Active, Pulled" with purple/orange/blue pins still
+     standing). Reading the model here makes the first paint filtered. */
+  showModel();
   markersLayer.clearLayers();
   activeSets().forEach(function (s) {
     if (!mapStatusFilter[normStatus(s.status)]) return;
