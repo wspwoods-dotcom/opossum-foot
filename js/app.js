@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-10-20eo';
+var APP_VERSION = 'beta 0.1 · build 2026-10-20ep';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -3111,7 +3111,12 @@ function saveSetForm() {
       setType: nSetType, /* Q55: Other… resolves to the typed custom; Q208: '' when the field is toggled off */
       /* Q26: stacked attractant rows -> arrays; Q208: a toggled-off attractant saves empty */
       bait: setFieldOn('bait') ? collectAttrRows('bait') : [], lure: setFieldOn('lure') ? collectAttrRows('lure') : [],
-      urine: setFieldOn('urine') ? collectAttrRows('urine') : [], other: setFieldOn('other') ? collectAttrRows('other') : [],
+      urine: setFieldOn('urine') ? collectAttrRows('urine') : [],
+      /* Q209 (2026-10-20): visual/audio were missing from the new-set record
+         entirely — picks made on the New Set form silently vanished (Edit
+         saved them fine). They ride here now, under the same Q208 guard. */
+      visual: setFieldOn('visual') ? collectAttrRows('visual') : [], audio: setFieldOn('audio') ? collectAttrRows('audio') : [],
+      other: setFieldOn('other') ? collectAttrRows('other') : [],
       status: status,
       dateSet: dateSet,
       notes: $('sf-notes').value.trim(),
