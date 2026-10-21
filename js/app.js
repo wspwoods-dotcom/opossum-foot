@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-10-20en';
+var APP_VERSION = 'beta 0.1 · build 2026-10-20eo';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -2879,13 +2879,16 @@ function openSetForm(coords, setId) {
   $('sf-maker').onchange = onMakerChange;
   renderTrapDetailFields(s || tmpl || null);
   renderSetTypeOptions(); /* Q29: rebuild taxonomy each open so legacy values reset */
-  var stv = s ? (s.setType || 'Dirt hole') : (tmpl && tmpl.setType ? tmpl.setType : 'Dirt hole');
+  /* Q208: with Set type toggled off, a new set's hidden dropdown holds blank,
+     not the "Dirt hole" fallback — the save forces blank regardless (Q208 in
+     saveSetForm); this keeps the form itself honest. */
+  var stv = s ? (s.setType || 'Dirt hole') : (tmpl && tmpl.setType ? tmpl.setType : (setFieldOn('settype') ? 'Dirt hole' : ''));
   if (stv === 'Other') {
     /* Q55: a legacy literal Other becomes the Other… escape hatch with the
        "What is it?" box revealed, ready to be typed for real. */
     $('sf-settype').value = OTHER_VALUE;
   } else {
-    ensureSetTypeOption(stv); /* Q29: legacy values ("Drowning set", "Trail / blind set") ride along */
+    if (stv) ensureSetTypeOption(stv); /* Q29: legacy values ("Drowning set", "Trail / blind set") ride along */
     $('sf-settype').value = stv;
   }
   /* Q55: reveal any "What is it?" boxes whose dropdown opened on Other. */
@@ -3026,6 +3029,27 @@ function saveSetForm() {
   hideSetFormError();
   var td = trapDetailValues();
   var rt = resolvedTrapType();
+  /* Q208 (2026-10-20): Tanner — a field toggled off in Settings must not be
+     logged at all. Q162 blanked the carry-forward template, but the form's
+     own defaults refilled the hidden fields (set type falls back to "Dirt
+     hole"; the trap picker resolves its first type) and this save wrote
+     them anyway. For a NEW set, every toggled-off group is forced blank
+     here, at the save itself, so nothing the user turned off can reach
+     storage. Edit mode keeps td/rt untouched on purpose: values logged
+     while a field was on are the set's real data, and an unrelated edit
+     must not strip them. */
+  var ntd = td, nrt = rt, nSetType = selVal('sf-settype');
+  if (!editingSetId) {
+    ntd = {}; for (var nk in td) if (Object.prototype.hasOwnProperty.call(td, nk)) ntd[nk] = td[nk];
+    nrt = { t: rt.t, spring: rt.spring };
+    if (!setFieldOn('traptype')) { nrt.t = ''; nrt.spring = ''; ntd.trapMaker = ''; }
+    if (!setFieldOn('trapdetail')) {
+      ntd.trapSpring = ''; ntd.trapSize = ''; ntd.snareDia = ''; ntd.snareLock = '';
+      ntd.snareLen = ''; ntd.snarePurpose = ''; ntd.trapModel = ''; ntd.trapMods = [];
+      ntd.panSize = ''; ntd.jawShape = ''; ntd.jawClose = '';
+    }
+    if (!setFieldOn('settype')) nSetType = '';
+  }
   if (editingSetId) {
     var s = getSet(editingSetId);
     if (!s) { closeSheets(); return; }
@@ -3077,17 +3101,17 @@ function saveSetForm() {
     var ns = {
       id: uid('s'), name: name,
       lat: pendingCoords.lat, lng: pendingCoords.lng, county: null,
-      trapType: rt.t,
-      trapMaker: td.trapMaker,
-      trapSpring: td.trapSpring || rt.spring || '', trapSize: td.trapSize,
-      snareDia: td.snareDia, snareLock: td.snareLock, snareLen: td.snareLen,
-      snarePurpose: td.snarePurpose,
-      trapModel: td.trapModel,
-      trapMods: normalizeMods(td.trapMods), panSize: td.panSize, jawShape: td.jawShape, jawClose: td.jawClose,
-      setType: selVal('sf-settype'), /* Q55: Other… resolves to the typed custom */
-      /* Q26: stacked attractant rows -> arrays */
-      bait: collectAttrRows('bait'), lure: collectAttrRows('lure'),
-      urine: collectAttrRows('urine'), other: collectAttrRows('other'),
+      trapType: nrt.t,
+      trapMaker: ntd.trapMaker,
+      trapSpring: ntd.trapSpring || nrt.spring || '', trapSize: ntd.trapSize,
+      snareDia: ntd.snareDia, snareLock: ntd.snareLock, snareLen: ntd.snareLen,
+      snarePurpose: ntd.snarePurpose,
+      trapModel: ntd.trapModel,
+      trapMods: normalizeMods(ntd.trapMods), panSize: ntd.panSize, jawShape: ntd.jawShape, jawClose: ntd.jawClose,
+      setType: nSetType, /* Q55: Other… resolves to the typed custom; Q208: '' when the field is toggled off */
+      /* Q26: stacked attractant rows -> arrays; Q208: a toggled-off attractant saves empty */
+      bait: setFieldOn('bait') ? collectAttrRows('bait') : [], lure: setFieldOn('lure') ? collectAttrRows('lure') : [],
+      urine: setFieldOn('urine') ? collectAttrRows('urine') : [], other: setFieldOn('other') ? collectAttrRows('other') : [],
       status: status,
       dateSet: dateSet,
       notes: $('sf-notes').value.trim(),
@@ -3186,15 +3210,20 @@ function openSetDetail(id) {
   function sdRow(label, val) {
     if (val) sdHtml += '<dt>' + esc(label) + '</dt><dd>' + esc(val) + '</dd>';
   }
-  var sdTrapDet = trapDetailSummary(s);
-  sdRow('Trap', (s.trapType || '') + (sdTrapDet ? ' · ' + sdTrapDet : ''));
-  sdRow('Set type', s.setType || '');
-  sdRow('Bait', joinAttr(s.bait));
-  sdRow('Lure', joinAttr(s.lure));
-  sdRow('Urine', joinAttr(s.urine));
-  sdRow('Visual', joinAttr(s.visual));
-  sdRow('Audio', joinAttr(s.audio));
-  sdRow('Other Attractants', joinAttr(s.other));
+  /* Q208 (2026-10-20): the detail sheet honors the same field toggles — a
+     field switched off shows no row here even when an older set still
+     carries a value logged while the field was on. Stored data untouched. */
+  var sdTrapParts = [];
+  if (setFieldOn('traptype') && s.trapType) sdTrapParts.push(s.trapType);
+  if (setFieldOn('trapdetail')) { var sdDet0 = trapDetailSummary(s); if (sdDet0) sdTrapParts.push(sdDet0); }
+  sdRow('Trap', sdTrapParts.join(' · '));
+  if (setFieldOn('settype')) sdRow('Set type', s.setType || '');
+  if (setFieldOn('bait')) sdRow('Bait', joinAttr(s.bait));
+  if (setFieldOn('lure')) sdRow('Lure', joinAttr(s.lure));
+  if (setFieldOn('urine')) sdRow('Urine', joinAttr(s.urine));
+  if (setFieldOn('visual')) sdRow('Visual', joinAttr(s.visual));
+  if (setFieldOn('audio')) sdRow('Audio', joinAttr(s.audio));
+  if (setFieldOn('other')) sdRow('Other Attractants', joinAttr(s.other));
   sdRow('Date set', fmtDate(s.dateSet));
   if (showCoords()) {
     sdRow('Location', (s.county ? s.county + ' Co. · ' : '') + s.lat.toFixed(5) + ', ' + s.lng.toFixed(5));
