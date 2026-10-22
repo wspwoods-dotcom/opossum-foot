@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-10-21eq';
+var APP_VERSION = 'beta 0.1 · build 2026-10-21er';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -2821,9 +2821,10 @@ function sponsorForProduct(name) {
    sponsors live inside the suggestion menus now (see sponsorSuggests). */
 /* Q171 (2026-10-08): sponsor bio is the full-screen demo sheet — X close, logo,
    name, gold tagline, OUR STORY, PRODUCTS, tier-gated extras, SPONSORED footer.
-   Tier 1 = bio + product names only; Tier 2+ adds product descriptions and the
-   gold VISIT WEBSITE button. Every caller (pickers, scorecard, directory) rides
-   this one function. */
+   Tier 1 = bio + product names + the gold VISIT WEBSITE button (Tanner's ruling
+   2026-10-21: the direct link to the sponsor's sales page is Tier 1's biggest
+   benefit); Tier 2+ adds product descriptions and the History tab. Every caller
+   (pickers, scorecard, directory) rides this one function. */
 function openSponsorBio(id) {
   var sp = sponsorById(id);
   if (!sp) return;
@@ -2844,9 +2845,11 @@ function openSponsorBio(id) {
       return '<div class="sp-bio-prod"><div class="sp-bio-prodname">' + esc(pr.name) + '</div>' +
         ((tier >= 2 && pr.description) ? '<div class="sp-bio-proddesc dim">' + esc(pr.description) + '</div>' : '') + '</div>';
     }).join('') +
-    ((tier >= 2 && sp.url)
+    (sp.url
       ? '<a class="sp-bio-visit" href="' + esc(sp.url) + '" target="_blank" rel="noopener">Visit Website</a>'
-      : '<p class="sp-bio-upgrade dim">Upgrade to Tier 2 for product descriptions + website link</p>') +
+      : '') +
+    (tier >= 2 ? ''
+      : '<p class="sp-bio-upgrade dim">Tier 2 adds full product descriptions</p>') +
     '<div class="sp-bio-sponsored">Sponsored</div>' +
     '</div>';
   showModal(html);
@@ -2878,18 +2881,42 @@ function openSetForm(coords, setId) {
   $('sf-type').onchange = function () { renderTrapDetailFields(); paintSelectHint(this); };
   $('sf-maker').onchange = onMakerChange;
   renderTrapDetailFields(s || tmpl || null);
-  renderSetTypeOptions(); /* Q29: rebuild taxonomy each open so legacy values reset */
+  renderSetTypeOptions(); /* Q212: rebuild the foundation picker each open so legacy values reset */
   /* Q208: with Set type toggled off, a new set's hidden dropdown holds blank,
      not the "Dirt hole" fallback — the save forces blank regardless (Q208 in
      saveSetForm); this keeps the form itself honest. */
   var stv = s ? (s.setType || 'Dirt hole') : (tmpl && tmpl.setType ? tmpl.setType : (setFieldOn('settype') ? 'Dirt hole' : ''));
+  var svar = s ? (s.variation || '') : (tmpl ? (tmpl.variation || '') : '');
+  if (!s && !setFieldOn('settype')) svar = ''; /* Q162/Q208: off means blank, carried template included */
   if (stv === 'Other') {
     /* Q55: a legacy literal Other becomes the Other… escape hatch with the
        "What is it?" box revealed, ready to be typed for real. */
     $('sf-settype').value = OTHER_VALUE;
+    renderVariationOptions();
+    setVariationFields('', svar);
+  } else if (stv) {
+    var fnd = foundationOf(stv);
+    if (fnd) {
+      /* Q212: the form opens structured. A legacy name selects its
+         foundation and rides as the variation (unless the record already
+         carries a variation of its own); a foundation name selects
+         itself. Nothing stored is renamed by opening — the structure is
+         only written if the trapper saves. */
+      $('sf-settype').value = fnd;
+      renderVariationOptions();
+      setVariationFields(fnd, svar || (stv !== fnd ? stv : ''));
+    } else {
+      /* No foundation home ("Drowning set", a custom name): rides along
+         verbatim as its own option, exactly as before. */
+      ensureSetTypeOption(stv);
+      $('sf-settype').value = stv;
+      renderVariationOptions();
+      setVariationFields('', svar);
+    }
   } else {
-    if (stv) ensureSetTypeOption(stv); /* Q29: legacy values ("Drowning set", "Trail / blind set") ride along */
-    $('sf-settype').value = stv;
+    $('sf-settype').value = '';
+    renderVariationOptions();
+    setVariationFields('', '');
   }
   /* Q55: reveal any "What is it?" boxes whose dropdown opened on Other. */
   ['sf-maker', 'sf-type', 'sf-settype', 'sf-trapspring', 'sf-trapsize', 'sf-snaredia',
@@ -2985,7 +3012,7 @@ function carryTemplate(t) {
     c.snareLen = ''; c.snarePurpose = ''; c.trapModel = ''; c.trapMods = [];
     c.panSize = ''; c.jawShape = ''; c.jawClose = '';
   }
-  if (!setFieldOn('settype')) c.setType = '';
+  if (!setFieldOn('settype')) { c.setType = ''; c.variation = ''; /* Q212: the variation rides the settype toggle */ }
   ['bait', 'lure', 'urine', 'visual', 'audio', 'other'].forEach(function (kk) {
     if (!setFieldOn(kk)) c[kk] = [];
   });
@@ -3038,7 +3065,7 @@ function saveSetForm() {
      storage. Edit mode keeps td/rt untouched on purpose: values logged
      while a field was on are the set's real data, and an unrelated edit
      must not strip them. */
-  var ntd = td, nrt = rt, nSetType = selVal('sf-settype');
+  var ntd = td, nrt = rt, nSetType = selVal('sf-settype'), nVariation = variationFieldValue();
   if (!editingSetId) {
     ntd = {}; for (var nk in td) if (Object.prototype.hasOwnProperty.call(td, nk)) ntd[nk] = td[nk];
     nrt = { t: rt.t, spring: rt.spring };
@@ -3048,7 +3075,7 @@ function saveSetForm() {
       ntd.snareLen = ''; ntd.snarePurpose = ''; ntd.trapModel = ''; ntd.trapMods = [];
       ntd.panSize = ''; ntd.jawShape = ''; ntd.jawClose = '';
     }
-    if (!setFieldOn('settype')) nSetType = '';
+    if (!setFieldOn('settype')) { nSetType = ''; nVariation = ''; /* Q212: the variation blanks with its foundation */ }
   }
   if (editingSetId) {
     var s = getSet(editingSetId);
@@ -3064,6 +3091,7 @@ function saveSetForm() {
     s.trapMods = normalizeMods(td.trapMods); s.panSize = td.panSize; s.jawShape = td.jawShape; s.jawClose = td.jawClose;
     normalizeTrapDetail(s);
     s.setType = selVal('sf-settype'); /* Q55: Other… resolves to the typed custom */
+    s.variation = variationFieldValue(); /* Q212: the form opened with the stored variation on it (openSetForm), so an unrelated edit writes the same value back — never a blank */
     /* Q26: stacked attractant rows -> arrays (deduped, empties dropped) */
     s.bait = collectAttrRows('bait');
     s.lure = collectAttrRows('lure');
@@ -3109,6 +3137,7 @@ function saveSetForm() {
       trapModel: ntd.trapModel,
       trapMods: normalizeMods(ntd.trapMods), panSize: ntd.panSize, jawShape: ntd.jawShape, jawClose: ntd.jawClose,
       setType: nSetType, /* Q55: Other… resolves to the typed custom; Q208: '' when the field is toggled off */
+      variation: nVariation, /* Q212: '' unless a variation/custom was picked; Q208: '' when toggled off */
       /* Q26: stacked attractant rows -> arrays; Q208: a toggled-off attractant saves empty */
       bait: setFieldOn('bait') ? collectAttrRows('bait') : [], lure: setFieldOn('lure') ? collectAttrRows('lure') : [],
       urine: setFieldOn('urine') ? collectAttrRows('urine') : [],
@@ -3222,7 +3251,7 @@ function openSetDetail(id) {
   if (setFieldOn('traptype') && s.trapType) sdTrapParts.push(s.trapType);
   if (setFieldOn('trapdetail')) { var sdDet0 = trapDetailSummary(s); if (sdDet0) sdTrapParts.push(sdDet0); }
   sdRow('Trap', sdTrapParts.join(' · '));
-  if (setFieldOn('settype')) sdRow('Set type', s.setType || '');
+  if (setFieldOn('settype')) sdRow('Set type', setTypeLabel(s)); /* Q212: "Foundation — Variation"; legacy names verbatim */
   if (setFieldOn('bait')) sdRow('Bait', joinAttr(s.bait));
   if (setFieldOn('lure')) sdRow('Lure', joinAttr(s.lure));
   if (setFieldOn('urine')) sdRow('Urine', joinAttr(s.urine));
@@ -3452,7 +3481,7 @@ function openLogSheet(setId) {
   logEventType = 'catch'; logOtherType = 'sprung';
   renderPendingLogPhotos();
   $('log-setline').innerHTML = '<strong>' + esc(s.name) + '</strong>' +
-    (s.setType ? ' · ' + esc(s.setType) : '') +
+    (s.setType ? ' · ' + esc(setTypeLabel(s)) : '') +
     (s.trapType ? ' · ' + esc(s.trapType) : '') +
     (function () { var a = allAttrSummary(s); return a ? ' · ' + esc(a) : ''; })();
   $('log-count').textContent = '1';
@@ -4514,6 +4543,19 @@ function dimLabel(def, v) {
 }
 function dimValues(def) {
   var seen = {}, out = [];
+  /* Q212: the Set Type filter always offers the 15 foundations + Other,
+     merged with whatever type values the trapper's own sets and logs
+     actually carry — legacy names included — so an old season stays
+     filterable by the names it was logged under. */
+  if (def.field === 'setType' && Store.data) {
+    allFoundationNames().concat([SET_TYPE_OTHER]).forEach(function (v) {
+      if (!seen[v]) { seen[v] = true; out.push(v); }
+    });
+    (Store.data.sets || []).forEach(function (s) {
+      var v = s ? (s.setType || '') : '';
+      if (v && !seen[v]) { seen[v] = true; out.push(v); }
+    });
+  }
   activeLogs().forEach(function (l) {
     /* Q26: attractant dims hold lists — flatten them into the value list */
     var vs = toAttrArray(dimValue(l, def));
@@ -5196,7 +5238,7 @@ function renderTotals() {
       other: toAttrArray(s.other).join(' / '),
       trap: trapBit,
       traps: (s.trapCount * 1) || 1,
-      setType: s.setType || ''
+      setType: setTypeLabel(s) /* Q212: Totals shows the same label as everywhere else */
     };
   });
   function setupDetailHtml(st) {
@@ -6987,7 +7029,7 @@ function cloneLine(id) {
         var c = {
           id: uid('s'), lineId: ln.id,
           name: s.name, lat: s.lat, lng: s.lng, county: s.county,
-          setType: s.setType, trapType: s.trapType,
+          setType: s.setType, variation: s.variation || '', trapType: s.trapType, /* Q212: a copied set keeps its variation */
           trapSpring: s.trapSpring, trapSize: s.trapSize,
           trapModel: s.trapModel, trapMaker: s.trapMaker,
           snareDia: s.snareDia, snareLock: s.snareLock,
@@ -7326,34 +7368,78 @@ function gpsPreselect() {
   }, { enableHighAccuracy: true, timeout: 15000, maximumAge: 60000 });
 }
 
-/* ================= Q29. SET-TYPE TAXONOMY =================
-   Researched 2026-09-26 (goals files: set-types-research.md). The New Set
-   form's Set Type dropdown now carries the full researched taxonomy,
-   grouped Land / Water. Snare sets file under their terrain (no Snare
-   group). "Trail" and "Blind" are separate entries; "Trench" and
-   "Step-down" stay separate; "T-bone" and "Bean Duff" (exact spelling)
-   included. There is deliberately NO "Drowning set" entry — it's a
-   dispatch method, not a set type. Labels are short ("Flat", not
-   "Flat set"). "Other" remains the escape hatch. */
-var SET_TYPES = {
-  /* Q81 (2026-10-01): Tanner — pick lists run A to Z. */
-  Land: ['Bean Duff', 'Blind', 'Bucket', 'Carcass', 'Cubby', 'Dirt hole',
-    'Flag', 'Flat', 'Hay', 'Leaning pole', 'Leaning tree', 'Leg snare',
-    'Mound', 'Positive', 'Rub', 'Scent post', 'Staked hide', 'Step-down',
-    'T-bone', 'Trail', 'Trail snare', 'Trash pile', 'Trench',
-    'Under-fence snare', 'Urine post', 'Weasel box'],
-  Water: ['Bank den', 'Bottom edge', 'Canal / channel', 'Culvert snare',
-    'Dam break', 'Dam crossover', 'Den / culvert', 'Den-entrance snare',
-    'Drain tile', 'Feed bed', 'Float', 'Latrine site', 'Obstruction',
-    'Open water', 'Overhanging bank', 'Pocket', 'Pole (under-ice)', 'Runway',
-    'Scent mound', 'Slide', 'Slide snare', 'Spring run', 'Top edge']
+/* ================= Q212. SET-TYPE FOUNDATIONS + VARIATIONS =================
+   History: Q29 (2026-09-26) put the full researched taxonomy in the Set
+   Type dropdown — 49 names, Land / Water. Lydia's tester note (Tanner's
+   ruling 2026-10-21) called the scroll overwhelming, and she was right
+   about the structure: Bean Duff, Scent post, T-bone, Staked hide are one
+   foundation (Flat) dressed by attraction and location. Q212 splits the
+   two: the picker offers FOUNDATIONS only (how the set is built), and the
+   old names live on as VARIATIONS under their foundation — plus a
+   free-text custom variation, because set names vary state to state.
+   A set stores the foundation in setType and the variation in `variation`
+   ('' when none). Display (setTypeLabel): "Foundation — Variation";
+   foundation alone when there is no variation; and a LEGACY stored name
+   (a set saved before Q212, type = an old variation name, no variation
+   field) stands verbatim until the set is edited — then it opens
+   structured (foundation picked by FOUNDATION_OF, its own name riding as
+   the variation) and saves that way. Nothing here renames stored data:
+   old sets, exports, and backups keep their strings. "Other" remains the
+   escape hatch; there is still deliberately NO "Drowning set" entry —
+   it's a dispatch method, not a set type. */
+var SET_FOUNDATIONS = {
+  Land: ['Flat', 'Dirt hole', 'Cubby', 'Trail / Blind', 'Pole', 'Snare', 'Positive'],
+  Water: ['Pocket', 'Den & entrance', 'Bank edge', 'Dam', 'Channel & run',
+    'Slide', 'Bank feature', 'Float & pole']
+};
+var SET_VARIATIONS = {
+  'Flat': ['Flat', 'Bean Duff', 'Scent post', 'Urine post', 'T-bone', 'Staked hide', 'Rub', 'Flag', 'Mound', 'Carcass'],
+  'Dirt hole': ['Dirt hole', 'Step-down', 'Trench', 'Hay'],
+  'Cubby': ['Cubby', 'Bucket', 'Weasel box', 'Trash pile'],
+  'Trail / Blind': ['Trail', 'Blind'],
+  'Pole': ['Leaning pole', 'Leaning tree'],
+  'Snare': ['Trail snare', 'Under-fence snare', 'Leg snare'],
+  'Positive': ['Positive'],
+  'Pocket': ['Pocket'],
+  'Den & entrance': ['Bank den', 'Den / culvert', 'Den-entrance snare', 'Culvert snare', 'Drain tile'],
+  'Bank edge': ['Bottom edge', 'Top edge', 'Overhanging bank'],
+  'Dam': ['Dam break', 'Dam crossover'],
+  'Channel & run': ['Canal / channel', 'Runway', 'Spring run'],
+  'Slide': ['Slide', 'Slide snare'],
+  'Bank feature': ['Scent mound', 'Feed bed', 'Latrine site', 'Open water', 'Obstruction'],
+  'Float & pole': ['Float', 'Pole (under-ice)']
 };
 var SET_TYPE_OTHER = 'Other';
+/* Every Q29 name -> its foundation, built by inverting SET_VARIATIONS. */
+var FOUNDATION_OF = {};
+Object.keys(SET_VARIATIONS).forEach(function (f) {
+  SET_VARIATIONS[f].forEach(function (v) { FOUNDATION_OF[v] = f; });
+});
+/* A foundation maps to itself; a legacy name maps to its foundation;
+   anything else (customs, "Drowning set") has no foundation home -> null. */
+function foundationOf(v) {
+  if (!v) return null;
+  if (SET_VARIATIONS[v]) return v;
+  return FOUNDATION_OF[v] || null;
+}
+function allFoundationNames() {
+  return SET_FOUNDATIONS.Land.concat(SET_FOUNDATIONS.Water);
+}
 function allSetTypes() {
-  return SET_TYPES.Land.concat(SET_TYPES.Water).concat([SET_TYPE_OTHER]);
+  /* Q212: known = the 15 foundations + all 49 legacy names + Other, so
+     nothing already in a trapper's data ever reads as foreign. */
+  return allFoundationNames().concat(Object.keys(FOUNDATION_OF)).concat([SET_TYPE_OTHER]);
 }
 function isKnownSetType(v) {
   return allSetTypes().indexOf(v) !== -1;
+}
+/* The one label used wherever a set's type is shown. */
+function setTypeLabel(s) {
+  if (!s) return '';
+  var t = s.setType || '';
+  var v = (typeof s.variation === 'string') ? s.variation.trim() : '';
+  if (t && v && v !== t && foundationOf(t) === t) return t + ' — ' + v;
+  return t;
 }
 /* Old short dropdown -> researched taxonomy. Only unambiguous renames are
    migrated; values with no clean new home ("Drowning set",
@@ -7435,21 +7521,58 @@ function renderSetTypeOptions() {
   var html = '';
   ['Land', 'Water'].forEach(function (g) {
     html += '<optgroup label="' + g + '">';
-    SET_TYPES[g].forEach(function (t) { html += '<option>' + esc(t) + '</option>'; });
+    SET_FOUNDATIONS[g].forEach(function (t) { html += '<option>' + esc(t) + '</option>'; });
     html += '</optgroup>';
   });
-  /* Q55: the trapper's custom set types, then the Other… escape hatch. */
+  /* Q55: the trapper's remembered custom set types ride along as their own
+     foundations (a custom name IS its own foundation — it has no variation
+     family), then the Other… escape hatch. Known names never double-list. */
   var seenST = {};
-  ['Land', 'Water'].forEach(function (g) { SET_TYPES[g].forEach(function (t) { seenST[t.toLowerCase()] = 1; }); });
+  allSetTypes().forEach(function (t) { seenST[t.toLowerCase()] = 1; });
   customOptionsFor('sf-settype').forEach(function (t) {
     if (!seenST[t.toLowerCase()]) { html += '<option>' + esc(t) + '</option>'; seenST[t.toLowerCase()] = 1; }
   });
   html += '<option value="' + OTHER_VALUE + '">Other…</option>';
   sel.innerHTML = html;
+  renderVariationOptions();
 }
-/* Legacy stored values with no taxonomy home ("Drowning set",
+/* Q212: the Variation dropdown under the foundation picker — "— None —"
+   plus the chosen foundation's names. Customs and ride-along legacy values
+   have no family, so they get None plus the free-text box only. */
+function renderVariationOptions() {
+  var sel = $('sf-setvariation');
+  if (!sel) return;
+  var f = $('sf-settype') ? $('sf-settype').value : '';
+  var names = SET_VARIATIONS[f] || [];
+  var html = '<option value="">— None —</option>';
+  names.forEach(function (t) { html += '<option>' + esc(t) + '</option>'; });
+  sel.innerHTML = html;
+}
+/* Open-time fill: a name in the foundation's list selects in the dropdown;
+   any other name (a custom variation) rides in the free-text box instead,
+   so an edit opens with every stored character still on the form. */
+function setVariationFields(foundation, name) {
+  var sel = $('sf-setvariation'), cust = $('sf-setvariation-custom');
+  if (cust) cust.value = '';
+  if (!sel) return;
+  sel.value = '';
+  if (!name) return;
+  if ((SET_VARIATIONS[foundation] || []).indexOf(name) !== -1) sel.value = name;
+  else if (cust) cust.value = name;
+}
+/* The variation as it should be stored: a typed custom name wins over the
+   dropdown pick; blank when neither is set. */
+function variationFieldValue() {
+  var cust = $('sf-setvariation-custom');
+  var typed = cust ? cust.value.trim() : '';
+  if (typed) return typed;
+  var sel = $('sf-setvariation');
+  return sel ? (sel.value || '') : '';
+}
+/* Stored values with no foundation home ("Drowning set",
    "Trail / blind set") still open fine in the form: they ride along as a
-   selected first option until the user picks a taxonomy value. */
+   selected first option until the user picks a foundation value. (Q212:
+   the 49 taxonomy names never reach here — foundationOf homes them.) */
 function ensureSetTypeOption(v) {
   var sel = $('sf-settype');
   if (!sel || !v || isKnownSetType(v)) return;
@@ -8327,6 +8450,14 @@ function boot() {
   document.addEventListener('change', function (e) {
     var t = e.target;
     if (t && t.tagName === 'SELECT' && t.getAttribute('data-has-other')) toggleOtherWrap(t);
+    /* Q212: picking a different foundation refills the Variation dropdown
+       with that foundation's names and clears any typed custom variation —
+       a variation never outlives the foundation it belonged to. */
+    if (t && t.id === 'sf-settype') {
+      renderVariationOptions();
+      var cust = $('sf-setvariation-custom');
+      if (cust) cust.value = '';
+    }
   });
   /* demo mode: seed fictional data only on a completely fresh install */
   if (DEMO && Store.data.sets.length === 0 && Store.data.logs.length === 0) {
