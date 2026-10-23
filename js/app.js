@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-10-21er';
+var APP_VERSION = 'beta 0.1 · build 2026-10-23es';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -6106,6 +6106,204 @@ function exportFullBackup() {
   setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 3000);
   toast('Full backup downloaded (' + sets.length + ' sets, ' + logs.length + ' logs). Keep it somewhere safe — import it back with "Import data (JSON)" after a reinstall.');
 }
+
+/* Q214 (2026-10-23, Tanner): full media export. The JSON backup carries the
+   data but NOT the pictures — photos and voice memos live in the IDB stores,
+   so a lost phone used to lose every license photo and permission slip.
+   This builds ONE ZIP on the phone holding every photo and memo from EVERY
+   line: set photos, catch photos, licenses, landowner permission slips and
+   boundary maps, trip photos, marker (Forage & Finds) photos, voice memos —
+   in named folders, each file named by its record and date, with an INDEX
+   (txt + csv) mapping every file back to its record. Nothing is sent
+   anywhere; the ZIP downloads like every other export and the trapper
+   decides where it goes. The ZIP is written by hand (store method — photos
+   and audio are already compressed) so it works offline with no library,
+   like the rest of the app. The same function ships in Jon's fur-sale clone,
+   where receipt photos ride along the same way. */
+function zipDosDateTime(ts) {
+  var dt = new Date(ts || Date.now());
+  var time = ((dt.getHours() & 31) << 11) | ((dt.getMinutes() & 63) << 5) | ((dt.getSeconds() >> 1) & 31);
+  var date = (((Math.max(1980, dt.getFullYear()) - 1980) & 127) << 9) | (((dt.getMonth() + 1) & 15) << 5) | (dt.getDate() & 31);
+  return { time: time, date: date };
+}
+var ZIP_CRC_TABLE = null;
+function zipCrc32(bytes) {
+  if (!ZIP_CRC_TABLE) {
+    ZIP_CRC_TABLE = [];
+    for (var n = 0; n < 256; n++) {
+      var c = n;
+      for (var k = 0; k < 8; k++) c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1);
+      ZIP_CRC_TABLE[n] = c >>> 0;
+    }
+  }
+  var crc = 0xFFFFFFFF;
+  for (var i = 0; i < bytes.length; i++) crc = ZIP_CRC_TABLE[(crc ^ bytes[i]) & 0xFF] ^ (crc >>> 8);
+  return (crc ^ 0xFFFFFFFF) >>> 0;
+}
+function blobToBytes(blob) {
+  if (blob.arrayBuffer) return blob.arrayBuffer().then(function (ab) { return new Uint8Array(ab); });
+  return new Promise(function (resolve, reject) {
+    var r = new FileReader();
+    r.onload = function () { resolve(new Uint8Array(r.result)); };
+    r.onerror = function () { reject(new Error('read failed')); };
+    r.readAsArrayBuffer(blob);
+  });
+}
+/* entries: [{path, blob, when}] -> Promise<Blob> of the complete ZIP. */
+function buildZipBlob(entries) {
+  var parts = [], central = [], offset = 0, chain = Promise.resolve();
+  var enc = new TextEncoder();
+  entries.forEach(function (e) {
+    chain = chain.then(function () {
+      return blobToBytes(e.blob).then(function (bytes) {
+        var nameBytes = enc.encode(e.path);
+        var crc = zipCrc32(bytes), dt = zipDosDateTime(e.when);
+        var lh = new DataView(new ArrayBuffer(30));
+        lh.setUint32(0, 0x04034b50, true); lh.setUint16(4, 20, true);
+        lh.setUint16(6, 0x0800, true); /* UTF-8 file names */
+        lh.setUint16(8, 0, true);      /* store — no compression */
+        lh.setUint16(10, dt.time, true); lh.setUint16(12, dt.date, true);
+        lh.setUint32(14, crc, true);
+        lh.setUint32(18, bytes.length, true); lh.setUint32(22, bytes.length, true);
+        lh.setUint16(26, nameBytes.length, true); lh.setUint16(28, 0, true);
+        parts.push(new Blob([lh.buffer, nameBytes, bytes]));
+        var ch = new DataView(new ArrayBuffer(46));
+        ch.setUint32(0, 0x02014b50, true); ch.setUint16(4, 20, true); ch.setUint16(6, 20, true);
+        ch.setUint16(8, 0x0800, true); ch.setUint16(10, 0, true);
+        ch.setUint16(12, dt.time, true); ch.setUint16(14, dt.date, true);
+        ch.setUint32(16, crc, true);
+        ch.setUint32(20, bytes.length, true); ch.setUint32(24, bytes.length, true);
+        ch.setUint16(28, nameBytes.length, true);
+        ch.setUint32(42, offset, true);
+        central.push(new Blob([ch.buffer, nameBytes]));
+        offset += 30 + nameBytes.length + bytes.length;
+      });
+    });
+  });
+  return chain.then(function () {
+    var cdSize = central.reduce(function (n, b) { return n + b.size; }, 0);
+    var eo = new DataView(new ArrayBuffer(22));
+    eo.setUint32(0, 0x06054b50, true);
+    eo.setUint16(8, entries.length, true); eo.setUint16(10, entries.length, true);
+    eo.setUint32(12, cdSize, true); eo.setUint32(16, offset, true);
+    return new Blob(parts.concat(central).concat([new Blob([eo.buffer])]), { type: 'application/zip' });
+  });
+}
+function mediaFileSlug(s) {
+  var out = String(s == null ? '' : s).replace(/[\/\\:*?"<>|]/g, '-').replace(/\s+/g, ' ').trim();
+  if (out.length > 70) out = out.slice(0, 70).trim();
+  return out || 'Untitled';
+}
+function mediaExt(blob, rec) {
+  var mime = (rec && rec.mime) || (blob && blob.type) || '';
+  var map = { 'image/jpeg': 'jpg', 'image/png': 'png', 'image/gif': 'gif', 'image/webp': 'webp', 'image/heic': 'heic',
+    'audio/wav': 'wav', 'audio/x-wav': 'wav', 'audio/mpeg': 'mp3', 'audio/mp4': 'm4a', 'audio/aac': 'aac', 'audio/webm': 'webm', 'audio/ogg': 'ogg' };
+  if (map[mime]) return map[mime];
+  var nm = rec && rec.name && /\.([A-Za-z0-9]{2,5})$/.exec(rec.name);
+  if (nm) return nm[1].toLowerCase();
+  return mime.indexOf('audio') === 0 ? 'm4a' : 'jpg';
+}
+function mediaDateStamp(ts) {
+  var d = new Date(ts || Date.now());
+  function p2(n) { return ('0' + n).slice(-2); }
+  return d.getFullYear() + '-' + p2(d.getMonth() + 1) + '-' + p2(d.getDate());
+}
+function buildMediaEntries(photos, memos) {
+  var lines = Store.data.lines || [];
+  var firstLineId = lines.length ? lines[0].id : null;
+  function lineName(id) {
+    for (var i = 0; i < lines.length; i++) if (lines[i].id === id) return lines[i].name || 'Line';
+    return lines.length ? (lines[0].name || 'Line') : 'Line';
+  }
+  function logById(id) {
+    var found = null;
+    (Store.data.logs || []).forEach(function (x) { if (x.id === id) found = x; });
+    return found;
+  }
+  var usedPaths = {}, entries = [], indexRows = [];
+  function add(folder, label, lineId, rec, blob, note) {
+    if (!blob) return;
+    var when = rec.createdAt || Date.now();
+    var base = mediaDateStamp(when) + ' — ' + mediaFileSlug(label);
+    var ext = mediaExt(blob, rec);
+    var path = folder + '/' + base + '.' + ext, n = 2;
+    while (usedPaths[path]) { path = folder + '/' + base + ' (' + n + ').' + ext; n++; }
+    usedPaths[path] = true;
+    entries.push({ path: path, blob: blob, when: when });
+    indexRows.push({ file: path, category: folder, line: lineName(lineId), record: label, date: mediaDateStamp(when), note: note || '' });
+  }
+  photos.forEach(function (p) {
+    if (!p || !p.blob) return;
+    if (p.landownerId) {
+      var lo = landownerById(p.landownerId);
+      add('Permission & Boundary', (lo ? lo.name : 'Landowner') + (p.kind === 'boundary' ? ' — Boundary map' : ' — Permission slip'),
+        lo ? lo.lineId : firstLineId, p, p.blob, '');
+    } else if (p.tripId) {
+      var tr = tripById(p.tripId);
+      add('Trip Photos', 'Trip ' + (tr ? fmtDate(tr.date) : '') + (p.kind === 'map' ? ' — Directions' : ' — Odometer'),
+        tr ? tr.lineId : firstLineId, p, p.blob, '');
+    } else if (p.logId) {
+      var lg = logById(p.logId);
+      var st = lg && lg.setId ? getSet(lg.setId) : null;
+      add('Catch Photos', (st ? st.name : 'Catch') + ' — ' + (lg ? (lg.species || lg.otherType || 'Catch') : 'Catch'),
+        st ? st.lineId : firstLineId, p, p.blob, '');
+    } else if (p.setId) {
+      var s2 = getSet(p.setId);
+      add('Set Photos', s2 ? s2.name : 'Set', s2 ? s2.lineId : firstLineId, p, p.blob, '');
+    } else if (p.markerId) {
+      var mk = null;
+      (Store.data.markers || []).forEach(function (x) { if (x.id === p.markerId) mk = x; });
+      add('Forage & Finds', mk ? (mk.name || mk.label || mk.ref || 'Marker') : 'Marker',
+        mk ? mk.lineId : firstLineId, p, p.blob, '');
+    } else {
+      /* No set/log/trip/landowner/marker link: a license-wallet photo. */
+      add('Licenses', p.name ? p.name.replace(/\.[A-Za-z0-9]+$/, '') : 'License',
+        p.lineId || firstLineId, p, p.blob, p.link ? 'Linked site: ' + p.link : '');
+    }
+  });
+  memos.forEach(function (m) {
+    if (!m || !m.blob) return;
+    var ms = m.setId ? getSet(m.setId) : null;
+    var mlg = m.logId ? logById(m.logId) : null;
+    var mSet = ms || (mlg && mlg.setId ? getSet(mlg.setId) : null);
+    add('Voice Memos', mSet ? mSet.name : (mlg ? (mlg.species || 'Catch memo') : 'Voice memo'),
+      mSet ? mSet.lineId : firstLineId, m, m.blob,
+      m.transcript ? 'Transcript: ' + m.transcript : '');
+  });
+  return { entries: entries, indexRows: indexRows };
+}
+function mediaIndexText(rows) {
+  var out = ['Opossum Foot — media export index', 'Exported ' + new Date().toLocaleString(), rows.length + ' files', ''];
+  rows.forEach(function (r) {
+    out.push(r.file + '  |  Line: ' + r.line + '  |  ' + r.record + (r.note ? '  |  ' + r.note : ''));
+  });
+  return out.join('\n');
+}
+function exportMediaZip() {
+  Promise.all([IDB.all('photos'), IDB.all('memos')]).then(function (res) {
+    var built = buildMediaEntries(res[0], res[1]);
+    if (!built.entries.length) { toast('No photos or voice memos on this phone yet.'); return null; }
+    toast('Building your media file…');
+    var rows = built.indexRows;
+    var csv = 'File,Category,Line,Record,Date,Notes\n' + rows.map(function (r) {
+      return [r.file, r.category, r.line, r.record, r.date, r.note].map(function (v) {
+        return '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"';
+      }).join(',');
+    }).join('\n');
+    built.entries.unshift({ path: 'INDEX.csv', blob: new Blob([csv], { type: 'text/csv' }), when: Date.now() });
+    built.entries.unshift({ path: 'INDEX.txt', blob: new Blob([mediaIndexText(rows)], { type: 'text/plain' }), when: Date.now() });
+    return buildZipBlob(built.entries).then(function (zip) {
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(zip);
+      a.download = 'opossum-foot-media-' + todayISO() + '.zip';
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 3000);
+      toast('Media file downloaded: ' + rows.length + ' photos & recordings from every line (' +
+        (zip.size / 1048576).toFixed(1) + ' MB). The INDEX file inside says what each one is.');
+    });
+  }).catch(function () { toast('Media export hit a snag — your data is untouched. Try again.'); });
+}
 /* Import a JSON file previously exported from Opossum Foot
    (or generated by the Trap Log migration): {app:'opossum-foot', sets:[], logs:[]}.
    Merges into existing data; colliding ids get fresh ones. */
@@ -8360,6 +8558,7 @@ function wireUp() {
     toast('Trapping state is now ' + (e ? e.name : code) + '.');
   };
   $('btn-backup').onclick = exportFullBackup;
+  $('btn-export-media').onclick = exportMediaZip; /* Q214 */
   $('btn-export-catches').onclick = exportCatches;
   $('btn-export-sets').onclick = exportSets;
   $('btn-export-mileage').onclick = exportMileage; /* Q8 */
