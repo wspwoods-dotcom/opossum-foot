@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-10-23es';
+var APP_VERSION = 'beta 0.1 · build 2026-10-24et';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -2618,8 +2618,10 @@ function onFollowFix(pos) {
   if (map && locateState === 'following') {
     var pt = map.latLngToContainerPoint([c.latitude, c.longitude]);
     var size = map.getSize();
-    if (Math.abs(pt.x - size.x / 2) > size.x * 0.28 ||
-        Math.abs(pt.y - size.y / 2) > size.y * 0.28) {
+    /* Q215: 15% deadband (was 28% — at zoom 19 the old band let the view
+       sit ~40 m off the trapper before it bothered to recenter). */
+    if (Math.abs(pt.x - size.x / 2) > size.x * 0.15 ||
+        Math.abs(pt.y - size.y / 2) > size.y * 0.15) {
       map.panTo([c.latitude, c.longitude], { animate: false });
     }
   }
@@ -2649,21 +2651,37 @@ function setLocateSearching(on) {
 function startAcquire() {
   locateState = 'acquiring';
   setLocateSearching(true);
-  var best = null, finished = false;
+  var best = null, finished = false, prevFix = null;
   /* Q70: acquire runs silent — the dot moves, no progress chatter.
      Denial and no-fix still speak up below. */
   hookFollowDrag();
 
+  /* Q215 (2026-10-24): a cold iPhone radio's first fixes can sit displaced
+     (Tanner: the send landed ~50 yards west of his ditch) while CLAIMING
+     good accuracy — a single optimistic fix must not end the acquire. The
+     stream has to CONVERGE: a fresh fix (≤12 m claimed) landing within
+     12 m of the previous fresh fix (≤25 m claimed). Only then is the
+     position settled enough to send him to it. */
+  function fixDistM(a, b) {
+    var dx = (a.lng - b.lng) * 111320 * Math.cos(a.lat * Math.PI / 180);
+    var dy = (a.lat - b.lat) * 110540;
+    return Math.sqrt(dx * dx + dy * dy);
+  }
+
   function consider(pos) {
     var c = pos.coords || {};
-    if (typeof c.latitude !== 'number' || typeof c.longitude !== 'number') return;
+    if (typeof c.latitude !== 'number' || typeof c.longitude !== 'number') return false;
     var ageMs = Date.now() - (pos.timestamp || 0);
-    if (ageMs > 30000 || ageMs < 0) return; /* stale cached fix — ignore it */
+    if (ageMs > 30000 || ageMs < 0) return false; /* stale cached fix — ignore it */
     var acc = (typeof c.accuracy === 'number' && isFinite(c.accuracy)) ? Math.round(c.accuracy) : 9999;
+    var fx = { lat: c.latitude, lng: c.longitude, acc: acc };
     if (!best || acc < best.acc) {
-      best = { lat: c.latitude, lng: c.longitude, acc: acc };
+      best = fx;
       drawFix(best, false);
     }
+    var converged = !!(prevFix && prevFix.acc <= 25 && acc <= 12 && fixDistM(prevFix, fx) <= 12);
+    prevFix = fx;
+    return converged;
   }
 
   function finish() {
@@ -2679,8 +2697,7 @@ function startAcquire() {
   locateTimer = setTimeout(finish, 45000);
   try {
     locateWatch = navigator.geolocation.watchPosition(function (pos) {
-      consider(pos);
-      if (best && best.acc <= 8) finish(); /* good enough — stop early */
+      if (consider(pos)) finish(); /* Q215: stream converged — send him */
     }, function (err) {
       /* transient iOS timeouts while the radio warms up are normal — keep
        * waiting; only a permission denial ends the attempt early. */
