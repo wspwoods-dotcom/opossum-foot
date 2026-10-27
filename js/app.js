@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-10-24et';
+var APP_VERSION = 'beta 0.1 · build 2026-10-27eu';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -2219,10 +2219,13 @@ function setPlacingLock(on) {
   document.body.classList.toggle('placing', !!on);
 }
 function placeIcon() {
-  return L.divIcon({
-    className: '',
-    html: '<div class="pin pin-place"></div>',
-    iconSize: [36, 36], iconAnchor: [18, 18]
+  /* Q217 (2026-10-27): the signature drag pin is now Lydia's opossum-track
+     pin, the delivered SVG used exactly as-is. The artwork sits centered in
+     the SVG's square canvas (content bbox measured at x 49.9%, tip y 72.2%),
+     so the anchor compensates in placement math only — file untouched. */
+  return L.icon({
+    iconUrl: 'assets/pin-track.svg',
+    iconSize: [110, 110], iconAnchor: [55, 79]
   });
 }
 function startPlacePin(latlng) {
@@ -4473,10 +4476,18 @@ function renderShowList() {
     else SIGN_CATALOG.forEach(function (e) { if (e.fam === fam) n++; });
     return ' <span class="show-count">' + n + ' kinds</span>';
   };
+  /* Q216 (2026-10-26, Tanner approved the mockup "Perfect"): live count of
+     the active line's sets beside each status, in the same .show-count
+     style the sign families use for their "N kinds". */
+  var statusCount = function (v) {
+    var n = 0;
+    activeSets().forEach(function (s) { if (normStatus(s.status) === v) n++; });
+    return ' <span class="show-count">' + n + (n === 1 ? ' set' : ' sets') + '</span>';
+  };
   var html = STATUS_VALUES.map(function (v) {
     var c = pinSchemeById(pinSchemeId()).colors[v];
     return '<label class="show-row"><span class="show-dot" style="background:' + c + '"></span>' +
-      '<span class="show-name">' + esc(STATUS_LABELS[v]) + '</span>' +
+      '<span class="show-name">' + esc(STATUS_LABELS[v]) + statusCount(v) + '</span>' +
       '<input type="checkbox" data-show-status="' + v + '"' + (m[v] !== false ? ' checked' : '') + '></label>';
   }).join('');
   var famKeys = ['homes', 'ground', 'tree', 'feeding', 'scent', 'forage'];
