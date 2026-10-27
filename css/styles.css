@@ -796,8 +796,12 @@ body.placing .leaflet-control-layers { pointer-events: none; opacity: .45; }
    standard fab glyph; and because the artwork is a black pin, it sits on a
    sepia-tan disc (brand color) so it reads on the dark button the way it
    reads on the map. Artwork itself exactly as delivered. */
-#btn-drop-pin img { width: 54px; height: 54px; border-radius: 50%;
-  background: radial-gradient(circle at 50% 50%, #DFB994 0 68%, rgba(223,185,148,0) 70%); }
+#btn-drop-pin img { width: 54px; height: 54px; }
+/* Q219 (2026-10-27): the pin carries a thin white outline (Tanner's order) so
+   the black pin stands out on dark buttons and dark ground. The outline is
+   baked into assets/pin-track-ol.png — a rendered copy of Lydia's SVG with a
+   mathematically even white dilation around the silhouette. Her delivered
+   file is untouched; a CSS shadow stack proved uneven and was rejected. */
 /* 2026-09-29: generalized from #place-bar-only — the home-bar cancel × rendered
    at the raw 128px with no size rule. */
 .pb-ic { width: 18px; height: 18px; object-fit: contain; filter: invert(1); vertical-align: -3px; margin-right: 6px; }
