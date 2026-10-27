@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-10-27ev';
+var APP_VERSION = 'beta 0.1 · build 2026-10-27ex';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -2224,8 +2224,8 @@ function placeIcon() {
      the SVG's square canvas (content bbox measured at x 49.9%, tip y 72.2%),
      so the anchor compensates in placement math only — file untouched. */
   return L.icon({
-    iconUrl: 'assets/pin-track.svg',
-    iconSize: [110, 110], iconAnchor: [55, 79]
+    iconUrl: 'assets/pin-track-ol.png',
+    iconSize: [110, 110], iconAnchor: [55, 81]
   });
 }
 function startPlacePin(latlng) {
