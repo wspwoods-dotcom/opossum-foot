@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-10-27fb';
+var APP_VERSION = 'beta 0.1 · build 2026-10-28fc';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -797,6 +797,41 @@ function maybeRetryCountyBanner(lat, lng) {
     if (info && info.county) {
       setCountyBanner(info);
       checkStateMismatch(info);
+      noteCountyBannerAt(lat, lng); /* Q225 */
+    }
+  });
+}
+
+/* Q225 (2026-10-28): the banner was written once — on the crosshair-acquire
+   final fix — and never reconsidered. Q96's retry only heals an UNKNOWN
+   banner, so a trapper who crossed a county line carried the old county in
+   the header for the whole outing (Tanner's field report: dot in Boone,
+   banner still GREENE — for him that banner carries legal weight). Now the
+   banner remembers where it was set from; once a follow fix lands more than
+   400 m from that point (well beyond GPS jitter, well inside any real
+   crossing), the county is looked up again and the banner corrected. The
+   60 s throttle matches Q96's. A successful lookup re-arms the gate from the
+   new point, changed county or not, so steady travel doesn't re-fetch on
+   every throttle window. */
+var countyBannerAt = null;
+var lastCountyMoveCheck = 0;
+function noteCountyBannerAt(lat, lng) {
+  if (typeof lat === 'number' && typeof lng === 'number') countyBannerAt = { lat: lat, lng: lng };
+}
+function maybeMoveCountyBanner(lat, lng) {
+  var banner = $('county-banner');
+  if (!banner || banner.classList.contains('unknown')) return; /* Q96 owns the unknown case */
+  if (typeof lat !== 'number' || typeof lng !== 'number') return;
+  if (!countyBannerAt) { noteCountyBannerAt(lat, lng); return; }
+  if (haversineMi(countyBannerAt.lat, countyBannerAt.lng, lat, lng) * 1609.34 < 400) return;
+  var now = Date.now();
+  if (now - lastCountyMoveCheck < 60000) return;
+  lastCountyMoveCheck = now;
+  reverseGeocode(lat, lng).then(function (info) {
+    if (info && info.county) {
+      setCountyBanner(info);
+      checkStateMismatch(info);
+      noteCountyBannerAt(lat, lng);
     }
   });
 }
@@ -2591,6 +2626,7 @@ function drawFix(fix, final) {
     reverseGeocode(fix.lat, fix.lng).then(function (info) {
       setCountyBanner(info);
       checkStateMismatch(info);
+      if (info && info.county) noteCountyBannerAt(fix.lat, fix.lng); /* Q225 */
       if (!info.county) toast('Located — county lookup failed. You are responsible for knowing your county.');
     });
   }
@@ -2618,6 +2654,7 @@ function onFollowFix(pos) {
   var acc = (typeof c.accuracy === 'number' && isFinite(c.accuracy)) ? Math.round(c.accuracy) : 9999;
   drawFix({ lat: c.latitude, lng: c.longitude, acc: acc }, false);
   maybeRetryCountyBanner(c.latitude, c.longitude); /* Q96: heal a missed county lookup */
+  maybeMoveCountyBanner(c.latitude, c.longitude); /* Q225: correct the banner after a county-line crossing */
   if (map && locateState === 'following') {
     var pt = map.latLngToContainerPoint([c.latitude, c.longitude]);
     var size = map.getSize();
