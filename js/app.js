@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-10-27ey';
+var APP_VERSION = 'beta 0.1 · build 2026-10-27ez';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -7218,13 +7218,21 @@ function deleteLine(id) {
 /* Q83: clone a line — new season, old ground. The clone carries the line's
    settings, home, and every set's location + trap setup (deep-copied, fresh
    ids, status reset to active, check clock restarted). Catches, check history,
-   photos, mileage trips, and landowners stay on the source line. */
+   photos, mileage trips, and landowners stay on the source line.
+   Q222 (2026-10-27, Tanner's pick): the dialog offers a checkbox — checked by
+   default, shown only when the source line has landowners — to copy the
+   landowner notebook too: records (fresh ids) AND their IDB photos (slips +
+   boundary maps, re-keyed to the new records, lineId = the clone). The dialog
+   says plainly the copies are last season's notes — permission still gets
+   re-confirmed for the new season, the app copying a slip grants nothing. */
 function cloneLine(id) {
   var d = Store.data;
   var src = lineById(d, id);
   if (!src) return;
   var nSets = 0;
   d.sets.forEach(function (s) { if (s.lineId === id) nSets++; });
+  var nLo = 0;
+  (d.landowners || []).forEach(function (lo) { if (lo && lo.lineId === id) nLo++; });
   /* Q83: the confirm doubles as the rename box — prefilled "<name> (copy)",
      editable — and spells out what crosses over and what stays behind. */
   showModal(
@@ -7233,14 +7241,20 @@ function cloneLine(id) {
     '<input type="text" id="m-clone-name" maxlength="40" value="' + esc(src.name + ' (copy)') + '">' +
     '<p style="margin-top:10px">The new line gets this line\u2019s set locations and trap setups' +
     (nSets ? ' (' + nSets + ' set' + (nSets === 1 ? '' : 's') + ')' : '') +
-    ' \u2014 no catches, no check history, no photos, and no bait or lure (that changes day to day). ' +
+    ' \u2014 no catches, no check history, no set photos, and no bait or lure (that changes day to day). ' +
     'Sets come back active with a fresh check clock.</p>' +
+    (nLo ? '<label class="checkline" style="margin-top:12px"><input type="checkbox" id="m-clone-lo" checked>' +
+      '<span>Also copy the landowner notebook \u2014 ' + nLo + ' landowner' + (nLo === 1 ? '' : 's') +
+      ': names, phone numbers, notes, boundaries, and permission-slip and boundary photos.</span></label>' +
+      '<p class="dim" style="margin-top:6px">Copies as last season\u2019s notes \u2014 re-confirm permission for the new season.</p>' : '') +
     '<div class="btn-row"><button class="btn-secondary" id="m-cancel" type="button">Cancel</button>' +
     '<button class="btn-primary" id="m-ok" type="button">Clone line</button></div>'
   );
   setTimeout(function () { var el = $('m-clone-name'); if (el) el.focus(); }, 60);
   $('m-cancel').onclick = closeModal;
   $('m-ok').onclick = function () {
+    $('m-ok').disabled = true; /* Q222: photo copies finish async — no double-clone on a double tap */
+    var copyLo = !!($('m-clone-lo') && $('m-clone-lo').checked);
     var name = $('m-clone-name').value.trim() || (src.name + ' (copy)');
       var ln = {
         id: newLineId(), name: name, state: src.state,
@@ -7270,14 +7284,47 @@ function cloneLine(id) {
         };
         d.sets.push(c);
       });
-      closeModal();
-      rememberEntry('linename', ln.name); /* Q12 */
-      Store.save();
-      activateLine(ln.id);
-      maybePromptHomeOnce(); /* Q53: cloned line gets the home question once, skippable */
-      refreshForLine();
-      renderLines();
-      toast('Line cloned \u2014 ' + nSets + ' set' + (nSets === 1 ? '' : 's') + ' carried over.');
+      /* Q222: landowner notebook copy — records first (fresh ids), then the
+         IDB photos re-keyed to them. Best-effort on photos: the clone lands
+         either way and the toast says if a photo did not copy. */
+      var loCopied = 0, loPhotoChain = null;
+      if (copyLo) {
+        if (!Array.isArray(d.landowners)) d.landowners = [];
+        var loIdMap = {};
+        d.landowners.slice().forEach(function (lo) {
+          if (!lo || lo.lineId !== id) return;
+          var lc = { id: newLandownerId(), lineId: ln.id, name: lo.name, phones: lo.phones,
+                     notes: lo.notes, boundaryNote: lo.boundaryNote, createdAt: Date.now() };
+          d.landowners.push(lc); loIdMap[lo.id] = lc.id; loCopied++;
+        });
+        if (loCopied) {
+          loPhotoChain = IDB.all('photos').then(function (all) {
+            var chain = Promise.resolve();
+            all.forEach(function (p) {
+              if (p && p.landownerId && loIdMap[p.landownerId]) {
+                chain = chain.then(function () {
+                  return IDB.put('photos', { id: uid('p'), landownerId: loIdMap[p.landownerId], kind: p.kind, name: p.name, blob: p.blob, lineId: ln.id, createdAt: Date.now() });
+                });
+              }
+            });
+            return chain;
+          });
+        }
+      }
+      var finishClone = function (photoFailed) {
+        closeModal();
+        rememberEntry('linename', ln.name); /* Q12 */
+        Store.save();
+        activateLine(ln.id);
+        maybePromptHomeOnce(); /* Q53: cloned line gets the home question once, skippable */
+        refreshForLine();
+        renderLines();
+        toast('Line cloned \u2014 ' + nSets + ' set' + (nSets === 1 ? '' : 's') + ' carried over.' +
+          (loCopied ? ' Landowner notebook copied too.' : '') +
+          (photoFailed ? ' One photo did not copy.' : ''));
+      };
+      if (loPhotoChain) loPhotoChain.then(function () { finishClone(false); }, function () { finishClone(true); });
+      else finishClone(false);
     };
 }
 
