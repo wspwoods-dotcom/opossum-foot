@@ -133,6 +133,13 @@ input[type=text], input[type=date], input[type=time], input[type=number], input[
    It now wears the same dark field as every other input, sitting under the
    date. color-scheme keeps the opened spinner dark too. */
 input[type=time] { color-scheme: dark; }
+/* Q224 (2026-10-27): Tanner's screenshot — the Reports From/To date fields
+   rendered as empty black boxes on his iPhone. Q109 gave the time picker
+   color-scheme: dark but the date fields never got it, so iOS drew their
+   native edit text in the light scheme and it vanished on the dark field.
+   Every date input in the app (Reports range, set/catch/trip dates) gets
+   the same dark scheme now. */
+input[type=date] { color-scheme: dark; }
 textarea { min-height: 84px; resize: vertical; }
 input:focus, select:focus, textarea:focus, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
 /* "e.g." hint state for the manufacturer/type selects — nothing picked yet. */
