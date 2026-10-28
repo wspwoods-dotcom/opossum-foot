@@ -22,7 +22,7 @@
   --pin-pulled: #7d7663;
   --pin-missing: #5b8dd9;
   --pin-prospect: #7a5fa0;   /* Q189 */
-  --line: #3a4330;
+  --line: #7C7052;      /* Q221 (2026-10-27): warm sepia line — was #3a4330, too close to panel/bg, read "sleepy" (Tanner). One variable draws every outline in the app. */
   --radius: 12px;
   --tap: 52px;            /* minimum touch target */
   --tabbar-h: 64px;
