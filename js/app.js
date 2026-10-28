@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-10-27ez';
+var APP_VERSION = 'beta 0.1 · build 2026-10-27fa';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -8600,8 +8600,16 @@ function wireUp() {
   /* licenses */
   $('btn-add-license').onclick = function () { $('license-input').click(); };
   $('license-input').onchange = function () {
-    var files = this.files;
-    if (!files || !files.length) return;
+    /* Q223 (2026-10-27, Tanner's field report): snapshot the files into a plain
+       array BEFORE clearing the input. this.files is a LIVE FileList — the old
+       code compared done === files.length inside the async save, but clearing
+       the input emptied the list first, so the count never matched: the photo
+       saved silently and the wallet never re-rendered or toasted. Every other
+       picker in the app captures this.files[0] synchronously; this one held
+       the live list, and it alone broke. */
+    var files = Array.prototype.slice.call(this.files || []);
+    this.value = '';
+    if (!files.length) return;
     var done = 0;
     for (var i = 0; i < files.length; i++) {
       (function (f) {
@@ -8610,7 +8618,6 @@ function wireUp() {
           .catch(function () { toast('Could not save that photo.'); });
       })(files[i]);
     }
-    this.value = '';
   };
 
   /* Q52: landowner notebook */
