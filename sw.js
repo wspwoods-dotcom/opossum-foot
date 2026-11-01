@@ -4,7 +4,7 @@
  * No user data ever passes through here — sets/catches live in
  * localStorage/IndexedDB on the device only.
  */
-var SHELL_CACHE = 'opossum-foot-shell-v97';
+var SHELL_CACHE = 'opossum-foot-shell-v98';
 var TILE_CACHE = 'opossum-foot-tiles-v1';
 var MAX_TILES = 400;
 
@@ -57,7 +57,14 @@ var SHELL = [
   './assets/icons/plus.png',
   './assets/icons/check.png',
   './assets/icons/x.png',
-  './assets/sponsors/awesome-opossum.webp'
+  './assets/sponsors/awesome-opossum.webp',
+  './vendor/leaflet/leaflet.js',
+  './vendor/leaflet/leaflet.css',
+  './vendor/leaflet/images/layers.png',
+  './vendor/leaflet/images/layers-2x.png',
+  './vendor/leaflet/images/marker-icon.png',
+  './vendor/leaflet/images/marker-icon-2x.png',
+  './vendor/leaflet/images/marker-shadow.png'
 ];
 
 var TILE_HOSTS = [
@@ -163,5 +170,5 @@ self.addEventListener('fetch', function (event) {
       })
     );
   }
-  /* CDN libraries (Leaflet) and geocoding APIs: network only, no caching of user-adjacent data */
+  /* Geocoding APIs: network only, no caching of user-adjacent data (Leaflet is bundled locally since Q227). */
 });

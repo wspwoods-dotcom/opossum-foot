@@ -13,7 +13,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <link rel="icon" type="image/png" href="assets/favicon.png">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="vendor/leaflet/leaflet.css"><!-- Q227: Leaflet 1.9.4 bundled locally so the map opens with no connection -->
 <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
@@ -811,6 +811,22 @@
   </div>
 </div>
 
+<!-- Q226 (2026-10-31): Tanner — post-catch "Update this set?" prompt -->
+<div id="sheet-postcatch" class="sheet">
+  <div class="sheet-grab"></div>
+  <div class="sheet-head"><h2>Catch logged!</h2><button class="sheet-x" data-close type="button">×</button></div>
+  <div class="sheet-body">
+    <p>Update this set for next time?</p>
+    <p class="dim">Trap, set type, bait, lure — anything that changed.</p>
+    <div class="card"><dl class="kv" id="pc-fields"></dl></div>
+    <div class="sheet-actions">
+      <button class="btn-primary" id="btn-pc-update" type="button">Update this set</button>
+      <button class="btn-secondary" id="btn-pc-keep" type="button">Keep as-is</button>
+    </div>
+    <p class="dim">Changes apply to future catches only.</p>
+  </div>
+</div>
+
 <!-- GUIDE / LEGAL SHEET -->
 <div id="sheet-guide" class="sheet">
   <div class="sheet-grab"></div>
@@ -827,7 +843,7 @@
 
 <div id="toast"></div>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="vendor/leaflet/leaflet.js"></script>
 <script src="js/season-data.js"></script>
 <script src="js/guide-content.js"></script>
 <script src="js/trap-catalog.js"></script>
