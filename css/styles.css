@@ -761,6 +761,7 @@ body.route-locked #tabbar { pointer-events: none; opacity: .35; }
 
 /* ---------- misc ---------- */
 .empty { text-align: center; color: var(--faint); padding: 40px 20px; }
+#map .empty { padding-right: 96px; } /* Q227: keep the library-fail message clear of the right-side fabs */
 .empty .big { font-size: 44px; margin-bottom: 10px; }
 .hidden-file { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
 
