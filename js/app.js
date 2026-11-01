@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-10-28fc';
+var APP_VERSION = 'beta 0.1 · build 2026-11-01fd';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -3901,11 +3901,44 @@ function saveLog() {
   toast(isOther
     ? 'Logged ' + (OTHER_LABELS[logOtherType] || 'Other event') + (species ? ' — ' + species : '') + (logDisposition && logDisposition !== 'none' ? ' (' + dispLabel(logDisposition) + ')' : '') + (s ? ' at ' + s.name : '') + '.'
     : 'Logged ' + log.count + ' ' + species + ' (' + dispLabel(logDisposition) + ')' + (s ? ' at ' + s.name : '') + '.');
+  /* Q226 (2026-10-31): Tanner — after a real catch (not an Other event),
+     offer the "Update this set?" prompt: the trapper just remade the set
+     and may want the set to reflect the new trap, set type, or attractants.
+     Past catches keep what they were stamped with; only future catches
+     pick up the change (B32). */
+  if (!isOther) openPostCatchPrompt(logSetId);
   /* INVARIANT: saving a log — catch or Other event — NEVER changes the
      set's trap status. Status is manual-only: no s.status assignment
      exists in saveLog or any log code path. */
   /* weather snapshot in background */
   stampLogWeather(s, log);
+}
+
+/* Q226 (2026-10-31): Tanner — post-catch "Update this set?" prompt. Shows
+   the set as it stands (same rows as the detail sheet: only fields actually
+   logged, honoring the field toggles) so the trapper can spot anything that
+   changed when they remade the set. "Update this set" opens the full Edit
+   Set form; "Keep as-is" just closes. Editing never rewrites past catches. */
+var postCatchSetId = null;
+function openPostCatchPrompt(setId) {
+  var s = getSet(setId);
+  if (!s) return;
+  postCatchSetId = setId;
+  var html = '';
+  function pcRow(label, val) {
+    if (val) html += '<dt>' + esc(label) + '</dt><dd>' + esc(val) + '</dd>';
+  }
+  var trapParts = [];
+  if (setFieldOn('traptype') && s.trapType) trapParts.push(s.trapType);
+  if (setFieldOn('trapdetail')) { var det = trapDetailSummary(s); if (det) trapParts.push(det); }
+  pcRow('Trap', trapParts.join(' · '));
+  if (setFieldOn('settype')) pcRow('Set type', setTypeLabel(s));
+  if (setFieldOn('bait')) pcRow('Bait', joinAttr(s.bait));
+  if (setFieldOn('lure')) pcRow('Lure', joinAttr(s.lure));
+  if (setFieldOn('urine')) pcRow('Urine', joinAttr(s.urine));
+  if (!html) html = '<dt>Set</dt><dd class="dim">No trap, set type, or attractants on this set yet.</dd>';
+  $('pc-fields').innerHTML = html;
+  openSheet('sheet-postcatch');
 }
 
 /* Q68: one-tap check-in from the set detail sheet — "I was here, nothing
@@ -8486,6 +8519,10 @@ function wireUp() {
   $('log-othertype').onchange = function () { logOtherType = this.value; updateLogNotesPlaceholder(); updateLogDispositionRow(); updateOtherSubtypeRows(); };
   $('log-date').onchange = function () { updateDateDOW('log-date', 'log-date-dow'); renderLogWarnings(); };
   $('btn-save-log').onclick = saveLog;
+  /* Q226: post-catch prompt actions — Update opens the full Edit Set form
+     for the set just caught on; Keep just closes. */
+  $('btn-pc-update').onclick = function () { var id = postCatchSetId; postCatchSetId = null; if (id) openSetForm(null, id); };
+  $('btn-pc-keep').onclick = function () { closeSheets(); };
   $('btn-voice-lognotes').onclick = function () {
     var ta = $('log-notes');
     Voice.start($('voice-lognotes-preview'), function (t) {
