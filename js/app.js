@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-11-01fe';
+var APP_VERSION = 'beta 0.1 · build 2026-11-05ff';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -2233,6 +2233,7 @@ function refreshMarkers() {
     markersLayer.addLayer(m);
   });
   refreshPinWinds();
+  renderBulkBar(); /* Q229: the bar counts the live prospect sets on this line */
 }
 
 function setDropPinMode(on) {
@@ -2822,7 +2823,9 @@ function wireStatusSeg() {
   for (var stb = 0; stb < stBtns.length; stb++) {
     stBtns[stb].onclick = (function (b) {
       return function () {
+        var prevSt = $('sf-status').value; /* Q229 */
         $('sf-status').value = b.getAttribute('data-st');
+        if ($('sf-status').value === 'active' && prevSt !== 'active') $('sf-date').value = todayISO(); /* Q229: show the date jumping to today the moment Active is picked, so the save never rewrites a visible field silently */
         hideSetFormError();
         syncStatusSeg();
         renderMissingReasonRow();
@@ -3156,8 +3159,9 @@ function saveSetForm() {
     s.visual = collectAttrRows('visual');
     s.audio = collectAttrRows('audio');
     s.other = collectAttrRows('other');
+    var oldStatus = normStatus(s.status); /* Q229: the date rule keys on the move */
     s.status = status;
-    s.dateSet = dateSet;
+    s.dateSet = activeDateFor(oldStatus, status, dateSet, todayISO()); /* Q229: any move TO Active restarts the set date — the day it goes active is day one. A set that stays Active keeps its date. */
     s.notes = $('sf-notes').value.trim();
     if (td.trapModel) rememberEntry('trapmodel', td.trapModel); /* Q12 */
     /* Q36: missing reason rides the status */
@@ -4423,6 +4427,14 @@ function normStatus(v) {
   if (s === '') return 'active'; /* pre-status sets defaulted to active */
   return 'missing'; /* unknown values land in the catch-all */
 }
+/* Q229 (2026-11-05, Tanner): the date a set went active. A move TO Active
+   restarts the set date — the day it goes active is day one, whether it was
+   a prospect, a sprung set or a pulled one. Anything else keeps the stored
+   date, and a set that stays Active keeps its date. Pure: no DOM, no Store. */
+function activeDateFor(oldStatus, newStatus, currentDate, today) {
+  if (normStatus(newStatus) === 'active' && normStatus(oldStatus) !== 'active') return today;
+  return currentDate;
+}
 /* Map-view status filters: independent multi-select toggles. Several can be
    on at once; a set shows when its current status is toggled on. */
 var mapStatusFilter = { active: true, sprung: true, pulled: true, missing: true, prospect: true };
@@ -4602,6 +4614,7 @@ function afterShowToggle() {
     var rl = routeShownFor;
     if (!drawRouteEstimate(rl)) toast('Not enough visible sets for a route.');
   }
+  renderBulkBar(); /* Q229: the bar lives and dies with the Show filter */
 }
 function renderMapStatusFilters() {
   /* Legacy name kept for existing callers — now renders the Show button. */
@@ -4617,6 +4630,101 @@ function renderMapStatusFilters() {
     done._wired = true;
     done.onclick = function () { commitShowDraft(); closeSheets(); };
   }
+  var bulkBtn = $('btn-bulk');
+  if (bulkBtn && !bulkBtn._wired) {
+    bulkBtn._wired = true;
+    bulkBtn.onclick = function () {
+      if (!bulkSelected) { bulkSelected = true; renderBulkBar(); return; }
+      openBulkStatusPicker();
+    };
+  }
+  renderBulkBar();
+}
+/* Q229 (2026-11-05, Tanner): bulk Prospect -> Active. When the Show filter
+   is narrowed to Prospect alone, a bar offers Select all on this line,
+   then Change status, then a confirm naming count, line, from -> to and
+   the date rule. Narrow by design: Prospect only, this line only. The
+   picker offers Active, Sprung, Pulled — Missing needs a reason per set
+   (Q35) so it stays one-at-a-time, and Prospect is already where they are. */
+var bulkSelected = false;
+function bulkProspectSets() {
+  var m = showModel();
+  if (m.prospect === false) return [];
+  var onlyProspect = STATUS_VALUES.every(function (k) { return k === 'prospect' ? m[k] !== false : m[k] === false; });
+  if (!onlyProspect) return [];
+  var lid = activeLineId();
+  return ((Store.data && Store.data.sets) || []).filter(function (s) { return s.lineId === lid && normStatus(s.status) === 'prospect'; });
+}
+function renderBulkBar() {
+  var bar = $('bulk-bar');
+  if (!bar) return;
+  var sets = bulkProspectSets();
+  var pane = $('pane-map');
+  if (!sets.length) {
+    bar.hidden = true;
+    bulkSelected = false;
+    if (pane) pane.classList.remove('bulk-on');
+    return;
+  }
+  bar.hidden = false;
+  if (pane) pane.classList.add('bulk-on');
+  var n = sets.length;
+  $('bulk-bar-text').textContent = bulkSelected ? (n + ' selected') : (n + ' Prospect on this line');
+  $('btn-bulk').textContent = bulkSelected ? 'Change status' : 'Select all';
+}
+function openBulkStatusPicker() {
+  var sets = bulkProspectSets();
+  if (!sets.length) { renderBulkBar(); return; }
+  var colors = pinSchemeById(pinSchemeId()).colors;
+  var rows = ['active', 'sprung', 'pulled'].map(function (k) {
+    return '<button type="button" class="bulk-status-row" data-st="' + k + '">' +
+      '<span class="bulk-dot" style="background:' + colors[k] + '"></span>' + esc(STATUS_LABELS[k]) + '</button>';
+  }).join('');
+  showModal('<h3>Change ' + sets.length + ' sets to…</h3>' + rows +
+    '<div class="btn-row" style="margin-top:14px"><button class="btn-secondary" id="m-cancel" type="button">Cancel</button></div>');
+  $('m-cancel').onclick = function () { closeModal(); };
+  var btns = document.querySelectorAll('#modal-card .bulk-status-row');
+  for (var i = 0; i < btns.length; i++) {
+    btns[i].onclick = function () { var t = this.getAttribute('data-st'); closeModal(); openBulkConfirm(t); };
+  }
+}
+function openBulkConfirm(target) {
+  var sets = bulkProspectSets();
+  if (!sets.length) { renderBulkBar(); return; }
+  var n = sets.length;
+  var ln = lineById(Store.data, activeLineId());
+  var colors = pinSchemeById(pinSchemeId()).colors;
+  var dateLine = target === 'active'
+    ? '<p>Date set becomes today, ' + fmtDate(todayISO()) + '.</p>'
+    : '';
+  showModal('<h3>Change ' + n + ' sets to ' + esc(STATUS_LABELS[target]) + '?</h3>' +
+    '<p>' + esc(ln ? ln.name : '') + '</p>' +
+    '<p><span class="bulk-dot" style="background:' + colors.prospect + '"></span> Prospect → ' +
+    '<span class="bulk-dot" style="background:' + colors[target] + '"></span> ' + esc(STATUS_LABELS[target]) + '</p>' +
+    dateLine +
+    '<p>You can change any set back one at a time from Edit this set.</p>' +
+    '<div class="btn-row" style="margin-top:14px"><button class="btn-secondary" id="m-cancel" type="button">Cancel</button>' +
+    '<button class="btn-primary" id="m-ok" type="button">Change ' + n + ' sets</button></div>');
+  $('m-cancel').onclick = function () { closeModal(); };
+  $('m-ok').onclick = function () { closeModal(); applyBulkStatus(target); };
+}
+function applyBulkStatus(target) {
+  var sets = bulkProspectSets();
+  if (!sets.length) { renderBulkBar(); return; }
+  var n = sets.length;
+  var today = todayISO();
+  sets.forEach(function (s) {
+    s.status = target;
+    s.dateSet = activeDateFor('prospect', target, s.dateSet, today);
+    if (target === 'pulled' && !s.datePulled) s.datePulled = today;
+    if (target !== 'pulled' && s.datePulled) delete s.datePulled;
+    touchSet(s); /* Q68: any edit restarts the check clock */
+  });
+  Store.save();
+  refreshMarkers();
+  bulkSelected = false;
+  renderBulkBar();
+  toast(n + ' sets now ' + STATUS_LABELS[target] + '.');
 }
 function logStatus(l) {
   var s = l.setId ? getSet(l.setId) : null;
