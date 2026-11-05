@@ -35,7 +35,7 @@ expected — offline app-shell caching needs http/https).
 ## Runtime network use (only these)
 
 - Map tiles: cartocdn.com, arcgisonline.com, opentopomap.org
-- Leaflet CDN: unpkg.com
+- Leaflet: bundled locally (vendor/leaflet, 1.9.4) since build fd — no CDN load
 - County/state reverse-geocode (free, keyless): api.bigdatacloud.net,
   fallback nominatim.openstreetmap.org
 
