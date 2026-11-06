@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-11-06fl';
+var APP_VERSION = 'beta 0.1 · build 2026-11-06fm';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -2525,6 +2525,12 @@ var locateWatch = null, locateTimer = null;
 var locateState = 'idle'; /* idle | acquiring | following | paused */
 var followLastPan = 0;
 var followWatchdog = null, lastFollowFixAt = 0, staleDropCount = 0;
+var followGuardTimer = null;
+/* Q233 (2026-11-06fm): one-shot tap correction — a tap centers on lastFix at
+   once, then the first converged fix re-centers if the tap-time fix was off.
+   Armed by centerOnFix; disarmed by firing, by a drag-pause, by stop, or
+   after 60 s. */
+var tapCorrectArmed = false, tapCenter = null, tapCorrectTimer = null;
 
 function stopLocateWatch() {
   if (locateWatch !== null) { try { navigator.geolocation.clearWatch(locateWatch); } catch (e) {} locateWatch = null; }
@@ -2575,6 +2581,7 @@ function hookFollowDrag() {
 function pauseFollow() {
   if (locateState !== 'following') return;
   locateState = 'paused';
+  disarmTapCorrection(); /* Q233: a drag cancels the correction — his pause rule stands */
   var b = $('btn-locate'); if (b) b.classList.add('paused-mode');
   /* BQ3: silent pause — no toast. The button's paused state shows it. */
 }
@@ -2582,11 +2589,57 @@ function pauseFollow() {
 /* Only called on location permission denial — there is no manual off. */
 function stopFollow(silent) {
   disarmFollowWatchdog();
+  stopFollowGuard(); /* Q233 */
+  disarmTapCorrection(); /* Q233 */
   stopLocateWatch();
   locateState = 'idle';
   var b = $('btn-locate'); if (b) b.classList.remove('active-mode', 'paused-mode');
   if (lastFix) lastFix.at = 0; /* next tap takes a fresh fix, not follow */
   if (!silent) toast('Follow off.');
+}
+
+/* Q233: one definition of "the dot is far enough off-center that the map
+   should re-center on it" — shared by the follow watch and the periodic
+   guard, so the two can never drift apart. */
+function dotPastDeadband(lat, lng) {
+  if (!map || typeof lat !== 'number' || typeof lng !== 'number') return false;
+  var pt = map.latLngToContainerPoint([lat, lng]);
+  var size = map.getSize();
+  return Math.abs(pt.x - size.x / 2) > size.x * 0.15 ||
+         Math.abs(pt.y - size.y / 2) > size.y * 0.15;
+}
+function panToFixIfOffCenter(lat, lng) {
+  if (dotPastDeadband(lat, lng)) map.panTo([lat, lng], { animate: false });
+}
+
+/* Q233: the follow watch's own re-pan is the first line, but a watch hiccup
+   must not strand the map off-center — while following, re-check every few
+   seconds and pan to the last fix whenever the dot sits past the deadband.
+   Paused (dragged) never pans; the guard only runs while following. */
+function followGuardTick() {
+  if (locateState !== 'following' || !map || !lastFix || lastFix.lat == null) return;
+  panToFixIfOffCenter(lastFix.lat, lastFix.lng);
+}
+function startFollowGuard() {
+  stopFollowGuard();
+  followGuardTimer = setInterval(followGuardTick, 4000);
+}
+function stopFollowGuard() {
+  if (followGuardTimer) { clearInterval(followGuardTimer); followGuardTimer = null; }
+}
+
+/* Q233: tap correction — arm on every tap-centering, fire once on the first
+   converged fix that lands well away from the tap center. */
+function armTapCorrection() {
+  disarmTapCorrection();
+  if (!lastFix || lastFix.lat == null) return;
+  tapCenter = { lat: lastFix.lat, lng: lastFix.lng };
+  tapCorrectArmed = true;
+  tapCorrectTimer = setTimeout(disarmTapCorrection, 60000);
+}
+function disarmTapCorrection() {
+  tapCorrectArmed = false; tapCenter = null;
+  if (tapCorrectTimer) { clearTimeout(tapCorrectTimer); tapCorrectTimer = null; }
 }
 
 /* Enter follow mode: one tap on the crosshair gets you here, and follow
@@ -2601,6 +2654,7 @@ function enterFollow() {
   lastFollowFixAt = Date.now();
   startFollowWatch();
   armFollowWatchdog();
+  startFollowGuard(); /* Q233 */
   if (map && lastFix && lastFix.lat != null) map.panTo([lastFix.lat, lastFix.lng], { animate: false });
 }
 
@@ -2653,19 +2707,25 @@ function onFollowFix(pos) {
   lastFollowFixAt = Date.now();
   armFollowWatchdog();
   var acc = (typeof c.accuracy === 'number' && isFinite(c.accuracy)) ? Math.round(c.accuracy) : 9999;
+  var prevFix = lastFix; /* fix before this one — the Q215 convergence comparison */
   drawFix({ lat: c.latitude, lng: c.longitude, acc: acc }, false);
   maybeRetryCountyBanner(c.latitude, c.longitude); /* Q96: heal a missed county lookup */
   maybeMoveCountyBanner(c.latitude, c.longitude); /* Q225: correct the banner after a county-line crossing */
-  if (map && locateState === 'following') {
-    var pt = map.latLngToContainerPoint([c.latitude, c.longitude]);
-    var size = map.getSize();
-    /* Q215: 15% deadband (was 28% — at zoom 19 the old band let the view
-       sit ~40 m off the trapper before it bothered to recenter). */
-    if (Math.abs(pt.x - size.x / 2) > size.x * 0.15 ||
-        Math.abs(pt.y - size.y / 2) > size.y * 0.15) {
+  /* Q233: tap correction — if the tap centered on a stale fix, the first
+     converged fix (Q215 rule: fresh ≤12 m claimed within 12 m of the
+     previous fresh ≤25 m claimed) landing more than 12 m from the tap
+     center re-centers the map once, while still following. */
+  if (tapCorrectArmed && locateState === 'following' && tapCenter && prevFix &&
+      typeof prevFix.acc === 'number' && prevFix.acc <= 25 && acc <= 12 &&
+      haversineMi(prevFix.lat, prevFix.lng, c.latitude, c.longitude) * 1609.34 <= 12) {
+    if (haversineMi(tapCenter.lat, tapCenter.lng, c.latitude, c.longitude) * 1609.34 > 12) {
       map.panTo([c.latitude, c.longitude], { animate: false });
     }
+    disarmTapCorrection();
   }
+  /* Q215: 15% deadband (was 28% — at zoom 19 the old band let the view
+     sit ~40 m off the trapper before it bothered to recenter). */
+  if (map && locateState === 'following') panToFixIfOffCenter(c.latitude, c.longitude);
 }
 function onFollowError(err) {
   if (locateState !== 'following' && locateState !== 'paused') return;
@@ -2692,7 +2752,7 @@ function setLocateSearching(on) {
 function startAcquire() {
   locateState = 'acquiring';
   setLocateSearching(true);
-  var best = null, finished = false, prevFix = null;
+  var best = null, finished = false, prevFix = null, acqTrail = []; /* Q233: trail for motion convergence */
   /* Q70: acquire runs silent — the dot moves, no progress chatter.
      Denial and no-fix still speak up below. */
   hookFollowDrag();
@@ -2722,6 +2782,24 @@ function startAcquire() {
     }
     var converged = !!(prevFix && prevFix.acc <= 25 && acc <= 12 && fixDistM(prevFix, fx) <= 12);
     prevFix = fx;
+    /* Q233: a moving phone can never meet the stationary convergence rule —
+       at road speed consecutive fixes land ~20 m apart, so the acquire would
+       run the full 45 s while driving. Three fresh fixes in a straight line
+       at road-step distances mean the radio is live and the phone is moving:
+       take the latest fix and go. */
+    if (!converged) {
+      acqTrail.push(fx);
+      if (acqTrail.length > 3) acqTrail.shift();
+      if (acqTrail.length === 3) {
+        var t0 = acqTrail[0], t1 = acqTrail[1], t2 = acqTrail[2];
+        var s1 = haversineMi(t0.lat, t0.lng, t1.lat, t1.lng) * 1609.34;
+        var s2 = haversineMi(t1.lat, t1.lng, t2.lat, t2.lng) * 1609.34;
+        if (t0.acc <= 25 && t1.acc <= 25 && t2.acc <= 25 && s1 >= 5 && s1 <= 80 && s2 >= 5 && s2 <= 80) {
+          var turn = Math.abs(((bearingDeg(t1.lat, t1.lng, t2.lat, t2.lng) - bearingDeg(t0.lat, t0.lng, t1.lat, t1.lng) + 540) % 360) - 180);
+          if (turn < 60) { converged = true; best = fx; }
+        }
+      }
+    }
     return converged;
   }
 
@@ -2758,6 +2836,7 @@ function startAcquire() {
 function centerOnFix() {
   if (!map || !lastFix || lastFix.lat == null) return;
   map.setView([lastFix.lat, lastFix.lng], 19, { animate: false });
+  armTapCorrection(); /* Q233: verify the tap center against the next converged fix */
 }
 
 /* ◎ button: one tap acquires and follows — follow stays on from that point,
