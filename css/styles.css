@@ -1141,15 +1141,15 @@ body.placing #route-back-chip { display: none; }
    and the gold button appears only when the filter is narrowed to one
    status. The old bottom bulk bar (.bulk-bar, Q229) is gone, and with it
    the bulk-on fab lift. */
-.show-pill { position: absolute; top: 8px; left: 50%; transform: translateX(-50%); z-index: 600; display: flex; align-items: center; gap: 10px; max-width: 92vw; background: rgba(18,22,14,.88); border: 3px solid #fff; border-radius: 999px; padding: 6px 8px 6px 16px; }
-.show-btn { flex: 1 1 auto; min-width: 0; background: none; border: none; padding: 0; font-size: 16px; font-weight: 700; color: #f5efdd; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.show-pill { position: absolute; top: 8px; left: 50%; transform: translateX(-50%); z-index: 600; display: flex; align-items: center; gap: 10px; max-width: 92vw; background: rgba(18,22,14,.88); border: 3px solid #fff; border-radius: 999px; padding: 4px 8px 4px 16px; }
+.show-btn { flex: 1 1 auto; min-width: 0; min-height: 0; background: none; border: none; padding: 0; font-size: 16px; font-weight: 700; color: #f5efdd; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 /* Q232 fix (2026-11-06): the label rides in a block span so a too-long label
    ellipsizes from the START — a bare <button> centers its text and clips
    both ends with no ellipsis, in Safari and in Chromium alike (Tanner's
    06:51 screenshot). The span shrink-to-fits and centers itself, so short
    labels stay centered in the pill. */
 .show-label { display: block; width: fit-content; max-width: 100%; margin: 0 auto; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-align: left; }
-.show-pill .bulk-btn { flex: 0 0 auto; background: var(--accent); color: var(--accent-ink); border: none; border-radius: 24px; padding: 9px 16px; min-height: 0; font-size: 16px; font-weight: 800; white-space: nowrap; }
+.show-pill .bulk-btn { flex: 0 0 auto; background: var(--accent); color: var(--accent-ink); border: none; border-radius: 24px; padding: 4px 14px; min-height: 0; font-size: 16px; font-weight: 800; white-space: nowrap; }
 #btn-bulk[hidden] { display: none; }
 /* Q232: Edit-all sheet rows — label above a full-width select. */
 .bulk-edit-row { display: block; margin: 12px 0; font-size: 16px; font-weight: 700; color: var(--ink); }
