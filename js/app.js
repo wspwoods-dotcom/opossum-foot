@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-11-05ff';
+var APP_VERSION = 'beta 0.1 · build 2026-11-05fg';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -4640,27 +4640,33 @@ function renderMapStatusFilters() {
   }
   renderBulkBar();
 }
-/* Q229 (2026-11-05, Tanner): bulk Prospect -> Active. When the Show filter
-   is narrowed to Prospect alone, a bar offers Select all on this line,
-   then Change status, then a confirm naming count, line, from -> to and
-   the date rule. Narrow by design: Prospect only, this line only. The
-   picker offers Active, Sprung, Pulled — Missing needs a reason per set
-   (Q35) so it stays one-at-a-time, and Prospect is already where they are. */
+/* Q229 (2026-11-05, Tanner; widened same day on the ff check): bulk status
+   change. When the Show filter is narrowed to ANY one status, a bar offers
+   Select all on this line, then Change status, then a confirm naming count,
+   line, from -> to and the date rule. The picker offers every status except
+   the one you're coming from and except Missing as a target — Missing needs
+   a reason per set (Q35), Confiscated needs details per set, so it stays
+   one-at-a-time. Leaving Missing in bulk clears the reason/detail, like the
+   Edit save does. Scope is the active line only. */
 var bulkSelected = false;
-function bulkProspectSets() {
+function bulkFilterStatus() {
   var m = showModel();
-  if (m.prospect === false) return [];
-  var onlyProspect = STATUS_VALUES.every(function (k) { return k === 'prospect' ? m[k] !== false : m[k] === false; });
-  if (!onlyProspect) return [];
+  var on = STATUS_VALUES.filter(function (k) { return m[k] !== false; });
+  return on.length === 1 ? on[0] : null;
+}
+function bulkFilteredSets() {
+  var st = bulkFilterStatus();
+  if (!st) return [];
   var lid = activeLineId();
-  return ((Store.data && Store.data.sets) || []).filter(function (s) { return s.lineId === lid && normStatus(s.status) === 'prospect'; });
+  return ((Store.data && Store.data.sets) || []).filter(function (s) { return s.lineId === lid && normStatus(s.status) === st; });
 }
 function renderBulkBar() {
   var bar = $('bulk-bar');
   if (!bar) return;
-  var sets = bulkProspectSets();
+  var st = bulkFilterStatus();
+  var sets = bulkFilteredSets();
   var pane = $('pane-map');
-  if (!sets.length) {
+  if (!st || !sets.length) {
     bar.hidden = true;
     bulkSelected = false;
     if (pane) pane.classList.remove('bulk-on');
@@ -4669,14 +4675,15 @@ function renderBulkBar() {
   bar.hidden = false;
   if (pane) pane.classList.add('bulk-on');
   var n = sets.length;
-  $('bulk-bar-text').textContent = bulkSelected ? (n + ' selected') : (n + ' Prospect on this line');
+  $('bulk-bar-text').textContent = bulkSelected ? (n + ' selected') : (n + ' ' + STATUS_LABELS[st] + ' on this line');
   $('btn-bulk').textContent = bulkSelected ? 'Change status' : 'Select all';
 }
 function openBulkStatusPicker() {
-  var sets = bulkProspectSets();
-  if (!sets.length) { renderBulkBar(); return; }
+  var st = bulkFilterStatus();
+  var sets = bulkFilteredSets();
+  if (!st || !sets.length) { renderBulkBar(); return; }
   var colors = pinSchemeById(pinSchemeId()).colors;
-  var rows = ['active', 'sprung', 'pulled'].map(function (k) {
+  var rows = STATUS_VALUES.filter(function (k) { return k !== st && k !== 'missing'; }).map(function (k) {
     return '<button type="button" class="bulk-status-row" data-st="' + k + '">' +
       '<span class="bulk-dot" style="background:' + colors[k] + '"></span>' + esc(STATUS_LABELS[k]) + '</button>';
   }).join('');
@@ -4689,8 +4696,9 @@ function openBulkStatusPicker() {
   }
 }
 function openBulkConfirm(target) {
-  var sets = bulkProspectSets();
-  if (!sets.length) { renderBulkBar(); return; }
+  var st = bulkFilterStatus();
+  var sets = bulkFilteredSets();
+  if (!st || !sets.length) { renderBulkBar(); return; }
   var n = sets.length;
   var ln = lineById(Store.data, activeLineId());
   var colors = pinSchemeById(pinSchemeId()).colors;
@@ -4699,7 +4707,7 @@ function openBulkConfirm(target) {
     : '';
   showModal('<h3>Change ' + n + ' sets to ' + esc(STATUS_LABELS[target]) + '?</h3>' +
     '<p>' + esc(ln ? ln.name : '') + '</p>' +
-    '<p><span class="bulk-dot" style="background:' + colors.prospect + '"></span> Prospect → ' +
+    '<p><span class="bulk-dot" style="background:' + colors[st] + '"></span> ' + esc(STATUS_LABELS[st]) + ' → ' +
     '<span class="bulk-dot" style="background:' + colors[target] + '"></span> ' + esc(STATUS_LABELS[target]) + '</p>' +
     dateLine +
     '<p>You can change any set back one at a time from Edit this set.</p>' +
@@ -4709,15 +4717,17 @@ function openBulkConfirm(target) {
   $('m-ok').onclick = function () { closeModal(); applyBulkStatus(target); };
 }
 function applyBulkStatus(target) {
-  var sets = bulkProspectSets();
-  if (!sets.length) { renderBulkBar(); return; }
+  var st = bulkFilterStatus();
+  var sets = bulkFilteredSets();
+  if (!st || !sets.length) { renderBulkBar(); return; }
   var n = sets.length;
   var today = todayISO();
   sets.forEach(function (s) {
     s.status = target;
-    s.dateSet = activeDateFor('prospect', target, s.dateSet, today);
+    s.dateSet = activeDateFor(st, target, s.dateSet, today);
     if (target === 'pulled' && !s.datePulled) s.datePulled = today;
     if (target !== 'pulled' && s.datePulled) delete s.datePulled;
+    if (st === 'missing') { s.missingReason = null; s.missingDetail = null; } /* Q229: leaving Missing clears the reason/detail, like the Edit save */
     touchSet(s); /* Q68: any edit restarts the check clock */
   });
   Store.save();
