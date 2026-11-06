@@ -80,7 +80,14 @@
 
   <!-- MAP PANE -->
   <div id="pane-map" class="pane active">
-    <button type="button" id="btn-show" class="chip show-btn" aria-label="Choose what shows on the map">Show: All</button>
+    <!-- Q232 (2026-11-06): the bulk control lives IN the Show pill. The pill
+         carries the count ("Show: 18 Sprung", or each status with its count
+         when two or more are on) and the Select all button, shown only when
+         the filter is narrowed to one status. The old bottom bulk bar is gone. -->
+    <div id="show-pill" class="show-pill">
+      <button type="button" id="btn-show" class="show-btn" aria-label="Choose what shows on the map">Show: All</button>
+      <button type="button" id="btn-bulk" class="bulk-btn" hidden>Select all</button>
+    </div>
     <button type="button" id="weather-chip" class="chip weather-chip" aria-label="Weather details">🌤️</button>
     <!-- Q8: way back to the mileage dialog while a route estimate is drawn -->
     <button type="button" id="route-back-chip" class="btn-primary" hidden>‹ Back to mileage</button>
@@ -98,13 +105,6 @@
       <!-- Q95 (2026-10-01): Tanner — all three right-side fabs rest dark like the
            other two; green only while a mode is on (crosshair follow, pin-drop
            placing). The + button has no toggle state, so it rests dark. -->
-    </div>
-    <!-- Q229 (2026-11-05): bulk Prospect -> Active bar. Shows only when the
-         Show filter is narrowed to Prospect alone; the fabs lift above it
-         while it shows (pane gets bulk-on). -->
-    <div id="bulk-bar" class="bulk-bar" hidden>
-      <span id="bulk-bar-text"></span>
-      <button type="button" class="bulk-btn" id="btn-bulk">Select all</button>
     </div>
   </div>
 
