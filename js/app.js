@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-11-06fk';
+var APP_VERSION = 'beta 0.1 · build 2026-11-06fl';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -4482,10 +4482,11 @@ function renderPinSchemeList() {
 }
 /* Q190/Show (2026-10-18, Tanner's design): the four status chips became ONE
    "Show" button opening a checklist sheet ("Show on map"). The label names
-   what's on — "Show: All", the names themselves in their pin colors, or
-   "Show: N of 6" — and each sheet line carries its pin-color dot as the key.
-   The model persists in Store.data.mapShow; mapStatusFilter mirrors the set
-   statuses for the existing readers, and Markers reads the same model. */
+   what's on — each status in its pin color with its live count, plus Sign
+   by name when any sign family is on — and each sheet line carries its
+   pin-color dot as the key. The model persists in Store.data.mapShow;
+   mapStatusFilter mirrors the set statuses for the existing readers, and
+   Markers reads the same model. */
 function showModel() {
   var d = Store.data || {};
   if (!d.mapShow) d.mapShow = {};
@@ -4541,28 +4542,32 @@ function showGroups() {
    One status on: "Show: 18 Sprung" (count first, Tanner's wording). Two or
    more on: each status with its count, "Sprung 18 · Active 16" — a quick
    reference, and the Select all button is gone (bulk needs one status).
-   All on stays "Show: All"; nothing on shows Sign if its families are on,
-   else None. The Sign layer is never counted — it has no sets.
+   Nothing on shows Sign if its families are on, else None. The Sign layer
+   rides by NAME only, never a count (Tanner, 2026-11-06: sign is 71
+   mammal-sign kinds in 5 families plus 44 forage kinds — one number would
+   mean nothing), always last, whenever any family is on. There is no
+   "Show: All" anymore (Tanner, 2026-11-06) — all on lists everything: the
+   five statuses with counts plus Sign. Sizes are measured (headless
+   Chromium, DejaVu — SF Pro runs narrower): 1-2 items at 16px, 3-4 at
+   14px, 5-6 at 11px — the six-item all-on list measures 317px at 11px
+   against a 329px content box. The "Show: " prefix stays at 3 items or
+   fewer and drops above that.
    Fix (Tanner's 06:51 field report, build fj): NO "N of 5" — all five
    statuses show with their counts, smaller, so the whole list fits. A bare
    <button> centers its text and clips both ends with no ellipsis (his
    screenshot: "v: Active 0 · Sprung 18 · Pulled 0 · Missi"), so the label
    rides in a .show-label span that shrink-to-fits, centers itself, and
-   ellipsizes from the start if it ever overflows. Sizes are measured
-   (headless Chromium, DejaVu — SF Pro runs narrower): 1-2 statuses at
-   16px, 3-4 at 14px, 5 at 11px — the five-status list measures 284px at
-   11px against a 329px content box. 4-5 statuses drop the "Show: "
-   prefix for room. Slim (Tanner, 2026-11-06): the pill was 70px tall
-   while the text is 18px — the app's 52px button touch-height was
-   leaking in — so .show-btn sets min-height: 0 and the pill padding is
-   4px vertical, landing the pill near 33px tall (41px with the bulk
-   button showing). */
+   ellipsizes from the start if it ever overflows.
+   Slim (Tanner, 2026-11-06): the pill was 70px tall while the text is
+   18px — the app's 52px button touch-height was leaking in — so .show-btn
+   sets min-height: 0 and the pill padding is 4px vertical, landing the
+   pill near 33px tall (41px with the bulk button showing). */
 function renderShowButton() {
   var btn = $('btn-show'); if (!btn || !Store.data) return;
   var m = showModel();
   var onStatus = STATUS_VALUES.filter(function (v) { return m[v] !== false; });
   var groups = showGroups();
-  var on = groups.filter(function (g) { return g.on; });
+  var signOn = groups.some(function (g) { return g.key === 'sign' && g.on; });
   var colors = pinSchemeById(pinSchemeId()).colors;
   var nameHtml = function (v) { return '<span style="color:' + lighten(colors[v], 0.38) + '">' + esc(STATUS_LABELS[v]) + '</span>'; };
   var countOf = function (v) {
@@ -4570,17 +4575,18 @@ function renderShowButton() {
     activeSets().forEach(function (s) { if (normStatus(s.status) === v) n++; });
     return n;
   };
+  var signHtml = '<span style="color:#f0d28a">Sign</span>';
+  var items = onStatus.length + (signOn ? 1 : 0);
   var size = 16, html;
-  if (on.length === groups.length) html = 'Show: <span style="color:#f5efdd">All</span>';
-  else if (onStatus.length === 0) {
-    var signOn = groups.some(function (g) { return g.key === 'sign' && g.on; });
+  if (onStatus.length === 0) {
     html = signOn ? 'Show: <span style="color:#f5efdd">Sign</span>' : 'Show: <span style="color:#f5efdd">None</span>';
   }
-  else if (onStatus.length === 1) html = 'Show: ' + countOf(onStatus[0]) + ' ' + nameHtml(onStatus[0]);
+  else if (onStatus.length === 1) html = 'Show: ' + countOf(onStatus[0]) + ' ' + nameHtml(onStatus[0]) + (signOn ? ' · ' + signHtml : '');
   else {
     var parts = onStatus.map(function (v) { return nameHtml(v) + ' <span style="color:#f5efdd">' + countOf(v) + '</span>'; });
-    size = onStatus.length === 5 ? 11 : (onStatus.length >= 3 ? 14 : 16);
-    html = onStatus.length <= 3 ? 'Show: ' + parts.join(' · ') : parts.join(' · ');
+    if (signOn) parts.push(signHtml);
+    size = items <= 2 ? 16 : (items <= 4 ? 14 : 11);
+    html = items <= 3 ? 'Show: ' + parts.join(' · ') : parts.join(' · ');
   }
   btn.innerHTML = '<span class="show-label">' + html + '</span>';
   btn.style.fontSize = size + 'px';
