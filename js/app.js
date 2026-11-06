@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-11-06fi';
+var APP_VERSION = 'beta 0.1 · build 2026-11-06fj';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -4537,12 +4537,22 @@ function showGroups() {
   groups.push({ key: 'sign', label: 'Sign', on: anyFam, color: '#f0d28a' });
   return groups;
 }
-/* Q232 (2026-11-06): the pill carries the live counts on the active line.
+  /* Q232 (2026-11-06): the pill carries the live counts on the active line.
    One status on: "Show: 18 Sprung" (count first, Tanner's wording). Two or
    more on: each status with its count, "Sprung 18 · Active 16" — a quick
    reference, and the Select all button is gone (bulk needs one status).
    All on stays "Show: All"; nothing on shows Sign if its families are on,
-   else None. The Sign layer is never counted — it has no sets. */
+   else None. The Sign layer is never counted — it has no sets.
+   Fix (Tanner's 06:51 field report, build fj): NO "N of 5" — all five
+   statuses show with their counts, smaller, so the whole list fits. A bare
+   <button> centers its text and clips both ends with no ellipsis (his
+   screenshot: "v: Active 0 · Sprung 18 · Pulled 0 · Missi"), so the label
+   rides in a .show-label span that shrink-to-fits, centers itself, and
+   ellipsizes from the start if it ever overflows. Sizes are measured
+   (headless Chromium, DejaVu — SF Pro runs narrower): 1-3 statuses at
+   16px, 4 at 14px, 5 at 11px — the five-status list measures 284px at
+   11px against a 329px content box. 4-5 statuses drop the "Show: "
+   prefix for room. */
 function renderShowButton() {
   var btn = $('btn-show'); if (!btn || !Store.data) return;
   var m = showModel();
@@ -4556,14 +4566,23 @@ function renderShowButton() {
     activeSets().forEach(function (s) { if (normStatus(s.status) === v) n++; });
     return n;
   };
-  if (on.length === groups.length) btn.innerHTML = 'Show: <span style="color:#f5efdd">All</span>';
+  var size = 16, html;
+  if (on.length === groups.length) html = 'Show: <span style="color:#f5efdd">All</span>';
   else if (onStatus.length === 0) {
     var signOn = groups.some(function (g) { return g.key === 'sign' && g.on; });
-    btn.innerHTML = signOn ? 'Show: <span style="color:#f5efdd">Sign</span>' : 'Show: <span style="color:#f5efdd">None</span>';
+    html = signOn ? 'Show: <span style="color:#f5efdd">Sign</span>' : 'Show: <span style="color:#f5efdd">None</span>';
   }
-  else if (onStatus.length === 1) btn.innerHTML = 'Show: ' + countOf(onStatus[0]) + ' ' + nameHtml(onStatus[0]);
-  else if (onStatus.length <= 4) btn.innerHTML = 'Show: ' + onStatus.map(function (v) { return nameHtml(v) + ' <span style="color:#f5efdd">' + countOf(v) + '</span>'; }).join(' · ');
-  else btn.innerHTML = 'Show: ' + onStatus.length + ' of ' + STATUS_VALUES.length;
+  else if (onStatus.length === 1) html = 'Show: ' + countOf(onStatus[0]) + ' ' + nameHtml(onStatus[0]);
+  else {
+    var parts = onStatus.map(function (v) { return nameHtml(v) + ' <span style="color:#f5efdd">' + countOf(v) + '</span>'; });
+    if (onStatus.length <= 3) html = 'Show: ' + parts.join(' · ');
+    else {
+      size = onStatus.length === 4 ? 14 : 11;
+      html = parts.join(' · ');
+    }
+  }
+  btn.innerHTML = '<span class="show-label">' + html + '</span>';
+  btn.style.fontSize = size + 'px';
 }
 var showSignOpen = false;
 function renderShowList() {
