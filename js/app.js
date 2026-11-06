@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-11-05fg';
+var APP_VERSION = 'beta 0.1 · build 2026-11-05fh';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -6668,10 +6668,15 @@ function isShortMapsLink(url) {
   return /(maps\.app\.goo\.gl|goo\.gl)\//i.test(String(url || ''));
 }
 /* Q185: short Maps links hide the location behind a redirect. Follow it
-   (needs a connection) and read the coordinates off the final URL. */
+   (needs a connection) and read the coordinates off the final URL.
+   Q230 (2026-11-05): a plain fetch dies here — Google's Maps pages send
+   no Access-Control-Allow-Origin, so the browser rejects the fetch before
+   it ever sees the final URL. mode:'no-cors' returns an opaque response
+   whose .url (the final URL after the redirect) is still readable, and
+   that is all the parser needs. */
 function resolveMapsLink(url) {
   if (typeof fetch !== 'function') return Promise.resolve(null);
-  return fetch(url, { redirect: 'follow' }).then(function (res) {
+  return fetch(url, { redirect: 'follow', mode: 'no-cors' }).then(function (res) {
     return coordsFromMapsUrl(res && res.url ? res.url : url);
   }).catch(function () { return null; });
 }
@@ -7168,6 +7173,7 @@ function switchTab(name) {
   if (name === 'map') { initMap(); updateWeatherChip(); refreshMarkers(); } /* Q17: marker wind refresh on open */
   if (name === 'history') renderHistory();
   if (name === 'settings') { renderExportDimChips(); renderExportFilterBar(); renderSettingsHome(); refreshPurge(); } /* Q53: home status */
+  if (name === 'reports') { renderExportDimChips(); renderExportFilterBar(); } /* Q231: the filters live on the Reports tab now — draw them when it opens, not only after a Settings visit */
   if (name === 'scorecard') renderScorecardTab();
   if (name === 'totals') renderTotals();
   if (name === 'seasons') renderSeasons($('seasons-search').value);
@@ -8676,7 +8682,12 @@ function wireUp() {
   $('exp-from').onchange = function () { exportUI.from = this.value; renderExportFilterBar(); };
   $('exp-to').onchange = function () { exportUI.to = this.value; renderExportFilterBar(); };
   $('exp-filters-clear').onclick = function () { clearExportFilters(); renderExportDimChips(); renderExportFilterBar(); };
-  $('pane-settings').addEventListener('click', function (e) {
+  /* Q231 (2026-11-05): the filter buttons live in the Reports tab
+     (#pane-reports, since Q180 moved Reports out of Settings) and the
+     checklist sheet is a top-level element — neither sits inside
+     pane-settings, so the old listener there never fired. Document-level
+     delegation covers both. */
+  document.addEventListener('click', function (e) {
     var msbtn = e.target.closest ? e.target.closest('[data-msbtn]') : null;
     if (msbtn) { openMsSheet(msbtn.getAttribute('data-msbtn')); return; }
     var msrow = e.target.closest ? e.target.closest('[data-msval]') : null;
