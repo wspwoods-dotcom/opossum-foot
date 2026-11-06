@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-11-06fj';
+var APP_VERSION = 'beta 0.1 · build 2026-11-06fk';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -4549,10 +4549,14 @@ function showGroups() {
    screenshot: "v: Active 0 · Sprung 18 · Pulled 0 · Missi"), so the label
    rides in a .show-label span that shrink-to-fits, centers itself, and
    ellipsizes from the start if it ever overflows. Sizes are measured
-   (headless Chromium, DejaVu — SF Pro runs narrower): 1-3 statuses at
-   16px, 4 at 14px, 5 at 11px — the five-status list measures 284px at
+   (headless Chromium, DejaVu — SF Pro runs narrower): 1-2 statuses at
+   16px, 3-4 at 14px, 5 at 11px — the five-status list measures 284px at
    11px against a 329px content box. 4-5 statuses drop the "Show: "
-   prefix for room. */
+   prefix for room. Slim (Tanner, 2026-11-06): the pill was 70px tall
+   while the text is 18px — the app's 52px button touch-height was
+   leaking in — so .show-btn sets min-height: 0 and the pill padding is
+   4px vertical, landing the pill near 33px tall (41px with the bulk
+   button showing). */
 function renderShowButton() {
   var btn = $('btn-show'); if (!btn || !Store.data) return;
   var m = showModel();
@@ -4575,11 +4579,8 @@ function renderShowButton() {
   else if (onStatus.length === 1) html = 'Show: ' + countOf(onStatus[0]) + ' ' + nameHtml(onStatus[0]);
   else {
     var parts = onStatus.map(function (v) { return nameHtml(v) + ' <span style="color:#f5efdd">' + countOf(v) + '</span>'; });
-    if (onStatus.length <= 3) html = 'Show: ' + parts.join(' · ');
-    else {
-      size = onStatus.length === 4 ? 14 : 11;
-      html = parts.join(' · ');
-    }
+    size = onStatus.length === 5 ? 11 : (onStatus.length >= 3 ? 14 : 16);
+    html = onStatus.length <= 3 ? 'Show: ' + parts.join(' · ') : parts.join(' · ');
   }
   btn.innerHTML = '<span class="show-label">' + html + '</span>';
   btn.style.fontSize = size + 'px';
