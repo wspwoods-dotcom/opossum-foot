@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-11-05fh';
+var APP_VERSION = 'beta 0.1 · build 2026-11-06fi';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -4537,15 +4537,33 @@ function showGroups() {
   groups.push({ key: 'sign', label: 'Sign', on: anyFam, color: '#f0d28a' });
   return groups;
 }
+/* Q232 (2026-11-06): the pill carries the live counts on the active line.
+   One status on: "Show: 18 Sprung" (count first, Tanner's wording). Two or
+   more on: each status with its count, "Sprung 18 · Active 16" — a quick
+   reference, and the Select all button is gone (bulk needs one status).
+   All on stays "Show: All"; nothing on shows Sign if its families are on,
+   else None. The Sign layer is never counted — it has no sets. */
 function renderShowButton() {
-  var btn = $('btn-show'); if (!btn) return;
+  var btn = $('btn-show'); if (!btn || !Store.data) return;
+  var m = showModel();
+  var onStatus = STATUS_VALUES.filter(function (v) { return m[v] !== false; });
   var groups = showGroups();
   var on = groups.filter(function (g) { return g.on; });
-  var nameHtml = function (g) { return '<span style="color:' + lighten(g.color, 0.38) + '">' + esc(g.label) + '</span>'; };
+  var colors = pinSchemeById(pinSchemeId()).colors;
+  var nameHtml = function (v) { return '<span style="color:' + lighten(colors[v], 0.38) + '">' + esc(STATUS_LABELS[v]) + '</span>'; };
+  var countOf = function (v) {
+    var n = 0;
+    activeSets().forEach(function (s) { if (normStatus(s.status) === v) n++; });
+    return n;
+  };
   if (on.length === groups.length) btn.innerHTML = 'Show: <span style="color:#f5efdd">All</span>';
-  else if (on.length === 0) btn.innerHTML = 'Show: <span style="color:#f5efdd">None</span>';
-  else if (on.length <= 4) btn.innerHTML = 'Show: ' + on.map(nameHtml).join(', '); /* Q197: names up to four on; the count form is only for five */
-  else btn.innerHTML = 'Show: ' + on.length + ' of ' + groups.length;
+  else if (onStatus.length === 0) {
+    var signOn = groups.some(function (g) { return g.key === 'sign' && g.on; });
+    btn.innerHTML = signOn ? 'Show: <span style="color:#f5efdd">Sign</span>' : 'Show: <span style="color:#f5efdd">None</span>';
+  }
+  else if (onStatus.length === 1) btn.innerHTML = 'Show: ' + countOf(onStatus[0]) + ' ' + nameHtml(onStatus[0]);
+  else if (onStatus.length <= 4) btn.innerHTML = 'Show: ' + onStatus.map(function (v) { return nameHtml(v) + ' <span style="color:#f5efdd">' + countOf(v) + '</span>'; }).join(' · ');
+  else btn.innerHTML = 'Show: ' + onStatus.length + ' of ' + STATUS_VALUES.length;
 }
 var showSignOpen = false;
 function renderShowList() {
@@ -4635,17 +4653,18 @@ function renderMapStatusFilters() {
     bulkBtn._wired = true;
     bulkBtn.onclick = function () {
       if (!bulkSelected) { bulkSelected = true; renderBulkBar(); return; }
-      openBulkStatusPicker();
+      openBulkActions(); /* Q232: the second tap opens the actions menu — Change status / Edit all / Delete all */
     };
   }
   renderBulkBar();
 }
 /* Q229 (2026-11-05, Tanner; widened same day on the ff check): bulk status
-   change. When the Show filter is narrowed to ANY one status, a bar offers
-   Select all on this line, then Change status, then a confirm naming count,
-   line, from -> to and the date rule. The picker offers every status except
-   the one you're coming from and except Missing as a target — Missing needs
-   a reason per set (Q35), Confiscated needs details per set, so it stays
+   change. When the Show filter is narrowed to ANY one status, the Show pill
+   offers Select all on this line (Q232 moved it out of the bottom bar and
+   into the pill), then Actions, then a confirm naming count, line, from ->
+   to and the date rule. The picker offers every status except the one
+   you're coming from and except Missing as a target — Missing needs a
+   reason per set (Q35), Confiscated needs details per set, so it stays
    one-at-a-time. Leaving Missing in bulk clears the reason/detail, like the
    Edit save does. Scope is the active line only. */
 var bulkSelected = false;
@@ -4660,23 +4679,187 @@ function bulkFilteredSets() {
   var lid = activeLineId();
   return ((Store.data && Store.data.sets) || []).filter(function (s) { return s.lineId === lid && normStatus(s.status) === st; });
 }
+/* Q232 (2026-11-06): the bulk bar is gone — the control lives in the Show
+   pill. renderBulkBar now only drives the pill's gold button: it shows when
+   the filter is narrowed to ANY one status with sets on this line, reads
+   "Select all" until tapped, then "Actions" (second tap opens the menu).
+   Two or more statuses on, or none, and the button is gone — bulk needs
+   one status. The count itself lives in renderShowButton, refreshed here
+   and on every marker refresh. */
 function renderBulkBar() {
-  var bar = $('bulk-bar');
-  if (!bar) return;
+  var btn = $('btn-bulk');
+  if (!btn) return;
   var st = bulkFilterStatus();
   var sets = bulkFilteredSets();
-  var pane = $('pane-map');
   if (!st || !sets.length) {
-    bar.hidden = true;
+    btn.hidden = true;
     bulkSelected = false;
-    if (pane) pane.classList.remove('bulk-on');
-    return;
+  } else {
+    btn.hidden = false;
+    btn.textContent = bulkSelected ? 'Actions' : 'Select all';
   }
-  bar.hidden = false;
-  if (pane) pane.classList.add('bulk-on');
+  renderShowButton();
+}
+/* Q232: the actions menu — what the second tap opens. Change status keeps
+   the Q229 picker + confirm; Edit all and Delete all are new (below). */
+function openBulkActions() {
+  var st = bulkFilterStatus();
+  var sets = bulkFilteredSets();
+  if (!st || !sets.length) { renderBulkBar(); return; }
+  showModal('<h3>' + sets.length + ' sets selected</h3>' +
+    '<button type="button" class="bulk-status-row" id="ba-status">Change status</button>' +
+    '<button type="button" class="bulk-status-row" id="ba-edit">Edit all</button>' +
+    '<button type="button" class="bulk-status-row" id="ba-delete" style="color:#e5484d">Delete all</button>' +
+    '<div class="btn-row" style="margin-top:14px"><button class="btn-secondary" id="m-cancel" type="button">Cancel</button></div>');
+  $('m-cancel').onclick = function () { closeModal(); };
+  $('ba-status').onclick = function () { closeModal(); openBulkStatusPicker(); };
+  $('ba-edit').onclick = function () { closeModal(); openBulkEdit(); };
+  $('ba-delete').onclick = function () { closeModal(); openBulkDeleteConfirm(); };
+}
+/* Q232: Edit all — one menu with ALL the shared fields, so the sets can all
+   be changed to look the same in one pass. Options come from the app's own
+   lists: set-type foundations (+ his remembered customs), all trap types
+   (+ customs), and his remembered attractant values (Q11). Only fields that
+   are toggled on are offered (visual has no toggle — always on). Every
+   select starts at "(no change)": a field left alone keeps each set's own
+   value, never blanked. */
+function bulkEditOptions() {
+  var out = [];
+  if (setFieldOn('settype')) {
+    var stOpts = [];
+    ['Land', 'Water'].forEach(function (g) {
+      SET_FOUNDATIONS[g].forEach(function (t) { stOpts.push(t); });
+    });
+    customOptionsFor('sf-settype').forEach(function (t) {
+      if (stOpts.indexOf(t) === -1) stOpts.push(t);
+    });
+    out.push({ field: 'setType', label: 'Set type', options: stOpts });
+  }
+  if (setFieldOn('traptype')) {
+    var ttOpts = ALL_TRAP_TYPES.slice();
+    customOptionsFor('sf-type').forEach(function (t) {
+      if (ttOpts.indexOf(t) === -1) ttOpts.push(t);
+    });
+    out.push({ field: 'trapType', label: 'Trap type', options: ttOpts });
+  }
+  [['bait', 'Bait'], ['lure', 'Lure'], ['urine', 'Urine']].forEach(function (pair) {
+    if (!setFieldOn(pair[0])) return;
+    out.push({ field: pair[0], label: pair[1], options: savedEntries(pair[0]).slice() });
+  });
+  out.push({ field: 'visual', label: 'Visual', options: savedEntries('visual').slice() });
+  return out;
+}
+function openBulkEdit() {
+  var sets = bulkFilteredSets();
+  if (!sets.length) { renderBulkBar(); return; }
+  var fields = bulkEditOptions();
+  var rows = fields.map(function (f) {
+    var opts = '<option value="">(no change)</option>' + f.options.map(function (o) {
+      return '<option value="' + esc(o) + '">' + esc(o) + '</option>';
+    }).join('');
+    return '<label class="bulk-edit-row">' + esc(f.label) +
+      '<select id="be-' + f.field + '">' + opts + '</select></label>';
+  }).join('');
+  showModal('<h3>Edit all ' + sets.length + ' sets</h3>' +
+    '<p>Set as many fields as you want — fields you leave alone stay as they are on each set.</p>' + rows +
+    '<div class="btn-row" style="margin-top:14px"><button class="btn-secondary" id="m-cancel" type="button">Cancel</button>' +
+    '<button class="btn-primary" id="m-ok" type="button">Review changes</button></div>');
+  $('m-cancel').onclick = function () { closeModal(); };
+  $('m-ok').onclick = function () {
+    var changes = [];
+    fields.forEach(function (f) {
+      var v = ($('be-' + f.field) || {}).value || '';
+      if (v) changes.push({ field: f.field, label: f.label, value: v });
+    });
+    if (!changes.length) { closeModal(); toast('Nothing to change.'); return; }
+    closeModal(); openBulkEditConfirm(changes);
+  };
+}
+function openBulkEditConfirm(changes) {
+  var sets = bulkFilteredSets();
+  if (!sets.length) { renderBulkBar(); return; }
   var n = sets.length;
-  $('bulk-bar-text').textContent = bulkSelected ? (n + ' selected') : (n + ' ' + STATUS_LABELS[st] + ' on this line');
-  $('btn-bulk').textContent = bulkSelected ? 'Change status' : 'Select all';
+  var lines = changes.map(function (c) {
+    var note = c.field === 'setType' ? ' (variations cleared)'
+      : (c.field === 'bait' || c.field === 'lure' || c.field === 'urine' || c.field === 'visual') ? ' (replaces what is there now)' : '';
+    return '<p>' + esc(c.label) + ' → ' + esc(c.value) + note + '</p>';
+  }).join('');
+  showModal('<h3>Change ' + n + ' sets?</h3>' + lines +
+    '<p>Fields you left alone stay as they are on each set.</p>' +
+    '<div class="btn-row" style="margin-top:14px"><button class="btn-secondary" id="m-cancel" type="button">Cancel</button>' +
+    '<button class="btn-primary" id="m-ok" type="button">Change ' + n + ' sets</button></div>');
+  $('m-cancel').onclick = function () { closeModal(); };
+  $('m-ok').onclick = function () { closeModal(); applyBulkEdit(changes); };
+}
+function applyBulkEdit(changes) {
+  var sets = bulkFilteredSets();
+  if (!sets.length) { renderBulkBar(); return; }
+  var n = sets.length;
+  sets.forEach(function (s) {
+    changes.forEach(function (c) {
+      if (c.field === 'setType') { s.setType = c.value; s.variation = ''; } /* the old variation belongs to the old foundation */
+      else if (c.field === 'trapType') { s.trapType = c.value; } /* maker + trap details untouched */
+      else { s[c.field] = [c.value]; } /* attractants ride as arrays; bulk replaces the whole list */
+    });
+    touchSet(s); /* Q68: any edit restarts the check clock */
+  });
+  Store.save();
+  refreshMarkers();
+  bulkSelected = false;
+  renderBulkBar();
+  toast(n + ' sets updated.');
+}
+/* Q232: Delete all — the clone-a-line cleanup (Tanner, 2026-11-06). Same
+   gone-everywhere rule as a single delete (Q38): sets, their pins, catch
+   logs (History included), photos, and voice memos — one confirm naming
+   the counts, with the gone-forever warning, before anything is removed. */
+function openBulkDeleteConfirm() {
+  var st = bulkFilterStatus();
+  var sets = bulkFilteredSets();
+  if (!st || !sets.length) { renderBulkBar(); return; }
+  var n = sets.length;
+  var ln = lineById(Store.data, activeLineId());
+  var ids = {};
+  sets.forEach(function (s) { ids[s.id] = true; });
+  var nLogs = (Store.data.logs || []).filter(function (l) { return ids[l.setId]; }).length;
+  function ask(nPhotos, nMemos) {
+    var bits = [n + ' ' + STATUS_LABELS[st] + ' sets from “' + esc(ln ? ln.name : '') + '” will be permanently deleted'];
+    if (nLogs) bits.push('their ' + nLogs + ' catch log' + (nLogs > 1 ? 's' : '') + ' (removed from History too)');
+    if (nPhotos) bits.push(nPhotos + ' photo' + (nPhotos > 1 ? 's' : ''));
+    if (nMemos) bits.push(nMemos + ' voice memo' + (nMemos > 1 ? 's' : ''));
+    confirmModal('Delete ' + n + ' sets?',
+      bits.join(', ') + '. This cannot be undone — deleted data is gone forever.',
+      'Delete', function () { applyBulkDelete(ids, n); });
+  }
+  IDB.all('photos').then(function (all) {
+    var nPhotos = all.filter(function (p) { return ids[p.setId]; }).length;
+    return IDB.all('memos').then(function (memos) {
+      ask(nPhotos, memos.filter(function (m) { return ids[m.setId]; }).length);
+    });
+  }).catch(function () { ask(0, 0); });
+}
+function applyBulkDelete(ids, n) {
+  Store.data.sets = Store.data.sets.filter(function (x) { return !ids[x.id]; });
+  Store.data.logs = Store.data.logs.filter(function (l) { return !ids[l.setId]; });
+  IDB.all('photos').then(function (all) {
+    all.forEach(function (p) {
+      if (!ids[p.setId]) return;
+      if (photoURLs[p.id]) { URL.revokeObjectURL(photoURLs[p.id]); delete photoURLs[p.id]; }
+      delete photoById[p.id];
+      IDB.del('photos', p.id);
+    });
+  }).catch(function () { /* noop */ });
+  IDB.all('memos').then(function (all) {
+    all.forEach(function (m) {
+      if (!ids[m.setId]) return;
+      if (memoURLs[m.id]) { URL.revokeObjectURL(memoURLs[m.id]); delete memoURLs[m.id]; }
+      IDB.del('memos', m.id);
+    });
+  }).catch(function () { /* noop */ });
+  Store.save(); refreshMarkers(); renderHistory(); renderTotals();
+  bulkSelected = false;
+  renderBulkBar();
+  toast(n + ' sets deleted.');
 }
 function openBulkStatusPicker() {
   var st = bulkFilterStatus();
