@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-11-06fm';
+var APP_VERSION = 'beta 0.1 · build 2026-11-07fn';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -2612,12 +2612,16 @@ function panToFixIfOffCenter(lat, lng) {
   if (dotPastDeadband(lat, lng)) map.panTo([lat, lng], { animate: false });
 }
 
-/* Q233: the follow watch's own re-pan is the first line, but a watch hiccup
+/* Q234 (2026-11-07): the follow watch's own re-pan is the first line, but a watch hiccup
    must not strand the map off-center — while following, re-check every few
    seconds and pan to the last fix whenever the dot sits past the deadband.
-   Paused (dragged) never pans; the guard only runs while following. */
+   Paused (dragged) never pans; the guard only runs while following.
+   Q234: never pan to a STALE fix — a lastFix older than 60 s is untrusted
+   (the watchdog restarts the watch to fetch a fresh one); panning to it
+   would actively hold the map on a wrong spot. */
 function followGuardTick() {
   if (locateState !== 'following' || !map || !lastFix || lastFix.lat == null) return;
+  if (Date.now() - (lastFix.at || 0) > 60000) return; /* Q234: stale fix — do not trust it */
   panToFixIfOffCenter(lastFix.lat, lastFix.lng);
 }
 function startFollowGuard() {
@@ -2642,6 +2646,36 @@ function disarmTapCorrection() {
   if (tapCorrectTimer) { clearTimeout(tapCorrectTimer); tapCorrectTimer = null; }
 }
 
+/* Q234 (2026-11-07): the tap trusts lastFix, and the Q233 tap correction
+   only fires on a CONVERGED watch fix — if the watch never converges, the
+   map can sit on a stale/displaced tap center while the guard (which also
+   trusts lastFix) holds it there. So every tap also fires a one-shot fresh
+   read that depends on neither the watch nor convergence: a fresh fix
+   landing >12 m from the tap center re-centers the map once. The one-shot
+   supersedes the watch-based correction when it lands. */
+function verifyTapCenter() {
+  if (!('geolocation' in navigator)) return;
+  var tc = tapCenter ? { lat: tapCenter.lat, lng: tapCenter.lng } : (lastFix ? { lat: lastFix.lat, lng: lastFix.lng } : null);
+  if (!tc) return;
+  try {
+    navigator.geolocation.getCurrentPosition(function (pos) {
+      var c = pos.coords || {};
+      if (typeof c.latitude !== 'number' || typeof c.longitude !== 'number') return;
+      var ageMs = Date.now() - (pos.timestamp || 0);
+      if (ageMs > 30000 || ageMs < 0) return; /* stale cached fix — ignore */
+      var acc = (typeof c.accuracy === 'number' && isFinite(c.accuracy)) ? Math.round(c.accuracy) : 9999;
+      if (acc > 25) return; /* too coarse to trust over the tap center */
+      if (locateState !== 'following') return; /* user paused/stopped since the tap */
+      if (haversineMi(tc.lat, tc.lng, c.latitude, c.longitude) * 1609.34 > 12) {
+        drawFix({ lat: c.latitude, lng: c.longitude, acc: acc }, false);
+        if (map) { map.invalidateSize(); map.panTo([c.latitude, c.longitude], { animate: false }); }
+      }
+      disarmTapCorrection(); /* the one-shot supersedes the watch-based correction */
+    }, function () { /* one-shot failed — the watch + guard still cover it */ },
+    { enableHighAccuracy: true, timeout: 8000, maximumAge: 0 });
+  } catch (e) { /* geolocation unavailable — watch + guard still cover it */ }
+}
+
 /* Enter follow mode: one tap on the crosshair gets you here, and follow
    stays on from this point. */
 function enterFollow() {
@@ -2655,7 +2689,9 @@ function enterFollow() {
   startFollowWatch();
   armFollowWatchdog();
   startFollowGuard(); /* Q233 */
-  if (map && lastFix && lastFix.lat != null) map.panTo([lastFix.lat, lastFix.lng], { animate: false });
+  /* Q234: re-measure before panning — a stale cached container size (B13)
+     lands the pan off-center. */
+  if (map && lastFix && lastFix.lat != null) { map.invalidateSize(); map.panTo([lastFix.lat, lastFix.lng], { animate: false }); }
 }
 
 /* Draw the GPS dot/circle for a fix. On the final fix, also zoom + county. */
@@ -2835,8 +2871,12 @@ function startAcquire() {
    right on yourself at working zoom. */
 function centerOnFix() {
   if (!map || !lastFix || lastFix.lat == null) return;
+  /* Q234: re-measure before centering — a stale cached container size (B13)
+     lands the setView off-center. */
+  map.invalidateSize();
   map.setView([lastFix.lat, lastFix.lng], 19, { animate: false });
   armTapCorrection(); /* Q233: verify the tap center against the next converged fix */
+  verifyTapCenter(); /* Q234: verify the tap center against a one-shot fresh fix */
 }
 
 /* ◎ button: one tap acquires and follows — follow stays on from that point,
