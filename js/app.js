@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-11-07fn';
+var APP_VERSION = 'beta 0.1 · build 2026-11-07fo';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -5059,6 +5059,14 @@ function applyBulkStatus(target) {
     touchSet(s); /* Q68: any edit restarts the check clock */
   });
   Store.save();
+  /* Q235 (2026-11-07, Tanner): the filter follows the sets — after a bulk
+     status change the Show filter was still narrowed to the old status,
+     which now holds 0 sets, so the map showed nothing. Toggle the new
+     status on (and the old one off) so the sets land in view. */
+  var m = showModel();
+  m[st] = false;
+  m[target] = true;
+  saveShowModel();
   refreshMarkers();
   bulkSelected = false;
   renderBulkBar();
