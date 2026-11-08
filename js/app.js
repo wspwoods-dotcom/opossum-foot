@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-11-07fo';
+var APP_VERSION = 'beta 0.1 · build 2026-11-07fp';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -1447,22 +1447,34 @@ function rememberAttractants(s) {
 /* Q69: the sponsor's logo (product badge) replaces the eye in the suggestion
    row; tapping it still opens the sponsor bio. No badge on file → the eye
    stays as the fallback so the info page is always one tap away. */
-function sponsorSuggestRowHtml(sp) {
+/* Q238 (2026-11-07): one row per sponsor PRODUCT, not one per sponsor.
+   The row fills that product; the eye/logo opens the sponsor bio. */
+function sponsorSuggestRowHtml(sp, productName) {
   var mark = sp.badge
     ? '<img class="sponsor-logo" src="' + esc(sp.badge) + '" alt="' + esc(sp.name) + ' logo">'
     : '&#128065;';
   return '<div class="suggest-sponsor">' +
-    '<button type="button" class="suggest-fill" data-v="' + esc(sp.product) + '"><span class="suggest-name">' + esc(sp.product) + '</span> <span class="pill">Sponsored</span></button>' +
+    '<button type="button" class="suggest-fill" data-v="' + esc(productName) + '"><span class="suggest-name">' + esc(productName) + '</span> <span class="pill">Sponsored</span></button>' +
     '<button type="button" class="sponsor-eye" data-sp="' + esc(sp.id) + '" aria-label="About ' + esc(sp.name) + '">' + mark + '</button>' +
     '</div>';
 }
+/* Q238: expand each sponsor's products array into individual rows. Filter
+   is PREFIX on the product name only (Tanner's ruling 2026-11-07): typing
+   "M" shows what starts with M, "G" what starts with G. No sponsor-name
+   fallback — it made "g" match everything ("Pine Hollow Trapping" has a
+   "g"). Empty query shows all products for the section. */
 function sponsorSuggests(key, q) {
   var out = [];
   for (var i = 0; i < SPONSORS.length; i++) {
     var sp = SPONSORS[i];
     if (sp.section !== key) continue;
-    if (q && sp.product.toLowerCase().indexOf(q) === -1 && sp.name.toLowerCase().indexOf(q) === -1) continue;
-    out.push(sp);
+    var products = sp.products || (sp.product ? [{ name: sp.product }] : []);
+    for (var j = 0; j < products.length; j++) {
+      var name = products[j] && products[j].name ? String(products[j].name) : '';
+      if (!name) continue;
+      if (q && name.toLowerCase().indexOf(q) !== 0) continue;
+      out.push({ sp: sp, name: name });
+    }
   }
   return out;
 }
@@ -1470,6 +1482,31 @@ function attachSuggest(inputId, boxId, key) {
   var input = $(inputId), box = $(boxId);
   if (!input || !box || input._suggestWired) return;
   input._suggestWired = true;
+  /* Q236 (2026-11-07): an × that wipes the field in one tap — the manual
+     entries auto-populate from the last thing used, and clearing them took
+     deleting every letter. The button rides inside the input's right edge
+     and only shows while the field has text. It clears the text only: it
+     does NOT forget the entry from the saved-entry history (the × on a
+     suggestion row is the way to remove one from history; the last-used
+     value is usually wanted again). */
+  var wrap = document.createElement('span');
+  wrap.className = 'clear-wrap';
+  input.parentNode.insertBefore(wrap, input);
+  wrap.appendChild(input);
+  var clearBtn = document.createElement('button');
+  clearBtn.type = 'button';
+  clearBtn.className = 'input-clear';
+  clearBtn.setAttribute('aria-label', 'Clear');
+  clearBtn.textContent = '×';
+  clearBtn.hidden = !input.value;
+  wrap.appendChild(clearBtn);
+  clearBtn.onclick = function (e) {
+    if (e && e.stopPropagation) e.stopPropagation();
+    input.value = '';
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+    input.focus();
+  };
+  function updateClear() { clearBtn.hidden = !input.value; }
   function fillFrom(btn) {
     input.value = btn.getAttribute('data-v');
     box.className = 'suggest'; box.innerHTML = '';
@@ -1484,10 +1521,10 @@ function attachSuggest(inputId, boxId, key) {
     var sps = sponsorSuggests(key, q);
     var items = savedEntries(key).filter(function (v) {
       var vl = v.toLowerCase();
-      return vl !== q && (!q || vl.indexOf(q) !== -1);
+      return vl !== q && (!q || vl.indexOf(q) === 0); /* Q238: saved entries filter by prefix too */
     }).slice(0, 6);
     if (!sps.length && !items.length) { box.className = 'suggest'; box.innerHTML = ''; return; }
-    var html = sps.map(sponsorSuggestRowHtml).join('') + items.map(function (v) {
+    var html = sps.map(function (r) { return sponsorSuggestRowHtml(r.sp, r.name); }).join('') + items.map(function (v) {
       /* Q79 (2026-10-01): Tanner — user-typed entries get a × to remove them
          from the list; built-in seeds don't. */
       var del = isSeedEntry(key, v)
@@ -1518,6 +1555,7 @@ function attachSuggest(inputId, boxId, key) {
     }
   }
   input.addEventListener('input', render);
+  input.addEventListener('input', updateClear); /* Q236: the × shows only while the field has text */
   input.addEventListener('focus', render);
   input.addEventListener('blur', function () {
     setTimeout(function () { box.className = 'suggest'; }, 160);
@@ -1658,7 +1696,7 @@ var TRAP_SUB = {
     otherSize: 'Other / unsure', model: true
   },
   'Bodygrip / Conibear': { sizes: ['110', '120', '160', '220', '280', '330'], otherSize: 'Other' },
-  'Snare': { snare: true },
+  'Snare': { snare: true, model: true }, /* Q239 (2026-11-07): snare sets get a Brand/model field so sponsor snares can appear as suggestion rows */
   'Cage live trap': {
     sizes: ['Small — up to 7"x7"x24"', 'Medium — 9"x9"x24" to 10"x12"x32"', 'Large — 12"x12" and up'],
     otherSize: 'Other', model: true
@@ -1988,7 +2026,7 @@ function trapDetailSummary(s) {
 function normalizeTrapDetail(s) {
   var t = s.trapType;
   if (t === 'Foothold') { s.snareDia = s.snareLock = s.snareLen = s.snarePurpose = ''; }
-  else if (t === 'Snare') { s.trapSpring = s.trapSize = s.trapModel = ''; }
+  else if (t === 'Snare') { s.trapSpring = s.trapSize = ''; } /* Q239: snare keeps its Brand/model — no longer wiped here */
   else if (t === 'Bodygrip / Conibear' || t === 'Cage live trap' || t === 'Colony trap' || t === 'Bear trap') {
     s.trapSpring = s.snareDia = s.snareLock = s.snareLen = s.snarePurpose = '';
   } else { s.trapSpring = s.trapSize = s.snareDia = s.snareLock = s.snareLen = s.snarePurpose = ''; }
@@ -2985,14 +3023,19 @@ function sponsorById(id) {
   return null;
 }
 /* Scorecard sponsor chips: match a ranked attractant name to a sponsor's
-   product (normalized). The chip never affects the rank — it only marks
-   products whose maker sponsors the app. */
+   product (normalized). Q238: match any product in the sponsor's products
+   array, not just the single main product. The chip never affects the rank
+   — it only marks products whose maker sponsors the app. */
 function sponsorForProduct(name) {
   var n = String(name == null ? '' : name).toLowerCase().trim();
   if (!n) return null;
   for (var i = 0; i < SPONSORS.length; i++) {
     var sp = SPONSORS[i];
     if (String(sp.product == null ? '' : sp.product).toLowerCase().trim() === n) return sp;
+    var products = sp.products || [];
+    for (var j = 0; j < products.length; j++) {
+      if (products[j] && String(products[j].name || '').toLowerCase().trim() === n) return sp;
+    }
   }
   return null;
 }
@@ -4797,16 +4840,16 @@ function renderMapStatusFilters() {
   if (bulkBtn && !bulkBtn._wired) {
     bulkBtn._wired = true;
     bulkBtn.onclick = function () {
-      if (!bulkSelected) { bulkSelected = true; renderBulkBar(); return; }
-      openBulkActions(); /* Q232: the second tap opens the actions menu — Change status / Edit all / Delete all */
+      openBulkActions(); /* Q237 (2026-11-07): one tap opens the menu — the Select-all step is gone */
     };
   }
   renderBulkBar();
 }
 /* Q229 (2026-11-05, Tanner; widened same day on the ff check): bulk status
    change. When the Show filter is narrowed to ANY one status, the Show pill
-   offers Select all on this line (Q232 moved it out of the bottom bar and
-   into the pill), then Actions, then a confirm naming count, line, from ->
+   offers Actions on this line (Q232 moved it out of the bottom bar and
+   into the pill; Q237 dropped the Select-all step, so one tap opens the
+   menu), then a confirm naming count, line, from ->
    to and the date rule. The picker offers every status except the one
    you're coming from and except Missing as a target — Missing needs a
    reason per set (Q35), Confiscated needs details per set, so it stays
@@ -4826,11 +4869,13 @@ function bulkFilteredSets() {
 }
 /* Q232 (2026-11-06): the bulk bar is gone — the control lives in the Show
    pill. renderBulkBar now only drives the pill's gold button: it shows when
-   the filter is narrowed to ANY one status with sets on this line, reads
-   "Select all" until tapped, then "Actions" (second tap opens the menu).
-   Two or more statuses on, or none, and the button is gone — bulk needs
-   one status. The count itself lives in renderShowButton, refreshed here
-   and on every marker refresh. */
+   the filter is narrowed to ANY one status with sets on this line and reads
+   "Actions" (Q237, 2026-11-07: one tap opens the menu — the Select-all step
+   is gone). Two or more statuses on, or none, and the button is gone — bulk
+   needs one status. The count itself lives in renderShowButton, refreshed
+   here and on every marker refresh. bulkSelected is vestigial — the bulk
+   actions reset it after they run, but nothing reads it for the label/flow
+   anymore. */
 function renderBulkBar() {
   var btn = $('btn-bulk');
   if (!btn) return;
@@ -4841,7 +4886,7 @@ function renderBulkBar() {
     bulkSelected = false;
   } else {
     btn.hidden = false;
-    btn.textContent = bulkSelected ? 'Actions' : 'Select all';
+    btn.textContent = 'Actions'; /* Q237: the button reads Actions from the start — no Select-all step */
   }
   renderShowButton();
 }
