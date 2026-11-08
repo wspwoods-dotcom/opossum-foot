@@ -351,6 +351,17 @@ body[data-pinscheme="pastel"] { --pin-active:#a9d6a5; --pin-sprung:#eacd7d; --pi
   background: var(--panel); color: var(--muted); border: 1px solid var(--line);
   font-size: 20px; line-height: 1; padding: 0; }
 .attr-row-x:active { background: var(--line); }
+/* Q236 (2026-11-07): the one-tap clear × inside manual-entry inputs. The
+   wrap keeps the input full-width; the × sits over the input's right edge
+   and only shows while the field has text. */
+.clear-wrap { position: relative; display: block; }
+.attr-row .clear-wrap { flex: 1; min-width: 0; }
+.clear-wrap input[type=text] { padding-right: 42px; }
+.input-clear { position: absolute; right: 6px; top: 50%; transform: translateY(-50%);
+  width: 30px; height: 30px; border-radius: 50%; border: none; background: transparent;
+  color: var(--muted); font-size: 20px; line-height: 1; padding: 0; cursor: pointer; }
+.input-clear:active { background: var(--line); }
+.input-clear[hidden] { display: none; }
 .attr-add { margin-top: 8px; }
 /* Q98: the add-another button hides until a row has a value; base button
    display:inline-flex overrides the UA [hidden] rule, so this is explicit. */
