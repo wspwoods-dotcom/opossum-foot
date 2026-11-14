@@ -231,7 +231,7 @@ select.select-hint { color: var(--faint); }
   z-index: 500;
 }
 #county-banner .cb-text { flex: 1 1 auto; min-width: 0; text-align: center; }
-#county-banner .cb-county { font-size: 22px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; }
+#county-banner .cb-county { font-size: 22px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; white-space: nowrap; }
 #county-banner .cb-state { font-size: 13px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-top: 1px; }
 #county-banner.unknown .cb-county { color: var(--faint); font-size: 16px; letter-spacing: .5px; }
 
