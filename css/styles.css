@@ -88,7 +88,7 @@ body {
 }
 #sponsor-map-banner .smb-logo { background: none; border: 0; padding: 0; margin: 0; display: flex; align-items: center; }
 #sponsor-map-banner .smb-logo img { display: block; height: 42px; width: auto; }
-#sponsor-map-banner .smb-logo[data-sp="kansas-trapline"] img { height: 30px; }
+#sponsor-map-banner .smb-logo:last-child img { height: 30px; } /* KTP oval is shorter than the Pine Hollow badge */
 
 /* ---------- onboarding ---------- */
 #view-onboard { align-items: center; justify-content: center; padding: 28px 22px; }
@@ -1018,7 +1018,6 @@ body.placing .leaflet-control-layers { pointer-events: none; opacity: .45; }
 .sp-bio-prod { margin: 0 0 20px; }
 .sp-bio-prodname { font-weight: 700; font-size: 17px; }
 .sp-bio-proddesc { font-size: 14px; margin-top: 6px; line-height: 1.55; }
-.sp-bio-upgrade { font-size: 14px; margin: 24px 0 0; line-height: 1.5; }
 .sp-bio-visit { display: inline-block; margin-top: 28px; background: var(--accent);
   color: var(--accent-ink); font-weight: 800; text-transform: uppercase; letter-spacing: .06em;
   font-size: 16px; padding: 17px 52px; border-radius: 999px; text-decoration: none; }
