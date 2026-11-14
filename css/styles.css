@@ -97,31 +97,22 @@ html.of-standalone .view { height: 100vh; }
 .splash-logo-ph { height: 84px; width: auto; }
 .splash-logo-ktp { height: 58px; width: auto; }
 
-/* ---------- sponsor map banner ---------- */
-/* fm (2026-11-14): fl painted the banner but the logos were WRONG — jammed
-   against the top of the strip with their top arcs sliced off by the gold
-   line and dead black space below them. Cause: box-sizing is border-box, so
-   the 34px bottom safe-area padding sat INSIDE the 54px height, leaving a
-   20px content slot for 42px/30px logos; centered in 20px they overflowed
-   11px above the banner's top edge, and that overflow is not drawn (the
-   phone shows the logos starting exactly at the gold line, bottoms at
-   851/845 as the centered math predicts). Fix: the banner's height now
-   ADDS the safe-area inset (54px content + inset below it), so the logos
-   center in a full 54px slot and sit fully inside the strip. In a tab the
-   inset is 0 and the banner is 54px, unchanged. Map loses ~34px vs fl but
-   stays taller than the fj 812 layout. */
-#sponsor-map-banner {
-  flex: 0 0 auto;
-  display: flex; align-items: center; justify-content: center; gap: 26px;
-  background: #10140c;
-  border-top: 1px solid var(--accent);
-  height: calc(54px + env(safe-area-inset-bottom));
-  padding: 0 12px env(safe-area-inset-bottom);
-  z-index: 400;
-}
-#sponsor-map-banner .smb-logo { background: none; border: 0; padding: 0; margin: 0; display: flex; align-items: center; }
-#sponsor-map-banner .smb-logo img { display: block; height: 42px; width: auto; }
-#sponsor-map-banner .smb-logo:last-child img { height: 30px; } /* KTP oval is shorter than the Pine Hollow badge */
+/* ---------- sponsor map chips (fn) ---------- */
+/* fn (2026-11-14, Tanner): the bottom banner is gone — the sponsor logos
+   live up top now, one on each side of the map, bigger and display-only.
+   They float over the map (absolute, tap-through) so they take no layout
+   height; the map gets its full height back and the tab bar sits at the very
+   bottom. They sit just below the Show pill (top:56px) so they never collide
+   with it. pointer-events:none keeps map taps working underneath and enforces
+   display-only (bios open only from the product lists, Scorecard, or a bio
+   sheet — never from these chips). Both chips share a 56px-tall box so the
+   two logos center on the same line; Pine Hollow's badge is 56px, KTP's oval
+   40px (same 42:30 ratio as the old banner, a third bigger). */
+#pane-map .smb-chip { position: absolute; top: 56px; z-index: 600; display: flex; align-items: center; justify-content: center; height: 56px; pointer-events: none; }
+#pane-map .smb-chip-ph { left: 12px; }
+#pane-map .smb-chip-ktp { right: 12px; }
+#pane-map .smb-chip img { display: block; height: 56px; width: auto; }
+#pane-map .smb-chip-ktp img { height: 40px; }
 
 /* ---------- onboarding ---------- */
 #view-onboard { align-items: center; justify-content: center; padding: 28px 22px; }
