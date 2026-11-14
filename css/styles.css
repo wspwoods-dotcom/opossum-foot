@@ -97,22 +97,20 @@ html.of-standalone .view { height: 100vh; }
 .splash-logo-ph { height: 84px; width: auto; }
 .splash-logo-ktp { height: 58px; width: auto; }
 
-/* ---------- sponsor map chips (fn) ---------- */
-/* fn (2026-11-14, Tanner): the bottom banner is gone — the sponsor logos
-   live up top now, one on each side of the map, bigger and display-only.
-   They float over the map (absolute, tap-through) so they take no layout
-   height; the map gets its full height back and the tab bar sits at the very
-   bottom. They sit just below the Show pill (top:56px) so they never collide
-   with it. pointer-events:none keeps map taps working underneath and enforces
-   display-only (bios open only from the product lists, Scorecard, or a bio
-   sheet — never from these chips). Both chips share a 56px-tall box so the
-   two logos center on the same line; Pine Hollow's badge is 56px, KTP's oval
-   40px (same 42:30 ratio as the old banner, a third bigger). */
-#pane-map .smb-chip { position: absolute; top: 56px; z-index: 600; display: flex; align-items: center; justify-content: center; height: 56px; pointer-events: none; }
-#pane-map .smb-chip-ph { left: 12px; }
-#pane-map .smb-chip-ktp { right: 12px; }
-#pane-map .smb-chip img { display: block; height: 56px; width: auto; }
-#pane-map .smb-chip-ktp img { height: 40px; }
+/* ---------- sponsor logos in the county banner (fo) ---------- */
+/* fo (2026-11-14, Tanner): the sponsor logos live in the black space
+   flanking the county name in the county banner — Pine Hollow left, KTP
+   right, display-only. (The fn map-corner chips were the wrong spot; he
+   wants them here, next to COUNTY UNKNOWN.) The banner is a flex row now:
+   logo, county text (flex:1, centered), logo. pointer-events:none keeps
+   them display-only (bios open only from the product lists, Scorecard, or a
+   bio sheet — never from these logos). Both logos are 56px/40px — a third
+   bigger than the old 42px/30px banner logos, same ratio. The banner grows
+   only as much as the logos need (they are the tallest item); the bottom
+   banner stays gone and the map keeps its full height. */
+#county-banner .smb-chip { flex: 0 0 auto; display: flex; align-items: center; pointer-events: none; }
+#county-banner .smb-chip img { display: block; height: 56px; width: auto; }
+#county-banner .smb-chip-ktp img { height: 40px; }
 
 /* ---------- onboarding ---------- */
 #view-onboard { align-items: center; justify-content: center; padding: 28px 22px; }
@@ -217,12 +215,14 @@ select.select-hint { color: var(--faint); }
 /* ---------- county banner (LOUD) ---------- */
 #county-banner {
   flex: 0 0 auto;
+  display: flex; align-items: center;
   background: #0e120a;
   border-bottom: 2px solid var(--accent);
   padding: calc(10px + env(safe-area-inset-top)) 12px 9px;
   text-align: center;
   z-index: 500;
 }
+#county-banner .cb-text { flex: 1 1 auto; min-width: 0; text-align: center; }
 #county-banner .cb-county { font-size: 22px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; }
 #county-banner .cb-state { font-size: 13px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-top: 1px; }
 #county-banner.unknown .cb-county { color: var(--faint); font-size: 16px; letter-spacing: .5px; }
