@@ -64,10 +64,31 @@ body {
 
 /* ---------- splash ---------- */
 #view-splash { align-items: center; justify-content: center; text-align: center; padding: 32px; background: radial-gradient(ellipse at 50% 35%, #2B341B 0%, var(--bg) 70%); }
-#view-splash img { width: min(82vw, 350px); height: auto; filter: drop-shadow(0 10px 28px rgba(0,0,0,.45)); }
+#view-splash > img { width: min(82vw, 350px); height: auto; filter: drop-shadow(0 10px 28px rgba(0,0,0,.45)); }
 #view-splash h1 { font-size: 40px; margin: 20px 0 6px; letter-spacing: .5px; }
 #view-splash p { color: var(--muted); margin: 4px 0; }
 #view-splash .loading { margin-top: 26px; color: var(--faint); font-size: 15px; }
+
+/* ---------- splash sponsors (Presented by) ---------- */
+.splash-sponsors { margin-top: 30px; }
+.splash-presented { font-size: 12px; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+.splash-logos { display: flex; align-items: center; justify-content: center; gap: 28px; }
+.splash-logo-ph { height: 84px; width: auto; }
+.splash-logo-ktp { height: 58px; width: auto; }
+
+/* ---------- sponsor map banner ---------- */
+#sponsor-map-banner {
+  flex: 0 0 auto;
+  display: flex; align-items: center; justify-content: center; gap: 26px;
+  background: #10140c;
+  border-top: 1px solid var(--accent);
+  height: 54px;
+  padding: 0 12px env(safe-area-inset-bottom);
+  z-index: 400;
+}
+#sponsor-map-banner .smb-logo { background: none; border: 0; padding: 0; margin: 0; cursor: pointer; display: flex; align-items: center; }
+#sponsor-map-banner .smb-logo img { display: block; height: 42px; width: auto; }
+#sponsor-map-banner .smb-logo[data-sp="kansas-trapline"] img { height: 30px; }
 
 /* ---------- onboarding ---------- */
 #view-onboard { align-items: center; justify-content: center; padding: 28px 22px; }
@@ -156,7 +177,6 @@ select.select-hint { color: var(--faint); }
   display: flex;
   background: #10140c;
   border-top: 1px solid var(--line);
-  padding-bottom: env(safe-area-inset-bottom);
 }
 #tabbar button {
   flex: 1 1 0; min-width: 0; background: none; border: none; border-radius: 0;
@@ -203,7 +223,7 @@ select.select-hint { color: var(--faint); }
 #line-bar-name { color: var(--accent); max-width: 60vw; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 #line-bar .lb-go { color: var(--faint); font-size: 18px; line-height: 1; }
 
-#state-alert, #offline-banner, #pin-hint {
+#state-alert, #offline-banner, #pin-hint, #measure-hint {
   flex: 0 0 auto; z-index: 500;
   padding: 10px 14px; font-size: 15px; font-weight: 600; text-align: center;
 }
@@ -214,6 +234,12 @@ select.select-hint { color: var(--faint); }
 #offline-banner.show { display: block; }
 #pin-hint { background: var(--accent); color: var(--accent-ink); display: none; }
 #pin-hint.show { display: block; }
+/* fg / Lefty note 3: the measuring banner, same family as the pin hint. */
+#measure-hint { background: var(--accent); color: var(--accent-ink); display: none; }
+#measure-hint.show { display: block; }
+/* fg / Lefty note 3: the distance label pinned to the measured line. */
+.measure-label { background: var(--accent); color: #0e150a; border: 1px solid var(--accent); font-weight: 700; font-size: 15px; border-radius: 8px; box-shadow: none; }
+.measure-label::before { display: none; }
 #place-bar { flex: 0 0 auto; z-index: 500; display: none; align-items: center; justify-content: center; gap: 10px; padding: 10px 14px; font-size: 15px; font-weight: 600; background: #1d2a12; color: #fff; border-bottom: 1px solid var(--line); }
 #place-bar.show { display: flex; }
 .pin-place { background: #ff9f1c; animation: pinpulse 1.4s infinite; }
@@ -732,6 +758,16 @@ body.route-locked #tabbar { pointer-events: none; opacity: .35; }
 }
 #toast.show { display: block; }
 
+/* ---------- photo zoom (Q241) ---------- */
+/* Q241 (2026-11-14): pinch-to-zoom on every photo in the app. The viewport
+   locks page zoom (user-scalable=no), so the viewer provides its own:
+   pinch to zoom 1x–4x, double-tap toggles 1x/2.5x, drag pans while zoomed.
+   The img grows by width inside a scrollable wrap, so panning is native
+   scrolling. */
+.pv-zoom { overflow: auto; max-height: 68vh; border-radius: 8px; touch-action: none; -webkit-user-select: none; user-select: none; }
+.pv-zoom img { display: block; width: 100%; border-radius: 8px; }
+.pv-zoom-hint { margin-top: 6px; text-align: center; font-size: 13px; color: var(--faint); }
+
 /* ---------- licenses ---------- */
 .lic-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
 /* Tanner 2026-10-07: trip photos render in the same lic-grid below the row.
@@ -971,7 +1007,7 @@ body.placing .leaflet-control-layers { pointer-events: none; opacity: .45; }
 .sp-bio-sheet { position: relative; min-height: 100%; padding: 110px 30px 44px; text-align: center; }
 .sp-bio-x { position: absolute; top: 56px; right: 16px; background: none; border: none;
   color: var(--muted); font-size: 36px; line-height: 1; padding: 10px; cursor: pointer; }
-.sp-bio-logo { width: 124px; height: 124px; border-radius: 50%; object-fit: cover; }
+.sp-bio-logo { height: 124px; width: auto; max-width: 220px; border-radius: 0; object-fit: contain; }
 .sp-bio-name { text-transform: uppercase; letter-spacing: .1em; font-size: 30px; margin: 20px 0 8px; }
 .sp-bio-tagline { color: var(--accent); text-transform: uppercase; letter-spacing: .2em;
   font-weight: 700; font-size: 15px; }
