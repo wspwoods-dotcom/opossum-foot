@@ -21,6 +21,13 @@
 <!-- ============ SPLASH ============ -->
 <div id="view-splash" class="view active">
   <img src="assets/logo-primary.png" alt="Opossum Foot logo">
+  <div class="splash-sponsors">
+    <div class="splash-presented">Presented by</div>
+    <div class="splash-logos">
+      <img class="splash-logo-ph" src="assets/sponsors/pine-hollow.png" alt="Pine Hollow Trapping and Supplies">
+      <img class="splash-logo-ktp" src="assets/sponsors/kansas-trapline.png" alt="Kansas Trapline Products">
+    </div>
+  </div>
   <p class="loading" id="splash-status">Loading…</p>
 </div>
 
@@ -66,6 +73,7 @@
   <div id="state-alert"><span id="state-alert-text"></span><button class="btn-small btn-ghost" id="btn-switch-state" type="button">Switch</button></div>
   <div id="offline-banner">You're offline. The app still works — map areas you've already viewed will render; new areas need a connection.</div>
   <div id="pin-hint">Tap the map to place your set pin.</div>
+  <div id="measure-hint">Measuring — tap two points on the map. Tap the ruler again to turn it off.</div>
   <div id="mk-hint">Tap the map to place your marker.</div>
   <div id="mk-place-bar"><span>Drag the marker onto the exact spot.</span><button class="btn-small btn-primary" id="btn-mk-place-ok" type="button">Looks right</button><button class="btn-small btn-ghost" id="btn-mk-place-cancel" type="button" aria-label="Cancel">✕</button></div>
   <div id="mk-area-bar"><span id="mk-area-count">No corners yet</span><button class="btn-small btn-secondary" id="btn-mk-area-undo" type="button">Undo corner</button><button class="btn-small btn-primary" id="btn-mk-area-done" type="button" disabled>Done</button><button class="btn-small btn-ghost" id="btn-mk-area-cancel" type="button" aria-label="Cancel">✕</button></div>
@@ -97,6 +105,9 @@
       <button class="fab secondary" id="btn-drop-pin" type="button" aria-label="Drop a pin"><img src="assets/pin-track-ol.png" alt=""></button>
       <button class="fab secondary" id="btn-add-gps" type="button" aria-label="Add set at my location"><img src="assets/icons/plus.png" alt=""></button>
       <button class="fab secondary" id="btn-mark" type="button" aria-label="Mark sign or forage"><svg viewBox="0 0 24 24" class="fab-diamond" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2.5" transform="rotate(45 12 12)" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="2.1" fill="currentColor"/></svg></button>
+      <!-- fg / Lefty note 3 (2026-11-14): ruler fab — tap to measure, tap two
+           points on the map, distance shows. Stays on until tapped off. -->
+      <button class="fab secondary" id="btn-measure" type="button" aria-label="Measure distance"><svg viewBox="0 0 24 24" class="fab-diamond" aria-hidden="true"><path d="M4 20 L20 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M8 16 l2.5 2.5 M12 12 l2.5 2.5 M16 8 l2.5 2.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
       <!-- Q196 (2026-10-18): the track fab moved off the map into Paperwork -> Route and Mileage (Tanner: the map screen is getting busy).
            Q206 (2026-10-19): Tanner — the fab is back on the map, shown only
            while Route & mileage tracking is toggled on in Settings (tracking.js
@@ -351,7 +362,7 @@
         <button type="button" class="setsec-head" id="setsec-about-head" data-sec="setsec-about" aria-expanded="false"><span>About</span><span class="setsec-chev" aria-hidden="true">›</span></button>
         <div class="setsec-body" id="setsec-about-body" hidden>
         <div class="rowline"><img src="assets/icon-mark.png" class="about-logo" alt="Opossum Foot logo"><div><strong>Opossum Foot</strong><br><span class="dim">Beta · a pocket trapping notebook</span></div></div>
-        <p class="dim">Logo &amp; brand artwork by Lydia Reichenbacher · Tight Chains Apparel LLC</p>
+        <p class="dim">Logo &amp; brand artwork by Lydia Reichenbacher · Tight Chains Co.</p>
         <p class="dim">No accounts. No cloud. No analytics. Sponsors keep Opossum Foot free — no popups, no tracking, no nonsense.<br>Season reminders are reminders only — always verify with your state agency and local ordinances.</p>
         <p class="dim">Build <span id="build-stamp">—</span></p>
         </div>
@@ -399,6 +410,10 @@
     <button type="button" data-tab="reports"><svg class="ti-img ti-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v11m0 0l-3.5-3.5M12 14l3.5-3.5"/><path d="M5 20h14"/></svg>Data</button>
     <button type="button" data-tab="settings"><img class="ti-img" src="assets/icons/gear.png" alt="">Settings</button>
   </nav>
+  <div id="sponsor-map-banner">
+    <button type="button" class="smb-logo" data-sp="pine-hollow" aria-label="Pine Hollow Trapping and Supplies"><img src="assets/sponsors/pine-hollow.png" alt="Pine Hollow Trapping and Supplies"></button>
+    <button type="button" class="smb-logo" data-sp="kansas-trapline" aria-label="Kansas Trapline Products"><img src="assets/sponsors/kansas-trapline.png" alt="Kansas Trapline Products"></button>
+  </div>
 </div>
 
 <!-- ============ SHEETS ============ -->
