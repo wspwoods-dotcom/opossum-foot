@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-11-14fi';
+var APP_VERSION = 'beta 0.1 · build 2026-11-14fj';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -7823,6 +7823,7 @@ function switchTab(name) {
   if (name === 'seasons') renderSeasons($('seasons-search').value);
   if (name === 'licenses') { renderLicenses(); renderLandowners(); renderPaperworkMileage(); }
   if (name === 'lines') renderLines();
+  reportViewport(); /* fj: keep the About diagnostic fresh, incl. bannerB while on the map */
 }
 
 /* ================= 13b. TRAP LINES UI =================
@@ -8187,6 +8188,7 @@ function toggleSettingsSection(secId) {
   var willOpen = !sec.classList.contains('open');
   if (willOpen) { sec.classList.add('open'); body.hidden = false; }
   else { sec.classList.remove('open'); body.hidden = true; }
+  if (willOpen) reportViewport(); /* fj: refresh the About diagnostic when opened */
   head.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
   return willOpen;
 }
@@ -9580,6 +9582,36 @@ function wireUp() {
    visual-viewport resize (browser toolbar showing/hiding). */
 function fitAppHeight() {
   try { document.documentElement.style.setProperty('--app-h', window.innerHeight + 'px'); } catch (e) { /* noop */ }
+  reportViewport(); /* fj: fill the About diagnostic line with the phone's real numbers */
+}
+/* fj (2026-11-14): diagnostic readout for the dead-band below the banner —
+   the fh innerHeight fix measures right in headless but the installed PWA
+   still shows a ~62pt gap, so stop guessing and read the phone's own numbers:
+   window size, visual viewport, screen size, safe-area bottom, --app-h, and
+   where the banner actually ends. Shown in Settings → About. */
+function reportViewport() {
+  try {
+    var vs = document.getElementById('viewport-stamp'); if (!vs) return;
+    var vv = window.visualViewport;
+    var probe = document.getElementById('viewport-probe');
+    if (!probe) {
+      probe = document.createElement('div'); probe.id = 'viewport-probe';
+      probe.style.cssText = 'position:fixed;left:0;top:0;width:0;height:0;padding-bottom:env(safe-area-inset-bottom, 0px);visibility:hidden;pointer-events:none;';
+      document.body.appendChild(probe);
+    }
+    var safeB = parseFloat(getComputedStyle(probe).paddingBottom) || 0;
+    var ban = document.getElementById('sponsor-map-banner');
+    /* bannerB only exists while the map view is laid out (Settings hides it),
+       so keep the last real reading instead of reporting 0. */
+    var banRect = ban ? ban.getBoundingClientRect() : null;
+    if (banRect && banRect.height > 0) reportViewport.lastBanB = Math.round(banRect.bottom);
+    var banB = (typeof reportViewport.lastBanB === 'number') ? reportViewport.lastBanB : -1;
+    var appH = getComputedStyle(document.documentElement).getPropertyValue('--app-h').trim();
+    vs.textContent = 'win ' + window.innerWidth + 'x' + window.innerHeight +
+      ' · vv ' + (vv ? Math.round(vv.width) + 'x' + Math.round(vv.height) : 'n/a') +
+      ' · scr ' + window.screen.width + 'x' + window.screen.height +
+      ' · safeB ' + Math.round(safeB) + ' · appH ' + appH + ' · bannerB ' + banB;
+  } catch (e) { /* noop */ }
 }
 if (typeof window !== 'undefined') {
   window.addEventListener('resize', fitAppHeight);
