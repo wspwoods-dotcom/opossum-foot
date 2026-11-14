@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-11-14fh';
+var APP_VERSION = 'beta 0.1 · build 2026-11-14fi';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -3194,10 +3194,13 @@ function sponsorForProduct(name) {
 /* Q67: the old standalone sponsor badge row under the Bait field is gone —
    sponsors live inside the suggestion menus now (see sponsorSuggests). */
 /* Q171 (2026-10-08): sponsor bio is the full-screen demo sheet — X close, logo,
-   name, gold tagline, OUR STORY, PRODUCTS, tier-gated extras, SPONSORED footer.
+   name, gold tagline, OUR STORY, PRODUCTS, SPONSORED footer.
    Tier 1 = bio + product names + the gold VISIT WEBSITE button (Tanner's ruling
    2026-10-21: the direct link to the sponsor's sales page is Tier 1's biggest
-   benefit); Tier 2+ adds product descriptions and the History tab. Every caller
+   benefit). Product descriptions stay tier-gated in the data (Tier 2+), but NO
+   tier or upsell language ever renders in the app — tiers live in sales
+   materials only (Tanner's ruling 2026-11-14: the "Tier 2 adds full product
+   descriptions" line is removed; it had ridden along since Q171). Every caller
    (pickers, scorecard, directory) rides this one function. */
 function openSponsorBio(id) {
   var sp = sponsorById(id);
@@ -3222,8 +3225,6 @@ function openSponsorBio(id) {
     (sp.url
       ? '<a class="sp-bio-visit" href="' + esc(sp.url) + '" target="_blank" rel="noopener">Visit Website</a>'
       : '') +
-    (tier >= 2 ? ''
-      : '<p class="sp-bio-upgrade dim">Tier 2 adds full product descriptions</p>') +
     '<div class="sp-bio-sponsored">Sponsored</div>' +
     '</div>';
   showModal(html);
