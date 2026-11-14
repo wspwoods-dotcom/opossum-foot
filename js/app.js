@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-11-14fj';
+var APP_VERSION = 'beta 0.1 · build 2026-11-14fk';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -9574,14 +9574,30 @@ function wireUp() {
 }
 
 /* ================= 16. BOOT ================= */
-/* fh (2026-11-14): drive the app height from window.innerHeight. 100dvh
-   under-measures in Safari / in-app web views — Tanner's phone showed a
-   ~190px dead band below the sponsor banner after opening the link in chat
-   (the view ended short of the screen bottom). innerHeight is the true
-   visible height in that host. Refit on resize, orientation change, and
-   visual-viewport resize (browser toolbar showing/hiding). */
+/* fk (2026-11-14): WebKit bug 254868 — in an installed iOS standalone PWA
+   with viewport-fit=cover, window.innerHeight / 100dvh report the screen
+   MINUS the top safe-area inset (874-62=812 on iPhone 16 Pro), while 100vh
+   is the true full screen. The fh innerHeight fix baked the wrong 812 in.
+   In standalone, size the shell from 100vh instead; in a tab or in-app
+   browser keep innerHeight (100vh overshoots behind a URL bar there).
+   Detect with navigator.standalone (reliable on iOS) plus the display-mode
+   media query as backup — the media query alone is unreliable on iOS. */
+function isStandaloneApp() {
+  try {
+    if (window.navigator && window.navigator.standalone) return true;
+    if (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) return true;
+  } catch (e) { /* noop */ }
+  return false;
+}
 function fitAppHeight() {
-  try { document.documentElement.style.setProperty('--app-h', window.innerHeight + 'px'); } catch (e) { /* noop */ }
+  try {
+    if (isStandaloneApp()) {
+      document.documentElement.classList.add('of-standalone');
+      document.documentElement.style.setProperty('--app-h', '100vh');
+    } else {
+      document.documentElement.style.setProperty('--app-h', window.innerHeight + 'px');
+    }
+  } catch (e) { /* noop */ }
   reportViewport(); /* fj: fill the About diagnostic line with the phone's real numbers */
 }
 /* fj (2026-11-14): diagnostic readout for the dead-band below the banner —
@@ -9606,7 +9622,14 @@ function reportViewport() {
     var banRect = ban ? ban.getBoundingClientRect() : null;
     if (banRect && banRect.height > 0) reportViewport.lastBanB = Math.round(banRect.bottom);
     var banB = (typeof reportViewport.lastBanB === 'number') ? reportViewport.lastBanB : -1;
-    var appH = getComputedStyle(document.documentElement).getPropertyValue('--app-h').trim();
+    /* fk: appH is the shell's real px height (body border box), not the
+       --app-h var — in standalone --app-h is '100vh', which getComputedStyle
+       returns as a literal, and the diagnostic must prove the shell in px.
+       NOTE: bannerB/appH are layout numbers; if the compositor clipped the
+       shell they could read 874 while the gap stayed — the screenshot is
+       the ground truth, these numbers are the supporting evidence. */
+    var appH = -1;
+    try { if (document.body) appH = Math.round(document.body.getBoundingClientRect().height); } catch (e) { /* noop */ }
     vs.textContent = 'win ' + window.innerWidth + 'x' + window.innerHeight +
       ' · vv ' + (vv ? Math.round(vv.width) + 'x' + Math.round(vv.height) : 'n/a') +
       ' · scr ' + window.screen.width + 'x' + window.screen.height +
