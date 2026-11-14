@@ -1463,19 +1463,28 @@ function sponsorSuggestRowHtml(sp, productName) {
    "M" shows what starts with M, "G" what starts with G. No sponsor-name
    fallback — it made "g" match everything ("Pine Hollow Trapping" has a
    "g"). Empty query shows all products for the section. */
+/* fg: a product carries its own section when its sponsor spans
+   sections (Pine Hollow: bait/lure/urine/visual); otherwise it falls back
+   to the sponsor's single section, so existing sponsors behave as before.
+   Rows sort alphabetically by product name. */
 function sponsorSuggests(key, q) {
   var out = [];
   for (var i = 0; i < SPONSORS.length; i++) {
     var sp = SPONSORS[i];
-    if (sp.section !== key) continue;
     var products = sp.products || (sp.product ? [{ name: sp.product }] : []);
     for (var j = 0; j < products.length; j++) {
       var name = products[j] && products[j].name ? String(products[j].name) : '';
       if (!name) continue;
+      var psec = (products[j] && products[j].section) || sp.section;
+      if (psec !== key) continue;
       if (q && name.toLowerCase().indexOf(q) !== 0) continue;
       out.push({ sp: sp, name: name });
     }
   }
+  out.sort(function (a, b) {
+    var al = a.name.toLowerCase(), bl = b.name.toLowerCase();
+    return al < bl ? -1 : (al > bl ? 1 : 0);
+  });
   return out;
 }
 function attachSuggest(inputId, boxId, key) {
@@ -1522,9 +1531,21 @@ function attachSuggest(inputId, boxId, key) {
     var items = savedEntries(key).filter(function (v) {
       var vl = v.toLowerCase();
       return vl !== q && (!q || vl.indexOf(q) === 0); /* Q238: saved entries filter by prefix too */
-    }).slice(0, 6);
-    if (!sps.length && !items.length) { box.className = 'suggest'; box.innerHTML = ''; return; }
-    var html = sps.map(function (r) { return sponsorSuggestRowHtml(r.sp, r.name); }).join('') + items.map(function (v) {
+    });
+    /* fg: saved entries sort alphabetically in the suggestion list. */
+    items.sort(function (a, b) {
+      var al = a.toLowerCase(), bl = b.toLowerCase();
+      return al < bl ? -1 : (al > bl ? 1 : 0);
+    });
+    items = items.slice(0, 6);
+    /* fg: a "None" row tops every attractant suggestion box — shown
+       when the field is empty or the query matches "none" by prefix. */
+    var showNone = (!q || 'none'.indexOf(q) === 0) && q !== 'none';
+    if (!sps.length && !items.length && !showNone) { box.className = 'suggest'; box.innerHTML = ''; return; }
+    var noneHtml = showNone
+      ? '<div class="suggest-row"><button type="button" class="suggest-item" data-v="None">None</button></div>'
+      : '';
+    var html = noneHtml + sps.map(function (r) { return sponsorSuggestRowHtml(r.sp, r.name); }).join('') + items.map(function (v) {
       /* Q79 (2026-10-01): Tanner — user-typed entries get a × to remove them
          from the list; built-in seeds don't. */
       var del = isSeedEntry(key, v)
@@ -2143,6 +2164,8 @@ function initMap() {
       placeHomePin(e.latlng);
     } else if (dropPinMode) {
       startPlacePin(e.latlng);
+    } else if (measureMode) {
+      measureTap(e.latlng);
     } else if (window.Markers) {
       Markers.onMapClick(e);
     }
@@ -2266,7 +2289,7 @@ function refreshMarkers() {
     if (!mapStatusFilter[normStatus(s.status)]) return;
     var m = L.marker([s.lat, s.lng], { icon: setIcon(s), title: s.name });
     /* B15: no opening set details mid-placement — finish the pin first. */
-    m.on('click', function () { if (document.body.classList.contains('placing')) return; openSetOrStack(s.id); });
+    m.on('click', function () { if (document.body.classList.contains('placing') || measureMode) return; openSetOrStack(s.id); });
     m._setId = s.id;
     markersLayer.addLayer(m);
   });
@@ -2276,13 +2299,51 @@ function refreshMarkers() {
 
 function setDropPinMode(on) {
   dropPinMode = on;
-  if (on) { cancelPlacePin(); cancelHomePick(); } /* Q53: one picking mode at a time */
+  if (on) { cancelPlacePin(); cancelHomePick(); setMeasureMode(false); } /* Q53: one picking mode at a time */
   $('pin-hint').classList.toggle('show', on);
   $('btn-drop-pin').classList.toggle('active-mode', on);
   /* B15-fix: the placement lock starts the moment placement is ARMED, not
      after the pin drops. The drop-pin button stays live so an armed
      placement can still be cancelled. */
   setPlacingLock(on);
+}
+
+/* fg / Lefty note 3 (2026-11-14): map distance measurement. The ruler fab
+   toggles measuring on — it stays on until tapped off (Tanner: toggled
+   often on). Tap two points: gold dots, a gold line, and the distance
+   (feet + yards under a mile, miles above). A third tap starts a new
+   measurement. One picking mode at a time (Q53). */
+var measureMode = false, measureA = null, measureB = null, measureLayer = null;
+function setMeasureMode(on) {
+  measureMode = on;
+  if (on) { setDropPinMode(false); cancelHomePick(); }
+  if (!on) clearMeasure();
+  var h = $('measure-hint'); if (h) h.classList.toggle('show', on);
+  var b = $('btn-measure'); if (b) b.classList.toggle('active-mode', on);
+}
+function clearMeasure() {
+  measureA = null; measureB = null;
+  if (measureLayer && map) { try { map.removeLayer(measureLayer); } catch (e) { /* noop */ } }
+  measureLayer = null;
+}
+function fmtMeasure(meters) {
+  var ft = meters * 3.28084;
+  if (ft < 5280) return Math.round(ft).toLocaleString('en-US') + ' ft · ' + Math.round(ft / 3).toLocaleString('en-US') + ' yd';
+  return (ft / 5280).toFixed(2) + ' mi';
+}
+function measureTap(ll) {
+  if (!map) return;
+  if (measureA && measureB) clearMeasure();
+  if (!measureA) {
+    measureA = ll;
+    if (!measureLayer) measureLayer = L.layerGroup().addTo(map);
+    L.circleMarker(ll, { radius: 6, color: '#E7C945', weight: 2, fillColor: '#E7C945', fillOpacity: 1 }).addTo(measureLayer);
+    return;
+  }
+  measureB = ll;
+  L.circleMarker(ll, { radius: 6, color: '#E7C945', weight: 2, fillColor: '#E7C945', fillOpacity: 1 }).addTo(measureLayer);
+  var line = L.polyline([measureA, measureB], { color: '#E7C945', weight: 3 }).addTo(measureLayer);
+  line.bindTooltip(fmtMeasure(map.distance(measureA, measureB)), { permanent: true, direction: 'center', className: 'measure-label', interactive: false }).openTooltip();
 }
 
 /* Draggable placement pin: GPS gets you close, your finger dials it in. */
@@ -3009,14 +3070,105 @@ function renderMissingReasonRow() {
    exclusivity — free-text entry stays open to everyone and the product list
    itself is never pay-to-play. Badge in the bait section; tap opens the bio. */
 var SPONSORS = [
-  { id: 'awesome-opossum', name: 'Awesome Opossum', product: 'Awesome Opossum raccoon bait',
-    section: 'bait', tier: 2, tagline: 'Raccoon Bait',
-    badge: 'assets/sponsors/awesome-opossum.webp',
-    brandLogo: 'assets/sponsors/awesome-opossum.webp', /* product and brand are one here; future sponsors can differ */
-    story: ['Awesome Opossum was developed as a raccoon bait with a sweet and musky scent. Originally it was effective on most nest predators, but ended up catching more opossums than anything.'],
-    products: [{ name: 'Awesome Opossum raccoon bait',
-      description: 'Sweet and musky raccoon bait — built for nest predators, famous for catching more opossums than anything.' }],
-    url: 'https://opossumfoot.com', urlLabel: 'opossumfoot.com' }
+  { id: 'pine-hollow', name: 'Pine Hollow Trapping and Supplies', product: 'Ghost Dancer',
+    section: 'bait', tier: 1, tagline: 'Trapping supplies — Arkansas',
+    badge: 'assets/sponsors/pine-hollow.png',
+    brandLogo: 'assets/sponsors/pine-hollow.png',
+    story: ['Pine Hollow Trapping and Supplies is a family-run trapping supply company in Arkansas, and Opossum Foot\u2019s founding sponsor and first distribution partner.'],
+    products: [
+      { name: 'Ghost Dancer', section: 'bait' },
+      { name: 'Medicine Man', section: 'bait' },
+      { name: 'Dog Soldier', section: 'bait' },
+      { name: 'Dream Catcher', section: 'bait' },
+      { name: 'Hoochie Coochie', section: 'lure' },
+      { name: 'Snag a Puss', section: 'lure' },
+      { name: 'Feline Hitter', section: 'lure' },
+      { name: 'Destabalizer', section: 'lure' },
+      { name: 'Texas 2 Step', section: 'lure' },
+      { name: 'Boomshakala', section: 'lure' },
+      { name: 'Toe Jam', section: 'lure' },
+      { name: 'Big Juju', section: 'lure' },
+      { name: 'K9 Hitter', section: 'lure' },
+      { name: 'K9 Thumper', section: 'lure' },
+      { name: 'K9 Venom', section: 'lure' },
+      { name: 'Beaver Tail Oil', section: 'lure' },
+      { name: 'Buffalo Oil', section: 'lure' },
+      { name: 'Killer Beaver Paste', section: 'lure' },
+      { name: 'Black Hat Brand Beaver Lure', section: 'lure' },
+      { name: 'Next of Kin', section: 'lure' },
+      { name: 'Knockout', section: 'lure' },
+      { name: 'Kristy\'s Nest Raider', section: 'lure' },
+      { name: 'Executioner', section: 'lure' },
+      { name: 'Fishy Sweet Raccoon Lure', section: 'lure' },
+      { name: 'Dream Catcher Lure', section: 'lure' },
+      { name: 'Liquid Killer Beaver', section: 'lure' },
+      { name: 'Karma', section: 'lure' },
+      { name: 'Catfish Oil', section: 'lure' },
+      { name: 'Smokey Fish Oil', section: 'lure' },
+      { name: 'All Call LDC', section: 'lure' },
+      { name: 'Bobcat', section: 'urine' },
+      { name: 'Coyote', section: 'urine' },
+      { name: 'Fox', section: 'urine' },
+      { name: 'Bone', section: 'visual' }
+    ],
+    url: 'https://pinehollowtrappingandsupplies.com/', urlLabel: 'pinehollowtrappingandsupplies.com' },
+  { id: 'kansas-trapline', name: 'Kansas Trapline Products', product: 'Last Stop',
+    section: 'bait', tier: 1, tagline: 'Trapping supplies — Kansas',
+    badge: 'assets/sponsors/kansas-trapline.png',
+    brandLogo: 'assets/sponsors/kansas-trapline.png',
+    story: ['Kansas Trapline Products makes baits and lures for trappers, sold alongside Pine Hollow as a founding sponsor partner.'],
+    products: [
+      { name: 'Last Stop', section: 'bait' },
+      { name: 'Felines Revenge', section: 'bait' },
+      { name: 'Flint Hills Fox paste bait', section: 'bait' },
+      { name: 'Die Hard B', section: 'bait' },
+      { name: 'Die Hard C', section: 'bait' },
+      { name: 'Schneider Chunky', section: 'bait' },
+      { name: 'Woodchopper', section: 'bait' },
+      { name: 'Alpine Call', section: 'lure' },
+      { name: 'Blood Runner', section: 'lure' },
+      { name: 'Bobcat Gland Lure', section: 'lure' },
+      { name: 'Big Muddy', section: 'lure' },
+      { name: 'Beaver Nut Buster', section: 'lure' },
+      { name: 'Beaver Lure #1', section: 'lure' },
+      { name: 'Beaver Lure', section: 'lure' },
+      { name: 'Bobs Nub Rub', section: 'lure' },
+      { name: 'Bootheel Beaver', section: 'lure' },
+      { name: 'Bud Halls Mink Lure', section: 'lure' },
+      { name: 'Bucktooth Buffett', section: 'lure' },
+      { name: 'Cat a Strophic', section: 'lure' },
+      { name: 'Coyote Gland Lure', section: 'lure' },
+      { name: 'Catty Coyote', section: 'lure' },
+      { name: 'Crazy Coon', section: 'lure' },
+      { name: 'Death Scent', section: 'lure' },
+      { name: 'Dakota Breaks', section: 'lure' },
+      { name: 'Final Approach', section: 'lure' },
+      { name: 'Final Destination', section: 'lure' },
+      { name: 'Feline Finalizer', section: 'lure' },
+      { name: 'High Hill Gland Lure', section: 'lure' },
+      { name: 'Kansas Predator Extreme', section: 'lure' },
+      { name: 'Kansas Call LDC', section: 'lure' },
+      { name: 'Last Dance', section: 'lure' },
+      { name: 'My Last Sunset', section: 'lure' },
+      { name: 'Minus 9 Lives', section: 'lure' },
+      { name: 'Mystery Mink', section: 'lure' },
+      { name: 'Moon Shot Call Lure', section: 'lure' },
+      { name: 'Oklahoma Suicide Sauce', section: 'lure' },
+      { name: 'Old Faithful-Red Fox gland lure', section: 'lure' },
+      { name: 'Positive Attraction', section: 'lure' },
+      { name: 'Pants Down', section: 'lure' },
+      { name: 'Running J Coon Gland Lure', section: 'lure' },
+      { name: 'Ratter Up', section: 'lure' },
+      { name: 'Red Fox gland lure', section: 'lure' },
+      { name: 'Seldom Fails', section: 'lure' },
+      { name: 'Tall Grass Supreme', section: 'lure' },
+      { name: 'Western Any and All call lure', section: 'lure' },
+      { name: 'X Factor', section: 'lure' },
+      { name: 'You dirty Rat', section: 'lure' },
+      { name: 'Doodles Coon Killer', section: 'lure' },
+      { name: 'Muskcoonotter', section: 'lure' }
+    ],
+    url: 'https://kansastraplineproducts.com/', urlLabel: 'kansastraplineproducts.com' }
 ];
 function sponsorById(id) {
   for (var i = 0; i < SPONSORS.length; i++) if (SPONSORS[i].id === id) return SPONSORS[i];
@@ -3078,6 +3230,12 @@ function openSponsorBio(id) {
   $('modal').classList.add('sponsor-sheet');
   $('m-sp-x').onclick = function () { $('modal').classList.remove('sponsor-sheet'); closeModal(); };
 }
+
+/* Sponsor map banner: tap a logo to open that sponsor's bio. */
+document.addEventListener('click', function (e) {
+  var b = e.target && e.target.closest ? e.target.closest('#sponsor-map-banner [data-sp]') : null;
+  if (b) openSponsorBio(b.getAttribute('data-sp'));
+});
 
 function openSetForm(coords, setId) {
   setFormOpenSeq++;
@@ -3276,6 +3434,23 @@ function saveSetForm() {
   if (!dateSet) { showSetFormError('Date set is required — pick the date.'); return; }
   if (status === 'missing' && !setMissingReason) { showSetFormError('Pick why this set is missing.'); return; }
   hideSetFormError();
+  /* fg / Lefty note 2 (2026-11-11): duplicate set names are blocked with a
+     popup — two sets can't share a name, or the History and map get
+     ambiguous. Compare trimmed, case-insensitive; the set being edited is
+     allowed to keep its own name. The auto-numbered name from nextSetName
+     passes through the same check. */
+  var dupName = null;
+  for (var di = 0; di < Store.data.sets.length; di++) {
+    var ds = Store.data.sets[di];
+    if (editingSetId && ds.id === editingSetId) continue;
+    if (String(ds.name || '').trim().toLowerCase() === name.toLowerCase()) { dupName = ds.name; break; }
+  }
+  if (dupName) {
+    showModal('<h3>That name is already taken</h3><p>There is already a set named &ldquo;' + esc(dupName) + '&rdquo;. Give this set a different name.</p>' +
+      '<div class="btn-row"><button class="btn-primary" id="m-ok" type="button">OK</button></div>');
+    $('m-ok').onclick = closeModal;
+    return;
+  }
   var td = trapDetailValues();
   var rt = resolvedTrapType();
   /* Q208 (2026-10-20): Tanner — a field toggled off in Settings must not be
@@ -3821,6 +3996,7 @@ function openPendingPhotoViewer(idx) {
     '<div class="btn-row" style="margin-top:10px"><button class="btn-danger" id="m-ph-del" type="button">Remove</button>' +
     '<button class="btn-secondary" id="m-ph-save" type="button">Save Photo</button>' +
     '<button class="btn-secondary" id="m-close" type="button">Close</button></div>');
+  wirePhotoZoom($('modal-card')); /* Q241: pinch-to-zoom */
   $('m-close').onclick = function () { URL.revokeObjectURL(url); closeModal(); };
   $('m-ph-save').onclick = function () { sharePhotoFile(ph.blob, 'opossum-foot-photo'); };
   $('m-ph-del').onclick = function () {
@@ -3893,6 +4069,7 @@ function openPendingSetPhotoViewer(idx) {
     '<div class="btn-row" style="margin-top:10px"><button class="btn-danger" id="m-ph-del" type="button">Remove</button>' +
     '<button class="btn-secondary" id="m-ph-save" type="button">Save Photo</button>' +
     '<button class="btn-secondary" id="m-close" type="button">Close</button></div>');
+  wirePhotoZoom($('modal-card')); /* Q241: pinch-to-zoom */
   $('m-close').onclick = function () { URL.revokeObjectURL(url); closeModal(); };
   $('m-ph-save').onclick = function () { sharePhotoFile(ph.blob, 'opossum-foot-photo'); };
   $('m-ph-del').onclick = function () {
@@ -4064,9 +4241,15 @@ function saveLog() {
   pendingLogMemos = [];
   closeSheets();
   renderHistory(); renderTotals(); refreshMarkers(); /* Q75 (2026-10-01): Tanner — the pin repaints the moment the catch is logged, no tab switch needed. */
-  toast(isOther
-    ? 'Logged ' + (OTHER_LABELS[logOtherType] || 'Other event') + (species ? ' — ' + species : '') + (logDisposition && logDisposition !== 'none' ? ' (' + dispLabel(logDisposition) + ')' : '') + (s ? ' at ' + s.name : '') + '.'
-    : 'Logged ' + log.count + ' ' + species + ' (' + dispLabel(logDisposition) + ')' + (s ? ' at ' + s.name : '') + '.');
+  /* fg / Lefty note 1 (2026-11-10): the "Logged …" toast used to sit on top
+     of the post-catch sheet's two buttons ("Update this set" / "Keep as-is")
+     — toast is z-index 1100, sheets are 950. When the post-catch sheet
+     opens, its own "Catch logged!" header IS the confirmation, so no toast:
+     nothing covers the buttons. Other events open no sheet, so they keep
+     the toast as their only confirmation. */
+  if (isOther) {
+    toast('Logged ' + (OTHER_LABELS[logOtherType] || 'Other event') + (species ? ' — ' + species : '') + (logDisposition && logDisposition !== 'none' ? ' (' + dispLabel(logDisposition) + ')' : '') + (s ? ' at ' + s.name : '') + '.');
+  }
   /* Q226 (2026-10-31): Tanner — after a real catch (not an Other event),
      offer the "Update this set?" prompt: the trapper just remade the set
      and may want the set to reflect the new trap, set type, or attractants.
@@ -4287,6 +4470,83 @@ function sharePhotoFile(blob, baseName) {
   toast('Opened full-size — long-press the photo and tap Save Image.');
 }
 /* Q71: ro = read-only (summary sheet) — no Delete button, just view + save. */
+/* Q241 (2026-11-14): pinch-to-zoom for every photo viewer in the app.
+   The PWA viewport locks page zoom, so the viewer zooms itself: the img
+   grows by width (100%–400%) inside a scrollable wrap, so panning is
+   native scrolling. Pinch scales around the fingers; double-tap toggles
+   1x / 2.5x around the tap point; one-finger drag pans while zoomed.
+   Call right after the viewer's showModal/showModal2, passing its card. */
+function wirePhotoZoom(cardEl) {
+  var img = cardEl ? cardEl.querySelector('img') : null;
+  if (!img) return;
+  var wrap = document.createElement('div');
+  wrap.className = 'pv-zoom';
+  img.parentNode.insertBefore(wrap, img);
+  wrap.appendChild(img);
+  var hint = document.createElement('div');
+  hint.className = 'pv-zoom-hint';
+  hint.textContent = 'Pinch or double-tap to zoom · drag to move around';
+  wrap.parentNode.insertBefore(hint, wrap.nextSibling);
+  var scale = 1, MIN = 1, MAX = 4;
+  var pts = {};
+  var lastTap = 0;
+  function applyScale(ns, fx, fy) {
+    ns = Math.max(MIN, Math.min(MAX, ns));
+    var w0 = img.clientWidth || wrap.clientWidth;
+    var h0 = img.clientHeight || 0;
+    var sx = (fx != null) ? fx : 0.5, sy = (fy != null) ? fy : 0.5;
+    var rx = (wrap.scrollLeft + sx * wrap.clientWidth) / (w0 || 1);
+    var ry = (wrap.scrollTop + sy * wrap.clientHeight) / (h0 || 1);
+    scale = ns;
+    img.style.width = (scale * 100) + '%';
+    wrap.scrollLeft = rx * img.clientWidth - sx * wrap.clientWidth;
+    wrap.scrollTop = ry * img.clientHeight - sy * wrap.clientHeight;
+  }
+  function pt(e) { var r = wrap.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top }; }
+  function dist(a, b) { var dx = a.x - b.x, dy = a.y - b.y; return Math.sqrt(dx * dx + dy * dy); }
+  wrap.addEventListener('pointerdown', function (e) {
+    try { wrap.setPointerCapture(e.pointerId); } catch (err) { /* noop */ }
+    pts[e.pointerId] = pt(e);
+    var ids = Object.keys(pts);
+    if (ids.length === 2) {
+      wrap._pinchD = dist(pts[ids[0]], pts[ids[1]]);
+      wrap._pinchS = scale;
+    }
+  });
+  wrap.addEventListener('pointermove', function (e) {
+    if (!pts[e.pointerId]) return;
+    var prev = pts[e.pointerId];
+    pts[e.pointerId] = pt(e);
+    var ids = Object.keys(pts);
+    if (ids.length === 2) {
+      var d = dist(pts[ids[0]], pts[ids[1]]);
+      if (wrap._pinchD && d > 0) {
+        var mx = (pts[ids[0]].x + pts[ids[1]].x) / 2 / wrap.clientWidth;
+        var my = (pts[ids[0]].y + pts[ids[1]].y) / 2 / wrap.clientHeight;
+        applyScale(wrap._pinchS * (d / wrap._pinchD), mx, my);
+      }
+    } else if (ids.length === 1 && scale > 1) {
+      wrap.scrollLeft -= (pts[e.pointerId].x - prev.x);
+      wrap.scrollTop -= (pts[e.pointerId].y - prev.y);
+    }
+  });
+  function endPt(e) {
+    var wasSingle = Object.keys(pts).length === 1;
+    var p = pts[e.pointerId];
+    delete pts[e.pointerId];
+    if (wasSingle && p && e.type === 'pointerup') {
+      var now = Date.now();
+      if (now - lastTap < 300) {
+        applyScale(scale > 1.2 ? 1 : 2.5, p.x / wrap.clientWidth, p.y / wrap.clientHeight);
+        lastTap = 0;
+      } else lastTap = now;
+    }
+    if (!Object.keys(pts).length) wrap._pinchD = null;
+  }
+  wrap.addEventListener('pointerup', endPt);
+  wrap.addEventListener('pointercancel', endPt);
+}
+
 function openPhotoViewer(p, onDelete, ro) {
   var when = '';
   try { when = new Date(p.createdAt).toLocaleString(); } catch (e) { /* noop */ }
@@ -4296,6 +4556,7 @@ function openPhotoViewer(p, onDelete, ro) {
     (ro ? '' : '<button class="btn-danger" id="m-ph-del" type="button">Delete</button>') +
     '<button class="btn-secondary" id="m-ph-save" type="button">Save Photo</button>' +
     '<button class="btn-secondary" id="m-close" type="button">Close</button></div>');
+  wirePhotoZoom($('modal-card')); /* Q241: pinch-to-zoom */
   $('m-close').onclick = closeModal;
   $('m-ph-save').onclick = function () { sharePhotoFile(p.blob, 'opossum-foot-photo'); };
   var delBtn = $('m-ph-del');
@@ -6359,6 +6620,7 @@ function openPhotoViewerLayer2(p, title, urlFor, onDelete) {
     '<div class="btn-row" style="margin-top:10px"><button class="btn-danger" id="m2-ph-del" type="button">Delete</button>' +
     '<button class="btn-secondary" id="m2-ph-save" type="button">Save Photo</button>' +
     '<button class="btn-secondary" id="m2-close" type="button">Close</button></div>');
+  wirePhotoZoom($('modal2-card')); /* Q241: pinch-to-zoom */
   $('m2-close').onclick = closeModal2;
   $('m2-ph-save').onclick = function () { if (p && p.blob) sharePhotoFile(p.blob, 'opossum-foot-photo'); };
   $('m2-ph-del').onclick = function () {
@@ -8863,6 +9125,7 @@ function wireUp() {
   });
   var bs = $('build-stamp'); if (bs) bs.textContent = APP_VERSION;
   $('btn-drop-pin').onclick = function () { setDropPinMode(!dropPinMode); };
+  $('btn-measure').onclick = function () { setMeasureMode(!measureMode); }; /* fg / Lefty note 3 */
   $('btn-add-gps').onclick = function () {
     /* + means "I'm standing on it": drop the pin at the live GPS fix right
        now and go straight into the New Set form — no draggable confirm.
@@ -9334,7 +9597,7 @@ function boot() {
   wireUp();
   IDB.open().then(function () {
     if (DEMO_ACTIVE) seedDemoIDB();
-    $('splash-status').textContent = 'Ready.';
+    $('splash-status').textContent = 'Follow along.';
     /* B17: hold the splash a few seconds so the logo gets its moment. */
     setTimeout(function () {
       if (Store.data.onboarded && activeStateCode() && stateData()) enterMain();
