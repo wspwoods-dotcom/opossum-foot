@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-11-12fg';
+var APP_VERSION = 'beta 0.1 · build 2026-11-14fh';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -3231,11 +3231,11 @@ function openSponsorBio(id) {
   $('m-sp-x').onclick = function () { $('modal').classList.remove('sponsor-sheet'); closeModal(); };
 }
 
-/* Sponsor map banner: tap a logo to open that sponsor's bio. */
-document.addEventListener('click', function (e) {
-  var b = e.target && e.target.closest ? e.target.closest('#sponsor-map-banner [data-sp]') : null;
-  if (b) openSponsorBio(b.getAttribute('data-sp'));
-});
+/* fh (2026-11-14, Tanner's ruling): the map-banner logos are display-only
+   — NO tap handler here. Sponsor bios open only from the logo next to a
+   product in the bait/lure lists, from the Scorecard, or from the Visit
+   Website link inside a bio sheet. (The fg build wired the banner logos to
+   open the bio; Tanner caught it on his phone.) */
 
 function openSetForm(coords, setId) {
   setFormOpenSeq++;
@@ -9571,7 +9571,24 @@ function wireUp() {
 }
 
 /* ================= 16. BOOT ================= */
+/* fh (2026-11-14): drive the app height from window.innerHeight. 100dvh
+   under-measures in Safari / in-app web views — Tanner's phone showed a
+   ~190px dead band below the sponsor banner after opening the link in chat
+   (the view ended short of the screen bottom). innerHeight is the true
+   visible height in that host. Refit on resize, orientation change, and
+   visual-viewport resize (browser toolbar showing/hiding). */
+function fitAppHeight() {
+  try { document.documentElement.style.setProperty('--app-h', window.innerHeight + 'px'); } catch (e) { /* noop */ }
+}
+if (typeof window !== 'undefined') {
+  window.addEventListener('resize', fitAppHeight);
+  window.addEventListener('orientationchange', fitAppHeight);
+  if (window.visualViewport) window.visualViewport.addEventListener('resize', fitAppHeight);
+}
+fitAppHeight(); /* set it at parse time too, before first paint */
+
 function boot() {
+  fitAppHeight(); /* fh: pin the app to the true visible height (see below) */
   Store.load();
   /* Q55: one delegated listener reveals the "What is it?" box under any
      Other-capable dropdown, wherever it was rendered. */
