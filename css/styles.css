@@ -199,6 +199,14 @@ select.select-hint { color: var(--faint); }
   display: flex;
   background: #10140c;
   border-top: 1px solid var(--line);
+  /* fp (2026-11-14, Tanner): the tab bar sits at the very bottom and the
+     iPhone home indicator (the white swipe-up bar) was cutting across the
+     tab labels. Lift the tabs by the bottom safe-area inset (34px on his
+     phone) so the home bar sits in black space below the labels instead of
+     on top of them. The tab bar's own dark background fills the strip, so
+     it reads as a little black space under the tabs. In a browser tab the
+     inset is 0 and nothing changes. The map gives back only that 34px. */
+  padding-bottom: env(safe-area-inset-bottom);
 }
 #tabbar button {
   flex: 1 1 0; min-width: 0; background: none; border: none; border-radius: 0;
