@@ -66,9 +66,22 @@ body {
    iPhone 16 Pro); 100vh is the true full screen. Size the shell from 100vh
    in standalone only (the JS .of-standalone class is the reliable gate;
    the media query is a backup — it reads false on some iOS installs).
-   In a tab 100vh overshoots behind the URL bar, so tabs keep the var. */
-html.of-standalone body, html.of-standalone .view { height: 100vh; }
-@media (display-mode: standalone) { body, .view { height: 100vh; } }
+   In a tab 100vh overshoots behind the URL bar, so tabs keep the var.
+   fl (2026-11-14): fk laid the shell out at 874 but the banner still did
+   NOT paint — Tanner's phone showed the logos hidden behind black with only
+   a sliver of a logo peeking above the 812 line. The body is position:fixed,
+   and WebKit clips fixed content to the short layout viewport (bug 237961 /
+   piclaw: never position:fixed on the root in standalone). Un-pin the body
+   to position:absolute in standalone so the whole 874 paints; the document
+   cannot scroll (html,body overflow:hidden), so nothing is lost. The fabs
+   anchor to #pane-map (relative), not to the body, so they do not move.
+   Fallback if this still does not paint on-device: position:static on body. */
+html.of-standalone body { position: absolute; top: 0; left: 0; width: 100%; height: 100vh; }
+html.of-standalone .view { height: 100vh; }
+@media (display-mode: standalone) {
+  body { position: absolute; top: 0; left: 0; width: 100%; height: 100vh; }
+  .view { height: 100vh; }
+}
 
 /* ---------- splash ---------- */
 #view-splash { align-items: center; justify-content: center; text-align: center; padding: 32px; background: radial-gradient(ellipse at 50% 35%, #2B341B 0%, var(--bg) 70%); }
