@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-11-14fp';
+var APP_VERSION = 'beta 0.1 · build 2026-11-14fq';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -778,7 +778,36 @@ function setCountyBanner(info) {
     $('cb-county').textContent = 'County unknown';
     $('cb-state').textContent = 'Tap the crosshair to locate';
   }
+  fitCountyName();
 }
+
+/* fq (2026-11-14, Tanner): the county name must shrink to fit on ONE line
+   in the space between the two sponsor logos, never overlapping them and
+   never wrapping. Long names (Pottawattamie, Prince George's, San Bernardino
+   — up to ~22 chars) are wider than the ~264px between the logos at 22px, so
+   they used to wrap to two lines and grow the banner ~28px. fitCountyName
+   resets to the CSS base size, then steps the font down (proportionally, so
+   it lands in 1–2 passes) until the text fits its box, with a 14px floor.
+   The longest real US county name fits at ~16px, well above the floor, so
+   the floor is a safety net real names never hit. Runs whenever the name is
+   set and on resize/rotation (the box width changes). Skips when the banner
+   isn't laid out yet (clientWidth 0, e.g. onboarding) — the next set or
+   resize re-runs it. */
+function fitCountyName() {
+  var el = $('cb-county');
+  if (!el) return;
+  el.style.fontSize = ''; /* reset to the CSS base (22px known, 16px unknown) */
+  var box = el.clientWidth;
+  if (!box) return;
+  var size = parseFloat(getComputedStyle(el).fontSize) || 22;
+  var guard = 0;
+  while (el.scrollWidth > box && size > 14 && guard++ < 20) {
+    size = Math.max(14, size * box / el.scrollWidth);
+    el.style.fontSize = size.toFixed(1) + 'px';
+  }
+}
+window.addEventListener('resize', fitCountyName);
+window.addEventListener('orientationchange', fitCountyName);
 
 /* Q96 (2026-10-01): the county lookup used to get exactly one shot — on the
    acquire-final fix. If that single fetch failed, the banner sat at COUNTY
