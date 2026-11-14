@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-11-14fm';
+var APP_VERSION = 'beta 0.1 · build 2026-11-14fn';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -9616,7 +9616,10 @@ function reportViewport() {
       document.body.appendChild(probe);
     }
     var safeB = parseFloat(getComputedStyle(probe).paddingBottom) || 0;
-    var ban = document.getElementById('sponsor-map-banner');
+    /* fn (2026-11-14): the bottom banner is gone, so bannerB now reads the
+       tab bar's bottom — the bottom edge of the app chrome. The field name
+       stays so the diagnostic format (and the fj check) does not change. */
+    var ban = document.getElementById('tabbar');
     /* bannerB only exists while the map view is laid out (Settings hides it),
        so keep the last real reading instead of reporting 0. */
     var banRect = ban ? ban.getBoundingClientRect() : null;
