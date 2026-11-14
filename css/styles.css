@@ -98,12 +98,24 @@ html.of-standalone .view { height: 100vh; }
 .splash-logo-ktp { height: 58px; width: auto; }
 
 /* ---------- sponsor map banner ---------- */
+/* fm (2026-11-14): fl painted the banner but the logos were WRONG — jammed
+   against the top of the strip with their top arcs sliced off by the gold
+   line and dead black space below them. Cause: box-sizing is border-box, so
+   the 34px bottom safe-area padding sat INSIDE the 54px height, leaving a
+   20px content slot for 42px/30px logos; centered in 20px they overflowed
+   11px above the banner's top edge, and that overflow is not drawn (the
+   phone shows the logos starting exactly at the gold line, bottoms at
+   851/845 as the centered math predicts). Fix: the banner's height now
+   ADDS the safe-area inset (54px content + inset below it), so the logos
+   center in a full 54px slot and sit fully inside the strip. In a tab the
+   inset is 0 and the banner is 54px, unchanged. Map loses ~34px vs fl but
+   stays taller than the fj 812 layout. */
 #sponsor-map-banner {
   flex: 0 0 auto;
   display: flex; align-items: center; justify-content: center; gap: 26px;
   background: #10140c;
   border-top: 1px solid var(--accent);
-  height: 54px;
+  height: calc(54px + env(safe-area-inset-bottom));
   padding: 0 12px env(safe-area-inset-bottom);
   z-index: 400;
 }
