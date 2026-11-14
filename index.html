@@ -61,9 +61,18 @@
 <!-- ============ MAIN ============ -->
 <div id="view-main" class="view">
 
+  <!-- fo (2026-11-14, Tanner): the sponsor logos live in the black space
+       flanking the county name in this banner — Pine Hollow left, KTP right,
+       display-only. (The fn map-corner chips were the wrong spot; he wants
+       them here, next to COUNTY UNKNOWN.) Bios open only from the product
+       lists, Scorecard, or a bio sheet — never from these logos. -->
   <div id="county-banner" class="unknown">
-    <div class="cb-county" id="cb-county">County unknown</div>
-    <div class="cb-state" id="cb-state">Tap the crosshair to locate</div>
+    <span class="smb-chip smb-chip-ph"><img src="assets/sponsors/pine-hollow.png" alt="Pine Hollow Trapping and Supplies"></span>
+    <div class="cb-text">
+      <div class="cb-county" id="cb-county">County unknown</div>
+      <div class="cb-state" id="cb-state">Tap the crosshair to locate</div>
+    </div>
+    <span class="smb-chip smb-chip-ktp"><img src="assets/sponsors/kansas-trapline.png" alt="Kansas Trapline Products"></span>
   </div>
   <button type="button" id="line-bar" aria-label="Active trap line — tap to open Lines">
     <span class="lb-tag">Trap line</span>
@@ -96,14 +105,6 @@
       <button type="button" id="btn-show" class="show-btn" aria-label="Choose what shows on the map">Show: All</button>
       <button type="button" id="btn-bulk" class="bulk-btn" hidden>Select all</button>
     </div>
-    <!-- fn (2026-11-14, Tanner): sponsor logos live up top now, one on each
-         side of the map, bigger and display-only — the bottom banner is gone
-         so the map gets its full height back. They float over the map
-         (tap-through) and sit just below the Show pill so they never collide
-         with it. Bios open only from the product lists, Scorecard, or a bio
-         sheet — never from these chips. -->
-    <span class="smb-chip smb-chip-ph"><img src="assets/sponsors/pine-hollow.png" alt="Pine Hollow Trapping and Supplies"></span>
-    <span class="smb-chip smb-chip-ktp"><img src="assets/sponsors/kansas-trapline.png" alt="Kansas Trapline Products"></span>
     <button type="button" id="weather-chip" class="chip weather-chip" aria-label="Weather details">🌤️</button>
     <!-- Q8: way back to the mileage dialog while a route estimate is drawn -->
     <button type="button" id="route-back-chip" class="btn-primary" hidden>‹ Back to mileage</button>
