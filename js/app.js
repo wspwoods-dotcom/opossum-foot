@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-11-15gb';
+var APP_VERSION = 'beta 0.1 · build 2026-11-15gc';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -5961,49 +5961,11 @@ function renderHistByDate(list) {
   return html;
 }
 
-function renderHistBySpecies(list) {
-  var f = histUI;
-  var groups = {};
-  list.forEach(function (l) {
-    /* Other events group under their subtype label, not a species. */
-    var sp = l.otherType ? (OTHER_LABELS[l.otherType] || 'Other event') : (l.species || 'Unknown');
-    var g = groups[sp] || (groups[sp] = { logs: [], kept: 0, alive: 0, released: 0, transported: 0, total: 0 });
-    var c = normCount(l);
-    g.logs.push(l); g.total += c;
-    var d = dispOf(l);
-    if (d === 'released') g.released += c;
-    else if (d === 'kept-alive') g.alive += c;
-    else if (d === 'transported') g.transported += c;
-    else g.kept += c;
-  });
-  var names = Object.keys(groups).sort(function (a, b) { return groups[b].total - groups[a].total; });
-  var html = '';
-  names.forEach(function (sp) {
-    var g = groups[sp], open = !!f.spOpen[sp];
-    var parts = [];
-    if (g.kept) parts.push(g.kept + ' kept');
-    if (g.alive) parts.push(g.alive + ' kept alive');
-    if (g.released) parts.push(g.released + ' released');
-    if (g.transported) parts.push(g.transported + ' transported/released');
-    html += '<div class="sp-group"><button type="button" class="sp-head" data-sp="' + esc(sp) + '">' +
-      '<span class="sp-name">' + esc(sp) + '</span>' +
-      '<span class="sp-total">×' + g.total + '</span>' +
-      '<span class="chev">' + (open ? '▾' : '▸') + '</span></button>' +
-      '<div class="dim sp-sub">' + esc(parts.join(' · ') || 'no catches') + '</div>';
-    if (open) {
-      html += '<div class="sp-body">';
-      g.logs.forEach(function (l) { html += logRowHtml(l, true); });
-      html += '</div>';
-    }
-    html += '</div>';
-  });
-  return html;
-}
-
 /* Q16: History "By trap type" view — entries grouped under their trap type
    stamped at log time (Foothold, Snare, Dog-proof…). One set = one trap, so
    the type is unambiguous; labeled "By Trap Type" (not "By Trap") for that
-   reason. Same collapsible group pattern as By Species. */
+   reason. Collapsible group pattern. (The By Species twin that used to sit
+   here was cut in gc — Totals owns species counts.) */
 function renderHistByTrapType(list) {
   var f = histUI;
   var groups = {};
@@ -6075,8 +6037,10 @@ function renderHistory() {
     holdListHeight(box, histFiltering);
     return;
   }
-  box.innerHTML = (histUI.view === 'species') ? renderHistBySpecies(list)
-    : (histUI.view === 'traptype') ? renderHistByTrapType(list)
+  /* gc (2026-11-15): History is the record — By Date or By Trap Type.
+     Species counts live on Totals now; the old By Species view duplicated
+     that card catch for catch. */
+  box.innerHTML = (histUI.view === 'traptype') ? renderHistByTrapType(list)
     : renderHistByDate(list);
   holdListHeight(box, histFiltering);
 }
@@ -10199,13 +10163,6 @@ function wireUp() {
     var chip = e.target.closest ? e.target.closest('.chip') : null;
     if (chip) {
       if (chip.hasAttribute('data-disp')) histUI.disp = chip.getAttribute('data-disp');
-      renderHistory();
-      return;
-    }
-    var spHead = e.target.closest ? e.target.closest('.sp-head') : null;
-    if (spHead && !spHead.classList.contains('tt-head')) {
-      var s = spHead.getAttribute('data-sp');
-      histUI.spOpen[s] = !histUI.spOpen[s];
       renderHistory();
       return;
     }
