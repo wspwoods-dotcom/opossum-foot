@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-11-14fs';
+var APP_VERSION = 'beta 0.1 · build 2026-11-14ft';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -1516,7 +1516,13 @@ function sponsorSuggests(key, q) {
   });
   return out;
 }
-function attachSuggest(inputId, boxId, key) {
+/* ft (2026-11-14, Tanner): typeToFilter — for the product lists (bait, lure,
+   urine, visual, audio, other) the suggestion box stays shut until you start
+   typing. Tap the field and only the keyboard opens; type 'C' and the
+   products starting with C appear. A value already in the field stays put
+   (auto-saved — no need to look it up again). Other suggest fields keep the
+   old focus-pop behavior. */
+function attachSuggest(inputId, boxId, key, typeToFilter) {
   var input = $(inputId), box = $(boxId);
   if (!input || !box || input._suggestWired) return;
   input._suggestWired = true;
@@ -1549,13 +1555,20 @@ function attachSuggest(inputId, boxId, key) {
     input.value = btn.getAttribute('data-v');
     box.className = 'suggest'; box.innerHTML = '';
     input.focus();
+    /* ft: the input event below fires render — without this flag it would
+       pop the box straight back up with matches for the value just picked. */
+    input._justFilled = true;
     /* Q98 fix (2026-10-01): a programmatic fill fires no input event, so the
        "+ Add Another" button never appeared after tapping a suggestion.
        Dispatch it so the button (and the bait-rule check) update. */
     input.dispatchEvent(new Event('input', { bubbles: true }));
   }
   function render() {
+    /* ft: a just-picked value closes the box and keeps it closed; an empty
+       query on a type-to-filter field shows nothing at all. */
+    if (input._justFilled) { input._justFilled = false; box.className = 'suggest'; box.innerHTML = ''; return; }
     var q = input.value.trim().toLowerCase();
+    if (typeToFilter && !q) { box.className = 'suggest'; box.innerHTML = ''; return; }
     var sps = sponsorSuggests(key, q);
     var items = savedEntries(key).filter(function (v) {
       var vl = v.toLowerCase();
@@ -1606,7 +1619,9 @@ function attachSuggest(inputId, boxId, key) {
   }
   input.addEventListener('input', render);
   input.addEventListener('input', updateClear); /* Q236: the × shows only while the field has text */
-  input.addEventListener('focus', render);
+  /* ft: type-to-filter fields do NOT pop the box on focus — only typing
+     opens it. Every other suggest field keeps the old focus-pop. */
+  if (!typeToFilter) input.addEventListener('focus', render);
   input.addEventListener('blur', function () {
     setTimeout(function () { box.className = 'suggest'; }, 160);
   });
@@ -1654,7 +1669,8 @@ function renderAttrRows(field, values, minRows) {
   }
   host.innerHTML = html;
   for (var j = 0; j < vals.length; j++) {
-    attachSuggest('sf-' + field + '-row-' + j, 'sf-' + field + '-row-' + j + '-suggest', field);
+    /* ft: the product rows are type-to-filter — nothing pops until typing. */
+    attachSuggest('sf-' + field + '-row-' + j, 'sf-' + field + '-row-' + j + '-suggest', field, true);
   }
   /* Q30: refresh the bait-rule warning whenever bait rows re-render. */
   if (field === 'bait' && typeof updateBaitWarn === 'function') updateBaitWarn();
@@ -5045,6 +5061,26 @@ function renderShowButton() {
   btn.style.fontSize = size + 'px';
 }
 var showSignOpen = false;
+var showExpandedStatus = null; /* ft: which status group is expanded to its set names in the Show sheet (one at a time, null = none) */
+/* ft (2026-11-14, Tanner): the sets on the active line in one status, names
+   A–Z — the Show pill's list. Sorted case-insensitive so it reads the same
+   as every other name list in the app. */
+function showSetsFor(v) {
+  return activeSets().filter(function (s) { return normStatus(s.status) === v; })
+    .sort(function (a, b) {
+      var an = (a.name || '').toLowerCase(), bn = (b.name || '').toLowerCase();
+      return an < bn ? -1 : (an > bn ? 1 : 0);
+    });
+}
+/* ft: tap a set name in the Show list → the map flies to that set and its
+   detail opens (stack menu when several share the spot). Mirrors the
+   after-save flyTo (zoom ≥ 14) so the set is plainly in view. */
+function jumpToSet(id) {
+  var s = getSet(id); if (!s) return;
+  closeSheets();
+  if (map) map.flyTo([s.lat, s.lng], Math.max(map.getZoom(), 14), { duration: 0.8 });
+  openSetOrStack(id);
+}
 function renderShowList() {
   var host = $('show-list'); if (!host) return;
   var m = showWorking();
@@ -5063,11 +5099,31 @@ function renderShowList() {
     activeSets().forEach(function (s) { if (normStatus(s.status) === v) n++; });
     return ' <span class="show-count">' + n + (n === 1 ? ' set' : ' sets') + '</span>';
   };
+  /* ft (2026-11-14, Tanner): the Show pill is the set-name list he asked
+     for. Each status row expands to that status's set names on this line,
+     A–Z; tapping a name jumps the map to the set. The name is a button
+     (expand); the checkbox still toggles the map filter. The row is a div
+     now, not a label, so tapping the name expands instead of flipping the
+     filter — the checkbox is the filter's only switch. */
   var html = STATUS_VALUES.map(function (v) {
     var c = pinSchemeById(pinSchemeId()).colors[v];
-    return '<label class="show-row"><span class="show-dot" style="background:' + c + '"></span>' +
+    var open = showExpandedStatus === v;
+    var row = '<div class="show-row"><span class="show-dot" style="background:' + c + '"></span>' +
+      '<button type="button" class="show-name-btn" data-show-expand="' + v + '" aria-expanded="' + open + '">' +
       '<span class="show-name">' + esc(STATUS_LABELS[v]) + statusCount(v) + '</span>' +
-      '<input type="checkbox" data-show-status="' + v + '"' + (m[v] !== false ? ' checked' : '') + '></label>';
+      '<span class="show-chev">' + (open ? '▾' : '▸') + '</span></button>' +
+      '<input type="checkbox" data-show-status="' + v + '"' + (m[v] !== false ? ' checked' : '') + '></div>';
+    if (open) {
+      var names = showSetsFor(v);
+      if (!names.length) {
+        row += '<div class="show-names"><span class="dim show-noname">No sets</span></div>';
+      } else {
+        row += '<div class="show-names">' + names.map(function (s) {
+          return '<button type="button" class="show-setname" data-jump-set="' + s.id + '">' + esc(s.name || 'Unnamed set') + '</button>';
+        }).join('') + '</div>';
+      }
+    }
+    return row;
   }).join('');
   var famKeys = ['homes', 'ground', 'tree', 'feeding', 'scent', 'forage'];
   var anyFam = famKeys.some(function (k) { return m.fam[k] !== false; });
@@ -5088,6 +5144,18 @@ function renderShowList() {
     cb.addEventListener('change', function () {
       showWorking()[this.getAttribute('data-show-status')] = this.checked;
     });
+  });
+  /* ft: the name button expands/collapses its status's set list; a set name
+     jumps the map to that set. */
+  host.querySelectorAll('[data-show-expand]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var v = this.getAttribute('data-show-expand');
+      showExpandedStatus = (showExpandedStatus === v) ? null : v;
+      renderShowList();
+    });
+  });
+  host.querySelectorAll('[data-jump-set]').forEach(function (b) {
+    b.addEventListener('click', function () { jumpToSet(this.getAttribute('data-jump-set')); });
   });
   host.querySelectorAll('input[data-show-fam]').forEach(function (cb) {
     cb.addEventListener('change', function () {
@@ -5120,7 +5188,7 @@ function renderMapStatusFilters() {
   var btn = $('btn-show');
   if (btn && !btn._wired) {
     btn._wired = true;
-    btn.onclick = function () { showSignOpen = false; snapshotShowDraft(); renderShowList(); openSheet('sheet-show'); };
+    btn.onclick = function () { showSignOpen = false; showExpandedStatus = null; snapshotShowDraft(); renderShowList(); openSheet('sheet-show'); };
   }
   var done = $('btn-show-done');
   if (done && !done._wired) {
@@ -5213,6 +5281,12 @@ function bulkEditOptions() {
     });
     customOptionsFor('sf-settype').forEach(function (t) {
       if (stOpts.indexOf(t) === -1) stOpts.push(t);
+    });
+    /* ft (2026-11-14, Tanner): the Edit-all set-type list sorts A–Z too,
+       same as the form picker — one rule everywhere. */
+    stOpts.sort(function (a, b) {
+      var al = a.toLowerCase(), bl = b.toLowerCase();
+      return al < bl ? -1 : (al > bl ? 1 : 0);
     });
     out.push({ field: 'setType', label: 'Set type', options: stOpts });
   }
@@ -8660,20 +8734,25 @@ function touchSet(s) {
 function renderSetTypeOptions() {
   var sel = $('sf-settype');
   if (!sel) return;
+  /* ft (2026-11-14, Tanner): straight A–Z, Other last. The picker used to
+     run Land then Water in a curated foundation order — that was the one
+     name list in the app that wasn't alphabetical. The foundations, the
+     remembered customs, and Other all ride one flat list now; the variation
+     dropdown still keys off the chosen foundation, so nothing else moves. */
+  var byName = function (a, b) {
+    var al = a.toLowerCase(), bl = b.toLowerCase();
+    return al < bl ? -1 : (al > bl ? 1 : 0);
+  };
+  var fnds = allFoundationNames().slice().sort(byName);
   var html = '';
-  ['Land', 'Water'].forEach(function (g) {
-    html += '<optgroup label="' + g + '">';
-    SET_FOUNDATIONS[g].forEach(function (t) { html += '<option>' + esc(t) + '</option>'; });
-    html += '</optgroup>';
-  });
+  fnds.forEach(function (t) { html += '<option>' + esc(t) + '</option>'; });
   /* Q55: the trapper's remembered custom set types ride along as their own
      foundations (a custom name IS its own foundation — it has no variation
      family), then the Other… escape hatch. Known names never double-list. */
   var seenST = {};
-  allSetTypes().forEach(function (t) { seenST[t.toLowerCase()] = 1; });
-  customOptionsFor('sf-settype').forEach(function (t) {
-    if (!seenST[t.toLowerCase()]) { html += '<option>' + esc(t) + '</option>'; seenST[t.toLowerCase()] = 1; }
-  });
+  fnds.forEach(function (t) { seenST[t.toLowerCase()] = 1; });
+  var customs = customOptionsFor('sf-settype').filter(function (t) { return !seenST[t.toLowerCase()]; }).sort(byName);
+  customs.forEach(function (t) { html += '<option>' + esc(t) + '</option>'; });
   html += '<option value="' + OTHER_VALUE + '">Other…</option>';
   sel.innerHTML = html;
   renderVariationOptions();
