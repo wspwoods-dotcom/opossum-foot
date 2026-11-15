@@ -1184,6 +1184,9 @@ body.placing #route-back-chip { display: none; }
 #mk-place-bar, #mk-area-bar { flex: 0 0 auto; z-index: 500; display: none; align-items: center; justify-content: center; gap: 10px; padding: 10px 14px; font-size: 15px; font-weight: 600; background: #1d2a12; color: #fff; border-bottom: 1px solid var(--line); }
 #mk-place-bar.show, #mk-area-bar.show { display: flex; }
 .fab-diamond { width: 24px; height: 24px; }
+/* fs (2026-11-14, Tanner): the ruler glyph reads small at 24px — render it
+   at 30px, the same size as the PNG fab icons, so it reads as a ruler. */
+#btn-measure svg { width: 30px; height: 30px; }
 .mk-pin { width: 30px; height: 30px; background: #2c3e2d; border: 2px solid #f0d28a; border-radius: 8px; transform: rotate(45deg); display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 5px rgba(0,0,0,.35); }
 .mk-pin.mk-place { width: 36px; height: 36px; border-color: #fff; }
 .mk-glyph { width: 21px; height: 21px; fill: none; stroke: #f5efdd; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; transform: rotate(-45deg); }
