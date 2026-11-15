@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-11-14fu';
+var APP_VERSION = 'beta 0.1 · build 2026-11-14fv';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -463,9 +463,6 @@ function openSheet(id) {
 }
 function closeSheets() {
   var sheets = document.querySelectorAll('.sheet.show');
-  /* Q193: closing the Show sheet without Done discards its draft. */
-  var showEl = document.getElementById('sheet-show');
-  if (showEl && showEl.classList.contains('show') && typeof showDraft !== 'undefined') showDraft = null;
   var logWasOpen = !!document.getElementById('sheet-log').classList.contains('show');
   for (var i = 0; i < sheets.length; i++) sheets[i].classList.remove('show');
   $('scrim').classList.remove('show');
@@ -4972,20 +4969,12 @@ function saveShowModel() {
   showModel();
   Store.save();
 }
-/* Q193 (2026-10-18): the Show sheet edits a DRAFT — Done saves, the X throws
-   it away, like any other window (Tanner). While the sheet is open the live
-   model, the map, and the Show button label do not move. */
-var showDraft = null;
-function showWorking() {
-  if (!showDraft) return showModel();
-  STATUS_VALUES.forEach(function (k) { if (showDraft[k] === undefined) showDraft[k] = true; });
-  if (!showDraft.fam) showDraft.fam = {};
-  ['homes', 'ground', 'tree', 'feeding', 'scent', 'forage'].forEach(function (k) { if (showDraft.fam[k] === undefined) showDraft.fam[k] = true; });
-  return showDraft;
-}
-function snapshotShowDraft() { showDraft = JSON.parse(JSON.stringify(showModel())); }
-function commitShowDraft() {
-  if (showDraft) { Store.data.mapShow = showDraft; showDraft = null; }
+/* fv (2026-11-14, Tanner's redundancy audit): the Show sheet applies LIVE —
+   a checkbox tap writes straight to the live model, saves, and repaints the
+   map and the Show pill behind the sheet. The Q193 draft is gone (Done went
+   with it; the X just closes), the same live-apply the Filter sheet already
+   had. applyShowChange() is the one place a Show toggle lands. */
+function applyShowChange() {
   saveShowModel();
   renderShowButton();
   refreshMarkers();
@@ -5095,7 +5084,7 @@ function jumpToSet(id) {
 }
 function renderShowList() {
   var host = $('show-list'); if (!host) return;
-  var m = showWorking();
+  var m = showModel();
   var famCount = function (fam) {
     if (!window.Markers || !window.SIGN_CATALOG) return '';
     var n = 0;
@@ -5154,7 +5143,8 @@ function renderShowList() {
   host.innerHTML = html;
   host.querySelectorAll('input[data-show-status]').forEach(function (cb) {
     cb.addEventListener('change', function () {
-      showWorking()[this.getAttribute('data-show-status')] = this.checked;
+      showModel()[this.getAttribute('data-show-status')] = this.checked;
+      applyShowChange();
     });
   });
   /* ft: the name button expands/collapses its status's set list; a set name
@@ -5171,14 +5161,16 @@ function renderShowList() {
   });
   host.querySelectorAll('input[data-show-fam]').forEach(function (cb) {
     cb.addEventListener('change', function () {
-      showWorking().fam[this.getAttribute('data-show-fam')] = this.checked;
+      showModel().fam[this.getAttribute('data-show-fam')] = this.checked;
+      applyShowChange();
       renderShowList();
     });
   });
   var all = $('show-sign-all');
   if (all) all.addEventListener('change', function () {
-    var mm = showWorking();
+    var mm = showModel();
     famKeys.forEach(function (k) { mm.fam[k] = all.checked; });
+    applyShowChange();
     renderShowList();
   });
   var tg = $('show-sign-toggle');
@@ -5200,12 +5192,7 @@ function renderMapStatusFilters() {
   var btn = $('btn-show');
   if (btn && !btn._wired) {
     btn._wired = true;
-    btn.onclick = function () { showSignOpen = false; showExpandedStatus = null; snapshotShowDraft(); renderShowList(); openSheet('sheet-show'); };
-  }
-  var done = $('btn-show-done');
-  if (done && !done._wired) {
-    done._wired = true;
-    done.onclick = function () { commitShowDraft(); closeSheets(); };
+    btn.onclick = function () { showSignOpen = false; showExpandedStatus = null; renderShowList(); openSheet('sheet-show'); };
   }
   var bulkBtn = $('btn-bulk');
   if (bulkBtn && !bulkBtn._wired) {
@@ -9413,7 +9400,6 @@ function wireUp() {
   /* Q226: post-catch prompt actions — Update opens the full Edit Set form
      for the set just caught on; Keep just closes. */
   $('btn-pc-update').onclick = function () { var id = postCatchSetId; postCatchSetId = null; if (id) openSetForm(null, id); };
-  $('btn-pc-keep').onclick = function () { closeSheets(); };
   $('btn-voice-lognotes').onclick = function () {
     var ta = $('log-notes');
     Voice.start($('voice-lognotes-preview'), function (t) {
@@ -9467,7 +9453,6 @@ function wireUp() {
       return;
     }
   });
-  $('sheet-ms-done').onclick = function () { closeSheets(); msOpenKey = null; };
   $('sheet-ms-clear').onclick = function () {
     if (msOpenKey) exportUI[msOpenKey] = [];
     renderMsList(); renderExportDimChips(); renderExportFilterBar();
