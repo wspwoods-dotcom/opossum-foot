@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-11-15fz';
+var APP_VERSION = 'beta 0.1 · build 2026-11-15ga';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -1229,6 +1229,20 @@ function applyFeatureToggles() {
    'sd-notes-head', 'sd-notes'].forEach(function (id) {
     var el = $(id);
     if (el) el.style.display = vOn ? '' : 'none';
+  });
+  /* ga: in the installed iPhone app the Voice → notes buttons cannot listen
+     (Apple blocks dictation there) — they only printed instructions, which
+     Tanner called redundant. Hide the buttons and show the one-line keyboard
+     tip instead. Record memo still works on iPhone and stays. */
+  if (isIOSPWA()) {
+    ['btn-voice-setnotes', 'voice-setnotes-preview', 'btn-voice-lognotes', 'voice-lognotes-preview'].forEach(function (id) {
+      var el = $(id);
+      if (el) el.style.display = 'none';
+    });
+  }
+  ['voice-setnotes-tip', 'voice-lognotes-tip'].forEach(function (id) {
+    var el = $(id);
+    if (el) el.style.display = (vOn && isIOSPWA()) ? '' : 'none';
   });
   var lt = lineTabs();
   TOGGLEABLE_TABS.forEach(function (k) {
@@ -3075,7 +3089,7 @@ function locateMe() {
 }
 
 /* ================= 7. SETS ================= */
-var editingSetId = null, pendingCoords = null, pendingSetPhotos = [], editSetPhotos = [];
+var editingSetId = null, pendingCoords = null, pendingSetPhotos = [], editSetPhotos = [], formNoteEntries = [];
 var setFormOpenSeq = 0, modsRenderSeq = -1; /* Q204: mods fold state is per form-open */
 var setMissingReason = null;
 
@@ -3388,7 +3402,13 @@ function openSetForm(coords, setId) {
   $('sf-missing-detail').value = (s && s.missingDetail) || '';
   var mps = $('sf-missing-photos'); if (mps) mps.innerHTML = '';
   renderMissingReasonRow();
-  $('sf-notes').value = s ? (s.notes || '') : '';
+  /* ga: the notes box is a composer now — the set's notes live as dated
+     entries above it, staged in formNoteEntries until Save. */
+  $('sf-notes').value = '';
+  formNoteEntries = s ? setNoteEntries(s).map(function (e) {
+    return { id: e.id, text: e.text, date: e.date || '', at: e.at || 0 };
+  }) : [];
+  renderFormNoteEntries();
   $('voice-setnotes-preview').classList.remove('show');
   $('voice-setnotes-preview').innerHTML = '';
   /* Q71: edit mode keeps full photo + memo control on the form itself —
@@ -3568,7 +3588,9 @@ function saveSetForm() {
     var oldStatus = normStatus(s.status); /* Q229: the date rule keys on the move */
     s.status = status;
     s.dateSet = activeDateFor(oldStatus, status, dateSet, todayISO()); /* Q229: any move TO Active restarts the set date — the day it goes active is day one. A set that stays Active keeps its date. */
-    s.notes = $('sf-notes').value.trim();
+    stageComposerNote(); /* ga: a note still in the box files as an entry too */
+    s.noteLog = formNoteEntries.slice();
+    syncSetNotesText(s);
     if (td.trapModel) rememberEntry('trapmodel', td.trapModel); /* Q12 */
     /* Q36: missing reason rides the status */
     s.missingReason = (status === 'missing') ? setMissingReason : null;
@@ -3593,6 +3615,7 @@ function saveSetForm() {
     rememberAttractants(s);
   } else {
     if (!pendingCoords) { toast('No location for this set.'); return; }
+    stageComposerNote(); /* ga: file any note still in the box before building the record */
     var ns = {
       id: uid('s'), name: name,
       lat: pendingCoords.lat, lng: pendingCoords.lng, county: null,
@@ -3615,7 +3638,8 @@ function saveSetForm() {
       other: setFieldOn('other') ? collectAttrRows('other') : [],
       status: status,
       dateSet: dateSet,
-      notes: $('sf-notes').value.trim(),
+      notes: formNoteEntries.map(function (e) { return e.text; }).join('\n'),
+      noteLog: formNoteEntries.slice(), /* ga: dated note entries */
       /* Q36: missing reason rides the status */
       missingReason: (status === 'missing') ? setMissingReason : null,
       missingDetail: (status === 'missing' && setMissingReason === 'confiscated') ? $('sf-missing-detail').value.trim() : null,
@@ -3755,18 +3779,106 @@ function openSetDetail(id) {
   /* Q71: summary memos are playback-only — recording/deletion are in Edit. */
   renderMemos(s.id, 'sd-memos', false);
   /* Q178 (2026-10-08): view-only div, not a textarea. */
-  $('sd-notes').textContent = s.notes || '—';
+  renderSetNotes(s); /* ga: dated entries, newest first */
   refreshNotesBox('setdetail-notessec', 'sd-notes', 'sd-memos', 'sd-photos'); /* Q99 */
   setSectionOpen('setdetail-catchessec', false); /* Q203: every open starts folded */
   openSheet('sheet-setdetail');
 }
+/* ================= ga (2026-11-15): SET NOTES AS DATED ENTRIES ==============
+   Tanner: a note should file as a transcript in the set, not live forever in
+   one box — and he may want several. Each set now carries noteLog: a list of
+   {id, text, date, at}, oldest first, shown newest first. The Edit Set form
+   stages entries in formNoteEntries (Save commits, X discards — the form's
+   contract); a note still sitting in the box at Save files as an entry too.
+   s.notes stays as the plain-text join of the entries so History lines,
+   exports and older readers keep seeing the same words. Sets written before
+   ga have no noteLog: their notes text shows as one undated "Earlier note"
+   entry and carries into noteLog the first time an entry is added. */
+function setNoteEntries(s) {
+  if (!s) return [];
+  if (Array.isArray(s.noteLog)) return s.noteLog;
+  if (s.notes && s.notes.trim()) {
+    return [{ id: 'legacy', text: s.notes, date: '', at: s.createdAt || 0 }];
+  }
+  return [];
+}
+function syncSetNotesText(s) {
+  var es = Array.isArray(s.noteLog) ? s.noteLog : [];
+  s.notes = es.map(function (e) { return e.text; }).join('\n');
+}
+function addSetNoteEntry(s, text) {
+  var t = String(text || '').trim();
+  if (!s || !t) return false;
+  if (!Array.isArray(s.noteLog)) {
+    s.noteLog = (s.notes && s.notes.trim())
+      ? [{ id: uid('n'), text: s.notes, date: '', at: s.createdAt || 0 }]
+      : [];
+  }
+  s.noteLog.push({ id: uid('n'), text: t, date: todayISO(), at: Date.now() });
+  syncSetNotesText(s);
+  return true;
+}
+function noteEntryHTML(e) {
+  return '<div class="note-entry"><div class="note-date">' +
+    (e.date ? esc(fmtDate(e.date)) : 'Earlier note') + '</div>' +
+    '<div class="note-text">' + esc(e.text) + '</div></div>';
+}
+function renderSetNotes(s) {
+  var el = $('sd-notes');
+  if (!el) return;
+  var es = setNoteEntries(s);
+  if (!es.length) { el.textContent = '—'; return; }
+  el.innerHTML = es.slice().reverse().map(noteEntryHTML).join('');
+}
+function renderFormNoteEntries() {
+  var box = $('sf-note-entries');
+  if (!box) return;
+  box.innerHTML = '';
+  formNoteEntries.slice().reverse().forEach(function (e) {
+    var div = document.createElement('div');
+    div.className = 'note-entry';
+    var head = document.createElement('div');
+    head.className = 'note-entry-head';
+    var dl = document.createElement('span');
+    dl.className = 'note-date';
+    dl.textContent = e.date ? fmtDate(e.date) : 'Earlier note';
+    head.appendChild(dl);
+    var del = document.createElement('button');
+    del.type = 'button';
+    del.className = 'note-del';
+    del.textContent = '✕';
+    del.title = 'Remove this note';
+    del.onclick = function () {
+      formNoteEntries = formNoteEntries.filter(function (x) { return x.id !== e.id; });
+      renderFormNoteEntries();
+    };
+    head.appendChild(del);
+    div.appendChild(head);
+    var tx = document.createElement('div');
+    tx.className = 'note-text';
+    tx.textContent = e.text;
+    div.appendChild(tx);
+    box.appendChild(div);
+  });
+  if (formNoteEntries.length) setSectionOpen('setform-notessec', true);
+}
+function stageComposerNote() {
+  var ta = $('sf-notes');
+  if (!ta) return false;
+  var t = ta.value.trim();
+  if (!t) return false;
+  formNoteEntries.push({ id: uid('n'), text: t, date: todayISO(), at: Date.now() });
+  ta.value = '';
+  renderFormNoteEntries();
+  return true;
+}
 function appendTranscriptToSetNotes(setId, tr) {
   var s = getSet(setId);
   if (!s || !tr) return;
-  s.notes = (s.notes ? s.notes.replace(/\s+$/, '') + ' ' : '') + tr;
+  addSetNoteEntry(s, tr); /* ga: a memo transcript files as its own dated entry */
   touchSet(s); /* Q68 */
   Store.save();
-  if (setId === detailSetId && $('sd-notes')) { $('sd-notes').textContent = s.notes || '—'; refreshNotesBox('setdetail-notessec', 'sd-notes', 'sd-memos', 'sd-photos'); /* Q99 */ }
+  if (setId === detailSetId && $('sd-notes')) { renderSetNotes(s); refreshNotesBox('setdetail-notessec', 'sd-notes', 'sd-memos', 'sd-photos'); /* Q99 */ }
 }
 
 function renderSetLogs(s, byLog) {
@@ -7408,6 +7520,7 @@ function importDataFile(file) {
         status: normStatus(s.status),
         dateSet: s.dateSet || todayISO(),
         notes: s.notes || '',
+        noteLog: (Array.isArray(s.noteLog) && s.noteLog.length) ? s.noteLog : undefined, /* ga */
         lineId: activeLineId(),
         createdAt: s.createdAt || Date.now()
       };
@@ -8850,6 +8963,8 @@ function refreshNotesBox(secId, notesId, memosId, photosId) {
   /* Q178: notesId may be a textarea (edit forms) or a view-only div (detail sheet). */
   var ntxt = nv ? (nv.value !== undefined ? nv.value : nv.textContent) || '' : '';
   var hasNotes = !!(ntxt.trim() && ntxt.trim() !== '—');
+  /* ga: on the set form the box is just the composer — filed entries count too. */
+  if (notesId === 'sf-notes' && document.querySelectorAll('#sf-note-entries .note-entry').length) hasNotes = true;
   var mb = memosId && $(memosId);
   var hasMemos = !!(mb && mb.querySelector('.memo-card'));
   var pb = photosId && $(photosId);
@@ -9848,6 +9963,10 @@ function wireUp() {
     Voice.start($('voice-setnotes-preview'), function (t) {
       ta.value = (ta.value ? ta.value.replace(/\s+$/, '') + ' ' : '') + t;
     });
+  };
+  /* ga: file the composer's text as a dated entry on the set. */
+  $('btn-add-note').onclick = function () {
+    if (!stageComposerNote()) toast('Nothing to add yet — write the note first.');
   };
   /* Q37: photo option on the New Set form */
   $('btn-sf-photo').onclick = function () { $('sf-photo-input').click(); };
