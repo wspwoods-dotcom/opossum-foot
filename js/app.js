@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-11-15gd';
+var APP_VERSION = 'beta 0.1 · build 2026-11-15ge';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -6324,6 +6324,7 @@ function renderTotals() {
   $('totals-sub').textContent = 'Season ' + sy + ' · ' + logs.length + ' log entries all-time.';
   var bySpecies = {}, bySet = {}, byDisp = { kept: 0, alive: 0, released: 0, transported: 0 };
   var byDispSp = { kept: {}, alive: {}, released: {}, transported: {} }; /* Q61: species caught under each disposition */
+  var byMonth = {}; /* ge: catches grouped by calendar month, 'YYYY-MM' keys */
   logs.forEach(function (l) {
     if (l.otherType) return; /* Other events are events, not catches — excluded from Totals */
     var y = l.seasonYear || seasonYearOf(l.date);
@@ -6334,6 +6335,11 @@ function renderTotals() {
     var bucket = (d === 'released') ? 'released' : (d === 'kept-alive' ? 'alive' : (d === 'transported' ? 'transported' : 'kept'));
     bySpecies[l.species][bucket] += c; bySet[l.setName || '(deleted set)'][bucket] += c; byDisp[bucket] += c;
     byDispSp[bucket][l.species] = (byDispSp[bucket][l.species] || 0) + c;
+    var mk = (l.date || '').slice(0, 7);
+    if (/^\d{4}-\d{2}$/.test(mk)) {
+      byMonth[mk] = byMonth[mk] || { kept: 0, alive: 0, released: 0, transported: 0 };
+      byMonth[mk][bucket] += c;
+    }
   });
   function rows(obj, withSetup) {
     /* 2026-10-01 (Tanner): the headline number is TOTAL caught — a released
@@ -6429,7 +6435,33 @@ function renderTotals() {
         return dhtml;
       }).join('') + '</div></div>';
     }
+    cards += '<div class="card">' + totalsCardHead('month', 'By Month') + '<div class="totals-card-body"' + (tc.month ? ' hidden' : '') + '>' + monthRows() + '</div></div>';
     return cards;
+  }
+  /* ge: By Month rows — chronological, so the season reads in the order it
+     happened; headline is total caught, disposition breakdown behind the
+     tap, same as the other cards' rows. */
+  function monthRows() {
+    var MN = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    function tot(o) { return o.kept + o.alive + o.released + o.transported; }
+    return Object.keys(byMonth).sort().map(function (mk) {
+      var o = byMonth[mk], sub = [];
+      if (o.alive) sub.push(o.alive + ' kept alive');
+      if (o.released) sub.push(o.released + ' released');
+      if (o.transported) sub.push(o.transported + ' transported');
+      var label = MN[parseInt(mk.slice(5, 7), 10) - 1] + ' ' + mk.slice(0, 4);
+      var key = 'mo:' + mk;
+      var hasDetail = sub.length > 0;
+      var open = hasDetail && !!totalsExpanded[key];
+      var html = '<div class="rowline"' + (hasDetail ? ' data-totkey="' + esc(key) + '"' : '') + '>' +
+        '<span>' + (hasDetail ? '<span class="tchev">' + (open ? '▾' : '▸') + '</span> ' : '') + esc(label) +
+        '</span><span class="big-num">' + tot(o) + '</span></div>';
+      if (hasDetail) {
+        html += '<div class="totals-detail"' + (open ? '' : ' hidden') + '>' +
+          '<div class="dim">' + sub.join(' · ') + '</div></div>';
+      }
+      return html;
+    }).join('');
   }
 }
 
