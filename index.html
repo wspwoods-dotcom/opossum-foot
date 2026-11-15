@@ -147,6 +147,7 @@
   <div id="pane-history" class="pane">
     <div class="pane-head"><h2>History</h2><p>Every catch, newest first.</p></div>
     <div class="scroll">
+      <button class="btn-secondary gal-open" id="btn-gallery" type="button"><img class="bi" src="assets/icons/camera.png" alt="">Photo gallery</button>
       <div id="hist-summary" class="hist-summary"></div>
       <div class="seg compact" id="hist-season-seg">
         <button type="button" data-season="this">This season</button>
@@ -243,8 +244,10 @@
           <p class="imp-cap">Saves a full Opossum Foot backup file (.json) — import it back after a reinstall.</p>
           <button class="btn-secondary" id="btn-export-media" type="button">⬇ Export photos &amp; files (ZIP)</button>
           <p class="imp-cap">Saves every photo and voice memo from <strong>every line</strong> — set and catch photos, licenses, permission slips, trip photos — as one .zip file, organized in folders with an index that says what each file is. The JSON backup above holds your data but not your pictures; this file is their backup.</p>
+          <button class="btn-secondary" id="btn-share-line" type="button">⬆ Share this line</button>
+          <p class="imp-cap">Send the line you are on — its sets and logs only — to another trapper (AirDrop, Nearby Share, Messages, email…). On their phone it lands as a new line of their own; your lines and theirs stay separate. Photos do not ride along.</p>
           <button class="btn-secondary" id="btn-import" type="button"><img class="bi" src="assets/icons/upload.png" alt="">Import data (JSON)</button>
-          <p class="imp-cap">Reads back an Opossum Foot backup file (.json) from this phone.</p>
+          <p class="imp-cap">Reads back an Opossum Foot backup file (.json) from this phone. A line another trapper shared with you imports here too — it lands as a new line.</p>
           <input type="file" id="import-file" class="hidden-file" accept=".json,application/json">
           <button class="btn-secondary" id="btn-import-pins" type="button"><img class="bi" src="assets/icons/mappin.png" alt="">Import pins from Google Maps</button>
           <p class="imp-cap">Reads pin files from Google Maps, My Maps, or Google Takeout — map files (.kml / .kmz), place files (.geojson / .json), and saved-list spreadsheets (.csv).</p>
@@ -545,6 +548,14 @@
     </div>
   </div>
 
+<div id="sheet-gallery" class="sheet">
+  <div class="sheet-head"><h2>Photo gallery</h2><button class="sheet-x" data-close type="button">×</button></div>
+  <div class="sheet-body">
+    <p class="dim" style="margin-top:2px">Every photo on this line, newest first — each one labeled with the set, catch, or record it belongs to. Tap a photo to see it full-size.</p>
+    <div id="gallery-grid" class="gal-grid"></div>
+    <p class="dim" id="gallery-empty" hidden>No photos on this line yet. Photos you add to a set or a catch will show up here.</p>
+  </div>
+</div>
 <div id="sheet-setform" class="sheet">
   <div class="sheet-grab"></div>
   <div class="sheet-head"><h2 id="setform-title">New Set</h2><button class="sheet-x" data-close type="button">×</button></div>  <div class="sheet-body">
