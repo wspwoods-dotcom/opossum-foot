@@ -135,6 +135,12 @@ button, .btn {
 [hidden] { display: none !important; }
 /* Q178 (2026-10-08): view-only notes on the detail sheet — plain text, not a box. */
 .notes-view { font-size: 17px; color: var(--ink); white-space: pre-wrap; word-wrap: break-word; margin: 0 0 8px; }
+/* ga: dated note entries on a set (form staging list + detail view) */
+.note-entry { padding: 8px 0; border-bottom: 1px solid var(--line); }
+.note-entry-head { display: flex; justify-content: space-between; align-items: center; }
+.note-date { font-size: 12.5px; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); }
+.note-text { font-size: 16px; white-space: pre-wrap; word-wrap: break-word; margin-top: 2px; }
+.note-del { background: none; border: none; color: var(--muted); font-size: 15px; line-height: 1; padding: 2px 6px; cursor: pointer; }
 .btn-primary { background: var(--accent); color: var(--accent-ink); width: 100%; }
 .btn-secondary { background: var(--panel); color: var(--ink); border: 1px solid var(--line); width: 100%; }
 .btn-ghost { background: transparent; color: var(--accent); border: 1px solid var(--accent); }
