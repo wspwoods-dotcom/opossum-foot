@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-11-15ga';
+var APP_VERSION = 'beta 0.1 · build 2026-11-15gb';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -1254,14 +1254,19 @@ function applyFeatureToggles() {
   var wchip = $('weather-chip');
   if (wchip) wchip.style.display = wOn ? '' : 'none';
   if (!wOn && $('sheet-weather') && $('sheet-weather').classList.contains('show')) closeSheets();
-  /* Q8: mileage toggle — hides the standalone mileage CSV export and the
-     Paperwork mileage card. (2026-10-07: mileage moved off the Lines tab —
-     it's paperwork.) */
+  /* Q8 + gb (2026-11-15): the mileage toggle stops NEW recording — it no
+     longer hides records already made. The CSV export stays while any line
+     has trips; the Paperwork card stays while the ACTIVE line has trips
+     (renderPaperworkMileage applies the same rule when it renders). */
   var mOn = Store.data.mileageOn !== false;
   var mexp = $('btn-export-mileage');
-  if (mexp) mexp.style.display = mOn ? '' : 'none';
+  if (mexp) mexp.style.display = (mOn || (Store.data.trips || []).length > 0) ? '' : 'none';
   var pmc = $('setsec-mileage');
-  if (pmc) pmc.style.display = mOn ? '' : 'none';
+  if (pmc) {
+    var aln = activeLine();
+    var pmcTrips = !!(aln && tripsForLine(aln.id).length);
+    pmc.style.display = (mOn || pmcTrips) ? '' : 'none';
+  }
   /* Q206 (2026-10-19): the map's Track fab follows this same toggle. */
   if (window.Tracking && Tracking.syncFab) Tracking.syncFab();
   /* fy: ruler toggle — off hides the map's measure button entirely and ends
@@ -6701,8 +6706,13 @@ function renderPaperworkMileage() {
   if (!box) return;
   var card = $('setsec-mileage');
   var on = Store.data.mileageOn !== false;
-  if (card) card.style.display = on ? '' : 'none';
-  if (!on) return;
+  /* gb: off stops new recording only — a line with trips keeps its section,
+     with the record buttons swapped for a one-line note (below). The section
+     hides only when recording is off AND this line has no trips. */
+  var ln0 = activeLine();
+  var hasTrips = !!(ln0 && tripsForLine(ln0.id).length);
+  if (card) card.style.display = (on || hasTrips) ? '' : 'none';
+  if (!on && !hasTrips) return;
   var lines = (Store.data.lines || []);
   if (!lines.length) { box.innerHTML = '<p class="dim">No lines yet.</p>'; return; }
   /* Tanner 2026-10-07 (df): the Mileage section follows the active line only —
@@ -6714,12 +6724,17 @@ function renderPaperworkMileage() {
   var rows = trips.map(tripRowHTML).join('') || '<p class="dim">No trips logged yet.</p>';
   /* Tanner 2026-10-07 (dg): like the other two sections — the add button is
      full-width below the last trip; the trip box itself is the edit target. */
+  /* gb: with recording off, the two record buttons give way to one line
+     saying so — past trips above stay listed and readable. */
+  var actions = on
+    ? '<button type="button" class="btn-secondary" data-pm-logtrip="' + esc(ln.id) + '" style="margin-top:10px">\uFF0B Log Trip</button>' +
+      '<button type="button" class="btn-secondary" data-pm-track="' + esc(ln.id) + '" style="margin-top:10px;margin-left:8px"><span style="color:#e5484d">\u25CF</span> Track a route</button>'
+    : '<p class="dim" style="margin-top:10px">Mileage is off \u2014 these trips stay here to read. To record new trips, turn on Mileage log in Settings \u2192 Feature Toggles.</p>';
   box.innerHTML = '<div class="pm-line" data-pm-line-block="' + esc(ln.id) + '">' +
     '<div class="pm-line-head"><span><strong>' + esc(ln.name) + '</strong> ' +
     '<span class="dim">' + esc(fmtMiles(lineTripTotal(ln.id))) + '</span></span></div>' +
     rows +
-    '<button type="button" class="btn-secondary" data-pm-logtrip="' + esc(ln.id) + '" style="margin-top:10px">\uFF0B Log Trip</button>' +
-    '<button type="button" class="btn-secondary" data-pm-track="' + esc(ln.id) + '" style="margin-top:10px;margin-left:8px"><span style="color:#e5484d">\u25CF</span> Track a route</button></div>';
+    actions + '</div>';
   function lineOf(el) {
     var b = el.closest ? el.closest('[data-pm-line-block]') : null;
     return b ? b.getAttribute('data-pm-line-block') : null;
