@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-11-15gc';
+var APP_VERSION = 'beta 0.1 · build 2026-11-15gd';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -116,10 +116,9 @@ var Store = {
     var sfDef = { traptype: true, settype: true, bait: true, lure: true, urine: true, visual: true, audio: true, other: true, notes: true };
     if (!this.data.setFields || typeof this.data.setFields !== 'object') this.data.setFields = {};
     for (var sfk in sfDef) if (typeof this.data.setFields[sfk] !== 'boolean') this.data.setFields[sfk] = true;
-    /* Totals tab section toggles — all default on. */
-    if (!this.data.totalsSections || typeof this.data.totalsSections !== 'object') this.data.totalsSections = {};
-    var tsDef = ['species', 'set', 'disposition'], tss = this.data.totalsSections;
-    for (var tsi = 0; tsi < tsDef.length; tsi++) if (typeof tss[tsDef[tsi]] !== 'boolean') tss[tsDef[tsi]] = true;
+    /* gd (2026-11-15): the Totals section chips are gone — every section
+       card always stands; collapsing a card is the one mechanism. Stored
+       totalsSections values from the chip era are simply ignored. */
   },
   save: function () {
     try {
@@ -6390,15 +6389,8 @@ function renderTotals() {
       return '<div><span class="dim">' + f[0] + ':</span> ' + (f[1] ? esc(f[1]) : '<span class="dim">None</span>') + '</div>';
     }).join('');
   }
-  box.innerHTML = totalsSectionChips() + totalsSectionCards();
+  box.innerHTML = totalsSectionCards();
 
-  function totalsSectionChips() {
-    var ts = totalsSections();
-    var defs = [['species', 'Species'], ['set', 'Set'], ['disposition', 'Disposition']];
-    return '<div class="chip-row" id="totals-sec-chips" style="margin-bottom:10px">' + defs.map(function (d) {
-      return '<button type="button" class="chip' + (ts[d[0]] ? ' on' : '') + '" data-sec="' + d[0] + '">' + d[1] + '</button>';
-    }).join('') + '</div>';
-  }
   /* Tanner 2026-09-30: each of the three section cards collapses behind its
      own header — tap to open or fold at leisure. State persists on-device. */
   function totalsCollapsed() {
@@ -6412,10 +6404,10 @@ function renderTotals() {
       '<h3>' + title + '</h3><span class="tchev">' + (closed ? '▸' : '▾') + '</span></button>';
   }
   function totalsSectionCards() {
-    var ts = totalsSections(), tc = totalsCollapsed(), cards = '';
-    if (ts.species) cards += '<div class="card">' + totalsCardHead('species', 'By Species') + '<div class="totals-card-body"' + (tc.species ? ' hidden' : '') + '>' + rows(bySpecies, false) + '</div></div>';
-    if (ts.set) cards += '<div class="card">' + totalsCardHead('set', 'By Set') + '<div class="totals-card-body"' + (tc.set ? ' hidden' : '') + '>' + rows(bySet, true) + '</div></div>';
-    if (ts.disposition) {
+    var tc = totalsCollapsed(), cards = '';
+    cards += '<div class="card">' + totalsCardHead('species', 'By Species') + '<div class="totals-card-body"' + (tc.species ? ' hidden' : '') + '>' + rows(bySpecies, false) + '</div></div>';
+    cards += '<div class="card">' + totalsCardHead('set', 'By Set') + '<div class="totals-card-body"' + (tc.set ? ' hidden' : '') + '>' + rows(bySet, true) + '</div></div>';
+    {
       var names = [['kept', 'Dispatched'], ['alive', 'Kept alive'], ['released', 'Released'], ['transported', 'Transported']];
       /* Q86 (2026-10-01): Tanner — sort largest count first, it reads cleaner. */
       names.sort(function (a, b) { return (byDisp[b[0]] || 0) - (byDisp[a[0]] || 0); });
@@ -6437,20 +6429,8 @@ function renderTotals() {
         return dhtml;
       }).join('') + '</div></div>';
     }
-    if (!cards) cards = '<p class="dim" style="text-align:center">All sections hidden — tap a chip above to show one.</p>';
     return cards;
   }
-}
-
-/* Q22: Totals tab section toggles, persisted on-device. */
-function totalsSections() {
-  var t = Store.data.totalsSections;
-  if (!t || typeof t !== 'object') t = {};
-  if (typeof t.species !== 'boolean') t.species = true;
-  if (typeof t.set !== 'boolean') t.set = true;
-  if (typeof t.disposition !== 'boolean') t.disposition = true;
-  Store.data.totalsSections = t;
-  return t;
 }
 
 /* Q202 (2026-10-19): hold a results list at its unfiltered height while a
@@ -10109,14 +10089,6 @@ function wireUp() {
     renderMsList(); renderExportDimChips(); renderExportFilterBar();
   };
   $('pane-totals').addEventListener('click', function (e) {
-    var chip = e.target.closest ? e.target.closest('#totals-sec-chips .chip') : null;
-    if (chip) {
-      var ts = totalsSections(), k = chip.getAttribute('data-sec');
-      ts[k] = !ts[k];
-      Store.save();
-      renderTotals();
-      return;
-    }
     /* Tanner 2026-09-30: collapse/expand a whole Totals section card. */
     var thead = e.target.closest ? e.target.closest('.totals-card-head') : null;
     if (thead) {
