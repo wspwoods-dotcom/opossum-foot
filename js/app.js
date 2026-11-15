@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-11-15fw';
+var APP_VERSION = 'beta 0.1 · build 2026-11-15fx';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -2376,6 +2376,11 @@ function setMeasureMode(on) {
   if (!on) clearMeasure();
   var h = $('measure-hint'); if (h) h.classList.toggle('show', on);
   var b = $('btn-measure'); if (b) b.classList.toggle('active-mode', on);
+  /* fx: the ruler is a picking mode too — it takes the same placement lock as
+     pin/sign/home (Tanner: "Same with ruler"), so Show/Actions, the tab bar
+     and the other map controls stay dead until it is toggled off. Runs last
+     so the unlock calls inside cancelAllMapModes never win over an arm. */
+  setPlacingLock(on);
 }
 function clearMeasure() {
   measureA = null; measureB = null;
@@ -7289,6 +7294,9 @@ function importDataFile(file) {
     var data;
     try { data = JSON.parse(reader.result); }
     catch (e) { toast('That file is not valid JSON.'); return; }
+    /* fx: a shared line file takes the line-transfer path — it lands as a
+       NEW line, never merged into the active one. */
+    if (data && data.kind === 'line-transfer') { importLineTransfer(data); return; }
     if (!data || !Array.isArray(data.sets) || !Array.isArray(data.logs)) {
       toast('Not an Opossum Foot import file.');
       return;
@@ -7371,6 +7379,243 @@ function importDataFile(file) {
     toast('Imported ' + nSets + ' sets, ' + nLogs + ' logs' + (nTrips ? ' and ' + nTrips + ' trips' : '') + '.');
   };
   reader.readAsText(file);
+}
+
+/* ================= fx (2026-11-15): LINE TRANSFER — share a line ================
+   Tanner: send ONE line (sets + logs) to another trapper. The sender taps
+   "Share this line" (Reports → Data) and the OS share sheet carries the file
+   (AirDrop on iPhone, Nearby Share on Android, or Messages/email). The
+   receiver saves the file, taps "Import data (JSON)", and the line lands as
+   a NEW line beside their own: fresh ids on the line, every set and log,
+   log→set links remapped, and the file's transfer id remembered so importing
+   the same shared file twice never duplicates the line. Nothing of the
+   receiver's is merged or overwritten. Photos never ride along (they live in
+   IndexedDB, not the data file) — the photo gallery shares separately.
+   Landowners, licenses and signs never travel: those are the sender's own. */
+function buildLineTransfer(ln) {
+  var sets = (Store.data.sets || []).filter(function (s) { return s && s.lineId === ln.id; });
+  var setIds = {};
+  sets.forEach(function (s) { setIds[s.id] = true; });
+  var logs = (Store.data.logs || []).filter(function (l) {
+    return l && (l.lineId === ln.id || setIds[l.setId]);
+  });
+  return {
+    app: 'opossum-foot',
+    kind: 'line-transfer',
+    transferId: uid('t'),
+    exportedAt: new Date().toISOString(),
+    version: APP_VERSION,
+    line: {
+      id: ln.id, name: ln.name || 'Line', state: ln.state || '',
+      home: (ln.home && isFinite(+ln.home.lat) && isFinite(+ln.home.lng)) ? { lat: +ln.home.lat, lng: +ln.home.lng } : null
+    },
+    sets: sets,
+    logs: logs
+  };
+}
+
+function shareActiveLine() {
+  var ln = activeLine();
+  if (!ln) { toast('No line to share yet.'); return; }
+  var data = buildLineTransfer(ln);
+  if (!data.sets.length && !data.logs.length) {
+    toast('“' + ln.name + '” has no sets or logs to share yet.');
+    return;
+  }
+  var fname = 'opossum-foot-line-' + lineFileSlug() + '-' + todayISO() + '.json';
+  var blob = new Blob([JSON.stringify(data)], { type: 'application/json;charset=utf-8' });
+  var file = null;
+  try { file = new File([blob], fname, { type: 'application/json' }); } catch (e) { file = null; }
+  var nav = (typeof navigator !== 'undefined') ? navigator : {};
+  if (file && nav.canShare && nav.share) {
+    var ok = false;
+    try { ok = !!nav.canShare({ files: [file] }); } catch (e) { ok = false; }
+    if (ok) {
+      nav.share({ files: [file], title: 'Opossum Foot line — ' + ln.name }).catch(function (err) {
+        if (!err || err.name !== 'AbortError') toast('Could not open the share sheet.');
+      });
+      return;
+    }
+  }
+  /* No file share sheet on this browser: download the transfer file instead —
+     the sender passes it along however they like. */
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = fname;
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 3000);
+  toast('Line file saved (' + data.sets.length + ' sets, ' + data.logs.length + ' logs). Send it to your buddy — they open Opossum Foot and tap “Import data (JSON)”.');
+}
+
+function findImportedTransfer(transferId) {
+  var list = Store.data.importedTransfers;
+  if (!Array.isArray(list) || !transferId) return null;
+  for (var i = 0; i < list.length; i++) {
+    var e = list[i];
+    if (e && (e.id === transferId || e === transferId)) return e;
+  }
+  return null;
+}
+
+/* Accept-first: the receiver always sees what is about to land and taps
+   "Add line" before anything is written. */
+function importLineTransfer(data) {
+  if (!data.line || !Array.isArray(data.sets) || !Array.isArray(data.logs)) {
+    toast('That line file looks incomplete.'); return;
+  }
+  var prior = findImportedTransfer(data.transferId);
+  if (prior) {
+    toast('You already added this line' + (prior.name ? ' — it is in your lines as “' + prior.name + '”' : '') + '.');
+    return;
+  }
+  var srcName = String(data.line.name || 'Shared line').trim() || 'Shared line';
+  var nS = data.sets.length, nL = data.logs.length;
+  showModal2(
+    '<h3>Add this line?</h3>' +
+    '<p><strong>' + esc(srcName) + '</strong> — ' + nS + ' set' + (nS === 1 ? '' : 's') + ', ' + nL + ' log' + (nL === 1 ? '' : 's') + '.</p>' +
+    '<p>It lands as a new line of your own, beside your lines. Nothing of yours is changed, and nothing merges into it. Photos do not ride along in a line share.</p>' +
+    '<div class="btn-row"><button class="btn-secondary" id="m2-cancel" type="button">Cancel</button>' +
+    '<button class="btn-primary" id="m2-ok" type="button">Add line</button></div>'
+  );
+  $('m2-cancel').onclick = closeModal2;
+  $('m2-ok').onclick = function () { closeModal2(); applyLineTransfer(data, srcName); };
+}
+
+function applyLineTransfer(data, srcName) {
+  var d = Store.data;
+  if (!Array.isArray(d.importedTransfers)) d.importedTransfers = [];
+  /* A name the receiver already uses gets a number — two lines with the same
+     name would confuse the line picker. */
+  var taken = {};
+  (d.lines || []).forEach(function (l) { taken[String((l && l.name) || '').toLowerCase()] = true; });
+  var name = srcName, n = 2;
+  while (taken[name.toLowerCase()]) { name = srcName + ' (' + n + ')'; n++; }
+  var ln = {
+    id: newLineId(), name: name,
+    state: data.line.state || activeStateCode(),
+    tabs: { history: true, scorecard: true, seasons: true, licenses: true }
+  };
+  if (data.line.home && isFinite(+data.line.home.lat) && isFinite(+data.line.home.lng)) {
+    ln.home = { lat: +data.line.home.lat, lng: +data.line.home.lng };
+    ln.homeAsked = true;
+  }
+  d.lines.push(ln);
+  var setIdMap = {}, nSets = 0, nLogs = 0;
+  data.sets.forEach(function (s) {
+    if (!s || typeof s !== 'object') return;
+    var c;
+    try { c = JSON.parse(JSON.stringify(s)); } catch (e) { return; }
+    var oldId = c.id;
+    c.id = uid('s');
+    c.lineId = ln.id;
+    c.name = String(s.name || 'Set');
+    c.lat = +s.lat || 0; c.lng = +s.lng || 0;
+    c.status = normStatus(s.status);
+    c.trapMods = Array.isArray(s.trapMods) ? s.trapMods.slice() : [];
+    c.bait = toAttrArray(s.bait); c.lure = toAttrArray(s.lure); c.urine = toAttrArray(s.urine);
+    c.visual = toAttrArray(s.visual); c.audio = toAttrArray(s.audio); c.other = toAttrArray(s.other);
+    if (oldId) setIdMap[oldId] = c.id;
+    d.sets.push(c); nSets++;
+  });
+  data.logs.forEach(function (l) {
+    if (!l || typeof l !== 'object') return;
+    var c;
+    try { c = JSON.parse(JSON.stringify(l)); } catch (e) { return; }
+    c.id = uid('l');
+    c.lineId = ln.id;
+    c.setId = (l.setId && setIdMap[l.setId]) ? setIdMap[l.setId] : null;
+    c.setName = String(l.setName || '(imported)');
+    c.species = String(l.species || 'Unknown');
+    c.count = normCount(l);
+    c.date = /^\d{4}-\d{2}-\d{2}$/.test(l.date || '') ? l.date : todayISO();
+    c.seasonYear = l.seasonYear || seasonYearOf(c.date);
+    c.bait = toAttrArray(l.bait); c.lure = toAttrArray(l.lure); c.urine = toAttrArray(l.urine);
+    c.visual = toAttrArray(l.visual); c.audio = toAttrArray(l.audio); c.other = toAttrArray(l.other);
+    d.logs.push(c); nLogs++;
+  });
+  if (data.transferId) d.importedTransfers.push({ id: data.transferId, name: name, at: Date.now() });
+  Store.save();
+  refreshMarkers(); renderHistory(); renderTotals();
+  if (typeof renderLines === 'function') renderLines();
+  toast('Added “' + name + '” as a new line — ' + nSets + ' sets, ' + nLogs + ' logs. Find it in the line picker.');
+}
+
+/* ================= fx (2026-11-15): PHOTO GALLERY =================
+   Tanner: one place that shows every photo on the line, each labeled with
+   what it belongs to. Every photo record already carries its link — setId
+   for set photos, logId for catches, landownerId / tripId / markerId for the
+   rest, and no link at all means the license wallet — the same taxonomy the
+   media ZIP export (Q214) uses. View-only: tap opens the standard viewer
+   (zoom + Save); deleting still happens on the set or catch itself. */
+function galleryPhotoLabel(p) {
+  if (p.landownerId) {
+    var lo = landownerById(p.landownerId);
+    return { title: lo ? lo.name : 'Landowner', sub: p.kind === 'boundary' ? 'Boundary map' : 'Permission slip', lineId: lo ? lo.lineId : p.lineId };
+  }
+  if (p.tripId) {
+    var tr = tripById(p.tripId);
+    return { title: 'Trip ' + (tr ? fmtDate(tr.date) : ''), sub: p.kind === 'map' ? 'Directions' : 'Odometer', lineId: tr ? tr.lineId : p.lineId };
+  }
+  if (p.logId) {
+    var lg = null;
+    (Store.data.logs || []).forEach(function (x) { if (x.id === p.logId) lg = x; });
+    var st = lg && lg.setId ? getSet(lg.setId) : (p.setId ? getSet(p.setId) : null);
+    return {
+      title: lg ? (lg.species || lg.otherType || 'Catch') : 'Catch',
+      sub: (st ? st.name : (lg ? (lg.setName || '') : '')) + (lg ? ' · ' + fmtDate(lg.date) : ''),
+      lineId: st ? st.lineId : p.lineId
+    };
+  }
+  if (p.setId) {
+    var s2 = getSet(p.setId);
+    if (!s2) return null; /* the set is gone; its photos are cascade-deleted with it */
+    return { title: s2.name, sub: 'Set photo', lineId: s2.lineId };
+  }
+  if (p.markerId) {
+    var mk = null;
+    (Store.data.markers || []).forEach(function (x) { if (x.id === p.markerId) mk = x; });
+    return { title: mk ? (mk.name || mk.label || mk.ref || 'Marker') : 'Marker', sub: 'Forage & Finds', lineId: mk ? mk.lineId : p.lineId };
+  }
+  return { title: p.name ? String(p.name).replace(/\.[A-Za-z0-9]+$/, '') : 'License', sub: 'Paperwork', lineId: p.lineId };
+}
+
+function openGallery() {
+  openSheet('sheet-gallery');
+  renderGallery();
+}
+
+function renderGallery() {
+  var grid = $('gallery-grid'), empty = $('gallery-empty');
+  if (!grid) return;
+  grid.innerHTML = '';
+  if (empty) empty.hidden = true;
+  IDB.all('photos').then(function (all) {
+    var lid = activeLineId(), items = [];
+    (all || []).forEach(function (p) {
+      if (!p || !p.blob) return;
+      var lab = galleryPhotoLabel(p);
+      if (!lab || lab.lineId !== lid) return;
+      items.push({ p: p, title: lab.title, sub: lab.sub });
+    });
+    items.sort(function (a, b) { return (b.p.createdAt || 0) - (a.p.createdAt || 0); });
+    if (!items.length) { if (empty) empty.hidden = false; return; }
+    items.forEach(function (it) {
+      var tile = document.createElement('div');
+      tile.className = 'gal-tile';
+      var img = document.createElement('img');
+      img.src = photoURL(it.p);
+      img.alt = it.title;
+      tile.appendChild(img);
+      var cap = document.createElement('div');
+      cap.className = 'gal-cap';
+      cap.innerHTML = '<span class="gal-title">' + esc(it.title) + '</span>' +
+        (it.sub ? '<span class="gal-sub">' + esc(it.sub) + '</span>' : '');
+      tile.appendChild(cap);
+      tile.onclick = function () { openPhotoViewer(it.p, null, true); };
+      grid.appendChild(tile);
+    });
+  }).catch(function () { if (empty) empty.hidden = false; });
 }
 
 /* ================= Q7. GOOGLE MAPS PIN IMPORT =================
@@ -9610,6 +9855,8 @@ function wireUp() {
   };
   $('btn-backup').onclick = exportFullBackup;
   $('btn-export-media').onclick = exportMediaZip; /* Q214 */
+  $('btn-share-line').onclick = shareActiveLine; /* fx: AirDrop / Nearby Share a line */
+  $('btn-gallery').onclick = openGallery; /* fx: photo gallery */
   $('btn-export-catches').onclick = exportCatches;
   $('btn-export-sets').onclick = exportSets;
   $('btn-export-mileage').onclick = exportMileage; /* Q8 */
