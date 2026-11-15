@@ -863,6 +863,7 @@ body.placing #map-status-filters,
 body.placing #weather-chip,
 body.placing #btn-locate,
 body.placing #btn-add-gps,
+body.placing #show-pill,
 body.placing .leaflet-control-layers { pointer-events: none; opacity: .45; }
 /* B15: zoom stays live during placement — pan and zoom, nothing else. */
 
@@ -1002,6 +1003,14 @@ body.placing .leaflet-control-layers { pointer-events: none; opacity: .45; }
 .photo-thumb { width: 76px; height: 76px; object-fit: cover; border-radius: 10px; flex: 0 0 auto; border: 1px solid var(--line); }
 .photo-thumb.sm { width: 48px; height: 48px; border-radius: 8px; }
 .log-photos { display: flex; gap: 6px; margin-top: 6px; }
+/* fx (2026-11-15): photo gallery — grid of every photo on the line, labeled. */
+.gal-open { width: 100%; margin: 0 0 10px; }
+.gal-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.gal-tile { border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: var(--bg2); cursor: pointer; }
+.gal-tile img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; display: block; }
+.gal-cap { padding: 5px 7px 6px; }
+.gal-title { display: block; font-size: 12px; font-weight: 600; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.gal-sub { display: block; font-size: 11px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 #pane-map { position: relative; }
 .sc-row { display: flex; align-items: baseline; gap: 10px; padding: 10px 2px; border-bottom: 1px solid var(--line); }
 /* Q172 (2026-10-08): clear separation between the Scorecard filter controls
