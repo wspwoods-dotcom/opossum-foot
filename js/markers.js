@@ -84,6 +84,7 @@ var Markers = (function () {
   function setLock(on) { document.body.classList.toggle('placing', !!on); }
   function startPinPlace() {
     cancelAll();
+    if (window.cancelAllMapModes) window.cancelAllMapModes(); /* fw: one picking mode at a time */
     setLock(true);
     $('mk-hint').textContent = 'Tap the map where the sign is.';
     $('mk-hint').classList.add('show');
@@ -120,6 +121,7 @@ var Markers = (function () {
   var areaPts = [], areaDraft = null;
   function startAreaPlace() {
     cancelAll();
+    if (window.cancelAllMapModes) window.cancelAllMapModes(); /* fw: one picking mode at a time */
     setLock(true);
     mode = 'area'; areaPts = [];
     $('mk-hint').textContent = 'Tap the corners around the patch.';

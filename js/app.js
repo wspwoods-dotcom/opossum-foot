@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-11-14fv';
+var APP_VERSION = 'beta 0.1 · build 2026-11-15fw';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -2339,9 +2339,23 @@ function refreshMarkers() {
   renderBulkBar(); /* Q229: the bar counts the live prospect sets on this line */
 }
 
+/* fw (2026-11-15): one map command at a time, for real. The picking modes
+   (set pin, marker/sign, measure, home pick) each lived in their own switch
+   and never cancelled each other — a pin hint and a sign hint could stack,
+   and a pin drag bar and a marker drag bar could stack (Tanner, 2026-11-15).
+   Every mode entry runs cancelAllMapModes() first; `except` keeps the mode
+   being entered from cancelling itself. */
+function cancelAllMapModes(except) {
+  if (except !== 'pin' && dropPinMode) setDropPinMode(false);
+  if (except !== 'measure' && measureMode) setMeasureMode(false);
+  if (except !== 'home' && homePickMode) cancelHomePick();
+  cancelPlacePin();
+  if (window.Markers) Markers.cancelAll();
+}
+
 function setDropPinMode(on) {
   dropPinMode = on;
-  if (on) { cancelPlacePin(); cancelHomePick(); setMeasureMode(false); } /* Q53: one picking mode at a time */
+  if (on) { cancelAllMapModes('pin'); } /* Q53/fw: one picking mode at a time */
   $('pin-hint').classList.toggle('show', on);
   $('btn-drop-pin').classList.toggle('active-mode', on);
   /* B15-fix: the placement lock starts the moment placement is ARMED, not
@@ -2358,7 +2372,7 @@ function setDropPinMode(on) {
 var measureMode = false, measureA = null, measureB = null, measureLayer = null;
 function setMeasureMode(on) {
   measureMode = on;
-  if (on) { setDropPinMode(false); cancelHomePick(); }
+  if (on) { cancelAllMapModes('measure'); } /* Q53/fw: one picking mode at a time */
   if (!on) clearMeasure();
   var h = $('measure-hint'); if (h) h.classList.toggle('show', on);
   var b = $('btn-measure'); if (b) b.classList.toggle('active-mode', on);
@@ -2507,7 +2521,7 @@ function startHomePick() {
   if (!map) { toast('Open the map first.'); return; }
   var l0 = activeLine();
   if (l0) { l0.homeAsked = true; Store.save(); } /* asked once per line — Settings re-opens it */
-  setDropPinMode(false); cancelPlacePin();
+  cancelAllMapModes('home'); /* fw: one picking mode at a time */
   homePickMode = true; homeMapLive = true;
   /* Tanner 2026-10-01: no A/B choice — the GPS button duplicated the previous
      screen. Straight to pin drop: tap the map, drag the pin, tap OK. */
