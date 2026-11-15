@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-11-15fy';
+var APP_VERSION = 'beta 0.1 · build 2026-11-15fz';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -7378,6 +7378,8 @@ function importDataFile(file) {
     /* fx: a shared line file takes the line-transfer path — it lands as a
        NEW line, never merged into the active one. */
     if (data && data.kind === 'line-transfer') { importLineTransfer(data); return; }
+    /* fz: a photo pack takes its own path — photos re-attach by set name. */
+    if (data && data.kind === 'photo-pack') { importPhotoPack(data); return; }
     if (!data || !Array.isArray(data.sets) || !Array.isArray(data.logs)) {
       toast('Not an Opossum Foot import file.');
       return;
@@ -7697,6 +7699,205 @@ function renderGallery() {
       grid.appendChild(tile);
     });
   }).catch(function () { if (empty) empty.hidden = false; });
+}
+
+/* ================= fz (2026-11-15): PHOTO PACK — share a line's photos =====
+   Tanner: photos travel separately from the line share (fx). The sender opens
+   the photo gallery and taps "Share photo pack" — one JSON file carrying the
+   active line's SET and CATCH photos (slips, trips, signs and paperwork stay
+   home: what they belong to doesn't travel). The receiver imports the line
+   first, then the pack (same Import button): each photo names the set it
+   belongs to, and on the other phone it re-attaches to the set with that
+   name on the matching line — catch photos also name their catch (date +
+   species), so they land back on the right log entry when it can be found.
+   A pack is remembered by id, so importing it twice never doubles photos. */
+function blobToDataURL(blob) {
+  return new Promise(function (resolve, reject) {
+    var r = new FileReader();
+    r.onload = function () { resolve(String(r.result || '')); };
+    r.onerror = function () { reject(r.error); };
+    r.readAsDataURL(blob);
+  });
+}
+function dataURLToBlob(durl) {
+  var m = /^data:([^;,]*)(;base64)?,([\s\S]*)$/.exec(String(durl || ''));
+  if (!m) return null;
+  var bin = atob(m[3]);
+  var bytes = new Uint8Array(bin.length);
+  for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+  return new Blob([bytes], { type: m[1] || 'image/jpeg' });
+}
+function packPhotoOwner(p) {
+  /* The set a photo belongs to, and its catch (log) when it has one. */
+  var log = null;
+  if (p.logId) {
+    (Store.data.logs || []).forEach(function (x) { if (x.id === p.logId) log = x; });
+  }
+  var set = p.setId ? getSet(p.setId) : null;
+  if (!set && log && log.setId) set = getSet(log.setId);
+  return { set: set, log: log };
+}
+function buildPhotoPack(ln) {
+  return IDB.all('photos').then(function (all) {
+    var jobs = [];
+    (all || []).forEach(function (p) {
+      if (!p || !p.blob || (!p.setId && !p.logId)) return;
+      var lab = galleryPhotoLabel(p);
+      if (!lab || lab.lineId !== ln.id) return;
+      var own = packPhotoOwner(p);
+      if (!own.set) return;
+      jobs.push(blobToDataURL(p.blob).then(function (durl) {
+        return {
+          setName: own.set.name,
+          kind: p.kind || null,
+          name: p.name || '',
+          mime: (p.blob && p.blob.type) || p.mime || 'image/jpeg',
+          createdAt: p.createdAt || Date.now(),
+          log: own.log ? { date: own.log.date || '', species: own.log.species || own.log.otherType || '' } : null,
+          data: durl
+        };
+      }).catch(function () { return null; }));
+    });
+    return Promise.all(jobs).then(function (photos) {
+      return {
+        app: 'opossum-foot',
+        kind: 'photo-pack',
+        packId: uid('pk'),
+        exportedAt: new Date().toISOString(),
+        version: APP_VERSION,
+        lineName: ln.name || 'Line',
+        photos: photos.filter(function (x) { return !!x; })
+      };
+    });
+  });
+}
+function shareJsonFile(blob, fname, title, doneToast) {
+  var file = null;
+  try { file = new File([blob], fname, { type: 'application/json' }); } catch (e) { file = null; }
+  var nav = (typeof navigator !== 'undefined') ? navigator : {};
+  if (file && nav.canShare && nav.share) {
+    var ok = false;
+    try { ok = !!nav.canShare({ files: [file] }); } catch (e) { ok = false; }
+    if (ok) {
+      nav.share({ files: [file], title: title }).catch(function (err) {
+        if (!err || err.name !== 'AbortError') toast('Could not open the share sheet.');
+      });
+      return;
+    }
+  }
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = fname;
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 3000);
+  if (doneToast) toast(doneToast);
+}
+function sharePhotoPack() {
+  var ln = activeLine();
+  if (!ln) { toast('No line to share photos from yet.'); return; }
+  buildPhotoPack(ln).then(function (pack) {
+    if (!pack.photos.length) {
+      toast('No set or catch photos on “' + ln.name + '” yet — those are the photos a pack carries.');
+      return;
+    }
+    var fname = 'opossum-foot-photos-' + lineFileSlug() + '-' + todayISO() + '.json';
+    var blob = new Blob([JSON.stringify(pack)], { type: 'application/json;charset=utf-8' });
+    shareJsonFile(blob, fname, 'Opossum Foot photos — ' + ln.name,
+      'Photo pack saved (' + pack.photos.length + ' photos). Send it to your buddy — they import the line first, then this pack, and the photos re-attach to the sets.');
+  }).catch(function () { toast('Could not build the photo pack.'); });
+}
+function normNameKey(s) { return String(s || '').trim().toLowerCase(); }
+function findPhotoPackLine(data) {
+  /* The receiver's line these photos belong to: the one holding the most of
+     the pack's set names; the pack's line name breaks a tie. */
+  var want = {};
+  (data.photos || []).forEach(function (p) { if (p && p.setName) want[normNameKey(p.setName)] = true; });
+  var best = null;
+  (Store.data.lines || []).forEach(function (ln) {
+    if (!ln) return;
+    var names = {};
+    (Store.data.sets || []).forEach(function (s) {
+      if (s && s.lineId === ln.id) names[normNameKey(s.name)] = true;
+    });
+    var n = 0;
+    Object.keys(want).forEach(function (k) { if (names[k]) n++; });
+    var score = n * 2 + (normNameKey(ln.name) === normNameKey(data.lineName) ? 1 : 0);
+    if (n > 0 && (!best || score > best.score)) best = { line: ln, matched: n, score: score };
+  });
+  return best;
+}
+function importPhotoPack(data) {
+  if (!Array.isArray(data.photos) || !data.photos.length) {
+    toast('That photo pack looks empty.'); return;
+  }
+  var packs = Store.data.importedPacks;
+  if (Array.isArray(packs) && data.packId && packs.indexOf(data.packId) !== -1) {
+    toast('You already added this photo pack.'); return;
+  }
+  var found = findPhotoPackLine(data);
+  if (!found) {
+    toast('None of the sets in this photo pack are on any of your lines. Import the line share first, then this pack.');
+    return;
+  }
+  var ln = found.line;
+  var setNames = {};
+  (Store.data.sets || []).forEach(function (s) {
+    if (s && s.lineId === ln.id) setNames[normNameKey(s.name)] = true;
+  });
+  var can = 0;
+  data.photos.forEach(function (p) { if (p && setNames[normNameKey(p.setName)]) can++; });
+  var cant = data.photos.length - can;
+  showModal2(
+    '<h3>Add these photos?</h3>' +
+    '<p><strong>' + data.photos.length + ' photo' + (data.photos.length === 1 ? '' : 's') + '</strong> for <strong>' + esc(ln.name) + '</strong> — each one re-attaches to the set with the same name.' +
+    (cant ? ' ' + cant + ' of them name a set that is not on that line and will be skipped.' : '') + '</p>' +
+    '<div class="btn-row"><button class="btn-secondary" id="m2-cancel" type="button">Cancel</button>' +
+    '<button class="btn-primary" id="m2-ok" type="button">Add photos</button></div>'
+  );
+  $('m2-cancel').onclick = closeModal2;
+  $('m2-ok').onclick = function () { closeModal2(); applyPhotoPack(data, ln); };
+}
+function applyPhotoPack(data, ln) {
+  var setByName = {};
+  (Store.data.sets || []).forEach(function (s) {
+    if (s && s.lineId === ln.id) setByName[normNameKey(s.name)] = s;
+  });
+  var logByKey = {};
+  (Store.data.logs || []).forEach(function (l) {
+    if (!l || l.lineId !== ln.id || !l.setId) return;
+    var k = l.setId + '|' + (l.date || '') + '|' + normNameKey(l.species || l.otherType || '');
+    if (!logByKey[k]) logByKey[k] = l;
+  });
+  var jobs = [], skipped = 0;
+  data.photos.forEach(function (p) {
+    var set = p && setByName[normNameKey(p.setName)];
+    if (!set) { skipped++; return; }
+    var blob = dataURLToBlob(p.data);
+    if (!blob) { skipped++; return; }
+    var rec = {
+      id: uid('p'), setId: set.id, lineId: ln.id,
+      name: p.name || '', blob: blob,
+      mime: p.mime || blob.type || 'image/jpeg',
+      createdAt: p.createdAt || Date.now()
+    };
+    if (p.kind) rec.kind = p.kind;
+    if (p.log) {
+      var lg = logByKey[set.id + '|' + (p.log.date || '') + '|' + normNameKey(p.log.species || '')];
+      if (lg) rec.logId = lg.id;
+    }
+    jobs.push(IDB.put('photos', rec).then(function () { return true; }).catch(function () { return false; }));
+  });
+  Promise.all(jobs).then(function (results) {
+    var added = results.filter(function (x) { return x; }).length;
+    skipped += results.length - added;
+    if (!Array.isArray(Store.data.importedPacks)) Store.data.importedPacks = [];
+    if (data.packId) Store.data.importedPacks.push(data.packId);
+    Store.save();
+    renderGallery(); renderHistory();
+    toast('Added ' + added + ' photo' + (added === 1 ? '' : 's') + ' to “' + ln.name + '” — attached to their sets.' +
+      (skipped ? ' ' + skipped + ' skipped.' : ''));
+  });
 }
 
 /* ================= Q7. GOOGLE MAPS PIN IMPORT =================
@@ -9950,6 +10151,7 @@ function wireUp() {
   $('btn-export-media').onclick = exportMediaZip; /* Q214 */
   $('btn-share-line').onclick = shareActiveLine; /* fx: AirDrop / Nearby Share a line */
   $('btn-gallery').onclick = openGallery; /* fx: photo gallery */
+  $('btn-share-photos').onclick = sharePhotoPack; /* fz: share the line's photo pack */
   $('btn-export-catches').onclick = exportCatches;
   $('btn-export-sets').onclick = exportSets;
   $('btn-export-mileage').onclick = exportMileage; /* Q8 */
