@@ -675,10 +675,13 @@
     <div class="setsec-body" id="setform-notessec-body" hidden>
     <div class="setfield" id="setfield-notes">
     <label class="field" for="sf-notes">Notes</label>
-    <textarea id="sf-notes" placeholder="Anything worth remembering…"></textarea>
+    <div id="sf-note-entries"></div>
+    <textarea id="sf-notes" placeholder="Write a note — Add note files it with today's date…"></textarea>
     <div class="btn-row" style="margin-top:8px">
+      <button class="btn-small btn-secondary" id="btn-add-note" type="button">＋ Add note</button>
       <button class="btn-small btn-secondary" id="btn-voice-setnotes" type="button"><img class="bi" src="assets/icons/mic.png" alt="">Voice → notes</button>
     </div>
+    <p class="dim" id="voice-setnotes-tip" style="display:none;margin:8px 0 0">Tap the 🎤 key on your keyboard to dictate a note.</p>
     <div class="voice-preview" id="voice-setnotes-preview"></div>
     </div>
     <!-- Q71: memo recording + playback + deletion on the Edit Set form (edit mode only) -->
@@ -834,6 +837,7 @@
     <div class="btn-row" style="margin-top:8px">
       <button class="btn-small btn-secondary" id="btn-voice-lognotes" type="button"><img class="bi" src="assets/icons/mic.png" alt="">Voice → notes</button>
     </div>
+    <p class="dim" id="voice-lognotes-tip" style="display:none;margin:8px 0 0">Tap the 🎤 key on your keyboard to dictate a note.</p>
     <div class="voice-preview" id="voice-lognotes-preview"></div>
     <!-- Q177 (2026-10-08): Tanner — small field labels, consistent with Edit Set -->
     <label class="field" for="btn-log-memo" style="margin-top:12px">Voice memos</label>
