@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-11-14ft';
+var APP_VERSION = 'beta 0.1 · build 2026-11-14fu';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -5072,14 +5072,26 @@ function showSetsFor(v) {
       return an < bn ? -1 : (an > bn ? 1 : 0);
     });
 }
-/* ft: tap a set name in the Show list → the map flies to that set and its
-   detail opens (stack menu when several share the spot). Mirrors the
-   after-save flyTo (zoom ≥ 14) so the set is plainly in view. */
+/* ft2 (2026-11-14, Tanner, after trying ft): the jump lands on the MAP, not
+   the detail. Tap a name and the map flies to that set — then he taps the
+   pin from there, and the detail opens with Edit this set / Log a catch.
+   ft opened the detail straight away, so he never saw the set on the map.
+   The pin has to be standing to tap it: if its status is filtered off, the
+   jump switches it back on first (the Show pill shows it). */
 function jumpToSet(id) {
   var s = getSet(id); if (!s) return;
+  var st = normStatus(s.status);
+  var m = showModel();
+  if (m[st] === false) {
+    m[st] = true;
+    saveShowModel();
+    renderShowButton();
+    refreshMarkers();
+    if (window.Markers) Markers.render();
+    afterShowToggle();
+  }
   closeSheets();
   if (map) map.flyTo([s.lat, s.lng], Math.max(map.getZoom(), 14), { duration: 0.8 });
-  openSetOrStack(id);
 }
 function renderShowList() {
   var host = $('show-list'); if (!host) return;
