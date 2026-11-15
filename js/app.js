@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-11-15ge';
+var APP_VERSION = 'beta 0.1 · build 2026-11-15gf';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -9401,16 +9401,17 @@ function renderSetTypeOptions() {
     var al = a.toLowerCase(), bl = b.toLowerCase();
     return al < bl ? -1 : (al > bl ? 1 : 0);
   };
-  var fnds = allFoundationNames().slice().sort(byName);
-  var html = '';
-  fnds.forEach(function (t) { html += '<option>' + esc(t) + '</option>'; });
-  /* Q55: the trapper's remembered custom set types ride along as their own
-     foundations (a custom name IS its own foundation — it has no variation
-     family), then the Other… escape hatch. Known names never double-list. */
+  /* Q55: the trapper's remembered custom set types are their own
+     foundations (a custom name has no variation family). gf (2026-11-15,
+     Tanner): customs fold INTO the one A–Z run instead of riding in a
+     block after the built-ins — they sit where he'd look for them.
+     Known names never double-list; Other… stays last. */
+  var fnds = allFoundationNames().slice();
   var seenST = {};
   fnds.forEach(function (t) { seenST[t.toLowerCase()] = 1; });
-  var customs = customOptionsFor('sf-settype').filter(function (t) { return !seenST[t.toLowerCase()]; }).sort(byName);
-  customs.forEach(function (t) { html += '<option>' + esc(t) + '</option>'; });
+  var customs = customOptionsFor('sf-settype').filter(function (t) { return !seenST[t.toLowerCase()]; });
+  var html = '';
+  fnds.concat(customs).sort(byName).forEach(function (t) { html += '<option>' + esc(t) + '</option>'; });
   html += '<option value="' + OTHER_VALUE + '">Other…</option>';
   sel.innerHTML = html;
   renderVariationOptions();
