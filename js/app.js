@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-11-15fx';
+var APP_VERSION = 'beta 0.1 · build 2026-11-15fy';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -100,6 +100,7 @@ var Store = {
        whatever they chose. */
     if (typeof this.data.weatherOn !== 'boolean') this.data.weatherOn = true;
     if (typeof this.data.voiceOn !== 'boolean') this.data.voiceOn = true;
+    if (typeof this.data.rulerOn !== 'boolean') this.data.rulerOn = true; /* fy: map ruler on by default */
     if (typeof this.data.windArrowsOn !== 'boolean') this.data.windArrowsOn = true; /* Q17: on by default */
     /* Q68: trap check clock — hours between required checks, default 24. */
     if (typeof this.data.checkIntervalHours !== 'number' || this.data.checkIntervalHours <= 0) this.data.checkIntervalHours = 24;
@@ -265,7 +266,7 @@ function seedDemoStore() {
     L('l-demo-06', 's-demo-10', 'Striped skunk', 1, 'kept-alive', '2026-11-21', 'For essence collection.')
   ];
   Store.data = {
-    onboarded: true, state: 'IA', weatherOn: true, voiceOn: true,
+    onboarded: true, state: 'IA', weatherOn: true, voiceOn: true, rulerOn: true,
     setFields: { traptype: true, settype: true, bait: true, lure: true, urine: true, visual: true, audio: true, other: true, notes: true },
     lines: [{ id: 'line-1', name: 'Line 1', state: 'IA' }],
     activeLineId: 'line-1',
@@ -1249,6 +1250,12 @@ function applyFeatureToggles() {
   if (pmc) pmc.style.display = mOn ? '' : 'none';
   /* Q206 (2026-10-19): the map's Track fab follows this same toggle. */
   if (window.Tracking && Tracking.syncFab) Tracking.syncFab();
+  /* fy: ruler toggle — off hides the map's measure button entirely and ends
+     any measurement in progress. Default on. */
+  var rOn = Store.data.rulerOn !== false;
+  var rbtn = $('btn-measure');
+  if (rbtn) rbtn.style.display = rOn ? '' : 'none';
+  if (!rOn && typeof measureMode !== 'undefined' && measureMode) setMeasureMode(false);
 }
 
 /* ---- new-set field toggles ---- */
@@ -4527,9 +4534,48 @@ function sharePhotoFile(blob, baseName) {
       return;
     }
   }
-  var url = URL.createObjectURL(blob);
-  window.open(url, '_blank');
-  toast('Opened full-size — long-press the photo and tap Save Image.');
+  /* fy fallback: the share sheet refused the file (some phones balk at the
+     camera's own format). Re-encode to a plain JPEG and offer the sheet once
+     more. If it still won't go, stay put — every caller shows the photo on
+     screen already, so a long-press saves it right there. Never kick the
+     user out to a separate screen just to save a photo. */
+  blobToJpeg(blob, function (jpg) {
+    if (jpg && nav.canShare && nav.share) {
+      var jf = null;
+      try { jf = new File([jpg], (baseName || 'opossum-foot-photo') + '.jpg', { type: 'image/jpeg' }); } catch (e) { jf = null; }
+      if (jf) {
+        var ok2 = false;
+        try { ok2 = !!nav.canShare({ files: [jf] }); } catch (e) { ok2 = false; }
+        if (ok2) {
+          nav.share({ files: [jf] }).catch(function (err) {
+            if (!err || err.name !== 'AbortError') toast('Long-press the photo and tap Save Image to save it to your Photos.');
+          });
+          return;
+        }
+      }
+    }
+    toast('Long-press the photo and tap Save Image to save it to your Photos.');
+  });
+}
+/* fy: decode any photo blob and hand back a plain JPEG (or null). */
+function blobToJpeg(blob, cb) {
+  try {
+    var url = URL.createObjectURL(blob);
+    var img = new Image();
+    img.onload = function () {
+      try {
+        var c = document.createElement('canvas');
+        c.width = img.naturalWidth || img.width;
+        c.height = img.naturalHeight || img.height;
+        c.getContext('2d').drawImage(img, 0, 0);
+        URL.revokeObjectURL(url);
+        if (c.toBlob) c.toBlob(function (b) { cb(b || null); }, 'image/jpeg', 0.92);
+        else cb(null);
+      } catch (e) { cb(null); }
+    };
+    img.onerror = function () { URL.revokeObjectURL(url); cb(null); };
+    img.src = url;
+  } catch (e) { cb(null); }
 }
 /* Q71: ro = read-only (summary sheet) — no Delete button, just view + save. */
 /* Q241 (2026-11-14): pinch-to-zoom for every photo viewer in the app.
@@ -4607,6 +4653,24 @@ function wirePhotoZoom(cardEl) {
   }
   wrap.addEventListener('pointerup', endPt);
   wrap.addEventListener('pointercancel', endPt);
+  /* fy: on iPhone, Safari can take the pinch for itself before the pointer
+     events finish — its own gesture events are the reliable signal there.
+     Drive the same applyScale from them (e.scale is relative to the pinch
+     start; the focal point rides along when the event carries one). */
+  var gS = 1;
+  wrap.addEventListener('gesturestart', function (e) { e.preventDefault(); gS = scale; });
+  wrap.addEventListener('gesturechange', function (e) {
+    e.preventDefault();
+    if (!e.scale) return;
+    var fx = null, fy2 = null;
+    if (typeof e.clientX === 'number' && wrap.clientWidth) {
+      var r = wrap.getBoundingClientRect();
+      fx = (e.clientX - r.left) / wrap.clientWidth;
+      fy2 = (e.clientY - r.top) / wrap.clientHeight;
+    }
+    applyScale(gS * e.scale, fx, fy2);
+  });
+  wrap.addEventListener('gestureend', function (e) { e.preventDefault(); });
 }
 
 function openPhotoViewer(p, onDelete, ro) {
@@ -4633,6 +4697,22 @@ function openPhotoViewer(p, onDelete, ro) {
       });
     });
   };
+}
+
+/* fy: trip photos have called openFullPhoto(blob) since Q163, but the
+   function itself was lost in an earlier refactor — those taps did nothing.
+   Full-size in the app modal, zoom wired, Save Photo like every other
+   viewer (better than the old open-in-a-new-tab intent). */
+function openFullPhoto(blob) {
+  if (!blob) return;
+  var url = URL.createObjectURL(blob);
+  showModal('<img src="' + url + '" style="width:100%;border-radius:8px" alt="Photo">' +
+    '<div class="btn-row" style="margin-top:10px">' +
+    '<button class="btn-secondary" id="m-ph-save" type="button">Save Photo</button>' +
+    '<button class="btn-secondary" id="m-close" type="button">Close</button></div>');
+  wirePhotoZoom($('modal-card')); /* Q241/fy: pinch-to-zoom */
+  $('m-close').onclick = function () { URL.revokeObjectURL(url); closeModal(); };
+  $('m-ph-save').onclick = function () { sharePhotoFile(blob, 'opossum-foot-photo'); };
 }
 
 /* --- voice memos via MediaRecorder, stored as blobs in IndexedDB --- */
@@ -6639,6 +6719,7 @@ function openLicenseDetail(p) {
     '<button class="btn-secondary" id="m-ph-save" type="button">Save Photo</button>' +
     '<button class="btn-secondary" id="m-close" type="button">Close</button></div>';
   showModal(html);
+  wirePhotoZoom($('modal-card')); /* fy: the license photo zooms like every other photo */
   $('m-close').onclick = closeModal;
   $('m-ph-save').onclick = function () { sharePhotoFile(p.blob, 'opossum-foot-license'); };
   $('m-lic-save').onclick = function () {
@@ -8629,6 +8710,16 @@ function enterMain() {
       toast(this.checked ? 'Mileage tracking is on.' : 'Mileage tracking is off.');
     };
   }
+  /* fy: ruler toggle — off hides the map's measure button entirely. Default on. */
+  var rulerBox = $('settings-ruler');
+  if (rulerBox) {
+    rulerBox.checked = Store.data.rulerOn !== false;
+    rulerBox.onchange = function () {
+      Store.data.rulerOn = this.checked;
+      Store.save(); applyFeatureToggles();
+      toast(this.checked ? 'Map ruler is on.' : 'Map ruler is off.');
+    };
+  }
   /* Q68: trap check interval — longer than 24h where the regs allow it. */
   var ciSel = $('settings-checkinterval');
   var ccBox = $('settings-checkclock');
@@ -8777,6 +8868,7 @@ function buildGuideTOC() {
       'Reset', function () {
     Store.data.weatherOn = true; Store.data.voiceOn = true; Store.data.windArrowsOn = true; /* Q17; Q183: reset restores the fresh-install default (weather on) */
     Store.data.mileageOn = true; /* Q8 */
+    Store.data.rulerOn = true; /* fy */
     /* Q14/Q62: tab reset is per-line — restores all five toggleable tabs on the active line. */
     var l = activeLine();
     if (l) l.tabs = { history: true, scorecard: true, seasons: true, licenses: true, totals: true };
@@ -8784,6 +8876,7 @@ function buildGuideTOC() {
     Store.save();
     $('settings-weather').checked = true; $('settings-voice').checked = true; $('settings-windarrows').checked = true;
     var mcb = $('settings-mileage'); if (mcb) mcb.checked = true;
+    var rcb = $('settings-ruler'); if (rcb) rcb.checked = true;
     renderTabToggles();
     sfKeys.forEach(function (key) { var cb = $('settings-sf-' + key); if (cb) cb.checked = true; });
     applyFeatureToggles(); applySetFieldToggles();

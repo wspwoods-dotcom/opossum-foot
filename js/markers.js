@@ -203,7 +203,16 @@ var Markers = (function () {
     if (!editId) return;
     IDB.all('photos').then(function (all) {
       all.filter(function (p) { return p.markerId === editId; }).forEach(function (p) {
-        var img = document.createElement('img'); img.className = 'mk-thumb'; img.src = URL.createObjectURL(p.blob); host.appendChild(img);
+        var img = document.createElement('img'); img.className = 'mk-thumb'; img.src = URL.createObjectURL(p.blob);
+        /* fy: tap opens the photo viewer (zoom + save), like every other photo in the app. */
+        img.style.cursor = 'pointer';
+        img.onclick = function () {
+          if (window.openPhotoViewerLayer2) openPhotoViewerLayer2(p, 'Sign photo', function (ph) { return URL.createObjectURL(ph.blob); }, function () {
+            closeModal2();
+            IDB.del('photos', p.id).then(function () { renderFormPhotos(editId); });
+          });
+        };
+        host.appendChild(img);
       });
     }).catch(function () {});
   }
@@ -269,7 +278,16 @@ var Markers = (function () {
     IDB.all('photos').then(function (all) {
       var host = $('mk-detail-photos'); if (!host) return;
       all.filter(function (p) { return p.markerId === id; }).forEach(function (p) {
-        var img = document.createElement('img'); img.className = 'mk-thumb'; img.src = URL.createObjectURL(p.blob); host.appendChild(img);
+        var img = document.createElement('img'); img.className = 'mk-thumb'; img.src = URL.createObjectURL(p.blob);
+        /* fy: tap opens the photo viewer (zoom + save), like every other photo in the app. */
+        img.style.cursor = 'pointer';
+        img.onclick = function () {
+          if (window.openPhotoViewerLayer2) openPhotoViewerLayer2(p, mk.name || 'Sign photo', function (ph) { return URL.createObjectURL(ph.blob); }, function () {
+            closeModal2();
+            IDB.del('photos', p.id).then(function () { openDetail(id); });
+          });
+        };
+        host.appendChild(img);
       });
     }).catch(function () {});
     openSheet('sheet-marker-detail');
