@@ -1239,6 +1239,14 @@ body.placing #route-back-chip { display: none; }
 .bulk-dot { display: inline-block; width: 16px; height: 16px; border-radius: 50%; border: 2px solid #fff; vertical-align: -2px; }
 .show-row { display: flex; align-items: center; gap: 12px; padding: 11px 4px; border-bottom: 1px solid var(--line); font-size: 17px; cursor: pointer; }
 .show-row input[type="checkbox"] { margin-left: auto; width: 22px; height: 22px; accent-color: #7fa650; }
+/* ft (2026-11-14, Tanner): the Show pill's set-name list. The status name is
+   a button that expands its sets; the names sit indented under their status,
+   A–Z, and tapping one jumps the map to that set. */
+.show-name-btn { flex: 1; display: flex; align-items: center; gap: 8px; background: none; border: none; color: inherit; font: inherit; text-align: left; padding: 0; cursor: pointer; min-width: 0; }
+.show-chev { opacity: .55; font-size: 14px; flex: 0 0 auto; }
+.show-names { padding-left: 30px; }
+.show-setname { display: block; width: 100%; text-align: left; background: none; border: none; border-bottom: 1px solid var(--line); color: inherit; font: inherit; font-size: 16px; padding: 9px 4px; cursor: pointer; }
+.show-noname { display: block; padding: 9px 4px; font-size: 15px; }
 .show-dot { flex: 0 0 auto; width: 15px; height: 15px; border-radius: 50%; border: 2px solid rgba(255,255,255,.55); }
 .show-name { flex: 1; }
 .show-count { opacity: .6; font-size: 13.5px; }
