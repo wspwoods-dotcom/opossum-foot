@@ -55,8 +55,7 @@ can change it any time in Settings.
   and By Trap Type, search the lot, filter by disposition, and switch
   between this season, last season, and all time. (Species counts live on
   Totals now.) The **Photo gallery** button at the top gathers every photo
-  on the line in one place. (Reports and CSV exports live in Settings →
-  Backup & Reports.)
+  on the line in one place. (Reports and CSV exports live on the Data tab.)
 - **Totals** — Your season numbers in four cards: By Species, By Set, By
   Disposition, and By Month. Rows show the title and kept count only — tap
   one to see the details. Tap a card's header to fold it away or open it
@@ -307,7 +306,7 @@ The **Route and Mileage** section lives on the Paperwork tab. Tap
 miles, notes — and the app keeps a running total for the line. It also
 draws a straight-line route estimate between your sets on the map (dashed
 line; it reads 20–40% under real road miles, so treat it as a rough check,
-not a receipt). Mileage exports to CSV from Backup & Reports.
+not a receipt). Mileage exports to CSV from the Data tab.
 
 The on/off switch is **Mileage log** in Settings → Feature Toggles, and it
 only governs recording *new* trips. Turn it off and your recorded trips,
@@ -324,7 +323,7 @@ emails you that it's ready, download it, tap the file in your Files app
 to unzip it, and look in the **Saved** folder — there's one spreadsheet
 (.csv) file per list. Then, in Opossum Foot: switch to the trap line the
 pins belong on first (imports land on the line that's active), open
-**Settings → Backup & Reports**, and use **Import pins from Google Maps**
+the **Data** tab, look under **Move data in or out**, and use **Import pins from Google Maps**
 to pick that file. It also reads map files (.kml / .kmz) and place files
 (.geojson / .json) from Google Maps or My Maps. The app digs each pin's
 coordinates out of its Maps link itself, carries the names over, and
@@ -351,7 +350,7 @@ license photos and the set-build shots.
 **Share photo pack**. That builds one file carrying the line's set and
 catch photos (license photos and other paperwork stay home) and hands it
 to your share sheet — AirDrop it, send it, however you like. On the
-receiving phone, use **Import** in Settings → Backup & Reports and pick
+receiving phone, use **Import data** on the Data tab, under **Move data in or out**, and pick
 the pack: each photo re-attaches to the set with the same name on the
 imported line, and catch photos match up to their catch by date and
 species. If the sets aren't on that phone yet, import the line share first
@@ -359,8 +358,8 @@ species. If the sets aren't on that phone yet, import the line share first
 
 ## Sharing a whole line
 
-Handing a line to a buddy, or moving it to a new phone? In Settings →
-Backup & Reports, tap **Share this line**. One file carries
+Handing a line to a buddy, or moving it to a new phone? On the **Data**
+tab, under **Move data in or out**, tap **Share this line**. One file carries
 the line's sets and catch logs — share it by AirDrop or Nearby Share. On
 the receiving phone, Import brings it in as a **new line** of its own,
 beside the lines already there: nothing merges, and nothing already on
@@ -411,10 +410,10 @@ no copying numbers out of the app.
 
 There is no account and no cloud. Everything lives on your phone, which means
 a lost phone, a wiped phone, or clearing your browser data can take your
-whole season with it. In **Settings**, open **Backup & Reports** — the full
-backup and all the reports live in that one place now.
+whole season with it. Open the **Data** tab — backups, sharing, and all
+the reports live in that one place.
 
-- **Full backup** is at the top: **"💾 Back up all data (JSON)"** — sets,
+- **Keep your data safe** is the top card: **"Back up all data (JSON)"** — sets,
   catches, lines, landowners, the lot. Importing it restores everything.
   Do this one, not just the CSVs.
 - **Your pictures ride separately:** **Export photos & files (ZIP)** saves
@@ -429,8 +428,8 @@ backup and all the reports live in that one place now.
   downloads always include everything.
 - Do it at least a few times a season. If the phone goes in the creek, the
   JSON file is your season.
-- License photos and voice memos don't ride in any backup file — save the
-  ones that matter to your camera roll.
+- License photos and voice memos don't ride in the JSON backup — they're
+  in the photo ZIP above.
 
 ## If something looks wrong
 

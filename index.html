@@ -222,7 +222,7 @@
       <div class="card setsec" id="setsec-mileage">
         <button type="button" class="setsec-head" id="setsec-mileage-head" data-sec="setsec-mileage" aria-expanded="false"><span>Route and Mileage</span><span class="setsec-chev" aria-hidden="true">›</span></button>
         <div class="setsec-body" id="setsec-mileage-body" hidden>
-          <p class="dim" style="margin:0 0 8px">Odometer trips and tracked routes for the line you're on — for the tax book. Track a route follows you on the map and files its miles here when you stop. Export every line's log from Settings → Export mileage (CSV).</p>
+          <p class="dim" style="margin:0 0 8px">Odometer trips and tracked routes for the line you're on — for the tax book. Track a route follows you on the map and files its miles here when you stop. Export every line's log from the Data tab → Export mileage (CSV).</p>
           <div id="paperwork-mileage-lines"></div>
         </div>
       </div>
@@ -237,19 +237,24 @@
     <div class="pane-head"><h2>Data</h2><p>Back up your data and download reports.</p></div>
     <div class="scroll">
       <div class="card">
-        <h3>Full backup</h3>
+        <h3>Keep your data safe</h3>
         <div class="sheet-actions">
           <button class="btn-secondary" id="btn-backup" type="button"><img class="bi" src="assets/icons/disk.png" alt="">Back up all data (JSON)</button>
-          <p class="imp-cap">Saves a full Opossum Foot backup file (.json) — import it back after a reinstall.</p>
+          <p class="imp-cap">Saves one file with everything — your lines, sets, and logs. Import it back after a reinstall or on a new phone.</p>
           <button class="btn-secondary" id="btn-export-media" type="button">⬇ Export photos &amp; files (ZIP)</button>
-          <p class="imp-cap">Saves every photo and voice memo from <strong>every line</strong> — set and catch photos, licenses, permission slips, trip photos — as one .zip file, organized in folders with an index that says what each file is. The JSON backup above holds your data but not your pictures; this file is their backup.</p>
+          <p class="imp-cap">Every photo and voice memo from <strong>every line</strong>, in one file. The backup above holds your data but not your pictures — this file is their backup.</p>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Move data in or out</h3>
+        <div class="sheet-actions">
           <button class="btn-secondary" id="btn-share-line" type="button">⬆ Share this line</button>
-          <p class="imp-cap">Send the line you are on — its sets and logs only — to another trapper (AirDrop, Nearby Share, Messages, email…). On their phone it lands as a new line of their own; your lines and theirs stay separate. Photos do not ride along.</p>
+          <p class="imp-cap">Send the line you are on — its sets and logs only — to another trapper (AirDrop, Nearby Share, Messages, email…). On their phone it lands as a new line of their own. Photos do not ride along.</p>
           <button class="btn-secondary" id="btn-import" type="button"><img class="bi" src="assets/icons/upload.png" alt="">Import data (JSON)</button>
-          <p class="imp-cap">Reads back an Opossum Foot backup file (.json) from this phone. A line another trapper shared with you imports here too — it lands as a new line.</p>
+          <p class="imp-cap">Bring in a backup file to restore your data, or a line another trapper sent you. A shared line lands as a new line of your own.</p>
           <input type="file" id="import-file" class="hidden-file" accept=".json,application/json">
           <button class="btn-secondary" id="btn-import-pins" type="button"><img class="bi" src="assets/icons/mappin.png" alt="">Import pins from Google Maps</button>
-          <p class="imp-cap">Reads pin files from Google Maps, My Maps, or Google Takeout — map files (.kml / .kmz), place files (.geojson / .json), and saved-list spreadsheets (.csv).</p>
+          <p class="imp-cap">Bring in pins you saved in Google Maps, My Maps, or Google Takeout.</p>
           <input type="file" id="import-pins-file" class="hidden-file" accept=".kml,.kmz,.geojson,.json,.csv,application/vnd.google-earth.kml+xml,application/vnd.google-earth.kmz,application/geo+json,text/csv">
           <button class="btn-secondary" id="btn-paste-pin" type="button"><img class="bi" src="assets/icons/mappin.png" alt="">Paste a Maps link</button>
           <p class="imp-cap">One pin at a time: in Google Maps tap Share, copy the link, and paste it here.</p>
@@ -402,7 +407,7 @@
         <button type="button" class="setsec-head" id="setsec-danger-head" data-sec="setsec-danger" aria-expanded="false"><span>Erase Everything</span><span class="setsec-chev" aria-hidden="true">›</span></button>
         <div class="setsec-body" id="setsec-danger-body" hidden>
         <p class="dim" style="margin-top:0">Everything on this phone — sets, catches, photos, voice memos, licenses, landowners — gets permanently deleted. It will be gone forever. There is no undo and no cloud copy.</p>
-        <p class="dim"><strong>Back up all data (JSON)</strong> first if you want to keep a copy. The backup lives in Settings → Backup &amp; Reports.</p>
+        <p class="dim"><strong>Back up all data (JSON)</strong> first if you want to keep a copy. The backup lives on the Data tab, under Keep your data safe.</p>
         <button class="btn-danger" id="btn-erase" type="button" style="width:100%">Erase all Opossum Foot data on this phone</button>
         <p class="dim" style="margin:16px 0 4px"><strong>Purge catch history.</strong> Delete old or test catch records without touching your sets. Pick a line, a date range, or both — matching records, their photos, and their voice memos are gone forever.</p>
         <label class="field" for="purge-line">Line</label>
