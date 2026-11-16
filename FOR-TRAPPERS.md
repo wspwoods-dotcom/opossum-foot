@@ -311,12 +311,20 @@ not a receipt). Mileage exports to CSV from the Data tab.
 Or tap **Track a route** (same section, or the track button on the map)
 and the app records your actual path by GPS while you run the line. Stop
 the track and it files itself as a mileage trip, with a readout of which
-active sets you passed and which you missed. While a track runs, the app
+active sets you passed and which you missed. Short runs read in feet —
+under a mile, the counter shows feet instead of tenths of a mile; the
+trip itself still files in miles. While a track runs, the app
 keeps your screen awake so the recording stays unbroken. If recording is
 interrupted anyway — the phone sleeps, or you leave the app — the route
 breaks at that spot and picks back up when you return. It never draws a
 line across ground it didn't record, and the miles count only the path
 actually traveled.
+
+Trips file as one-line rows — date, miles, and whether the run was a
+**GPS track** or an **Odometer** entry (odometer rows show their readings
+right on the line). Tap a row to open it: the passed-sets readout, the
+odometer photos, **Show on map**, and the trip's editing all live inside
+the open row.
 
 The on/off switch is **Mileage log** in Settings → Feature Toggles, and it
 only governs recording *new* trips. Turn it off and your recorded trips,
