@@ -45,12 +45,20 @@ var Tracking = (function () {
     var paused = pauseAccum + (state === 'paused' ? now - pauseStart : 0);
     return now - startT - paused;
   }
+  /* gl (Tanner, 2026-11-16): short runs read in FEET — a man walking a
+     line covers hundreds of feet, and tenths of a mile tell him nothing.
+     At a mile and beyond it reads in miles. The saved trip always files
+     in miles; this only changes what the bar and finish sheet show. */
+  function fmtDist(m) {
+    if (m < 1609.344) return Math.round(m * 3.28084) + ' ft';
+    return (m / 1609.344).toFixed(1) + ' mi';
+  }
   function updateBar() {
     var el = $('track-stats');
     /* gk (Tanner's call, 2026-11-16): no elapsed-time ticker — how long a
        run takes swings with the day's catches and a dozen other things,
        so the clock says nothing worth showing. Miles are the record. */
-    if (el) el.textContent = (distM / 1609.344).toFixed(1) + ' mi';
+    if (el) el.textContent = fmtDist(distM);
     var dot = $('track-dot');
     if (dot) dot.style.opacity = state === 'paused' ? '.35' : (Math.floor(Date.now() / 600) % 2 ? '1' : '.45');
   }
@@ -160,7 +168,7 @@ var Tracking = (function () {
     var cov = coverage();
     var miles = distM / 1609.344;
     pending = { miles: miles, elapsed: elapsedMs(), cov: cov, pts: pts.slice() };
-    $('track-done-stats').innerHTML = '<strong>' + miles.toFixed(1) + ' mi</strong> on the line';
+    $('track-done-stats').innerHTML = '<strong>' + fmtDist(distM) + '</strong> on the line';
     $('track-done-cov').innerHTML = cov.passed.length + ' of ' + (cov.passed.length + cov.missed.length) + ' active sets passed' +
       (cov.missed.length ? '<br><span class="mk-safety">Missed: ' + cov.missed.map(function (n) { return esc(n); }).join(', ') + '</span>' : '<br>Every active set on this line got a visit.');
     openSheet('sheet-track-done');
@@ -192,7 +200,10 @@ var Tracking = (function () {
     Store.data.trips.push({
       id: uid('trip'), lineId: lineId, createdAt: Date.now(), date: todayISO(),
       source: 'gps-track', miles: Math.round(pending.miles * 10) / 10, track: downsample(pending.pts, 400),
-      notes: 'GPS track · ' + fmtElapsed(pending.elapsed) + ' · passed ' + cov.passed.length + ' of ' + (cov.passed.length + cov.missed.length) + ' active sets'
+      /* gl: no elapsed stamp on the trip note — the timer stalls whenever
+         the phone sleeps, so saved trips were landing stamped 0:00. The
+         note is the coverage record, nothing it can't stand behind. */
+      notes: 'Passed ' + cov.passed.length + ' of ' + (cov.passed.length + cov.missed.length) + ' active sets'
     });
     Store.save();
     pending = null;

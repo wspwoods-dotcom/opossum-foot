@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-11-16gk';
+var APP_VERSION = 'beta 0.1 · build 2026-11-16gl';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -1492,9 +1492,13 @@ function rememberAttractants(s) {
   });
   if (changed) Store.save();
 }
-/* Q67: sponsored products ride INSIDE the bait/lure suggestion menus —
-   matching sponsors first with a Sponsored tag. Tapping the product name
-   fills the row; the eye opens the sponsor bio without filling anything. */
+/* Q67: sponsored products ride INSIDE the bait/lure suggestion menus,
+   with a Sponsored tag. Tapping the product name fills the row; the eye
+   opens the sponsor bio without filling anything.
+   gl (Tanner's ruling, 2026-11-16): the regular entries — the built-in
+   products and the trapper's own remembered ones — list FIRST; matching
+   sponsored products follow. His everyday products outrank the sponsors
+   in his own suggestion box. */
 /* Q69: the sponsor's logo (product badge) replaces the eye in the suggestion
    row; tapping it still opens the sponsor bio. No badge on file → the eye
    stays as the fallback so the info page is always one tap away. */
@@ -1609,14 +1613,14 @@ function attachSuggest(inputId, boxId, key, typeToFilter) {
     var noneHtml = showNone
       ? '<div class="suggest-row"><button type="button" class="suggest-item" data-v="None">None</button></div>'
       : '';
-    var html = noneHtml + sps.map(function (r) { return sponsorSuggestRowHtml(r.sp, r.name); }).join('') + items.map(function (v) {
+    var html = noneHtml + items.map(function (v) {
       /* Q79 (2026-10-01): Tanner — user-typed entries get a × to remove them
          from the list; built-in seeds don't. */
       var del = isSeedEntry(key, v)
         ? ''
         : '<button type="button" class="suggest-del" data-v="' + esc(v) + '" aria-label="Remove from list">×</button>';
       return '<div class="suggest-row"><button type="button" class="suggest-item" data-v="' + esc(v) + '">' + esc(v) + '</button>' + del + '</div>';
-    }).join('');
+    }).join('') + sps.map(function (r) { return sponsorSuggestRowHtml(r.sp, r.name); }).join('');
     box.innerHTML = html;
     box.className = 'suggest show';
     var btns = box.querySelectorAll('.suggest-item, .suggest-fill');
@@ -3575,7 +3579,6 @@ function saveSetForm() {
     var s = getSet(editingSetId);
     if (!s) { closeSheets(); return; }
     s.name = name;
-    rememberEntry('setname', name); /* Q12 */
     s.trapType = rt.t;
     s.trapMaker = td.trapMaker;
     s.trapSpring = td.trapSpring || rt.spring || ''; s.trapSize = td.trapSize;
@@ -3659,7 +3662,6 @@ function saveSetForm() {
     ns.lineId = activeLineId();
     Store.data.sets.push(ns);
     Store.save(); refreshMarkers(); closeSheets();
-    rememberEntry('setname', ns.name); /* Q12 */
     if (ns.trapModel) rememberEntry('trapmodel', ns.trapModel); /* Q12 */
     if (ns.missingDetail) rememberEntry('missingdetail', ns.missingDetail); /* Q12 */
     rememberAttractants(ns);
@@ -6615,34 +6617,56 @@ function isLicenseWalletPhoto(p, lid, firstId) {
    is a license-style card — tap the image to view, X to delete just it.
    Tanner 2026-10-07 (dg): like the other two sections — no camera/delete
    buttons on the trip; tap the trip box to edit it. Deleting a trip moved
-   into the trip form. */
-function tripRowHTML(tr) {
-  /* Q201: a GPS-track trip has no odometer readings — rendering it through
-     the odometer row produced "undefined → undefined" and tapping it opened
-     the odometer editor. It gets its own row: the record, a way to see the
-     saved route again, and a delete. */
+   into the trip form.
+   gl (2026-11-16): superseded in part — trips are collapsible rows now;
+   tapping the row's head opens it, and the odometer trip's form opens
+   from its Edit trip button inside. GPS trips keep Show on map + Delete
+   inside the open row. */
+/* gl (Tanner, 2026-11-16): the trip's detail line, cleaned for display.
+   Old GPS notes read "GPS track \u00b7 0:00 \u00b7 passed 29 of 34 active sets" \u2014
+   the kind now rides on the collapsed row itself and the elapsed stamp
+   was never trustworthy (the timer stalls while the phone sleeps), so
+   both come off here; the stored note itself is not rewritten. */
+function tripDetail(tr) {
+  var n = (tr.notes || '').trim();
   if (tr.source === 'gps-track') {
+    n = n.replace(/^GPS track\s*\u00b7\s*/, '');
+    n = n.replace(/^\d+:\d{2}(:\d{2})?\s*\u00b7\s*/, '');
+    if (n) n = n.charAt(0).toUpperCase() + n.slice(1);
+  }
+  return n;
+}
+/* gl: trips file as COLLAPSIBLE one-line rows \u2014 date, miles, and the kind
+   (GPS track, or Odometer with its readings) on the line; tap the line to
+   open the row for the details, photos, and buttons. A season of trips
+   reads as one screen instead of an endless scroll of full-size cards. */
+function tripRowHTML(tr) {
+  var head = '<div class="line-row trip-head" data-trip-toggle="' + esc(tr.id) + '">' +
+    '<div class="line-main">' +
+    '<span class="line-name">' + esc(fmtDate(tr.date)) + ' \u00b7 ' + esc(fmtMiles(tripMiles(tr))) + '</span>';
+  var chev = '</div><span class="trip-chev">\u25b8</span></div>';
+  if (tr.source === 'gps-track') {
+    var det = tripDetail(tr);
     return '<div class="trip-block">' +
-      '<div class="line-row">' +
-      '<div class="line-main">' +
-      '<span class="line-name">' + esc(fmtDate(tr.date)) + ' · ' + esc(fmtMiles(tripMiles(tr))) + '</span>' +
-      '<span class="dim">' + esc(tr.notes || 'GPS track') + '</span>' +
-      '</div>' +
-      '</div>' +
-      '<div class="btn-row" style="margin-top:8px">' +
+      head + '<span class="dim">GPS track</span>' + chev +
+      '<div class="trip-body">' +
+      (det ? '<div class="dim" style="margin-bottom:8px">' + esc(det) + '</div>' : '') +
+      '<div class="btn-row">' +
       '<button type="button" class="btn-secondary" data-trip-show="' + esc(tr.id) + '">Show on map</button>' +
       '<button type="button" class="btn-ghost" data-trip-gdel="' + esc(tr.id) + '">Delete</button>' +
       '</div>' +
+      '</div>' +
       '</div>';
   }
-  return '<div class="trip-block" data-trip-edit="' + esc(tr.id) + '" title="Tap to edit">' +
-    '<div class="line-row">' +
-    '<div class="line-main">' +
-    '<span class="line-name">' + esc(fmtDate(tr.date)) + ' \u00b7 ' + esc(fmtMiles(tripMiles(tr))) + '</span>' +
-    '<span class="dim">' + esc(String(tr.startOdo) + ' \u2192 ' + String(tr.endOdo) + (tr.notes ? ' \u00b7 ' + tr.notes : '')) + '</span>' +
-    '</div>' +
-    '</div>' +
+  return '<div class="trip-block">' +
+    head + '<span class="dim">Odometer \u00b7 ' + esc(String(tr.startOdo) + ' \u2192 ' + String(tr.endOdo)) + '</span>' + chev +
+    '<div class="trip-body">' +
+    (tr.notes ? '<div class="dim" style="margin-bottom:8px">' + esc(tr.notes) + '</div>' : '') +
     '<div class="lic-grid trip-photogrid" data-trip-thumbs="' + esc(tr.id) + '"></div>' +
+    '<div class="btn-row" style="margin-top:8px">' +
+    '<button type="button" class="btn-secondary" data-trip-edit="' + esc(tr.id) + '">Edit trip</button>' +
+    '</div>' +
+    '</div>' +
     '</div>';
 }
 function fillTripThumbs(box) {
@@ -6755,6 +6779,16 @@ function renderPaperworkMileage() {
     (function (el) {
       el.onclick = function () { deleteTrip(lineOf(el), el.getAttribute('data-trip-gdel')); };
     })(gdels[g]);
+  }
+  /* gl: a trip row's head taps the row open and closed. */
+  var togs = box.querySelectorAll('[data-trip-toggle]');
+  for (var tg = 0; tg < togs.length; tg++) {
+    (function (el) {
+      el.onclick = function () {
+        var b = el.closest ? el.closest('.trip-block') : null;
+        if (b) b.classList.toggle('open');
+      };
+    })(togs[tg]);
   }
   fillTripThumbs(box);
 }
@@ -9967,7 +10001,9 @@ function wireUp() {
   /* Q26: attractant rows wire their own suggestions in renderAttrRows */
   /* Q12: app-wide saved-entry suggestions — tap-to-fill, never auto-fill.
      Each kind is scoped to its own field. */
-  attachSuggest('sf-name', 'sf-name-suggest', 'setname');
+  /* gl (Tanner's ruling, 2026-11-16): the Set Name field is PLAIN — no
+     suggestion box. Set names must be unique, so the old popup only ever
+     offered names the app would refuse, and it grew with every set saved. */
   attachSuggest('sf-missing-detail', 'sf-missing-detail-suggest', 'missingdetail');
   $('sf-date').onchange = function () { updateDateDOW('sf-date', 'sf-date-dow'); };
   $('btn-voice-setnotes').onclick = function () {
