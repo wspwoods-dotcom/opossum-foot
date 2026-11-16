@@ -8,12 +8,22 @@
    set-coverage readout: which active sets the dot passed, which it
    missed. Honest limit (same class as Q10): the web app records while
    it is open on screen; true background recording comes with the
-   store wrapper. */
+   store wrapper.
+   gk (2026-11-16, Tanner's Boone County field report): when the phone
+   slept mid-run, the next fix was joined to the last pre-sleep point
+   with one straight line — the track cut diagonally across a section
+   corner he never drove, and the diagonal counted toward mileage.
+   Two fixes: (1) a recording gap over GAP_MS breaks the track into
+   segments — no line is drawn across a gap and no distance is counted
+   for it, live or saved; (2) a screen wake lock is held while
+   tracking so the phone does not sleep mid-run in the first place. */
 var Tracking = (function () {
   var mapRef = null, layer = null, savedLayer = null;
   var watchId = null, state = 'idle'; /* idle | tracking | paused */
   var pts = [], distM = 0, startT = 0, pauseAccum = 0, pauseStart = 0, timer = null;
   var line = null, lastFixAt = 0;
+  var GAP_MS = 40000; /* gk: a fix arriving later than this after the previous one starts a new segment */
+  var wakeSentinel = null;
 
   function hav(a, b) {
     var R = 6371000, dLa = (b.lat - a.lat) * Math.PI / 180, dLo = (b.lng - a.lng) * Math.PI / 180;
@@ -37,16 +47,33 @@ var Tracking = (function () {
   }
   function updateBar() {
     var el = $('track-stats');
-    if (el) el.textContent = (distM / 1609.344).toFixed(1) + ' mi · ' + fmtElapsed(elapsedMs());
+    /* gk (Tanner's call, 2026-11-16): no elapsed-time ticker — how long a
+       run takes swings with the day's catches and a dozen other things,
+       so the clock says nothing worth showing. Miles are the record. */
+    if (el) el.textContent = (distM / 1609.344).toFixed(1) + ' mi';
     var dot = $('track-dot');
     if (dot) dot.style.opacity = state === 'paused' ? '.35' : (Math.floor(Date.now() / 600) % 2 ? '1' : '.45');
+  }
+  /* gk: split a point list into segments at gap flags (p.g). A point
+     with .g starts a new segment; nothing is ever drawn or measured
+     across the break. */
+  function segments(list) {
+    var segs = [], cur = [];
+    (list || []).forEach(function (p) {
+      if (p.g && cur.length) { segs.push(cur); cur = []; }
+      cur.push(p);
+    });
+    if (cur.length) segs.push(cur);
+    return segs;
   }
   function draw() {
     if (!layer) return;
     layer.clearLayers();
-    if (pts.length > 1) {
-      line = L.polyline(pts.map(function (p) { return [p.lat, p.lng]; }), { color: '#e5484d', weight: 4, opacity: 0.85 }).addTo(layer);
-    }
+    segments(pts).forEach(function (seg) {
+      if (seg.length > 1) {
+        L.polyline(seg.map(function (p) { return [p.lat, p.lng]; }), { color: '#e5484d', weight: 4, opacity: 0.85 }).addTo(layer);
+      }
+    });
   }
   function onPos(pos) {
     if (state !== 'tracking') return;
@@ -58,18 +85,40 @@ var Tracking = (function () {
       var d = hav(last, p), dt = (p.t - last.t) / 1000;
       if (d < 8 && dt < 20) return;              /* standing still — GPS jitter is not travel */
       if (dt > 0 && d / dt > 24 && dt < 30) return; /* teleport jump, not a road */
-      distM += d;
+      if (dt * 1000 > GAP_MS) { p.g = 1; }       /* gk: the recorder was asleep/away — break here, count nothing across the gap (a long Pause breaks the same way: paused travel was never recorded) */
+      else distM += d;
     }
     pts.push(p); lastFixAt = p.t;
     draw(); updateBar();
   }
   function onErr() { /* a dropped fix is not a stopped track; the watch retries on its own */ }
+  /* gk: hold the screen awake while a track runs, so iOS does not
+     suspend the app mid-run. Best-effort: unsupported browsers skip it,
+     and iOS drops the lock when the app leaves the screen — it is
+     re-acquired on return (visibilitychange below). The gap break
+     covers whatever still gets through. */
+  function acquireWake() {
+    if (!('wakeLock' in navigator) || wakeSentinel) return;
+    try {
+      navigator.wakeLock.request('screen').then(function (s) {
+        wakeSentinel = s;
+        s.addEventListener('release', function () { wakeSentinel = null; });
+      }).catch(function () { /* not visible / not allowed — the gap break covers it */ });
+    } catch (e) {}
+  }
+  function releaseWake() {
+    if (wakeSentinel) { try { wakeSentinel.release(); } catch (e) {} wakeSentinel = null; }
+  }
+  document.addEventListener('visibilitychange', function () {
+    if (document.visibilityState === 'visible' && state === 'tracking') acquireWake();
+  });
   function start() {
     if (state !== 'idle') return;
     if (!navigator.geolocation) { toast('This phone has no GPS available to the app.'); return; }
     clearSaved();
     pts = []; distM = 0; startT = Date.now(); pauseAccum = 0;
     state = 'tracking';
+    acquireWake();
     watchId = navigator.geolocation.watchPosition(onPos, onErr, { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 });
     timer = setInterval(updateBar, 500);
     $('track-bar').classList.add('show');
@@ -102,6 +151,7 @@ var Tracking = (function () {
   var pending = null;
   function stop() {
     if (state === 'idle') return;
+    releaseWake();
     if (watchId !== null) { try { navigator.geolocation.clearWatch(watchId); } catch (e) {} watchId = null; }
     if (timer) { clearInterval(timer); timer = null; }
     state = 'idle';
@@ -110,16 +160,28 @@ var Tracking = (function () {
     var cov = coverage();
     var miles = distM / 1609.344;
     pending = { miles: miles, elapsed: elapsedMs(), cov: cov, pts: pts.slice() };
-    $('track-done-stats').innerHTML = '<strong>' + miles.toFixed(1) + ' mi</strong> · ' + fmtElapsed(pending.elapsed) + ' on the line';
+    $('track-done-stats').innerHTML = '<strong>' + miles.toFixed(1) + ' mi</strong> on the line';
     $('track-done-cov').innerHTML = cov.passed.length + ' of ' + (cov.passed.length + cov.missed.length) + ' active sets passed' +
       (cov.missed.length ? '<br><span class="mk-safety">Missed: ' + cov.missed.map(function (n) { return esc(n); }).join(', ') + '</span>' : '<br>Every active set on this line got a visit.');
     openSheet('sheet-track-done');
   }
   function discard() { pending = null; if (layer) layer.clearLayers(); clearSaved(); closeSheets(); }
-  function downsample(arr, max) {
+  function downsampleSeg(arr, max) {
     if (arr.length <= max) return arr.map(function (p) { return [Math.round(p.lat * 1e5) / 1e5, Math.round(p.lng * 1e5) / 1e5]; });
     var step = arr.length / max, out = [];
     for (var i = 0; i < arr.length; i += step) { var p = arr[Math.floor(i)]; out.push([Math.round(p.lat * 1e5) / 1e5, Math.round(p.lng * 1e5) / 1e5]); }
+    return out;
+  }
+  /* gk: downsample per segment so a saved route keeps its gap breaks.
+     One segment saves in the original flat shape ([[lat,lng],...]);
+     several save as an array of those arrays. drawSaved reads both. */
+  function downsample(arr, max) {
+    var segs = segments(arr);
+    if (segs.length <= 1) return downsampleSeg(arr, max);
+    var out = [];
+    segs.forEach(function (seg) {
+      out.push(downsampleSeg(seg, Math.max(2, Math.round(max * seg.length / Math.max(1, arr.length)))));
+    });
     return out;
   }
   function saveToMileage() {
@@ -141,9 +203,16 @@ var Tracking = (function () {
   function drawSaved(track) {
     if (!savedLayer || !track || !track.length) return;
     savedLayer.clearLayers();
-    L.polyline(track, { color: '#e5484d', weight: 4, opacity: 0.85 }).addTo(savedLayer);
+    /* gk: a saved track is either the flat shape ([[lat,lng],...]) or,
+       when the run had recording gaps, an array of segment arrays. */
+    var isSegs = Array.isArray(track[0]) && track[0].length > 0 && Array.isArray(track[0][0]);
+    var lines = isSegs ? track : [track], all = [];
+    lines.forEach(function (seg) {
+      if (seg && seg.length > 1) L.polyline(seg, { color: '#e5484d', weight: 4, opacity: 0.85 }).addTo(savedLayer);
+      (seg || []).forEach(function (p) { all.push(p); });
+    });
     syncRouteBar();
-    if (mapRef) mapRef.fitBounds(L.latLngBounds(track.map(function (p) { return L.latLng(p[0], p[1]); })), { padding: [30, 30] });
+    if (mapRef && all.length) mapRef.fitBounds(L.latLngBounds(all.map(function (p) { return L.latLng(p[0], p[1]); })), { padding: [30, 30] });
   }
   /* Q200 (2026-10-18): Tanner — a drawn route had NO way off the map. The
      route bar's Hide button, a fresh track, and a discard all clear it. */
@@ -216,5 +285,5 @@ var Tracking = (function () {
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', wire);
   else wire();
-  return { attach: attach, start: start, syncFab: syncFab, active: function () { return state !== 'idle'; }, drawSaved: drawSaved, clearSaved: clearSaved, rescuePending: rescuePending, _test: { hav: hav, start: start, onPos: onPos, stop: stop, state: function () { return state; }, pts: function () { return pts; }, miles: function () { return distM / 1609.344; } } };
+  return { attach: attach, start: start, syncFab: syncFab, active: function () { return state !== 'idle'; }, drawSaved: drawSaved, clearSaved: clearSaved, rescuePending: rescuePending, _test: { hav: hav, start: start, onPos: onPos, stop: stop, state: function () { return state; }, pts: function () { return pts; }, miles: function () { return distM / 1609.344; }, segs: function () { return segments(pts).length; }, downsample: downsample, wake: function () { return !!wakeSentinel; } } };
 })();
