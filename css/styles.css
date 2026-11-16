@@ -818,6 +818,11 @@ body.route-locked #tabbar { pointer-events: none; opacity: .35; }
 .trip-block .line-row { border: none; padding: 0; margin-bottom: 0; }
 .trip-block .trip-photogrid:not(:empty) { margin-top: 8px; }
 .trip-block + .trip-block { margin-top: 10px; }
+/* gl: collapsible trip rows — the body stays shut until the row opens. */
+.trip-body { display: none; }
+.trip-block.open .trip-body { display: block; margin-top: 8px; }
+.trip-chev { align-self: center; opacity: .65; font-size: 14px; }
+.trip-block.open .trip-chev { transform: rotate(90deg); }
 .lic-item { position: relative; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--line); background: #000; aspect-ratio: 4/3; }
 .lic-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .lic-item button { position: absolute; top: 6px; right: 6px; width: 40px; height: 40px; min-height: 0; border-radius: 50%; background: rgba(0,0,0,.65); color: #fff; font-size: 18px; padding: 0; }
