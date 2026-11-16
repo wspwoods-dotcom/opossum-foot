@@ -32,7 +32,7 @@ var STATES = [
   { code: "MA", name: "Massachusetts", file: "massachusetts-2026-27.json", provisional: false },
   { code: "MI", name: "Michigan", file: "michigan-2026-27.json", provisional: false },
   { code: "MN", name: "Minnesota", file: "minnesota-2026-27.json", provisional: false },
-  { code: "MS", name: "Mississippi", file: "mississippi-2026-27.json", provisional: true },
+  { code: "MS", name: "Mississippi", file: "mississippi-2026-27.json", provisional: false },
   { code: "MO", name: "Missouri", file: "missouri-2026-27.json", provisional: false },
   { code: "MT", name: "Montana", file: "montana-2026-27.json", provisional: false },
   { code: "NE", name: "Nebraska", file: "nebraska-2026-27.json", provisional: false },
@@ -41,7 +41,7 @@ var STATES = [
   { code: "NJ", name: "New Jersey", file: "new-jersey-2026-27.json", provisional: false },
   { code: "NM", name: "New Mexico", file: "new-mexico-2026-27.json", provisional: false },
   { code: "NY", name: "New York", file: "new-york-2026-27.json", provisional: false },
-  { code: "NC", name: "North Carolina", file: "north-carolina-2026-27.json", provisional: true },
+  { code: "NC", name: "North Carolina", file: "north-carolina-2026-27.json", provisional: false },
   { code: "ND", name: "North Dakota", file: "north-dakota-2026-27.json", provisional: false },
   { code: "OH", name: "Ohio", file: "ohio-2026-27.json", provisional: false },
   { code: "OK", name: "Oklahoma", file: "oklahoma-2026-27.json", provisional: false },
@@ -53,7 +53,7 @@ var STATES = [
   { code: "TN", name: "Tennessee", file: "tennessee-2026-27.json", provisional: false },
   { code: "TX", name: "Texas", file: "texas-2026-27.json", provisional: false },
   { code: "UT", name: "Utah", file: "utah-2026-27.json", provisional: false },
-  { code: "VT", name: "Vermont", file: "vermont-2026-27.json", provisional: true },
+  { code: "VT", name: "Vermont", file: "vermont-2026-27.json", provisional: false },
   { code: "VA", name: "Virginia", file: "virginia-2026-27.json", provisional: false },
   { code: "WA", name: "Washington", file: "washington-2026-27.json", provisional: false },
   { code: "WV", name: "West Virginia", file: "west-virginia-2026-27.json", provisional: false },
@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-11-15gf';
+var APP_VERSION = 'beta 0.1 · build 2026-11-15gg';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
