@@ -51,12 +51,16 @@ can change it any time in Settings.
   ranked by raw catch counts. Filter by season or species, or put two lures
   head-to-head.
 - **Lines** — Your trap lines, each with its own mileage log.
-- **History** — Every catch and event you've logged. Flip between By date,
-  By species, and By Trap Type, search the lot, or chip it down by
-  disposition. (Reports and CSV exports live in Settings → Backup &
-  Reports.)
-- **Totals** — Your season numbers. Rows show the title and kept count
-  only — tap one to see the details.
+- **History** — Every catch and event you've logged. Flip between By date
+  and By Trap Type, search the lot, filter by disposition, and switch
+  between this season, last season, and all time. (Species counts live on
+  Totals now.) The **Photo gallery** button at the top gathers every photo
+  on the line in one place. (Reports and CSV exports live in Settings →
+  Backup & Reports.)
+- **Totals** — Your season numbers in four cards: By Species, By Set, By
+  Disposition, and By Month. Rows show the title and kept count only — tap
+  one to see the details. Tap a card's header to fold it away or open it
+  back up.
 - **Seasons** — Season dates and reminders for your state, species by
   species.
 - **Paperwork** — Your license photos plus the landowner notebook: names,
@@ -103,13 +107,19 @@ licenses, history, and totals, all separate.
    Each gets its own stack of rows: bait, lure, urine, plus Other
    Attractants for the rest of it — feathers, squeakers, T-bones, foil,
    whatever you're running. Tap "+ Add Another" to stack more (up to six
-   per field). Anything you type gets remembered, so next time you just tap
-   it instead of typing it again. Fill these in honestly — this is what
-   makes the Totals and Scorecard tabs worth anything.
+   per field). The boxes work by typing: start typing and the matches
+   appear — the list stays shut until you type. Everything you've run
+   before is remembered, so a letter or two brings it right back, and
+   there's a "None" in every box for a set that carries nothing there.
+   Fill these in honestly — this is what makes the Totals and Scorecard
+   tabs worth anything.
 7. **Set type** — Flat, Pocket, Dirt hole, and the rest, grouped Land and
-   Water.
-8. **Status** — four buttons now, not a dropdown: Active, Sprung, Pulled,
-   Missing. New sets start Active. If a trap goes missing, the app asks
+   Water, in one A–Z run. A type you type in yourself under "Other…" is
+   remembered and joins the A–Z list for good; "Other…" itself always
+   stays at the bottom.
+8. **Status** — five buttons now, not a dropdown: Active, Sprung, Pulled,
+   Missing, and Prospect (a spot you're planning on but haven't set yet).
+   New sets start Active. If a trap goes missing, the app asks
    why: Stolen, Mother Nature, Can't locate, Removed, or Confiscated (that
    one asks for the details and lets you snap the citation). Find it again
    and "Mark recovered" puts it back to Pulled.
@@ -129,6 +139,13 @@ Red asterisks on the set form mean the same as on the log form — the app
 won't save without them. The coordinates sit at the bottom of the form (and
 the set detail too) — tap them to copy, handy when you're texting a buddy
 your spot.
+
+**Notes on a set are dated entries.** Type in the Notes box and tap
+**＋ Add note** — the note files with today's date, newest first, so the
+set's story reads in order ("rebaited with Ghost Dancer," "sign everywhere
+but no takers yet"). Notes you wrote before entries existed carry in as one
+undated "Earlier note." Dictated memos file as dated entries too, the
+moment you stop recording.
 
 ## Logging a catch — step by step
 
@@ -157,10 +174,10 @@ your spot.
 The app snapshots the set's bait, lure, and trap onto the log entry, so even
 if you change the set later, the record of *that catch* stays honest.
 
-**iPhone folks:** the Voice-to-notes button can't reach Apple's speech engine
-in the installed app, so it'll tell you straight and point you at the fix —
-tap the notes box, hit the mic key on your keyboard, and dictate. Same
-field, same result.
+**iPhone folks:** there's no record button in the app on iPhone — Apple's
+speech engine can't be reached from the installed app, so the app doesn't
+pretend otherwise. Tap the notes box, hit the 🎤 key on your keyboard, and
+dictate. Same field, same result.
 
 ## "Other events" — the stuff that isn't a catch
 
@@ -219,7 +236,11 @@ to lowest.
 - **By disposition:** how it all shook out — dispatched, released,
   transported, kept alive. Tap a disposition row and it breaks down by
   species, so you see exactly what got released and what got dispatched.
-- Toggle the sections on and off right on the tab.
+- **By month:** your catches grouped by calendar month, in the order the
+  season happened. The headline is the month's total — tap it for the
+  disposition breakdown.
+- All four cards always stand. Tap a card's header to fold it shut or open
+  it back up.
 
 ## Scorecard — what's actually producing
 
@@ -234,9 +255,12 @@ two and run them head-to-head.
 
 ## The little sponsor logos
 
-Some bait and lure rows wear a small sponsor badge — that's a maker who
-helps keep this app free. Tap the badge to read who they are. Tapping it
-never fills anything in; your pick is still yours.
+In the bait and lure lists, sponsor rows carry the maker's logo — that's a
+maker who helps keep this app free. Tap the logo to read their bio: who
+they are, what they make, and a link to their site. Tapping it never fills
+anything in or picks for you; your pick is still yours. You'll also see
+sponsor names on the opening screen and beside your county name on the
+map — those are nameplates only and don't tap through to anything.
 
 ## Weather lives on the map now
 
@@ -255,6 +279,16 @@ points where your scent is going — downwind, not where the wind's coming
 from. The arrows refresh on their own; turn them off in Settings under
 Feature Toggles if they're clutter.
 
+## Finding a set from the Show pill
+
+The **Show** pill on the map filters which sets are drawn — and the list
+under it names every set on the line, grouped by status (Active, Sprung,
+Pulled, Missing, Prospect) and A–Z inside each group. Tap a set's name and
+the map flies straight to it. If that set's status was filtered off, the
+filter switches it back on first, so you always land looking at the set
+you picked. The filters apply the moment you tap them — there's no Done
+button to hunt for.
+
 ## Follow-me GPS, how it actually works
 
 One tap on the crosshair and the map follows you — and it stays following.
@@ -268,13 +302,18 @@ app says "Waiting for GPS…" and holds the save.
 
 ## Route and Mileage
 
-Every line has a Mileage button. Tap **+ ODOMETER** to log trips with start
-and end odometer readings — date, miles, notes — and the app keeps a running
-total. It also draws a straight-line route estimate between your sets on the
-map (dashed line; it reads 20–40% under real road miles, so treat it as a
-rough check, not a receipt). There's a mileage on/off toggle in the mileage
-screen, and "‹ Back to mileage" drops the route line off the map. Mileage
-exports to CSV from Backup & Reports.
+The **Route and Mileage** section lives on the Paperwork tab. Tap
+**Log Trip** to record a run with start and end odometer readings — date,
+miles, notes — and the app keeps a running total for the line. It also
+draws a straight-line route estimate between your sets on the map (dashed
+line; it reads 20–40% under real road miles, so treat it as a rough check,
+not a receipt). Mileage exports to CSV from Backup & Reports.
+
+The on/off switch is **Mileage log** in Settings → Feature Toggles, and it
+only governs recording *new* trips. Turn it off and your recorded trips,
+the Route and Mileage section, and the CSV export all stay right where
+they were — you just can't add new ones until you turn it back on. The
+section only disappears when a line has no trips recorded at all.
 
 ## Bringing in Google Maps pins
 
@@ -284,23 +323,49 @@ by one. On your phone's browser, go to takeout.google.com, tap
 emails you that it's ready, download it, tap the file in your Files app
 to unzip it, and look in the **Saved** folder — there's one spreadsheet
 (.csv) file per list. Then, in Opossum Foot: switch to the trap line the
-pins belong on first (imports land on the line that's active), tap the
-**Data** tab, and use **Import pins from Google Maps** to pick that
-file. The app digs each pin's coordinates out of its Maps link itself,
-carries the names over, and names any pin that truly has no location
-instead of planting it in the ocean. If a pin lands on top of a set you
-already have, the app stops and asks — skip it, merge it, or delete the
-incoming pin. Your app data is never touched by an import. Just one pin?
-Share it from Google Maps, copy the link, and use **Paste a Maps link**
-in the Data tab. Either way, you fill in the trap and attractant details
-afterward by tapping each pin on the map. The full slow, plain-language
-walkthrough lives in `google-pins-import-for-new-users.md`.
+pins belong on first (imports land on the line that's active), open
+**Settings → Backup & Reports**, and use **Import pins from Google Maps**
+to pick that file. It also reads map files (.kml / .kmz) and place files
+(.geojson / .json) from Google Maps or My Maps. The app digs each pin's
+coordinates out of its Maps link itself, carries the names over, and
+names any pin that truly has no location instead of planting it in the
+ocean. If a pin lands on top of a set you already have, the app stops
+and asks — skip it, merge it, or delete the incoming pin. Your app data
+is never touched by an import. Just one pin? Share it from Google Maps,
+copy the link, and use **Paste a Maps link** in the same place. Either
+way, you fill in the trap and attractant details afterward by tapping
+each pin on the map.
 
-## Saving photos to your phone
+## Photos — the gallery, zoom, and sharing them
 
-Every photo viewer in the app has a "Save to camera roll" button. It hands
-the photo to your phone's share sheet — one more tap and it's in your
-library. Handy for the license photos and the set-build shots.
+The **Photo gallery** button at the top of History gathers the active
+line's photos in one grid, each labeled by what it belongs to — a set, a
+catch, or paperwork. Tap any photo anywhere in the app to open it full
+screen, and pinch to zoom — zoom works on every photo, not just some.
+
+Every photo viewer has a **Save Photo** button. It hands the photo to your
+phone's share sheet — one more tap and it's in your library. Handy for the
+license photos and the set-build shots.
+
+**Sharing photos with another trapper:** in the Photo gallery, tap
+**Share photo pack**. That builds one file carrying the line's set and
+catch photos (license photos and other paperwork stay home) and hands it
+to your share sheet — AirDrop it, send it, however you like. On the
+receiving phone, use **Import** in Settings → Backup & Reports and pick
+the pack: each photo re-attaches to the set with the same name on the
+imported line, and catch photos match up to their catch by date and
+species. If the sets aren't on that phone yet, import the line share first
+(see the next section), then the pack. The same pack can't be added twice.
+
+## Sharing a whole line
+
+Handing a line to a buddy, or moving it to a new phone? In Settings →
+Backup & Reports, tap **Share this line**. One file carries
+the line's sets and catch logs — share it by AirDrop or Nearby Share. On
+the receiving phone, Import brings it in as a **new line** of its own,
+beside the lines already there: nothing merges, and nothing already on
+that phone is changed. Photos don't ride in a line share — they travel in
+a photo pack, above. The same file can't be imported twice.
 
 ## Deleting means gone
 
@@ -352,7 +417,13 @@ backup and all the reports live in that one place now.
 - **Full backup** is at the top: **"💾 Back up all data (JSON)"** — sets,
   catches, lines, landowners, the lot. Importing it restores everything.
   Do this one, not just the CSVs.
-- **Reports** is below it: set the date range and filter chips, watch the
+- **Your pictures ride separately:** **Export photos & files (ZIP)** saves
+  every photo and voice memo from every line — set and catch photos,
+  licenses, permission slips — as one zip file with an index saying what
+  each file is. The JSON backup holds your data but not your pictures;
+  this file is their backup.
+- **Reports** is below it: set the date range and the filter dropdowns
+  (each one opens a checklist — pick what you want and tap Done), watch the
   match count ("37 of 210 catches match"), then download the report you
   want. The filters shape the catches report — the sets and mileage
   downloads always include everything.
