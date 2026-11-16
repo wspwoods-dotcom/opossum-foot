@@ -308,6 +308,16 @@ draws a straight-line route estimate between your sets on the map (dashed
 line; it reads 20–40% under real road miles, so treat it as a rough check,
 not a receipt). Mileage exports to CSV from the Data tab.
 
+Or tap **Track a route** (same section, or the track button on the map)
+and the app records your actual path by GPS while you run the line. Stop
+the track and it files itself as a mileage trip, with a readout of which
+active sets you passed and which you missed. While a track runs, the app
+keeps your screen awake so the recording stays unbroken. If recording is
+interrupted anyway — the phone sleeps, or you leave the app — the route
+breaks at that spot and picks back up when you return. It never draws a
+line across ground it didn't record, and the miles count only the path
+actually traveled.
+
 The on/off switch is **Mileage log** in Settings → Feature Toggles, and it
 only governs recording *new* trips. Turn it off and your recorded trips,
 the Route and Mileage section, and the CSV export all stay right where
