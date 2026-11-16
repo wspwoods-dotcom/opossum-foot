@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-11-16gh';
+var APP_VERSION = 'beta 0.1 · build 2026-11-16gi';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -10418,6 +10418,42 @@ function boot() {
       renderVariationOptions();
       var cust = $('sf-setvariation-custom');
       if (cust) cust.value = '';
+    }
+  });
+  /* gi (2026-11-16, Tanner): a name typed under Other… joins its list the
+     moment it's typed — not at the next save. On the box's change (blur),
+     remember it and put it in the live dropdown right away: the Set Type
+     picker rebuilds with the custom folded into the A–Z run (his place in
+     the form untouched — the picker stays on Other… with his text in the
+     box); every other dropdown gains the option just ahead of Other…. */
+  document.addEventListener('change', function (e) {
+    var t = e.target;
+    if (!t || t.tagName !== 'INPUT' || !/-othertext$/.test(t.id || '')) return;
+    var selId = t.id.slice(0, -'-othertext'.length);
+    var typed = (t.value || '').trim();
+    if (!typed) return;
+    rememberCustomOption(selId, typed);
+    var sel = $(selId);
+    if (!sel || sel.tagName !== 'SELECT') return;
+    if (selId === 'sf-settype') {
+      renderSetTypeOptions();
+      sel.value = OTHER_VALUE;
+      renderVariationOptions();
+      toggleOtherWrap(sel);
+      return;
+    }
+    var has = false, otherIdx = -1;
+    for (var i = 0; i < sel.options.length; i++) {
+      var o = sel.options[i];
+      if (o.value === typed || o.text === typed) has = true;
+      if (o.value === OTHER_VALUE) otherIdx = i;
+    }
+    if (!has) {
+      var opt = document.createElement('option');
+      opt.value = typed;
+      opt.textContent = typed;
+      if (otherIdx !== -1) sel.insertBefore(opt, sel.options[otherIdx]);
+      else sel.appendChild(opt);
     }
   });
   /* demo mode: seed fictional data only on a completely fresh install */
