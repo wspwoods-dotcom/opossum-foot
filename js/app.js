@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-11-16gi';
+var APP_VERSION = 'beta 0.1 · build 2026-11-16gj';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -3556,6 +3556,10 @@ function saveSetForm() {
      while a field was on are the set's real data, and an unrelated edit
      must not strip them. */
   var ntd = td, nrt = rt, nSetType = selVal('sf-settype'), nVariation = variationFieldValue();
+  /* gj: a variation typed in the custom box is remembered under its
+     foundation at save too (the box's change listener usually beat us here). */
+  var vCust = $('sf-setvariation-custom');
+  if (nSetType && vCust && vCust.value.trim()) rememberCustomOption('sf-setvariation:' + nSetType, vCust.value.trim());
   if (!editingSetId) {
     ntd = {}; for (var nk in td) if (Object.prototype.hasOwnProperty.call(td, nk)) ntd[nk] = td[nk];
     nrt = { t: rt.t, spring: rt.spring };
@@ -9423,7 +9427,16 @@ function renderVariationOptions() {
   var sel = $('sf-setvariation');
   if (!sel) return;
   var f = $('sf-settype') ? $('sf-settype').value : '';
-  var names = SET_VARIATIONS[f] || [];
+  if (f === OTHER_VALUE) { var ot = $('sf-settype-othertext'); f = ot ? ot.value.trim() : ''; }
+  var names = (SET_VARIATIONS[f] || []).slice();
+  /* gj (2026-11-16, Tanner): his remembered custom variations for this
+     foundation ride after its family names — a variation typed once is a
+     plain dropdown option from then on, under the set type it was typed on. */
+  var seenV = {};
+  names.forEach(function (t) { seenV[t.toLowerCase()] = 1; });
+  if (f) customOptionsFor('sf-setvariation:' + f).forEach(function (t) {
+    if (!seenV[t.toLowerCase()]) { names.push(t); seenV[t.toLowerCase()] = 1; }
+  });
   var html = '<option value="">— None —</option>';
   names.forEach(function (t) { html += '<option>' + esc(t) + '</option>'; });
   sel.innerHTML = html;
@@ -9437,8 +9450,15 @@ function setVariationFields(foundation, name) {
   if (!sel) return;
   sel.value = '';
   if (!name) return;
-  if ((SET_VARIATIONS[foundation] || []).indexOf(name) !== -1) sel.value = name;
-  else if (cust) cust.value = name;
+  /* gj: a family name OR a remembered custom selects in the dropdown —
+     try the option itself, not just the family list. */
+  sel.value = name;
+  if (sel.value === name) return;
+  sel.value = '';
+  if (cust) cust.value = name;
+  /* A stored custom that predates remembering joins the list now, so it
+     opens as a plain option from here on. */
+  if (foundation) rememberCustomOption('sf-setvariation:' + foundation, name);
 }
 /* The variation as it should be stored: a typed custom name wins over the
    dropdown pick; blank when neither is set. */
@@ -10455,6 +10475,23 @@ function boot() {
       if (otherIdx !== -1) sel.insertBefore(opt, sel.options[otherIdx]);
       else sel.appendChild(opt);
     }
+  });
+  /* gj (2026-11-16, Tanner): same rule for the Custom variation box — a
+     variation typed once is remembered under the set type it's typed on
+     and becomes the dropdown's selected option on the spot; the box
+     clears because the name lives in the list now. */
+  document.addEventListener('change', function (e) {
+    var t = e.target;
+    if (!t || t.id !== 'sf-setvariation-custom') return;
+    var typed = (t.value || '').trim();
+    if (!typed) return;
+    var f = selVal('sf-settype');
+    if (!f) return;
+    rememberCustomOption('sf-setvariation:' + f, typed);
+    renderVariationOptions();
+    var sel = $('sf-setvariation');
+    if (sel) sel.value = typed;
+    t.value = '';
   });
   /* demo mode: seed fictional data only on a completely fresh install */
   if (DEMO && Store.data.sets.length === 0 && Store.data.logs.length === 0) {
