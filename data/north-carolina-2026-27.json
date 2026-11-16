@@ -3,29 +3,50 @@
  "state": "NC",
  "state_name": "North Carolina",
  "season_year": "2026-27",
- "retrieved_at": "2026-09-18",
+ "retrieved_at": "2026-11-15",
  "disclaimer": "Reminder reference only — NOT legal authority. Season dates, zones, and limits are set annually and can change. Always verify current regulations with the North Carolina Wildlife Resources Commission before hunting or trapping.",
  "sources": [
   {
-   "id": "nc-season-glance",
-   "title": "NCWRC 2026-2027 Season-Dates-at-a-Glance",
-   "url": "https://www.ncwildlife.gov/index.php/regulations/2026-2027-season-dates-glance/download?attachment",
+   "id": "nc-digest-trapping",
+   "title": "NC 2026-2027 Regulations Digest — Trapping Regulations (official digest via eRegulations)",
+   "url": "https://www.eregulations.com/northcarolina/hunting/trapping-regulations",
    "type": "agency_booklet",
-   "notes": "Official NCWRC season dates summary."
+   "notes": "Trapping seasons table (Oct. 1–Feb. 28 statewide; Jan. 2–Jan. 23 fox season in Clay, Graham, Henderson, Macon, Tyrrell Cos.); trappable species list; fox/bobcat/otter pelt tagging rules and tag fees."
+  },
+  {
+   "id": "nc-digest-small-game",
+   "title": "NC 2026-2027 Regulations Digest — Small Game & Other Seasons (official digest via eRegulations)",
+   "url": "https://www.eregulations.com/northcarolina/hunting/small-game-other-seasons",
+   "type": "agency_booklet",
+   "notes": "Raccoon/opossum hunting Oct. 12–Feb. 28 (raccoon daily limit 3, no possession/season limits; opossum no limits); bobcat Oct. 12–Feb. 28, no limits; no closed hunting season on private lands for groundhog, nutria, coyote, striped skunk, armadillo."
+  },
+  {
+   "id": "nc-furbearer-newsletter-2026",
+   "title": "NCWRC Carolina Furbearer Newsletter, Fall/Winter 2026-2027 (Vol. 20, Issue 2)",
+   "url": "https://ncwildlife.gov/fall-winter-2026-furbearer-newsletter/open",
+   "type": "agency_page",
+   "notes": "Uniform statewide trapping season Oct. 1, 2026–Feb. 28, 2027 for all 100 counties (14 listed species); nutria no closed season east of I-77, no depredation permit needed there; depredation permit is free; 55 counties have fox trapping seasons; no new fox counties as of Sept. 1, 2026."
   },
   {
    "id": "nc-10b-0303",
    "title": "15A NCAC 10B .0303 (open seasons — trapping)",
    "url": "http://reports.oah.state.nc.us/ncac/title%2015a%20-%20environmental%20quality/chapter%2010%20-%20wildlife%20resources%20and%20water%20safety/subchapter%20b/15a%20ncac%2010b%20.0303.pdf",
    "type": "administrative_code",
-   "notes": "Trapping Oct 1–last day of February; nutria no closed season east of I-77."
+   "notes": "Trapping of fur-bearing animals (G.S. 113-129(7a)) plus coyotes, armadillos, groundhogs: Oct. 1–last day of February; coyote trapping also allowed during local fox trapping seasons; no closed trapping season for nutria east of I-77."
+  },
+  {
+   "id": "nc-fox-seasons",
+   "title": "NCWRC Fox Hunting and Trapping Seasons publication (updated Aug. 19, 2026)",
+   "url": "http://ncwildlife.gov/foxseasons",
+   "type": "agency_page",
+   "notes": "County-by-county fox seasons are published here; the publication is image-based (25 pp.) and its per-county tables were not machine-readable, so county local-law fox seasons are noted, not modeled."
   },
   {
    "id": "nc-10b-0205",
    "title": "15A NCAC 10B .0205 (raccoon and opossum hunting)",
    "url": "http://reports.oah.state.nc.us/ncac/title%2015a%20-%20environmental%20quality/chapter%2010%20-%20wildlife%20resources%20and%20water%20safety/chapter%2010%20rules.html",
    "type": "administrative_code",
-   "notes": "Raccoon and opossum hunting from the Monday on or nearest Oct 15–last day of February."
+   "notes": "Raccoon and opossum hunting from the Monday on or nearest Oct. 15 (Oct. 12, 2026) through the last day of February; 2026-27 dates confirmed directly in the Regulations Digest."
   },
   {
    "id": "nc-gs-113-129",
@@ -37,7 +58,7 @@
  ],
  "license_summary": {
   "trapping_license": "A trapping license is required to trap furbearers. Coyote trapping is also allowed during local fox trapping seasons in counties with locally established fox seasons.",
-  "depredation": "Outside the trapping season, animals can be trapped only under a free Depredation Permit; landowners whose property has been damaged by beavers may take beaver on their property anytime by any lawful method without a depredation permit (depredation provisions are noted here, not modeled as seasons)."
+  "depredation": "Outside the trapping season, animals can be trapped only under a Depredation Permit (free, from a Wildlife Enforcement Officer, Wildlife District Biologist, or Licensed Wildlife Control Agent); landowners whose property has been damaged by beavers may take beaver on their property anytime by any lawful method without a depredation permit, and no depredation permit is required to trap nutria east of I-77 (depredation provisions are noted here, not modeled as seasons)."
  },
  "species": [
   {
@@ -160,12 +181,14 @@
       "daily_bag": null,
       "season_bag": null,
       "possession_limit": null,
-      "limit_notes": "Hunting: Oct. 12, 2026 – Feb. 28, 2027, statewide."
+      "limit_notes": "No daily, season, or possession limits."
      },
-     "notes": "Hunting: Oct. 12, 2026 – Feb. 28, 2027, statewide."
+     "notes": "Hunting: Oct. 12, 2026 – Feb. 28, 2027, statewide; no daily, season, or possession limits."
     }
    ],
-   "permit_requirements": [],
+   "permit_requirements": [
+    "Bobcat and otter pelts/carcasses must be tagged with an NCWRC tag before being sold or otherwise transferred; tags are free from the Wildlife Resources Commission."
+   ],
    "notes": ""
   },
   {
@@ -233,11 +256,43 @@
       "limit_notes": "Trapping: Oct. 1, 2026 – Feb. 28, 2027, statewide. County fox seasons established by local law vary by county (see ‘Foxes’ in the Regulations Digest); not modeled county-by-county."
      },
      "notes": "Trapping: Oct. 1, 2026 – Feb. 28, 2027, statewide. County fox seasons established by local law vary by county (see ‘Foxes’ in the Regulations Digest); not modeled county-by-county."
+    },
+    {
+     "method": "trapping",
+     "land_type": "all",
+     "open_date": "2027-01-02",
+     "close_date": "2027-01-23",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "NC-fox-jan-five-counties",
+       "zone_name": "Clay, Graham, Henderson, Macon, and Tyrrell counties",
+       "area_type": "counties",
+       "counties": [
+        "Clay",
+        "Graham",
+        "Henderson",
+        "Macon",
+        "Tyrrell"
+       ]
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": 2,
+      "season_bag": 10,
+      "possession_limit": null,
+      "limit_notes": "Daily bag limit of two and a season bag limit of 10. Trappers must have fox tags prior to taking foxes, and the sale of live foxes under this season is prohibited."
+     },
+     "notes": "Fox trapping is allowed in Clay, Graham, Henderson, Macon and Tyrrell counties Jan. 2 – Jan. 23, 2027, with a daily bag limit of two and a season bag limit of 10. Trappers must have fox tags prior to taking foxes, and the sale of live foxes under this season is prohibited."
     }
    ],
-   "permit_requirements": [],
-   "notes": "County fox seasons set by local law vary by county and were not verified county-by-county for 2026-27; the statewide trapping season is modeled.",
-   "county_notes": "Fox trapping seasons exist only in about 55 of 100 counties, set by General Assembly local laws (the NCWRC cannot create fox seasons) — check ncwildlife.gov/foxseasons for your county."
+   "permit_requirements": [
+    "Fox pelts/carcasses must be tagged with an NCWRC tag before being sold or otherwise transferred (tag $2.25), except where local laws do not require fox tagging."
+   ],
+   "notes": "County fox seasons set by local law vary by county and were not verified county-by-county for 2026-27; the statewide trapping season is modeled, along with the Regulations Digest's January fox trapping season in Clay, Graham, Henderson, Macon, and Tyrrell counties.",
+   "county_notes": "Fox trapping seasons exist only in about 55 of 100 counties, set by General Assembly local laws (the NCWRC cannot create fox seasons; no new counties were added for 2026-27) — check ncwildlife.gov/foxseasons for your county."
   },
   {
    "common_name": "Groundhog",
@@ -492,7 +547,9 @@
      "notes": "Trapping: Oct. 1, 2026 – Feb. 28, 2027, statewide."
     }
    ],
-   "permit_requirements": [],
+   "permit_requirements": [
+    "Bobcat and otter pelts/carcasses must be tagged with an NCWRC tag before being sold or otherwise transferred; tags are free from the Wildlife Resources Commission."
+   ],
    "notes": ""
   },
   {
@@ -545,9 +602,9 @@
       "daily_bag": 3,
       "season_bag": null,
       "possession_limit": null,
-      "limit_notes": "daily bag 3."
+      "limit_notes": "Daily limit 3; no possession or season limits."
      },
-     "notes": "Hunting: Oct. 12, 2026 – Feb. 28, 2027; daily bag 3."
+     "notes": "Hunting: Oct. 12, 2026 – Feb. 28, 2027; daily limit 3; no possession or season limits."
     }
    ],
    "permit_requirements": [],
@@ -626,18 +683,18 @@
  ],
  "verification": {
   "regulation_year_confirmed": true,
-  "confirmation_notes": "NCWRC 2026-2027 Season-Dates-at-a-Glance, 15A NCAC 10B .0303/.0205, and N.C.G.S. § 113-129(7a) (official statute; ringtail not listed — dropped from dataset), read 2026-09-18.",
+  "confirmation_notes": "Verified 2026-11-15 against the official NC 2026-2027 Regulations Digest (Trapping Regulations and Small Game & Other Seasons, via eRegulations), the NCWRC Carolina Furbearer Newsletter Fall/Winter 2026-2027, and 15A NCAC 10B .0303. All modeled rows confirmed: statewide trapping Oct. 1, 2026–Feb. 28, 2027 for the 14 listed species; nutria no closed season east of I-77; raccoon/opossum/bobcat hunting Oct. 12, 2026–Feb. 28, 2027 with digest limits; fox/bobcat/otter pelt tagging requirements; five-county January fox trapping season added from the digest.",
   "known_gaps": [
-   "Fox hunting seasons are set by county local law; the NCWRC 'Fox Season Hunting and Trapping Seasons' publication (ncwildlife.gov/foxseasons) could not be fetched for verification — county fox seasons are a known gap.",
+   "Fox trapping and hunting seasons set by county local law (~55 counties) are not modeled county-by-county; the NCWRC 'Fox Hunting and Trapping Seasons' publication (ncwildlife.gov/foxseasons, updated Aug. 19, 2026) is image-based and its per-county tables could not be machine-read. The statewide season and the digest's five-county January season are modeled.",
+   "The digest also provides no closed hunting season on private lands for coyote, groundhog, nutria, striped skunk, and armadillo (and year-round beaver take by firearm/bow with landowner permission); consistent with this file's existing design, only dated hunting seasons are modeled as rows, and those provisions are covered in the license summary and notes.",
    "Scientific names are standard taxonomy, not stated in NCWRC regulations."
   ]
  },
- "provisional": true,
+ "provisional": false,
  "license_url": "https://gooutdoorsnorthcarolina.com",
  "license_vendor": "Go Outdoors North Carolina (Brandt)",
  "regs_url": "https://www.ncwildlife.gov/regulations/2026-2027-season-dates-glance/open",
- "regs_kind": "pdf"
-,
+ "regs_kind": "pdf",
  "warden_directory": {
   "label": "Report a violation",
   "url": "https://www.ncwildlife.gov/enforcement/nc-wildtip-turn-poachers-reward-program",

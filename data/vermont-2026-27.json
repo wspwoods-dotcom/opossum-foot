@@ -3,26 +3,47 @@
  "state": "VT",
  "state_name": "Vermont",
  "season_year": "2026",
- "provisional": true,
- "retrieved_at": "2026-09-18",
+ "provisional": false,
+ "retrieved_at": "2026-11-15",
  "disclaimer": "Reminder reference only \u2014 NOT legal authority. Season dates, zones, and limits are set annually and can change. Always verify current regulations with Vermont Fish & Wildlife before hunting or trapping.",
  "sources": [
   {
-   "id": "vt-dates-2026",
-   "title": "2026 Vermont Hunting & Trapping Seasons date sheet (VT Fish & Wildlife, publ. 7/8/2025)",
-   "url": "https://www.vtfishandwildlife.com/sites/fishandwildlife/files/documents/Seasons/2026-hunt-trap-dates.pdf.pdf",
-   "type": "agency_booklet",
-   "notes": "Official VFWD date sheet (dates inclusive). Text extracted 2026-09-18. Footnote: check the VFWD website for exceptions to these dates."
+   "id": "vt-seasons-page-2026-27",
+   "title": "Hunting and Trapping Seasons (Vermont Fish & Wildlife Department official seasons page)",
+   "url": "http://vtfishandwildlife.com/hunt/hunting-and-trapping-seasons",
+   "type": "agency_webpage",
+   "notes": "Live official VFWD seasons table incl. 2026-27 furbearer hunting and trapping dates. Fetched 2026-11-15. Confirms the 2026 date-sheet extraction of 2026-09-18."
+  },
+  {
+   "id": "vt-furbearer-rule-44",
+   "title": "10 App. V.S.A. section 44 - Furbearing species rule (VT Fish & Wildlife Board), as included in the Board's August 19, 2026 meeting packet",
+   "url": "https://www.vtfishandwildlife.com/sites/fishandwildlife/files/documents/VFWD-Board-Documents/2026/board-minutes-081926-app.pdf",
+   "type": "agency_rule",
+   "notes": "Section 5.0 establishes seasons and bag limits (formula dates, all dates inclusive); section 4.18 pelt tagging for bobcat/otter/fisher; section 4.23 annual trapper survey; section 4.20 coyote dog permit. Fetched 2026-11-15."
+  },
+  {
+   "id": "vt-license-fees-statute",
+   "title": "10 V.S.A. section 4255 - License fees (Vermont Statutes Online, Vermont Legislature)",
+   "url": "https://legislature.vermont.gov/statutes/fullchapter/10/105",
+   "type": "statute",
+   "notes": "Resident fees: trapping license $23.00; trapping license 17 & under $10.00. Fetched 2026-11-15."
+  },
+  {
+   "id": "vt-license-application",
+   "title": "Vermont Fish & Wildlife Department Sporting License Application (official fee table)",
+   "url": "https://vtfishandwildlife.com/sites/fishandwildlife/files/documents/Licenses%20Center/Printable%20Applications/ND/sporting-license-application.pdf",
+   "type": "agency_form",
+   "notes": "Resident / nonresident fees: Trapping $23.00 / $305.00; 5-year trapping $109.00 / $1,519.00; youth trapping $10.00 / $305.00. Fetched 2026-11-15."
   }
  ],
  "license_summary": {
-  "trapping_license": "NOT VERIFIED \u2014 license types/fees were not extracted; see Vermont Fish & Wildlife licensing before trapping.",
-  "tagging_reporting": "NOT VERIFIED \u2014 pelt tagging / harvest reporting requirements (otter, beaver, bobcat, fisher) could not be confirmed; agency site fetch failed 2026-09-18."
+  "trapping_license": "A Vermont trapping license is required to take animals with the use of traps (10 V.S.A. section 4252). Fees (10 V.S.A. section 4255; VFWD sporting license application): Resident trapping $23.00; resident youth trapping (17 & under) $10.00; resident 5-year trapping $109.00; nonresident trapping $305.00; nonresident 5-year trapping $1,519.00; nonresident youth trapping $305.00. Per the VFWD license application, trapping license eligibility requires proof of a previous license, a hunter/trapper safety card, or an affidavit.",
+  "tagging_reporting": "Bobcat, otter, and fisher pelts must be tagged (10 App. V.S.A. section 44, section 4.18): the taker must notify authorized Department staff within 48 hours of the close of the season and present pelts for tagging; tags remain affixed until the pelt is tanned; carcasses are surrendered at tagging; pelts may not be transported out of Vermont before tagging. Beaver and muskrat pelts carry no tagging requirement under section 44. ALL licensed trappers must complete and submit an annual biological collection trapper survey (trapping activity report) for the license season (section 4.23), and must report a trapped dog or cat to a warden within 24 hours of discovery."
  },
  "species": [
   {
    "common_name": "Mink",
-   "iac_reference": "2026 VT Hunting & Trapping Seasons date sheet (VT Fish & Wildlife Dept., publ. 7/8/2025)",
+   "iac_reference": "10 App. V.S.A. section 44 (Furbearing species rule) section 5.23; VT Fish & Wildlife Hunting and Trapping Seasons page (2026-27), fetched 2026-11-15",
    "scientific_name": "Neogale vison",
    "scientific_name_verified": false,
    "scientific_name_note": "Standard taxonomy; not stated on the 2026 VT date sheet.",
@@ -47,17 +68,17 @@
       "daily_bag": null,
       "season_bag": null,
       "possession_limit": null,
-      "limit_notes": "No bag limit stated on the date sheet."
+      "limit_notes": "No limit (10 App. V.S.A. section 44, section 5.23)."
      },
      "notes": ""
     }
    ],
    "permit_requirements": [],
-   "notes": ""
+   "notes": "No open hunting season for mink (10 App. V.S.A. section 44, section 5.23: by hunting - no open season)."
   },
   {
    "common_name": "Striped skunk",
-   "iac_reference": "2026 VT Hunting & Trapping Seasons date sheet (VT Fish & Wildlife Dept., publ. 7/8/2025)",
+   "iac_reference": "10 App. V.S.A. section 44 (Furbearing species rule) section 5.27; VT Fish & Wildlife Hunting and Trapping Seasons page (2026-27), fetched 2026-11-15",
    "scientific_name": "Mephitis mephitis",
    "scientific_name_verified": false,
    "scientific_name_note": "Standard taxonomy; not stated on the 2026 VT date sheet.",
@@ -82,7 +103,7 @@
       "daily_bag": null,
       "season_bag": null,
       "possession_limit": null,
-      "limit_notes": "No bag limit stated on the date sheet."
+      "limit_notes": "No limit (10 App. V.S.A. section 44, section 5.27)."
      },
      "notes": ""
     },
@@ -105,7 +126,7 @@
       "daily_bag": null,
       "season_bag": null,
       "possession_limit": null,
-      "limit_notes": "No bag limit stated on the date sheet."
+      "limit_notes": "No limit (10 App. V.S.A. section 44, section 5.27)."
      },
      "notes": "Date sheet: 'Open Year Round' for hunting. Check VFWD for exceptions to these dates."
     }
@@ -115,7 +136,7 @@
   },
   {
    "common_name": "Red fox",
-   "iac_reference": "2026 VT Hunting & Trapping Seasons date sheet (VT Fish & Wildlife Dept., publ. 7/8/2025)",
+   "iac_reference": "10 App. V.S.A. section 44 (Furbearing species rule) section 5.26; VT Fish & Wildlife Hunting and Trapping Seasons page (2026-27), fetched 2026-11-15",
    "scientific_name": "Vulpes vulpes",
    "scientific_name_verified": false,
    "scientific_name_note": "Standard taxonomy; not stated on the 2026 VT date sheet.",
@@ -140,7 +161,7 @@
       "daily_bag": null,
       "season_bag": null,
       "possession_limit": null,
-      "limit_notes": "No bag limit stated on the date sheet."
+      "limit_notes": "No limit (10 App. V.S.A. section 44, section 5.26)."
      },
      "notes": ""
     },
@@ -163,7 +184,7 @@
       "daily_bag": null,
       "season_bag": null,
       "possession_limit": null,
-      "limit_notes": "No bag limit stated on the date sheet."
+      "limit_notes": "No limit (10 App. V.S.A. section 44, section 5.26)."
      },
      "notes": ""
     }
@@ -173,7 +194,7 @@
   },
   {
    "common_name": "Gray fox",
-   "iac_reference": "2026 VT Hunting & Trapping Seasons date sheet (VT Fish & Wildlife Dept., publ. 7/8/2025)",
+   "iac_reference": "10 App. V.S.A. section 44 (Furbearing species rule) section 5.26; VT Fish & Wildlife Hunting and Trapping Seasons page (2026-27), fetched 2026-11-15",
    "scientific_name": "Urocyon cinereoargenteus",
    "scientific_name_verified": false,
    "scientific_name_note": "Standard taxonomy; not stated on the 2026 VT date sheet.",
@@ -198,7 +219,7 @@
       "daily_bag": null,
       "season_bag": null,
       "possession_limit": null,
-      "limit_notes": "No bag limit stated on the date sheet."
+      "limit_notes": "No limit (10 App. V.S.A. section 44, section 5.26)."
      },
      "notes": ""
     },
@@ -221,7 +242,7 @@
       "daily_bag": null,
       "season_bag": null,
       "possession_limit": null,
-      "limit_notes": "No bag limit stated on the date sheet."
+      "limit_notes": "No limit (10 App. V.S.A. section 44, section 5.26)."
      },
      "notes": ""
     }
@@ -231,7 +252,7 @@
   },
   {
    "common_name": "Raccoon",
-   "iac_reference": "2026 VT Hunting & Trapping Seasons date sheet (VT Fish & Wildlife Dept., publ. 7/8/2025)",
+   "iac_reference": "10 App. V.S.A. section 44 (Furbearing species rule) section 5.24; VT Fish & Wildlife Hunting and Trapping Seasons page (2026-27), fetched 2026-11-15",
    "scientific_name": "Procyon lotor",
    "scientific_name_verified": false,
    "scientific_name_note": "Standard taxonomy; not stated on the 2026 VT date sheet.",
@@ -256,7 +277,7 @@
       "daily_bag": null,
       "season_bag": null,
       "possession_limit": null,
-      "limit_notes": "No bag limit stated on the date sheet."
+      "limit_notes": "No limit (10 App. V.S.A. section 44, section 5.24)."
      },
      "notes": ""
     },
@@ -279,7 +300,7 @@
       "daily_bag": null,
       "season_bag": null,
       "possession_limit": null,
-      "limit_notes": "No bag limit stated on the date sheet."
+      "limit_notes": "No limit (10 App. V.S.A. section 44, section 5.24)."
      },
      "notes": ""
     }
@@ -289,7 +310,7 @@
   },
   {
    "common_name": "Coyote",
-   "iac_reference": "2026 VT Hunting & Trapping Seasons date sheet (VT Fish & Wildlife Dept., publ. 7/8/2025)",
+   "iac_reference": "10 App. V.S.A. section 44 (Furbearing species rule) section 5.29; VT Fish & Wildlife Hunting and Trapping Seasons page (2026-27), fetched 2026-11-15",
    "scientific_name": "Canis latrans",
    "scientific_name_verified": false,
    "scientific_name_note": "Standard taxonomy; not stated on the 2026 VT date sheet.",
@@ -314,17 +335,65 @@
       "daily_bag": null,
       "season_bag": null,
       "possession_limit": null,
-      "limit_notes": "No bag limit stated on the date sheet."
+      "limit_notes": "No limit (10 App. V.S.A. section 44, section 5.29)."
      },
      "notes": ""
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "VT-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit (10 App. V.S.A. section 44, section 5.29)."
+     },
+     "notes": "Hunting/taking coyote without the aid of dogs: no closed season (10 App. V.S.A. section 44, section 5.29; VFWD seasons page: 'No Closed Season')."
+    },
+    {
+     "method": "hunting",
+     "land_type": "all",
+     "open_date": "2026-12-15",
+     "close_date": "2027-03-31",
+     "open_time": null,
+     "timezone": "America/New_York",
+     "continuous_open": false,
+     "zones": [
+      {
+       "zone_id": "VT-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "No limit (10 App. V.S.A. section 44, section 5.29)."
+     },
+     "notes": "Taking coyote with the aid of dogs, December 15 through March 31 (section 5.29). Coyote Dog Permit required and only Department Registered Dogs may be used (section 4.20); take must be reported within 48 hours of the close of the season (section 4.20.6)."
     }
    ],
-   "permit_requirements": [],
-   "notes": "Coyote HUNTING dates are not on the date sheet ('Check website for updates') and are not modeled."
+   "permit_requirements": [
+    "Coyote Dog Permit required to hunt, pursue, or take coyote with the aid of dogs (10 App. V.S.A. section 44, section 4.20)."
+   ],
+   "notes": "Coyote hunting verified against the furbearer rule: no closed season without dogs; December 15-March 31 with dogs under a Coyote Dog Permit."
   },
   {
    "common_name": "Virginia opossum",
-   "iac_reference": "2026 VT Hunting & Trapping Seasons date sheet (VT Fish & Wildlife Dept., publ. 7/8/2025)",
+   "iac_reference": "10 App. V.S.A. section 44 (Furbearing species rule) section 5.16; VT Fish & Wildlife Hunting and Trapping Seasons page (2026-27), fetched 2026-11-15",
    "scientific_name": "Didelphis virginiana",
    "scientific_name_verified": false,
    "scientific_name_note": "Standard taxonomy; not stated on the 2026 VT date sheet.",
@@ -349,7 +418,7 @@
       "daily_bag": null,
       "season_bag": null,
       "possession_limit": null,
-      "limit_notes": "No bag limit stated on the date sheet."
+      "limit_notes": "No limit (10 App. V.S.A. section 44, section 5.16)."
      },
      "notes": ""
     },
@@ -372,7 +441,7 @@
       "daily_bag": null,
       "season_bag": null,
       "possession_limit": null,
-      "limit_notes": "No bag limit stated on the date sheet."
+      "limit_notes": "No limit (10 App. V.S.A. section 44, section 5.16)."
      },
      "notes": "Date sheet: 'Open Year Round' for hunting. Check VFWD for exceptions to these dates."
     }
@@ -382,7 +451,7 @@
   },
   {
    "common_name": "Weasel",
-   "iac_reference": "2026 VT Hunting & Trapping Seasons date sheet (VT Fish & Wildlife Dept., publ. 7/8/2025)",
+   "iac_reference": "10 App. V.S.A. section 44 (Furbearing species rule) section 5.15; VT Fish & Wildlife Hunting and Trapping Seasons page (2026-27), fetched 2026-11-15",
    "scientific_name": "Neogale frenata; Mustela erminea",
    "scientific_name_verified": false,
    "scientific_name_note": "Regulations group weasels without distinguishing species; standard taxonomy, not stated on the sheet.",
@@ -407,7 +476,7 @@
       "daily_bag": null,
       "season_bag": null,
       "possession_limit": null,
-      "limit_notes": "No bag limit stated on the date sheet."
+      "limit_notes": "No limit (10 App. V.S.A. section 44, section 5.15)."
      },
      "notes": ""
     },
@@ -430,7 +499,7 @@
       "daily_bag": null,
       "season_bag": null,
       "possession_limit": null,
-      "limit_notes": "No bag limit stated on the date sheet."
+      "limit_notes": "No limit (10 App. V.S.A. section 44, section 5.15)."
      },
      "notes": "Date sheet: 'Open Year Round' for hunting. Check VFWD for exceptions to these dates."
     }
@@ -440,7 +509,7 @@
   },
   {
    "common_name": "River otter",
-   "iac_reference": "2026 VT Hunting & Trapping Seasons date sheet (VT Fish & Wildlife Dept., publ. 7/8/2025)",
+   "iac_reference": "10 App. V.S.A. section 44 (Furbearing species rule) section 5.21; VT Fish & Wildlife Hunting and Trapping Seasons page (2026-27), fetched 2026-11-15",
    "scientific_name": "Lontra canadensis",
    "scientific_name_verified": false,
    "scientific_name_note": "Standard taxonomy; not stated on the 2026 VT date sheet.",
@@ -465,17 +534,19 @@
       "daily_bag": null,
       "season_bag": null,
       "possession_limit": null,
-      "limit_notes": "No bag limit stated on the date sheet."
+      "limit_notes": "No limit (10 App. V.S.A. section 44, section 5.21)."
      },
      "notes": ""
     }
    ],
-   "permit_requirements": [],
-   "notes": "Pelt tagging / harvest reporting requirements NOT verified (agency site fetch failed 2026-09-18)."
+   "permit_requirements": [
+    "Pelt tagging required (10 App. V.S.A. section 44, section 4.18): notify authorized Department staff within 48 hours of the close of the season, present the pelt for tagging (tag stays affixed until tanned), and surrender the carcass at tagging. Pelts may not leave Vermont before tagging."
+   ],
+   "notes": "Pelt tagging required under section 4.18 (verified 2026-11-15). No open hunting season for otter (section 5.21)."
   },
   {
    "common_name": "Muskrat",
-   "iac_reference": "2026 VT Hunting & Trapping Seasons date sheet (VT Fish & Wildlife Dept., publ. 7/8/2025)",
+   "iac_reference": "10 App. V.S.A. section 44 (Furbearing species rule) section 5.28; VT Fish & Wildlife Hunting and Trapping Seasons page (2026-27), fetched 2026-11-15",
    "scientific_name": "Ondatra zibethicus",
    "scientific_name_verified": false,
    "scientific_name_note": "Standard taxonomy; not stated on the 2026 VT date sheet.",
@@ -500,7 +571,7 @@
       "daily_bag": null,
       "season_bag": null,
       "possession_limit": null,
-      "limit_notes": "No bag limit stated on the date sheet."
+      "limit_notes": "No limit (10 App. V.S.A. section 44, section 5.28)."
      },
      "notes": ""
     },
@@ -523,17 +594,17 @@
       "daily_bag": null,
       "season_bag": null,
       "possession_limit": null,
-      "limit_notes": "No bag limit stated on the date sheet."
+      "limit_notes": "No limit (10 App. V.S.A. section 44, section 5.28)."
      },
      "notes": "2026 spring hunting segment from the date sheet; already past as of 2026-09-18."
     }
    ],
    "permit_requirements": [],
-   "notes": "Pelt tagging / harvest reporting requirements NOT verified (agency site fetch failed 2026-09-18)."
+   "notes": "No pelt tagging requirement under 10 App. V.S.A. section 44 (tagging under section 4.18 applies only to bobcat, otter, and fisher). The annual trapper survey (section 4.23) applies to all licensed trappers."
   },
   {
    "common_name": "Beaver",
-   "iac_reference": "2026 VT Hunting & Trapping Seasons date sheet (VT Fish & Wildlife Dept., publ. 7/8/2025)",
+   "iac_reference": "10 App. V.S.A. section 44 (Furbearing species rule) section 5.20; VT Fish & Wildlife Hunting and Trapping Seasons page (2026-27), fetched 2026-11-15",
    "scientific_name": "Castor canadensis",
    "scientific_name_verified": false,
    "scientific_name_note": "Standard taxonomy; not stated on the 2026 VT date sheet.",
@@ -558,17 +629,17 @@
       "daily_bag": null,
       "season_bag": null,
       "possession_limit": null,
-      "limit_notes": "No bag limit stated on the date sheet."
+      "limit_notes": "No limit (10 App. V.S.A. section 44, section 5.20)."
      },
      "notes": ""
     }
    ],
    "permit_requirements": [],
-   "notes": "Pelt tagging / harvest reporting requirements NOT verified (agency site fetch failed 2026-09-18)."
+   "notes": "No pelt tagging requirement under 10 App. V.S.A. section 44 (tagging under section 4.18 applies only to bobcat, otter, and fisher). The annual trapper survey (section 4.23) applies to all licensed trappers. No open hunting season for beaver (section 5.20)."
   },
   {
    "common_name": "Fisher",
-   "iac_reference": "2026 VT Hunting & Trapping Seasons date sheet (VT Fish & Wildlife Dept., publ. 7/8/2025)",
+   "iac_reference": "10 App. V.S.A. section 44 (Furbearing species rule) section 5.14; VT Fish & Wildlife Hunting and Trapping Seasons page (2026-27), fetched 2026-11-15",
    "scientific_name": "Pekania pennanti",
    "scientific_name_verified": false,
    "scientific_name_note": "Standard taxonomy; not stated on the 2026 VT date sheet.",
@@ -593,17 +664,19 @@
       "daily_bag": null,
       "season_bag": null,
       "possession_limit": null,
-      "limit_notes": "No bag limit stated on the date sheet."
+      "limit_notes": "No limit (10 App. V.S.A. section 44, section 5.14)."
      },
      "notes": ""
     }
    ],
-   "permit_requirements": [],
-   "notes": "No open HUNTING season for fisher. Tagging/reporting requirements NOT verified."
+   "permit_requirements": [
+    "Pelt tagging required (10 App. V.S.A. section 44, section 4.18): notify authorized Department staff within 48 hours of the close of the season, present the pelt for tagging (tag stays affixed until tanned), and surrender the carcass at tagging. Pelts may not leave Vermont before tagging."
+   ],
+   "notes": "No open hunting season for fisher (section 5.14). Pelt tagging required under section 4.18 (verified 2026-11-15)."
   },
   {
    "common_name": "Bobcat",
-   "iac_reference": "2026 VT Hunting & Trapping Seasons date sheet (VT Fish & Wildlife Dept., publ. 7/8/2025)",
+   "iac_reference": "10 App. V.S.A. section 44 (Furbearing species rule) section 5.25; VT Fish & Wildlife Hunting and Trapping Seasons page (2026-27), fetched 2026-11-15",
    "scientific_name": "Lynx rufus",
    "scientific_name_verified": false,
    "scientific_name_note": "Standard taxonomy; not stated on the 2026 VT date sheet.",
@@ -628,7 +701,7 @@
       "daily_bag": null,
       "season_bag": null,
       "possession_limit": null,
-      "limit_notes": "No bag limit stated on the date sheet."
+      "limit_notes": "No limit (10 App. V.S.A. section 44, section 5.25)."
      },
      "notes": ""
     },
@@ -651,67 +724,63 @@
       "daily_bag": null,
       "season_bag": null,
       "possession_limit": null,
-      "limit_notes": "No bag limit stated on the date sheet."
+      "limit_notes": "No limit (10 App. V.S.A. section 44, section 5.25)."
      },
-     "notes": "Year unstated on the date sheet; read as Jan-Feb 2026 (the sheet's calendar year). The Jan-Feb 2027 hunting segment is not published and is NOT inferred."
+     "notes": "Rule section 5.25 sets bobcat hunting as January 10-February 7 annually; VFWD's 2026-27 seasons page lists January 10 - February 7, 2026. The January-February 2027 segment follows the same standing rule dates but is not listed on the agency's 2026-27 page and is not separately modeled here."
     }
    ],
-   "permit_requirements": [],
-   "notes": "Whether bobcat requires a separate permit/tag NOT verified (no draw assumed; none modeled)."
+   "permit_requirements": [
+    "Pelt tagging required (10 App. V.S.A. section 44, section 4.18): notify authorized Department staff within 48 hours of the close of the season, present the pelt for tagging (tag stays affixed until tanned), and surrender the carcass at tagging. Pelts may not leave Vermont before tagging."
+   ],
+   "notes": "No separate bobcat permit or draw; pelt tagging under section 4.18 is required (verified 2026-11-15)."
   },
   {
    "common_name": "American marten",
-   "iac_reference": "2026 VT Hunting & Trapping Seasons date sheet (VT Fish & Wildlife Dept., publ. 7/8/2025)",
+   "iac_reference": "10 App. V.S.A. section 44 (Furbearing species rule) section 5.22; VT Fish & Wildlife Hunting and Trapping Seasons page (2026-27), fetched 2026-11-15",
    "scientific_name": "Martes americana",
    "scientific_name_verified": false,
    "scientific_name_note": "Standard taxonomy; not stated on the 2026 VT date sheet.",
    "season_status": "closed",
    "seasons": [],
    "permit_requirements": [],
-   "notes": "No open season per the 2026 VT date sheet (listed under 'No Open Season')."
+   "notes": "No open season (10 App. V.S.A. section 44, section 5.22: no open season, bag limit zero); also listed 'No Open Season' on the VFWD 2026-27 seasons page."
   },
   {
    "common_name": "Canada lynx",
-   "iac_reference": "2026 VT Hunting & Trapping Seasons date sheet (VT Fish & Wildlife Dept., publ. 7/8/2025)",
+   "iac_reference": "10 App. V.S.A. section 44 (Furbearing species rule) section 5.18; VT Fish & Wildlife Hunting and Trapping Seasons page (2026-27), fetched 2026-11-15",
    "scientific_name": "Lynx canadensis",
    "scientific_name_verified": false,
    "scientific_name_note": "Standard taxonomy; not stated on the 2026 VT date sheet.",
    "season_status": "closed",
    "seasons": [],
    "permit_requirements": [],
-   "notes": "No open season per the 2026 VT date sheet (listed under 'No Open Season')."
+   "notes": "No open season (10 App. V.S.A. section 44, section 5.18). Anyone who incidentally captures a lynx must notify the Department immediately (section 4.22); special body-gripping trap restrictions (lynx exclusion devices / elevated sets) apply in Wildlife Management Unit E during the trapping season."
   },
   {
    "common_name": "Gray wolf",
-   "iac_reference": "2026 VT Hunting & Trapping Seasons date sheet (VT Fish & Wildlife Dept., publ. 7/8/2025)",
+   "iac_reference": "10 App. V.S.A. section 44 (Furbearing species rule) section 5.17; VT Fish & Wildlife Hunting and Trapping Seasons page (2026-27), fetched 2026-11-15",
    "scientific_name": "Canis lupus",
    "scientific_name_verified": false,
    "scientific_name_note": "Standard taxonomy; not stated on the 2026 VT date sheet.",
    "season_status": "closed",
    "seasons": [],
    "permit_requirements": [],
-   "notes": "No open season per the 2026 VT date sheet (listed under 'No Open Season')."
+   "notes": "No open season (10 App. V.S.A. section 44, section 5.17: no open season, bag limit zero); also listed 'No Open Season' on the VFWD 2026-27 seasons page."
   }
  ],
  "verification": {
   "regulation_year_confirmed": true,
-  "confirmation_notes": "2026 Vermont Hunting & Trapping Seasons date sheet (VFWD, published 7/8/2025). Trapping: mink/skunk/red & gray fox/raccoon/coyote/opossum/weasel Oct 24-Dec 31, 2026; otter/muskrat/beaver Oct 24, 2026-Mar 31, 2027; fisher Dec 1-31; bobcat Dec 1-16; marten/lynx/wolf no open season. Hunting: bobcat Jan 10-Feb 7 (year unstated, read as 2026); red & gray fox Oct 24, 2026-Feb 14, 2027; raccoon Oct 10-Dec 31; muskrat Mar 20-Apr 19; weasel/skunk/opossum open year-round; fisher/otter/beaver/mink no open hunting season; coyote hunting dates not given ('check website').",
+  "confirmation_notes": "Verified 2026-11-15 against (1) the live VFWD Hunting and Trapping Seasons page and (2) the Furbearing species rule, 10 App. V.S.A. section 44, section 5.0. Rule formula dates converted to the 2026-27 calendar: fourth Saturday in October 2026 = Oct 24, 2026; second Saturday in October 2026 = Oct 10, 2026; second Sunday in February 2027 = Feb 14, 2027. Trapping: mink/skunk/red & gray fox/raccoon/coyote/opossum/weasel Oct 24-Dec 31, 2026; otter/muskrat/beaver Oct 24, 2026-Mar 31, 2027; fisher Dec 1-31, 2026; bobcat Dec 1-16, 2026; marten/lynx/wolf no open season. Hunting: bobcat Jan 10-Feb 7, 2026; red & gray fox Oct 24, 2026-Feb 14, 2027; raccoon Oct 10-Dec 31, 2026; muskrat Mar 20-Apr 19, 2026; skunk/weasel/opossum no closed season; coyote no closed season without dogs and Dec 15-Mar 31 with dogs (permit); mink/otter/beaver/fisher no open hunting season. All open furbearer seasons carry NO bag limit per section 5.0. All seasons are statewide (no WMU variation in section 44). License fees verified against 10 V.S.A. section 4255 and the VFWD sporting license application. Tagging/reporting verified against rule sections 4.18 (bobcat/otter/fisher pelt tagging) and 4.23 (annual trapper survey).",
   "known_gaps": [
-   "provisional=true: the date sheet is dated 7/8/2025 and a newer 2027 sheet may exist; re-verify before launch.",
-   "Pelt tagging / harvest reporting requirements NOT verified (VFWD site fetch failed 2026-09-18).",
-   "Whether bobcat needs a separate permit/tag NOT verified; none modeled and no draw assumed.",
-   "Coyote HUNTING dates not on the sheet ('check website for updates'); not modeled.",
-   "License types/fees not extracted.",
-   "Bobcat hunting 'Jan 10-Feb 7' year is ambiguous on the sheet; read as 2026 per the sheet's calendar-year framing. The Jan-Feb 2027 segment is not inferred.",
-   "Scientific names are standard taxonomy, NOT stated on the sheet; all marked scientific_name_verified=false.",
-   "No administrative-code cross-check performed."
+   "Scientific names are standard taxonomy and are NOT stated in the Vermont sources consulted; all remain scientific_name_verified=false (same convention as other finalized state files).",
+   "Bobcat hunting January 10-February 7, 2027: the standing rule (section 5.25) sets these dates annually, but VFWD's 2026-27 seasons page lists only the 2026 segment; the 2027 segment is documented in the hunting row's notes rather than modeled as a separate season entry.",
+   "The August 19, 2026 Fish & Wildlife Board packet discussed possible section 44 amendments (body-gripping trap sizing; extending the section 4.22 WMU E lynx-rule sunset from Jan 1, 2027 to 2032) but adopted none at that meeting; seasons, limits, tagging, and reporting verified here are the rule as in force for 2026-27."
   ]
  },
  "license_url": "https://www.vtfishandwildlife.com/licenses-and-lotteries/license-center",
  "license_vendor": "Vermont Fish & Wildlife Department (own portal)",
- "regs_url": "https://www.vtfishandwildlife.com/sites/fishandwildlife/files/documents/Seasons/2026-hunt-trap-dates.pdf.pdf",
- "regs_kind": "pdf"
-,
+ "regs_url": "http://vtfishandwildlife.com/hunt/hunting-and-trapping-seasons",
+ "regs_kind": "page",
  "warden_directory": {
   "label": "Report a violation",
   "url": "http://vtfishandwildlife.com/newsroom/vermont%E2%80%99s-%E2%80%98operation-game-thief%E2%80%99-helps-catch-poachers",

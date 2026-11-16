@@ -4,7 +4,7 @@
  "state_name": "Connecticut",
  "season_year": "2026",
  "provisional": true,
- "retrieved_at": "2026-09-18",
+ "retrieved_at": "2026-11-15",
  "disclaimer": "Reminder reference only \u2014 NOT legal authority. Season dates, zones, and limits are set annually and can change. Always verify current regulations with the CT Department of Energy & Environmental Protection before hunting or trapping.",
  "sources": [
   {
@@ -12,7 +12,14 @@
    "title": "2026 Connecticut Hunting and Trapping Guide (CT DEEP)",
    "url": "https://portal.ct.gov/-/media/deep/hunting_trapping/pdf_files/2026-ct-hunting-guide.pdf?rev=0bd45223c84a41bc88f35e9082d16340&",
    "type": "agency_booklet",
-   "notes": "CT DEEP calendar-year guide. Furbearer Seasons table on p.36; pelt-tagging schedule and protected-species rule on p.36. Archived locally in hidden_files/season-research/connecticut/."
+   "notes": "CT DEEP calendar-year guide. Furbearer Seasons table on p.36; pelt-tagging schedule and protected-species rule on p.36. Archived locally in hidden_files/season-research/connecticut/. Re-downloaded from portal.ct.gov on 2026-11-15: PDF is byte-identical (MD5 c65e69dbfad68247017dd8b8416bf739) to the archived copy used for the original build, so the published guide has not changed."
+  },
+  {
+   "id": "ct-deep-furbearer-trapping-web",
+   "title": "Furbearer Trapping Seasons \u2014 2026 Connecticut Hunting and Trapping Guide (CT DEEP web chapter)",
+   "url": "https://portal.ct.gov/deep/hunting/2026-connecticut-hunting-and-trapping-guide/furbearer-trapping-seasons",
+   "type": "agency_webpage",
+   "notes": "Live DEEP web version of the guide's trapping chapter (page content last updated January 2026; checked 2026-11-15). Season table, pelt-tagging list and 2026 tagging schedule, fisher/gray-fox carcass collection, protected-species pelt rule, and state-land trapping permits ($60/unit, valid November-March 31) all match guide p.36 exactly."
   }
  ],
  "license_summary": {
@@ -711,9 +718,9 @@
  ],
  "verification": {
   "regulation_year_confirmed": true,
-  "confirmation_notes": "2026 CT Hunting and Trapping Guide (final, calendar-year). Furbearer Seasons table p.36: otter Jan 1-Mar 15 & Nov 8-Dec 31 (limit 8); beaver Jan 1-Mar 31 & Dec 1-Dec 31 (no limit); mink/muskrat/weasel/coyote/gray fox/red fox/raccoon/opossum/skunk Jan 1-Mar 15 & Nov 8-Dec 31 (no limits); fisher Nov 20-Dec 31 (limit 2, carcass submission mandatory); pelt-tagging species list; bobcat confirmed PROTECTED (no open season) via the protected-species pelt rule on p.36.",
+  "confirmation_notes": "RE-VERIFIED 2026-11-15 against (1) the 2026 CT Hunting and Trapping Guide PDF, p.36 Furbearer Seasons table (fresh download byte-identical to the archived copy), and (2) the live CT DEEP 'Furbearer Trapping Seasons' web chapter. Every row confirmed unchanged: otter Jan 1-Mar 15 & Nov 8-Dec 31 (limit 8); beaver Jan 1-Mar 31 & Dec 1-Dec 31 (no limit); mink/muskrat/weasel/coyote/gray fox/red fox/raccoon/opossum/skunk Jan 1-Mar 15 & Nov 8-Dec 31 (no limits); fisher Nov 20-Dec 31 (limit 2, carcass submission mandatory); pelt-tagging species list (beaver, river otter, red fox, gray fox, wild mink, coyote, fisher) and hunter-reporting alternative for fox/coyote (online or 1-877-337-4868); gray fox carcass submission requested (voluntary); state-land permits $60/unit valid November-March 31; bobcat confirmed PROTECTED (no open season) via the protected-species pelt rule. No date, limit, zone, or note in any species row required correction.",
   "known_gaps": [
-   "CT publishes calendar-year guides; the 2027 guide (setting January-March 2027 furbearer dates) is not published as of 2026-09-18. season_year='2026', provisional=true; only the two published 2026 segments are modeled and nothing about 2027 is inferred.",
+   "STILL PROVISIONAL for one reason only: CT publishes calendar-year guides, and the 2027 Connecticut Hunting and Trapping Guide (which will set the January 1-March 15, 2027 furbearer dates \u2014 the second half of the 2026-27 trapping season) had NOT been published as of 2026-11-15. Only the two published calendar-2026 segments are modeled; nothing about 2027 is inferred. provisional stays true until the 2027 guide is out and the Jan-Mar 2027 segment is verified and added.",
    "Scientific names are standard taxonomy, NOT stated in the guide; all marked scientific_name_verified=false.",
    "Black bear excluded as big game, not a furbearer.",
    "No administrative-code cross-check performed; the DEEP guide is the published authority."
@@ -722,8 +729,7 @@
  "license_url": "https://ct.aspirafocus.com/internetsales",
  "license_vendor": "Aspira",
  "regs_url": "https://portal.ct.gov/-/media/deep/hunting_trapping/pdf_files/2026-ct-hunting-guide.pdf?rev=0bd45223c84a41bc88f35e9082d16340&",
- "regs_kind": "pdf"
-,
+ "regs_kind": "pdf",
  "warden_directory": {
   "label": "Report a violation",
   "url": "https://portal.ct.gov/deep/about/contact-us/24-hour-emergency-and-information-phone-numbers",

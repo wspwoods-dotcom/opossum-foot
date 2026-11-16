@@ -3,7 +3,7 @@
  "state": "MS",
  "state_name": "Mississippi",
  "season_year": "2026-27",
- "retrieved_at": "2026-09-18",
+ "retrieved_at": "2026-11-15",
  "disclaimer": "Reminder reference only — NOT legal authority. Season dates, zones, and limits are set annually and can change. Always verify current regulations with the Mississippi Department of Wildlife, Fisheries, and Parks before hunting or trapping. Municipalities and counties may authorize snares within 100 ft of roads on a public-safety finding.",
  "sources": [
   {
@@ -11,19 +11,47 @@
    "title": "MDWFP: Furbearer & Trapping",
    "url": "https://www.mdwfp.com/wildlife-hunting/furbearer-trapping",
    "type": "agency_webpage",
-   "notes": "Official MDWFP page: trapping Nov 1–Mar 15 for all furbearers and nuisance species; no bag/possession limits."
+   "notes": "Official MDWFP page: trapping season Nov. 1–Mar. 15 for all furbearer and nuisance species; no bag or possession limits; trapping license required at 16+, resident $25.00, non-resident $205.00; trapper harvest survey due May 1."
+  },
+  {
+   "id": "ms-mdwfp-trapping-regulations",
+   "title": "MDWFP: Furbearing and Trapping Regulations",
+   "url": "https://mdwfp.com/wildlife-hunting/furbearing-and-trapping-regulations",
+   "type": "agency_webpage",
+   "notes": "Official MDWFP general trapping regulations: license requirement, landowner exemption and helper licensing, landowner permission, trap identification tags, 36-hour trap checks, 100-ft road setback with municipal/county snare exception on a public-safety finding, year-round nuisance-animal take on private lands, and CITES tagging of bobcat and river otter before shipping or transport out of Mississippi."
+  },
+  {
+   "id": "ms-rule-4-1",
+   "title": "40 Miss. Admin. Code Pt. 2, Ch. 4, Rule 4.1 — 2026-27 Small Game Seasons and Bag Limits (FINAL)",
+   "url": "https://www.mdwfp.com/sites/default/files/2026-05/40%20Miss.%20Admin.%20Code%2C%20Part%202%2C%20Rule%204.1%202026-27%20Small%20Game%20Seasons%20and%20Bag%20Limits%20FINAL.pdf",
+   "type": "agency_rule",
+   "notes": "Official Commission rule, updated April 2026. Sec. B: raccoon July 1–Sept. 30, 1 per party per night. Sec. C: opossum, raccoon, and bobcat Oct. 1–31 (food & sport), 5 per day / 8 per party; Nov. 1–Mar. 15 (food, sport, and pelt), no limit; Friday/Saturday closing dates extend through the following Sunday. Sec. G: trapping season Nov. 1–Mar. 15, no limit."
+  },
+  {
+   "id": "ms-seasons-2026-27-pdf",
+   "title": "MDWFP: 2026-2027 Hunting Seasons (official season document)",
+   "url": "https://www.mdwfp.com/sites/default/files/2026-06/2026-2027%20hunting%20seasons.pdf",
+   "type": "agency_webpage",
+   "notes": "Official MDWFP 2026-2027 season document; small game table matches Rule 4.1 (raccoon July 1–Sept. 30; opossum/raccoon/bobcat Oct. 1–Oct. 31 and Nov. 1–Mar. 15)."
+  },
+  {
+   "id": "ms-seasons-webpage",
+   "title": "MDWFP: Hunting Seasons and Bag Limits",
+   "url": "https://www.mdwfp.com/wildlife-hunting/hunting-seasons-and-bag-limits",
+   "type": "agency_webpage",
+   "notes": "Official MDWFP season dates page: Raccoon July 1–Sept. 30, 1 per party/night; Opossum, Raccoon, and Bobcat Oct. 1–Oct. 31 (food and sport) and Nov. 1–Mar. 15 (food, sport, and pelt), 5/day and 8/party in the first season, no limit in the second."
   },
   {
    "id": "ms-sb2420",
-   "title": "2026 Mississippi SB 2420 (amendment to Miss. Code § 49-7-31.4)",
+   "title": "2026 Mississippi SB 2420 (amendments to Miss. Code §§ 49-7-31, 49-7-31.2, 49-7-31.3, 49-7-31.4)",
    "url": "https://billstatus.ls.state.ms.us/documents/2026/pdf/SB/2400-2499/SB2420PS.pdf",
    "type": "statute",
-   "notes": "Official legislature PDF of the bill text; enactment status not confirmed from bill history — see known gaps."
+   "notes": "Extends open seasons that end on a Saturday (including the fur-bearing animal season under § 49-7-31.4 and any additional raccoon season) to 30 minutes after sunset on the following Sunday. Approved by the Governor Mar. 19, 2026, per the official bill history (billstatus.ls.state.ms.us/2026/pdf/history/SB/SB2420.xml). SB 2420 did not itself set the Nov. 1–Mar. 15 seasons; those are set by Commission Rule 4.1."
   }
  ],
  "license_summary": {
-  "trapping_license": "A trapping license is required of anyone 16 or older who traps furbearers (bobcat, mink, muskrat, opossum, otter, raccoon, weasel) or nuisance animals (beaver, coyote, fox, nutria, skunks) in Mississippi. Resident $25; nonresident $205. No person shall trap on the lands of another without the landowner's permission.",
-  "bobcat_otter_tagging": "River otter and bobcat are subject to tagging requirements (see MDWFP 'River Otter and Bobcat Tagging')."
+  "trapping_license": "A trapping license is required of anyone 16 or older who traps furbearers (bobcat, mink, muskrat, opossum, otter, raccoon, weasel) or nuisance animals (beaver, coyote, fox, nutria, skunks) in Mississippi, and of each helper or assistant 16 or older. Resident $25; nonresident $205. No license is required of a resident who traps on land in which the record title is vested in that person. No person shall trap on the lands of another without the landowner's permission.",
+  "bobcat_otter_tagging": "Bobcat and river otter are subject to federal CITES tagging: animals harvested in Mississippi must be CITES tagged prior to shipping or transporting out of Mississippi. Tags are sold over the counter at MDWFP offices in lots of five; unused tags must be returned to MDWFP within 45 days after the close of the trapping season."
  },
  "species": [
   {
@@ -55,7 +83,30 @@
       "possession_limit": null,
       "limit_notes": "no bag or possession limits."
      },
-     "notes": "Trapping: Nov. 1, 2026 – Mar. 15, 2027; no bag or possession limits. (Season set by Commission rule under SB 2420 (2026).)"
+     "notes": "Trapping: Nov. 1, 2026 – Mar. 15, 2027; no bag or possession limits. (40 Miss. Admin. Code Pt. 2, Ch. 4, Rule 4.1 § G, updated April 2026.)"
+    },
+    {
+     "method": "trapping",
+     "land_type": "private",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "MS-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Nuisance animal take; see MDWFP Nuisance Animal Regulations (40 Miss. Admin. Code Pt. 2, Ch. 7, Rule 7.1) for methods and conditions."
+     },
+     "notes": "Nuisance animal: may be taken year-round on private lands, and on open public lands that have statewide seasons without special regulations. (MDWFP Furbearing and Trapping Regulations, citing Rule 7.1.)"
     }
    ],
    "permit_requirements": [],
@@ -90,7 +141,7 @@
       "possession_limit": null,
       "limit_notes": "no bag or possession limits."
      },
-     "notes": "Trapping: Nov. 1, 2026 – Mar. 15, 2027; no bag or possession limits. (Season set by Commission rule under SB 2420 (2026).)"
+     "notes": "Trapping: Nov. 1, 2026 – Mar. 15, 2027; no bag or possession limits. (40 Miss. Admin. Code Pt. 2, Ch. 4, Rule 4.1 § G, updated April 2026.)"
     },
     {
      "method": "hunting",
@@ -111,15 +162,15 @@
       "daily_bag": "5",
       "season_bag": null,
       "possession_limit": null,
-      "limit_notes": "Oct. 1–31: 5 per day, 8 per party."
+      "limit_notes": "Oct. 1–31 (food and sport): 5 per day, 8 per party."
      },
-     "notes": "Hunting: Oct. 1–31, 2026; 5 per day, 8 per party."
+     "notes": "Hunting: Oct. 1–31, 2026 (food and sport, sport hunting with dogs and guns); 5 per day, 8 per party. (Rule 4.1 § C.) If the closing date falls on a Friday or Saturday, the season extends through the following Sunday (Rule 4.1)."
     },
     {
      "method": "hunting",
      "land_type": "all",
      "open_date": "2026-11-01",
-     "close_date": "2027-02-28",
+     "close_date": "2027-03-15",
      "open_time": null,
      "timezone": "America/Chicago",
      "continuous_open": false,
@@ -134,12 +185,14 @@
       "daily_bag": null,
       "season_bag": null,
       "possession_limit": null,
-      "limit_notes": "Nov. 1 – Feb. 28: no bag or possession limit."
+      "limit_notes": "Nov. 1 – Mar. 15 (food, sport, and pelt): no bag or possession limit."
      },
-     "notes": "Hunting: Nov. 1, 2026 – Feb. 28, 2027; no limit."
+     "notes": "Hunting: Nov. 1, 2026 – Mar. 15, 2027 (food, sport, and pelt); no limit. (Rule 4.1 § C.)"
     }
    ],
-   "permit_requirements": [],
+   "permit_requirements": [
+    "Bobcat harvested in Mississippi must be CITES tagged prior to shipping or transporting out of Mississippi. CITES tags are sold over the counter at MDWFP offices in lots of five; unused tags must be returned to MDWFP within 45 days after the close of the trapping season."
+   ],
    "notes": ""
   },
   {
@@ -171,7 +224,30 @@
       "possession_limit": null,
       "limit_notes": "no bag or possession limits."
      },
-     "notes": "Trapping: Nov. 1, 2026 – Mar. 15, 2027; no bag or possession limits. (Season set by Commission rule under SB 2420 (2026).)"
+     "notes": "Trapping: Nov. 1, 2026 – Mar. 15, 2027; no bag or possession limits. (40 Miss. Admin. Code Pt. 2, Ch. 4, Rule 4.1 § G, updated April 2026.)"
+    },
+    {
+     "method": "trapping",
+     "land_type": "private",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "MS-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Nuisance animal take; see MDWFP Nuisance Animal Regulations (40 Miss. Admin. Code Pt. 2, Ch. 7, Rule 7.1) for methods and conditions."
+     },
+     "notes": "Nuisance animal: may be taken year-round on private lands, and on open public lands that have statewide seasons without special regulations. (MDWFP Furbearing and Trapping Regulations, citing Rule 7.1.)"
     }
    ],
    "permit_requirements": [],
@@ -206,7 +282,30 @@
       "possession_limit": null,
       "limit_notes": "no bag or possession limits."
      },
-     "notes": "Trapping: Nov. 1, 2026 – Mar. 15, 2027; no bag or possession limits. (Season set by Commission rule under SB 2420 (2026).)"
+     "notes": "Trapping: Nov. 1, 2026 – Mar. 15, 2027; no bag or possession limits. (40 Miss. Admin. Code Pt. 2, Ch. 4, Rule 4.1 § G, updated April 2026.)"
+    },
+    {
+     "method": "trapping",
+     "land_type": "private",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "MS-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Nuisance animal take; see MDWFP Nuisance Animal Regulations (40 Miss. Admin. Code Pt. 2, Ch. 7, Rule 7.1) for methods and conditions."
+     },
+     "notes": "Nuisance animal: may be taken year-round on private lands, and on open public lands that have statewide seasons without special regulations. (MDWFP Furbearing and Trapping Regulations, citing Rule 7.1.)"
     }
    ],
    "permit_requirements": [],
@@ -241,7 +340,7 @@
       "possession_limit": null,
       "limit_notes": "no bag or possession limits."
      },
-     "notes": "Trapping: Nov. 1, 2026 – Mar. 15, 2027; no bag or possession limits. (Season set by Commission rule under SB 2420 (2026).)"
+     "notes": "Trapping: Nov. 1, 2026 – Mar. 15, 2027; no bag or possession limits. (40 Miss. Admin. Code Pt. 2, Ch. 4, Rule 4.1 § G, updated April 2026.)"
     }
    ],
    "permit_requirements": [],
@@ -276,7 +375,7 @@
       "possession_limit": null,
       "limit_notes": "no bag or possession limits."
      },
-     "notes": "Trapping: Nov. 1, 2026 – Mar. 15, 2027; no bag or possession limits. (Season set by Commission rule under SB 2420 (2026).)"
+     "notes": "Trapping: Nov. 1, 2026 – Mar. 15, 2027; no bag or possession limits. (40 Miss. Admin. Code Pt. 2, Ch. 4, Rule 4.1 § G, updated April 2026.)"
     }
    ],
    "permit_requirements": [],
@@ -311,7 +410,30 @@
       "possession_limit": null,
       "limit_notes": "no bag or possession limits."
      },
-     "notes": "Trapping: Nov. 1, 2026 – Mar. 15, 2027; no bag or possession limits. (Season set by Commission rule under SB 2420 (2026).)"
+     "notes": "Trapping: Nov. 1, 2026 – Mar. 15, 2027; no bag or possession limits. (40 Miss. Admin. Code Pt. 2, Ch. 4, Rule 4.1 § G, updated April 2026.)"
+    },
+    {
+     "method": "trapping",
+     "land_type": "private",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "MS-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Nuisance animal take; see MDWFP Nuisance Animal Regulations (40 Miss. Admin. Code Pt. 2, Ch. 7, Rule 7.1) for methods and conditions."
+     },
+     "notes": "Nuisance animal: may be taken year-round on private lands, and on open public lands that have statewide seasons without special regulations. (MDWFP Furbearing and Trapping Regulations, citing Rule 7.1.)"
     }
    ],
    "permit_requirements": [],
@@ -346,7 +468,7 @@
       "possession_limit": null,
       "limit_notes": "no bag or possession limits."
      },
-     "notes": "Trapping: Nov. 1, 2026 – Mar. 15, 2027; no bag or possession limits. (Season set by Commission rule under SB 2420 (2026).)"
+     "notes": "Trapping: Nov. 1, 2026 – Mar. 15, 2027; no bag or possession limits. (40 Miss. Admin. Code Pt. 2, Ch. 4, Rule 4.1 § G, updated April 2026.)"
     },
     {
      "method": "hunting",
@@ -364,18 +486,18 @@
       }
      ],
      "bag_limits": {
-      "daily_bag": null,
+      "daily_bag": "5",
       "season_bag": null,
       "possession_limit": null,
-      "limit_notes": "Hunting: Oct. 1–31, 2026."
+      "limit_notes": "Oct. 1–31 (food and sport): 5 per day, 8 per party."
      },
-     "notes": "Hunting: Oct. 1–31, 2026."
+     "notes": "Hunting: Oct. 1–31, 2026 (food and sport, sport hunting with dogs and guns); 5 per day, 8 per party. (Rule 4.1 § C.) If the closing date falls on a Friday or Saturday, the season extends through the following Sunday (Rule 4.1)."
     },
     {
      "method": "hunting",
      "land_type": "all",
      "open_date": "2026-11-01",
-     "close_date": "2027-02-28",
+     "close_date": "2027-03-15",
      "open_time": null,
      "timezone": "America/Chicago",
      "continuous_open": false,
@@ -390,9 +512,9 @@
       "daily_bag": null,
       "season_bag": null,
       "possession_limit": null,
-      "limit_notes": "Hunting: Nov. 1, 2026 – Feb. 28, 2027."
+      "limit_notes": "Nov. 1 – Mar. 15 (food, sport, and pelt): no bag or possession limit."
      },
-     "notes": "Hunting: Nov. 1, 2026 – Feb. 28, 2027."
+     "notes": "Hunting: Nov. 1, 2026 – Mar. 15, 2027 (food, sport, and pelt); no limit. (Rule 4.1 § C.)"
     }
    ],
    "permit_requirements": [],
@@ -427,7 +549,7 @@
       "possession_limit": null,
       "limit_notes": "no bag or possession limits."
      },
-     "notes": "Trapping: Nov. 1, 2026 – Mar. 15, 2027; no bag or possession limits. (Season set by Commission rule under SB 2420 (2026).)"
+     "notes": "Trapping: Nov. 1, 2026 – Mar. 15, 2027; no bag or possession limits. (40 Miss. Admin. Code Pt. 2, Ch. 4, Rule 4.1 § G, updated April 2026.)"
     },
     {
      "method": "hunting",
@@ -450,7 +572,7 @@
       "possession_limit": null,
       "limit_notes": "1 per party per night."
      },
-     "notes": "Hunting: July 1 – Sept. 30, 2026; 1 per party per night."
+     "notes": "Hunting: July 1 – Sept. 30, 2026; 1 per party per night. (Rule 4.1 § B.) If the closing date falls on a Friday or Saturday, the season extends through the following Sunday (Rule 4.1)."
     },
     {
      "method": "hunting",
@@ -468,18 +590,18 @@
       }
      ],
      "bag_limits": {
-      "daily_bag": null,
+      "daily_bag": "5",
       "season_bag": null,
       "possession_limit": null,
-      "limit_notes": "Hunting: Oct. 1–31, 2026."
+      "limit_notes": "Oct. 1–31 (food and sport): 5 per day, 8 per party."
      },
-     "notes": "Hunting: Oct. 1–31, 2026."
+     "notes": "Hunting: Oct. 1–31, 2026 (food and sport, sport hunting with dogs and guns); 5 per day, 8 per party. (Rule 4.1 § C.) If the closing date falls on a Friday or Saturday, the season extends through the following Sunday (Rule 4.1)."
     },
     {
      "method": "hunting",
      "land_type": "all",
      "open_date": "2026-11-01",
-     "close_date": "2027-02-28",
+     "close_date": "2027-03-15",
      "open_time": null,
      "timezone": "America/Chicago",
      "continuous_open": false,
@@ -494,9 +616,9 @@
       "daily_bag": null,
       "season_bag": null,
       "possession_limit": null,
-      "limit_notes": "Hunting: Nov. 1, 2026 – Feb. 28, 2027."
+      "limit_notes": "Nov. 1 – Mar. 15 (food, sport, and pelt): no bag or possession limit."
      },
-     "notes": "Hunting: Nov. 1, 2026 – Feb. 28, 2027."
+     "notes": "Hunting: Nov. 1, 2026 – Mar. 15, 2027 (food, sport, and pelt); no limit. (Rule 4.1 § C.)"
     }
    ],
    "permit_requirements": [],
@@ -531,10 +653,12 @@
       "possession_limit": null,
       "limit_notes": "no bag or possession limits."
      },
-     "notes": "Trapping: Nov. 1, 2026 – Mar. 15, 2027; no bag or possession limits. (Season set by Commission rule under SB 2420 (2026).)"
+     "notes": "Trapping: Nov. 1, 2026 – Mar. 15, 2027; no bag or possession limits. (40 Miss. Admin. Code Pt. 2, Ch. 4, Rule 4.1 § G, updated April 2026.)"
     }
    ],
-   "permit_requirements": [],
+   "permit_requirements": [
+    "River otter harvested in Mississippi must be CITES tagged prior to shipping or transporting out of Mississippi. CITES tags are sold over the counter at MDWFP offices in lots of five; unused tags must be returned to MDWFP within 45 days after the close of the trapping season."
+   ],
    "notes": ""
   },
   {
@@ -566,7 +690,30 @@
       "possession_limit": null,
       "limit_notes": "no bag or possession limits."
      },
-     "notes": "Trapping: Nov. 1, 2026 – Mar. 15, 2027; no bag or possession limits. (Season set by Commission rule under SB 2420 (2026).)"
+     "notes": "Trapping: Nov. 1, 2026 – Mar. 15, 2027; no bag or possession limits. (40 Miss. Admin. Code Pt. 2, Ch. 4, Rule 4.1 § G, updated April 2026.)"
+    },
+    {
+     "method": "trapping",
+     "land_type": "private",
+     "open_date": null,
+     "close_date": null,
+     "open_time": null,
+     "timezone": "America/Chicago",
+     "continuous_open": true,
+     "zones": [
+      {
+       "zone_id": "MS-statewide",
+       "zone_name": "Entire state",
+       "area_type": "statewide"
+      }
+     ],
+     "bag_limits": {
+      "daily_bag": null,
+      "season_bag": null,
+      "possession_limit": null,
+      "limit_notes": "Nuisance animal take; see MDWFP Nuisance Animal Regulations (40 Miss. Admin. Code Pt. 2, Ch. 7, Rule 7.1) for methods and conditions."
+     },
+     "notes": "Nuisance animal: may be taken year-round on private lands, and on open public lands that have statewide seasons without special regulations. (MDWFP Furbearing and Trapping Regulations, citing Rule 7.1.)"
     }
    ],
    "permit_requirements": [],
@@ -601,7 +748,7 @@
       "possession_limit": null,
       "limit_notes": "no bag or possession limits."
      },
-     "notes": "Trapping: Nov. 1, 2026 – Mar. 15, 2027; no bag or possession limits. (Season set by Commission rule under SB 2420 (2026).)"
+     "notes": "Trapping: Nov. 1, 2026 – Mar. 15, 2027; no bag or possession limits. (40 Miss. Admin. Code Pt. 2, Ch. 4, Rule 4.1 § G, updated April 2026.)"
     }
    ],
    "permit_requirements": [],
@@ -610,19 +757,18 @@
  ],
  "verification": {
   "regulation_year_confirmed": true,
-  "confirmation_notes": "Official MDWFP furbearer & trapping page, 40 Miss. Admin. Code Pt. 2, Ch. 4, r. 4.1, and Miss. Code § 49-7-31.4, read 2026-09-18. Hunting dates modeled per Rule 4.1; see known gaps re SB 2420.",
+  "confirmation_notes": "Verified 2026-11-15 against official MDWFP sources: Furbearer & Trapping page; Furbearing and Trapping Regulations page; 40 Miss. Admin. Code Pt. 2, Ch. 4, Rule 4.1 (2026-27 FINAL, updated April 2026); MDWFP 2026-2027 Hunting Seasons document; and the MDWFP Hunting Seasons and Bag Limits page — all in agreement. Opossum/raccoon/bobcat hunting corrected to Rule 4.1 (Oct. 1–31 at 5/day, 8/party; Nov. 1–Mar. 15, no limit), superseding the Feb. 28 end date carried in the earlier provisional file. SB 2420 (2026) enactment confirmed from the official Legislature bill history: approved by the Governor Mar. 19, 2026; it adds only the Saturday-closing extension and did not set the season dates.",
   "known_gaps": [
-   "Hunting-season dates were read from the official 40 Miss. Admin. Code Pt. 2, Ch. 4, Rule 4.1 text on 2026-09-18, but no stable official URL for the current rule text was located; the 2026-27 digest table suggests a Nov. 1–Mar. 15 hunt end for opossum/raccoon/bobcat vs. the rule's Feb. 28. Re-verify against the current rule before relying on hunting dates.",
-   "2026 SB 2420 (amending § 49-7-31.4) bill text was found on the official legislature site but gubernatorial approval/enactment was not confirmed from bill history; hunting season dates are modeled per the published Rule 4.1 (through Feb. 28), with the statute's Mar. 15 end flagged in species notes.",
-   "Scientific names are standard taxonomy, not stated in MDWFP regulations."
+   "Scientific names are standard taxonomy, not stated in MDWFP regulations.",
+   "Year-round nuisance-animal take is modeled as a continuous private-land trapping season per the MDWFP Furbearing and Trapping Regulations summary; the method- and area-specific conditions of 40 Miss. Admin. Code Pt. 2, Ch. 7, Rule 7.1 (Nuisance Animals) are not modeled in detail.",
+   "WMA-specific seasons and restrictions are not modeled; statewide seasons are shown."
   ]
  },
- "provisional": true,
+ "provisional": false,
  "license_url": "https://licensing.outdoors.ms/",
  "license_vendor": "MDWFP online license platform (licensing.outdoors.ms)",
  "regs_url": "https://mdwfp.com/wildlife-hunting/furbearing-and-trapping-regulations",
- "regs_kind": "page"
-,
+ "regs_kind": "page",
  "warden_directory": {
   "label": "Report a violation",
   "url": "https://dev.mdwfp.com/enforcement-education",
