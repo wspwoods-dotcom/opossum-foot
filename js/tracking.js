@@ -21,7 +21,7 @@ var Tracking = (function () {
   var mapRef = null, layer = null, savedLayer = null;
   var watchId = null, state = 'idle'; /* idle | tracking | paused */
   var pts = [], distM = 0, startT = 0, pauseAccum = 0, pauseStart = 0, timer = null;
-  var line = null, lastFixAt = 0;
+  var line = null, lastFixAt = 0, lastAt = 0; /* lastAt: arrival clock of the last accepted fix (go) */
   var GAP_MS = 40000; /* gk: a fix arriving later than this after the previous one starts a new segment */
   var wakeSentinel = null;
 
@@ -34,6 +34,7 @@ var Tracking = (function () {
     mapRef = map;
     layer = L.layerGroup().addTo(map);
     savedLayer = L.layerGroup().addTo(map);
+    fixLayer = L.layerGroup().addTo(map);
   }
   function fmtElapsed(ms) {
     var s = Math.floor(ms / 1000), h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), ss = s % 60;
@@ -87,16 +88,39 @@ var Tracking = (function () {
     if (state !== 'tracking') return;
     var c = pos.coords;
     if (!c || (c.accuracy && c.accuracy > 35)) return;
-    var p = { lat: c.latitude, lng: c.longitude, t: Date.now() };
+    var now = Date.now();
+    /* go (2026-11-17, Tanner's field failure of the gk break): a fix
+       carries its own time (pos.timestamp), and iOS does not always hand
+       fixes over when they happen — on wake it can deliver a cached
+       pre-sleep position, and a stuck daemon can keep re-sending one
+       frozen fix. Stamping every point with the ARRIVAL time made a
+       minutes-long sleep look like a run of fresh <40 s steps, so the
+       gk gap test (which measures from the last accepted point) never
+       fired and the wake fix joined across the fields. Two defences:
+       (1) the point is stamped with the fix's own time when that time
+       is sane, and the gap test runs on BOTH clocks — fix time and
+       arrival time (lastAt); either one can call the gap.
+       (2) the old teleport test switched off at dt 30 while the gap
+       only started at dt 40, leaving a 30–40 s window where a far fix
+       was neither rejected nor broken, just joined and counted. A jump
+       too fast to be travel is now a break whenever it is not a lone
+       spike: spikes (dt < 30) are still dropped whole, but a sustained
+       relocation starts a new segment instead of drawing the diagonal. */
+    var ft = (typeof pos.timestamp === 'number' && isFinite(pos.timestamp) &&
+              pos.timestamp <= now + 5000 && pos.timestamp >= now - 86400000) ? pos.timestamp : now;
+    var p = { lat: c.latitude, lng: c.longitude, t: ft };
     var last = pts[pts.length - 1];
     if (last) {
-      var d = hav(last, p), dt = (p.t - last.t) / 1000;
-      if (d < 8 && dt < 20) return;              /* standing still — GPS jitter is not travel */
-      if (dt > 0 && d / dt > 24 && dt < 30) return; /* teleport jump, not a road */
-      if (dt * 1000 > GAP_MS) { p.g = 1; }       /* gk: the recorder was asleep/away — break here, count nothing across the gap (a long Pause breaks the same way: paused travel was never recorded) */
-      else distM += d;
+      var d = hav(last, p), dt = (p.t - last.t) / 1000, adt = (now - lastAt) / 1000;
+      if (d < 8 && dt < 20 && adt < 20) return;   /* standing still — GPS jitter is not travel */
+      var gap = (dt * 1000 > GAP_MS) || (adt * 1000 > GAP_MS);
+      if (dt > 0 && d / dt > 24 && !gap) {
+        if (dt < 30) return;                     /* teleport spike, not a road — drop it */
+        p.g = 1;                                 /* sustained relocation — break, never join */
+      } else if (gap) { p.g = 1; }               /* gk: the recorder was asleep/away — break here, count nothing across the gap (a long Pause breaks the same way: paused travel was never recorded) */
+      if (!p.g) distM += d;
     }
-    pts.push(p); lastFixAt = p.t;
+    pts.push(p); lastFixAt = p.t; lastAt = now;
     draw(); updateBar();
   }
   function onErr() { /* a dropped fix is not a stopped track; the watch retries on its own */ }
@@ -123,8 +147,9 @@ var Tracking = (function () {
   function start() {
     if (state !== 'idle') return;
     if (!navigator.geolocation) { toast('This phone has no GPS available to the app.'); return; }
+    endFix();
     clearSaved();
-    pts = []; distM = 0; startT = Date.now(); pauseAccum = 0;
+    pts = []; distM = 0; startT = Date.now(); pauseAccum = 0; lastAt = 0;
     state = 'tracking';
     acquireWake();
     watchId = navigator.geolocation.watchPosition(onPos, onErr, { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 });
@@ -173,7 +198,7 @@ var Tracking = (function () {
       (cov.missed.length ? '<br><span class="mk-safety">Missed: ' + cov.missed.map(function (n) { return esc(n); }).join(', ') + '</span>' : '<br>Every active set on this line got a visit.');
     openSheet('sheet-track-done');
   }
-  function discard() { pending = null; if (layer) layer.clearLayers(); clearSaved(); closeSheets(); }
+  function discard() { pending = null; if (layer) layer.clearLayers(); endFix(); clearSaved(); closeSheets(); }
   function downsampleSeg(arr, max) {
     if (arr.length <= max) return arr.map(function (p) { return [Math.round(p.lat * 1e5) / 1e5, Math.round(p.lng * 1e5) / 1e5]; });
     var step = arr.length / max, out = [];
@@ -230,6 +255,150 @@ var Tracking = (function () {
   function clearSaved() {
     if (savedLayer) savedLayer.clearLayers();
     syncRouteBar();
+  }
+  /* go (2026-11-17): Fix route — repair a SAVED trip whose line jumped
+     (a sleep diagonal recorded before the intake fix, or through any
+     path it could not see). The stored points go on the map as tappable
+     dots; Tanner taps the last good point before the bad stretch and
+     the first good point after it, the bar says what the cut removes,
+     and Apply drops the points between and leaves a segment BREAK
+     between the two kept points — the same segment model as live
+     tracking, so nothing is drawn or counted across it. Miles are
+     recomputed from the stored geometry. Apply stays in fix mode, so
+     several bad stretches can be cut one after another; Done leaves
+     with whatever cuts were applied (each one already saved by the
+     caller's callback). */
+  var fixLayer = null, fixPts = null, fixSel = null, fixCb = null;
+  function fixFlatten(track) {
+    var out = [];
+    if (!track || !track.length) return out;
+    var isSegs = Array.isArray(track[0]) && track[0].length > 0 && Array.isArray(track[0][0]);
+    var lines = isSegs ? track : [track];
+    lines.forEach(function (seg, si) {
+      (seg || []).forEach(function (p) { out.push({ lat: p[0], lng: p[1], seg: si }); });
+    });
+    return out;
+  }
+  function fixSegs(list) {
+    var segs = [], cur = [], curSeg = null;
+    (list || []).forEach(function (p) {
+      if (curSeg === null || p.seg !== curSeg) { if (cur.length) segs.push(cur); cur = []; curSeg = p.seg; }
+      cur.push(p);
+    });
+    if (cur.length) segs.push(cur);
+    return segs;
+  }
+  function fixShape(list) {
+    /* back to the stored shape drawSaved reads: flat for one segment,
+       an array of segment arrays when the route has breaks */
+    var segs = fixSegs(list).map(function (seg) {
+      return seg.map(function (p) { return [p.lat, p.lng]; });
+    });
+    return segs.length <= 1 ? (segs[0] || []) : segs;
+  }
+  function fixMiles(list) {
+    var m = 0;
+    for (var i = 1; i < (list || []).length; i++) {
+      if (list[i].seg === list[i - 1].seg) m += hav(list[i - 1], list[i]);
+    }
+    return Math.round((m / 1609.344) * 10) / 10;
+  }
+  function fixStretch() {
+    /* what an Apply removes: the points strictly between the two taps,
+       and the within-segment path length from the first tap to the
+       second — after the cut that length is gone and the break between
+       the kept points counts nothing. */
+    var a = fixSel.a, b = fixSel.b, m = 0;
+    for (var i = a + 1; i <= b; i++) {
+      if (fixPts[i].seg === fixPts[i - 1].seg) m += hav(fixPts[i - 1], fixPts[i]);
+    }
+    return { n: b - a - 1, m: m };
+  }
+  function fixDraw() {
+    if (!fixLayer) return;
+    fixLayer.clearLayers();
+    if (!fixPts) return;
+    fixSegs(fixPts).forEach(function (seg) {
+      if (seg.length > 1) {
+        L.polyline(seg.map(function (p) { return [p.lat, p.lng]; }), { color: '#e5484d', weight: 4, opacity: 0.5 }).addTo(fixLayer);
+      }
+    });
+    if (fixSel && fixSel.a !== null && fixSel.b !== null) {
+      var stretch = fixPts.slice(fixSel.a, fixSel.b + 1);
+      L.polyline(stretch.map(function (p) { return [p.lat, p.lng]; }), { color: '#e7c945', weight: 6, opacity: 0.95 }).addTo(fixLayer);
+    }
+    fixPts.forEach(function (p, i) {
+      var chosen = !!fixSel && (i === fixSel.a || i === fixSel.b);
+      var mk = L.circleMarker([p.lat, p.lng], {
+        radius: chosen ? 10 : 7, color: '#ffffff', weight: 2,
+        fillColor: chosen ? '#e7c945' : '#e5484d', fillOpacity: 1
+      });
+      mk.on('click', function () { fixTap(i); });
+      mk.addTo(fixLayer);
+    });
+  }
+  function fixBar() {
+    var bar = $('fix-bar'), lb = $('fix-bar-label'), ap = $('btn-fix-apply');
+    if (!bar || !lb || !ap) return;
+    if (!fixPts) { bar.classList.remove('show'); return; }
+    bar.classList.add('show');
+    if (!fixSel || fixSel.a === null) {
+      lb.textContent = 'Fix route — tap the last good point before the bad stretch.';
+      ap.style.display = 'none';
+    } else if (fixSel.b === null) {
+      lb.textContent = 'Now tap the first good point after the bad stretch.';
+      ap.style.display = 'none';
+    } else {
+      var st = fixStretch();
+      lb.textContent = st.n > 0
+        ? 'Cut ' + st.n + ' point' + (st.n === 1 ? '' : 's') + ' — ' + fmtDist(st.m) + ' of route comes out.'
+        : 'Join these two points with a break — ' + fmtDist(st.m) + ' of route comes out.';
+      ap.style.display = '';
+    }
+  }
+  function fixTap(i) {
+    if (!fixPts || i < 0 || i >= fixPts.length) return;
+    if (!fixSel || fixSel.a === null) { fixSel = { a: i, b: null }; }
+    else if (fixSel.b === null) {
+      if (i === fixSel.a) { fixSel = { a: null, b: null }; }
+      else if (i < fixSel.a) { fixSel = { a: i, b: fixSel.a }; }
+      else { fixSel.b = i; }
+    } else { fixSel = { a: i, b: null }; }
+    fixDraw(); fixBar();
+  }
+  function fixApply() {
+    if (!fixPts || !fixSel || fixSel.a === null || fixSel.b === null) return;
+    var a = fixSel.a, b = fixSel.b, sameSeg = fixPts[a].seg === fixPts[b].seg, cutSeg = fixPts[a].seg;
+    var kept = [];
+    fixPts.forEach(function (p, i) { if (i <= a || i >= b) kept.push(p); });
+    if (sameSeg) {
+      /* the second kept point opens a new segment; everything from it
+         onward in its old segment (and later segments, harmlessly)
+         renumbers with it, so earlier breaks survive untouched */
+      kept.forEach(function (p, i) { if (i > a && p.seg >= cutSeg) p.seg += 1; });
+    }
+    fixPts = kept;
+    fixSel = { a: null, b: null };
+    var res = { track: fixShape(fixPts), miles: fixMiles(fixPts) };
+    fixDraw(); fixBar();
+    if (fixCb) fixCb(res);
+    toast('Cut made — the route now breaks there. Tap another stretch, or Done.');
+  }
+  function startFix(track, cb) {
+    if (!fixLayer) return;
+    clearSaved();
+    fixPts = fixFlatten(track);
+    fixSel = { a: null, b: null };
+    fixCb = cb || null;
+    fixDraw(); fixBar();
+    if (mapRef && fixPts.length) {
+      mapRef.fitBounds(L.latLngBounds(fixPts.map(function (p) { return L.latLng(p.lat, p.lng); })), { padding: [30, 30] });
+    }
+  }
+  function endFix() {
+    fixPts = null; fixSel = null; fixCb = null;
+    if (fixLayer) fixLayer.clearLayers();
+    fixBar();
   }
   /* Q201: the route bar is the standing home of a drawn route AND of an
      unsaved just-tracked route: it says which state things are in, offers
@@ -293,8 +462,10 @@ var Tracking = (function () {
     var d = $('btn-track-discard'); if (d) d.onclick = discard;
     var h = $('btn-route-hide'); if (h) h.onclick = hideRoute;
     var rs = $('btn-route-save'); if (rs) rs.onclick = function () { saveToMileage(); syncRouteBar(); };
+    var fa = $('btn-fix-apply'); if (fa) fa.onclick = fixApply;
+    var fd = $('btn-fix-done'); if (fd) fd.onclick = endFix;
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', wire);
   else wire();
-  return { attach: attach, start: start, syncFab: syncFab, active: function () { return state !== 'idle'; }, drawSaved: drawSaved, clearSaved: clearSaved, rescuePending: rescuePending, _test: { hav: hav, start: start, onPos: onPos, stop: stop, state: function () { return state; }, pts: function () { return pts; }, miles: function () { return distM / 1609.344; }, segs: function () { return segments(pts).length; }, downsample: downsample, wake: function () { return !!wakeSentinel; } } };
+  return { attach: attach, start: start, syncFab: syncFab, active: function () { return state !== 'idle'; }, drawSaved: drawSaved, clearSaved: clearSaved, rescuePending: rescuePending, startFix: startFix, endFix: endFix, _test: { hav: hav, start: start, onPos: onPos, stop: stop, state: function () { return state; }, pts: function () { return pts; }, miles: function () { return distM / 1609.344; }, segs: function () { return segments(pts).length; }, downsample: downsample, wake: function () { return !!wakeSentinel; }, fixTap: fixTap, fixApply: fixApply, fixState: function () { return { active: !!fixPts, n: fixPts ? fixPts.length : 0, sel: fixSel, shape: fixPts ? fixShape(fixPts) : null, miles: fixPts ? fixMiles(fixPts) : null }; } } };
 })();
