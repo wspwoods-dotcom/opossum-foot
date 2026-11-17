@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-11-17gn';
+var APP_VERSION = 'beta 0.1 · build 2026-11-17go';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -6879,6 +6879,7 @@ function tripRowHTML(tr) {
       (det ? '<div class="dim" style="margin-bottom:8px">' + esc(det) + '</div>' : '') +
       '<div class="btn-row">' +
       '<button type="button" class="btn-secondary" data-trip-show="' + esc(tr.id) + '">Show on map</button>' +
+      (tr.track && tr.track.length > 1 ? '<button type="button" class="btn-secondary" data-trip-fix="' + esc(tr.id) + '">Fix route</button>' : '') +
       '<button type="button" class="btn-ghost" data-trip-gdel="' + esc(tr.id) + '">Delete</button>' +
       '</div>' +
       '</div>' +
@@ -7006,6 +7007,26 @@ function renderPaperworkMileage() {
     (function (el) {
       el.onclick = function () { deleteTrip(lineOf(el), el.getAttribute('data-trip-gdel')); };
     })(gdels[g]);
+  }
+  /* go: Fix route — a GPS trip whose line jumped (the sleep diagonal)
+     can be repaired after the fact. Tracking owns the map work; each
+     applied cut lands back on the trip here and saves, so the readout,
+     the map, and the mileage agree and survive a reload. */
+  var fixes = box.querySelectorAll('[data-trip-fix]');
+  for (var f2 = 0; f2 < fixes.length; f2++) {
+    (function (el) {
+      el.onclick = function () {
+        var tr = tripById(el.getAttribute('data-trip-fix'));
+        if (tr && tr.track && tr.track.length > 1 && window.Tracking) {
+          switchTab('map');
+          Tracking.startFix(tr.track, function (res) {
+            tr.track = res.track; tr.miles = res.miles;
+            Store.save(); renderPaperworkMileage();
+          });
+        }
+        else toast('No route is saved on that trip.');
+      };
+    })(fixes[f2]);
   }
   /* gl: a trip row's head taps the row open and closed. */
   var togs = box.querySelectorAll('[data-trip-toggle]');
