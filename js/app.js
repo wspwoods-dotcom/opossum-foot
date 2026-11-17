@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-11-17gm';
+var APP_VERSION = 'beta 0.1 · build 2026-11-17gn';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -105,6 +105,9 @@ var Store = {
     /* Q68: trap check clock — hours between required checks, default 24. */
     if (typeof this.data.checkIntervalHours !== 'number' || this.data.checkIntervalHours <= 0) this.data.checkIntervalHours = 24;
     if (typeof this.data.checkClockOn !== 'boolean') this.data.checkClockOn = true; /* alerts on by default */
+    /* gn: the trapper's own trap tag text (Settings → Where You Trap),
+       shown back beside the state's Cat 1 trap-tag rule on the Seasons tab. */
+    if (typeof this.data.trapTag !== 'string') this.data.trapTag = '';
     migrateCheckClock(this.data);
     /* Q104 (2026-10-01): Tanner — notes get no tap-to-fill suggestions;
        purge any remembered notes, including ones already deleted from sets. */
@@ -4535,7 +4538,7 @@ function saveLog() {
      and may want the set to reflect the new trap, set type, or attractants.
      Past catches keep what they were stamped with; only future catches
      pick up the change (B32). */
-  if (!isOther) openPostCatchPrompt(logSetId);
+  if (!isOther) openPostCatchPrompt(logSetId, log);
   /* INVARIANT: saving a log — catch or Other event — NEVER changes the
      set's trap status. Status is manual-only: no s.status assignment
      exists in saveLog or any log code path. */
@@ -4549,10 +4552,23 @@ function saveLog() {
    changed when they remade the set. "Update this set" opens the full Edit
    Set form; "Keep as-is" just closes. Editing never rewrites past catches. */
 var postCatchSetId = null;
-function openPostCatchPrompt(setId) {
+function openPostCatchPrompt(setId, log) {
   var s = getSet(setId);
   if (!s) return;
   postCatchSetId = setId;
+  /* gn: if this species carries a sealing deadline (Cat 2) or an
+     incidental-catch procedure (Cat 9) in this state, note it under the
+     set summary — informational only, never blocks anything. */
+  var noteBox = $('pc-gap-note');
+  if (noteBox) {
+    var notes = log ? gapNotesForCatch(log.species) : [];
+    noteBox.innerHTML = notes.map(function (n) {
+      return '<div class="warnbox"><div class="wb-title">' + esc(n.cat === 2 ? 'Tagging / sealing — ' : 'Incidental catch — ') + esc(log.species) + '</div>' +
+        esc(n.entry.rule) +
+        (n.entry.deadline ? ' <strong>Deadline: ' + esc(n.entry.deadline) + '.</strong>' : '') +
+        '<div class="reminder-tag">' + esc(REMINDER_LINE) + '</div></div>';
+    }).join('');
+  }
   var html = '';
   function pcRow(label, val) {
     if (val) html += '<dt>' + esc(label) + '</dt><dd>' + esc(val) + '</dd>';
@@ -6622,6 +6638,7 @@ function renderSeasons(filter) {
     rl.removeAttribute('href');
   }
   renderSeasonsCompliance(d);
+  renderSeasonsGap(d);
   var q = (filter || '').toLowerCase();
   var list = sortSpeciesAlpha(stateSpecies().filter(function (sp) {
     return !q || sp.common_name.toLowerCase().indexOf(q) !== -1;
@@ -6681,6 +6698,104 @@ function renderSeasonsCompliance(d) {
     if (open) { body.setAttribute('hidden', ''); card.classList.remove('open'); }
     else { body.removeAttribute('hidden'); card.classList.add('open'); }
   };
+}
+
+/* ================= 10b. GAP-REGULATION CATEGORIES (gn, 2026-11-17) ======
+   The gap sweep: requirement categories the season data never carried —
+   trap owner-ID tags (1), permission (5), snare construction (10),
+   setbacks (11), carcass/waste (12), trapper education (6) and
+   nonresident rules (7) render here on the Seasons tab; pelt sealing (2),
+   harvest reporting (3) and sell-by deadlines (4) plus the nuisance
+   operator note (8) render on the Paperwork tab; incidental-catch
+   procedures (9) and sealing notes ride the post-catch confirmation.
+   Data: js/gap-data.js, generated from data/us-gap-categories.json by
+   tools/build-gap-data.js. Reminder-grade reference only, like
+   everything else on these tabs. */
+var GAP_CAT_LABELS = {
+  1: 'Trap tags (owner ID)', 2: 'Pelt tagging & sealing', 3: 'Harvest reporting',
+  4: 'Selling & holding pelts', 5: 'Permission to trap', 6: 'Trapper education',
+  7: 'Nonresident trappers', 8: 'Nuisance wildlife work', 9: 'Incidental catch',
+  10: 'Snare construction', 11: 'Setbacks', 12: 'Carcasses & waste'
+};
+function gapEntries(code, cat) {
+  var all = (window.OPOSSUM_FOOT_GAP_DATA || {})[code || activeStateCode()] || [];
+  if (!cat) return all;
+  return all.filter(function (e) { return e.category === cat; });
+}
+function gapSourceHost(url) {
+  var m = /^\w+:\/\/([^\/]+)/.exec(url || '');
+  return m ? m[1].replace(/^www\./, '') : (url || '');
+}
+/* Seasons tab: a second collapsible card under the Trap & Snare Rules
+   card — same markup, same toggle behaviour. The season data's
+   license_summary is never rendered as its own view, so the licensing
+   categories (6, 7) ride in this card under their own headings. */
+function renderSeasonsGap(d) {
+  var box = $('seasons-gap');
+  if (!box) return;
+  var code = activeStateCode();
+  var secs = [];
+  function sec(cat, extra) {
+    var list = gapEntries(code, cat);
+    if (!list.length) return;
+    var h = '<p class="rules-sec">' + esc(GAP_CAT_LABELS[cat]) + '</p><ul class="rules-list">' +
+      list.map(function (e) { return '<li>' + esc(e.rule) + '</li>'; }).join('') + '</ul>';
+    if (extra) h += extra;
+    secs.push(h);
+  }
+  var tag = (Store.data.trapTag || '').trim();
+  sec(1, tag
+    ? '<p class="dim">Your trap tag: <strong>' + esc(tag) + '</strong></p>'
+    : '<p class="dim">You haven\'t saved your trap tag yet — add it under Settings → Where You Trap and it will show here with this rule.</p>');
+  sec(5); sec(10); sec(11); sec(12); sec(6); sec(7);
+  if (!secs.length) { box.innerHTML = ''; box.hidden = true; return; }
+  var srcs = [];
+  gapEntries(code).forEach(function (e) {
+    if (e.source && srcs.indexOf(e.source) < 0) srcs.push(e.source);
+  });
+  box.innerHTML = '<div class="card setsec" id="gap-card">' +
+    '<button type="button" class="setsec-head" id="gap-toggle"><span>' + esc(d.state_name) + ' — Tags, Permission, Setbacks &amp; Licensing</span>' +
+    '<span class="setsec-chev">›</span></button>' +
+    '<div class="setsec-body" hidden>' + secs.join('') +
+    '<p class="dim rules-src">Sources: ' + srcs.map(function (u) {
+      return '<a href="' + esc(u) + '" target="_blank" rel="noopener">' + esc(gapSourceHost(u)) + '</a>';
+    }).join(' · ') + '<br>' + esc(REMINDER_LINE) + '</p></div></div>';
+  box.hidden = false;
+  $('gap-toggle').onclick = function () {
+    var card = $('gap-card');
+    var body = card.querySelector('.setsec-body');
+    var open = !body.hasAttribute('hidden');
+    if (open) { body.setAttribute('hidden', ''); card.classList.remove('open'); }
+    else { body.removeAttribute('hidden'); card.classList.add('open'); }
+  };
+}
+/* Does a gap entry's rule text name this species? Matches the full common
+   name, its last word, and a few everyday aliases (the app says
+   "River Otter"; the rules say "otter"). */
+function gapSpeciesTerms(name) {
+  var n = (name || '').toLowerCase().trim();
+  if (!n) return [];
+  var terms = [n];
+  var words = n.split(/\s+/);
+  if (words.length > 1 && terms.indexOf(words[words.length - 1]) < 0) terms.push(words[words.length - 1]);
+  var alias = { 'river otter': 'otter', 'american marten': 'marten', 'pine marten': 'marten', 'canada lynx': 'lynx', 'striped skunk': 'skunk', 'spotted skunk': 'skunk', 'red fox': 'fox', 'gray fox': 'fox', 'grey fox': 'fox' };
+  if (alias[n] && terms.indexOf(alias[n]) < 0) terms.push(alias[n]);
+  return terms;
+}
+/* gn: sealing (Cat 2) and incidental-catch (Cat 9) notes for a logged
+   catch of the given species, in the active line's state. */
+function gapNotesForCatch(species) {
+  var terms = gapSpeciesTerms(species);
+  if (!terms.length) return [];
+  var out = [];
+  [2, 9].forEach(function (cat) {
+    gapEntries(null, cat).forEach(function (e) {
+      var t = (e.rule || '').toLowerCase();
+      var hit = terms.some(function (term) { return t.indexOf(term) >= 0; });
+      if (hit) out.push({ cat: cat, entry: e });
+    });
+  });
+  return out;
 }
 
 function showSpeciesDetail(name) {
@@ -6904,6 +7019,37 @@ function renderPaperworkMileage() {
   }
   fillTripThumbs(box);
 }
+/* gn: Paperwork tab deadlines card — the active line's state pelt
+   sealing, harvest reporting, and sell-by deadlines (live-verified
+   entries only; the generator holds unverified ones out of the app),
+   plus the state's nuisance-operator note (Cat 8) where one exists.
+   The whole card hides when the state has none of these. */
+function renderPaperworkDeadlines() {
+  var card = $('setsec-deadlines');
+  var box = $('paperwork-deadlines');
+  if (!card || !box) return;
+  var code = activeStateCode();
+  var d = stateData();
+  var h = '';
+  [[2, GAP_CAT_LABELS[2]], [3, GAP_CAT_LABELS[3]], [4, GAP_CAT_LABELS[4]]].forEach(function (g) {
+    var list = gapEntries(code, g[0]);
+    if (!list.length) return;
+    h += '<p class="rules-sec">' + esc(g[1]) + '</p><ul class="rules-list">' + list.map(function (e) {
+      return '<li>' + (e.deadline ? '<strong>' + esc(e.deadline) + '</strong> — ' : '') + esc(e.rule) + '</li>';
+    }).join('') + '</ul>';
+  });
+  var nwco = gapEntries(code, 8);
+  if (nwco.length) {
+    h += '<p class="rules-sec">' + esc(GAP_CAT_LABELS[8]) + '</p><ul class="rules-list">' +
+      nwco.map(function (e) { return '<li>' + esc(e.rule) + '</li>'; }).join('') + '</ul>';
+  }
+  if (!h) { card.style.display = 'none'; box.innerHTML = ''; return; }
+  card.style.display = '';
+  var title = $('setsec-deadlines-title');
+  if (title) title.textContent = 'Deadlines & Permits — ' + (d ? d.state_name : code);
+  box.innerHTML = h + '<p class="dim rules-src">' + esc(REMINDER_LINE) + '</p>';
+}
+
 function renderLicenses() {
   var grid = $('license-grid');
   IDB.all('photos').then(function (all) {
@@ -8718,7 +8864,7 @@ function switchTab(name) {
   if (name === 'scorecard') renderScorecardTab();
   if (name === 'totals') renderTotals();
   if (name === 'seasons') renderSeasons($('seasons-search').value);
-  if (name === 'licenses') { renderLicenses(); renderLandowners(); renderPaperworkMileage(); }
+  if (name === 'licenses') { renderLicenses(); renderLandowners(); renderPaperworkMileage(); renderPaperworkDeadlines(); }
   if (name === 'lines') renderLines();
   reportViewport(); /* fj: keep the About diagnostic fresh, incl. bannerB while on the map */
 }
@@ -8742,6 +8888,7 @@ function refreshForLine() {
   renderLicenses();
   renderLandowners();
   renderPaperworkMileage(); /* df: mileage follows the active line */
+  renderPaperworkDeadlines(); /* gn: deadlines follow the active line's state too */
   renderMapStatusFilters();
   buildStateSelect($('settings-state'), activeStateCode());
   renderSettingsLineName();
@@ -9134,6 +9281,17 @@ function enterMain() {
     Store.save(); refreshMarkers();
     toast(this.checked ? 'Wind arrows are on.' : 'Wind arrows are off.');
   };
+  /* gn: my trap tag — plain text, saved like every other setting; shown
+     back on the Seasons tab beside the state's trap-tag rule. */
+  var tagInput = $('settings-traptag');
+  if (tagInput) {
+    tagInput.value = Store.data.trapTag || '';
+    tagInput.onchange = function () {
+      Store.data.trapTag = this.value.trim();
+      Store.save();
+      toast(Store.data.trapTag ? 'Trap tag saved.' : 'Trap tag cleared.');
+    };
+  }
   /* Q103: GPS coordinates stay hidden (screenshot-safe) unless this is on. Default off. */
   $('settings-showcoords').checked = !!Store.data.showCoords;
   $('settings-showcoords').onchange = function () {
