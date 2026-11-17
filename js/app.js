@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-11-16gl';
+var APP_VERSION = 'beta 0.1 · build 2026-11-17gm';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -1652,6 +1652,94 @@ function attachSuggest(inputId, boxId, key, typeToFilter) {
     setTimeout(function () { box.className = 'suggest'; }, 160);
   });
 }
+/* ---- gm (2026-11-17, Tanner): Set Name clear × + live suggestions ----
+   The gl build made the Set Name field plain; Tanner reversed that on his
+   phone: renaming a set meant backspacing the whole name by hand, and the
+   old name list was missed. So: (1) a clear × inside the field's right
+   edge — the same Q236 .clear-wrap/.input-clear pattern the manual-entry
+   fields use — shown only while the field has text; tapping it empties
+   the field and keeps focus there. (2) While typing, the dormant
+   #sf-name-suggest box lists the ACTIVE LINE's existing set names that
+   contain the typed text, in natural alpha-numerical order (Muskrat 2
+   before Muskrat 10). No match = the box hides completely and typing is
+   free — nothing blocks, and the duplicate-name check at save is
+   unchanged. Tapping a suggestion fills the field with that exact name
+   and closes the box. Existing set names only: no None row, no sponsors. */
+var setNameClearBtn = null;
+function updateSetNameClear() {
+  var inp = $('sf-name');
+  if (setNameClearBtn) setNameClearBtn.hidden = !(inp && inp.value);
+}
+function hideSetNameSuggest() {
+  var box = $('sf-name-suggest');
+  if (box) { box.className = 'suggest'; box.innerHTML = ''; }
+}
+function renderSetNameSuggest() {
+  var inp = $('sf-name'), box = $('sf-name-suggest');
+  if (!inp || !box) return;
+  if (inp._justFilled) { inp._justFilled = false; hideSetNameSuggest(); return; }
+  var q = inp.value.trim().toLowerCase();
+  if (!q) { hideSetNameSuggest(); return; }
+  var seen = {}, names = [];
+  activeSets().forEach(function (s) {
+    var nm = String(s.name || '').trim();
+    if (!nm) return;
+    var k = nm.toLowerCase();
+    if (seen[k] || k.indexOf(q) === -1) return;
+    seen[k] = true; names.push(nm);
+  });
+  names.sort(function (a, b) { return a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' }); });
+  if (!names.length) { hideSetNameSuggest(); return; }
+  box.innerHTML = names.map(function (n) {
+    return '<button type="button" class="suggest-item" data-v="' + esc(n) + '">' + esc(n) + '</button>';
+  }).join('');
+  box.className = 'suggest show';
+  var btns = box.querySelectorAll('.suggest-item');
+  for (var i = 0; i < btns.length; i++) {
+    btns[i].onclick = function () {
+      inp.value = this.getAttribute('data-v');
+      hideSetNameSuggest();
+      updateSetNameClear();
+      inp.focus();
+      /* Set AFTER focus() — the same order attachSuggest uses: refocusing
+         fires a focus render that would reopen the box, and the flag is
+         what the input render below consumes to keep it shut. */
+      inp._justFilled = true;
+      inp.dispatchEvent(new Event('input', { bubbles: true }));
+    };
+  }
+}
+function wireSetNameField() {
+  var inp = $('sf-name'), box = $('sf-name-suggest');
+  if (!inp || !box || inp._setNameWired) return;
+  inp._setNameWired = true;
+  var wrap = document.createElement('span');
+  wrap.className = 'clear-wrap';
+  inp.parentNode.insertBefore(wrap, inp);
+  wrap.appendChild(inp);
+  var btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'input-clear';
+  btn.id = 'sf-name-clear';
+  btn.setAttribute('aria-label', 'Clear set name');
+  btn.textContent = '×';
+  btn.hidden = !inp.value;
+  wrap.appendChild(btn);
+  setNameClearBtn = btn;
+  btn.onclick = function (e) {
+    if (e && e.stopPropagation) e.stopPropagation();
+    inp.value = '';
+    hideSetNameSuggest();
+    updateSetNameClear();
+    inp.focus();
+    inp.dispatchEvent(new Event('input', { bubbles: true }));
+  };
+  inp.addEventListener('input', renderSetNameSuggest);
+  inp.addEventListener('input', updateSetNameClear);
+  inp.addEventListener('focus', renderSetNameSuggest);
+  inp.addEventListener('blur', function () { setTimeout(hideSetNameSuggest, 160); });
+}
+
 /* ---- Q26: stacked attractant rows on the set form ----------------------
    Each attractant field renders one row per value: text input with its own
    tap-to-fill suggestions, a × to drop the row, and an "add another"
@@ -3343,6 +3431,7 @@ function openSetForm(coords, setId) {
   $('setform-title').textContent = s ? 'Edit Set' : 'New Set';
   $('sf-name').value = s ? s.name : nextSetName();
   $('sf-name').placeholder = s ? '' : 'e.g. Creek crossing';
+  updateSetNameClear(); hideSetNameSuggest(); /* gm: the × mirrors the prefilled name; the suggestion box starts shut */
   renderMakerOptions();
   $('sf-maker').value = s ? (s.trapMaker || '__mixed') : (tmpl ? (tmpl.trapMaker || '__mixed') : '');
   var pk = (s && s.trapMaker) ? pickerTypeFor(s.trapMaker, s.trapType, s.trapSpring, s.trapModel)
@@ -6331,6 +6420,7 @@ function renderTotals() {
   var bySpecies = {}, bySet = {}, byDisp = { kept: 0, alive: 0, released: 0, transported: 0 };
   var byDispSp = { kept: {}, alive: {}, released: {}, transported: {} }; /* Q61: species caught under each disposition */
   var byMonth = {}; /* ge: catches grouped by calendar month, 'YYYY-MM' keys */
+  var bySetType = {}, byTrapType = {}; /* gm (2026-11-17): catches grouped by the log's stamped set type / trap type */
   logs.forEach(function (l) {
     if (l.otherType) return; /* Other events are events, not catches — excluded from Totals */
     var y = l.seasonYear || seasonYearOf(l.date);
@@ -6346,8 +6436,26 @@ function renderTotals() {
       byMonth[mk] = byMonth[mk] || { kept: 0, alive: 0, released: 0, transported: 0 };
       byMonth[mk][bucket] += c;
     }
+    /* gm: group by what the catch was stamped with when it was logged
+       (saveLog stamps setType + trapType onto every log). A log with no
+       stamp (legacy/imported) falls back to its set's current values via
+       setId; a log whose set is gone and carries no stamp lands in
+       Unspecified. The stamp holds the foundation name only — logs never
+       carried the set's variation — so By Set Type groups by foundation /
+       legacy name exactly as stamped. */
+    var srcSet = l.setId ? getSet(l.setId) : null;
+    var stVal = (typeof l.setType === 'string' ? l.setType.trim() : '');
+    if (!stVal && srcSet) stVal = setTypeLabel(srcSet);
+    var stKey = stVal || 'Unspecified';
+    bySetType[stKey] = bySetType[stKey] || { kept: 0, alive: 0, released: 0, transported: 0 };
+    bySetType[stKey][bucket] += c;
+    var ttVal = (typeof l.trapType === 'string' ? l.trapType.trim() : '');
+    if (!ttVal && srcSet) ttVal = String(srcSet.trapType || '').trim();
+    var ttKey = ttVal || 'Unspecified';
+    byTrapType[ttKey] = byTrapType[ttKey] || { kept: 0, alive: 0, released: 0, transported: 0 };
+    byTrapType[ttKey][bucket] += c;
   });
-  function rows(obj, withSetup) {
+  function rows(obj, withSetup, prefix) {
     /* 2026-10-01 (Tanner): the headline number is TOTAL caught — a released
        animal was still caught. Disposition breakdown hides behind the tap.
        Sorted by the total actually displayed, highest to lowest. */
@@ -6360,8 +6468,9 @@ function renderTotals() {
       if (o.transported) sub.push(o.transported + ' transported');
       /* Rows show the title (name + total caught) only. The
          disposition breakdown and (for sets) the setup fields hide behind a
-         tap, so the tab reads clean. */
-      var key = (withSetup ? 'set:' : 'sp:') + k;
+         tap, so the tab reads clean. gm: each card passes its own key
+         prefix so expanded-row state never collides across cards. */
+      var key = (prefix || (withSetup ? 'set:' : 'sp:')) + k;
       var hasDetail = sub.length > 0 || !!setup;
       var open = hasDetail && !!totalsExpanded[key];
       var html = '<div class="rowline' + (setup ? ' totals-setrow' : '') + '"' +
@@ -6419,6 +6528,8 @@ function renderTotals() {
     var tc = totalsCollapsed(), cards = '';
     cards += '<div class="card">' + totalsCardHead('species', 'By Species') + '<div class="totals-card-body"' + (tc.species ? ' hidden' : '') + '>' + rows(bySpecies, false) + '</div></div>';
     cards += '<div class="card">' + totalsCardHead('set', 'By Set') + '<div class="totals-card-body"' + (tc.set ? ' hidden' : '') + '>' + rows(bySet, true) + '</div></div>';
+    cards += '<div class="card">' + totalsCardHead('settype', 'By Set Type') + '<div class="totals-card-body"' + (tc.settype ? ' hidden' : '') + '>' + rows(bySetType, false, 'st:') + '</div></div>';
+    cards += '<div class="card">' + totalsCardHead('traptype', 'By Trap Type') + '<div class="totals-card-body"' + (tc.traptype ? ' hidden' : '') + '>' + rows(byTrapType, false, 'tt:') + '</div></div>';
     {
       var names = [['kept', 'Dispatched'], ['alive', 'Kept alive'], ['released', 'Released'], ['transported', 'Transported']];
       /* Q86 (2026-10-01): Tanner — sort largest count first, it reads cleaner. */
@@ -6731,8 +6842,9 @@ function renderPaperworkMileage() {
   /* gb: with recording off, the two record buttons give way to one line
      saying so — past trips above stay listed and readable. */
   var actions = on
-    ? '<button type="button" class="btn-secondary" data-pm-logtrip="' + esc(ln.id) + '" style="margin-top:10px">\uFF0B Log Trip</button>' +
-      '<button type="button" class="btn-secondary" data-pm-track="' + esc(ln.id) + '" style="margin-top:10px;margin-left:8px"><span style="color:#e5484d">\u25CF</span> Track a route</button>'
+    ? '<div style="display:flex;flex-direction:column;gap:10px;margin-top:10px">' +
+      '<button type="button" class="btn-secondary" data-pm-logtrip="' + esc(ln.id) + '">\uFF0B Log Trip</button>' +
+      '<button type="button" class="btn-secondary" data-pm-track="' + esc(ln.id) + '"><span style="color:#e5484d">\u25CF</span> Track a route</button></div>'
     : '<p class="dim" style="margin-top:10px">Mileage is off \u2014 these trips stay here to read. To record new trips, turn on Mileage log in Settings \u2192 Feature Toggles.</p>';
   box.innerHTML = '<div class="pm-line" data-pm-line-block="' + esc(ln.id) + '">' +
     '<div class="pm-line-head"><span><strong>' + esc(ln.name) + '</strong> ' +
@@ -10001,9 +10113,11 @@ function wireUp() {
   /* Q26: attractant rows wire their own suggestions in renderAttrRows */
   /* Q12: app-wide saved-entry suggestions — tap-to-fill, never auto-fill.
      Each kind is scoped to its own field. */
-  /* gl (Tanner's ruling, 2026-11-16): the Set Name field is PLAIN — no
-     suggestion box. Set names must be unique, so the old popup only ever
-     offered names the app would refuse, and it grew with every set saved. */
+  /* gm (Tanner's ruling, 2026-11-17): the Set Name field gets its clear ×
+     and its existing-name suggestions back (see wireSetNameField) — the
+     gl plain-field ruling is reversed. Suggestions never block: the
+     duplicate-name check at save still does that job alone. */
+  wireSetNameField();
   attachSuggest('sf-missing-detail', 'sf-missing-detail-suggest', 'missingdetail');
   $('sf-date').onchange = function () { updateDateDOW('sf-date', 'sf-date-dow'); };
   $('btn-voice-setnotes').onclick = function () {
