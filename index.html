@@ -184,6 +184,7 @@
       <a id="seasons-regs" class="regs-link" target="_blank" rel="noopener" hidden></a>
       <a id="seasons-warden" class="regs-link" target="_blank" rel="noopener" hidden></a>
       <div id="seasons-rules" hidden></div>
+      <div id="seasons-gap" hidden></div>
       <input type="search" id="seasons-search" placeholder="Search species…" aria-label="Search species">
       <div style="height:10px"></div>
       <div id="seasons-list"></div>
@@ -224,6 +225,16 @@
         <div class="setsec-body" id="setsec-mileage-body" hidden>
           <p class="dim" style="margin:0 0 8px">Odometer trips and tracked routes for the line you're on — for the tax book. Track a route follows you on the map and files its miles here when you stop. Export every line's log from the Data tab → Export mileage (CSV).</p>
           <div id="paperwork-mileage-lines"></div>
+        </div>
+      </div>
+      <!-- gn (2026-11-17): state deadlines card — pelt sealing, harvest
+           reporting, and sell-by deadlines for the active line's state,
+           from the gap-regulation research. Renders only when the state
+           has entries (renderPaperworkDeadlines). -->
+      <div class="card setsec" id="setsec-deadlines" style="display:none">
+        <button type="button" class="setsec-head" id="setsec-deadlines-head" data-sec="setsec-deadlines" aria-expanded="false"><span id="setsec-deadlines-title">State Deadlines</span><span class="setsec-chev" aria-hidden="true">›</span></button>
+        <div class="setsec-body" id="setsec-deadlines-body" hidden>
+          <div id="paperwork-deadlines"></div>
         </div>
       </div>
     </div>
@@ -294,6 +305,11 @@
         <label class="field" for="settings-state">State</label>
         <select id="settings-state"></select>
         <p class="dim" style="margin-top:8px">Applies to the active trap line (<strong id="settings-line-name"></strong>). Changing the state takes effect immediately.</p>
+        <!-- gn (2026-11-17): the trapper's own trap tag / ID, shown back on
+             the Seasons tab rules card in states that require trap tags. -->
+        <label class="field" for="settings-traptag" style="margin-top:12px">My trap tag</label>
+        <input type="text" id="settings-traptag" placeholder="Name &amp; address, or state ID number" autocomplete="off">
+        <p class="dim" style="margin-top:8px">What your trap tags say — many states require your name and address, or a state-issued ID number, on every trap. Kept on this phone only; it shows on the Seasons tab with your state's tag rule.</p>
         <p class="dim" id="settings-home-status" style="margin:12px 0 8px">Not set — the map opens on your trapping state.</p>
         <button class="btn-secondary" id="btn-change-home" type="button">Change home location</button>
       </div>
@@ -872,6 +888,7 @@
     <p>Update this set for next time?</p>
     <p class="dim">Trap, set type, bait, lure — anything that changed.</p>
     <div class="card"><dl class="kv" id="pc-fields"></dl></div>
+    <div id="pc-gap-note"></div>
     <div class="sheet-actions">
       <button class="btn-primary" id="btn-pc-update" type="button">Update this set</button>
     </div>
@@ -897,6 +914,7 @@
 
 <script src="vendor/leaflet/leaflet.js"></script>
 <script src="js/season-data.js"></script>
+<script src="js/gap-data.js"></script>
 <script src="js/guide-content.js"></script>
 <script src="js/trap-catalog.js"></script>
 <script src="js/catalog.js"></script>
