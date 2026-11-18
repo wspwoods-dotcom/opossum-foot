@@ -236,8 +236,18 @@ var Tracking = (function () {
     closeSheets();
     toast('Route filed in the mileage log.');
   }
-  function drawSaved(track) {
+  /* gr (2026-11-18, Tanner): who the drawn saved route belongs to.
+     When app.js draws a saved trip from the Paperwork readout (Show on
+     map, or the landing after a Fix route Done), it passes a context
+     with fix/back callbacks and the route bar offers Fix route for
+     that same trip plus Back to the readout — checking a repair no
+     longer means digging back through Paperwork to find the trip.
+     Draws without a context (an unsaved just-tracked route) clear it,
+     so the two buttons only ever ride a saved trip's route. */
+  var savedCtx = null;
+  function drawSaved(track, ctx) {
     if (!savedLayer || !track || !track.length) return;
+    savedCtx = ctx || null;
     savedLayer.clearLayers();
     /* gk: a saved track is either the flat shape ([[lat,lng],...]) or,
        when the run had recording gaps, an array of segment arrays. */
@@ -253,6 +263,7 @@ var Tracking = (function () {
   /* Q200 (2026-10-18): Tanner — a drawn route had NO way off the map. The
      route bar's Hide button, a fresh track, and a discard all clear it. */
   function clearSaved() {
+    savedCtx = null;
     if (savedLayer) savedLayer.clearLayers();
     syncRouteBar();
   }
@@ -283,7 +294,14 @@ var Tracking = (function () {
      Join instead of Cut — the boundary comes out of the working copy,
      the line draws through, and the connecting leg counts again.
      More than one break between the taps is a hint, not a join: one
-     break at a time, so no leg is ever restored sight unseen. */
+     break at a time, so no leg is ever restored sight unseen.
+     gr (2026-11-18, Tanner): Done used to leave a blank map — the
+     fix layer cleared and nothing was drawn, so the repaired route
+     vanished and he had to dig back through Paperwork to look at it.
+     The caller's callback now draws the saved trip (drawSaved with
+     the trip's context, above), so Done lands on the fixed route
+     itself with Fix route and Back riding the route bar. Cancel is
+     unchanged: discard and out, nothing drawn. */
   var fixLayer = null, fixPts = null, fixSel = null, fixCb = null;
   var fixMks = null, fixLines = null, fixDragEndAt = 0;
   function fixFlatten(track) {
@@ -528,6 +546,12 @@ var Tracking = (function () {
     var drawn = !!(savedLayer && savedLayer.getLayers().length);
     bar.classList.toggle('show', drawn || !!pending);
     var sv = $('btn-route-save'); if (sv) sv.style.display = pending ? '' : 'none';
+    /* gr: Fix route + Back ride the bar only while a saved trip's
+       route is drawn with its context (see drawSaved) — never on an
+       unsaved route, whose bar carries Save instead. */
+    var tripDrawn = drawn && !!savedCtx && !pending;
+    var rf = $('btn-route-fix'); if (rf) rf.style.display = tripDrawn ? '' : 'none';
+    var rb = $('btn-route-back'); if (rb) rb.style.display = tripDrawn ? '' : 'none';
     var lb = $('route-bar-label'); if (lb) lb.textContent = pending ? 'Route — not saved yet' : 'Route on the map';
   }
   /* Q201: Hide while a route is still unsaved asks first — hiding is the
@@ -582,11 +606,13 @@ var Tracking = (function () {
     var d = $('btn-track-discard'); if (d) d.onclick = discard;
     var h = $('btn-route-hide'); if (h) h.onclick = hideRoute;
     var rs = $('btn-route-save'); if (rs) rs.onclick = function () { saveToMileage(); syncRouteBar(); };
+    var rf2 = $('btn-route-fix'); if (rf2) rf2.onclick = function () { if (savedCtx && savedCtx.fix) savedCtx.fix(); };
+    var rb2 = $('btn-route-back'); if (rb2) rb2.onclick = function () { if (savedCtx && savedCtx.back) savedCtx.back(); };
     var fa = $('btn-fix-apply'); if (fa) fa.onclick = fixApply;
     var fd = $('btn-fix-done'); if (fd) fd.onclick = fixDone;
     var fc = $('btn-fix-cancel'); if (fc) fc.onclick = fixCancel;
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', wire);
   else wire();
-  return { attach: attach, start: start, syncFab: syncFab, active: function () { return state !== 'idle'; }, drawSaved: drawSaved, clearSaved: clearSaved, rescuePending: rescuePending, startFix: startFix, endFix: endFix, _test: { hav: hav, start: start, onPos: onPos, stop: stop, state: function () { return state; }, pts: function () { return pts; }, miles: function () { return distM / 1609.344; }, segs: function () { return segments(pts).length; }, downsample: downsample, wake: function () { return !!wakeSentinel; }, fixTap: fixTap, fixApply: fixApply, fixJoin: fixJoin, fixDone: fixDone, fixCancel: fixCancel, fixMarkers: function () { return fixMks; }, fixPoints: function () { return fixPts ? fixPts.map(function (p) { return { lat: p.lat, lng: p.lng, seg: p.seg }; }) : null; }, fixState: function () { return { active: !!fixPts, n: fixPts ? fixPts.length : 0, sel: fixSel, shape: fixPts ? fixShape(fixPts) : null, miles: fixPts ? fixMiles(fixPts) : null }; } } };
+  return { attach: attach, start: start, syncFab: syncFab, active: function () { return state !== 'idle'; }, drawSaved: drawSaved, clearSaved: clearSaved, rescuePending: rescuePending, startFix: startFix, endFix: endFix, _test: { hav: hav, start: start, onPos: onPos, stop: stop, state: function () { return state; }, pts: function () { return pts; }, miles: function () { return distM / 1609.344; }, segs: function () { return segments(pts).length; }, downsample: downsample, wake: function () { return !!wakeSentinel; }, fixTap: fixTap, fixApply: fixApply, fixJoin: fixJoin, fixDone: fixDone, fixCancel: fixCancel, fixMarkers: function () { return fixMks; }, fixPoints: function () { return fixPts ? fixPts.map(function (p) { return { lat: p.lat, lng: p.lng, seg: p.seg }; }) : null; }, fixState: function () { return { active: !!fixPts, n: fixPts ? fixPts.length : 0, sel: fixSel, shape: fixPts ? fixShape(fixPts) : null, miles: fixPts ? fixMiles(fixPts) : null }; }, routeBar: function () { var bar = $('route-bar'), fx = $('btn-route-fix'), bk = $('btn-route-back'); return { shown: !!(bar && bar.classList.contains('show')), fix: !!(fx && fx.style.display !== 'none'), back: !!(bk && bk.style.display !== 'none'), ctx: !!savedCtx, drawn: savedLayer ? savedLayer.getLayers().length : 0 }; } } };
 })();
