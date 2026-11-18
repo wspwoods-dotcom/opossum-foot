@@ -568,19 +568,18 @@ body.route-locked #tabbar { pointer-events: none; opacity: .35; }
   background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
   margin-top: 8px; padding: 14px;
 }
-/* gp (2026-11-17, Tanner): the regs-family cards — the Seasons
-   "{State} — Tags, Permission, Setbacks & Licensing" card and the
-   Paperwork "Deadlines & Permits" card — carry law, not app content,
-   so they wear the same filled yellow as the official buttons
-   (.regs-link: var(--accent) fill, var(--accent-ink) text, ink
-   chevron). Secondary text and the source links take the ink color
-   too: the standard .dim tan and the yellow .rules-src links would
-   vanish on the fill. */
-.regs-card { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
-.regs-card .setsec-head { color: var(--accent-ink); }
-.regs-card .setsec-chev { color: var(--accent-ink); }
-.regs-card .dim { color: var(--accent-ink); opacity: .75; }
-.regs-card .rules-src a { color: var(--accent-ink); }
+/* gp (2026-11-17) gave the two regs-family cards a filled-yellow
+   .regs-card treatment; gv (2026-11-18, Tanner) AMENDS that ruling:
+   yellow belongs to the official BUTTONS only (.regs-link, the Trap &
+   Snare Rules head). The regs lists — the Seasons "{State} — Tags,
+   Permission, Setbacks & Licensing" card and the Paperwork "Deadlines
+   & Permits" card — wear the standard .card treatment like every
+   other list in the app (his words: "the consistent list from
+   above"; in Paperwork, "consistently green like the others"). The
+   .regs-card class and its rules are gone; both cards are plain
+   .card.setsec now, so head/chevron/.dim/.rules-src all take the
+   standard colors (gold survives only in the source links, exactly
+   as in the rules list above them). */
 /* Q99 (2026-10-01): the notes/memos/photos collapsible on the set form, log
    form, and set detail — a divider sets it off from the fields above. */
 .sheet .setsec { border-top: 1px solid var(--line); margin-top: 10px; }
