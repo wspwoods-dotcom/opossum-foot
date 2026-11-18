@@ -341,7 +341,9 @@ fix the app stranded between two breaks; join it to the stretch on
 each side to make the route whole, or leave it be — a stranded point
 draws nothing and counts no miles either way. The trip's miles in the bar
 update as you work. Nothing is saved until you tap **Done**; **Cancel**
-throws the whole edit away and the trip stays exactly as it was.
+throws the whole edit away and the trip stays exactly as it was. When
+you tap **Done**, the fixed route stays on screen so you can check it;
+**Back** returns to Paperwork when you're satisfied.
 
 The on/off switch is **Mileage log** in Settings → Feature Toggles, and it
 only governs recording *new* trips. Turn it off and your recorded trips,
