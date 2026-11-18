@@ -275,7 +275,15 @@ var Tracking = (function () {
      entering fix mode takes a WORKING COPY; drags and cuts touch only
      that copy. Done commits it through the caller's callback (which
      writes the trip and saves); Cancel throws the whole edit away and
-     the stored trip is never touched. */
+     the stored trip is never touched.
+     gq (2026-11-18, Tanner's field case on gp): the gap logic can
+     strand points — a lone single-point segment sitting as a bare dot
+     mid-route, a trip's tail broken off unconnected. JOIN is the third
+     verb: tap a point on each side of ONE break and the bar offers
+     Join instead of Cut — the boundary comes out of the working copy,
+     the line draws through, and the connecting leg counts again.
+     More than one break between the taps is a hint, not a join: one
+     break at a time, so no leg is ever restored sight unseen. */
   var fixLayer = null, fixPts = null, fixSel = null, fixCb = null;
   var fixMks = null, fixLines = null, fixDragEndAt = 0;
   function fixFlatten(track) {
@@ -322,6 +330,17 @@ var Tracking = (function () {
       if (fixPts[i].seg === fixPts[i - 1].seg) m += hav(fixPts[i - 1], fixPts[i]);
     }
     return { n: b - a - 1, m: m };
+  }
+  /* gq: the leg a Join restores — the boundary pair between the two
+     tapped segments (last point of the earlier segment, first point
+     of the next). Joining draws and counts exactly that leg, no more:
+     whatever lies inside each tapped segment was already counted. */
+  function fixJoinLeg() {
+    var a = fixSel.a, b = fixSel.b;
+    for (var i = a; i < b; i++) {
+      if (fixPts[i + 1].seg !== fixPts[i].seg) return hav(fixPts[i], fixPts[i + 1]);
+    }
+    return 0;
   }
   /* gp: a fix point is a divIcon marker — a ~30px touch handle with a
      ~14px visible dot (red, or gold + larger when picked for a cut).
@@ -393,17 +412,27 @@ var Tracking = (function () {
     var mi = $('fix-bar-miles');
     if (mi) mi.textContent = 'Trip: ' + fmtMiles(fixMiles(fixPts));
     if (!fixSel || fixSel.a === null) {
-      lb.textContent = 'Fix route — drag a point to move it, or tap two points to cut between them.';
+      lb.textContent = 'Fix route — drag a point to move it, or tap two points to cut between them or join across a break.';
       ap.style.display = 'none';
     } else if (fixSel.b === null) {
-      lb.textContent = 'Now tap the first good point after the bad stretch.';
+      lb.textContent = 'Now tap the second point — the first good point past the bad stretch, or a point across the break to join.';
       ap.style.display = 'none';
-    } else {
+    } else if (fixPts[fixSel.b].seg === fixPts[fixSel.a].seg) {
       var st = fixStretch();
       lb.textContent = st.n > 0
         ? 'Cut ' + st.n + ' point' + (st.n === 1 ? '' : 's') + ' — ' + fmtDist(st.m) + ' of route comes out.'
         : 'Join these two points with a break — ' + fmtDist(st.m) + ' of route comes out.';
+      ap.textContent = 'Cut it';
       ap.style.display = '';
+    } else if (fixPts[fixSel.b].seg === fixPts[fixSel.a].seg + 1) {
+      /* gq: exactly one break between the taps — the offer is Join */
+      lb.textContent = 'Join these two stretches — ' + fmtDist(fixJoinLeg()) + ' of route comes back in.';
+      ap.textContent = 'Join';
+      ap.style.display = '';
+    } else {
+      /* gq: more than one break between the taps — a hint, no action */
+      lb.textContent = 'Those have more than one break between them — join one break at a time.';
+      ap.style.display = 'none';
     }
   }
   function fixTap(i) {
@@ -418,6 +447,11 @@ var Tracking = (function () {
   }
   function fixApply() {
     if (!fixPts || !fixSel || fixSel.a === null || fixSel.b === null) return;
+    /* gq: the one button serves both verbs — the segment relationship
+       of the two taps decides. Across exactly one break it joins;
+       across more than one it does nothing (the bar already hinted). */
+    if (fixPts[fixSel.b].seg === fixPts[fixSel.a].seg + 1) { fixJoin(); return; }
+    if (fixPts[fixSel.b].seg !== fixPts[fixSel.a].seg) return;
     var a = fixSel.a, b = fixSel.b, sameSeg = fixPts[a].seg === fixPts[b].seg, cutSeg = fixPts[a].seg;
     var kept = [];
     fixPts.forEach(function (p, i) { if (i <= a || i >= b) kept.push(p); });
@@ -433,6 +467,25 @@ var Tracking = (function () {
        to the trip until Done (see fixDone). */
     fixDraw(); fixBar();
     toast('Cut made in the edit — Done saves it, Cancel throws it away.');
+  }
+  /* gq: Join — take the one boundary break between the two tapped
+     segments out of the working copy. The later segment folds into
+     the earlier one and every segment after it renumbers down, so
+     exactly one boundary disappears and later breaks survive. The
+     stranded-dot case is this same move twice: join the dot to the
+     stretch before it, then to the stretch after it. Like drags and
+     cuts, a join lives in the working copy only until Done. */
+  function fixJoin() {
+    if (!fixPts || !fixSel || fixSel.a === null || fixSel.b === null) return;
+    var sA = fixPts[fixSel.a].seg, sB = fixPts[fixSel.b].seg;
+    if (sB !== sA + 1) return;
+    fixPts.forEach(function (p) {
+      if (p.seg === sB) p.seg = sA;
+      else if (p.seg > sB) p.seg -= 1;
+    });
+    fixSel = { a: null, b: null };
+    fixDraw(); fixBar();
+    toast('Joined in the edit — Done saves it, Cancel throws it away.');
   }
   /* gp: Done is the only door out that saves — it hands the working
      copy to the caller's callback (which writes the trip + Store.save)
@@ -535,5 +588,5 @@ var Tracking = (function () {
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', wire);
   else wire();
-  return { attach: attach, start: start, syncFab: syncFab, active: function () { return state !== 'idle'; }, drawSaved: drawSaved, clearSaved: clearSaved, rescuePending: rescuePending, startFix: startFix, endFix: endFix, _test: { hav: hav, start: start, onPos: onPos, stop: stop, state: function () { return state; }, pts: function () { return pts; }, miles: function () { return distM / 1609.344; }, segs: function () { return segments(pts).length; }, downsample: downsample, wake: function () { return !!wakeSentinel; }, fixTap: fixTap, fixApply: fixApply, fixDone: fixDone, fixCancel: fixCancel, fixMarkers: function () { return fixMks; }, fixPoints: function () { return fixPts ? fixPts.map(function (p) { return { lat: p.lat, lng: p.lng, seg: p.seg }; }) : null; }, fixState: function () { return { active: !!fixPts, n: fixPts ? fixPts.length : 0, sel: fixSel, shape: fixPts ? fixShape(fixPts) : null, miles: fixPts ? fixMiles(fixPts) : null }; } } };
+  return { attach: attach, start: start, syncFab: syncFab, active: function () { return state !== 'idle'; }, drawSaved: drawSaved, clearSaved: clearSaved, rescuePending: rescuePending, startFix: startFix, endFix: endFix, _test: { hav: hav, start: start, onPos: onPos, stop: stop, state: function () { return state; }, pts: function () { return pts; }, miles: function () { return distM / 1609.344; }, segs: function () { return segments(pts).length; }, downsample: downsample, wake: function () { return !!wakeSentinel; }, fixTap: fixTap, fixApply: fixApply, fixJoin: fixJoin, fixDone: fixDone, fixCancel: fixCancel, fixMarkers: function () { return fixMks; }, fixPoints: function () { return fixPts ? fixPts.map(function (p) { return { lat: p.lat, lng: p.lng, seg: p.seg }; }) : null; }, fixState: function () { return { active: !!fixPts, n: fixPts ? fixPts.length : 0, sel: fixSel, shape: fixPts ? fixShape(fixPts) : null, miles: fixPts ? fixMiles(fixPts) : null }; } } };
 })();
