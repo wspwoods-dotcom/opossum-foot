@@ -59,15 +59,15 @@ var Markers = (function () {
       if (!visible(mk)) return;
       if (mk.poly && mk.poly.length > 2) {
         var p = L.polygon(mk.poly, { className: 'mk-area', color: '#f0d28a', weight: 2, fillColor: '#2c3e2d', fillOpacity: 0.45 });
-        p.on('click', function () { if (document.body.classList.contains('placing')) return; openDetail(mk.id); });
+        p.on('click', function () { if (document.body.classList.contains('placing') || document.body.classList.contains('editor-lock')) return; openDetail(mk.id); });
         layer.addLayer(p);
         var c = p.getBounds().getCenter();
         var cm = L.marker(c, { icon: pinIcon(mk), title: mk.name });
-        cm.on('click', function () { if (document.body.classList.contains('placing')) return; openDetail(mk.id); });
+        cm.on('click', function () { if (document.body.classList.contains('placing') || document.body.classList.contains('editor-lock')) return; openDetail(mk.id); });
         layer.addLayer(cm);
       } else if (isFinite(+mk.lat) && isFinite(+mk.lng)) {
         var m = L.marker([+mk.lat, +mk.lng], { icon: pinIcon(mk), title: mk.name });
-        m.on('click', function () { if (document.body.classList.contains('placing')) return; openDetail(mk.id); });
+        m.on('click', function () { if (document.body.classList.contains('placing') || document.body.classList.contains('editor-lock')) return; openDetail(mk.id); });
         layer.addLayer(m);
       }
     });
