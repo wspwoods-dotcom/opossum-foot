@@ -790,35 +790,132 @@ var Tracking = (function () {
      track shape never has), so nothing downstream — sorting runs on
      the trip's date + createdAt, totals on its miles, Fix route on
      the geometry — ever sees a time it has to trust. */
-  var drawPts = null, drawCb = null;
+  /* gu (Tanner, 2026-11-18): the drawing hand can FIX its own work
+     in the tool — a point laid wrong is fixed where it lies, not
+     after a save-and-reopen in Fix route. The points are real
+     markers now (the fix editor's handle pattern): drag one and the
+     line and the miles follow; tap one and the bar offers Remove
+     this dot (an explicit apply, never a delete on tap); tap the
+     FIRST point with two or more laid and the bar offers Close the
+     loop instead — close takes precedence over remove for that one
+     point. Closing appends a copy of the first point, the same
+     model as the fix editor's loop close, and the copy files with
+     the trip like any drawn point. While the loop is closed the map
+     lays nothing, no point can come out (Undo reopens first — the
+     pop IS the closing copy), and dragging either end point moves
+     both copies together so the loop never tears. */
+  var drawPts = null, drawCb = null, drawMks = null, drawLines = null;
+  var drawSel = null, drawOffer = null, drawClosed = false, drawDragEndAt = 0;
   function drawMeters() {
     var m = 0;
     for (var i = 1; i < (drawPts || []).length; i++) m += hav(drawPts[i - 1], drawPts[i]);
     return m;
   }
+  function drawIcon(sel) {
+    return L.divIcon({
+      className: 'draw-pt' + (sel ? ' draw-pt-sel' : ''),
+      html: '<i></i>', iconSize: [30, 30], iconAnchor: [15, 15]
+    });
+  }
+  /* the polyline lives in its own group so a marker drag redraws
+     ONLY the line — rebuilding the markers mid-drag would kill the
+     drag (the fix editor's gp lesson, same shape). */
+  function drawDrawLines() {
+    if (!drawLines) return;
+    drawLines.clearLayers();
+    if (!drawPts || drawPts.length < 2) return;
+    L.polyline(drawPts.map(function (p) { return [p.lat, p.lng]; }), { color: '#e5484d', weight: 4, opacity: 0.85 }).addTo(drawLines);
+  }
   function drawRender() {
     if (!drawLayer) return;
     drawLayer.clearLayers();
-    if (!drawPts) return;
-    if (drawPts.length > 1) {
-      L.polyline(drawPts.map(function (p) { return [p.lat, p.lng]; }), { color: '#e5484d', weight: 4, opacity: 0.85 }).addTo(drawLayer);
-    }
-    drawPts.forEach(function (p) {
-      L.circleMarker([p.lat, p.lng], { radius: 5, color: '#ffffff', weight: 2, fillColor: '#e5484d', fillOpacity: 1, interactive: false }).addTo(drawLayer);
+    drawMks = [];
+    if (!drawPts) { drawLines = null; return; }
+    drawLines = L.layerGroup().addTo(drawLayer);
+    drawDrawLines();
+    drawPts.forEach(function (p, i) {
+      var mk = L.marker([p.lat, p.lng], {
+        icon: drawIcon(i === drawSel), draggable: true, autoPan: false, keyboard: false
+      });
+      /* a drag ends with a click event on some browsers — that click
+         is the drag finishing, not a point tap, so it is ignored. */
+      mk.on('click', function () {
+        if (Date.now() - drawDragEndAt < 250) return;
+        drawTapPoint(i);
+      });
+      mk.on('drag', function () { drawDragged(mk, i, false); });
+      mk.on('dragend', function () {
+        drawDragEndAt = Date.now();
+        drawDragged(mk, i, true);
+      });
+      mk.addTo(drawLayer);
+      drawMks.push(mk);
     });
   }
+  function drawDragged(mk, i, end) {
+    if (!drawPts || !drawPts[i]) return;
+    var ll = mk.getLatLng(), p = drawPts[i];
+    p.lat = ll.lat; p.lng = ll.lng;
+    /* a closed loop's two end copies are one place: move both */
+    if (drawClosed && drawPts.length > 1 && (i === 0 || i === drawPts.length - 1)) {
+      var j = i === 0 ? drawPts.length - 1 : 0;
+      drawPts[j].lat = ll.lat; drawPts[j].lng = ll.lng;
+      if (drawMks && drawMks[j]) drawMks[j].setLatLng(ll);
+    }
+    drawDrawLines();
+    if (end) drawBar(); else drawMilesEl();
+  }
+  function drawMilesEl() {
+    var mi = $('draw-bar-miles');
+    if (mi) mi.textContent = drawPts && drawPts.length > 1 ? fmtDist(drawMeters()) : '';
+  }
   function drawBar() {
-    var bar = $('draw-bar'), lb = $('draw-bar-label');
+    var bar = $('draw-bar'), lb = $('draw-bar-label'), ap = $('btn-draw-apply');
     if (!bar || !lb) return;
     if (!drawPts) { bar.classList.remove('show'); return; }
     bar.classList.add('show');
-    if (!drawPts.length) lb.textContent = 'Draw a route — tap the map to lay the route, point by point.';
+    if (ap) {
+      if (drawOffer === 'close') { ap.textContent = 'Close the loop'; ap.style.display = ''; }
+      else if (drawOffer === 'remove') { ap.textContent = 'Remove this dot'; ap.style.display = ''; }
+      else ap.style.display = 'none';
+    }
+    if (drawOffer === 'close') lb.textContent = 'Close the loop — the route ties back to its first point, and the closing stretch counts in the miles.';
+    else if (drawOffer === 'remove') lb.textContent = 'That point is picked — Remove this dot takes it out, or tap the map to keep drawing.';
+    else if (drawClosed) lb.textContent = 'Loop closed — Save it as it stands, or Undo takes the closing point back and reopens the drawing.';
+    else if (!drawPts.length) lb.textContent = 'Draw a route — tap the map to lay the route, point by point.';
     else if (drawPts.length === 1) lb.textContent = 'One point down — tap the map to keep drawing the route.';
-    else lb.textContent = 'Tap the map to keep drawing, or Save the route as it stands.';
-    var mi = $('draw-bar-miles');
-    if (mi) mi.textContent = drawPts.length > 1 ? fmtDist(drawMeters()) : '';
+    else lb.textContent = 'Tap the map to keep drawing, drag a point to move it, tap a point to take it out, or Save the route as it stands.';
+    drawMilesEl();
     var un = $('btn-draw-undo'); if (un) un.style.display = drawPts.length ? '' : 'none';
     var sv = $('btn-draw-save'); if (sv) sv.disabled = drawPts.length < 2;
+  }
+  function drawTapPoint(i) {
+    if (!drawPts || i < 0 || i >= drawPts.length) return;
+    if (drawClosed) {
+      /* no offers while closed: nothing comes out and nothing new
+         closes — the bar's closed line already says Undo reopens */
+      drawSel = null; drawOffer = null;
+      drawRender(); drawBar();
+      return;
+    }
+    /* the first point with a route behind it offers the loop close
+       — that offer takes precedence over removing it */
+    if (i === 0 && drawPts.length >= 2) { drawSel = 0; drawOffer = 'close'; }
+    else { drawSel = i; drawOffer = 'remove'; }
+    drawRender(); drawBar();
+  }
+  function drawApply() {
+    if (!drawPts || drawSel === null || !drawOffer) return;
+    if (drawOffer === 'close') {
+      if (drawClosed || drawPts.length < 2) return;
+      drawPts.push({ lat: drawPts[0].lat, lng: drawPts[0].lng });
+      drawClosed = true;
+    } else {
+      if (drawClosed) return; /* a remove is never live while closed */
+      drawPts.splice(drawSel, 1);
+    }
+    drawSel = null; drawOffer = null;
+    drawRender(); drawBar();
   }
   function startDrawRoute(cb) {
     if (!drawLayer) return;
@@ -827,19 +924,25 @@ var Tracking = (function () {
     clearSaved();
     drawPts = [];
     drawCb = cb || null;
+    drawSel = null; drawOffer = null; drawClosed = false; drawDragEndAt = 0;
     editorLock(true);
     drawRender(); drawBar();
   }
   function endDrawRoute() {
     if (!drawPts) return;
-    drawPts = null; drawCb = null;
+    drawPts = null; drawCb = null; drawMks = null;
+    drawSel = null; drawOffer = null; drawClosed = false;
     if (drawLayer) drawLayer.clearLayers();
     drawBar();
     editorLock(false);
   }
   function drawUndo() {
     if (!drawPts || !drawPts.length) return;
+    /* while closed, the point Undo takes IS the closing copy —
+       popping it reopens the drawing */
+    if (drawClosed) drawClosed = false;
     drawPts.pop();
+    drawSel = null; drawOffer = null;
     drawRender(); drawBar();
   }
   function drawCancel() {
@@ -864,7 +967,13 @@ var Tracking = (function () {
     if (!own) return false;
     if (Date.now() - mapDragAt < 250) return true;
     if (drawPts) {
-      drawPts.push({ lat: e.latlng.lat, lng: e.latlng.lng });
+      /* gu: a ground tap lays the next point and lets any picked
+         point's offer go; while the loop is closed the tap is still
+         the editor's, but it lays nothing */
+      if (!drawClosed) {
+        drawPts.push({ lat: e.latlng.lat, lng: e.latlng.lng });
+        drawSel = null; drawOffer = null;
+      }
       drawRender(); drawBar();
     } else {
       fixDrawMapTap(e.latlng);
@@ -949,11 +1058,12 @@ var Tracking = (function () {
     var fcn = $('btn-fix-connect'); if (fcn) fcn.onclick = fixDrawConnect;
     var fst = $('btn-fix-stop'); if (fst) fst.onclick = fixDrawStop;
     var fbk = $('btn-fix-back'); if (fbk) fbk.onclick = fixDrawExit;
+    var dap = $('btn-draw-apply'); if (dap) dap.onclick = drawApply;
     var du = $('btn-draw-undo'); if (du) du.onclick = drawUndo;
     var dc = $('btn-draw-cancel'); if (dc) dc.onclick = drawCancel;
     var dsv = $('btn-draw-save'); if (dsv) dsv.onclick = drawSaveTap;
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', wire);
   else wire();
-  return { attach: attach, start: start, syncFab: syncFab, active: function () { return state !== 'idle'; }, drawSaved: drawSaved, clearSaved: clearSaved, rescuePending: rescuePending, startFix: startFix, endFix: endFix, mapTap: mapTap, startDrawRoute: startDrawRoute, endDrawRoute: endDrawRoute, _test: { hav: hav, start: start, onPos: onPos, stop: stop, state: function () { return state; }, pts: function () { return pts; }, miles: function () { return distM / 1609.344; }, segs: function () { return segments(pts).length; }, downsample: downsample, wake: function () { return !!wakeSentinel; }, fixTap: fixTap, fixApply: fixApply, fixJoin: fixJoin, fixDone: fixDone, fixCancel: fixCancel, fixMarkers: function () { return fixMks; }, fixPoints: function () { return fixPts ? fixPts.map(function (p) { var o = { lat: p.lat, lng: p.lng, seg: p.seg }; if (p.hand) o.hand = 1; return o; }) : null; }, fixState: function () { return { active: !!fixPts, n: fixPts ? fixPts.length : 0, sel: fixSel, shape: fixPts ? fixShape(fixPts) : null, miles: fixPts ? fixMiles(fixPts) : null, locked: document.body.classList.contains('editor-lock') }; }, fixDraw: function () { return { mode: fixDrawMode, anchored: !!fixRun, run: fixRun ? fixRun.pts.length : 0, target: !!(fixRun && fixRun.tPt), end: fixRun ? fixRun.end : null, label: ($('fix-bar-label') || {}).textContent || '' }; }, fixDrawEnter: fixDrawEnter, fixDrawExit: fixDrawExit, fixDrawTap: fixDrawTapPoint, fixDrawUndo: fixDrawUndo, fixDrawStop: fixDrawStop, fixDrawConnect: fixDrawConnect, mapTap: mapTap, startDrawRoute: startDrawRoute, endDrawRoute: endDrawRoute, drawRoute: function () { return { active: !!drawPts, n: drawPts ? drawPts.length : 0, miles: drawPts ? Math.round((drawMeters() / 1609.344) * 10) / 10 : 0, locked: document.body.classList.contains('editor-lock'), barShown: !!($('draw-bar') && $('draw-bar').classList.contains('show')), saveDisabled: !!($('btn-draw-save') && $('btn-draw-save').disabled) }; }, routeBar: function () { var bar = $('route-bar'), fx = $('btn-route-fix'), bk = $('btn-route-back'); return { shown: !!(bar && bar.classList.contains('show')), fix: !!(fx && fx.style.display !== 'none'), back: !!(bk && bk.style.display !== 'none'), ctx: !!savedCtx, drawn: savedLayer ? savedLayer.getLayers().length : 0 }; } } };
+  return { attach: attach, start: start, syncFab: syncFab, active: function () { return state !== 'idle'; }, drawSaved: drawSaved, clearSaved: clearSaved, rescuePending: rescuePending, startFix: startFix, endFix: endFix, mapTap: mapTap, startDrawRoute: startDrawRoute, endDrawRoute: endDrawRoute, _test: { hav: hav, start: start, onPos: onPos, stop: stop, state: function () { return state; }, pts: function () { return pts; }, miles: function () { return distM / 1609.344; }, segs: function () { return segments(pts).length; }, downsample: downsample, wake: function () { return !!wakeSentinel; }, fixTap: fixTap, fixApply: fixApply, fixJoin: fixJoin, fixDone: fixDone, fixCancel: fixCancel, fixMarkers: function () { return fixMks; }, fixPoints: function () { return fixPts ? fixPts.map(function (p) { var o = { lat: p.lat, lng: p.lng, seg: p.seg }; if (p.hand) o.hand = 1; return o; }) : null; }, fixState: function () { return { active: !!fixPts, n: fixPts ? fixPts.length : 0, sel: fixSel, shape: fixPts ? fixShape(fixPts) : null, miles: fixPts ? fixMiles(fixPts) : null, locked: document.body.classList.contains('editor-lock') }; }, fixDraw: function () { return { mode: fixDrawMode, anchored: !!fixRun, run: fixRun ? fixRun.pts.length : 0, target: !!(fixRun && fixRun.tPt), end: fixRun ? fixRun.end : null, label: ($('fix-bar-label') || {}).textContent || '' }; }, fixDrawEnter: fixDrawEnter, fixDrawExit: fixDrawExit, fixDrawTap: fixDrawTapPoint, fixDrawUndo: fixDrawUndo, fixDrawStop: fixDrawStop, fixDrawConnect: fixDrawConnect, mapTap: mapTap, startDrawRoute: startDrawRoute, endDrawRoute: endDrawRoute, drawRoute: function () { return { active: !!drawPts, n: drawPts ? drawPts.length : 0, miles: drawPts ? Math.round((drawMeters() / 1609.344) * 10) / 10 : 0, locked: document.body.classList.contains('editor-lock'), barShown: !!($('draw-bar') && $('draw-bar').classList.contains('show')), saveDisabled: !!($('btn-draw-save') && $('btn-draw-save').disabled), pts: drawPts ? drawPts.map(function (p) { return [p.lat, p.lng]; }) : [], closed: drawClosed, sel: drawSel, offer: drawOffer, label: ($('draw-bar-label') || {}).textContent || '', applyShown: !!($('btn-draw-apply') && $('btn-draw-apply').style.display !== 'none'), applyText: ($('btn-draw-apply') || {}).textContent || '', barMiles: ($('draw-bar-miles') || {}).textContent || '' }; }, drawMarkers: function () { return drawMks; }, drawTapPoint: drawTapPoint, drawApply: drawApply, routeBar: function () { var bar = $('route-bar'), fx = $('btn-route-fix'), bk = $('btn-route-back'); return { shown: !!(bar && bar.classList.contains('show')), fix: !!(fx && fx.style.display !== 'none'), back: !!(bk && bk.style.display !== 'none'), ctx: !!savedCtx, drawn: savedLayer ? savedLayer.getLayers().length : 0 }; } } };
 })();
