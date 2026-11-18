@@ -336,78 +336,91 @@
       </div>
       <!-- Q91 (2026-10-01): Tanner — trap check alerts live in Feature Toggles now. -->
       <!-- Q53 home ground now lives in the Where You Trap card (Q90) -->
+      <!-- gx (2026-11-18): Tanner — the three toggle menus live under one
+           "Toggles" layer in Settings, on the same collapsible bar
+           standard, starting collapsed like its sibling menus. Section
+           open state is not stored anywhere, so nothing is lost for
+           existing users; the three menus keep their own collapse. -->
+      <div class="card setsec" id="setsec-toggles">
+        <button type="button" class="setsec-head" id="setsec-toggles-head" data-sec="setsec-toggles" aria-expanded="false"><span>Toggles</span><span class="setsec-chev" aria-hidden="true">›</span></button>
+        <div class="setsec-body" id="setsec-toggles-body" hidden>
+        <p class="dim" style="margin:0 0 8px">Every switch in the app: features, bottom-bar tabs, and set-form fields.</p>
       <div class="card setsec" id="setsec-features">
         <button type="button" class="setsec-head" id="setsec-features-head" data-sec="setsec-features" aria-expanded="false"><span>Feature Toggles</span><span class="setsec-chev" aria-hidden="true">›</span></button>
         <div class="setsec-body" id="setsec-features-body" hidden>
+        <p class="dim" style="margin:0 0 8px">On/off switches for app features — alerts, weather, wind, voice, and map tools. Most apply to the whole app; the ones set per trap line say so.</p>
         <!-- Q182 (2026-10-14): per-line catch alerts — lives beside the trap
              check alerts because it is the same kind of switch, but it writes
              to the active trap line, not the whole app. -->
-        <label class="checkline"><input type="checkbox" id="settings-catchalerts"> Catch alerts</label>
-        <p class="dim" style="margin:-6px 0 10px">Season and bag-limit reminders while you log a catch — for the active trap line only (<strong id="catchalerts-line-name"></strong>). Turn it off on a line where you know the rules cold. The season badges on the animal list stay either way; they're just information.</p>
+        <label class="checkline"><input type="checkbox" id="settings-catchalerts"> Catch warnings — season &amp; limits</label>
+        <p class="dim" style="margin:-6px 0 10px">When you log a catch, warning boxes flag season and bag-limit trouble before you save. Set per trap line — the active line only (<strong id="catchalerts-line-name"></strong>); the season badges on the animal list stay either way, they're just information.</p>
         <label class="checkline"><input type="checkbox" id="settings-ruler" checked> Map ruler</label>
-        <p class="dim" style="margin:-6px 0 10px">The ruler button on the map — tap two points to measure a distance in feet, yards, or miles. Off hides the button entirely.</p>
+        <p class="dim" style="margin:-6px 0 10px">Shows the ruler button on the map — tap two points to measure a distance in feet, yards, or miles. Off hides the button and ends any measuring underway.</p>
         <!-- Q205 (2026-10-19): the Sign & Forage Reference moved out of Settings
              into the Trapper's Guide (its own chapter there, with search). -->
         <label class="checkline"><input type="checkbox" id="settings-mileage"> Route &amp; mileage tracking</label>
-        <p class="dim" style="margin:-6px 0 12px">Odometer trips per line, the route estimate, and the standalone mileage CSV — its own report for your records or reimbursement.</p>
+        <p class="dim" style="margin:-6px 0 12px">Records your trips and routes per line — read them in Paperwork under Route and Mileage, and export the mileage CSV from Data. Off stops new recording; trips already saved stay put.</p>
         <label class="checkline"><input type="checkbox" id="settings-markers" checked> Sign &amp; forage markers</label>
-        <p class="dim" style="margin:-6px 0 10px">The map layer for animal sign, forage, and finds — 71 sign kinds and the Forage &amp; finds family, each with its own icon. Off hides the layer and its map button entirely.</p>
+        <p class="dim" style="margin:-6px 0 10px">Shows the sign and forage layer on the map — animal sign, forage, and finds, each with its own icon — plus the map button for adding them. Off hides the layer and the button; markers already saved stay saved.</p>
         <!-- gw (2026-11-18): tag records — optional by default, removable by
              choice, blocking never. Off hides the catch-sheet section and
              My Tags; stored records are never deleted by the toggle. -->
-        <label class="checkline"><input type="checkbox" id="settings-tagrecords" checked> Tag records</label>
-        <p class="dim" style="margin:-6px 0 10px">A place on each catch to keep the tag or sealing number, the date, and a photo of the tag — for species your state tags, like bobcat and otter. Always optional, never in the way; off hides the section and My Tags in Paperwork. Tag records you've already saved stay on this phone either way.</p>
+        <label class="checkline"><input type="checkbox" id="settings-tagrecords" checked> Tag records (catch sheet + My Tags)</label>
+        <p class="dim" style="margin:-6px 0 10px">Adds a Tag section on the catch sheet for the tag or sealing number, the date tagged, and a photo of the tag — for species your state tags, like bobcat and otter. Always optional; off hides the section and My Tags in Paperwork, and records already saved stay on this phone.</p>
         <!-- Q91 (2026-10-01): Tanner — trap check alerts live here now. Toggling
              it on reveals the check-interval entry as a sub-menu. -->
         <label class="checkline"><input type="checkbox" id="settings-checkclock"> Trap check alerts</label>
+        <p class="dim" style="margin:-6px 0 10px">Sets that go past your check interval with no activity turn red on the map, with a due countdown on the set's details. Any edit, catch, or check-in restarts the clock; off hides the red pins and countdowns.</p>
         <div id="checkalert-sub" hidden>
           <label class="field" for="settings-checkinterval" style="margin-top:2px">Check interval (hours)</label>
           <input type="number" id="settings-checkinterval" min="1" step="1" inputmode="numeric" placeholder="24">
           <p class="dim" style="margin-top:8px">Sets past this long without any activity turn red on the map. Any edit, catch, or check-in restarts the clock. The quick &ldquo;Checked &mdash; nothing changed&rdquo; button only restarts the clock &mdash; it saves nothing to History. Turn alerts off to hide the red pins and countdowns.</p>
         </div>
         <label class="checkline"><input type="checkbox" id="settings-voice"> Voice entry &amp; memos</label>
-        <p class="dim" style="margin:-6px 0 12px">Dictate notes and record voice memos. Transcription uses your phone's speech recognition and needs a connection; recordings stay on this phone.</p>
+        <p class="dim" style="margin:-6px 0 12px">Adds the dictation and voice-memo buttons on set and catch notes. Transcription uses your phone's speech recognition and needs a connection; the recordings themselves stay on this phone.</p>
         <label class="checkline"><input type="checkbox" id="settings-weather"> Weather (map chip + auto-record)</label>
-        <p class="dim" style="margin:-6px 0 10px">Map chip with current conditions and the next 12 hours; weather auto-attaches to new sets and catches. Sends coordinates to Open-Meteo, a free weather service — needs a connection.</p>
+        <p class="dim" style="margin:-6px 0 10px">Shows current conditions and the next 12 hours on the map chip, and attaches the weather to new sets and catches on its own. Sends your coordinates to Open-Meteo for the forecast — needs a connection.</p>
         <label class="checkline"><input type="checkbox" id="settings-windarrows"> Wind arrows on set pins</label>
-        <p class="dim" style="margin:-6px 0 10px">Small arrows at the edge of each pin show the downwind direction — where your scent goes. They appear when you're zoomed in close, and use live wind data when you're online.</p>
+        <p class="dim" style="margin:-6px 0 10px">A small arrow at the edge of each set pin points downwind — the way your scent carries. Arrows show when you're zoomed in close, and use live wind when you're online.</p>
         <button class="btn-secondary" id="btn-features-reset" type="button">Reset features to defaults</button>
         </div>
       </div>
       <div class="card setsec" id="setsec-tabs">
-        <button type="button" class="setsec-head" id="setsec-tabs-head" data-sec="setsec-tabs" aria-expanded="false"><span>Tab Toggles</span><span class="setsec-chev" aria-hidden="true">›</span></button>
+        <button type="button" class="setsec-head" id="setsec-tabs-head" data-sec="setsec-tabs" aria-expanded="false"><span>Tabs on the Bottom Bar</span><span class="setsec-chev" aria-hidden="true">›</span></button>
         <div class="setsec-body" id="setsec-tabs-body" hidden>
-        <p class="dim" style="margin:0 0 8px">Choose which tabs appear on the bottom bar for the active trap line (<strong id="tabs-line-name"></strong>). Map, Data, and Settings always show.</p>
+        <p class="dim" style="margin:0 0 8px">Choose which tabs ride on the bottom bar for the active trap line (<strong id="tabs-line-name"></strong>). Map, Data, and Settings always show.</p>
         <div class="checkgrid">
-        <label class="checkline"><input type="checkbox" id="settings-tab-history"> History tab</label>
-        <label class="checkline"><input type="checkbox" id="settings-tab-scorecard"> Scorecard tab</label>
-        <label class="checkline"><input type="checkbox" id="settings-tab-seasons"> Seasons tab</label>
-        <label class="checkline"><input type="checkbox" id="settings-tab-licenses"> Paperwork tab</label>
-        <label class="checkline"><input type="checkbox" id="settings-tab-totals"> Totals tab</label>
+        <div class="toggle-cell"><label class="checkline"><input type="checkbox" id="settings-tab-history"> History tab</label><p class="dim tnote">Shows the History tab on the bottom bar for the active line — the running log of checks, catches, and changes. Off hides the tab; nothing in it is deleted.</p></div>
+        <div class="toggle-cell"><label class="checkline"><input type="checkbox" id="settings-tab-scorecard"> Scorecard tab</label><p class="dim tnote">Shows the Scorecard tab on the bottom bar for the active line — your season at a glance. Off hides the tab; nothing in it is deleted.</p></div>
+        <div class="toggle-cell"><label class="checkline"><input type="checkbox" id="settings-tab-seasons"> Seasons tab</label><p class="dim tnote">Shows the Seasons tab on the bottom bar for the active line — season dates and rules for your state. Off hides the tab; nothing in it is deleted.</p></div>
+        <div class="toggle-cell"><label class="checkline"><input type="checkbox" id="settings-tab-licenses"> Paperwork tab</label><p class="dim tnote">Shows the Paperwork tab on the bottom bar for the active line — licenses, tags, landowners, and mileage. Off hides the tab; nothing in it is deleted.</p></div>
+        <div class="toggle-cell"><label class="checkline"><input type="checkbox" id="settings-tab-totals"> Totals tab</label><p class="dim tnote">Shows the Totals tab on the bottom bar for the active line — your season totals, broken down by species, set, and trap. Off hides the tab; nothing in it is deleted.</p></div>
         </div>
         </div>
       </div>
       <div class="card setsec" id="setsec-setfields">
-        <button type="button" class="setsec-head" id="setsec-setfields-head" data-sec="setsec-setfields" aria-expanded="false"><span>Set Field Toggles</span><span class="setsec-chev" aria-hidden="true">›</span></button>
+        <button type="button" class="setsec-head" id="setsec-setfields-head" data-sec="setsec-setfields" aria-expanded="false"><span>Fields on the Set Form</span><span class="setsec-chev" aria-hidden="true">›</span></button>
         <div class="setsec-body" id="setsec-setfields-body" hidden>
-        <p class="dim" style="margin:0 0 8px">Choose which fields appear when you add a set. Set name, Status, and Date set always show — they're required.</p>
+        <p class="dim" style="margin:0 0 8px">Choose which fields show when you add a set. Set name, Status, and Date set always show — they're required.</p>
         <div class="checkgrid">
-        <label class="checkline"><input type="checkbox" id="settings-sf-traptype"> Trap type</label>
-        <label class="checkline"><input type="checkbox" id="settings-sf-trapdetail"> Trap details</label>
-        <label class="checkline"><input type="checkbox" id="settings-sf-settype"> Set type</label>
-        <label class="checkline"><input type="checkbox" id="settings-sf-bait"> Bait</label>
-        <label class="checkline"><input type="checkbox" id="settings-sf-lure"> Lure</label>
-        <label class="checkline"><input type="checkbox" id="settings-sf-urine"> Urine</label>
-        <label class="checkline"><input type="checkbox" id="settings-sf-visual"> Visual</label>
-        <label class="checkline"><input type="checkbox" id="settings-sf-audio"> Audio</label>
-        <label class="checkline"><input type="checkbox" id="settings-sf-other"> Other attractants</label>
-        <label class="checkline"><input type="checkbox" id="settings-sf-notes"> Notes</label>
+        <div class="toggle-cell"><label class="checkline"><input type="checkbox" id="settings-sf-traptype"> Trap type</label><p class="dim tnote">Shows the Trap type field when you add a set. Off hides the field, and sets saved while it's off leave it blank.</p></div>
+        <div class="toggle-cell"><label class="checkline"><input type="checkbox" id="settings-sf-trapdetail"> Trap details</label><p class="dim tnote">Shows the Trap details field when you add a set. Off hides the field, and sets saved while it's off leave it blank.</p></div>
+        <div class="toggle-cell"><label class="checkline"><input type="checkbox" id="settings-sf-settype"> Set type</label><p class="dim tnote">Shows the Set type field when you add a set. Off hides the field, and sets saved while it's off leave it blank.</p></div>
+        <div class="toggle-cell"><label class="checkline"><input type="checkbox" id="settings-sf-bait"> Bait</label><p class="dim tnote">Shows the Bait field when you add a set. Off hides the field, and sets saved while it's off leave it blank.</p></div>
+        <div class="toggle-cell"><label class="checkline"><input type="checkbox" id="settings-sf-lure"> Lure</label><p class="dim tnote">Shows the Lure field when you add a set. Off hides the field, and sets saved while it's off leave it blank.</p></div>
+        <div class="toggle-cell"><label class="checkline"><input type="checkbox" id="settings-sf-urine"> Urine</label><p class="dim tnote">Shows the Urine field when you add a set. Off hides the field, and sets saved while it's off leave it blank.</p></div>
+        <div class="toggle-cell"><label class="checkline"><input type="checkbox" id="settings-sf-visual"> Visual</label><p class="dim tnote">Shows the Visual field when you add a set. Off hides the field, and sets saved while it's off leave it blank.</p></div>
+        <div class="toggle-cell"><label class="checkline"><input type="checkbox" id="settings-sf-audio"> Audio</label><p class="dim tnote">Shows the Audio field when you add a set. Off hides the field, and sets saved while it's off leave it blank.</p></div>
+        <div class="toggle-cell"><label class="checkline"><input type="checkbox" id="settings-sf-other"> Other attractants</label><p class="dim tnote">Shows the Other attractants field when you add a set. Off hides the field, and sets saved while it's off leave it blank.</p></div>
+        <div class="toggle-cell"><label class="checkline"><input type="checkbox" id="settings-sf-notes"> Notes</label><p class="dim tnote">Shows the Notes field when you add a set. Off hides the field, and sets saved while it's off leave it blank.</p></div>
         </div>
       <div class="card setsec" id="setsec-appearance">
         <button type="button" class="setsec-head" id="setsec-appearance-head" data-sec="setsec-appearance" aria-expanded="false"><span>Appearance</span><span class="setsec-chev" aria-hidden="true">›</span></button>
         <div class="setsec-body" id="setsec-appearance-body" hidden>
         <p class="dim" style="margin:0 0 8px">Pin colors — applies to the map pins and the four status filter chips.</p>
         <div id="pinscheme-list"></div>
+        </div>
+      </div>
         </div>
       </div>
         </div>
@@ -419,9 +432,9 @@
         <p class="dim">Opossum Foot has no account, no login, and no cloud. Every set, catch, photo, and voice memo is stored only in this phone's browser storage. Nothing you enter is stored anywhere else — the only network traffic is map tiles, the app's own files, weather lookups (only if you turn weather on), and live voice transcription (only when you tap the microphone and have a connection).</p>
         <p class="dim"><strong>The honest catch:</strong> because there's no cloud backup, a lost phone, a wiped phone, or clearing this browser's data can destroy your records. Export a CSV backup regularly — that's your safety net.</p>
         <label class="checkline"><input type="checkbox" id="settings-showcoords"> Show GPS coordinates</label>
-        <p class="dim" style="margin:-6px 0 10px">Coordinates stay hidden so screenshots are safe to share. Turn this on to see the county and exact coordinates on set details and the weather tab.</p>
+        <p class="dim" style="margin:-6px 0 10px">Shows the county and exact coordinates on a set's details and on the weather tab. Off keeps them hidden, so screenshots are safe to share.</p>
         <label class="checkline"><input type="checkbox" id="settings-exportcoords"> Include GPS coordinates in reports</label>
-        <p class="dim" style="margin:-6px 0 10px">Off by default, so shared spreadsheets never carry your pins. Turn this on when you want Latitude and Longitude columns in the CSV exports.</p>
+        <p class="dim" style="margin:-6px 0 10px">Adds Latitude and Longitude columns to the CSV exports you download from Data. Off by default, so a spreadsheet you share never carries your pins.</p>
         </div>
       </div>
       <div class="card setsec" id="setsec-about">
