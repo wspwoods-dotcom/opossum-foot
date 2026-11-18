@@ -65,8 +65,8 @@ can change it any time in Settings.
 - **Paperwork** — Your license photos plus the landowner notebook: names,
   phone numbers, permission slips, and boundary notes for every property
   you run.
-- **Settings** — Tab toggles, feature toggles, set-field toggles, Backup &
-  Reports, and Erase Everything.
+- **Settings** — the Toggles menus (features, tabs on the bottom bar,
+  fields on the set form), Backup & Reports, and Erase Everything.
 
 ## Trap lines
 
@@ -276,7 +276,7 @@ got a signal.
 Zoom in close (14 or tighter) and every pin grows a little wind arrow. It
 points where your scent is going — downwind, not where the wind's coming
 from. The arrows refresh on their own; turn them off in Settings under
-Feature Toggles if they're clutter.
+Toggles → Feature Toggles if they're clutter.
 
 ## Finding a set from the Show pill
 
@@ -370,7 +370,7 @@ how the route came to be, and its miles count in the line's total like
 any other trip. From there it is a trip like any other: **Show on map**
 draws it, **Fix route** opens on it, and it deletes the same way.
 
-The on/off switch is **Mileage log** in Settings → Feature Toggles, and it
+The on/off switch is **Mileage log** in Settings → Toggles → Feature Toggles, and it
 only governs recording *new* trips. Turn it off and your recorded trips,
 the Route and Mileage section, and the CSV export all stay right where
 they were — you just can't add new ones until you turn it back on. The
@@ -482,9 +482,9 @@ it in later: open the catch in History and tap **Tag record**, or open
 My Tags here, where every tagged catch — and every catch still waiting
 on its tag, with the state's deadline beside it — is gathered in one
 place for when the warden or the fur buyer asks. If you never trap a
-species that gets tagged, turn **Tag records** off under Settings →
-Feature Toggles and the whole thing disappears; anything you already
-saved stays saved.
+species that gets tagged, turn **Tag records (catch sheet + My Tags)**
+off under Settings → Toggles → Feature Toggles and the whole thing
+disappears; anything you already saved stays saved.
 
 ## Backing up — read this one twice
 
@@ -517,7 +517,7 @@ the reports live in that one place.
   completely (swipe it away) and reopen the app from the home-screen icon.
   Nine times out of ten, that fixes it.
 - **Tabs or features went missing:** they're probably just toggled off.
-  Check Settings — Tab Toggles and Feature Toggles are per trap line, so
+  Check Settings — Tabs on the Bottom Bar and Feature Toggles are per trap line, so
   one line can run lean while another keeps everything.
 - **Your location dot won't show:** check that you allowed location access
   for the browser, and that you're not in airplane mode.
