@@ -468,6 +468,24 @@ permission slips, and boundary notes for every property you run sets on.
 Tap a landowner's number to call or text them straight from the notebook —
 no copying numbers out of the app.
 
+**Tag records** live here too, in the **My Tags** section. In half the
+states, some pelts — bobcat and otter in Iowa — have to be tagged or
+sealed, and the tag number is the kind of paper that gets lost. When you
+log a catch of a species your state tags, the catch form offers a small
+**Tag** section: the tag or sealing number, the date you got it tagged,
+and a photo of the tag on the pelt. The same three fields sit under the
+tagging note on the "Catch logged!" sheet, too. Every part of it is
+optional, and an untouched section changes nothing — the catch saves
+just like always.
+Most tagging happens days after the catch, at a station, so you can fill
+it in later: open the catch in History and tap **Tag record**, or open
+My Tags here, where every tagged catch — and every catch still waiting
+on its tag, with the state's deadline beside it — is gathered in one
+place for when the warden or the fur buyer asks. If you never trap a
+species that gets tagged, turn **Tag records** off under Settings →
+Feature Toggles and the whole thing disappears; anything you already
+saved stays saved.
+
 ## Backing up — read this one twice
 
 There is no account and no cloud. Everything lives on your phone, which means
