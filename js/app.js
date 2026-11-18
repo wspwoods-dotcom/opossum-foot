@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-11-18gs';
+var APP_VERSION = 'beta 0.1 · build 2026-11-18gt';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -2335,6 +2335,10 @@ function initMap() {
       startPlacePin(e.latlng);
     } else if (measureMode) {
       measureTap(e.latlng);
+    } else if (window.Tracking && Tracking.mapTap(e)) {
+      /* gt: while the route editor owns the map (Fix route's Draw, or
+         standalone Draw a route), map taps are drawing taps — they
+         never fall through to marker placement. */
     } else if (window.Markers) {
       Markers.onMapClick(e);
     }
@@ -2458,7 +2462,7 @@ function refreshMarkers() {
     if (!mapStatusFilter[normStatus(s.status)]) return;
     var m = L.marker([s.lat, s.lng], { icon: setIcon(s), title: s.name });
     /* B15: no opening set details mid-placement — finish the pin first. */
-    m.on('click', function () { if (document.body.classList.contains('placing') || measureMode) return; openSetOrStack(s.id); });
+    m.on('click', function () { if (document.body.classList.contains('placing') || document.body.classList.contains('editor-lock') || measureMode) return; openSetOrStack(s.id); });
     m._setId = s.id;
     markersLayer.addLayer(m);
   });
@@ -6885,10 +6889,13 @@ function tripRowHTML(tr) {
     '<div class="line-main">' +
     '<span class="line-name">' + esc(fmtDate(tr.date)) + ' \u00b7 ' + esc(fmtMiles(tripMiles(tr))) + '</span>';
   var chev = '</div><span class="trip-chev">\u25b8</span></div>';
-  if (tr.source === 'gps-track') {
+  /* gt: a hand-drawn route files in the same row family as a GPS
+     track — Show on map, Fix route, Delete — wearing its own honest
+     label: Drawn route. The record says how it came to be. */
+  if (tr.source === 'gps-track' || tr.source === 'drawn-route') {
     var det = tripDetail(tr);
     return '<div class="trip-block">' +
-      head + '<span class="dim">GPS track</span>' + chev +
+      head + '<span class="dim">' + (tr.source === 'drawn-route' ? 'Drawn route' : 'GPS track') + '</span>' + chev +
       '<div class="trip-body">' +
       (det ? '<div class="dim" style="margin-bottom:8px">' + esc(det) + '</div>' : '') +
       '<div class="btn-row">' +
@@ -6975,6 +6982,45 @@ function openTripFix(tr) {
     Tracking.drawSaved(tr.track, tripMapCtx(tr));
   });
 }
+/* gt (2026-11-18, Tanner): Draw a route — the standalone drawing
+   hand. Tracking owns the map work; when he taps Save in the draw
+   bar, this asks for the trip's date the way Log Trip does (a date
+   field, today filled in) and files the trip on the line he drew it
+   from. The record is honest about its making: source 'drawn-route',
+   and every stored point carries the hand flag. Points round to the
+   same five decimals a saved GPS track keeps. Cancelling the date
+   prompt leaves the drawn route on the map, untouched; saving lands
+   where Log Trip's save lands — back on the Paperwork readout. */
+function openDrawRoute(lineId) {
+  switchTab('map');
+  if (window.Tracking) Tracking.startDrawRoute(function (res) { openDrawnTripSave(lineId, res); });
+}
+function openDrawnTripSave(lineId, res) {
+  showModal(
+    '<h3>Save drawn route</h3>' +
+    '<p class="dim" style="margin:0 0 6px">' + esc(fmtMiles(res.miles)) + ' drawn by hand on the map.</p>' +
+    '<label class="field" for="m-draw-date">Date</label>' +
+    '<input type="date" id="m-draw-date" value="' + esc(todayISO()) + '">' +
+    '<div class="btn-row" style="margin-top:14px"><button class="btn-secondary" id="m-cancel" type="button">Cancel</button>' +
+    '<button class="btn-primary" id="m-ok" type="button">Save route</button></div>'
+  );
+  $('m-cancel').onclick = function () { closeModal(); };
+  $('m-ok').onclick = function () {
+    var date = $('m-draw-date').value;
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(date || '')) { toast('Pick a date for the trip.'); return; }
+    if (!Array.isArray(Store.data.trips)) Store.data.trips = [];
+    Store.data.trips.push({
+      id: uid('trip'), lineId: lineId, createdAt: Date.now(), date: date,
+      source: 'drawn-route', miles: res.miles,
+      track: res.pts.map(function (p) { return [Math.round(p.lat * 1e5) / 1e5, Math.round(p.lng * 1e5) / 1e5, 1]; }),
+      notes: ''
+    });
+    Store.save();
+    if (window.Tracking) Tracking.endDrawRoute();
+    closeModal(); renderPaperworkMileage(); switchTab('licenses');
+    toast('Drawn route filed in the mileage log.');
+  };
+}
 function renderPaperworkMileage() {
   var box = $('paperwork-mileage-lines');
   if (!box) return;
@@ -7003,7 +7049,8 @@ function renderPaperworkMileage() {
   var actions = on
     ? '<div style="display:flex;flex-direction:column;gap:10px;margin-top:10px">' +
       '<button type="button" class="btn-secondary" data-pm-logtrip="' + esc(ln.id) + '">\uFF0B Log Trip</button>' +
-      '<button type="button" class="btn-secondary" data-pm-track="' + esc(ln.id) + '"><span style="color:#e5484d">\u25CF</span> Track a route</button></div>'
+      '<button type="button" class="btn-secondary" data-pm-track="' + esc(ln.id) + '"><span style="color:#e5484d">\u25CF</span> Track a route</button>' +
+      '<button type="button" class="btn-secondary" data-pm-draw="' + esc(ln.id) + '">Draw a route</button></div>'
     : '<p class="dim" style="margin-top:10px">Mileage is off \u2014 these trips stay here to read. To record new trips, turn on Mileage log in Settings \u2192 Feature Toggles.</p>';
   box.innerHTML = '<div class="pm-line" data-pm-line-block="' + esc(ln.id) + '">' +
     '<div class="pm-line-head"><span><strong>' + esc(ln.name) + '</strong> ' +
@@ -7027,6 +7074,17 @@ function renderPaperworkMileage() {
     (function (el) {
       el.onclick = function () { showTripModal(el.getAttribute('data-pm-logtrip'), null); };
     })(lts[i]);
+  }
+  /* gt: Draw a route — same visibility rules as Track a route (the
+     actions block only renders while mileage recording is on). */
+  var drs = box.querySelectorAll('[data-pm-draw]');
+  for (var d2 = 0; d2 < drs.length; d2++) {
+    (function (el) {
+      el.onclick = function () {
+        if (Store.data.mileageOn === false) { toast('Route & mileage tracking is off — turn it on in Settings → Feature Toggles.'); return; }
+        openDrawRoute(el.getAttribute('data-pm-draw'));
+      };
+    })(drs[d2]);
   }
   var edits = box.querySelectorAll('[data-trip-edit]');
   for (var e = 0; e < edits.length; e++) {
