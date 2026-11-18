@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-11-18gw';
+var APP_VERSION = 'beta 0.1 · build 2026-11-18gx';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -486,6 +486,7 @@ function closeSheets() {
 function showModal(html) {
   $('modal-card').innerHTML = html;
   $('modal').classList.remove('sponsor-sheet'); /* Q171: sheet mode is opt-in per open */
+  $('modal').classList.remove('sheet-dress'); /* gx: the bulk family's sheet dress is opt-in per open, same pattern */
   $('modal').classList.add('show');
 }
 function closeModal() { $('modal').classList.remove('show'); }
@@ -1212,7 +1213,7 @@ function lineCatchAlerts() {
   var l = activeLine();
   return !l || l.catchAlerts !== false;
 }
-/* Q182: syncs the Settings Catch alerts switch to the active line.
+/* Q182: syncs the Settings Catch warnings switch to the active line.
    Called from the same places as renderTabToggles so a line switch
    re-binds it to the new line. */
 function renderCatchAlertsToggle() {
@@ -2996,15 +2997,16 @@ function drawFix(fix, final) {
     else gpsCircle = L.circle([fix.lat, fix.lng],
       { radius: Math.max(fix.acc, 1), color: '#2f8ff0', weight: 1, opacity: 0.6, fillColor: '#2f8ff0', fillOpacity: 0.15, interactive: false }).addTo(map);
     if (final) {
-      /* BQ2/gs: one crosshair tap always ends at the working zoom (17) —
-         no accuracy-based wide zoom that forces a second tap. gs
-         (Tanner, 2026-11-18): the landing was 19 under the old BQ2 rule;
-         his field report — driving, one tap left him staring at smeared
-         pixels with the accuracy circle filling the screen. Esri rural
-         imagery is only sharp to ~17; 19 is the same tiles stretched.
-         17 keeps a crossing and nearby sets in view on sharp tiles, and
-         he can still pinch tighter by hand (map maxZoom unchanged). */
-      map.setView([fix.lat, fix.lng], 17, { animate: false });
+      /* BQ2/gs/gx: one crosshair tap always ends at the working zoom
+         (19) — no accuracy-based wide zoom that forces a second tap.
+         History: the landing was 19 under the old BQ2 rule; gs
+         (2026-11-18) dropped it to 17 on Tanner's driving field report
+         (one tap left him staring at smeared pixels with the accuracy
+         circle filling the screen; Esri rural imagery is only sharp to
+         ~17). gx (2026-11-18, Tanner's verdict after living with 17 on
+         his own ground): restore 19. He can still pinch tighter or
+         wider by hand (map maxZoom unchanged). */
+      map.setView([fix.lat, fix.lng], 19, { animate: false });
     }
   }
   if (final) {
@@ -3164,15 +3166,16 @@ function startAcquire() {
 /* Crosshair tap centers on the fix AND zooms in when the view is wide —
    an explicit locate tap should put you on yourself, not just pan. */
 /* B22: every crosshair tap ends zoomed in on the latest fix —
-   no conditional half-zoom. gs (2026-11-18): the recenter lands at 17,
-   the same working zoom as the acquire landing in drawFix — the old
-   19 outran the Esri imagery (see the BQ2/gs note there). */
+   no conditional half-zoom. gs (2026-11-18) landed the recenter at 17,
+   the same working zoom as the acquire landing in drawFix; gx
+   (2026-11-18) restores 19 on Tanner's verdict after living with 17
+   (see the BQ2/gs/gx note in drawFix). */
 function centerOnFix() {
   if (!map || !lastFix || lastFix.lat == null) return;
   /* Q234: re-measure before centering — a stale cached container size (B13)
      lands the setView off-center. */
   map.invalidateSize();
-  map.setView([lastFix.lat, lastFix.lng], 17, { animate: false });
+  map.setView([lastFix.lat, lastFix.lng], 19, { animate: false });
   armTapCorrection(); /* Q233: verify the tap center against the next converged fix */
   verifyTapCenter(); /* Q234: verify the tap center against a one-shot fresh fix */
 }
@@ -5705,10 +5708,12 @@ function openBulkActions() {
   var sets = bulkFilteredSets();
   if (!st || !sets.length) { renderBulkBar(); return; }
   showModal('<h3>' + sets.length + ' sets selected</h3>' +
-    '<button type="button" class="bulk-status-row" id="ba-status">Change status</button>' +
-    '<button type="button" class="bulk-status-row" id="ba-edit">Edit all</button>' +
-    '<button type="button" class="bulk-status-row" id="ba-delete" style="color:#e5484d">Delete all</button>' +
+    '<div class="sheet-actions">' +
+    '<button type="button" class="btn-secondary" id="ba-status">Change status</button>' +
+    '<button type="button" class="btn-secondary" id="ba-edit">Edit all</button>' +
+    '<button type="button" class="btn-danger" id="ba-delete">Delete all</button></div>' +
     '<div class="btn-row" style="margin-top:14px"><button class="btn-secondary" id="m-cancel" type="button">Cancel</button></div>');
+  $('modal').classList.add('sheet-dress'); /* gx: standard sheet dress for the bulk family */
   $('m-cancel').onclick = function () { closeModal(); };
   $('ba-status').onclick = function () { closeModal(); openBulkStatusPicker(); };
   $('ba-edit').onclick = function () { closeModal(); openBulkEdit(); };
@@ -5768,6 +5773,7 @@ function openBulkEdit() {
     '<p>Set as many fields as you want — fields you leave alone stay as they are on each set.</p>' + rows +
     '<div class="btn-row" style="margin-top:14px"><button class="btn-secondary" id="m-cancel" type="button">Cancel</button>' +
     '<button class="btn-primary" id="m-ok" type="button">Review changes</button></div>');
+  $('modal').classList.add('sheet-dress'); /* gx: standard sheet dress for the bulk family */
   $('m-cancel').onclick = function () { closeModal(); };
   $('m-ok').onclick = function () {
     var changes = [];
@@ -5792,6 +5798,7 @@ function openBulkEditConfirm(changes) {
     '<p>Fields you left alone stay as they are on each set.</p>' +
     '<div class="btn-row" style="margin-top:14px"><button class="btn-secondary" id="m-cancel" type="button">Cancel</button>' +
     '<button class="btn-primary" id="m-ok" type="button">Change ' + n + ' sets</button></div>');
+  $('modal').classList.add('sheet-dress'); /* gx: standard sheet dress for the bulk family */
   $('m-cancel').onclick = function () { closeModal(); };
   $('m-ok').onclick = function () { closeModal(); applyBulkEdit(changes); };
 }
@@ -5871,13 +5878,14 @@ function openBulkStatusPicker() {
   if (!st || !sets.length) { renderBulkBar(); return; }
   var colors = pinSchemeById(pinSchemeId()).colors;
   var rows = STATUS_VALUES.filter(function (k) { return k !== st && k !== 'missing'; }).map(function (k) {
-    return '<button type="button" class="bulk-status-row" data-st="' + k + '">' +
+    return '<button type="button" class="btn-secondary bulk-pick-row" data-st="' + k + '">' +
       '<span class="bulk-dot" style="background:' + colors[k] + '"></span>' + esc(STATUS_LABELS[k]) + '</button>';
   }).join('');
   showModal('<h3>Change ' + sets.length + ' sets to…</h3>' + rows +
     '<div class="btn-row" style="margin-top:14px"><button class="btn-secondary" id="m-cancel" type="button">Cancel</button></div>');
+  $('modal').classList.add('sheet-dress'); /* gx: standard sheet dress for the bulk family */
   $('m-cancel').onclick = function () { closeModal(); };
-  var btns = document.querySelectorAll('#modal-card .bulk-status-row');
+  var btns = document.querySelectorAll('#modal-card .bulk-pick-row');
   for (var i = 0; i < btns.length; i++) {
     btns[i].onclick = function () { var t = this.getAttribute('data-st'); closeModal(); openBulkConfirm(t); };
   }
@@ -7299,7 +7307,7 @@ function renderPaperworkMileage() {
       '<button type="button" class="btn-secondary" data-pm-logtrip="' + esc(ln.id) + '">\uFF0B Log Trip</button>' +
       '<button type="button" class="btn-secondary" data-pm-track="' + esc(ln.id) + '"><span style="color:#e5484d">\u25CF</span> Track a route</button>' +
       '<button type="button" class="btn-secondary" data-pm-draw="' + esc(ln.id) + '">Draw a route</button></div>'
-    : '<p class="dim" style="margin-top:10px">Mileage is off \u2014 these trips stay here to read. To record new trips, turn on Mileage log in Settings \u2192 Feature Toggles.</p>';
+    : '<p class="dim" style="margin-top:10px">Mileage is off \u2014 these trips stay here to read. To record new trips, turn on Mileage log in Settings \u2192 Toggles \u2192 Feature Toggles.</p>';
   box.innerHTML = '<div class="pm-line" data-pm-line-block="' + esc(ln.id) + '">' +
     '<div class="pm-line-head"><span><strong>' + esc(ln.name) + '</strong> ' +
     '<span class="dim">' + esc(fmtMiles(lineTripTotal(ln.id))) + '</span></span></div>' +
@@ -7312,7 +7320,7 @@ function renderPaperworkMileage() {
   var trk = box.querySelectorAll('[data-pm-track]');
   for (var t = 0; t < trk.length; t++) {
     trk[t].onclick = function () {
-      if (Store.data.mileageOn === false) { toast('Route & mileage tracking is off — turn it on in Settings \u2192 Feature Toggles.'); return; }
+      if (Store.data.mileageOn === false) { toast('Route & mileage tracking is off — turn it on in Settings \u2192 Toggles \u2192 Feature Toggles.'); return; }
       switchTab('map');
       if (window.Tracking) Tracking.start();
     };
@@ -7329,7 +7337,7 @@ function renderPaperworkMileage() {
   for (var d2 = 0; d2 < drs.length; d2++) {
     (function (el) {
       el.onclick = function () {
-        if (Store.data.mileageOn === false) { toast('Route & mileage tracking is off — turn it on in Settings → Feature Toggles.'); return; }
+        if (Store.data.mileageOn === false) { toast('Route & mileage tracking is off — turn it on in Settings → Toggles → Feature Toggles.'); return; }
         openDrawRoute(el.getAttribute('data-pm-draw'));
       };
     })(drs[d2]);
@@ -9834,8 +9842,8 @@ function enterMain() {
       l.catchAlerts = this.checked;
       Store.save();
       toast(this.checked
-        ? 'Catch alerts are on for ' + l.name + '.'
-        : 'Catch alerts are off for ' + l.name + ' — the season badges still show.');
+        ? 'Catch warnings are on for ' + l.name + '.'
+        : 'Catch warnings are off for ' + l.name + ' — the season badges still show.');
     };
   }
   renderCatchAlertsToggle();
