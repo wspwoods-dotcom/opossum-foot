@@ -789,6 +789,21 @@ body.route-locked #tabbar { pointer-events: none; opacity: .35; }
 @supports (-webkit-touch-callout: none) {
   .date-col > input[type=date] { width: calc(100% - 30px); }
 }
+/* gx (2026-11-18): the same iOS content-box overshoot hit the tag entry's
+   Date tagged input — it stands bare in its sheet (no .date-col around
+   it), so on Tanner's phone it ran ~30px wider than the tag number input
+   and photo button beside it and bled off the sheet's right edge. Same
+   fix as .date-col, extended to all three tag-entry surfaces: the catch
+   log form's Tag section, the post-catch sheet, and the History tag
+   editor. */
+#log-tag-date, #tag-date, #pc-tag-date { display: block; width: 100%; max-width: 100%;
+  min-width: 0; box-sizing: border-box; }
+#log-tag-date::-webkit-datetime-edit, #tag-date::-webkit-datetime-edit, #pc-tag-date::-webkit-datetime-edit,
+#log-tag-date::-webkit-datetime-edit-fields-wrapper, #tag-date::-webkit-datetime-edit-fields-wrapper,
+#pc-tag-date::-webkit-datetime-edit-fields-wrapper { min-width: 0; }
+@supports (-webkit-touch-callout: none) {
+  #log-tag-date, #tag-date, #pc-tag-date { width: calc(100% - 30px); }
+}
 /* Tanner 2026-10-01: compact button row — smaller, less clunky. */
 .btn-compact > .btn-secondary { padding: 8px 10px; font-size: 14px; min-height: 0; }
 /* Home-ground prompt (Q53): three equal buttons, no icon, all centered. */
@@ -1037,6 +1052,10 @@ body.editor-lock #btn-track { pointer-events: none; opacity: .45; }
    Used by the mods section and the settings toggle groups. */
 .checkgrid { display: grid; grid-template-columns: 1fr 1fr; column-gap: 14px; }
 .checkgrid .checkline { padding: 7px 0; font-size: 15px; }
+/* gx (2026-11-18): every toggle in the Settings checkgrids carries its own
+   explanation under its label (Tanner's approved copy table) — same .dim
+   voice as the Feature Toggles explanations. */
+.checkgrid .tnote { margin: 0 0 8px; }
 /* Q103: coordinate footer, small and dim, tap to copy — only rendered when
    the Privacy toggle is on. */
 .coords-bottom { font-size: 11px; color: var(--muted); text-align: center; margin: 12px 0 4px; }
@@ -1319,7 +1338,19 @@ body.placing #route-back-chip { display: none; }
 /* Q232: Edit-all sheet rows — label above a full-width select. */
 .bulk-edit-row { display: block; margin: 12px 0; font-size: 16px; font-weight: 700; color: var(--ink); }
 .bulk-edit-row select { display: block; width: 100%; margin-top: 6px; padding: 10px; font-size: 16px; border-radius: 10px; border: 1px solid var(--line); background: #10150c; color: #fff; }
-.bulk-status-row { display: flex; align-items: center; gap: 12px; width: 100%; padding: 12px 10px; background: none; border: none; border-bottom: 1px solid var(--line); color: var(--ink); font-size: 17px; font-weight: 700; text-align: left; min-height: var(--tap); }
+/* gx (2026-11-18): the bulk rows' old ghost treatment (background: none,
+   hairline-only border — the .bulk-status-row rule that stood here) matched
+   no other menu or sheet in the app; Tanner's order was the standard sheet
+   dress. The Actions menu and Edit all now use the standard buttons
+   (btn-secondary / btn-danger / btn-primary in a .sheet-actions stack), and
+   the status picker's rows are solid btn-secondary buttons carrying their
+   status dot — .bulk-pick-row only spaces them. The family's modal card
+   takes the sheets' own panel treatment via .sheet-dress (opt-in per open,
+   removed by showModal): same var(--sheet) panel, 2px var(--line) border,
+   20px radius, sheet insets, and the 21px sheet-title size. */
+.bulk-pick-row { margin-bottom: 10px; }
+#modal.sheet-dress .modal-card { border: 2px solid var(--line); border-radius: 20px; padding: 20px 16px 24px; }
+#modal.sheet-dress h3 { font-size: 21px; }
 .bulk-dot { display: inline-block; width: 16px; height: 16px; border-radius: 50%; border: 2px solid #fff; vertical-align: -2px; }
 .show-row { display: flex; align-items: center; gap: 12px; padding: 11px 4px; border-bottom: 1px solid var(--line); font-size: 17px; cursor: pointer; }
 .show-row input[type="checkbox"] { margin-left: auto; width: 22px; height: 22px; accent-color: #7fa650; }
