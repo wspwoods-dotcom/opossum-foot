@@ -568,6 +568,19 @@ body.route-locked #tabbar { pointer-events: none; opacity: .35; }
   background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
   margin-top: 8px; padding: 14px;
 }
+/* gp (2026-11-17, Tanner): the regs-family cards — the Seasons
+   "{State} — Tags, Permission, Setbacks & Licensing" card and the
+   Paperwork "Deadlines & Permits" card — carry law, not app content,
+   so they wear the same filled yellow as the official buttons
+   (.regs-link: var(--accent) fill, var(--accent-ink) text, ink
+   chevron). Secondary text and the source links take the ink color
+   too: the standard .dim tan and the yellow .rules-src links would
+   vanish on the fill. */
+.regs-card { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.regs-card .setsec-head { color: var(--accent-ink); }
+.regs-card .setsec-chev { color: var(--accent-ink); }
+.regs-card .dim { color: var(--accent-ink); opacity: .75; }
+.regs-card .rules-src a { color: var(--accent-ink); }
 /* Q99 (2026-10-01): the notes/memos/photos collapsible on the set form, log
    form, and set detail — a divider sets it off from the fields above. */
 .sheet .setsec { border-top: 1px solid var(--line); margin-top: 10px; }
@@ -1280,8 +1293,14 @@ body.placing #route-back-chip { display: none; }
 /* Q200: the saved-route bar — same family as the place/track bars. */
 #route-bar { flex: 0 0 auto; z-index: 500; display: none; align-items: center; justify-content: center; gap: 10px; padding: 10px 14px; font-size: 15px; font-weight: 600; background: #1d2a12; color: #fff; border-bottom: 1px solid var(--line); }
 #route-bar.show { display: flex; }
-#fix-bar { flex: 0 0 auto; z-index: 500; display: none; align-items: center; justify-content: center; gap: 10px; padding: 10px 14px; font-size: 15px; font-weight: 600; background: #1d2a12; color: #fff; border-bottom: 1px solid var(--line); }
+#fix-bar { flex: 0 0 auto; z-index: 500; display: none; align-items: center; justify-content: center; flex-wrap: wrap; gap: 10px; padding: 10px 14px; font-size: 15px; font-weight: 600; background: #1d2a12; color: #fff; border-bottom: 1px solid var(--line); }
 #fix-bar.show { display: flex; }
+#fix-bar-miles { font-variant-numeric: tabular-nums; opacity: .85; }
+/* gp: fix-mode points are draggable handles — a 30px touch target with a
+   ~14px visible dot (red; gold and bigger when picked for a cut). */
+.fix-pt { background: none; border: none; }
+.fix-pt i { display: block; width: 14px; height: 14px; margin: 8px; border-radius: 50%; background: #e5484d; border: 2px solid #fff; box-shadow: 0 1px 4px rgba(0,0,0,.45); box-sizing: border-box; }
+.fix-pt-sel i { width: 20px; height: 20px; margin: 5px; background: #e7c945; }
 #track-dot { width: 11px; height: 11px; border-radius: 50%; background: #e5484d; flex: 0 0 auto; }
 #track-stats { font-variant-numeric: tabular-nums; }
 
