@@ -891,6 +891,25 @@ body.placing #show-pill,
 body.placing .leaflet-control-layers { pointer-events: none; opacity: .45; }
 /* B15: zoom stays live during placement — pan and zoom, nothing else. */
 
+/* gt (2026-11-18, Tanner): the editor lock — while Fix route is open or
+   Draw a route is up, the map's other tools rest: dimmed and inert, so
+   no panel can open over the work and bury it ("kind of like with the
+   issue we had before"). Same shape as the placing lock above. What
+   stays alive is what the work needs: pan, pinch, the +/− zoom control
+   and the basemap cycle button — neither is listed here. The set and
+   sign markers rest too, through the editor-lock checks in their own
+   tap handlers (app.js / markers.js), the way placing does it. */
+body.editor-lock #show-pill,
+body.editor-lock #weather-chip,
+body.editor-lock #route-back-chip,
+body.editor-lock #route-bar,
+body.editor-lock #btn-locate,
+body.editor-lock #btn-drop-pin,
+body.editor-lock #btn-add-gps,
+body.editor-lock #btn-mark,
+body.editor-lock #btn-measure,
+body.editor-lock #btn-track { pointer-events: none; opacity: .45; }
+
 /* ---- trap lines ---- */
 .line-row { display: flex; gap: 8px; align-items: stretch; margin-bottom: 8px; border: 1px solid var(--line); border-radius: 12px; padding: 4px; }
 .line-row.active { border-color: var(--accent); }
@@ -1296,6 +1315,10 @@ body.placing #route-back-chip { display: none; }
 #fix-bar { flex: 0 0 auto; z-index: 500; display: none; align-items: center; justify-content: center; flex-wrap: wrap; gap: 10px; padding: 10px 14px; font-size: 15px; font-weight: 600; background: #1d2a12; color: #fff; border-bottom: 1px solid var(--line); }
 #fix-bar.show { display: flex; }
 #fix-bar-miles { font-variant-numeric: tabular-nums; opacity: .85; }
+/* gt: the standalone Draw a route bar — same family as the fix bar. */
+#draw-bar { flex: 0 0 auto; z-index: 500; display: none; align-items: center; justify-content: center; flex-wrap: wrap; gap: 10px; padding: 10px 14px; font-size: 15px; font-weight: 600; background: #1d2a12; color: #fff; border-bottom: 1px solid var(--line); }
+#draw-bar.show { display: flex; }
+#draw-bar-miles { font-variant-numeric: tabular-nums; opacity: .85; }
 /* gp: fix-mode points are draggable handles — a 30px touch target with a
    ~14px visible dot (red; gold and bigger when picked for a cut). */
 .fix-pt { background: none; border: none; }
