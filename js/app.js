@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-11-18gv';
+var APP_VERSION = 'beta 0.1 · build 2026-11-18gw';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -4123,6 +4123,9 @@ function deleteLog(logId) {
 
 /* ================= 8. CATCH LOGGING ================= */
 var logSetId = null, logSpecies = null, logCount = 1, logDisposition = 'kept', pendingLogPhotos = [], pendingLogMemos = [];
+/* gw: the unsaved catch's tag photo — one photo, { blob } like the catch
+   photos, saved with kind 'tag' when the catch saves. */
+var pendingTagPhoto = null;
 /* Catch-memo finish: true while the log sheet is open for an unsaved catch.
    A memo that finishes landing after the sheet closed is an orphan. */
 var logSheetLive = false;
@@ -4176,6 +4179,8 @@ function openLogSheet(setId) {
   var s = getSet(setId);
   if (!s) return;
   logSetId = setId; logSpecies = null; logCount = 1; logDisposition = 'kept'; pendingLogPhotos = []; pendingLogMemos = [];
+  pendingTagPhoto = null; renderPendingTagPhoto(); /* gw */
+  $('log-tag-number').value = ''; $('log-tag-date').value = ''; /* gw: fresh tag fields per catch */
   logSheetLive = true;
   logEventType = 'catch'; logOtherType = 'sprung';
   renderPendingLogPhotos();
@@ -4222,6 +4227,7 @@ function setLogEventType(t) {
   renderLogWarnings();
   updateLogDispositionRow();
   updateOtherSubtypeRows();
+  updateLogTagSection(); /* gw: Other events never show the Tag section */
 }
 
 /* Q68: the "Empty — nothing changed" subtype is a pure check-in — no
@@ -4287,6 +4293,41 @@ function renderPendingLogPhotos() {
     box.appendChild(img);
   });
 }
+/* gw: the log form's Tag section lives and dies by three conditions —
+   Tag records on, a Catch (never an Other event), and a picked species
+   the state actually tags. It starts collapsed and every field in it is
+   optional; an untouched section saves nothing and blocks nothing. */
+function updateLogTagSection() {
+  var sec = $('logform-tagsec');
+  if (!sec) return;
+  var entry = (logEventType === 'catch' && logSpecies) ? tagEntryForSpecies(logSpecies) : null;
+  var show = tagRecordsOn() && !!entry;
+  sec.hidden = !show;
+  if (!show) { setSectionOpen('logform-tagsec', false); return; }
+  var rule = $('log-tag-rule');
+  if (rule) rule.textContent = tagRuleText(entry);
+}
+function renderPendingTagPhoto() {
+  var box = $('log-tag-photos');
+  if (!box) return;
+  box.innerHTML = '';
+  if (!pendingTagPhoto) return;
+  var img = document.createElement('img');
+  img.className = 'photo-thumb'; img.alt = 'Tag photo';
+  img.src = URL.createObjectURL(pendingTagPhoto.blob);
+  img.title = 'Tap to enlarge';
+  img.onclick = function () {
+    var url = URL.createObjectURL(pendingTagPhoto.blob);
+    showModal('<img src="' + url + '" style="width:100%;border-radius:8px" alt="Tag photo">' +
+      '<div class="btn-row" style="margin-top:10px"><button class="btn-danger" id="m-tph-del" type="button">Remove</button>' +
+      '<button class="btn-secondary" id="m-close" type="button">Close</button></div>');
+    wirePhotoZoom($('modal-card'));
+    $('m-close').onclick = closeModal;
+    $('m-tph-del').onclick = function () { pendingTagPhoto = null; renderPendingTagPhoto(); closeModal(); };
+  };
+  box.appendChild(img);
+}
+
 /* Viewer for a catch photo that hasn't been saved yet: tap enlarges,
    removal is an explicit choice inside the viewer. */
 function openPendingPhotoViewer(idx) {
@@ -4415,6 +4456,7 @@ function renderSpeciesList(filter) {
       logSpecies = this.getAttribute('data-sp');
       renderSpeciesList($('log-species-search').value);
       renderLogWarnings();
+      updateLogTagSection(); /* gw: the Tag section follows the picked species */
     };
   }
 }
@@ -4525,6 +4567,13 @@ function saveLog() {
     memoIds: pendingLogMemos.slice(),
     createdAt: Date.now()
   };
+  /* gw: the tag record rides on the catch — only when the Tag section
+     applied to this catch's species, and exactly as filled (blank fields
+     stay blank; the section untouched is a perfectly good save). */
+  if (tagRecordsOn() && !isOther && species && isTagSpecies(species)) {
+    log.tagNumber = ($('log-tag-number').value || '').trim();
+    log.tagDate = $('log-tag-date').value || '';
+  }
   log.lineId = activeLineId();
   Store.data.logs.push(log);
   touchSet(getSet(logSetId)); /* Q68: a logged catch, event, or empty check restarts the clock */
@@ -4538,6 +4587,17 @@ function saveLog() {
       lat: s ? s.lat : null, lng: s ? s.lng : null, createdAt: Date.now()
     }).catch(function () { /* noop */ });
   });
+  /* gw: the pending tag photo saves as the catch's tag photo — same
+     store, same shape as a catch photo, marked kind 'tag' so My Tags
+     and the photo pack can tell it from the catch's own photos. */
+  if (pendingTagPhoto && log.tagNumber !== undefined) {
+    IDB.put('photos', {
+      id: uid('p'), setId: log.setId, logId: log.id, kind: 'tag', blob: pendingTagPhoto.blob,
+      mime: pendingTagPhoto.blob.type || 'image/jpeg',
+      lat: s ? s.lat : null, lng: s ? s.lng : null, createdAt: Date.now()
+    }).catch(function () { /* noop */ });
+  }
+  pendingTagPhoto = null;
   pendingLogPhotos = [];
   pendingLogMemos = [];
   closeSheets();
@@ -4570,6 +4630,51 @@ function saveLog() {
    changed when they remade the set. "Update this set" opens the full Edit
    Set form; "Keep as-is" just closes. Editing never rewrites past catches. */
 var postCatchSetId = null;
+/* gw scope 3: the post-catch sheet's tag entry. The sheet has no save of
+   its own, so these fields WRITE THROUGH to the just-saved catch as they
+   change — closing the sheet any way (Update, ×, scrim) keeps whatever
+   was entered and loses nothing; untouched fields change nothing. */
+var postCatchLogId = null;
+var pcTagPhoto = null; /* { existing } — the photo saves the moment it's picked */
+function setupPcTagEntry(log) {
+  var wrap = $('pc-tag-entry');
+  if (!wrap) return;
+  postCatchLogId = null; pcTagPhoto = null;
+  var show = !!(log && tagRecordsOn() && tagEntryForSpecies(log.species));
+  wrap.hidden = !show;
+  if (!show) return;
+  postCatchLogId = log.id;
+  pcTagPhoto = { existing: null };
+  $('pc-tag-number').value = log.tagNumber || '';
+  $('pc-tag-date').value = log.tagDate || '';
+  renderPcTagPhoto();
+  IDB.all('photos').then(function (all) {
+    if (postCatchLogId !== log.id || !pcTagPhoto) return;
+    (all || []).forEach(function (p) { if (p && p.logId === log.id && p.kind === 'tag') pcTagPhoto.existing = p; });
+    renderPcTagPhoto();
+  }).catch(function () { /* noop */ });
+}
+function renderPcTagPhoto() {
+  var box = $('pc-tag-photos');
+  if (!box) return;
+  box.innerHTML = '';
+  var has = !!(pcTagPhoto && pcTagPhoto.existing);
+  var rm = $('btn-pc-tagphoto-remove');
+  if (rm) rm.hidden = !has;
+  if (!has) return;
+  var img = document.createElement('img');
+  img.className = 'photo-thumb'; img.alt = 'Tag photo';
+  img.src = photoURL(pcTagPhoto.existing);
+  img.onclick = function () { if (pcTagPhoto && pcTagPhoto.existing) openPhotoViewer(pcTagPhoto.existing, null, true); };
+  box.appendChild(img);
+}
+function pcTagWrite() {
+  var l = postCatchLogId ? tagLogById(postCatchLogId) : null;
+  if (!l) return;
+  l.tagNumber = ($('pc-tag-number').value || '').trim();
+  l.tagDate = $('pc-tag-date').value || '';
+  Store.save();
+}
 function openPostCatchPrompt(setId, log) {
   var s = getSet(setId);
   if (!s) return;
@@ -4587,6 +4692,7 @@ function openPostCatchPrompt(setId, log) {
         '<div class="reminder-tag">' + esc(REMINDER_LINE) + '</div></div>';
     }).join('');
   }
+  setupPcTagEntry(log); /* gw scope 3: the tag entry under the note */
   var html = '';
   function pcRow(label, val) {
     if (val) html += '<dt>' + esc(label) + '</dt><dd>' + esc(val) + '</dd>';
@@ -6049,7 +6155,17 @@ function logRowHtml(l, showDate) {
     (meta ? '<div class="dim">' + meta + '</div>' : '') +
     (l.notes ? '<div class="lr-notes">' + esc(l.notes) + '</div>' : '') +
     logMemoHtml(l) +
-    (l.weather ? '<div class="dim">🌤 ' + esc(weatherText(l.weather)) + '</div>' : '') + '</div>';
+    (l.weather ? '<div class="dim">🌤 ' + esc(weatherText(l.weather)) + '</div>' : '') +
+    /* gw: tag-species catches carry a tag line + editor button, visible
+       when the row is expanded (CSS rides .expanded like the notes). */
+    (function () {
+      if (l.otherType || !l.species || !tagRecordsOn() || !isTagSpecies(l.species)) return '';
+      var sum = (l.tagNumber || '').trim()
+        ? 'Tag № ' + esc(l.tagNumber) + (l.tagDate ? ' · tagged ' + esc(fmtDate(l.tagDate)) : '')
+        : 'Not tagged yet';
+      return '<div class="tag-line"><span class="dim">' + sum + '</span>' +
+        '<button type="button" class="btn-small btn-secondary" data-tag-edit="' + l.id + '">Tag record</button></div>';
+    })() + '</div>';
 }
 
 function renderHistByDate(list) {
@@ -6079,7 +6195,7 @@ function renderHistByDate(list) {
       var shut = !!f.collapsed[l.date];
       html += '<div class="day-group"><button type="button" class="day-head" data-day="' + esc(l.date) + '">' +
         esc(dayLabel(l.date)) + ' <span class="dim">· ' + dayCatches + ' catch' + (dayCatches === 1 ? '' : 'es') + '</span>' +
-        '<span class="chev">' + (shut ? '▸' : '▾') + '</span></button>' +
+        '<span class="chev' + (shut ? '' : ' open') + '">›</span></button>' + /* gw scope 5: standard chevron */
         '<div class="day-body"' + (shut ? ' hidden' : '') + '>';
       curDay = l.date;
     }
@@ -6120,7 +6236,7 @@ function renderHistByTrapType(list) {
     html += '<div class="sp-group"><button type="button" class="sp-head tt-head" data-tt="' + esc(tt) + '">' +
       '<span class="sp-name">' + esc(tt) + '</span>' +
       '<span class="sp-total">×' + g.total + '</span>' +
-      '<span class="chev">' + (open ? '▾' : '▸') + '</span></button>' +
+      '<span class="chev' + (open ? ' open' : '') + '">›</span></button>' + /* gw scope 5: standard chevron */
       '<div class="dim sp-sub">' + esc(parts.join(' · ') || 'no catches') + '</div>';
     if (open) {
       html += '<div class="sp-body">';
@@ -6556,7 +6672,7 @@ function renderTotals() {
   function totalsCardHead(key, title) {
     var closed = !!totalsCollapsed()[key];
     return '<button type="button" class="totals-card-head" data-tsec="' + key + '" aria-expanded="' + (!closed) + '">' +
-      '<h3>' + title + '</h3><span class="tchev">' + (closed ? '▸' : '▾') + '</span></button>';
+      '<h3>' + title + '</h3><span class="tchev">›</span></button>'; /* gw scope 5: one glyph, rotation shows state */
   }
   function totalsSectionCards() {
     var tc = totalsCollapsed(), cards = '';
@@ -6657,17 +6773,35 @@ function renderSeasons(filter) {
   }
   renderSeasonsCompliance(d);
   renderSeasonsGap(d);
+  renderSeasonsList(filter);
+}
+
+/* gw: the animal list is its OWN render, and the search box calls only
+   this — the way every other search bar in the app behaves (the log
+   form's species search re-renders its list, History's search its
+   rows). Before gw, each keystroke ran the whole renderSeasons: the
+   rules and gap cards above the search were rebuilt shut, the page
+   above the list collapsed by hundreds of pixels, the scroll lurched,
+   and the matched rows ended up scrolled out of sight above the sticky
+   search — the list area read as blank (Tanner's field report,
+   2026-11-18). Filtering now touches nothing above the search bar. */
+function renderSeasonsList(filter) {
+  var d = stateData();
+  if (!d) {
+    $('seasons-list').innerHTML = '<p class="dim">No season data loaded.</p>';
+    return;
+  }
   var q = (filter || '').toLowerCase();
   var list = sortSpeciesAlpha(stateSpecies().filter(function (sp) {
     return !q || sp.common_name.toLowerCase().indexOf(q) !== -1;
   }));
-  $('seasons-list').innerHTML = list.map(function (sp) {
+  $('seasons-list').innerHTML = list.length ? list.map(function (sp) {
     var info = speciesSeasonInfo(sp);
     return '<button type="button" class="species-row" data-sp="' + esc(sp.common_name) + '">' + speciesIcon(sp.common_name) +
       '<span class="sp-name">' + esc(sp.common_name) +
       (sp.scientific_name ? '<span class="sci">' + esc(sp.scientific_name) + '</span>' : '') + '</span>' +
       '<span class="badge ' + info.badgeClass + '">' + info.badge + '</span>' + '</button>';
-  }).join('');
+  }).join('') : '<p class="dim">No species match.</p>';
   var btns = $('seasons-list').querySelectorAll('.species-row');
   for (var i = 0; i < btns.length; i++) {
     btns[i].onclick = function (e) {
@@ -6814,6 +6948,120 @@ function gapNotesForCatch(species) {
     });
   });
   return out;
+}
+
+/* ================= gw: TAG RECORDS =================
+   Tanner's law for this feature (2026-11-18): optional by default,
+   removable by choice, blocking never. The record lives ON the catch
+   (log.tagNumber / log.tagDate, plus one photo record with kind 'tag'
+   and the catch's logId) — Paperwork → My Tags is a view over catches,
+   not a second store, so deleting a catch takes its tag record with it
+   everywhere, per the Q38 rule. The Settings toggle hides every surface
+   and deletes nothing. */
+function tagRecordsOn() { return Store.data.tagRecordsOn !== false; }
+/* The app has no global log-by-id helper (the one logById in the file is
+   nested inside the gallery section) — tag records use this one. */
+function tagLogById(id) {
+  var logs = Store.data.logs || [];
+  for (var i = 0; i < logs.length; i++) if (logs[i].id === id) return logs[i];
+  return null;
+}
+
+/* The Cat 2 (pelt tagging & sealing) entry covering this species in the
+   active line's state, or null — the same matching the post-catch
+   sealing note uses, so the form, History, and My Tags always agree
+   about which species get tagged. */
+function tagEntryForSpecies(species) {
+  var notes = gapNotesForCatch(species);
+  for (var i = 0; i < notes.length; i++) if (notes[i].cat === 2) return notes[i].entry;
+  return null;
+}
+function isTagSpecies(species) { return !!tagEntryForSpecies(species); }
+function tagRuleText(entry) {
+  return entry ? entry.rule + (entry.deadline ? ' Deadline: ' + entry.deadline + '.' : '') : '';
+}
+/* A catch "carries tag data" when any of the three fields is filled. */
+function logHasTagData(l, tagPhotos) {
+  if (!l) return false;
+  if ((l.tagNumber || '').trim() || l.tagDate) return true;
+  return !!(tagPhotos && tagPhotos[l.id]);
+}
+
+/* The tag record editor (sheet-tag): opened from an expanded History row
+   or a My Tags row. Prefilled with whatever is stored; every field stays
+   optional, and saving an untouched sheet changes nothing of substance. */
+var tagEditLogId = null;
+/* photo state: existing = the saved photo record (or null); blob = a
+   newly picked replacement; removed = the saved photo is to be deleted.
+   Nothing touches IndexedDB until Save. */
+var tagEditPhoto = null;
+function openTagEditor(logId) {
+  var l = tagLogById(logId);
+  if (!l) return;
+  tagEditLogId = logId;
+  tagEditPhoto = { existing: null, blob: null, removed: false };
+  $('tag-edit-line').innerHTML = '<strong>' + esc(l.species || 'Catch') + '</strong>' +
+    ' · ' + esc(fmtDate(l.date)) + (l.setName ? ' · ' + esc(l.setName) : '');
+  $('tag-edit-rule').textContent = tagRuleText(tagEntryForSpecies(l.species));
+  $('tag-number').value = l.tagNumber || '';
+  $('tag-date').value = l.tagDate || '';
+  renderTagEditPhoto();
+  IDB.all('photos').then(function (all) {
+    if (tagEditLogId !== logId) return;
+    (all || []).forEach(function (p) { if (p && p.logId === logId && p.kind === 'tag') tagEditPhoto.existing = p; });
+    renderTagEditPhoto();
+  }).catch(function () { /* noop */ });
+  openSheet('sheet-tag');
+}
+function renderTagEditPhoto() {
+  var box = $('tag-photos');
+  if (!box) return;
+  box.innerHTML = '';
+  var rm = $('btn-tag-photo-remove');
+  var has = !!(tagEditPhoto && (tagEditPhoto.blob || (tagEditPhoto.existing && !tagEditPhoto.removed)));
+  if (rm) rm.hidden = !has;
+  if (!tagEditPhoto) return;
+  var img = document.createElement('img');
+  img.className = 'photo-thumb'; img.alt = 'Tag photo';
+  if (tagEditPhoto.blob) {
+    img.src = URL.createObjectURL(tagEditPhoto.blob);
+    img.onclick = function () { openFullPhoto(tagEditPhoto.blob); };
+  } else if (tagEditPhoto.existing && !tagEditPhoto.removed) {
+    img.src = photoURL(tagEditPhoto.existing);
+    img.onclick = function () { openPhotoViewer(tagEditPhoto.existing, null, true); };
+  } else return;
+  box.appendChild(img);
+}
+function deleteTagPhotoRec(p) {
+  if (!p) return;
+  if (photoURLs[p.id]) { URL.revokeObjectURL(photoURLs[p.id]); delete photoURLs[p.id]; }
+  delete photoById[p.id];
+  IDB.del('photos', p.id).catch(function () { /* noop */ });
+}
+function saveTagRecord() {
+  var l = tagLogById(tagEditLogId);
+  if (!l) { closeSheets(); return; }
+  l.tagNumber = ($('tag-number').value || '').trim();
+  l.tagDate = $('tag-date').value || '';
+  var ph = tagEditPhoto;
+  if (ph) {
+    if (ph.removed && ph.existing) deleteTagPhotoRec(ph.existing);
+    if (ph.blob) {
+      if (ph.existing && !ph.removed) deleteTagPhotoRec(ph.existing);
+      IDB.put('photos', {
+        id: uid('p'), setId: l.setId, logId: l.id, kind: 'tag', blob: ph.blob,
+        mime: ph.blob.type || 'image/jpeg',
+        lat: (l.lat != null ? l.lat : null), lng: (l.lng != null ? l.lng : null),
+        createdAt: Date.now()
+      }).catch(function () { /* noop */ });
+    }
+  }
+  tagEditPhoto = null; tagEditLogId = null;
+  Store.save();
+  closeSheets();
+  renderHistory();
+  renderMyTags();
+  toast('Tag record saved.');
 }
 
 function showSpeciesDetail(name) {
@@ -7164,6 +7412,68 @@ function renderPaperworkDeadlines() {
   var title = $('setsec-deadlines-title');
   if (title) title.textContent = 'Deadlines & Permits — ' + (d ? d.state_name : code);
   box.innerHTML = h + '<p class="dim rules-src">' + esc(REMINDER_LINE) + '</p>';
+}
+
+/* gw: Paperwork → My Tags — a view over the active line's catches, never
+   a second store. Two groups, newest catch first in each: records on
+   file (number, date, photo) and tag-species catches still awaiting a
+   tag number, carrying the state's deadline text. No badges, counters,
+   or mentions anywhere else in the app. The whole card hides when Tag
+   records are off — stored records are untouched. */
+function renderMyTags() {
+  var card = $('setsec-mytags');
+  var box = $('mytags-list');
+  if (!card || !box) return;
+  if (!tagRecordsOn()) { card.style.display = 'none'; box.innerHTML = ''; return; }
+  card.style.display = '';
+  var logs = activeLogs().filter(function (l) {
+    return !l.otherType && l.species && isTagSpecies(l.species);
+  });
+  if (!logs.length) {
+    box.innerHTML = '<p class="dim">No catches on this line need a tag yet. When you log a species your state tags — bobcat, otter, and the like — its tag record will live here.</p>';
+    return;
+  }
+  IDB.all('photos').then(function (all) {
+    var tagPhotos = {};
+    (all || []).forEach(function (p) { if (p && p.logId && p.kind === 'tag') tagPhotos[p.logId] = p; });
+    var filled = [], waiting = [];
+    logs.forEach(function (l) { (logHasTagData(l, tagPhotos) ? filled : waiting).push(l); });
+    function byDateDesc(a, b) { return (b.date || '') < (a.date || '') ? -1 : ((b.date || '') > (a.date || '') ? 1 : (b.createdAt || 0) - (a.createdAt || 0)); }
+    filled.sort(byDateDesc); waiting.sort(byDateDesc);
+    function row(l) {
+      var p = tagPhotos[l.id];
+      var has = logHasTagData(l, tagPhotos);
+      var top = has
+        ? (l.tagNumber ? '<span class="tag-num">Tag № ' + esc(l.tagNumber) + '</span>' : '<span class="dim">Tag photo / date on file</span>')
+        : '<span class="dim">Awaiting tag</span>';
+      var meta = esc(fmtDate(l.date)) + (l.setName ? ' · ' + esc(l.setName) : '') +
+        (l.tagDate ? ' · Tagged ' + esc(fmtDate(l.tagDate)) : '');
+      var dl = '';
+      if (!has) {
+        var e = tagEntryForSpecies(l.species);
+        if (e) dl = '<div class="dim">' + (e.deadline ? '<strong>Deadline: ' + esc(e.deadline) + '</strong> — ' : '') + esc(e.rule) + '</div>';
+      }
+      return '<div class="tag-row" data-tag-edit="' + l.id + '"><div class="tag-flex">' +
+        '<div class="tag-main"><div class="tag-top"><span class="tag-species">' + esc(l.species) + '</span>' + top + '</div>' +
+        '<div class="dim">' + meta + '</div>' + dl + '</div>' +
+        (p ? '<img class="tag-thumb" data-tag-photo="' + l.id + '" src="' + photoURL(p) + '" alt="Tag photo">' : '') +
+        '</div></div>';
+    }
+    var h = '';
+    if (filled.length) h += (waiting.length ? '<p class="rules-sec">On record</p>' : '') + filled.map(row).join('');
+    if (waiting.length) h += (filled.length ? '<p class="rules-sec">Waiting for a tag</p>' : '') + waiting.map(row).join('');
+    box.innerHTML = h;
+    box.onclick = function (e) {
+      var th = e.target.closest ? e.target.closest('[data-tag-photo]') : null;
+      if (th) {
+        var p = tagPhotos[th.getAttribute('data-tag-photo')];
+        if (p) openPhotoViewer(p, null, true);
+        return;
+      }
+      var r = e.target.closest ? e.target.closest('[data-tag-edit]') : null;
+      if (r) openTagEditor(r.getAttribute('data-tag-edit'));
+    };
+  }).catch(function () { box.innerHTML = '<p class="dim">Could not load tag photos.</p>'; });
 }
 
 function renderLicenses() {
@@ -8980,7 +9290,7 @@ function switchTab(name) {
   if (name === 'scorecard') renderScorecardTab();
   if (name === 'totals') renderTotals();
   if (name === 'seasons') renderSeasons($('seasons-search').value);
-  if (name === 'licenses') { renderLicenses(); renderLandowners(); renderPaperworkMileage(); renderPaperworkDeadlines(); }
+  if (name === 'licenses') { renderLicenses(); renderLandowners(); renderPaperworkMileage(); renderPaperworkDeadlines(); renderMyTags(); }
   if (name === 'lines') renderLines();
   reportViewport(); /* fj: keep the About diagnostic fresh, incl. bannerB while on the map */
 }
@@ -9005,6 +9315,7 @@ function refreshForLine() {
   renderLandowners();
   renderPaperworkMileage(); /* df: mileage follows the active line */
   renderPaperworkDeadlines(); /* gn: deadlines follow the active line's state too */
+  renderMyTags(); /* gw: tag records follow the active line too */
   renderMapStatusFilters();
   buildStateSelect($('settings-state'), activeStateCode());
   renderSettingsLineName();
@@ -9441,6 +9752,18 @@ function enterMain() {
       toast(this.checked ? 'Mileage tracking is on.' : 'Mileage tracking is off.');
     };
   }
+  /* gw: tag records toggle — off hides the catch-sheet Tag section and
+     My Tags everywhere; stored records are never deleted. Default on. */
+  var tagBox = $('settings-tagrecords');
+  if (tagBox) {
+    tagBox.checked = tagRecordsOn();
+    tagBox.onchange = function () {
+      Store.data.tagRecordsOn = this.checked;
+      Store.save();
+      renderMyTags();
+      toast(this.checked ? 'Tag records are on.' : 'Tag records are off — records already saved stay on this phone.');
+    };
+  }
   /* fy: ruler toggle — off hides the map's measure button entirely. Default on. */
   var rulerBox = $('settings-ruler');
   if (rulerBox) {
@@ -9599,6 +9922,7 @@ function buildGuideTOC() {
       'Reset', function () {
     Store.data.weatherOn = true; Store.data.voiceOn = true; Store.data.windArrowsOn = true; /* Q17; Q183: reset restores the fresh-install default (weather on) */
     Store.data.mileageOn = true; /* Q8 */
+    Store.data.tagRecordsOn = true; /* gw */
     Store.data.rulerOn = true; /* fy */
     /* Q14/Q62: tab reset is per-line — restores all five toggleable tabs on the active line. */
     var l = activeLine();
@@ -9607,6 +9931,8 @@ function buildGuideTOC() {
     Store.save();
     $('settings-weather').checked = true; $('settings-voice').checked = true; $('settings-windarrows').checked = true;
     var mcb = $('settings-mileage'); if (mcb) mcb.checked = true;
+    var tgcb = $('settings-tagrecords'); if (tgcb) tgcb.checked = true;
+    renderMyTags(); /* gw: reset restores the My Tags section too */
     var rcb = $('settings-ruler'); if (rcb) rcb.checked = true;
     renderTabToggles();
     sfKeys.forEach(function (key) { var cb = $('settings-sf-' + key); if (cb) cb.checked = true; });
@@ -10533,9 +10859,68 @@ function wireUp() {
       renderPendingLogPhotos();
     });
   };
+  /* gw: tag photo pickers — same behavior as the catch photo picker
+     (capture the file synchronously, clear the input, downscale). */
+  $('btn-log-tagphoto').onclick = function () { $('log-tag-photo-input').click(); };
+  $('log-tag-photo-input').onchange = function () {
+    var f = this.files[0];
+    this.value = '';
+    if (!f) return;
+    downscalePhoto(f, function (blob) {
+      pendingTagPhoto = { blob: blob };
+      renderPendingTagPhoto();
+    });
+  };
+  $('btn-tag-photo').onclick = function () { $('tag-photo-input').click(); };
+  $('tag-photo-input').onchange = function () {
+    var f = this.files[0];
+    this.value = '';
+    if (!f || !tagEditPhoto) return;
+    downscalePhoto(f, function (blob) {
+      tagEditPhoto.blob = blob;
+      tagEditPhoto.removed = false;
+      renderTagEditPhoto();
+    });
+  };
+  $('btn-tag-photo-remove').onclick = function () {
+    if (!tagEditPhoto) return;
+    tagEditPhoto.blob = null;
+    tagEditPhoto.removed = true;
+    renderTagEditPhoto();
+  };
+  $('btn-save-tag').onclick = saveTagRecord;
+  /* gw scope 3: post-catch sheet tag entry — write-through fields. */
+  $('pc-tag-number').onchange = pcTagWrite;
+  $('pc-tag-date').onchange = pcTagWrite;
+  $('btn-pc-tagphoto').onclick = function () { $('pc-tag-photo-input').click(); };
+  $('pc-tag-photo-input').onchange = function () {
+    var f = this.files[0];
+    this.value = '';
+    if (!f || !postCatchLogId) return;
+    downscalePhoto(f, function (blob) {
+      var l = tagLogById(postCatchLogId);
+      if (!l) return;
+      if (pcTagPhoto && pcTagPhoto.existing) deleteTagPhotoRec(pcTagPhoto.existing);
+      var rec = {
+        id: uid('p'), setId: l.setId, logId: l.id, kind: 'tag', blob: blob,
+        mime: blob.type || 'image/jpeg',
+        lat: (l.lat != null ? l.lat : null), lng: (l.lng != null ? l.lng : null),
+        createdAt: Date.now()
+      };
+      IDB.put('photos', rec).catch(function () { /* noop */ });
+      if (!pcTagPhoto) pcTagPhoto = { existing: null };
+      pcTagPhoto.existing = rec;
+      renderPcTagPhoto();
+    });
+  };
+  $('btn-pc-tagphoto-remove').onclick = function () {
+    if (pcTagPhoto && pcTagPhoto.existing) { deleteTagPhotoRec(pcTagPhoto.existing); pcTagPhoto.existing = null; }
+    renderPcTagPhoto();
+  };
 
-  /* seasons search */
-  $('seasons-search').oninput = function () { renderSeasons(this.value); };
+  /* seasons search — gw: filters the animal list ONLY, like the app's
+     other search bars; the full renderSeasons runs on tab open. */
+  $('seasons-search').oninput = function () { renderSeasonsList(this.value); };
 
   /* history filters */
   $('history-search').oninput = function () { histUI.q = this.value; renderHistory(); };
@@ -10575,9 +10960,7 @@ function wireUp() {
       Store.data.totalsCollapsed = tco; Store.save();
       var tbody = thead.parentNode.querySelector('.totals-card-body');
       if (tbody) { if (tco[skey]) tbody.setAttribute('hidden', ''); else tbody.removeAttribute('hidden'); }
-      thead.setAttribute('aria-expanded', String(!tco[skey]));
-      var thchev = thead.querySelector('.tchev');
-      if (thchev) thchev.textContent = tco[skey] ? '▸' : '▾';
+      thead.setAttribute('aria-expanded', String(!tco[skey])); /* gw scope 5: the chevron rotates off aria-expanded; no glyph swap */
       return;
     }
     /* Tap a By Species / By Set row to expand/collapse its details. */
@@ -10637,6 +11020,9 @@ function wireUp() {
     }
     var memoBtn = e.target.closest ? e.target.closest('[data-memo-play]') : null;
     if (memoBtn) { toggleLogMemoPlayer(memoBtn); return; }
+    /* gw: the Tag record button opens the editor instead of expanding. */
+    var tagBtn = e.target.closest ? e.target.closest('[data-tag-edit]') : null;
+    if (tagBtn) { openTagEditor(tagBtn.getAttribute('data-tag-edit')); return; }
     var row = e.target.closest ? e.target.closest('.log-row') : null;
     if (row && row.getAttribute('data-log')) {
       var k = row.getAttribute('data-log');
