@@ -362,7 +362,10 @@ line you are planning, or one you ran the day the phone stayed in the
 truck. Tap **Draw a route** beside Log Trip: the map opens empty, you
 tap along the route while the miles count up, **Undo** takes back a
 point, and **Save** asks for the date and files it as a trip on the
-line. It reads **Drawn route** in the log, so the record always says
+line. A point that lands wrong is fixed right there, not after: drag
+it to where it belongs, or tap it and **Remove this dot**. Tap the
+first point instead and the bar offers **Close the loop** — the route
+ties back to its start, with the closing stretch counted in the miles. It reads **Drawn route** in the log, so the record always says
 how the route came to be, and its miles count in the line's total like
 any other trip. From there it is a trip like any other: **Show on map**
 draws it, **Fix route** opens on it, and it deletes the same way.
