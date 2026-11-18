@@ -321,10 +321,10 @@ line across ground it didn't record, and the miles count only the path
 actually traveled.
 
 Trips file as one-line rows — date, miles, and whether the run was a
-**GPS track** or an **Odometer** entry (odometer rows show their readings
-right on the line). Tap a row to open it: the passed-sets readout, the
-odometer photos, **Show on map**, and the trip's editing all live inside
-the open row.
+**GPS track**, a **Drawn route**, or an **Odometer** entry (odometer rows
+show their readings right on the line). Tap a row to open it: the
+passed-sets readout, the odometer photos, **Show on map**, and the trip's
+editing all live inside the open row.
 
 A saved GPS route can be repaired after the fact with **Fix route**,
 inside the open trip row. Every recorded point lands on the map as a dot
@@ -339,11 +339,33 @@ of a break and tap **Join**, and the line draws through again with
 that leg counted. A lone dot sitting by itself mid-route is one brief
 fix the app stranded between two breaks; join it to the stretch on
 each side to make the route whole, or leave it be — a stranded point
-draws nothing and counts no miles either way. The trip's miles in the bar
+draws nothing and counts no miles either way. **Draw** covers the
+stretch the phone never recorded at all — no points to drag, nothing to
+join. Tap **Draw**, tap one end of a stretch to start from it, then tap
+along the map: each tap lays a point by hand, and the line and the miles
+follow. When the drawn stretch reaches the end of another stretch, tap
+that end and tap **Connect** to make them one route; tap the far end of
+the same stretch and the route closes into a loop. **Stop here** leaves
+the stretch open where it stands, and **Undo** takes back the last point
+laid. Points you draw are marked as drawn by hand in the record, and
+from then on they are ordinary points — drag them in a later session
+like any other. The trip's miles in the bar
 update as you work. Nothing is saved until you tap **Done**; **Cancel**
 throws the whole edit away and the trip stays exactly as it was. When
 you tap **Done**, the fixed route stays on screen so you can check it;
-**Back** returns to Paperwork when you're satisfied.
+**Back** returns to Paperwork when you're satisfied. While you fix or
+draw, the map's other tools rest — nothing else can open over your work
+until you are done.
+
+A route can also be drawn whole, with no track behind it at all — a
+line you are planning, or one you ran the day the phone stayed in the
+truck. Tap **Draw a route** beside Log Trip: the map opens empty, you
+tap along the route while the miles count up, **Undo** takes back a
+point, and **Save** asks for the date and files it as a trip on the
+line. It reads **Drawn route** in the log, so the record always says
+how the route came to be, and its miles count in the line's total like
+any other trip. From there it is a trip like any other: **Show on map**
+draws it, **Fix route** opens on it, and it deletes the same way.
 
 The on/off switch is **Mileage log** in Settings → Feature Toggles, and it
 only governs recording *new* trips. Turn it off and your recorded trips,
