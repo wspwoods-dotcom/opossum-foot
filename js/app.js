@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-11-18gq';
+var APP_VERSION = 'beta 0.1 · build 2026-11-18gr';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -6939,6 +6939,35 @@ function deleteTripPhoto(photoId) {
     IDB.del('photos', photoId).then(function () { renderPaperworkMileage(); });
   });
 }
+/* gr (2026-11-18, Tanner): the trip-map context. While a saved trip's
+   route is drawn from this readout — Show on map, or the landing after
+   a Fix route Done — the route bar carries Fix route for that same
+   trip and Back to this readout, so the route (and a repair just made
+   to it) can be checked right where it landed. Back is the Paperwork
+   tab itself; the drawn route stays on the map, as Show on map has
+   always left it. */
+function tripMapCtx(tr) {
+  return {
+    fix: function () { openTripFix(tr); },
+    back: function () { switchTab('licenses'); }
+  };
+}
+/* go/gp/gq: Fix route — Tracking owns the map work and the working
+   copy; this callback fires ONCE, when Tanner taps Done in the fix
+   bar, and writes the finished edit to the trip and saves, so the
+   readout, the map, and the mileage agree and survive a reload.
+   Cancel never calls back at all.
+   gr: after the write, the saved trip is drawn the way Show on map
+   draws it, with its context — Done lands on the fixed route itself
+   instead of leaving a blank map behind. */
+function openTripFix(tr) {
+  switchTab('map');
+  Tracking.startFix(tr.track, function (res) {
+    tr.track = res.track; tr.miles = res.miles;
+    Store.save(); renderPaperworkMileage();
+    Tracking.drawSaved(tr.track, tripMapCtx(tr));
+  });
+}
 function renderPaperworkMileage() {
   var box = $('paperwork-mileage-lines');
   if (!box) return;
@@ -7004,7 +7033,7 @@ function renderPaperworkMileage() {
     (function (el) {
       el.onclick = function () {
         var tr = tripById(el.getAttribute('data-trip-show'));
-        if (tr && tr.track && tr.track.length > 1 && window.Tracking) { switchTab('map'); Tracking.drawSaved(tr.track); }
+        if (tr && tr.track && tr.track.length > 1 && window.Tracking) { switchTab('map'); Tracking.drawSaved(tr.track, tripMapCtx(tr)); }
         else toast('No route is saved on that trip.');
       };
     })(shows[s2]);
@@ -7016,24 +7045,15 @@ function renderPaperworkMileage() {
     })(gdels[g]);
   }
   /* go: Fix route — a GPS trip whose line jumped (the sleep diagonal)
-     can be repaired after the fact. Tracking owns the map work.
-     gp: the callback fires ONCE, when Tanner taps Done in the fix bar —
-     drags and cuts before that live in Tracking's working copy only,
-     and Cancel never calls back at all. The one call below writes the
-     finished edit to the trip and saves, so the readout, the map, and
-     the mileage agree and survive a reload. */
+     can be repaired after the fact. The wiring lives in openTripFix
+     (above renderPaperworkMileage): gp's once-only Done callback, and
+     gr's landing on the drawn fixed route after it. */
   var fixes = box.querySelectorAll('[data-trip-fix]');
   for (var f2 = 0; f2 < fixes.length; f2++) {
     (function (el) {
       el.onclick = function () {
         var tr = tripById(el.getAttribute('data-trip-fix'));
-        if (tr && tr.track && tr.track.length > 1 && window.Tracking) {
-          switchTab('map');
-          Tracking.startFix(tr.track, function (res) {
-            tr.track = res.track; tr.miles = res.miles;
-            Store.save(); renderPaperworkMileage();
-          });
-        }
+        if (tr && tr.track && tr.track.length > 1 && window.Tracking) openTripFix(tr);
         else toast('No route is saved on that trip.');
       };
     })(fixes[f2]);
