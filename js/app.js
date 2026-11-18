@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-11-17go';
+var APP_VERSION = 'beta 0.1 · build 2026-11-17gp';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -1921,13 +1921,20 @@ function renderMakerOptions() {
   if (!sel) return;
   var cur = sel.value; /* Q55: rebuild keeps the trapper's pick */
   var h = '<option value="">e.g. Bridger</option>';
+  /* gp (2026-11-17, Tanner): "None" pins the top of the brand list like
+     every other fillable box (the fg rule for the attractant boxes);
+     "Not sure / mixed brands" rides second. Picking None stores the
+     literal 'None' as the maker — the same value the bait/lure None
+     rows put in their fields — and reads back through the unfiltered
+     path, since TRAP_MAKERS has no 'None' entry. */
+  h += '<option value="None">None</option>';
   h += '<option value="__mixed">' + esc(MIXED_MAKER_LABEL) + '</option>';
   MAKER_ORDER.forEach(function (m) {
     var label = m + (TRAP_MAKERS[m].legacy ? ' (legacy)' : '');
     h += '<option value="' + esc(m) + '">' + esc(label) + '</option>';
   });
   /* Q55: the trapper's custom makers + the Other… escape hatch. */
-  var seenMakers = {};
+  var seenMakers = { none: 1 }; /* gp: a typed custom "None" must not duplicate the pinned row */
   MAKER_ORDER.forEach(function (m) { seenMakers[m.toLowerCase()] = 1; });
   customOptionsFor('sf-maker').forEach(function (m) {
     if (!seenMakers[m.toLowerCase()]) h += '<option value="' + esc(m) + '">' + esc(m) + '</option>';
@@ -6753,7 +6760,7 @@ function renderSeasonsGap(d) {
   gapEntries(code).forEach(function (e) {
     if (e.source && srcs.indexOf(e.source) < 0) srcs.push(e.source);
   });
-  box.innerHTML = '<div class="card setsec" id="gap-card">' +
+  box.innerHTML = '<div class="card setsec regs-card" id="gap-card">' +
     '<button type="button" class="setsec-head" id="gap-toggle"><span>' + esc(d.state_name) + ' — Tags, Permission, Setbacks &amp; Licensing</span>' +
     '<span class="setsec-chev">›</span></button>' +
     '<div class="setsec-body" hidden>' + secs.join('') +
@@ -7009,9 +7016,12 @@ function renderPaperworkMileage() {
     })(gdels[g]);
   }
   /* go: Fix route — a GPS trip whose line jumped (the sleep diagonal)
-     can be repaired after the fact. Tracking owns the map work; each
-     applied cut lands back on the trip here and saves, so the readout,
-     the map, and the mileage agree and survive a reload. */
+     can be repaired after the fact. Tracking owns the map work.
+     gp: the callback fires ONCE, when Tanner taps Done in the fix bar —
+     drags and cuts before that live in Tracking's working copy only,
+     and Cancel never calls back at all. The one call below writes the
+     finished edit to the trip and saves, so the readout, the map, and
+     the mileage agree and survive a reload. */
   var fixes = box.querySelectorAll('[data-trip-fix]');
   for (var f2 = 0; f2 < fixes.length; f2++) {
     (function (el) {
