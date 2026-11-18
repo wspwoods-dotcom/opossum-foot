@@ -537,8 +537,14 @@ body.route-locked #tabbar { pointer-events: none; opacity: .35; }
 /* Q49: collapsible Settings sections — full-width header buttons with a
    chevron; the body shows/hides via the hidden attribute (reliable on iOS). */
 .setsec { padding: 0 14px; }
-.setsec-head { display: flex; align-items: center; justify-content: space-between; width: 100%; background: none; border: none; color: var(--ink); font-size: 18px; font-weight: 700; padding: 14px 0; margin: 0; min-height: 0; cursor: pointer; text-align: left; }
-.setsec-chev { color: var(--muted); font-size: 22px; line-height: 1; transition: transform .18s ease; }
+/* gw scope 5 (2026-11-18): ONE bar standard app-wide, set at Tanner's
+   midpoint between the old Paperwork bar (50px tall, 18px title, 22px
+   chevron) and the old Totals bar (52px, 20px, 15px): 51px tall, 19px
+   title, 18.5px chevron, the › glyph in muted cream. Every collapsible
+   header family (.setsec-head here, .totals-card-head, the Seasons
+   official heads, History group heads) is tuned to these numbers. */
+.setsec-head { display: flex; align-items: center; justify-content: space-between; width: 100%; background: none; border: none; color: var(--ink); font-size: 19px; font-weight: 700; line-height: 23px; padding: 14px 0; margin: 0; min-height: 0; cursor: pointer; text-align: left; }
+.setsec-chev { color: var(--muted); font-size: 18.5px; line-height: 1; transition: transform .18s ease; }
 .setsec.open .setsec-chev { transform: rotate(90deg); }
 .setsec-body { padding-bottom: 14px; }
 .setsec-body[hidden] { display: none; }
@@ -551,35 +557,36 @@ body.route-locked #tabbar { pointer-events: none; opacity: .35; }
    gold buttons above it: gold, caps, centered. It stays the only collapsible
    one (Q119); the chevron pins right so the label stays truly centered, and
    the opened body drops as a dark card below the gold button. Scoped to
-   #seasons-rules so sheet collapsibles are untouched. */
-#seasons-rules .card.setsec { background: none; border: none; padding: 0; margin: 12px 0; }
-#seasons-rules .setsec-head {
+   #seasons-rules so sheet collapsibles are untouched.
+   gw (2026-11-18): the scope extends to #seasons-gap — see the note below. */
+#seasons-rules .card.setsec, #seasons-gap .card.setsec { background: none; border: none; padding: 0; margin: 12px 0; }
+#seasons-rules .setsec-head, #seasons-gap .setsec-head {
+  /* gw scope 5: the yellow color treatment stays (scope 1); the DIMENSIONS
+     join the app-wide bar standard — 19px title, 51px single-line bar. */
   position: relative; display: flex; align-items: center; justify-content: center;
-  width: 100%; min-height: var(--tap); padding: 12px 40px; margin: 12px 0;
+  width: 100%; min-height: 51px; padding: 10px 40px; margin: 12px 0;
   background: var(--accent); color: var(--accent-ink); border: none; border-radius: var(--radius);
-  font-size: 17px; font-weight: 700; text-transform: uppercase; text-align: center; cursor: pointer;
+  font-size: 19px; font-weight: 700; text-transform: uppercase; text-align: center; cursor: pointer;
 }
-#seasons-rules .setsec-chev {
+#seasons-rules .setsec-chev, #seasons-gap .setsec-chev {
   position: absolute; right: 16px; top: 50%; transform: translateY(-50%);
-  color: var(--accent-ink); font-size: 22px; line-height: 1; transition: transform .18s ease;
+  color: var(--accent-ink); font-size: 18.5px; line-height: 1; transition: transform .18s ease;
 }
-#seasons-rules .setsec.open .setsec-chev { transform: translateY(-50%) rotate(90deg); }
-#seasons-rules .setsec-body {
+#seasons-rules .setsec.open .setsec-chev, #seasons-gap .setsec.open .setsec-chev { transform: translateY(-50%) rotate(90deg); }
+#seasons-rules .setsec-body, #seasons-gap .setsec-body {
   background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
   margin-top: 8px; padding: 14px;
 }
-/* gp (2026-11-17) gave the two regs-family cards a filled-yellow
-   .regs-card treatment; gv (2026-11-18, Tanner) AMENDS that ruling:
-   yellow belongs to the official BUTTONS only (.regs-link, the Trap &
-   Snare Rules head). The regs lists — the Seasons "{State} — Tags,
-   Permission, Setbacks & Licensing" card and the Paperwork "Deadlines
-   & Permits" card — wear the standard .card treatment like every
-   other list in the app (his words: "the consistent list from
-   above"; in Paperwork, "consistently green like the others"). The
-   .regs-card class and its rules are gone; both cards are plain
-   .card.setsec now, so head/chevron/.dim/.rules-src all take the
-   standard colors (gold survives only in the source links, exactly
-   as in the rules list above them). */
+/* Color-rule history for the regs-family cards: gp (2026-11-17) gave both
+   a filled-yellow .regs-card treatment; gv (2026-11-18) removed it for
+   the standard .card treatment; gw (2026-11-18, Tanner's correction from
+   his phone) splits the pair: in SEASONS the "{State} — Tags, Permission,
+   Setbacks & Licensing" item is a BUTTON like Trap & Snare Rules — gold
+   bar on top, and beneath it the SAME dark panel the rules open into
+   (the scoped rules above now cover #seasons-gap too, so the two panels
+   match element for element by construction). In PAPERWORK, "Deadlines
+   & Permits" keeps gv's standard green Paperwork treatment — that
+   instruction stands untouched. The .regs-card class stays gone. */
 /* Q99 (2026-10-01): the notes/memos/photos collapsible on the set form, log
    form, and set detail — a divider sets it off from the fields above. */
 .sheet .setsec { border-top: 1px solid var(--line); margin-top: 10px; }
@@ -667,7 +674,7 @@ body.route-locked #tabbar { pointer-events: none; opacity: .35; }
    so the header never hid; its stale tap handler then revealed the emptied
    box. Explicit guard, matching the .attr-add pattern. */
 .baitrule-head[hidden] { display: none; }
-.baitrule-head { font-size: 16px; padding: 10px 0; color: #f5cf7a; }
+.baitrule-head { color: #f5cf7a; } /* gw scope 5: amber warning ink stays; size/padding now follow .setsec-head */
 .baitrule-head.open .setsec-chev { transform: rotate(90deg); }
 .reminder-tag { font-size: 13px; color: var(--muted); font-style: italic; margin-top: 8px; }
 
@@ -979,15 +986,37 @@ body.editor-lock #btn-track { pointer-events: none; opacity: .45; }
 .day-head { display: flex; align-items: center; gap: 6px; width: 100%; text-align: left;
   background: none; border: none; color: var(--accent); font-size: 15px; font-weight: 800;
   padding: 12px 0 4px; cursor: pointer; }
-.day-head .chev { margin-left: auto; color: var(--muted); }
+/* gw scope 5: the day divider's chevron joins the standard (›, 18.5px,
+   muted, rotates open); its 15px/800 accent date label stays — it is a
+   date divider inside the list, not a section bar. */
+.day-head .chev { margin-left: auto; color: var(--muted); font-size: 18.5px; line-height: 1; transition: transform .18s ease; }
+.day-head .chev.open { transform: rotate(90deg); }
 .lr-notes { font-size: 14px; color: var(--muted); margin-top: 4px;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .log-row.expanded .lr-notes { white-space: normal; }
+/* gw: the History row's tag line rides the same expand as the notes —
+   invisible while collapsed, plain when open. */
+.log-row .tag-line { display: none; margin-top: 6px; align-items: center; gap: 8px; flex-wrap: wrap; }
+.log-row.expanded .tag-line { display: flex; }
+/* gw: My Tags rows in Paperwork — the log-row look, tappable. */
+.tag-row { padding: 12px 0; border-bottom: 1px solid var(--line); cursor: pointer; }
+.tag-row:last-child { border-bottom: none; }
+.tag-row .tag-top { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.tag-row .tag-species { font-weight: 700; font-size: 17px; }
+.tag-row .tag-num { font-weight: 800; color: var(--accent); }
+.tag-row .tag-flex { display: flex; gap: 10px; align-items: flex-start; }
+.tag-row .tag-flex .tag-main { flex: 1; min-width: 0; }
+.tag-thumb { width: 56px; height: 56px; object-fit: cover; border-radius: 8px; flex: 0 0 auto; }
 .sp-group { border: 1px solid var(--line); border-radius: 12px; margin-bottom: 8px; overflow: hidden; }
+/* gw scope 5: History group bars join the standard — 19px title, 51px
+   bar, › chevron at 18.5px rotating open (padding is 14px vertical to
+   land the same 51px inside the group's own horizontal padding). */
 .sp-head { display: flex; align-items: center; gap: 8px; width: 100%; text-align: left;
   background: var(--panel); border: none; border-radius: 0; color: var(--text);
-  padding: 12px; min-height: 0; cursor: pointer; }
-.sp-name { font-weight: 700; font-size: 16px; }
+  padding: 14px 12px; min-height: 0; cursor: pointer; line-height: 23px; }
+.sp-name { font-weight: 700; font-size: 19px; }
+.sp-head .chev { font-size: 18.5px; line-height: 1; transition: transform .18s ease; }
+.sp-head .chev.open { transform: rotate(90deg); }
 .sp-total { font-weight: 800; color: var(--accent); font-size: 17px; margin-left: auto; }
 .sp-head .chev { color: var(--muted); }
 .sp-sub { padding: 0 12px 10px; }
@@ -1202,9 +1231,13 @@ body.placing #route-back-chip { display: none; }
 #hist-disp-chips .chip { flex: 1 1 28%; text-align: center; padding: 10px 6px; font-size: 14px; }
 
 /* Totals section cards: tappable collapsing headers (Tanner 2026-09-30). */
-.totals-card-head { display: flex; align-items: center; justify-content: space-between; width: 100%; background: none; border: none; padding: 0; margin: 0 0 2px; cursor: pointer; color: inherit; font: inherit; text-align: left; }
-.totals-card-head h3 { margin: 0; }
-.totals-card-head .tchev { color: var(--accent); font-size: 15px; }
+/* gw scope 5: Totals bars join the app-wide standard (51px, 19px title,
+   18.5px › in muted cream, rotating on open like .setsec) — the h3 inside
+   sheds the .card h3 border/padding so the button's own box is the bar. */
+.totals-card-head { display: flex; align-items: center; justify-content: space-between; width: 100%; background: none; border: none; padding: 14px 0; margin: 0; min-height: 0; cursor: pointer; color: inherit; font: inherit; line-height: 23px; text-align: left; }
+.totals-card-head h3 { margin: 0; font-size: 19px; line-height: 23px; border-top: none; padding-top: 0; }
+.totals-card-head .tchev { color: var(--muted); font-size: 18.5px; line-height: 1; transition: transform .18s ease; }
+.totals-card-head[aria-expanded="true"] .tchev { transform: rotate(90deg); }
 
 /* Landowner phone rows: number plus one-tap Call / Text (Tanner 2026-09-30). */
 .lo-phone { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 6px 0; }
