@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-11-18gr';
+var APP_VERSION = 'beta 0.1 · build 2026-11-18gs';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -2992,9 +2992,15 @@ function drawFix(fix, final) {
     else gpsCircle = L.circle([fix.lat, fix.lng],
       { radius: Math.max(fix.acc, 1), color: '#2f8ff0', weight: 1, opacity: 0.6, fillColor: '#2f8ff0', fillOpacity: 0.15, interactive: false }).addTo(map);
     if (final) {
-      /* BQ2: one crosshair tap always ends zoomed tight (19) — no
-         accuracy-based wide zoom that forces a second tap. */
-      map.setView([fix.lat, fix.lng], 19, { animate: false });
+      /* BQ2/gs: one crosshair tap always ends at the working zoom (17) —
+         no accuracy-based wide zoom that forces a second tap. gs
+         (Tanner, 2026-11-18): the landing was 19 under the old BQ2 rule;
+         his field report — driving, one tap left him staring at smeared
+         pixels with the accuracy circle filling the screen. Esri rural
+         imagery is only sharp to ~17; 19 is the same tiles stretched.
+         17 keeps a crossing and nearby sets in view on sharp tiles, and
+         he can still pinch tighter by hand (map maxZoom unchanged). */
+      map.setView([fix.lat, fix.lng], 17, { animate: false });
     }
   }
   if (final) {
@@ -3153,15 +3159,16 @@ function startAcquire() {
 
 /* Crosshair tap centers on the fix AND zooms in when the view is wide —
    an explicit locate tap should put you on yourself, not just pan. */
-/* B22: every crosshair tap ends zoomed in tight on the latest fix —
-   no conditional half-zoom. Q70: tighter than 18 — the recenter puts you
-   right on yourself at working zoom. */
+/* B22: every crosshair tap ends zoomed in on the latest fix —
+   no conditional half-zoom. gs (2026-11-18): the recenter lands at 17,
+   the same working zoom as the acquire landing in drawFix — the old
+   19 outran the Esri imagery (see the BQ2/gs note there). */
 function centerOnFix() {
   if (!map || !lastFix || lastFix.lat == null) return;
   /* Q234: re-measure before centering — a stale cached container size (B13)
      lands the setView off-center. */
   map.invalidateSize();
-  map.setView([lastFix.lat, lastFix.lng], 19, { animate: false });
+  map.setView([lastFix.lat, lastFix.lng], 17, { animate: false });
   armTapCorrection(); /* Q233: verify the tap center against the next converged fix */
   verifyTapCenter(); /* Q234: verify the tap center against a one-shot fresh fix */
 }
