@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-11-18gu';
+var APP_VERSION = 'beta 0.1 · build 2026-11-18gv';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -6771,7 +6771,7 @@ function renderSeasonsGap(d) {
   gapEntries(code).forEach(function (e) {
     if (e.source && srcs.indexOf(e.source) < 0) srcs.push(e.source);
   });
-  box.innerHTML = '<div class="card setsec regs-card" id="gap-card">' +
+  box.innerHTML = '<div class="card setsec" id="gap-card">' +
     '<button type="button" class="setsec-head" id="gap-toggle"><span>' + esc(d.state_name) + ' — Tags, Permission, Setbacks &amp; Licensing</span>' +
     '<span class="setsec-chev">›</span></button>' +
     '<div class="setsec-body" hidden>' + secs.join('') +
