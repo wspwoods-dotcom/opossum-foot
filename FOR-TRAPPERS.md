@@ -333,7 +333,13 @@ around it — pull two or three points along a bend to make the line
 follow a curve. For a stretch that never happened at all — a spike to a
 field you never set foot in — tap the last good point before it and the
 first good point after it, then tap **Cut it**: the points between come
-out and the route breaks there honestly. The trip's miles in the bar
+out and the route breaks there honestly. **Join** does the opposite —
+it reconnects stretches the app broke apart: tap a point on each side
+of a break and tap **Join**, and the line draws through again with
+that leg counted. A lone dot sitting by itself mid-route is one brief
+fix the app stranded between two breaks; join it to the stretch on
+each side to make the route whole, or leave it be — a stranded point
+draws nothing and counts no miles either way. The trip's miles in the bar
 update as you work. Nothing is saved until you tap **Done**; **Cancel**
 throws the whole edit away and the trip stays exactly as it was.
 
