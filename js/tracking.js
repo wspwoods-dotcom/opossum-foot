@@ -264,11 +264,20 @@ var Tracking = (function () {
      and Apply drops the points between and leaves a segment BREAK
      between the two kept points — the same segment model as live
      tracking, so nothing is drawn or counted across it. Miles are
-     recomputed from the stored geometry. Apply stays in fix mode, so
-     several bad stretches can be cut one after another; Done leaves
-     with whatever cuts were applied (each one already saved by the
-     caller's callback). */
+     recomputed from the stored geometry.
+     gp (2026-11-17, Tanner): two changes. (1) Every point is now a
+     DRAGGABLE handle — grab a point and drag it to where it should be
+     (his art-app model: pull the shape right instead of only cutting).
+     Dragging redraws the line and recomputes miles live, and a point
+     stays in its own segment — a drag never crosses a break. Cut stays
+     for stretches that never happened at all (a tower-fix spike, an
+     empty sleep gap): nothing there to drag. (2) Deferred save —
+     entering fix mode takes a WORKING COPY; drags and cuts touch only
+     that copy. Done commits it through the caller's callback (which
+     writes the trip and saves); Cancel throws the whole edit away and
+     the stored trip is never touched. */
   var fixLayer = null, fixPts = null, fixSel = null, fixCb = null;
+  var fixMks = null, fixLines = null, fixDragEndAt = 0;
   function fixFlatten(track) {
     var out = [];
     if (!track || !track.length) return out;
@@ -314,27 +323,63 @@ var Tracking = (function () {
     }
     return { n: b - a - 1, m: m };
   }
-  function fixDraw() {
-    if (!fixLayer) return;
-    fixLayer.clearLayers();
+  /* gp: a fix point is a divIcon marker — a ~30px touch handle with a
+     ~14px visible dot (red, or gold + larger when picked for a cut).
+     circleMarkers cannot be dragged; markers can, by touch or mouse,
+     and Leaflet keeps the map from panning while a handle is dragged. */
+  function fixIcon(chosen) {
+    return L.divIcon({
+      className: 'fix-pt' + (chosen ? ' fix-pt-sel' : ''),
+      html: '<i></i>', iconSize: [30, 30], iconAnchor: [15, 15]
+    });
+  }
+  /* gp: polylines live in their own group so a drag can redraw ONLY the
+     lines — rebuilding the markers mid-drag would kill the drag. */
+  function fixDrawLines() {
+    if (!fixLines) return;
+    fixLines.clearLayers();
     if (!fixPts) return;
     fixSegs(fixPts).forEach(function (seg) {
       if (seg.length > 1) {
-        L.polyline(seg.map(function (p) { return [p.lat, p.lng]; }), { color: '#e5484d', weight: 4, opacity: 0.5 }).addTo(fixLayer);
+        L.polyline(seg.map(function (p) { return [p.lat, p.lng]; }), { color: '#e5484d', weight: 4, opacity: 0.5 }).addTo(fixLines);
       }
     });
     if (fixSel && fixSel.a !== null && fixSel.b !== null) {
       var stretch = fixPts.slice(fixSel.a, fixSel.b + 1);
-      L.polyline(stretch.map(function (p) { return [p.lat, p.lng]; }), { color: '#e7c945', weight: 6, opacity: 0.95 }).addTo(fixLayer);
+      L.polyline(stretch.map(function (p) { return [p.lat, p.lng]; }), { color: '#e7c945', weight: 6, opacity: 0.95 }).addTo(fixLines);
     }
+  }
+  function fixDraw() {
+    if (!fixLayer) return;
+    fixLayer.clearLayers();
+    fixMks = [];
+    if (!fixPts) { fixLines = null; return; }
+    fixLines = L.layerGroup().addTo(fixLayer);
+    fixDrawLines();
     fixPts.forEach(function (p, i) {
       var chosen = !!fixSel && (i === fixSel.a || i === fixSel.b);
-      var mk = L.circleMarker([p.lat, p.lng], {
-        radius: chosen ? 10 : 7, color: '#ffffff', weight: 2,
-        fillColor: chosen ? '#e7c945' : '#e5484d', fillOpacity: 1
+      var mk = L.marker([p.lat, p.lng], {
+        icon: fixIcon(chosen), draggable: true, autoPan: false, keyboard: false
       });
-      mk.on('click', function () { fixTap(i); });
+      /* a drag ends with a click event on some browsers — that click is
+         the drag finishing, not a cut tap, so it is ignored. */
+      mk.on('click', function () {
+        if (Date.now() - fixDragEndAt < 250) return;
+        fixTap(i);
+      });
+      mk.on('drag', function () {
+        var ll = mk.getLatLng();
+        p.lat = ll.lat; p.lng = ll.lng;
+        fixDrawLines(); fixBar();
+      });
+      mk.on('dragend', function () {
+        fixDragEndAt = Date.now();
+        var ll = mk.getLatLng();
+        p.lat = ll.lat; p.lng = ll.lng;
+        fixDrawLines(); fixBar();
+      });
       mk.addTo(fixLayer);
+      fixMks.push(mk);
     });
   }
   function fixBar() {
@@ -342,8 +387,13 @@ var Tracking = (function () {
     if (!bar || !lb || !ap) return;
     if (!fixPts) { bar.classList.remove('show'); return; }
     bar.classList.add('show');
+    /* gp: the working trip's miles ride the bar and move live as points
+       are dragged or stretches are cut — same format as the Paperwork
+       readout (fmtMiles: tenths of a mile). */
+    var mi = $('fix-bar-miles');
+    if (mi) mi.textContent = 'Trip: ' + fmtMiles(fixMiles(fixPts));
     if (!fixSel || fixSel.a === null) {
-      lb.textContent = 'Fix route — tap the last good point before the bad stretch.';
+      lb.textContent = 'Fix route — drag a point to move it, or tap two points to cut between them.';
       ap.style.display = 'none';
     } else if (fixSel.b === null) {
       lb.textContent = 'Now tap the first good point after the bad stretch.';
@@ -379,10 +429,27 @@ var Tracking = (function () {
     }
     fixPts = kept;
     fixSel = { a: null, b: null };
-    var res = { track: fixShape(fixPts), miles: fixMiles(fixPts) };
+    /* gp: the cut lands in the working copy only — nothing is written
+       to the trip until Done (see fixDone). */
     fixDraw(); fixBar();
-    if (fixCb) fixCb(res);
-    toast('Cut made — the route now breaks there. Tap another stretch, or Done.');
+    toast('Cut made in the edit — Done saves it, Cancel throws it away.');
+  }
+  /* gp: Done is the only door out that saves — it hands the working
+     copy to the caller's callback (which writes the trip + Store.save)
+     exactly once, with every drag and cut of the session in it. */
+  function fixDone() {
+    if (!fixPts) { endFix(); return; }
+    var res = { track: fixShape(fixPts), miles: fixMiles(fixPts) };
+    var cb = fixCb;
+    endFix();
+    if (cb) cb(res);
+  }
+  /* gp: Cancel discards the working copy whole — drags and cuts alike —
+     and leaves fix mode with the stored trip untouched. */
+  function fixCancel() {
+    if (!fixPts) return;
+    endFix();
+    toast('Edit thrown away — the trip is unchanged.');
   }
   function startFix(track, cb) {
     if (!fixLayer) return;
@@ -396,7 +463,7 @@ var Tracking = (function () {
     }
   }
   function endFix() {
-    fixPts = null; fixSel = null; fixCb = null;
+    fixPts = null; fixSel = null; fixCb = null; fixMks = null; fixLines = null;
     if (fixLayer) fixLayer.clearLayers();
     fixBar();
   }
@@ -463,9 +530,10 @@ var Tracking = (function () {
     var h = $('btn-route-hide'); if (h) h.onclick = hideRoute;
     var rs = $('btn-route-save'); if (rs) rs.onclick = function () { saveToMileage(); syncRouteBar(); };
     var fa = $('btn-fix-apply'); if (fa) fa.onclick = fixApply;
-    var fd = $('btn-fix-done'); if (fd) fd.onclick = endFix;
+    var fd = $('btn-fix-done'); if (fd) fd.onclick = fixDone;
+    var fc = $('btn-fix-cancel'); if (fc) fc.onclick = fixCancel;
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', wire);
   else wire();
-  return { attach: attach, start: start, syncFab: syncFab, active: function () { return state !== 'idle'; }, drawSaved: drawSaved, clearSaved: clearSaved, rescuePending: rescuePending, startFix: startFix, endFix: endFix, _test: { hav: hav, start: start, onPos: onPos, stop: stop, state: function () { return state; }, pts: function () { return pts; }, miles: function () { return distM / 1609.344; }, segs: function () { return segments(pts).length; }, downsample: downsample, wake: function () { return !!wakeSentinel; }, fixTap: fixTap, fixApply: fixApply, fixState: function () { return { active: !!fixPts, n: fixPts ? fixPts.length : 0, sel: fixSel, shape: fixPts ? fixShape(fixPts) : null, miles: fixPts ? fixMiles(fixPts) : null }; } } };
+  return { attach: attach, start: start, syncFab: syncFab, active: function () { return state !== 'idle'; }, drawSaved: drawSaved, clearSaved: clearSaved, rescuePending: rescuePending, startFix: startFix, endFix: endFix, _test: { hav: hav, start: start, onPos: onPos, stop: stop, state: function () { return state; }, pts: function () { return pts; }, miles: function () { return distM / 1609.344; }, segs: function () { return segments(pts).length; }, downsample: downsample, wake: function () { return !!wakeSentinel; }, fixTap: fixTap, fixApply: fixApply, fixDone: fixDone, fixCancel: fixCancel, fixMarkers: function () { return fixMks; }, fixPoints: function () { return fixPts ? fixPts.map(function (p) { return { lat: p.lat, lng: p.lng, seg: p.seg }; }) : null; }, fixState: function () { return { active: !!fixPts, n: fixPts ? fixPts.length : 0, sel: fixSel, shape: fixPts ? fixShape(fixPts) : null, miles: fixPts ? fixMiles(fixPts) : null }; } } };
 })();
