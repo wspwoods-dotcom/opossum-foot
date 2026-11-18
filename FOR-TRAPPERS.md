@@ -326,6 +326,17 @@ right on the line). Tap a row to open it: the passed-sets readout, the
 odometer photos, **Show on map**, and the trip's editing all live inside
 the open row.
 
+A saved GPS route can be repaired after the fact with **Fix route**,
+inside the open trip row. Every recorded point lands on the map as a dot
+you can grab: drag a point to where it should be and the line reshapes
+around it — pull two or three points along a bend to make the line
+follow a curve. For a stretch that never happened at all — a spike to a
+field you never set foot in — tap the last good point before it and the
+first good point after it, then tap **Cut it**: the points between come
+out and the route breaks there honestly. The trip's miles in the bar
+update as you work. Nothing is saved until you tap **Done**; **Cancel**
+throws the whole edit away and the trip stays exactly as it was.
+
 The on/off switch is **Mileage log** in Settings → Feature Toggles, and it
 only governs recording *new* trips. Turn it off and your recorded trips,
 the Route and Mileage section, and the CSV export all stay right where
