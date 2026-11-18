@@ -218,6 +218,17 @@
           <button class="btn-secondary" id="btn-add-license" type="button">＋ Add Document</button>
         </div>
       </div>
+      <!-- gw (2026-11-18): My Tags — every tag record on the active line,
+           gathered from the catches themselves (the records live on the
+           catch; this is the show-the-warden view). Hidden entirely when
+           Tag records are off (renderMyTags). -->
+      <div class="card setsec" id="setsec-mytags" style="display:none">
+        <button type="button" class="setsec-head" id="setsec-mytags-head" data-sec="setsec-mytags" aria-expanded="false"><span>My Tags</span><span class="setsec-chev" aria-hidden="true">›</span></button>
+        <div class="setsec-body" id="setsec-mytags-body" hidden>
+          <p class="dim" style="margin:0 0 8px">Tag and sealing numbers for this line's catches — the number, the date, and the tag photo when you took one. Tap a row to open its tag record.</p>
+          <div id="mytags-list"></div>
+        </div>
+      </div>
       <div class="card setsec" id="setsec-landowner">
         <button type="button" class="setsec-head" id="setsec-landowner-head" data-sec="setsec-landowner" aria-expanded="false"><span>Landowner Notebook</span><span class="setsec-chev" aria-hidden="true">›</span></button>
         <div class="setsec-body" id="setsec-landowner-body" hidden>
@@ -328,6 +339,24 @@
       <div class="card setsec" id="setsec-features">
         <button type="button" class="setsec-head" id="setsec-features-head" data-sec="setsec-features" aria-expanded="false"><span>Feature Toggles</span><span class="setsec-chev" aria-hidden="true">›</span></button>
         <div class="setsec-body" id="setsec-features-body" hidden>
+        <!-- Q182 (2026-10-14): per-line catch alerts — lives beside the trap
+             check alerts because it is the same kind of switch, but it writes
+             to the active trap line, not the whole app. -->
+        <label class="checkline"><input type="checkbox" id="settings-catchalerts"> Catch alerts</label>
+        <p class="dim" style="margin:-6px 0 10px">Season and bag-limit reminders while you log a catch — for the active trap line only (<strong id="catchalerts-line-name"></strong>). Turn it off on a line where you know the rules cold. The season badges on the animal list stay either way; they're just information.</p>
+        <label class="checkline"><input type="checkbox" id="settings-ruler" checked> Map ruler</label>
+        <p class="dim" style="margin:-6px 0 10px">The ruler button on the map — tap two points to measure a distance in feet, yards, or miles. Off hides the button entirely.</p>
+        <!-- Q205 (2026-10-19): the Sign & Forage Reference moved out of Settings
+             into the Trapper's Guide (its own chapter there, with search). -->
+        <label class="checkline"><input type="checkbox" id="settings-mileage"> Route &amp; mileage tracking</label>
+        <p class="dim" style="margin:-6px 0 12px">Odometer trips per line, the route estimate, and the standalone mileage CSV — its own report for your records or reimbursement.</p>
+        <label class="checkline"><input type="checkbox" id="settings-markers" checked> Sign &amp; forage markers</label>
+        <p class="dim" style="margin:-6px 0 10px">The map layer for animal sign, forage, and finds — 71 sign kinds and the Forage &amp; finds family, each with its own icon. Off hides the layer and its map button entirely.</p>
+        <!-- gw (2026-11-18): tag records — optional by default, removable by
+             choice, blocking never. Off hides the catch-sheet section and
+             My Tags; stored records are never deleted by the toggle. -->
+        <label class="checkline"><input type="checkbox" id="settings-tagrecords" checked> Tag records</label>
+        <p class="dim" style="margin:-6px 0 10px">A place on each catch to keep the tag or sealing number, the date, and a photo of the tag — for species your state tags, like bobcat and otter. Always optional, never in the way; off hides the section and My Tags in Paperwork. Tag records you've already saved stay on this phone either way.</p>
         <!-- Q91 (2026-10-01): Tanner — trap check alerts live here now. Toggling
              it on reveals the check-interval entry as a sub-menu. -->
         <label class="checkline"><input type="checkbox" id="settings-checkclock"> Trap check alerts</label>
@@ -336,25 +365,12 @@
           <input type="number" id="settings-checkinterval" min="1" step="1" inputmode="numeric" placeholder="24">
           <p class="dim" style="margin-top:8px">Sets past this long without any activity turn red on the map. Any edit, catch, or check-in restarts the clock. The quick &ldquo;Checked &mdash; nothing changed&rdquo; button only restarts the clock &mdash; it saves nothing to History. Turn alerts off to hide the red pins and countdowns.</p>
         </div>
-        <!-- Q182 (2026-10-14): per-line catch alerts — lives beside the trap
-             check alerts because it is the same kind of switch, but it writes
-             to the active trap line, not the whole app. -->
-        <label class="checkline"><input type="checkbox" id="settings-catchalerts"> Catch alerts</label>
-        <p class="dim" style="margin:-6px 0 10px">Season and bag-limit reminders while you log a catch — for the active trap line only (<strong id="catchalerts-line-name"></strong>). Turn it off on a line where you know the rules cold. The season badges on the animal list stay either way; they're just information.</p>
+        <label class="checkline"><input type="checkbox" id="settings-voice"> Voice entry &amp; memos</label>
+        <p class="dim" style="margin:-6px 0 12px">Dictate notes and record voice memos. Transcription uses your phone's speech recognition and needs a connection; recordings stay on this phone.</p>
         <label class="checkline"><input type="checkbox" id="settings-weather"> Weather (map chip + auto-record)</label>
         <p class="dim" style="margin:-6px 0 10px">Map chip with current conditions and the next 12 hours; weather auto-attaches to new sets and catches. Sends coordinates to Open-Meteo, a free weather service — needs a connection.</p>
         <label class="checkline"><input type="checkbox" id="settings-windarrows"> Wind arrows on set pins</label>
         <p class="dim" style="margin:-6px 0 10px">Small arrows at the edge of each pin show the downwind direction — where your scent goes. They appear when you're zoomed in close, and use live wind data when you're online.</p>
-        <label class="checkline"><input type="checkbox" id="settings-voice"> Voice entry &amp; memos</label>
-        <p class="dim" style="margin:-6px 0 12px">Dictate notes and record voice memos. Transcription uses your phone's speech recognition and needs a connection; recordings stay on this phone.</p>
-        <label class="checkline"><input type="checkbox" id="settings-mileage"> Route &amp; mileage tracking</label>
-        <p class="dim" style="margin:-6px 0 12px">Odometer trips per line, the route estimate, and the standalone mileage CSV — its own report for your records or reimbursement.</p>
-        <label class="checkline"><input type="checkbox" id="settings-markers" checked> Sign &amp; forage markers</label>
-        <p class="dim" style="margin:-6px 0 10px">The map layer for animal sign, forage, and finds — 71 sign kinds and the Forage &amp; finds family, each with its own icon. Off hides the layer and its map button entirely.</p>
-        <label class="checkline"><input type="checkbox" id="settings-ruler" checked> Map ruler</label>
-        <p class="dim" style="margin:-6px 0 10px">The ruler button on the map — tap two points to measure a distance in feet, yards, or miles. Off hides the button entirely.</p>
-        <!-- Q205 (2026-10-19): the Sign & Forage Reference moved out of Settings
-             into the Trapper's Guide (its own chapter there, with search). -->
         <button class="btn-secondary" id="btn-features-reset" type="button">Reset features to defaults</button>
         </div>
       </div>
@@ -883,9 +899,55 @@
     <input type="file" id="log-photo-input" class="hidden-file" accept="image/*">
     </div>
     </div>
+    <!-- gw (2026-11-18): tag record — shown only when the picked species is
+         a tagging/sealing species in this state (gap Cat 2) and Tag records
+         are on. Every field optional; nothing here can block a save. -->
+    <div class="setsec" id="logform-tagsec" hidden>
+    <button type="button" class="setsec-head" id="logform-tagsec-head" data-sec="logform-tagsec" aria-expanded="false"><span>Tag <span class="dim">— optional</span></span><span class="setsec-chev" aria-hidden="true">›</span></button>
+    <div class="setsec-body" id="logform-tagsec-body" hidden>
+    <p class="dim" id="log-tag-rule" style="margin:0 0 8px"></p>
+    <label class="field" for="log-tag-number">Tag / sealing number <span class="dim">(optional)</span></label>
+    <input type="text" id="log-tag-number" placeholder="The number on the tag or seal" autocomplete="off">
+    <label class="field" for="log-tag-date" style="margin-top:12px">Date tagged <span class="dim">(optional)</span></label>
+    <input type="date" id="log-tag-date">
+    <label class="field" for="btn-log-tagphoto" style="margin-top:12px">Tag photo <span class="dim">(optional)</span></label>
+    <div class="btn-row" style="margin-top:8px">
+      <button class="btn-small btn-secondary" id="btn-log-tagphoto" type="button"><img class="bi" src="assets/icons/camera.png" alt="">Add tag photo</button>
+    </div>
+    <div class="photo-strip" id="log-tag-photos" style="margin-top:8px"></div>
+    <input type="file" id="log-tag-photo-input" class="hidden-file" accept="image/*">
+    <p class="dim" style="margin:8px 0 0">No hurry — most tagging happens days later, at a station. You can fill this in any time from History or Paperwork → My Tags.</p>
+    </div>
+    </div>
     <div class="form-error" id="logform-error" role="alert"></div>
     <div class="sheet-actions">
       <button class="btn-primary" id="btn-save-log" type="button">Save catch</button>
+    </div>
+  </div>
+</div>
+
+<!-- gw (2026-11-18): tag record editor — opened from History (expanded
+     catch row) and Paperwork → My Tags. Tagging usually happens days after
+     the catch, so this is where the number, date, and photo land. -->
+<div id="sheet-tag" class="sheet">
+  <div class="sheet-grab"></div>
+  <div class="sheet-head"><h2>Tag Record</h2><button class="sheet-x" data-close type="button">×</button></div>
+  <div class="sheet-body">
+    <div class="dim" id="tag-edit-line"></div>
+    <p class="dim" id="tag-edit-rule" style="margin:8px 0 0"></p>
+    <label class="field" for="tag-number">Tag / sealing number <span class="dim">(optional)</span></label>
+    <input type="text" id="tag-number" placeholder="The number on the tag or seal" autocomplete="off">
+    <label class="field" for="tag-date" style="margin-top:12px">Date tagged <span class="dim">(optional)</span></label>
+    <input type="date" id="tag-date">
+    <label class="field" for="btn-tag-photo" style="margin-top:12px">Tag photo <span class="dim">(optional)</span></label>
+    <div class="btn-row" style="margin-top:8px">
+      <button class="btn-small btn-secondary" id="btn-tag-photo" type="button"><img class="bi" src="assets/icons/camera.png" alt="">Add tag photo</button>
+      <button class="btn-small btn-danger" id="btn-tag-photo-remove" type="button" hidden>Remove photo</button>
+    </div>
+    <div class="photo-strip" id="tag-photos" style="margin-top:8px"></div>
+    <input type="file" id="tag-photo-input" class="hidden-file" accept="image/*">
+    <div class="sheet-actions">
+      <button class="btn-primary" id="btn-save-tag" type="button">Save tag record</button>
     </div>
   </div>
 </div>
@@ -899,6 +961,24 @@
     <p class="dim">Trap, set type, bait, lure — anything that changed.</p>
     <div class="card"><dl class="kv" id="pc-fields"></dl></div>
     <div id="pc-gap-note"></div>
+    <!-- gw scope 3 (2026-11-18): the tag ENTRY lives directly beneath the
+         tagging note in this sheet — same fields, same catch record as
+         the log form / History editor. Fully optional; entries write
+         straight to the catch, so closing this sheet any way keeps them
+         and skipping them costs nothing. -->
+    <div id="pc-tag-entry" hidden>
+      <label class="field" for="pc-tag-number">Tag / sealing number <span class="dim">(optional)</span></label>
+      <input type="text" id="pc-tag-number" placeholder="The number on the tag or seal" autocomplete="off">
+      <label class="field" for="pc-tag-date" style="margin-top:12px">Date tagged <span class="dim">(optional)</span></label>
+      <input type="date" id="pc-tag-date">
+      <label class="field" for="btn-pc-tagphoto" style="margin-top:12px">Tag photo <span class="dim">(optional)</span></label>
+      <div class="btn-row" style="margin-top:8px">
+        <button class="btn-small btn-secondary" id="btn-pc-tagphoto" type="button"><img class="bi" src="assets/icons/camera.png" alt="">Add tag photo</button>
+        <button class="btn-small btn-danger" id="btn-pc-tagphoto-remove" type="button" hidden>Remove photo</button>
+      </div>
+      <div class="photo-strip" id="pc-tag-photos" style="margin-top:8px"></div>
+      <input type="file" id="pc-tag-photo-input" class="hidden-file" accept="image/*">
+    </div>
     <div class="sheet-actions">
       <button class="btn-primary" id="btn-pc-update" type="button">Update this set</button>
     </div>
