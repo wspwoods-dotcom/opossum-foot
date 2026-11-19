@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-11-18gx';
+var APP_VERSION = 'beta 0.1 · build 2026-11-18gz';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -2442,9 +2442,13 @@ function refreshPinWinds() {
 function setIcon(set) {
   /* Q68: an overdue check turns the pin red, whatever the status color was. */
   var pinCls = isCheckOverdue(set) ? 'pin-overdue' : 'pin-' + esc(normStatus(set.status));
+  /* gz: a set picked in selection mode wears the gold ring + check (the
+     class rides the icon HTML, so refreshMarkers re-applies it on every
+     re-render and Leaflet carries it through pan/zoom). */
+  var sel = selMode && selIds[set.id];
   return L.divIcon({
     className: '',
-    html: '<div class="pin ' + pinCls + '">' + windArrowHtml(set) + '</div>',
+    html: '<div class="pin ' + pinCls + (sel ? ' pin-sel' : '') + '">' + (sel ? '<span class="pin-check">✓</span>' : '') + windArrowHtml(set) + '</div>',
     iconSize: [30, 30], iconAnchor: [15, 15]
   });
 }
@@ -2463,7 +2467,7 @@ function refreshMarkers() {
     if (!mapStatusFilter[normStatus(s.status)]) return;
     var m = L.marker([s.lat, s.lng], { icon: setIcon(s), title: s.name });
     /* B15: no opening set details mid-placement — finish the pin first. */
-    m.on('click', function () { if (document.body.classList.contains('placing') || document.body.classList.contains('editor-lock') || measureMode) return; openSetOrStack(s.id); });
+    m.on('click', function () { if (document.body.classList.contains('placing') || document.body.classList.contains('editor-lock') || measureMode) return; if (selMode) { selTapSet(s.id); return; } openSetOrStack(s.id); });
     m._setId = s.id;
     markersLayer.addLayer(m);
   });
@@ -2478,6 +2482,10 @@ function refreshMarkers() {
    Every mode entry runs cancelAllMapModes() first; `except` keeps the mode
    being entered from cancelling itself. */
 function cancelAllMapModes(except) {
+  /* gz: one map command at a time extends to set-selection mode — every
+     editor (Fix route / Draw, via tracking.js) and every picking mode
+     enters through here, so entering any of them ends selection mode. */
+  if (selMode || bulkSelCtx) exitSelMode();
   if (except !== 'pin' && dropPinMode) setDropPinMode(false);
   if (except !== 'measure' && measureMode) setMeasureMode(false);
   if (except !== 'home' && homePickMode) cancelHomePick();
@@ -5654,6 +5662,7 @@ function renderMapStatusFilters() {
       openBulkActions(); /* Q237 (2026-11-07): one tap opens the menu — the Select-all step is gone */
     };
   }
+  wireSelBar(); /* gz: the selection bar's buttons, wired once */
   renderBulkBar();
 }
 /* Q229 (2026-11-05, Tanner; widened same day on the ff check): bulk status
@@ -5678,6 +5687,129 @@ function bulkFilteredSets() {
   var lid = activeLineId();
   return ((Store.data && Store.data.sets) || []).filter(function (s) { return s.lineId === lid && normStatus(s.status) === st; });
 }
+/* gz (2026-11-18, Tanner): SET-SELECTION MODE. The Actions menu's bulk
+   operations take everything the narrowed Show filter holds; Tanner's
+   line doesn't sort that way — 12 dog-proof sets sharing one bait and one
+   lure can stand among 14 other varieties, and he needs to grab JUST the
+   12 and Edit all of them the same. "Select sets" in the Actions menu
+   enters this mode: tap pins to pick (tap again to unpick; a stack opens
+   its list and each row toggles), the selection bar counts live and
+   carries the same three bulk operations retargeted at the selection,
+   plus Select all shown / Clear / Done. Session state only — nothing is
+   persisted, no stored keys, no data-model change. While a bulk flow
+   launched from the bar is open, bulkSelCtx freezes the picked ids so
+   every step of the flow (picker, confirm, apply) aims at the same sets;
+   the classic flows read bulkFlowSets(), which is bulkFilteredSets()
+   untouched whenever no selection flow is in flight. A completed
+   operation exits the mode and clears the pick; Done exits changing
+   nothing. Entering any editor or picking mode (cancelAllMapModes)
+   also ends it, and switching lines ends it — a pick belongs to the
+   line and filter it was made on. */
+var selMode = false;
+var selIds = {};
+var bulkSelCtx = null;
+function selCount() { return Object.keys(selIds).length; }
+function bulkFlowSets() {
+  if (bulkSelCtx) {
+    return ((Store.data && Store.data.sets) || []).filter(function (s) { return bulkSelCtx.ids[s.id]; });
+  }
+  return bulkFilteredSets();
+}
+function enterSelMode() {
+  if (selMode) return;
+  /* Unavailable while an editor or a placement owns the map — the same
+     guards the pin taps themselves answer to. */
+  if (document.body.classList.contains('editor-lock') || document.body.classList.contains('placing') || measureMode) return;
+  selMode = true;
+  selIds = {};
+  document.body.classList.add('sel-mode');
+  renderSelBar();
+  renderBulkBar(); /* hides the Actions button — the bar replaces it */
+  /* B13's lesson, gz's miss: the bar is a flex sibling, so showing it
+     shrinks the map container — but Leaflet caches its size, so without
+     a re-measure the pins keep the stale geometry and the far ones land
+     outside the shrunken pane, untappable. Re-measure first. */
+  if (map) map.invalidateSize();
+  refreshMarkers();
+  toast('Tap pins to select sets.');
+}
+function exitSelMode() {
+  if (!selMode && !bulkSelCtx) return;
+  selMode = false;
+  selIds = {};
+  bulkSelCtx = null;
+  document.body.classList.remove('sel-mode');
+  renderSelBar();
+  renderBulkBar();
+  if (map) map.invalidateSize(); /* the bar hid — the map grew back (B13) */
+  refreshMarkers();
+}
+function renderSelBar() {
+  var bar = $('sel-bar'); if (!bar) return;
+  bar.classList.toggle('show', selMode);
+  if (!selMode) return;
+  var n = selCount();
+  $('sel-bar-count').textContent = n + ' selected';
+  /* With nothing picked, the three operations have no target — disabled,
+     never aimed at the whole filter by accident. */
+  ['btn-sel-status', 'btn-sel-edit', 'btn-sel-delete'].forEach(function (id) {
+    var b = $(id); if (b) b.disabled = n === 0;
+  });
+}
+function toggleSel(id) {
+  if (selIds[id]) delete selIds[id]; else selIds[id] = true;
+  refreshMarkers(); /* re-renders the pins with/without the gold ring */
+  renderSelBar();
+}
+function selTapSet(id) {
+  var s = getSet(id); if (!s) return;
+  var stack = setsAtSpot(s.lat, s.lng);
+  if (stack.length >= 2) { openSelStack(stack); return; }
+  toggleSel(id);
+}
+/* The stack list in selection dress: same sheet, same rows, each row
+   carrying its picked state; tapping a row toggles it and the list
+   re-renders in place — no set detail sheet opens in this mode. */
+function openSelStack(stack) {
+  stack = stack.slice().sort(function (a, b) { return a.name < b.name ? -1 : 1; });
+  $('stack-title').textContent = stack.length + ' sets at this spot';
+  $('stack-list').innerHTML = stack.map(function (x) {
+    var st = normStatus(x.status);
+    var on = !!selIds[x.id];
+    return '<button type="button" class="stack-row' + (on ? ' stack-row-sel' : '') + '" data-stack-id="' + x.id + '">' +
+      '<span class="stack-check">' + (on ? '✓' : '') + '</span>' +
+      '<span class="stack-name">' + esc(x.name) + '</span>' +
+      '<span class="badge status-' + esc(st) + '">' + esc(statusLabel(st)) + '</span>' +
+      '<span class="dim">' + esc(x.trapType || '—') + '</span></button>';
+  }).join('');
+  openSheet('sheet-stackmenu');
+}
+/* Launch one of the existing bulk flows at the frozen pick. */
+function selLaunch(fn) {
+  if (!selCount()) return;
+  var ids = {};
+  Object.keys(selIds).forEach(function (k) { ids[k] = true; });
+  bulkSelCtx = { ids: ids };
+  fn();
+}
+function wireSelBar() {
+  var bar = $('sel-bar');
+  if (!bar || bar._wired) return;
+  bar._wired = true;
+  $('btn-sel-status').onclick = function () { selLaunch(openBulkStatusPicker); };
+  $('btn-sel-edit').onclick = function () { selLaunch(openBulkEdit); };
+  $('btn-sel-delete').onclick = function () { selLaunch(openBulkDeleteConfirm); };
+  $('btn-sel-all').onclick = function () {
+    /* Everything the current Show filter is showing on this line — the
+       same predicate refreshMarkers paints by. */
+    showModel();
+    activeSets().forEach(function (s) { if (mapStatusFilter[normStatus(s.status)]) selIds[s.id] = true; });
+    refreshMarkers();
+    renderSelBar();
+  };
+  $('btn-sel-clear').onclick = function () { selIds = {}; refreshMarkers(); renderSelBar(); };
+  $('btn-sel-done').onclick = function () { exitSelMode(); };
+}
 /* Q232 (2026-11-06): the bulk bar is gone — the control lives in the Show
    pill. renderBulkBar now only drives the pill's gold button: it shows when
    the filter is narrowed to ANY one status with sets on this line and reads
@@ -5690,6 +5822,9 @@ function bulkFilteredSets() {
 function renderBulkBar() {
   var btn = $('btn-bulk');
   if (!btn) return;
+  /* gz: while selection mode owns the bulk work, the Actions button
+     rests — the selection bar is the bulk control until Done. */
+  if (selMode) { btn.hidden = true; renderShowButton(); return; }
   var st = bulkFilterStatus();
   var sets = bulkFilteredSets();
   if (!st || !sets.length) {
@@ -5704,6 +5839,7 @@ function renderBulkBar() {
 /* Q232: the actions menu — what the second tap opens. Change status keeps
    the Q229 picker + confirm; Edit all and Delete all are new (below). */
 function openBulkActions() {
+  bulkSelCtx = null; /* gz: the classic menu always aims at the filter */
   var st = bulkFilterStatus();
   var sets = bulkFilteredSets();
   if (!st || !sets.length) { renderBulkBar(); return; }
@@ -5711,12 +5847,14 @@ function openBulkActions() {
     '<div class="sheet-actions">' +
     '<button type="button" class="btn-secondary" id="ba-status">Change status</button>' +
     '<button type="button" class="btn-secondary" id="ba-edit">Edit all</button>' +
+    '<button type="button" class="btn-secondary" id="ba-select">Select sets</button>' +
     '<button type="button" class="btn-danger" id="ba-delete">Delete all</button></div>' +
     '<div class="btn-row" style="margin-top:14px"><button class="btn-secondary" id="m-cancel" type="button">Cancel</button></div>');
   $('modal').classList.add('sheet-dress'); /* gx: standard sheet dress for the bulk family */
   $('m-cancel').onclick = function () { closeModal(); };
   $('ba-status').onclick = function () { closeModal(); openBulkStatusPicker(); };
   $('ba-edit').onclick = function () { closeModal(); openBulkEdit(); };
+  $('ba-select').onclick = function () { closeModal(); enterSelMode(); };
   $('ba-delete').onclick = function () { closeModal(); openBulkDeleteConfirm(); };
 }
 /* Q232: Edit all — one menu with ALL the shared fields, so the sets can all
@@ -5759,7 +5897,7 @@ function bulkEditOptions() {
   return out;
 }
 function openBulkEdit() {
-  var sets = bulkFilteredSets();
+  var sets = bulkFlowSets(); /* gz: the frozen pick when launched from the selection bar */
   if (!sets.length) { renderBulkBar(); return; }
   var fields = bulkEditOptions();
   var rows = fields.map(function (f) {
@@ -5786,7 +5924,7 @@ function openBulkEdit() {
   };
 }
 function openBulkEditConfirm(changes) {
-  var sets = bulkFilteredSets();
+  var sets = bulkFlowSets(); /* gz: same target as the Edit-all form showed */
   if (!sets.length) { renderBulkBar(); return; }
   var n = sets.length;
   var lines = changes.map(function (c) {
@@ -5803,7 +5941,7 @@ function openBulkEditConfirm(changes) {
   $('m-ok').onclick = function () { closeModal(); applyBulkEdit(changes); };
 }
 function applyBulkEdit(changes) {
-  var sets = bulkFilteredSets();
+  var sets = bulkFlowSets(); /* gz: applies to exactly the sets the flow counted */
   if (!sets.length) { renderBulkBar(); return; }
   var n = sets.length;
   sets.forEach(function (s) {
@@ -5818,6 +5956,7 @@ function applyBulkEdit(changes) {
   refreshMarkers();
   bulkSelected = false;
   renderBulkBar();
+  if (bulkSelCtx) exitSelMode(); /* gz: a finished operation ends selection mode */
   toast(n + ' sets updated.');
 }
 /* Q232: Delete all — the clone-a-line cleanup (Tanner, 2026-11-06). Same
@@ -5825,16 +5964,22 @@ function applyBulkEdit(changes) {
    logs (History included), photos, and voice memos — one confirm naming
    the counts, with the gone-forever warning, before anything is removed. */
 function openBulkDeleteConfirm() {
-  var st = bulkFilterStatus();
-  var sets = bulkFilteredSets();
-  if (!st || !sets.length) { renderBulkBar(); return; }
+  var sets = bulkFlowSets(); /* gz: the frozen pick when launched from the selection bar */
+  if (!sets.length) { renderBulkBar(); return; }
   var n = sets.length;
   var ln = lineById(Store.data, activeLineId());
   var ids = {};
   sets.forEach(function (s) { ids[s.id] = true; });
+  /* The warning names the status when every set in the pile shares one —
+     always true of the classic filter pile, whose status is the filter's.
+     A mixed pick is worded to the count instead: "N selected sets". */
+  var froms = {};
+  sets.forEach(function (s) { froms[normStatus(s.status)] = true; });
+  var fromKeys = Object.keys(froms);
+  var pile = fromKeys.length === 1 ? n + ' ' + STATUS_LABELS[fromKeys[0]] + ' sets' : n + ' selected sets';
   var nLogs = (Store.data.logs || []).filter(function (l) { return ids[l.setId]; }).length;
   function ask(nPhotos, nMemos) {
-    var bits = [n + ' ' + STATUS_LABELS[st] + ' sets from “' + esc(ln ? ln.name : '') + '” will be permanently deleted'];
+    var bits = [pile + ' from “' + esc(ln ? ln.name : '') + '” will be permanently deleted'];
     if (nLogs) bits.push('their ' + nLogs + ' catch log' + (nLogs > 1 ? 's' : '') + ' (removed from History too)');
     if (nPhotos) bits.push(nPhotos + ' photo' + (nPhotos > 1 ? 's' : ''));
     if (nMemos) bits.push(nMemos + ' voice memo' + (nMemos > 1 ? 's' : ''));
@@ -5870,9 +6015,11 @@ function applyBulkDelete(ids, n) {
   Store.save(); refreshMarkers(); renderHistory(); renderTotals();
   bulkSelected = false;
   renderBulkBar();
+  if (bulkSelCtx) exitSelMode(); /* gz: a finished operation ends selection mode */
   toast(n + ' sets deleted.');
 }
 function openBulkStatusPicker() {
+  if (bulkSelCtx) { openBulkStatusPickerSel(); return; } /* gz: a pick may span statuses — its own picker below */
   var st = bulkFilterStatus();
   var sets = bulkFilteredSets();
   if (!st || !sets.length) { renderBulkBar(); return; }
@@ -5890,7 +6037,32 @@ function openBulkStatusPicker() {
     btns[i].onclick = function () { var t = this.getAttribute('data-st'); closeModal(); openBulkConfirm(t); };
   }
 }
+/* gz: the status picker for a hand pick. Missing stays one-at-a-time
+   (it needs a reason per set — the same rule as the classic picker), and
+   the one status every picked set already wears is not offered; a mixed
+   pick offers every other status. The header counts the pick. */
+function openBulkStatusPickerSel() {
+  var sets = bulkFlowSets();
+  if (!sets.length) { bulkSelCtx = null; renderSelBar(); return; }
+  var froms = {};
+  sets.forEach(function (s) { froms[normStatus(s.status)] = true; });
+  var uniform = Object.keys(froms).length === 1 ? Object.keys(froms)[0] : null;
+  var colors = pinSchemeById(pinSchemeId()).colors;
+  var rows = STATUS_VALUES.filter(function (k) { return k !== 'missing' && k !== uniform; }).map(function (k) {
+    return '<button type="button" class="btn-secondary bulk-pick-row" data-st="' + k + '">' +
+      '<span class="bulk-dot" style="background:' + colors[k] + '"></span>' + esc(STATUS_LABELS[k]) + '</button>';
+  }).join('');
+  showModal('<h3>Change ' + sets.length + ' sets to…</h3>' + rows +
+    '<div class="btn-row" style="margin-top:14px"><button class="btn-secondary" id="m-cancel" type="button">Cancel</button></div>');
+  $('modal').classList.add('sheet-dress'); /* gx: standard sheet dress for the bulk family */
+  $('m-cancel').onclick = function () { closeModal(); };
+  var btns = document.querySelectorAll('#modal-card .bulk-pick-row');
+  for (var i = 0; i < btns.length; i++) {
+    btns[i].onclick = function () { var t = this.getAttribute('data-st'); closeModal(); openBulkConfirm(t); };
+  }
+}
 function openBulkConfirm(target) {
+  if (bulkSelCtx) { openBulkConfirmSel(target); return; } /* gz: a pick may come from several statuses */
   var st = bulkFilterStatus();
   var sets = bulkFilteredSets();
   if (!st || !sets.length) { renderBulkBar(); return; }
@@ -5911,7 +6083,42 @@ function openBulkConfirm(target) {
   $('m-cancel').onclick = function () { closeModal(); };
   $('m-ok').onclick = function () { closeModal(); applyBulkStatus(target); };
 }
+/* gz: the confirm for a hand pick — same shape as the classic confirm,
+   but the "from" side is honest about a mixed pick: one shared status
+   reads as the classic from → to; several read as a counted list. */
+function openBulkConfirmSel(target) {
+  var sets = bulkFlowSets();
+  if (!sets.length) { bulkSelCtx = null; renderSelBar(); return; }
+  var n = sets.length;
+  var ln = lineById(Store.data, activeLineId());
+  var colors = pinSchemeById(pinSchemeId()).colors;
+  var dateLine = target === 'active'
+    ? '<p>Date set becomes today, ' + fmtDate(todayISO()) + '.</p>'
+    : '';
+  var counts = {};
+  sets.forEach(function (s) { var k = normStatus(s.status); counts[k] = (counts[k] || 0) + 1; });
+  var keys = Object.keys(counts);
+  var fromLine;
+  if (keys.length === 1) {
+    fromLine = '<p><span class="bulk-dot" style="background:' + colors[keys[0]] + '"></span> ' + esc(STATUS_LABELS[keys[0]]) + ' → ' +
+      '<span class="bulk-dot" style="background:' + colors[target] + '"></span> ' + esc(STATUS_LABELS[target]) + '</p>';
+  } else {
+    fromLine = '<p>Currently: ' + keys.map(function (k) {
+      return '<span class="bulk-dot" style="background:' + colors[k] + '"></span> ' + esc(STATUS_LABELS[k]) + ' ×' + counts[k];
+    }).join(' · ') + '</p>';
+  }
+  showModal('<h3>Change ' + n + ' sets to ' + esc(STATUS_LABELS[target]) + '?</h3>' +
+    '<p>' + esc(ln ? ln.name : '') + '</p>' +
+    fromLine +
+    dateLine +
+    '<p>You can change any set back one at a time from Edit this set.</p>' +
+    '<div class="btn-row" style="margin-top:14px"><button class="btn-secondary" id="m-cancel" type="button">Cancel</button>' +
+    '<button class="btn-primary" id="m-ok" type="button">Change ' + n + ' sets</button></div>');
+  $('m-cancel').onclick = function () { closeModal(); };
+  $('m-ok').onclick = function () { closeModal(); applyBulkStatus(target); };
+}
 function applyBulkStatus(target) {
+  if (bulkSelCtx) { applyBulkStatusSel(target); return; } /* gz: per-set from-status rules below */
   var st = bulkFilterStatus();
   var sets = bulkFilteredSets();
   if (!st || !sets.length) { renderBulkBar(); return; }
@@ -5937,6 +6144,34 @@ function applyBulkStatus(target) {
   refreshMarkers();
   bulkSelected = false;
   renderBulkBar();
+  toast(n + ' sets now ' + STATUS_LABELS[target] + '.');
+}
+/* gz: bulk status change over a hand pick. Each set follows the classic
+   rules from its OWN status: a move to Active restarts that set's date,
+   leaving Missing clears that set's reason/detail. The Q235 filter
+   follow is softened to match a mixed pick — the target status turns ON
+   so the changed sets land in view, but nothing turns off (the pick may
+   span statuses, and the unpicked sets keep the filter they had). The
+   finished operation exits selection mode. */
+function applyBulkStatusSel(target) {
+  var sets = bulkFlowSets();
+  if (!sets.length) { bulkSelCtx = null; renderSelBar(); return; }
+  var n = sets.length;
+  var today = todayISO();
+  sets.forEach(function (s) {
+    var from = normStatus(s.status);
+    s.status = target;
+    s.dateSet = activeDateFor(from, target, s.dateSet, today);
+    if (target === 'pulled' && !s.datePulled) s.datePulled = today;
+    if (target !== 'pulled' && s.datePulled) delete s.datePulled;
+    if (from === 'missing') { s.missingReason = null; s.missingDetail = null; } /* Q229: leaving Missing clears the reason/detail */
+    touchSet(s); /* Q68: any edit restarts the check clock */
+  });
+  Store.save();
+  var m = showModel();
+  m[target] = true;
+  saveShowModel();
+  exitSelMode(); /* refreshes markers + the pill, clears the pick */
   toast(n + ' sets now ' + STATUS_LABELS[target] + '.');
 }
 function logStatus(l) {
@@ -6684,16 +6919,16 @@ function renderTotals() {
   }
   function totalsSectionCards() {
     var tc = totalsCollapsed(), cards = '';
-    cards += '<div class="card">' + totalsCardHead('species', 'By Species') + '<div class="totals-card-body"' + (tc.species ? ' hidden' : '') + '>' + rows(bySpecies, false) + '</div></div>';
-    cards += '<div class="card">' + totalsCardHead('set', 'By Set') + '<div class="totals-card-body"' + (tc.set ? ' hidden' : '') + '>' + rows(bySet, true) + '</div></div>';
-    cards += '<div class="card">' + totalsCardHead('settype', 'By Set Type') + '<div class="totals-card-body"' + (tc.settype ? ' hidden' : '') + '>' + rows(bySetType, false, 'st:') + '</div></div>';
-    cards += '<div class="card">' + totalsCardHead('traptype', 'By Trap Type') + '<div class="totals-card-body"' + (tc.traptype ? ' hidden' : '') + '>' + rows(byTrapType, false, 'tt:') + '</div></div>';
+    cards += '<div class="card totals-card">' + totalsCardHead('species', 'By Species') + '<div class="totals-card-body"' + (tc.species ? ' hidden' : '') + '>' + rows(bySpecies, false) + '</div></div>';
+    cards += '<div class="card totals-card">' + totalsCardHead('set', 'By Set') + '<div class="totals-card-body"' + (tc.set ? ' hidden' : '') + '>' + rows(bySet, true) + '</div></div>';
+    cards += '<div class="card totals-card">' + totalsCardHead('settype', 'By Set Type') + '<div class="totals-card-body"' + (tc.settype ? ' hidden' : '') + '>' + rows(bySetType, false, 'st:') + '</div></div>';
+    cards += '<div class="card totals-card">' + totalsCardHead('traptype', 'By Trap Type') + '<div class="totals-card-body"' + (tc.traptype ? ' hidden' : '') + '>' + rows(byTrapType, false, 'tt:') + '</div></div>';
     {
       var names = [['kept', 'Dispatched'], ['alive', 'Kept alive'], ['released', 'Released'], ['transported', 'Transported']];
       /* Q86 (2026-10-01): Tanner — sort largest count first, it reads cleaner. */
       names.sort(function (a, b) { return (byDisp[b[0]] || 0) - (byDisp[a[0]] || 0); });
       /* Q61: each disposition row taps open to show what was caught under it. */
-      cards += '<div class="card">' + totalsCardHead('disposition', 'By Disposition') + '<div class="totals-card-body"' + (tc.disposition ? ' hidden' : '') + '>' + names.map(function (n) {
+      cards += '<div class="card totals-card">' + totalsCardHead('disposition', 'By Disposition') + '<div class="totals-card-body"' + (tc.disposition ? ' hidden' : '') + '>' + names.map(function (n) {
         var b = n[0], sp = byDispSp[b];
         var keys = Object.keys(sp).sort(function (a, c) { return sp[c] - sp[a]; });
         var hasDetail = keys.length > 0;
@@ -6710,7 +6945,7 @@ function renderTotals() {
         return dhtml;
       }).join('') + '</div></div>';
     }
-    cards += '<div class="card">' + totalsCardHead('month', 'By Month') + '<div class="totals-card-body"' + (tc.month ? ' hidden' : '') + '>' + monthRows() + '</div></div>';
+    cards += '<div class="card totals-card">' + totalsCardHead('month', 'By Month') + '<div class="totals-card-body"' + (tc.month ? ' hidden' : '') + '>' + monthRows() + '</div></div>';
     return cards;
   }
   /* ge: By Month rows — chronological, so the season reads in the order it
@@ -9347,6 +9582,7 @@ function activateLine(id) {
   if (!ln || d.activeLineId === id) return;
   d.activeLineId = id;
   Store.save();
+  exitSelMode(); /* gz: a pick belongs to the line it was made on */
   refreshForLine();
   renderLines();
   toast('Active line: ' + ln.name + '.');
@@ -11131,10 +11367,20 @@ function wireUp() {
     }
     closeSheets();
   };
-  /* Q140: stacked-pin menu — tapping a row opens that set's detail sheet. */
+  /* Q140: stacked-pin menu — tapping a row opens that set's detail sheet.
+     gz: in selection mode the same rows toggle the pick instead (the list
+     re-renders in place with the new states); no detail sheet opens. */
   $('stack-list').addEventListener('click', function (e) {
     var row = e.target && e.target.closest ? e.target.closest('[data-stack-id]') : null;
-    if (row) openSetDetail(row.getAttribute('data-stack-id'));
+    if (!row) return;
+    var id = row.getAttribute('data-stack-id');
+    if (selMode) {
+      var s = getSet(id);
+      toggleSel(id);
+      if (s) openSelStack(setsAtSpot(s.lat, s.lng));
+      return;
+    }
+    openSetDetail(id);
   });
   /* Q105 (2026-10-01): Tanner — no backdrop-tap dismissal on any dialog;
      every confirm closes only via its own buttons. The old
