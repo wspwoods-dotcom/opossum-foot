@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-11-18hf';
+var APP_VERSION = 'beta 0.1 · build 2026-11-19hg';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -2272,10 +2272,18 @@ function initMap() {
      sw.js enforces that cap for this host. The token is a PUBLIC token,
      URL-restricted to the app's own origins; it is meant to ship here.
      Native handling matches the Esri aerial's: real tiles to z19,
-     Leaflet upscales to the z22 map cap. */
+     Leaflet upscales to the z22 map cap.
+     hg (2026-11-19): the layer carries referrerPolicy 'unsafe-url'
+     (Leaflet 1.9.4's TileLayer option — createTile assigns it to each
+     tile <img>) and index.html sets the same policy document-wide, so
+     the page's own tile requests present the app's full URL as
+     Referer and pass the token's URL restriction. hf did this from
+     sw.js with a worker-constructed fetch instead; WebKit refused to
+     play along and the map stayed black on the phone — see the note
+     above fetchTile in sw.js. */
   var MAPBOX_TOKEN = 'pk.eyJ1Ijoib3Bvc3N1bWZvb3RhcHAiLCJhIjoiY213bXhmaThzMDRndjMwcGxmOXpsNjUwOCJ9.v0VzgWCuGzscCePZmw2AjQ';
   var mapboxSat = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/satellite-v9/tiles/256/{z}/{x}/{y}?access_token=' + MAPBOX_TOKEN,
-    { maxZoom: 22, maxNativeZoom: 19, attribution: 'Imagery © Mapbox © OpenStreetMap © Maxar' });
+    { maxZoom: 22, maxNativeZoom: 19, referrerPolicy: 'unsafe-url', attribution: 'Imagery © Mapbox © OpenStreetMap © Maxar' });
   var satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
     { maxZoom: 22, maxNativeZoom: 19, attribution: 'Imagery © Esri' });
   /* gy: second fallback — USDA NAIP (public domain), served as standard
