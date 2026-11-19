@@ -4,7 +4,7 @@
  * No user data ever passes through here — sets/catches live in
  * localStorage/IndexedDB on the device only.
  */
-var SHELL_CACHE = 'opossum-foot-shell-v162';
+var SHELL_CACHE = 'opossum-foot-shell-v163';
 var TILE_CACHE = 'opossum-foot-tiles-v1';
 var TILE_META_CACHE = 'opossum-foot-tile-meta-v1';
 var MAX_TILES = 2000;
@@ -164,12 +164,39 @@ function trimTiles() {
    name="referrer" content="unsafe-url">) and the Mapbox layer in
    js/app.js carries the element-level policy — and this worker is a
    pure pass-through: fetch(req) preserves the page request's
-   referrer exactly as the browser computed it. */
+   referrer exactly as the browser computed it.
+   hg FAILED in the field too (Tanner's iPhone, 2026-11-19 07:16 —
+   the third black field report). Two hypotheses survive, and both
+   point the same way: either the new workers never actually took
+   control on his installed PWA (iOS update stickiness — the app
+   now pokes registration.update() on foregrounding, see js/app.js),
+   or WebKit's service worker rewrites or drops the Referer on
+   fetch(req) even in "pass-through" — a long-standing class of
+   WebKit bugs in which SW-intercepted requests lose the page's
+   referrer. Under the second, ANY interception of Mapbox tiles is
+   poison in WebKit, whatever the page policy says.
+   hh (2026-11-19): Mapbox tiles bypass this worker ENTIRELY. The
+   fetch handler below returns without respondWith for
+   api.mapbox.com, so the browser makes the request natively,
+   carrying the page's referrer (hg's meta + layer policy, which
+   stay). The worker does not touch these requests at all.
+   Consequence, stated plainly: bypassed tiles live in the browser
+   HTTP cache, outside the 30-day TTL machinery below (which now
+   governs the remaining hosts; its Mapbox stamping code stands for
+   entries cached by gy–hg but is unreachable for new tiles).
+   Retention of a bypassed tile is governed by Mapbox's own
+   response header — verified against the live door 2026-11-19:
+   "Cache-Control: max-age=43200,s-maxage=43200", i.e. 12 hours,
+   well inside Mapbox's 30-day caching terms. */
 
-/* gy: the tile fetch, shared by the miss and expired-Mapbox paths.
+/* gy: the tile fetch, shared by the cache-miss and expired paths.
    A fresh Mapbox tile is timestamped in the meta cache as it lands
    (the 30-day cap above). The fetch itself is a plain pass-through
-   of the page's request (hg — see the note above). */
+   of the page's request (hg). hh: this function is unreachable for
+   Mapbox — the fetch handler bypasses those requests before this
+   branch (see the note above) — so its Mapbox stamping stands only
+   for entries cached by gy–hg; the other hosts flow through here
+   exactly as before. */
 function fetchTile(cache, req, url) {
   return fetch(req).then(function (res) {
     if (res && res.ok) {
@@ -190,8 +217,16 @@ self.addEventListener('fetch', function (event) {
   if (req.method !== 'GET') return;
   var url = req.url;
 
-  /* tiles: cache-first, then network, bounded cache. Mapbox tiles are
-     cache-first only inside their 30-day cap (see MAPBOX_TILE_TTL_MS). */
+  /* hh: Mapbox tiles bypass this worker ENTIRELY — return without
+     respondWith and the browser makes the request natively, with
+     the page's own referrer (see the long note above fetchTile).
+     The worker must not touch these requests at all. */
+  if (isMapboxTile(url)) return;
+
+  /* tiles: cache-first, then network, bounded cache. (Mapbox never
+     reaches this branch under hh — see the bypass above; the
+     30-day-cap path below stands for the remaining hosts and for
+     entries cached by gy–hg.) */
   if (isTileRequest(url)) {
     event.respondWith(
       caches.open(TILE_CACHE).then(function (cache) {
