@@ -105,6 +105,7 @@
        sets only. Same bar family as track/fix/draw; the panel dress
        follows the sheets (var(--sheet) with the sheet-dress 2px line). -->
   <div id="sel-bar"><span id="sel-bar-count">0 selected</span><button class="btn-small btn-secondary" id="btn-sel-picklist" type="button">Pick from list</button><button class="btn-small btn-secondary" id="btn-sel-actions" type="button">Actions</button><button class="btn-small btn-primary" id="btn-sel-done" type="button">Done</button></div>
+<div id="sel-hint">Tap sets on the map to pick them, or use Pick from list.</div>
   <div id="place-bar"><span>Drag the pin onto the exact spot.</span><button class="btn-small btn-primary" id="btn-place-ok" type="button"><img class="pb-ic" src="assets/icons/check.png" alt="">Looks right</button><button class="btn-small btn-ghost" id="btn-place-cancel" type="button" aria-label="Cancel"><img class="pb-ic" src="assets/icons/x.png" alt=""></button></div>
   <!-- B26: home-ground picker — two clear choices, not steps; cancel stays inline; tight bar -->
   <div id="home-bar"><span id="home-bar-prompt">Where's your home ground?</span><div class="home-bar-actions"><input id="home-zip" class="zip-jump" type="text" inputmode="numeric" maxlength="5" placeholder="ZIP" aria-label="Jump to ZIP code" autocomplete="off"><button class="btn-small btn-secondary" id="btn-home-zip" type="button">Go</button><button class="btn-small btn-primary" id="btn-home-ok" type="button" hidden>Set home here</button><button class="btn-small btn-ghost" id="btn-home-cancel" type="button" aria-label="Cancel"><img class="pb-ic" src="assets/icons/x.png" alt=""></button></div><div class="home-city-row"><input id="home-city" class="city-jump" type="text" placeholder="Or type a city…" aria-label="Jump to a city" autocomplete="off"><div id="home-city-matches" class="city-matches" hidden></div></div></div>
@@ -623,6 +624,11 @@
     <div class="sheet-body">
       <div id="pick-list"></div>
       <p class="dim" style="margin-top:10px">Tap a name to pick it. Tap it again to let it go.</p>
+    </div>
+    <!-- gy (2026-11-18): a plain Done at the foot — a pure close; picking
+         stays live on every tap, the X and the scrim keep working too. -->
+    <div class="sheet-actions">
+      <button class="btn-primary" id="btn-pick-done" type="button">Done</button>
     </div>
   </div>
 
