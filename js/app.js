@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-11-18gz';
+var APP_VERSION = 'beta 0.1 · build 2026-11-18hb';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -6994,6 +6994,32 @@ function holdListHeight(listEl, filtering) {
   }
 }
 
+/* hb (2026-11-18): Tanner's gz phone check — in Seasons he typed "Bo" and
+   got a blank pane: the search bar sticks at the pane top while the
+   filtered list restarts at its own top, which — with the pane scrolled —
+   sits up behind the bar/pane head, so the matches were nowhere visible.
+   After a filter render with a live query, if the first match is not
+   already sitting visible beneath the bar, scroll the pane so the bar
+   tops the view and the match follows right under it. No-op when the
+   match already sits right, and when the query is empty. */
+function revealFirstMatch(input, row) {
+  if (!input || !row || !input.value) return;
+  var sc = input.closest ? input.closest('.scroll') : null;
+  if (!sc) return;
+  var ir = input.getBoundingClientRect(), rr = row.getBoundingClientRect(),
+      sr = sc.getBoundingClientRect();
+  if (rr.top >= ir.bottom - 1 && rr.top >= sr.top && rr.bottom <= sr.bottom + 1) return;
+  if (ir.top - sr.top <= 16) {
+    /* The bar is perched at the pane top and its rect will not move while
+       it stays perched, so one live-rect delta lands the first match
+       right under it. (scrollIntoView cannot do this: for a stuck
+       element it aligns the stuck position and barely scrolls.) */
+    sc.scrollTop += rr.top - (ir.bottom + 6);
+  } else {
+    input.scrollIntoView(true);
+  }
+}
+
 function renderSeasons(filter) {
   var d = stateData();
   var entry = stateEntry(activeStateCode());
@@ -11163,11 +11189,21 @@ function wireUp() {
   };
 
   /* seasons search — gw: filters the animal list ONLY, like the app's
-     other search bars; the full renderSeasons runs on tab open. */
-  $('seasons-search').oninput = function () { renderSeasonsList(this.value); };
+     other search bars; the full renderSeasons runs on tab open.
+     hb: revealFirstMatch keeps the first match visible under the bar. */
+  $('seasons-search').oninput = function () {
+    renderSeasonsList(this.value);
+    revealFirstMatch(this, document.querySelector('#seasons-list .species-row'));
+  };
 
   /* history filters */
-  $('history-search').oninput = function () { histUI.q = this.value; renderHistory(); };
+  $('history-search').oninput = function () {
+    histUI.q = this.value; renderHistory();
+    /* hb: the visible face of a History match is its day-group head (the
+       catch rows live in the collapsed day body), so that is the reveal
+       target; in By Trap Type view the first row matches instead. */
+    revealFirstMatch(this, document.querySelector('#history-list .day-head, #history-list .log-row'));
+  };
   /* report filters (Settings) */
   $('exp-from').onchange = function () { exportUI.from = this.value; renderExportFilterBar(); };
   $('exp-to').onchange = function () { exportUI.to = this.value; renderExportFilterBar(); };
