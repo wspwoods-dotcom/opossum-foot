@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-11-18gy';
+var APP_VERSION = 'beta 0.1 · build 2026-11-18hf';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -5768,7 +5768,16 @@ function shownLineSets() {
    line and filter it was made on. */
 var selMode = false;
 var selIds = {};
-var selHintSpent = false; /* gy: the entry hint lives until the session's first pick */
+/* gy: the entry hint lived until the session's first pick. hf
+   (2026-11-18, Tanner): the hint grows a SECOND stage — the first
+   pick swaps its text instead of retiring it, and it then lives
+   until the Actions sheet first opens. selHintPicked marks stage 2
+   reached (sticky for the session, Clear-proof); selHintDone marks
+   the retirement (also sticky). enterSelMode resets both. */
+var SEL_HINT_STAGE1 = 'Tap sets on the map to pick them, or use Pick from list.';
+var SEL_HINT_STAGE2 = 'Now tap Actions to change the picked sets together.';
+var selHintPicked = false;
+var selHintDone = false;
 var bulkSelCtx = null;
 function selCount() { return Object.keys(selIds).length; }
 function bulkFlowSets() {
@@ -5784,7 +5793,8 @@ function enterSelMode() {
   if (document.body.classList.contains('editor-lock') || document.body.classList.contains('placing') || measureMode) return;
   selMode = true;
   selIds = {};
-  selHintSpent = false; /* gy: a fresh session earns the entry hint again */
+  selHintPicked = false; /* hf: a fresh session starts at stage 1 again */
+  selHintDone = false;
   document.body.classList.add('sel-mode');
   renderSelBar();
   renderBulkBar(); /* hides the Actions button — the bar replaces it */
@@ -5817,15 +5827,22 @@ function renderSelBar() {
      Actions sheet, openSelActions) — the 0-picked disablement is applied
      there, at open time, where the rows are rendered. */
   /* gy (2026-11-18, Tanner — "hint line until the first pick"): a slim
-     entry hint under the bar, shown only while nothing is picked AND no
-     pick has happened yet this session — the first pick (pin, picker,
-     Select all shown — all of them land here through renderSelBar)
-     retires it for the session, and Clearing back to zero does NOT
-     resurrect it. The hint is a flex sibling like the bar, so a flip
-     re-measures the map (the B13 lesson, same as the bar itself). */
+     entry hint under the bar. hf (same night, Tanner): the hint is now
+     TWO stages. Stage 1 (nothing picked yet this session) reads
+     SEL_HINT_STAGE1. The first pick — pin, picker, Select all shown,
+     all of them land here through renderSelBar — does NOT retire it:
+     the text swaps to SEL_HINT_STAGE2, pointing at the Actions sheet,
+     and stage 2 persists for the rest of the session, even if the
+     picks are Cleared back to zero (its advice is the point of the
+     mode). Opening the Actions sheet (openSelActions) retires the
+     hint for good that session. The text swap changes no geometry
+     (one line either way); only a visibility flip re-measures the
+     map — the hint is a flex sibling like the bar (the B13 lesson). */
   if (hint) {
-    if (selCount() > 0) selHintSpent = true;
-    var want = !selHintSpent && selCount() === 0;
+    if (selCount() > 0) selHintPicked = true;
+    var want = !selHintDone;
+    var txt = selHintPicked ? SEL_HINT_STAGE2 : SEL_HINT_STAGE1;
+    if (hint.textContent !== txt) hint.textContent = txt;
     if (want !== hint.classList.contains('show')) {
       hint.classList.toggle('show', want);
       if (map) map.invalidateSize();
@@ -5960,6 +5977,8 @@ function selClearSelection() {
 }
 function openSelActions() {
   if (!selMode) return;
+  selHintDone = true; /* hf: opening Actions retires the hint for the session */
+  renderSelBar();
   var n = selCount();
   var dis = n === 0 ? ' disabled' : '';
   showModal('<h3>' + n + ' selected</h3>' +
