@@ -1350,7 +1350,16 @@ body.placing #route-back-chip { display: none; }
 .mk-kind-ic .mk-glyph { width: 22px; height: 22px; }
 .mk-kind-ic.big { width: 46px; height: 46px; }
 .mk-kind-ic.big .mk-glyph { width: 30px; height: 30px; }
-.mk-kind-choice { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 11px 13px; font-size: 16px; background: var(--card, #fff); border: 1.5px solid var(--line); border-radius: 10px; color: inherit; margin-bottom: 12px; }
+/* gy (2026-11-18, Tanner's screenshot of live he): this wore a
+   --card variable with a pure-white fallback — and --card is defined
+   nowhere, so the button rendered WHITE with the sheet's pale ink on
+   it, unreadable, while
+   every other field wears the dark treatment. It now carries the
+   standard field treatment verbatim (the base field rule / .ms-select
+   family): #10140c ground, var(--ink) text, 1px var(--line) border,
+   var(--radius), var(--tap) min-height. One element serves the New and
+   Edit marker forms (markers.js openForm), so both are covered. */
+.mk-kind-choice { width: 100%; min-height: var(--tap); display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 12px 14px; font-family: inherit; font-size: 17px; background: #10140c; border: 1px solid var(--line); border-radius: var(--radius); color: var(--ink); margin-bottom: 12px; }
 .mk-kind-choice #mk-kind-name { display: inline-flex; align-items: center; gap: 8px; }
 .mk-kind-choice .mk-kind-ic { width: 28px; height: 28px; margin: 0; }
 .mk-kind-choice .mk-kind-ic .mk-glyph { width: 18px; height: 18px; }
@@ -1453,6 +1462,13 @@ body.placing #route-back-chip { display: none; }
 #sel-bar { flex: 0 0 auto; z-index: 500; display: none; align-items: center; justify-content: center; flex-wrap: nowrap; gap: 8px; padding: 10px; font-size: 15px; font-weight: 600; background: var(--sheet); color: #fff; border-bottom: 2px solid var(--line); }
 
 #sel-bar.show { display: flex; }
+/* gy (2026-11-18, Tanner — "hint line until the first pick"): the entry
+   hint under the selection bar. A separate slim element (the bar's own
+   one-row height never changes); its text wears the helper family —
+   .dim's muted ink at 14px, the picklist sheet's helper line — on the
+   bar's own sheet ground so it reads as one block with the bar. */
+#sel-hint { flex: 0 0 auto; z-index: 500; display: none; padding: 7px 14px; text-align: center; background: var(--sheet); color: var(--muted); font-size: 14px; border-bottom: 2px solid var(--line); }
+#sel-hint.show { display: block; }
 #sel-bar-count { font-variant-numeric: tabular-nums; white-space: nowrap; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
 /* he: the buttons never wrap or squeeze (their .btn-small dress is the
    family standard) — the count span absorbs any width pressure. */
