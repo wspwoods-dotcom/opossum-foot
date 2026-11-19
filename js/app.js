@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-11-19hh';
+var APP_VERSION = 'beta 0.1 · build 2026-11-19hi';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -2263,51 +2263,49 @@ function initMap() {
     return;
   }
   map = L.map('map', { zoomControl: false, attributionControl: true, maxZoom: 22 }).setView([39.5, -98.35], 4);
-  var street = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}',
-    { maxZoom: 22, maxNativeZoom: 19, attribution: '© Esri, HERE, Garmin, © OpenStreetMap contributors' });
-  /* Q10 / gy (2026-11-18): Mapbox Satellite is the default aerial. The
-     provider comparison (research_notes/map-provider-comparison-20261118)
-     found it the freshest deep-zoom rural imagery feeding Leaflet, and
-     its terms allow the app's on-device tile cache capped at 30 days —
-     sw.js enforces that cap for this host. The token is a PUBLIC token,
-     URL-restricted to the app's own origins; it is meant to ship here.
-     Native handling matches the Esri aerial's: real tiles to z19,
-     Leaflet upscales to the z22 map cap.
-     hg (2026-11-19): the layer carries referrerPolicy 'unsafe-url'
-     (Leaflet 1.9.4's TileLayer option — createTile assigns it to each
-     tile <img>) and index.html sets the same policy document-wide, so
-     the page's own tile requests present the app's full URL as
-     Referer and pass the token's URL restriction. hf did this from
-     sw.js with a worker-constructed fetch instead; WebKit refused to
-     play along and the map stayed black on the phone — see the note
-     above fetchTile in sw.js. */
+  /* Q10 / gy (2026-11-18): Mapbox Satellite became the default aerial.
+     The provider comparison (research_notes/map-provider-comparison-
+     20261118) found it the freshest deep-zoom rural imagery feeding
+     Leaflet, and its terms allow the app's on-device tile cache capped
+     at 30 days. The token is a PUBLIC token, URL-restricted to the
+     app's own origins; it is meant to ship here.
+     hg (2026-11-19): the Mapbox layers carry referrerPolicy
+     'unsafe-url' (Leaflet 1.9.4's TileLayer option — createTile
+     assigns it to each tile <img>) and index.html sets the same
+     policy document-wide. hf did the referrer work from sw.js with a
+     worker-constructed fetch instead; WebKit refused to play along
+     and the map stayed black on the phone — see the note above
+     fetchTile in sw.js. hh took the worker out of the chain entirely
+     (Mapbox tiles bypass it), and hi convicted the true cause at the
+     wire: WebKit sends only the bare origin as Referer, and the
+     token's restriction now admits that origin (console change,
+     2026-11-19) — the map paints on the phone.
+     hi amendment (2026-11-19, Tanner — "build Mapbox into the app
+     and take ESRI completely out of the app"): the stack below is
+     the whole story now. Esri is GONE — World_Street_Map,
+     World_Imagery, and the Reference roads/labels overlays that
+     rode over every aerial are all removed. satellite-streets-v12
+     bakes its roads and labels into the imagery, so no overlay is
+     needed anywhere; streets-v12 takes the Street seat and
+     outdoors-v12 the Topo seat, all on the same token, all with
+     the same handling (real tiles to z19, Leaflet upscales to the
+     z22 map cap; tiles bypass sw.js per hh). NAIP stays as the one
+     non-Mapbox aerial, now standing bare. */
   var MAPBOX_TOKEN = 'pk.eyJ1Ijoib3Bvc3N1bWZvb3RhcHAiLCJhIjoiY213bXhmaThzMDRndjMwcGxmOXpsNjUwOCJ9.v0VzgWCuGzscCePZmw2AjQ';
-  var mapboxSat = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/satellite-v9/tiles/256/{z}/{x}/{y}?access_token=' + MAPBOX_TOKEN,
+  var mapboxSat = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v12/tiles/256/{z}/{x}/{y}?access_token=' + MAPBOX_TOKEN,
     { maxZoom: 22, maxNativeZoom: 19, referrerPolicy: 'unsafe-url', attribution: 'Imagery © Mapbox © OpenStreetMap © Maxar' });
-  var satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-    { maxZoom: 22, maxNativeZoom: 19, attribution: 'Imagery © Esri' });
-  /* gy: second fallback — USDA NAIP (public domain), served as standard
+  /* gy: second aerial — USDA NAIP (public domain), served as standard
      tiles by the USGS National Map's USGSImageryOnly cache. (USDA's own
      FPAC ImageServer exposes no XYZ tile cache — its metadata calls it a
      test service — and the APFO endpoint does not answer.) Native NAIP
-     detail ends near z18; past that Leaflet upscales, same as Esri. */
+     detail ends near z18; past that Leaflet upscales. */
   var naip = L.tileLayer('https://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryOnly/MapServer/tile/{z}/{y}/{x}',
-    { maxZoom: 22, maxNativeZoom: 18, attribution: 'Imagery © USDA NAIP via USGS' });
-  var topo = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
-    { maxZoom: 22, maxNativeZoom: 17, attribution: '© OpenTopoMap © OpenStreetMap contributors' });
-  /* Esri reference overlays: roads + place labels, drawn over imagery/topo */
-  var esriRef = function (svc) {
-    return L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/' + svc + '/MapServer/tile/{z}/{y}/{x}',
-      { maxZoom: 22, maxNativeZoom: 19, attribution: '© Esri' });
-  };
-  var roads = esriRef('Reference/World_Transportation');
-  var labels = esriRef('Reference/World_Boundaries_and_Places');
-  var streetL = L.layerGroup([street]);
-  var mbSatL = L.layerGroup([mapboxSat, labels, roads]);
-  var esriSatL = L.layerGroup([satellite, labels, roads]);
-  var naipL = L.layerGroup([naip, labels, roads]);
-  var topoL = L.layerGroup([topo, roads]);
-  mbSatL.addTo(map);
+    { maxZoom: 22, maxNativeZoom: 18, attribution: 'Imagery © USGS' });
+  var mapboxStreet = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/streets-v12/tiles/256/{z}/{x}/{y}?access_token=' + MAPBOX_TOKEN,
+    { maxZoom: 22, maxNativeZoom: 19, referrerPolicy: 'unsafe-url', attribution: '© Mapbox © OpenStreetMap' });
+  var mapboxTopo = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/outdoors-v12/tiles/256/{z}/{x}/{y}?access_token=' + MAPBOX_TOKEN,
+    { maxZoom: 22, maxNativeZoom: 19, referrerPolicy: 'unsafe-url', attribution: '© Mapbox © OpenStreetMap' });
+  mapboxSat.addTo(map);
   /* Q74 (2026-10-01): Tanner — left-side stack is layers, zoom, weather, top
      to bottom. Leaflet stacks same-corner controls in add order. The weather
      chip joins as a real control so it rides the stack instead of floating. */
@@ -2322,16 +2320,19 @@ function initMap() {
      glyph on Satellite, road-map glyph on Street, mountain/topo glyph on
      Topo. Tap-cycle behavior unchanged. */
   /* gy (2026-11-18): Q10 lands — the cycle grows the two fallback aerials.
-     Settled order: Mapbox Satellite (default) → Esri Satellite → NAIP →
-     Street; Topo keeps its seat at the end of the cycle. */
+     Settled order then: Mapbox Satellite (default) → Esri Satellite →
+     NAIP → Street → Topo.
+     hi amendment (2026-11-19): Esri leaves the cycle with the rest of
+     Esri, and the Street and Topo seats become Mapbox's. Settled order
+     now: Mapbox Satellite (default) → NAIP → Mapbox Street → Mapbox
+     Topo → back to Satellite. */
   var baseLayers = [
-    { name: 'Mapbox Satellite', layer: mbSatL, icon: '🛰️' },
-    { name: 'Esri Satellite', layer: esriSatL, icon: '🌐' },
-    { name: 'NAIP', layer: naipL, icon: '🛩️' },
-    { name: 'Street', layer: streetL, icon: '🗺️' },
-    { name: 'Topo', layer: topoL, icon: '⛰️' }
+    { name: 'Mapbox Satellite', layer: mapboxSat, icon: '🛰️' },
+    { name: 'NAIP', layer: naip, icon: '🛩️' },
+    { name: 'Mapbox Street', layer: mapboxStreet, icon: '🗺️' },
+    { name: 'Mapbox Topo', layer: mapboxTopo, icon: '⛰️' }
   ];
-  var baseIdx = 0; /* mbSatL is already on the map */
+  var baseIdx = 0; /* mapboxSat is already on the map */
   var layerCtl = L.control({ position: 'bottomleft' });
   layerCtl.onAdd = function () {
     var el = L.DomUtil.create('div', 'leaflet-bar leaflet-control');
@@ -5588,7 +5589,15 @@ function jumpToSet(id) {
   if (locateState === 'following') pauseFollow();
   else if (locateState === 'acquiring') { stopLocateWatch(); setLocateSearching(false); locateState = 'idle'; }
   closeSheets();
-  if (map) map.flyTo([s.lat, s.lng], Math.max(map.getZoom(), 14), { duration: 0.8 });
+  /* hi amendment (2026-11-19, Tanner, from the field with the Mapbox map
+     live): the jump arrived too far out — Math.max(zoom, 14) stopped at
+     14 from his usual working view, so he had to pinch in by hand after
+     every pick. He ordered the jump to land at the crosshair's extent.
+     The crosshair's rule (drawFix, final fix) is an absolute setView to
+     19 — always 19, whether the view sits shallower or deeper — so the
+     jump now flies to exactly 19 under the same rule. The flight itself
+     stays animated; only the landing zoom changes. */
+  if (map) map.flyTo([s.lat, s.lng], 19, { duration: 0.8 });
 }
 function renderShowList() {
   var host = $('show-list'); if (!host) return;
@@ -11847,10 +11856,17 @@ function boot() {
       navigator.serviceWorker.register('sw.js').then(function (reg) { swReg = reg; })
         .catch(function () { /* offline still works without it */ });
       /* A new build took charge while this page still runs the old one:
-         offer a one-tap reload. Never force it — the user might be mid-log. */
+         offer a one-tap reload. (hi: the version check below no longer
+         waits for the tap — see reloadOnceFor. This message path keeps
+         the banner as the manual fallback.) */
       navigator.serviceWorker.addEventListener('message', function (ev) {
         if (ev.data && ev.data.type === 'OF_NEW_VERSION') showUpdateBanner();
       });
+      /* hi: when a new worker takes control of this page, ask whether
+         the running build is stale — checkBuildFresh spends the one
+         guarded reload if it is. A first-install claim finds the
+         running build matching and does nothing. */
+      navigator.serviceWorker.addEventListener('controllerchange', function () { checkBuildFresh(); });
       /* hh: an installed PWA can sit on an old worker for days if the
          browser only looks for a new one on cold navigation — ask for
          an update check whenever the app returns to the foreground.
@@ -11861,7 +11877,9 @@ function boot() {
         try { swReg.update().catch(function () { /* offline: stay quiet */ }); }
         catch (e) { /* an update check is a backstop, never a fault */ }
       }
-      /* backstop: version stamp check when the app is foregrounded / periodically */
+      /* backstop: version stamp check on load, when the app is
+         foregrounded, and periodically */
+      checkBuildFresh();
       document.addEventListener('visibilitychange', function () { if (!document.hidden) { checkBuildFresh(); pokeSwUpdate(); } });
       window.addEventListener('pageshow', function () { checkBuildFresh(); pokeSwUpdate(); });
       setInterval(checkBuildFresh, 5 * 60 * 1000);
@@ -11886,14 +11904,37 @@ function showUpdateBanner() {
   d.appendChild(b);
   document.body.appendChild(d);
 }
+/* hi (2026-11-19): a detected update now takes over ONCE on its
+   own. Through hh, checkBuildFresh and the OF_NEW_VERSION message
+   both ended at the banner — if the tap never came, the open page
+   ran the old build under the new worker indefinitely (the
+   nag-only takeover defect). Now a mismatch spends a single
+   guarded reload: the guard is the target stamp kept in
+   localStorage, so the same target can never reload twice; if
+   the page comes back still mismatched, the banner returns as
+   the manual path. The guard clears as soon as the running build
+   matches the live stamp again. */
+var UPDATE_GUARD_KEY = 'of-reload-for';
+function reloadOnceFor(target) {
+  var seen = null;
+  try { seen = window.localStorage.getItem(UPDATE_GUARD_KEY); } catch (e) { /* storage unavailable: banner */ }
+  if (seen === target) { showUpdateBanner(); return; }
+  try { window.localStorage.setItem(UPDATE_GUARD_KEY, target); }
+  catch (e) { showUpdateBanner(); return; }
+  window.location.reload();
+}
 function checkBuildFresh() {
-  if (_updateBannerShown) return;
   fetch('version.txt', { cache: 'no-store' }).then(function (r) {
     if (!r.ok) throw 0;
     return r.text();
   }).then(function (t) {
     t = (t || '').trim();
-    if (t && APP_VERSION.indexOf(t) === -1) showUpdateBanner();
+    if (!t) return;
+    if (APP_VERSION.indexOf(t) !== -1) {
+      try { window.localStorage.removeItem(UPDATE_GUARD_KEY); } catch (e) { /* a spent guard may stay spent */ }
+      return;
+    }
+    reloadOnceFor(t);
   }).catch(function () { /* offline: stay quiet */ });
 }
 
