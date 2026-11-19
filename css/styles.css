@@ -1446,9 +1446,17 @@ body.placing #route-back-chip { display: none; }
 /* gz: the set-selection bar — same bar family as track/fix/draw, but the
    panel dress follows the sheets (var(--sheet) over the sheet-dress 2px
    line), since the bulk family it launches wears that dress (gx). */
-#sel-bar { flex: 0 0 auto; z-index: 500; display: none; align-items: center; justify-content: center; flex-wrap: wrap; gap: 10px; padding: 10px 14px; font-size: 15px; font-weight: 600; background: var(--sheet); color: #fff; border-bottom: 2px solid var(--line); }
+/* he (2026-11-18): the bar is ONE row — count, Pick from list, Actions,
+   Done. No wrap; tighter gap/padding than the three-row gz bar so the
+   four pieces fit a phone width without squeezing the buttons (the
+   buttons keep their .btn-small dress untouched). */
+#sel-bar { flex: 0 0 auto; z-index: 500; display: none; align-items: center; justify-content: center; flex-wrap: nowrap; gap: 8px; padding: 10px; font-size: 15px; font-weight: 600; background: var(--sheet); color: #fff; border-bottom: 2px solid var(--line); }
+
 #sel-bar.show { display: flex; }
-#sel-bar-count { font-variant-numeric: tabular-nums; }
+#sel-bar-count { font-variant-numeric: tabular-nums; white-space: nowrap; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+/* he: the buttons never wrap or squeeze (their .btn-small dress is the
+   family standard) — the count span absorbs any width pressure. */
+#sel-bar button { flex: 0 0 auto; white-space: nowrap; }
 /* gp: fix-mode points are draggable handles — a 30px touch target with a
    ~14px visible dot (red; gold and bigger when picked for a cut). */
 .fix-pt { background: none; border: none; }
