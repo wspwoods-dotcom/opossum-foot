@@ -472,12 +472,18 @@ body.route-locked #tabbar { pointer-events: none; opacity: .35; }
    the element returned by onAdd, so the old descendant selector
    (.leaflet-control #weather-chip) never matched and the chip stayed
    transparent. Bare #weather-chip matches the element itself. */
+/* hc (2026-11-18, Tanner): the chip's own border was 1px rgba(0,0,0,.25)
+   while both .leaflet-bar controls beside it (zoom, layer cycle) compute
+   2px solid rgba(0,0,0,.2) — Leaflet's .leaflet-touch .leaflet-bar rule
+   outranks the app's border:none — so the chip read borderless next to
+   them. It now carries the identical 2px border; padding drops 1px a
+   side so the box keeps its exact size, radius and place. */
 #weather-chip {
   position: static; left: auto; bottom: auto; top: auto; right: auto;
-  background: var(--green) !important; border: 1px solid rgba(0,0,0,.25); color: #0e150a;
+  background: var(--green) !important; border: 2px solid rgba(0,0,0,.2); color: #0e150a;
   font-size: 13px; font-weight: 700; min-height: 0; border-radius: 14px;
   display: flex; flex-direction: column; align-items: center; line-height: 1.3;
-  padding: 5px 10px;
+  padding: 4px 9px;
 }
 /* Q130 (2026-10-01): Tanner — the left control stack (weather, zoom, layers)
    sits at the bottom-left of the map, where it used to be, with all three
@@ -1407,6 +1413,14 @@ body.placing #route-back-chip { display: none; }
 .show-chev { opacity: .55; font-size: 14px; flex: 0 0 auto; }
 .show-names { padding-left: 30px; }
 .show-setname { display: block; width: 100%; text-align: left; background: none; border: none; border-bottom: 1px solid var(--line); color: inherit; font: inherit; font-size: 16px; padding: 9px 4px; cursor: pointer; }
+/* hc (2026-11-18): selection mode dresses the Show list's names as a
+   picker — the check circle mirrors the stack rows' (gz): an empty ring
+   until picked, then gold-filled with the dark check; the picked row
+   tints gold like a picked stack row. */
+.show-setname-pick { display: flex; align-items: center; }
+.show-setcheck { flex: 0 0 auto; width: 22px; height: 22px; margin-right: 10px; border-radius: 50%; border: 2px solid var(--line); color: #1c1a12; font-size: 13px; font-weight: 800; line-height: 19px; text-align: center; box-sizing: border-box; }
+.show-setname-sel { background: #2c2413; color: #f5cf7a; }
+.show-setname-sel .show-setcheck { background: #E7C945; border-color: #E7C945; }
 .show-noname { display: block; padding: 9px 4px; font-size: 15px; }
 .show-dot { flex: 0 0 auto; width: 15px; height: 15px; border-radius: 50%; border: 2px solid rgba(255,255,255,.55); }
 .show-name { flex: 1; }
