@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-11-19hg';
+var APP_VERSION = 'beta 0.1 · build 2026-11-19hh';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -11843,14 +11843,27 @@ function boot() {
   /* service worker: http(s) only — skipped on file:// */
   if ('serviceWorker' in navigator && location.protocol.indexOf('http') === 0) {
     window.addEventListener('load', function () {
-      navigator.serviceWorker.register('sw.js').catch(function () { /* offline still works without it */ });
+      var swReg = null;
+      navigator.serviceWorker.register('sw.js').then(function (reg) { swReg = reg; })
+        .catch(function () { /* offline still works without it */ });
       /* A new build took charge while this page still runs the old one:
          offer a one-tap reload. Never force it — the user might be mid-log. */
       navigator.serviceWorker.addEventListener('message', function (ev) {
         if (ev.data && ev.data.type === 'OF_NEW_VERSION') showUpdateBanner();
       });
+      /* hh: an installed PWA can sit on an old worker for days if the
+         browser only looks for a new one on cold navigation — ask for
+         an update check whenever the app returns to the foreground.
+         (The hg Mapbox field failure may have been exactly this: the
+         new worker never took charge on the phone.) */
+      function pokeSwUpdate() {
+        if (!swReg || !swReg.update) return;
+        try { swReg.update().catch(function () { /* offline: stay quiet */ }); }
+        catch (e) { /* an update check is a backstop, never a fault */ }
+      }
       /* backstop: version stamp check when the app is foregrounded / periodically */
-      document.addEventListener('visibilitychange', function () { if (!document.hidden) checkBuildFresh(); });
+      document.addEventListener('visibilitychange', function () { if (!document.hidden) { checkBuildFresh(); pokeSwUpdate(); } });
+      window.addEventListener('pageshow', function () { checkBuildFresh(); pokeSwUpdate(); });
       setInterval(checkBuildFresh, 5 * 60 * 1000);
     });
   }
