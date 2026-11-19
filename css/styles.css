@@ -351,6 +351,12 @@ body[data-pinscheme="pastel"] { --pin-active:#a9d6a5; --pin-sprung:#eacd7d; --pi
 /* Q68: trap-check clock — a set past its check interval without any activity
    turns its pin red, whatever its status color was. */
 .pin-overdue { background: #e5484d; }
+/* gz: a set picked in selection mode — gold ring in place of the white one
+   (the app's own gold, #E7C945: fix/draw handles, measure line) plus a gold
+   check badge, so the chosen sets read at a glance. The class rides the
+   icon HTML, so it survives pan/zoom and every marker re-render. */
+.pin-sel { border-color: #E7C945; box-shadow: 0 0 0 3px #E7C945, 0 2px 8px rgba(0,0,0,.6); }
+.pin-check { position: absolute; right: -8px; top: -8px; width: 17px; height: 17px; border-radius: 50%; background: #E7C945; color: #1c1a12; font-size: 11px; font-weight: 800; line-height: 17px; text-align: center; border: 2px solid #fff; box-sizing: border-box; }
 /* Q68: overdue check line on the set detail sheet. */
 .check-overdue { color: #ff7a7a; font-weight: 600; }
 /* Q17: wind arrow — small triangle orbiting the pin, pointing downwind
@@ -562,9 +568,15 @@ body.route-locked #tabbar { pointer-events: none; opacity: .35; }
 #seasons-rules .card.setsec, #seasons-gap .card.setsec { background: none; border: none; padding: 0; margin: 12px 0; }
 #seasons-rules .setsec-head, #seasons-gap .setsec-head {
   /* gw scope 5: the yellow color treatment stays (scope 1); the DIMENSIONS
-     join the app-wide bar standard — 19px title, 51px single-line bar. */
+     join the app-wide bar standard — 19px title, 51px single-line bar.
+     gz (2026-11-18): the gap head's long title ("{State} — Tags,
+     Permission, Setbacks & Licensing") wraps to two lines, and at the old
+     10px vertical padding the wrapped box rendered 66px — off the
+     standard the rules head (one line) met. Vertical padding drops to
+     4px and the line-height to 21px, so a two-line head lands on the
+     same 51px box (min-height carries the one-line case, as before). */
   position: relative; display: flex; align-items: center; justify-content: center;
-  width: 100%; min-height: 51px; padding: 10px 40px; margin: 12px 0;
+  width: 100%; min-height: 51px; padding: 4px 40px; margin: 12px 0; line-height: 21px;
   background: var(--accent); color: var(--accent-ink); border: none; border-radius: var(--radius);
   font-size: 19px; font-weight: 700; text-transform: uppercase; text-align: center; cursor: pointer;
 }
@@ -630,6 +642,11 @@ body.route-locked #tabbar { pointer-events: none; opacity: .35; }
   border: 1px solid var(--line); border-radius: 12px;
   padding: 14px; margin: 0 0 10px; font-size: 16px; cursor: pointer; }
 .stack-row:active { background: #2a2f26; }
+/* gz: in selection mode a stack row shows its picked state — a gold check
+   circle at the left (echoing the pin badge) and a gold-tinted row. */
+.stack-check { flex: 0 0 auto; width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--line); color: #1c1a12; font-size: 13px; font-weight: 800; line-height: 19px; text-align: center; box-sizing: border-box; }
+.stack-row-sel { border-color: #E7C945; background: #2c2413; }
+.stack-row-sel .stack-check { background: #E7C945; border-color: #E7C945; }
 .stack-name { flex: 1; min-width: 0; font-weight: 700; overflow: hidden;
   text-overflow: ellipsis; white-space: nowrap; }
 .badge.status-sprung { background: #3d2c10; color: #f5cf7a; }
@@ -795,14 +812,30 @@ body.route-locked #tabbar { pointer-events: none; opacity: .35; }
    and photo button beside it and bled off the sheet's right edge. Same
    fix as .date-col, extended to all three tag-entry surfaces: the catch
    log form's Tag section, the post-catch sheet, and the History tag
-   editor. */
-#log-tag-date, #tag-date, #pc-tag-date { display: block; width: 100%; max-width: 100%;
+   editor.
+   gz (2026-11-18, Tanner's phone, Edit Set + Log a Catch screenshots):
+   the set form's Date Set (#sf-date) ran full-bleed off the screen edge
+   and the catch form's Date (#log-date) AND Time (#log-time) overshot
+   identically — WebKit gives input[type=time] the same intrinsic-sizing
+   treatment. A full sweep found every remaining bare temporal input in
+   the app, and all of them take the same treatment here: #sf-date,
+   #log-date, #log-time, and the two modal dates #m-trip-date (Log/Edit
+   trip) and #m-draw-date (Save drawn route). The only temporal inputs
+   NOT in this list sit inside .date-col wrappers (exp-from/exp-to,
+   purge-from/purge-to), which carry the same fix above. gz-check
+   asserts this coverage structurally so a future bare date/time field
+   cannot slip through. */
+#log-tag-date, #tag-date, #pc-tag-date, #sf-date, #log-date, #log-time, #m-trip-date, #m-draw-date { display: block; width: 100%; max-width: 100%;
   min-width: 0; box-sizing: border-box; }
 #log-tag-date::-webkit-datetime-edit, #tag-date::-webkit-datetime-edit, #pc-tag-date::-webkit-datetime-edit,
 #log-tag-date::-webkit-datetime-edit-fields-wrapper, #tag-date::-webkit-datetime-edit-fields-wrapper,
-#pc-tag-date::-webkit-datetime-edit-fields-wrapper { min-width: 0; }
+#pc-tag-date::-webkit-datetime-edit-fields-wrapper, #sf-date::-webkit-datetime-edit, #log-date::-webkit-datetime-edit,
+#log-time::-webkit-datetime-edit, #m-trip-date::-webkit-datetime-edit, #m-draw-date::-webkit-datetime-edit,
+#sf-date::-webkit-datetime-edit-fields-wrapper, #log-date::-webkit-datetime-edit-fields-wrapper,
+#log-time::-webkit-datetime-edit-fields-wrapper, #m-trip-date::-webkit-datetime-edit-fields-wrapper,
+#m-draw-date::-webkit-datetime-edit-fields-wrapper { min-width: 0; }
 @supports (-webkit-touch-callout: none) {
-  #log-tag-date, #tag-date, #pc-tag-date { width: calc(100% - 30px); }
+  #log-tag-date, #tag-date, #pc-tag-date, #sf-date, #log-date, #log-time, #m-trip-date, #m-draw-date { width: calc(100% - 30px); }
 }
 /* Tanner 2026-10-01: compact button row — smaller, less clunky. */
 .btn-compact > .btn-secondary { padding: 8px 10px; font-size: 14px; min-height: 0; }
@@ -1253,6 +1286,16 @@ body.placing #route-back-chip { display: none; }
 /* gw scope 5: Totals bars join the app-wide standard (51px, 19px title,
    18.5px › in muted cream, rotating on open like .setsec) — the h3 inside
    sheds the .card h3 border/padding so the button's own box is the bar. */
+/* gz (2026-11-18, Tanner's gx phone check): the gw midpoint standard was
+   applied to the HEAD alone (51px), but the Totals cards are plain .card
+   wrappers carrying 14px of padding above AND below the head, so the box
+   Tanner actually sees rendered 81px and never slimmed. The totals card
+   now carries no vertical padding of its own — the head is the box
+   (51px + the card's 2px of border = 53, the same rendered size as the
+   .card.setsec sections) — and the expanded body takes the bottom
+   padding the card used to lend it. Horizontal padding is unchanged. */
+.totals-card { padding: 0 14px; }
+.totals-card-body { padding-bottom: 14px; }
 .totals-card-head { display: flex; align-items: center; justify-content: space-between; width: 100%; background: none; border: none; padding: 14px 0; margin: 0; min-height: 0; cursor: pointer; color: inherit; font: inherit; line-height: 23px; text-align: left; }
 .totals-card-head h3 { margin: 0; font-size: 19px; line-height: 23px; border-top: none; padding-top: 0; }
 .totals-card-head .tchev { color: var(--muted); font-size: 18.5px; line-height: 1; transition: transform .18s ease; }
@@ -1382,6 +1425,12 @@ body.placing #route-back-chip { display: none; }
 #draw-bar { flex: 0 0 auto; z-index: 500; display: none; align-items: center; justify-content: center; flex-wrap: wrap; gap: 10px; padding: 10px 14px; font-size: 15px; font-weight: 600; background: #1d2a12; color: #fff; border-bottom: 1px solid var(--line); }
 #draw-bar.show { display: flex; }
 #draw-bar-miles { font-variant-numeric: tabular-nums; opacity: .85; }
+/* gz: the set-selection bar — same bar family as track/fix/draw, but the
+   panel dress follows the sheets (var(--sheet) over the sheet-dress 2px
+   line), since the bulk family it launches wears that dress (gx). */
+#sel-bar { flex: 0 0 auto; z-index: 500; display: none; align-items: center; justify-content: center; flex-wrap: wrap; gap: 10px; padding: 10px 14px; font-size: 15px; font-weight: 600; background: var(--sheet); color: #fff; border-bottom: 2px solid var(--line); }
+#sel-bar.show { display: flex; }
+#sel-bar-count { font-variant-numeric: tabular-nums; }
 /* gp: fix-mode points are draggable handles — a 30px touch target with a
    ~14px visible dot (red; gold and bigger when picked for a cut). */
 .fix-pt { background: none; border: none; }
