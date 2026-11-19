@@ -1413,10 +1413,11 @@ body.placing #route-back-chip { display: none; }
 .show-chev { opacity: .55; font-size: 14px; flex: 0 0 auto; }
 .show-names { padding-left: 30px; }
 .show-setname { display: block; width: 100%; text-align: left; background: none; border: none; border-bottom: 1px solid var(--line); color: inherit; font: inherit; font-size: 16px; padding: 9px 4px; cursor: pointer; }
-/* hc (2026-11-18): selection mode dresses the Show list's names as a
-   picker — the check circle mirrors the stack rows' (gz): an empty ring
-   until picked, then gold-filled with the dark check; the picked row
-   tints gold like a picked stack row. */
+/* hc (2026-11-18) picker dress, kept by hd for the Pick list's rows (the
+   picker moved to its own sheet — see renderPickList): the check circle
+   mirrors the stack rows' (gz): an empty ring until picked, then
+   gold-filled with the dark check; the picked row tints gold like a
+   picked stack row. */
 .show-setname-pick { display: flex; align-items: center; }
 .show-setcheck { flex: 0 0 auto; width: 22px; height: 22px; margin-right: 10px; border-radius: 50%; border: 2px solid var(--line); color: #1c1a12; font-size: 13px; font-weight: 800; line-height: 19px; text-align: center; box-sizing: border-box; }
 .show-setname-sel { background: #2c2413; color: #f5cf7a; }
