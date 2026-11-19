@@ -4,7 +4,7 @@
  * No user data ever passes through here — sets/catches live in
  * localStorage/IndexedDB on the device only.
  */
-var SHELL_CACHE = 'opossum-foot-shell-v160';
+var SHELL_CACHE = 'opossum-foot-shell-v161';
 var TILE_CACHE = 'opossum-foot-tiles-v1';
 var TILE_META_CACHE = 'opossum-foot-tile-meta-v1';
 var MAX_TILES = 2000;
@@ -143,10 +143,29 @@ function trimTiles() {
   });
 }
 
+/* hf (2026-11-18): the Mapbox token's URL restriction is registered
+   with the full app path and Mapbox prefix-matches the request's
+   Referer against it — but browsers send only the bare ORIGIN as the
+   Referer for cross-origin tile images under the default referrer
+   policy, so the phone's tile requests were refused (403) and the
+   aerial painted black (gy field report, Tanner's phone: labels and
+   pins over a black field). The worker therefore fetches Mapbox
+   tiles itself, presenting the app's full URL as the referrer and
+   sending it in full, so the restriction passes no matter what
+   referer the page's image request carried. Verified against
+   Mapbox's live door: full-path Referer → 200 image/jpeg,
+   origin-only → 403, none → 403. Other hosts are fetched untouched. */
+var MAPBOX_REFERRER = 'https://wspwoods-dotcom.github.io/opossum-foot/';
+
 /* gy: the tile fetch, shared by the miss and expired-Mapbox paths.
-   A fresh Mapbox tile is timestamped in the meta cache as it lands. */
+   A fresh Mapbox tile is timestamped in the meta cache as it lands.
+   hf: the Mapbox branch presents MAPBOX_REFERRER (see above); the
+   TTL stamping below is unchanged. */
 function fetchTile(cache, req, url) {
-  return fetch(req).then(function (res) {
+  var net = isMapboxTile(url)
+    ? fetch(url, { referrer: MAPBOX_REFERRER, referrerPolicy: 'unsafe-url' })
+    : fetch(req);
+  return net.then(function (res) {
     if (res && res.ok) {
       cache.put(req, res.clone());
       if (isMapboxTile(url)) {
