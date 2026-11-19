@@ -4,9 +4,18 @@
  * No user data ever passes through here — sets/catches live in
  * localStorage/IndexedDB on the device only.
  */
-var SHELL_CACHE = 'opossum-foot-shell-v159';
+var SHELL_CACHE = 'opossum-foot-shell-v160';
 var TILE_CACHE = 'opossum-foot-tiles-v1';
+var TILE_META_CACHE = 'opossum-foot-tile-meta-v1';
 var MAX_TILES = 2000;
+/* Q10 / gy (2026-11-18): Mapbox's terms allow caching its tiles on an
+   end user's device for at most 30 days. Mapbox tiles therefore carry a
+   fetch timestamp (kept in the meta cache, keyed by the tile request)
+   and are never served past this age — an expired entry is deleted and
+   refetched, never served stale. The cap is scoped to the Mapbox host
+   only; the other hosts keep the standing cache-first behavior, bounded
+   by the tile count alone. */
+var MAPBOX_TILE_TTL_MS = 30 * 24 * 60 * 60 * 1000;
 
 var SHELL = [
   './',
@@ -72,11 +81,17 @@ var SHELL = [
 var TILE_HOSTS = [
   'basemaps.cartocdn.com',
   'server.arcgisonline.com',
-  'tile.opentopomap.org'
+  'tile.opentopomap.org',
+  'api.mapbox.com',
+  'basemap.nationalmap.gov'
 ];
 
 function isTileRequest(url) {
   return TILE_HOSTS.some(function (h) { return url.indexOf(h) !== -1; });
+}
+
+function isMapboxTile(url) {
+  return url.indexOf('api.mapbox.com') !== -1;
 }
 
 self.addEventListener('install', function (event) {
@@ -99,7 +114,7 @@ self.addEventListener('activate', function (event) {
   event.waitUntil(
     caches.keys().then(function (keys) {
       return Promise.all(keys.map(function (k) {
-        if (k !== SHELL_CACHE && k !== TILE_CACHE) return caches.delete(k);
+        if (k !== SHELL_CACHE && k !== TILE_CACHE && k !== TILE_META_CACHE) return caches.delete(k);
       }));
     }).then(function () { return self.clients.claim(); }).then(function () {
       /* A new build just took charge while pages may still show the old one.
@@ -119,9 +134,30 @@ function trimTiles() {
         /* delete oldest first (cache.keys() returns in insertion order) */
         var extra = keys.slice(0, keys.length - MAX_TILES);
         extra.forEach(function (k) { cache.delete(k); });
+        /* gy: an evicted tile takes its Mapbox timestamp with it. */
+        caches.open(TILE_META_CACHE).then(function (meta) {
+          extra.forEach(function (k) { meta.delete(k); });
+        });
       }
     });
   });
+}
+
+/* gy: the tile fetch, shared by the miss and expired-Mapbox paths.
+   A fresh Mapbox tile is timestamped in the meta cache as it lands. */
+function fetchTile(cache, req, url) {
+  return fetch(req).then(function (res) {
+    if (res && res.ok) {
+      cache.put(req, res.clone());
+      if (isMapboxTile(url)) {
+        caches.open(TILE_META_CACHE).then(function (meta) {
+          meta.put(req, new Response(String(Date.now())));
+        });
+      }
+      trimTiles();
+    }
+    return res;
+  }).catch(function () { return undefined; });
 }
 
 self.addEventListener('fetch', function (event) {
@@ -129,19 +165,26 @@ self.addEventListener('fetch', function (event) {
   if (req.method !== 'GET') return;
   var url = req.url;
 
-  /* tiles: cache-first, then network, bounded cache */
+  /* tiles: cache-first, then network, bounded cache. Mapbox tiles are
+     cache-first only inside their 30-day cap (see MAPBOX_TILE_TTL_MS). */
   if (isTileRequest(url)) {
     event.respondWith(
       caches.open(TILE_CACHE).then(function (cache) {
         return cache.match(req).then(function (hit) {
-          if (hit) return hit;
-          return fetch(req).then(function (res) {
-            if (res && res.ok) {
-              cache.put(req, res.clone());
-              trimTiles();
-            }
-            return res;
-          }).catch(function () { return hit; });
+          if (!hit) return fetchTile(cache, req, url);
+          if (!isMapboxTile(url)) return hit;
+          return caches.open(TILE_META_CACHE).then(function (meta) {
+            return meta.match(req).then(function (stamp) {
+              return (stamp ? stamp.text() : Promise.resolve('')).then(function (ts) {
+                if (ts && (Date.now() - (+ts)) < MAPBOX_TILE_TTL_MS) return hit;
+                /* expired (or never stamped): delete and refetch —
+                   stale Mapbox tiles are never served. */
+                cache.delete(req);
+                meta.delete(req);
+                return fetchTile(cache, req, url);
+              });
+            });
+          });
         });
       })
     );
