@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-11-18hb';
+var APP_VERSION = 'beta 0.1 · build 2026-11-18hc';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -5581,7 +5581,15 @@ function renderShowList() {
         row += '<div class="show-names"><span class="dim show-noname">No sets</span></div>';
       } else {
         row += '<div class="show-names">' + names.map(function (s) {
-          return '<button type="button" class="show-setname" data-jump-set="' + s.id + '">' + esc(s.name || 'Unnamed set') + '</button>';
+          /* hc (2026-11-18, Tanner): in selection mode the names are a
+             PICKER — a picked name wears the mark. The mark is rendered
+             from selIds, the one selection the pins also write to, so a
+             pick made by either road shows on both. Outside the mode the
+             rows render exactly as ft built them. */
+          var picked = selMode && !!selIds[s.id];
+          return '<button type="button" class="show-setname' + (selMode ? ' show-setname-pick' : '') + (picked ? ' show-setname-sel' : '') + '" data-jump-set="' + s.id + '">' +
+            (selMode ? '<span class="show-setcheck">' + (picked ? '✓' : '') + '</span>' : '') +
+            '<span class="show-setname-label">' + esc(s.name || 'Unnamed set') + '</span></button>';
         }).join('') + '</div>';
       }
     }
@@ -5617,8 +5625,15 @@ function renderShowList() {
       renderShowList();
     });
   });
+  /* hc: in selection mode a set name picks instead of jumping — it toggles
+     the set in the selection and the list re-renders in place with the new
+     marks; no jump, no detail sheet, and the Show sheet stays open. */
   host.querySelectorAll('[data-jump-set]').forEach(function (b) {
-    b.addEventListener('click', function () { jumpToSet(this.getAttribute('data-jump-set')); });
+    b.addEventListener('click', function () {
+      var id = this.getAttribute('data-jump-set');
+      if (selMode) { toggleSel(id); renderShowList(); return; }
+      jumpToSet(id);
+    });
   });
   host.querySelectorAll('input[data-show-fam]').forEach(function (cb) {
     cb.addEventListener('change', function () {
