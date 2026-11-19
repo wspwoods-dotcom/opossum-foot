@@ -743,8 +743,11 @@ body.route-locked #tabbar { pointer-events: none; opacity: .35; }
    searches — History and Seasons fields stick to the top of their pane, so
    they never scroll away and typing never moves them. (The Log a Catch
    species list carries a fixed height in its markup for the same reason;
-   the landowner field tops a full-height pane card and never exhibited it.) */
-#history-search, #seasons-search { position: sticky; top: 0; z-index: 6; }
+   the landowner field tops a full-height pane card and never exhibited it.)
+   hb (2026-11-18): the stuck bar now wears the Guide bar's solid footing
+   (Q205: background var(--sheet)) — a proper header the results cannot
+   show through, instead of the bare field floating over the scroll. */
+#history-search, #seasons-search { position: sticky; top: 0; z-index: 6; background: var(--sheet); }
 /* Q161 (2026-10-06): Tanner — a giant warnbox (e.g. the coyote county-rules
    alert in Log a Catch) made the sheet content taller than the sheet, and
    without min-height:0 the flex item refused to shrink, so the sheet never
