@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-11-18hc';
+var APP_VERSION = 'beta 0.1 · build 2026-11-18hd';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -5581,14 +5581,7 @@ function renderShowList() {
         row += '<div class="show-names"><span class="dim show-noname">No sets</span></div>';
       } else {
         row += '<div class="show-names">' + names.map(function (s) {
-          /* hc (2026-11-18, Tanner): in selection mode the names are a
-             PICKER — a picked name wears the mark. The mark is rendered
-             from selIds, the one selection the pins also write to, so a
-             pick made by either road shows on both. Outside the mode the
-             rows render exactly as ft built them. */
-          var picked = selMode && !!selIds[s.id];
-          return '<button type="button" class="show-setname' + (selMode ? ' show-setname-pick' : '') + (picked ? ' show-setname-sel' : '') + '" data-jump-set="' + s.id + '">' +
-            (selMode ? '<span class="show-setcheck">' + (picked ? '✓' : '') + '</span>' : '') +
+          return '<button type="button" class="show-setname" data-jump-set="' + s.id + '">' +
             '<span class="show-setname-label">' + esc(s.name || 'Unnamed set') + '</span></button>';
         }).join('') + '</div>';
       }
@@ -5625,14 +5618,14 @@ function renderShowList() {
       renderShowList();
     });
   });
-  /* hc: in selection mode a set name picks instead of jumping — it toggles
-     the set in the selection and the list re-renders in place with the new
-     marks; no jump, no detail sheet, and the Show sheet stays open. */
+  /* hd (2026-11-18, Tanner — "We only want one door"): a name here JUMPS,
+     in every mode. hc briefly made these names pick while selection mode
+     was open; he superseded that the same evening — picking lives behind
+     the selection bar's "Pick from list" button and its own sheet
+     (renderPickList), never on the Show road. */
   host.querySelectorAll('[data-jump-set]').forEach(function (b) {
     b.addEventListener('click', function () {
-      var id = this.getAttribute('data-jump-set');
-      if (selMode) { toggleSel(id); renderShowList(); return; }
-      jumpToSet(id);
+      jumpToSet(this.getAttribute('data-jump-set'));
     });
   });
   host.querySelectorAll('input[data-show-fam]').forEach(function (cb) {
@@ -5807,10 +5800,74 @@ function selLaunch(fn) {
   bulkSelCtx = { ids: ids };
   fn();
 }
+/* hd (2026-11-18, Tanner): picking gets ONE door — this sheet, opened
+   only by the selection bar's "Pick from list" button. hc had hung the
+   picker on the Show sheet's list (the road in ran through the Show
+   pill); he found it, called it confusing, and then ruled the Show road
+   back to jumping in every mode. So the picker is its own sheet: the
+   same grouped list (statuses of the active line, one expanded at a
+   time, names A–Z, every status shown whatever the Show filter says),
+   the same dress (hc's gold tint + check circle, the stack rows'
+   family), and the marks rendered from selIds on every render — the
+   one selection the pins also write to, so a pick made by either road
+   shows on both. A name tap here toggles and re-renders in place: no
+   map flight, no detail sheet, and the mode and its count wait behind
+   the sheet untouched. The Sign families stay on the Show sheet — this
+   list is for sets. */
+var pickExpandedStatus = null; /* which status group is expanded here (one at a time) */
+function renderPickList() {
+  var host = $('pick-list'); if (!host) return;
+  var statusCount = function (v) {
+    var n = 0;
+    activeSets().forEach(function (s) { if (normStatus(s.status) === v) n++; });
+    return ' <span class="show-count">' + n + (n === 1 ? ' set' : ' sets') + '</span>';
+  };
+  host.innerHTML = STATUS_VALUES.map(function (v) {
+    var c = pinSchemeById(pinSchemeId()).colors[v];
+    var open = pickExpandedStatus === v;
+    var row = '<div class="show-row"><span class="show-dot" style="background:' + c + '"></span>' +
+      '<button type="button" class="show-name-btn" data-pick-expand="' + v + '" aria-expanded="' + open + '">' +
+      '<span class="show-name">' + esc(STATUS_LABELS[v]) + statusCount(v) + '</span>' +
+      '<span class="show-chev">' + (open ? '▾' : '▸') + '</span></button></div>';
+    if (open) {
+      var names = showSetsFor(v);
+      if (!names.length) {
+        row += '<div class="show-names"><span class="dim show-noname">No sets</span></div>';
+      } else {
+        row += '<div class="show-names">' + names.map(function (s) {
+          var picked = !!selIds[s.id];
+          return '<button type="button" class="show-setname show-setname-pick' + (picked ? ' show-setname-sel' : '') + '" data-pick-set="' + s.id + '">' +
+            '<span class="show-setcheck">' + (picked ? '✓' : '') + '</span>' +
+            '<span class="show-setname-label">' + esc(s.name || 'Unnamed set') + '</span></button>';
+        }).join('') + '</div>';
+      }
+    }
+    return row;
+  }).join('');
+  host.querySelectorAll('[data-pick-expand]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var v = this.getAttribute('data-pick-expand');
+      pickExpandedStatus = (pickExpandedStatus === v) ? null : v;
+      renderPickList();
+    });
+  });
+  host.querySelectorAll('[data-pick-set]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      toggleSel(this.getAttribute('data-pick-set'));
+      renderPickList();
+    });
+  });
+}
+function openSelPickList() {
+  pickExpandedStatus = null;
+  renderPickList();
+  openSheet('sheet-picklist');
+}
 function wireSelBar() {
   var bar = $('sel-bar');
   if (!bar || bar._wired) return;
   bar._wired = true;
+  $('btn-sel-picklist').onclick = function () { openSelPickList(); };
   $('btn-sel-status').onclick = function () { selLaunch(openBulkStatusPicker); };
   $('btn-sel-edit').onclick = function () { selLaunch(openBulkEdit); };
   $('btn-sel-delete').onclick = function () { selLaunch(openBulkDeleteConfirm); };
