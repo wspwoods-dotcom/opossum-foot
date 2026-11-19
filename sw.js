@@ -4,7 +4,7 @@
  * No user data ever passes through here — sets/catches live in
  * localStorage/IndexedDB on the device only.
  */
-var SHELL_CACHE = 'opossum-foot-shell-v163';
+var SHELL_CACHE = 'opossum-foot-shell-v164';
 var TILE_CACHE = 'opossum-foot-tiles-v1';
 var TILE_META_CACHE = 'opossum-foot-tile-meta-v1';
 var MAX_TILES = 2000;
@@ -79,9 +79,6 @@ var SHELL = [
 ];
 
 var TILE_HOSTS = [
-  'basemaps.cartocdn.com',
-  'server.arcgisonline.com',
-  'tile.opentopomap.org',
   'api.mapbox.com',
   'basemap.nationalmap.gov'
 ];
@@ -187,7 +184,39 @@ function trimTiles() {
    Retention of a bypassed tile is governed by Mapbox's own
    response header — verified against the live door 2026-11-19:
    "Cache-Control: max-age=43200,s-maxage=43200", i.e. 12 hours,
-   well inside Mapbox's 30-day caching terms. */
+   well inside Mapbox's 30-day caching terms.
+   hi (2026-11-19): the cause is CONVICTED, and it is not in this
+   file or in the page. Served exactly as production and read at
+   the wire under Playwright's WebKit (hidden_files/hi-check.py),
+   EVERY client path sends only the bare ORIGIN as the Referer
+   for cross-origin Mapbox requests — tile <img> (IDL property or
+   content attribute), plain <img> under the meta, page fetch
+   with an explicit full-URL referrer, and worker-constructed
+   fetch with an explicit referrer (hf's mechanism) — and Mapbox
+   answers 403 to each, while Chromium sends the full URL and
+   answers 200 through the same relay. WebKit trims the
+   cross-origin Referer to the origin no matter what the page
+   declares, so NO client-side mechanism can present the full
+   app path this token's restriction demands; a page-context
+   fetch layer was measured (explicit referrer, trimmed just the
+   same) and deliberately NOT built. The remaining cure sits on
+   the token itself (Mapbox console: admit the bare origin the
+   browsers actually send). Until then the bypass above stands —
+   it is correct in every engine that honors the page's policy —
+   and the tile machinery for the other hosts is unchanged.
+   hi amendment (2026-11-19, later): the cure LANDED. The token's
+   restriction now admits the bare origin (console change, Tanner,
+   2026-11-19 ~09:07 CT — verified at the source with the origin
+   Referer and on his phone: the map paints). In the same build,
+   Esri leaves the app entirely on Tanner's order: World_Imagery,
+   World_Street_Map and the Reference overlays are gone from
+   js/app.js, replaced by satellite-streets-v12 (aerial, labels
+   baked in), streets-v12 and outdoors-v12 on this same token —
+   all api.mapbox.com, so all ride the bypass above. Accordingly
+   the Esri host, the OpenTopoMap host and the long-dead CARTO
+   host leave TILE_HOSTS below (their names are deliberately not
+   written here — the shipped files carry zero references to
+   them now); the USGS host (NAIP) stays and keeps this cache. */
 
 /* gy: the tile fetch, shared by the cache-miss and expired paths.
    A fresh Mapbox tile is timestamped in the meta cache as it lands
