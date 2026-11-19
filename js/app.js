@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-11-18he';
+var APP_VERSION = 'beta 0.1 · build 2026-11-18gy';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -2265,8 +2265,26 @@ function initMap() {
   map = L.map('map', { zoomControl: false, attributionControl: true, maxZoom: 22 }).setView([39.5, -98.35], 4);
   var street = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}',
     { maxZoom: 22, maxNativeZoom: 19, attribution: '© Esri, HERE, Garmin, © OpenStreetMap contributors' });
+  /* Q10 / gy (2026-11-18): Mapbox Satellite is the default aerial. The
+     provider comparison (research_notes/map-provider-comparison-20261118)
+     found it the freshest deep-zoom rural imagery feeding Leaflet, and
+     its terms allow the app's on-device tile cache capped at 30 days —
+     sw.js enforces that cap for this host. The token is a PUBLIC token,
+     URL-restricted to the app's own origins; it is meant to ship here.
+     Native handling matches the Esri aerial's: real tiles to z19,
+     Leaflet upscales to the z22 map cap. */
+  var MAPBOX_TOKEN = 'pk.eyJ1Ijoib3Bvc3N1bWZvb3RhcHAiLCJhIjoiY213bXhmaThzMDRndjMwcGxmOXpsNjUwOCJ9.v0VzgWCuGzscCePZmw2AjQ';
+  var mapboxSat = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/satellite-v9/tiles/256/{z}/{x}/{y}?access_token=' + MAPBOX_TOKEN,
+    { maxZoom: 22, maxNativeZoom: 19, attribution: 'Imagery © Mapbox © OpenStreetMap © Maxar' });
   var satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
     { maxZoom: 22, maxNativeZoom: 19, attribution: 'Imagery © Esri' });
+  /* gy: second fallback — USDA NAIP (public domain), served as standard
+     tiles by the USGS National Map's USGSImageryOnly cache. (USDA's own
+     FPAC ImageServer exposes no XYZ tile cache — its metadata calls it a
+     test service — and the APFO endpoint does not answer.) Native NAIP
+     detail ends near z18; past that Leaflet upscales, same as Esri. */
+  var naip = L.tileLayer('https://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryOnly/MapServer/tile/{z}/{y}/{x}',
+    { maxZoom: 22, maxNativeZoom: 18, attribution: 'Imagery © USDA NAIP via USGS' });
   var topo = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
     { maxZoom: 22, maxNativeZoom: 17, attribution: '© OpenTopoMap © OpenStreetMap contributors' });
   /* Esri reference overlays: roads + place labels, drawn over imagery/topo */
@@ -2277,9 +2295,11 @@ function initMap() {
   var roads = esriRef('Reference/World_Transportation');
   var labels = esriRef('Reference/World_Boundaries_and_Places');
   var streetL = L.layerGroup([street]);
-  var satL = L.layerGroup([satellite, labels, roads]);
+  var mbSatL = L.layerGroup([mapboxSat, labels, roads]);
+  var esriSatL = L.layerGroup([satellite, labels, roads]);
+  var naipL = L.layerGroup([naip, labels, roads]);
   var topoL = L.layerGroup([topo, roads]);
-  satL.addTo(map);
+  mbSatL.addTo(map);
   /* Q74 (2026-10-01): Tanner — left-side stack is layers, zoom, weather, top
      to bottom. Leaflet stacks same-corner controls in add order. The weather
      chip joins as a real control so it rides the stack instead of floating. */
@@ -2293,12 +2313,17 @@ function initMap() {
      the button becomes an icon that changes per active view — satellite
      glyph on Satellite, road-map glyph on Street, mountain/topo glyph on
      Topo. Tap-cycle behavior unchanged. */
+  /* gy (2026-11-18): Q10 lands — the cycle grows the two fallback aerials.
+     Settled order: Mapbox Satellite (default) → Esri Satellite → NAIP →
+     Street; Topo keeps its seat at the end of the cycle. */
   var baseLayers = [
-    { name: 'Satellite', layer: satL, icon: '🛰️' },
+    { name: 'Mapbox Satellite', layer: mbSatL, icon: '🛰️' },
+    { name: 'Esri Satellite', layer: esriSatL, icon: '🌐' },
+    { name: 'NAIP', layer: naipL, icon: '🛩️' },
     { name: 'Street', layer: streetL, icon: '🗺️' },
     { name: 'Topo', layer: topoL, icon: '⛰️' }
   ];
-  var baseIdx = 0; /* satL is already on the map */
+  var baseIdx = 0; /* mbSatL is already on the map */
   var layerCtl = L.control({ position: 'bottomleft' });
   layerCtl.onAdd = function () {
     var el = L.DomUtil.create('div', 'leaflet-bar leaflet-control');
@@ -5743,6 +5768,7 @@ function shownLineSets() {
    line and filter it was made on. */
 var selMode = false;
 var selIds = {};
+var selHintSpent = false; /* gy: the entry hint lives until the session's first pick */
 var bulkSelCtx = null;
 function selCount() { return Object.keys(selIds).length; }
 function bulkFlowSets() {
@@ -5758,6 +5784,7 @@ function enterSelMode() {
   if (document.body.classList.contains('editor-lock') || document.body.classList.contains('placing') || measureMode) return;
   selMode = true;
   selIds = {};
+  selHintSpent = false; /* gy: a fresh session earns the entry hint again */
   document.body.classList.add('sel-mode');
   renderSelBar();
   renderBulkBar(); /* hides the Actions button — the bar replaces it */
@@ -5783,11 +5810,27 @@ function exitSelMode() {
 function renderSelBar() {
   var bar = $('sel-bar'); if (!bar) return;
   bar.classList.toggle('show', selMode);
-  if (!selMode) return;
+  var hint = $('sel-hint');
+  if (!selMode) { if (hint) hint.classList.remove('show'); return; }
   $('sel-bar-count').textContent = selCount() + ' selected';
   /* he: the bar carries no operation buttons anymore (they live in the
      Actions sheet, openSelActions) — the 0-picked disablement is applied
      there, at open time, where the rows are rendered. */
+  /* gy (2026-11-18, Tanner — "hint line until the first pick"): a slim
+     entry hint under the bar, shown only while nothing is picked AND no
+     pick has happened yet this session — the first pick (pin, picker,
+     Select all shown — all of them land here through renderSelBar)
+     retires it for the session, and Clearing back to zero does NOT
+     resurrect it. The hint is a flex sibling like the bar, so a flip
+     re-measures the map (the B13 lesson, same as the bar itself). */
+  if (hint) {
+    if (selCount() > 0) selHintSpent = true;
+    var want = !selHintSpent && selCount() === 0;
+    if (want !== hint.classList.contains('show')) {
+      hint.classList.toggle('show', want);
+      if (map) map.invalidateSize();
+    }
+  }
 }
 function toggleSel(id) {
   if (selIds[id]) delete selIds[id]; else selIds[id] = true;
@@ -5886,6 +5929,12 @@ function renderPickList() {
 function openSelPickList() {
   pickExpandedStatus = null;
   renderPickList();
+  /* gy (2026-11-18, Tanner's field report on hd — "there is no 'OK'
+     button, you just have to X out"): the sheet carries a plain Done in
+     its footer. A pure close — the identical end state the X gives
+     (closeSheets): picks are already live in selIds, the mode persists.
+     The label is plain "Done" at all times (Tanner's final ruling). */
+  $('btn-pick-done').onclick = function () { closeSheets(); };
   openSheet('sheet-picklist');
 }
 /* he (2026-11-18, Tanner — the hd bar was "really busy"): the selection
