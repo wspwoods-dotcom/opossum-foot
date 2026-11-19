@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-11-18hd';
+var APP_VERSION = 'beta 0.1 · build 2026-11-18he';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -5540,6 +5540,20 @@ function jumpToSet(id) {
     if (window.Markers) Markers.render();
     afterShowToggle();
   }
+  /* he (2026-11-18, Tanner's field report on hd): an explicit jump takes
+     the wheel, exactly as a drag does (hookFollowDrag → pauseFollow).
+     While following, the follow watch (onFollowFix) and the Q234 guard
+     both re-pan to his fix whenever the dot sits past the deadband —
+     and a programmatic flyTo never fires dragstart, so the jump landed
+     on the set and the next fix (or the next 4 s guard tick) snapped
+     the map straight back to his position. Proven in the bench both
+     ways before this fix. Pausing keeps the watch running (the dot
+     stays live) and the crosshair tap resumes + re-centers, as with a
+     drag pause. A pending acquire is cancelled for the same reason:
+     its landing would setView to his fix and enter follow over the
+     jump he just asked for. */
+  if (locateState === 'following') pauseFollow();
+  else if (locateState === 'acquiring') { stopLocateWatch(); setLocateSearching(false); locateState = 'idle'; }
   closeSheets();
   if (map) map.flyTo([s.lat, s.lng], Math.max(map.getZoom(), 14), { duration: 0.8 });
 }
@@ -5695,6 +5709,17 @@ function bulkFilteredSets() {
   var lid = activeLineId();
   return ((Store.data && Store.data.sets) || []).filter(function (s) { return s.lineId === lid && normStatus(s.status) === st; });
 }
+/* he (2026-11-18): every set the Show filter is currently showing on the
+   active line — any status on. bulkFilteredSets() is the single-status
+   special case of this; the pill button's reachability (below) is
+   measured against this wider set. */
+function shownLineSets() {
+  var m = showModel();
+  var lid = activeLineId();
+  return ((Store.data && Store.data.sets) || []).filter(function (s) {
+    return s.lineId === lid && m[normStatus(s.status)] !== false;
+  });
+}
 /* gz (2026-11-18, Tanner): SET-SELECTION MODE. The Actions menu's bulk
    operations take everything the narrowed Show filter holds; Tanner's
    line doesn't sort that way — 12 dog-proof sets sharing one bait and one
@@ -5703,7 +5728,10 @@ function bulkFilteredSets() {
    enters this mode: tap pins to pick (tap again to unpick; a stack opens
    its list and each row toggles), the selection bar counts live and
    carries the same three bulk operations retargeted at the selection,
-   plus Select all shown / Clear / Done. Session state only — nothing is
+   plus Select all shown / Clear / Done. (he, 2026-11-18: the bar itself
+   was slimmed to one row — count, Pick from list, Actions, Done — and
+   the five operations re-homed into the Actions sheet; see
+   openSelActions.) Session state only — nothing is
    persisted, no stored keys, no data-model change. While a bulk flow
    launched from the bar is open, bulkSelCtx freezes the picked ids so
    every step of the flow (picker, confirm, apply) aims at the same sets;
@@ -5756,13 +5784,10 @@ function renderSelBar() {
   var bar = $('sel-bar'); if (!bar) return;
   bar.classList.toggle('show', selMode);
   if (!selMode) return;
-  var n = selCount();
-  $('sel-bar-count').textContent = n + ' selected';
-  /* With nothing picked, the three operations have no target — disabled,
-     never aimed at the whole filter by accident. */
-  ['btn-sel-status', 'btn-sel-edit', 'btn-sel-delete'].forEach(function (id) {
-    var b = $(id); if (b) b.disabled = n === 0;
-  });
+  $('sel-bar-count').textContent = selCount() + ' selected';
+  /* he: the bar carries no operation buttons anymore (they live in the
+     Actions sheet, openSelActions) — the 0-picked disablement is applied
+     there, at open time, where the rows are rendered. */
 }
 function toggleSel(id) {
   if (selIds[id]) delete selIds[id]; else selIds[id] = true;
@@ -5863,23 +5888,53 @@ function openSelPickList() {
   renderPickList();
   openSheet('sheet-picklist');
 }
+/* he (2026-11-18, Tanner — the hd bar was "really busy"): the selection
+   bar is slimmed to one row — the count, Pick from list, Actions, Done —
+   and the five operations move into an Actions sheet wearing the same
+   standard sheet treatment as the bulk Actions menu (gx). A re-homing,
+   not a behavior change: every row runs the identical handler the bar
+   button ran (the three bulk flows through selLaunch, Select all shown
+   and Clear through the two functions below), and the three bulk rows
+   render disabled at 0 picked, exactly as the bar disabled them. */
+function selSelectAllShown() {
+  /* Everything the current Show filter is showing on this line — the
+     same predicate refreshMarkers paints by. */
+  showModel();
+  activeSets().forEach(function (s) { if (mapStatusFilter[normStatus(s.status)]) selIds[s.id] = true; });
+  refreshMarkers();
+  renderSelBar();
+}
+function selClearSelection() {
+  selIds = {};
+  refreshMarkers();
+  renderSelBar();
+}
+function openSelActions() {
+  if (!selMode) return;
+  var n = selCount();
+  var dis = n === 0 ? ' disabled' : '';
+  showModal('<h3>' + n + ' selected</h3>' +
+    '<div class="sheet-actions">' +
+    '<button type="button" class="btn-secondary" id="sa-status"' + dis + '>Change status</button>' +
+    '<button type="button" class="btn-secondary" id="sa-edit"' + dis + '>Edit all</button>' +
+    '<button type="button" class="btn-danger" id="sa-delete"' + dis + '>Delete all</button>' +
+    '<button type="button" class="btn-secondary" id="sa-all">Select all shown</button>' +
+    '<button type="button" class="btn-secondary" id="sa-clear">Clear</button></div>' +
+    '<div class="btn-row" style="margin-top:14px"><button class="btn-secondary" id="m-cancel" type="button">Cancel</button></div>');
+  $('modal').classList.add('sheet-dress'); /* gx: standard sheet dress for the bulk family */
+  $('m-cancel').onclick = function () { closeModal(); };
+  $('sa-status').onclick = function () { closeModal(); selLaunch(openBulkStatusPicker); };
+  $('sa-edit').onclick = function () { closeModal(); selLaunch(openBulkEdit); };
+  $('sa-delete').onclick = function () { closeModal(); selLaunch(openBulkDeleteConfirm); };
+  $('sa-all').onclick = function () { closeModal(); selSelectAllShown(); };
+  $('sa-clear').onclick = function () { closeModal(); selClearSelection(); };
+}
 function wireSelBar() {
   var bar = $('sel-bar');
   if (!bar || bar._wired) return;
   bar._wired = true;
   $('btn-sel-picklist').onclick = function () { openSelPickList(); };
-  $('btn-sel-status').onclick = function () { selLaunch(openBulkStatusPicker); };
-  $('btn-sel-edit').onclick = function () { selLaunch(openBulkEdit); };
-  $('btn-sel-delete').onclick = function () { selLaunch(openBulkDeleteConfirm); };
-  $('btn-sel-all').onclick = function () {
-    /* Everything the current Show filter is showing on this line — the
-       same predicate refreshMarkers paints by. */
-    showModel();
-    activeSets().forEach(function (s) { if (mapStatusFilter[normStatus(s.status)]) selIds[s.id] = true; });
-    refreshMarkers();
-    renderSelBar();
-  };
-  $('btn-sel-clear').onclick = function () { selIds = {}; refreshMarkers(); renderSelBar(); };
+  $('btn-sel-actions').onclick = function () { openSelActions(); };
   $('btn-sel-done').onclick = function () { exitSelMode(); };
 }
 /* Q232 (2026-11-06): the bulk bar is gone — the control lives in the Show
@@ -5890,7 +5945,17 @@ function wireSelBar() {
    needs one status. The count itself lives in renderShowButton, refreshed
    here and on every marker refresh. bulkSelected is vestigial — the bulk
    actions reset it after they run, but nothing reads it for the label/flow
-   anymore. */
+   anymore.
+   he (2026-11-18, Tanner's field report on hd — "my button on the top is
+   gone", pill reading "Active 34 · Pulled 23"): gz moved selection mode's
+   only door INTO this button's menu, so fi's hide rule stranded it — with
+   2+ statuses on there was no way into Select sets / Pick from list at
+   all. The button now shows whenever at least one status with sets is
+   showing on the active line; with 2+ on, its menu offers the Select sets
+   door only (openBulkActions) — the classic bulk ops still aim at one
+   status, and there is still no multi-status Select all (fi's intent).
+   Hidden only when nothing is showing, and while selection mode owns the
+   bar (gz, below). */
 function renderBulkBar() {
   var btn = $('btn-bulk');
   if (!btn) return;
@@ -5898,8 +5963,8 @@ function renderBulkBar() {
      rests — the selection bar is the bulk control until Done. */
   if (selMode) { btn.hidden = true; renderShowButton(); return; }
   var st = bulkFilterStatus();
-  var sets = bulkFilteredSets();
-  if (!st || !sets.length) {
+  var sets = st ? bulkFilteredSets() : shownLineSets();
+  if (!sets.length) {
     btn.hidden = true;
     bulkSelected = false;
   } else {
@@ -5913,8 +5978,24 @@ function renderBulkBar() {
 function openBulkActions() {
   bulkSelCtx = null; /* gz: the classic menu always aims at the filter */
   var st = bulkFilterStatus();
+  if (!st) {
+    /* he: 2+ statuses on — the classic bulk ops aim at ONE status, so
+       this menu offers only the Select sets door (gz put the mode's
+       entrance in this menu; fi's hide rule had stranded it behind the
+       hidden button). No multi-status Select all, no bulk ops. */
+    var shown = shownLineSets();
+    if (!shown.length) { renderBulkBar(); return; }
+    showModal('<h3>' + shown.length + (shown.length === 1 ? ' set' : ' sets') + ' showing</h3>' +
+      '<div class="sheet-actions">' +
+      '<button type="button" class="btn-secondary" id="ba-select">Select sets</button></div>' +
+      '<div class="btn-row" style="margin-top:14px"><button class="btn-secondary" id="m-cancel" type="button">Cancel</button></div>');
+    $('modal').classList.add('sheet-dress'); /* gx: standard sheet dress for the bulk family */
+    $('m-cancel').onclick = function () { closeModal(); };
+    $('ba-select').onclick = function () { closeModal(); enterSelMode(); };
+    return;
+  }
   var sets = bulkFilteredSets();
-  if (!st || !sets.length) { renderBulkBar(); return; }
+  if (!sets.length) { renderBulkBar(); return; }
   showModal('<h3>' + sets.length + ' sets selected</h3>' +
     '<div class="sheet-actions">' +
     '<button type="button" class="btn-secondary" id="ba-status">Change status</button>' +
