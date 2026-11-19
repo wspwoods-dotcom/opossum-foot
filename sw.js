@@ -4,7 +4,7 @@
  * No user data ever passes through here — sets/catches live in
  * localStorage/IndexedDB on the device only.
  */
-var SHELL_CACHE = 'opossum-foot-shell-v161';
+var SHELL_CACHE = 'opossum-foot-shell-v162';
 var TILE_CACHE = 'opossum-foot-tiles-v1';
 var TILE_META_CACHE = 'opossum-foot-tile-meta-v1';
 var MAX_TILES = 2000;
@@ -143,29 +143,35 @@ function trimTiles() {
   });
 }
 
-/* hf (2026-11-18): the Mapbox token's URL restriction is registered
-   with the full app path and Mapbox prefix-matches the request's
-   Referer against it — but browsers send only the bare ORIGIN as the
-   Referer for cross-origin tile images under the default referrer
-   policy, so the phone's tile requests were refused (403) and the
-   aerial painted black (gy field report, Tanner's phone: labels and
-   pins over a black field). The worker therefore fetches Mapbox
-   tiles itself, presenting the app's full URL as the referrer and
-   sending it in full, so the restriction passes no matter what
-   referer the page's image request carried. Verified against
+/* The Mapbox referrer story, in full. The token's URL restriction is
+   registered with the full app path and Mapbox prefix-matches the
+   request's Referer against it — but browsers send only the bare
+   ORIGIN as the Referer for cross-origin tile images under the
+   default referrer policy, so the phone's tile requests were refused
+   (403) and the aerial painted black (gy field report, Tanner's
+   phone: labels and pins over a black field). Verified against
    Mapbox's live door: full-path Referer → 200 image/jpeg,
-   origin-only → 403, none → 403. Other hosts are fetched untouched. */
-var MAPBOX_REFERRER = 'https://wspwoods-dotcom.github.io/opossum-foot/';
+   origin-only → 403, none → 403.
+   hf (2026-11-18) had this worker fetch Mapbox tiles itself,
+   constructing each fetch with an explicit referrer. That passed the
+   Chromium bench (200s, real pixels) and FAILED in the field —
+   Tanner's iPhone, 2026-11-18 22:17 and again 2026-11-19 06:52,
+   still black: WebKit's handling of referrer/referrerPolicy on
+   worker-constructed fetches does not match Chromium's. The
+   constructed fetch is therefore removed from the chain.
+   hg (2026-11-19): the PAGE's own tile requests carry the full
+   referer — index.html sets the document policy (<meta
+   name="referrer" content="unsafe-url">) and the Mapbox layer in
+   js/app.js carries the element-level policy — and this worker is a
+   pure pass-through: fetch(req) preserves the page request's
+   referrer exactly as the browser computed it. */
 
 /* gy: the tile fetch, shared by the miss and expired-Mapbox paths.
-   A fresh Mapbox tile is timestamped in the meta cache as it lands.
-   hf: the Mapbox branch presents MAPBOX_REFERRER (see above); the
-   TTL stamping below is unchanged. */
+   A fresh Mapbox tile is timestamped in the meta cache as it lands
+   (the 30-day cap above). The fetch itself is a plain pass-through
+   of the page's request (hg — see the note above). */
 function fetchTile(cache, req, url) {
-  var net = isMapboxTile(url)
-    ? fetch(url, { referrer: MAPBOX_REFERRER, referrerPolicy: 'unsafe-url' })
-    : fetch(req);
-  return net.then(function (res) {
+  return fetch(req).then(function (res) {
     if (res && res.ok) {
       cache.put(req, res.clone());
       if (isMapboxTile(url)) {
