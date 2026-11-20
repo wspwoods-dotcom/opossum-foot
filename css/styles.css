@@ -159,6 +159,16 @@ button, .btn {
    button renders capped automatically; title case can't sneak through again. */
 .regs-link { text-transform: uppercase; }
 .regs-link .dim { color: var(--accent-ink); opacity: 0.75; font-weight: 600; }
+/* hk (2026-11-19, Tanner): the warden link (Report a Violation) leaves
+   the yellow family — a solid rust-red, the stronger form of the
+   Seasons disclaimer's tint (#46221a, at #seasons-disclaimer), with
+   cream text. COLOR
+   ONLY: it keeps the .regs-link geometry it shares with the Official
+   Regulations link, and it stays a plain external link — it has no
+   menu or panel, so there is no bespoke menu to align. Scoped by id;
+   the regulations link keeps the yellow. */
+#seasons-warden { background: #6e2f28; color: #f5cf7a; }
+#seasons-warden .dim { color: #f5cf7a; }
 .btn-danger { background: #3a1f1b; color: #f0a49c; border: 1px solid #6e2f28; }
 .btn-small { min-height: 44px; font-size: 15px; padding: 8px 14px; width: auto; }
 button:disabled { opacity: .45; }
@@ -570,9 +580,12 @@ body.route-locked #tabbar { pointer-events: none; opacity: .35; }
    one (Q119); the chevron pins right so the label stays truly centered, and
    the opened body drops as a dark card below the gold button. Scoped to
    #seasons-rules so sheet collapsibles are untouched.
-   gw (2026-11-18): the scope extends to #seasons-gap — see the note below. */
-#seasons-rules .card.setsec, #seasons-gap .card.setsec { background: none; border: none; padding: 0; margin: 12px 0; }
-#seasons-rules .setsec-head, #seasons-gap .setsec-head {
+   gw (2026-11-18): the scope extends to #seasons-gap — see the note below.
+   hk (2026-11-19): the scope extends to #seasons-deadlines — Deadlines
+   & Permits moved in from Paperwork and takes the identical official
+   treatment, so all three Seasons expanders match element for element. */
+#seasons-rules .card.setsec, #seasons-gap .card.setsec, #seasons-deadlines .card.setsec { background: none; border: none; padding: 0; margin: 12px 0; }
+#seasons-rules .setsec-head, #seasons-gap .setsec-head, #seasons-deadlines .setsec-head {
   /* gw scope 5: the yellow color treatment stays (scope 1); the DIMENSIONS
      join the app-wide bar standard — 19px title, 51px single-line bar.
      gz (2026-11-18): the gap head's long title ("{State} — Tags,
@@ -586,12 +599,12 @@ body.route-locked #tabbar { pointer-events: none; opacity: .35; }
   background: var(--accent); color: var(--accent-ink); border: none; border-radius: var(--radius);
   font-size: 19px; font-weight: 700; text-transform: uppercase; text-align: center; cursor: pointer;
 }
-#seasons-rules .setsec-chev, #seasons-gap .setsec-chev {
+#seasons-rules .setsec-chev, #seasons-gap .setsec-chev, #seasons-deadlines .setsec-chev {
   position: absolute; right: 16px; top: 50%; transform: translateY(-50%);
   color: var(--accent-ink); font-size: 18.5px; line-height: 1; transition: transform .18s ease;
 }
-#seasons-rules .setsec.open .setsec-chev, #seasons-gap .setsec.open .setsec-chev { transform: translateY(-50%) rotate(90deg); }
-#seasons-rules .setsec-body, #seasons-gap .setsec-body {
+#seasons-rules .setsec.open .setsec-chev, #seasons-gap .setsec.open .setsec-chev, #seasons-deadlines .setsec.open .setsec-chev { transform: translateY(-50%) rotate(90deg); }
+#seasons-rules .setsec-body, #seasons-gap .setsec-body, #seasons-deadlines .setsec-body {
   background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
   margin-top: 8px; padding: 14px;
 }
@@ -604,7 +617,10 @@ body.route-locked #tabbar { pointer-events: none; opacity: .35; }
    (the scoped rules above now cover #seasons-gap too, so the two panels
    match element for element by construction). In PAPERWORK, "Deadlines
    & Permits" keeps gv's standard green Paperwork treatment — that
-   instruction stands untouched. The .regs-card class stays gone. */
+   instruction stands untouched. The .regs-card class stays gone.
+   hk (2026-11-19, Tanner) supersedes that last point: Deadlines &
+   Permits MOVED to Seasons and joins the official family above, so
+   Paperwork carries no deadlines section at all. */
 /* Q99 (2026-10-01): the notes/memos/photos collapsible on the set form, log
    form, and set detail — a divider sets it off from the fields above. */
 .sheet .setsec { border-top: 1px solid var(--line); margin-top: 10px; }
@@ -690,6 +706,15 @@ body.route-locked #tabbar { pointer-events: none; opacity: .35; }
 .form-error { display: none; color: #f0a49c; font-weight: 700; font-size: 15px; margin: 10px 0 2px; }
 .form-error.show { display: block; }
 .warnbox .wb-title { font-weight: 800; margin-bottom: 4px; }
+/* hk (2026-11-19, Tanner): the Seasons disclaimer's box wears a deep
+   rust-red tint — the same darkness as the warnbox brown it replaces,
+   NOT a bright alarm red; its cream/gold text is unchanged. Scoped by
+   id to the Seasons box alone: .warnbox is shared (the Log a Catch
+   cautions, the set form's bait warning, Scorecard's Unspecified box)
+   and those keep the brown. The disclaimer box is one element whose
+   text renderSeasons swaps per state, so this one rule tints it for
+   every state. */
+#seasons-disclaimer { background: #46221a; border-color: #743c2c; }
 /* Q97 (2026-10-01): the bait-rule head is a standalone collapsible row, not
    inside a .setsec — slim, amber, chevron rotates on expand.
    Q160 (2026-10-06): Tanner — the rule box showed empty on his phone. Root
