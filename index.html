@@ -198,10 +198,11 @@
     <div class="pane-head"><h2 id="seasons-title">Season Reminders</h2><p id="seasons-sub"></p></div>
     <div class="scroll">
       <div class="warnbox" id="seasons-disclaimer"></div>
-      <a id="seasons-regs" class="regs-link" target="_blank" rel="noopener" hidden></a>
       <a id="seasons-warden" class="regs-link" target="_blank" rel="noopener" hidden></a>
+      <a id="seasons-regs" class="regs-link" target="_blank" rel="noopener" hidden></a>
       <div id="seasons-rules" hidden></div>
       <div id="seasons-gap" hidden></div>
+      <div id="seasons-deadlines" hidden></div>
       <input type="search" id="seasons-search" placeholder="Search species…" aria-label="Search species">
       <div style="height:10px"></div>
       <div id="seasons-list"></div>
@@ -255,16 +256,11 @@
           <div id="paperwork-mileage-lines"></div>
         </div>
       </div>
-      <!-- gn (2026-11-17): state deadlines card — pelt sealing, harvest
-           reporting, and sell-by deadlines for the active line's state,
-           from the gap-regulation research. Renders only when the state
-           has entries (renderPaperworkDeadlines). -->
-      <div class="card setsec" id="setsec-deadlines" style="display:none">
-        <button type="button" class="setsec-head" id="setsec-deadlines-head" data-sec="setsec-deadlines" aria-expanded="false"><span id="setsec-deadlines-title">State Deadlines</span><span class="setsec-chev" aria-hidden="true">›</span></button>
-        <div class="setsec-body" id="setsec-deadlines-body" hidden>
-          <div id="paperwork-deadlines"></div>
-        </div>
-      </div>
+      <!-- hk (2026-11-19, Tanner): the gn state-deadlines card left
+           Paperwork — Deadlines & Permits stands on the Seasons tab
+           now, an official item under the Tags card
+           (renderSeasonsDeadlines). Paperwork keeps License Wallet,
+           My Tags, the Landowner Notebook, and Route and Mileage. -->
     </div>
   </div>
 
@@ -630,10 +626,15 @@
          stays live on every tap, the X and the scrim keep working too.
          hj (2026-11-19): Clear joins the foot stack, same size, above
          Done — it empties the picks and the list re-renders in place;
-         the sheet stays open and Done stays plain "Done". -->
+         the sheet stays open and Done stays plain "Done".
+         hk (2026-11-19): the stack becomes one row — Clear left, Done
+         right, the house .btn-row — handing the second row's height
+         back to the list. Same buttons, same order, same actions. -->
     <div class="sheet-actions">
-      <button class="btn-secondary" id="btn-pick-clear" type="button">Clear</button>
-      <button class="btn-primary" id="btn-pick-done" type="button">Done</button>
+      <div class="btn-row">
+        <button class="btn-secondary" id="btn-pick-clear" type="button">Clear</button>
+        <button class="btn-primary" id="btn-pick-done" type="button">Done</button>
+      </div>
     </div>
   </div>
 
