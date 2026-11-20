@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-11-20hl';
+var APP_VERSION = 'beta 0.1 · build 2026-11-20hm';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -3839,6 +3839,20 @@ function saveSetForm() {
       ns.weather = w; Store.save();
       if (typeof detailSetId !== 'undefined' && detailSetId === ns.id) openSetDetail(ns.id);
     });
+    /* hm (2026-11-20, Tanner's word — the he follow-up he flagged on
+       2026-11-18 and approved today): the save fly-to takes the wheel
+       exactly as a Show-list jump does (jumpToSet, he). While following,
+       the follow watch and the Q234 guard would drag the view back to
+       his fix on the next fix/tick, snapping off the set he just saved;
+       a programmatic flyTo never fires dragstart, so nothing paused it.
+       Pause follow through the same pauseFollow() the jump and a drag
+       use — the watch keeps running, the dot stays live, the crosshair
+       tap resumes. A pending acquire is cancelled for the jump's reason:
+       its landing would setView to his fix and enter follow over the
+       set he just saved. The save flow, destination, and zoom are
+       unchanged — only the follow interaction. */
+    if (locateState === 'following') pauseFollow();
+    else if (locateState === 'acquiring') { stopLocateWatch(); setLocateSearching(false); locateState = 'idle'; }
     if (map) map.flyTo([ns.lat, ns.lng], Math.max(map.getZoom(), 14), { duration: 0.8 });
   }
 }
@@ -7815,7 +7829,7 @@ function fillTripThumbs(box) {
           item.className = 'lic-item';
           var img = document.createElement('img');
           img.src = photoURL(p);
-          img.alt = p.kind === 'map' ? 'Road directions screenshot' : 'Odometer photo';
+          img.alt = p.kind === 'map' ? 'Road directions screenshot' : (p.kind === 'note' ? 'Note photo' : 'Odometer photo');
           /* dg: the trip box opens the edit form — photo taps must not bubble. */
           img.onclick = function (ev) { ev.stopPropagation(); openFullPhoto(p.blob); };
           var del = document.createElement('button');
@@ -8720,7 +8734,7 @@ function buildMediaEntries(photos, memos) {
         lo ? lo.lineId : firstLineId, p, p.blob, '');
     } else if (p.tripId) {
       var tr = tripById(p.tripId);
-      add('Trip Photos', 'Trip ' + (tr ? fmtDate(tr.date) : '') + (p.kind === 'map' ? ' — Directions' : ' — Odometer'),
+      add('Trip Photos', 'Trip ' + (tr ? fmtDate(tr.date) : '') + (p.kind === 'map' ? ' — Directions' : (p.kind === 'note' ? ' — Note photo' : ' — Odometer')),
         tr ? tr.lineId : firstLineId, p, p.blob, '');
     } else if (p.logId) {
       var lg = logById(p.logId);
@@ -9059,7 +9073,7 @@ function galleryPhotoLabel(p) {
   }
   if (p.tripId) {
     var tr = tripById(p.tripId);
-    return { title: 'Trip ' + (tr ? fmtDate(tr.date) : ''), sub: p.kind === 'map' ? 'Directions' : 'Odometer', lineId: tr ? tr.lineId : p.lineId };
+    return { title: 'Trip ' + (tr ? fmtDate(tr.date) : ''), sub: p.kind === 'map' ? 'Directions' : (p.kind === 'note' ? 'Note photo' : 'Odometer'), lineId: tr ? tr.lineId : p.lineId };
   }
   if (p.logId) {
     var lg = null;
@@ -10996,6 +11010,21 @@ function showTripModal(lineId, tripId) {
      him calculate right there. Typed readings are required; a photo (or failed
      photo) never blocks saving. */
   var startPhoto = null, endPhoto = null, mapPhoto = null;
+  var notePhotos = [];
+  /* hm (2026-11-20, Q195): notes parity — Tanner ruled note, voice, and
+     photo in ALL notes sections, and the trip editor's Notes field was
+     the one gap. It gains the set/log pattern: a Voice → notes button
+     (hidden when voice is off; on the installed iPhone app it gives way
+     to the keyboard-mic tip, the ga rule) and an Add photo button whose
+     photos classify as trip photos (kind 'note'). */
+  var tripVoiceBtn = '', tripVoiceTip = '';
+  if (Store.data.voiceOn !== false) {
+    if (isIOSPWA()) {
+      tripVoiceTip = '<p class="dim" id="voice-tripnotes-tip" style="margin:8px 0 0">Tap the <svg viewBox="0 0 24 24" width="12" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true" style="vertical-align:-3px"><rect x="9" y="2.5" width="6" height="11" rx="3"/><path d="M5.5 10.5v1a6.5 6.5 0 0 0 13 0v-1"/><path d="M12 18v3"/></svg> key on your keyboard to dictate a note.</p>';
+    } else {
+      tripVoiceBtn = '<button class="btn-small btn-secondary" id="m-voice-tripnotes" type="button"><img class="bi" src="assets/icons/mic.png" alt="">Voice → notes</button>';
+    }
+  }
   showModal(
     '<h3>' + (t ? 'Edit trip' : 'Log a trip') + '</h3>' +
     '<label class="field" for="m-trip-date">Date</label>' +
@@ -11019,6 +11048,13 @@ function showTripModal(lineId, tripId) {
     '<div class="lic-grid" id="m-trip-photos"></div>' +
     '<label class="field" for="m-trip-notes">Notes <span class="dim">(optional)</span></label>' +
     '<input type="text" id="m-trip-notes" maxlength="80" placeholder="e.g. River bottoms check" value="' + esc(t ? t.notes || '' : '') + '">' +
+    /* hm (Q195): the notes row — Voice → notes + Add photo, the same
+       pair the set and log notes sections carry. */
+    '<div class="btn-row" style="margin-top:8px">' + tripVoiceBtn +
+    '<button class="btn-small btn-secondary" id="m-note-photo" type="button"><img class="bi" src="assets/icons/camera.png" alt="">Add photo</button></div>' +
+    tripVoiceTip +
+    '<div class="voice-preview" id="voice-tripnotes-preview"></div>' +
+    '<div class="photo-strip" id="m-trip-note-photos" style="margin-top:8px"></div>' +
     '<input type="file" id="m-odo-photo-input" class="hidden-file" accept="image/*">' +
     '<div class="btn-row" style="margin-top:14px"><button class="btn-secondary" id="m-cancel" type="button">Cancel</button>' +
     '<button class="btn-primary" id="m-ok" type="button">' + (t ? 'Save' : 'Add trip') + '</button></div>' +
@@ -11044,6 +11080,31 @@ function showTripModal(lineId, tripId) {
   $('m-start-photo').onclick = function () { photoTarget = 'start'; $('m-odo-photo-input').click(); };
   $('m-end-photo').onclick = function () { photoTarget = 'end'; $('m-odo-photo-input').click(); };
   $('m-map-photo').onclick = function () { photoTarget = 'map'; $('m-odo-photo-input').click(); };
+  /* hm (Q195): the Notes photo button rides the same shared input. */
+  $('m-note-photo').onclick = function () { photoTarget = 'note'; $('m-odo-photo-input').click(); };
+  var tripVnBtn = $('m-voice-tripnotes');
+  if (tripVnBtn) tripVnBtn.onclick = function () {
+    var ta = $('m-trip-notes');
+    Voice.start($('voice-tripnotes-preview'), function (t2) {
+      ta.value = (ta.value ? ta.value.replace(/\s+$/, '') + ' ' : '') + t2;
+    });
+  };
+  /* Pending notes photos, thumbnailed in the strip under the Notes
+     field — the renderPendingLogPhotos pattern. Tap opens full-size. */
+  function renderTripNotePhotos() {
+    var box = $('m-trip-note-photos');
+    if (!box) return;
+    box.querySelectorAll('[data-pending-note]').forEach(function (el) { el.remove(); });
+    notePhotos.forEach(function (b) {
+      var img = document.createElement('img');
+      img.className = 'photo-thumb'; img.alt = 'Note photo';
+      img.setAttribute('data-pending-note', '1');
+      img.src = URL.createObjectURL(b);
+      img.title = 'Tap to enlarge';
+      img.onclick = function () { openFullPhoto(b); };
+      box.appendChild(img);
+    });
+  }
   /* Tanner 2026-10-07: attaching a photo pops a thumbnail right there, like
      everywhere else in the app — no "Photo attached." text getting shoved
      off the edge (that was also dragging the modal sideways). */
@@ -11069,6 +11130,7 @@ function showTripModal(lineId, tripId) {
         if (!blob) return;
         if (target === 'start') { startPhoto = blob; setPhotoThumb('m-start-photo-note', blob); }
         else if (target === 'map') { mapPhoto = blob; setPhotoThumb('m-map-photo-note', blob); }
+        else if (target === 'note') { notePhotos.push(blob); renderTripNotePhotos(); }
         else { endPhoto = blob; setPhotoThumb('m-end-photo-note', blob); }
       });
     } catch (e) { /* noop — saving the trip matters, the photo doesn't */ }
@@ -11083,6 +11145,16 @@ function showTripModal(lineId, tripId) {
         if (!p || p.tripId !== t.id || !p.blob) return;
         var img = document.createElement('img');
         img.src = photoURL(p);
+        /* hm (Q195): notes photos live in the Notes strip, not the
+           odometer/map grid above it — each photo in its own home. */
+        if (p.kind === 'note') {
+          var strip = $('m-trip-note-photos');
+          if (!strip) return;
+          img.className = 'photo-thumb'; img.alt = 'Note photo'; img.title = 'Tap to enlarge';
+          img.onclick = function () { openFullPhoto(p.blob); };
+          strip.appendChild(img);
+          return;
+        }
         img.alt = p.kind === 'map' ? 'Road directions screenshot' : 'Odometer photo';
         img.style.cssText = 'width:72px;height:72px;object-fit:cover;border-radius:8px;cursor:pointer;';
         img.onclick = function () { openFullPhoto(p.blob); };
@@ -11115,6 +11187,13 @@ function showTripModal(lineId, tripId) {
     if (endPhoto) IDB.put('photos', { id: uid('p'), tripId: rec.id, lineId: rec.lineId, kind: 'odo-end', blob: endPhoto, mime: endPhoto.type || 'image/jpeg', createdAt: Date.now() }).catch(function () {});
     /* The route-map screenshot rides along the same way (directions link-out scrapped 2026-10-07). */
     if (mapPhoto) IDB.put('photos', { id: uid('p'), tripId: rec.id, lineId: rec.lineId, kind: 'map', blob: mapPhoto, mime: mapPhoto.type || 'image/jpeg', createdAt: Date.now() }).catch(function () {});
+    /* hm (Q195): notes photos save with the trip too — the tripId is
+       what classifies them: they stay out of the License Wallet and
+       ride the trip's photo grid (Paperwork) and the media ZIP's
+       Trip Photos folder like every other trip photo. */
+    notePhotos.forEach(function (b) {
+      IDB.put('photos', { id: uid('p'), tripId: rec.id, lineId: rec.lineId, kind: 'note', blob: b, mime: b.type || 'image/jpeg', createdAt: Date.now() }).catch(function () {});
+    });
     closeModal(); switchTab('licenses');
     toast(t ? 'Trip updated.' : 'Trip logged.');
   };
