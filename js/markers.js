@@ -233,9 +233,14 @@ var Markers = (function () {
     var newFiles = formPhotoFiles;
     if (newFiles.length) {
       var mid = formCtx.editId;
+      /* hj (2026-11-19): the photo carries the owning marker's lineId,
+         stamped at write time from the parent record — line-less photo
+         records were the root of the License Wallet misfiling. */
+      var owner = data().filter(function (m) { return m.id === mid; })[0];
+      var mLineId = (owner && owner.lineId) || null;
       newFiles.forEach(function (file) {
         downscalePhoto(file, function (blob) {
-          IDB.put('photos', { id: uid('p'), markerId: mid, blob: blob, createdAt: Date.now() }).then(function () { renderFormPhotos(mid); });
+          IDB.put('photos', { id: uid('p'), markerId: mid, lineId: mLineId, blob: blob, createdAt: Date.now() }).then(function () { renderFormPhotos(mid); });
         });
       });
       formPhotoFiles = [];

@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-11-19hi';
+var APP_VERSION = 'beta 0.1 · build 2026-11-19hj';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -5723,7 +5723,13 @@ function renderMapStatusFilters() {
   if (bulkBtn && !bulkBtn._wired) {
     bulkBtn._wired = true;
     bulkBtn.onclick = function () {
-      openBulkActions(); /* Q237 (2026-11-07): one tap opens the menu — the Select-all step is gone */
+      /* hj (2026-11-19, Tanner): the button (renamed "Pick sets" — see
+         renderBulkBar) enters selection mode DIRECTLY. The menu that
+         used to intercept this tap (openBulkActions) is removed
+         entirely; the bulk operations live in the selection bar's
+         Actions sheet, aimed at the picked sets. */
+      bulkSelCtx = null; /* a fresh pick aims at no frozen bulk flow */
+      enterSelMode();
     };
   }
   wireSelBar(); /* gz: the selection bar's buttons, wired once */
@@ -5842,7 +5848,17 @@ function renderSelBar() {
   $('sel-bar-count').textContent = selCount() + ' selected';
   /* he: the bar carries no operation buttons anymore (they live in the
      Actions sheet, openSelActions) — the 0-picked disablement is applied
-     there, at open time, where the rows are rendered. */
+     there, at open time, where the rows are rendered.
+     hj (2026-11-19, Tanner — picking splits from acting): the
+     disablement moves onto the bar's Actions button itself. At 0
+     picked it is disabled — the house dress dims it (button:disabled)
+     and a tap opens nothing; the first pick by ANY door (pin tap,
+     list circle, per-status Select all, Select all shown) lands
+     through this render and lights it, the same moment the hint
+     reaches stage 2; back at 0 (Clear, or the last set unpicked) it
+     dims again. */
+  var ab = $('btn-sel-actions');
+  if (ab) ab.disabled = selCount() === 0;
   /* gy (2026-11-18, Tanner — "hint line until the first pick"): a slim
      entry hint under the bar. hf (same night, Tanner): the hint is now
      TWO stages. Stage 1 (nothing picked yet this session) reads
@@ -5924,7 +5940,20 @@ function renderPickList() {
     activeSets().forEach(function (s) { if (normStatus(s.status) === v) n++; });
     return ' <span class="show-count">' + n + (n === 1 ? ' set' : ' sets') + '</span>';
   };
-  host.innerHTML = STATUS_VALUES.map(function (v) {
+  /* hj (2026-11-19, Tanner): Select all shown rides at the TOP of this
+     sheet, above the status groups — it moved here from the Actions
+     sheet (picking lives with picking now; the Actions sheet only
+     acts). Its semantics are the old entry's exactly: selSelectAllShown
+     picks everything the Show filter is showing on this line, whatever
+     groups that spans. The row wears the group controls' dress; its
+     check fills when everything shown is already picked. */
+  showModel();
+  var shownSets = activeSets().filter(function (s) { return mapStatusFilter[normStatus(s.status)]; });
+  var shownPicked = shownSets.length > 0 && shownSets.every(function (s) { return !!selIds[s.id]; });
+  var topRow = '<button type="button" class="show-setname show-setname-pick show-pickall' + (shownPicked ? ' show-setname-sel' : '') + '" data-pick-allshown="1">' +
+    '<span class="show-setcheck">' + (shownPicked ? '✓' : '') + '</span>' +
+    '<span class="show-setname-label">Select all shown</span></button>';
+  host.innerHTML = topRow + STATUS_VALUES.map(function (v) {
     var c = pinSchemeById(pinSchemeId()).colors[v];
     var open = pickExpandedStatus === v;
     var row = '<div class="show-row"><span class="show-dot" style="background:' + c + '"></span>' +
@@ -5936,7 +5965,19 @@ function renderPickList() {
       if (!names.length) {
         row += '<div class="show-names"><span class="dim show-noname">No sets</span></div>';
       } else {
-        row += '<div class="show-names">' + names.map(function (s) {
+        /* hj (2026-11-19, Tanner): directly under the status header, a
+           Select all for the group — one tap picks every set the sheet
+           lists under the status; once the whole group is picked the
+           same control reads Clear all and lets just that group go.
+           It wears a setname row's dress and size; the picked dress
+           (gold tint + filled check) is the group's all-picked state,
+           the same signal a picked row gives. */
+        var allPicked = names.every(function (s) { return !!selIds[s.id]; });
+        row += '<div class="show-names">' +
+          '<button type="button" class="show-setname show-setname-pick show-pickall' + (allPicked ? ' show-setname-sel' : '') + '" data-pick-all="' + v + '">' +
+          '<span class="show-setcheck">' + (allPicked ? '✓' : '') + '</span>' +
+          '<span class="show-setname-label">' + (allPicked ? 'Clear all' : 'Select all') + '</span></button>' +
+          names.map(function (s) {
           var picked = !!selIds[s.id];
           return '<button type="button" class="show-setname show-setname-pick' + (picked ? ' show-setname-sel' : '') + '" data-pick-set="' + s.id + '">' +
             '<span class="show-setcheck">' + (picked ? '✓' : '') + '</span>' +
@@ -5959,6 +6000,36 @@ function renderPickList() {
       renderPickList();
     });
   });
+  host.querySelectorAll('[data-pick-all]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      togglePickGroup(this.getAttribute('data-pick-all'));
+      renderPickList();
+    });
+  });
+  host.querySelectorAll('[data-pick-allshown]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      selSelectAllShown();
+      renderPickList();
+    });
+  });
+}
+/* hj (2026-11-19, Tanner): the pick list's per-status Select all. It
+   writes the same selIds the name taps and pin taps write — only the
+   sets this sheet lists for the current line under that one status —
+   and lands through the same refreshMarkers + renderSelBar a single
+   toggle lands through, so the count, the pins' gold rings and the
+   two-stage hint move exactly as they do for manual picks. A group
+   only partly picked completes; a group fully picked clears, and
+   only that group. */
+function togglePickGroup(v) {
+  var names = showSetsFor(v);
+  if (!names.length) return;
+  var allPicked = names.every(function (s) { return !!selIds[s.id]; });
+  names.forEach(function (s) {
+    if (allPicked) delete selIds[s.id]; else selIds[s.id] = true;
+  });
+  refreshMarkers();
+  renderSelBar();
 }
 function openSelPickList() {
   pickExpandedStatus = null;
@@ -5969,6 +6040,11 @@ function openSelPickList() {
      (closeSheets): picks are already live in selIds, the mode persists.
      The label is plain "Done" at all times (Tanner's final ruling). */
   $('btn-pick-done').onclick = function () { closeSheets(); };
+  /* hj: Clear — the picking tool that moved out of the Actions sheet.
+     Empties every pick (selClearSelection lands through renderSelBar,
+     so the bar count falls and its Actions dims again) and the list
+     re-renders in place, marks gone; the sheet stays open. */
+  $('btn-pick-clear').onclick = function () { selClearSelection(); renderPickList(); };
   openSheet('sheet-picklist');
 }
 /* he (2026-11-18, Tanner — the hd bar was "really busy"): the selection
@@ -5978,7 +6054,13 @@ function openSelPickList() {
    not a behavior change: every row runs the identical handler the bar
    button ran (the three bulk flows through selLaunch, Select all shown
    and Clear through the two functions below), and the three bulk rows
-   render disabled at 0 picked, exactly as the bar disabled them. */
+   render disabled at 0 picked, exactly as the bar disabled them.
+   hj (2026-11-19, Tanner): the split is completed — Select all shown
+   and Clear LEAVE this sheet for the Pick sets sheet (they pick; this
+   sheet acts), leaving only Change status / Edit all / Delete all
+   over the Cancel row. The 0-picked disablement moved to the bar's
+   Actions button (renderSelBar), so the sheet can no longer open at
+   0 picked and its rows no longer need the disabled dress. */
 function selSelectAllShown() {
   /* Everything the current Show filter is showing on this line — the
      same predicate refreshMarkers paints by. */
@@ -5994,25 +6076,21 @@ function selClearSelection() {
 }
 function openSelActions() {
   if (!selMode) return;
+  if (selCount() === 0) return; /* hj: at 0 picked the bar button is inert; this is the same wall behind it */
   selHintDone = true; /* hf: opening Actions retires the hint for the session */
   renderSelBar();
   var n = selCount();
-  var dis = n === 0 ? ' disabled' : '';
   showModal('<h3>' + n + ' selected</h3>' +
     '<div class="sheet-actions">' +
-    '<button type="button" class="btn-secondary" id="sa-status"' + dis + '>Change status</button>' +
-    '<button type="button" class="btn-secondary" id="sa-edit"' + dis + '>Edit all</button>' +
-    '<button type="button" class="btn-danger" id="sa-delete"' + dis + '>Delete all</button>' +
-    '<button type="button" class="btn-secondary" id="sa-all">Select all shown</button>' +
-    '<button type="button" class="btn-secondary" id="sa-clear">Clear</button></div>' +
+    '<button type="button" class="btn-secondary" id="sa-status">Change status</button>' +
+    '<button type="button" class="btn-secondary" id="sa-edit">Edit all</button>' +
+    '<button type="button" class="btn-danger" id="sa-delete">Delete all</button></div>' +
     '<div class="btn-row" style="margin-top:14px"><button class="btn-secondary" id="m-cancel" type="button">Cancel</button></div>');
   $('modal').classList.add('sheet-dress'); /* gx: standard sheet dress for the bulk family */
   $('m-cancel').onclick = function () { closeModal(); };
   $('sa-status').onclick = function () { closeModal(); selLaunch(openBulkStatusPicker); };
   $('sa-edit').onclick = function () { closeModal(); selLaunch(openBulkEdit); };
   $('sa-delete').onclick = function () { closeModal(); selLaunch(openBulkDeleteConfirm); };
-  $('sa-all').onclick = function () { closeModal(); selSelectAllShown(); };
-  $('sa-clear').onclick = function () { closeModal(); selClearSelection(); };
 }
 function wireSelBar() {
   var bar = $('sel-bar');
@@ -6040,11 +6118,20 @@ function wireSelBar() {
    door only (openBulkActions) — the classic bulk ops still aim at one
    status, and there is still no multi-status Select all (fi's intent).
    Hidden only when nothing is showing, and while selection mode owns the
-   bar (gz, below). */
+   bar (gz, below).
+   hj (2026-11-19, Tanner): the button is renamed and its menu is gone.
+   It reads "Pick sets" now, and one tap enters selection mode
+   directly — no "N sets showing / Select sets / Cancel" prompt (the
+   2+ branch) and no classic bulk menu (the one-status branch) in
+   between. The three bulk operations live where he put them in he:
+   the selection bar's Actions sheet, aimed at the picked sets through
+   selLaunch ("Select all shown" there reproduces the old filter-wide
+   aim). "Actions" survives only on that bar button — the one the
+   two-stage hint names. */
 function renderBulkBar() {
   var btn = $('btn-bulk');
   if (!btn) return;
-  /* gz: while selection mode owns the bulk work, the Actions button
+  /* gz: while selection mode owns the bulk work, the Pick sets button
      rests — the selection bar is the bulk control until Done. */
   if (selMode) { btn.hidden = true; renderShowButton(); return; }
   var st = bulkFilterStatus();
@@ -6054,47 +6141,21 @@ function renderBulkBar() {
     bulkSelected = false;
   } else {
     btn.hidden = false;
-    btn.textContent = 'Actions'; /* Q237: the button reads Actions from the start — no Select-all step */
+    btn.textContent = 'Pick sets'; /* hj: renamed from Actions (Q237) — it is the picking door; the bar's Actions keeps the name alone */
   }
   renderShowButton();
 }
-/* Q232: the actions menu — what the second tap opens. Change status keeps
-   the Q229 picker + confirm; Edit all and Delete all are new (below). */
-function openBulkActions() {
-  bulkSelCtx = null; /* gz: the classic menu always aims at the filter */
-  var st = bulkFilterStatus();
-  if (!st) {
-    /* he: 2+ statuses on — the classic bulk ops aim at ONE status, so
-       this menu offers only the Select sets door (gz put the mode's
-       entrance in this menu; fi's hide rule had stranded it behind the
-       hidden button). No multi-status Select all, no bulk ops. */
-    var shown = shownLineSets();
-    if (!shown.length) { renderBulkBar(); return; }
-    showModal('<h3>' + shown.length + (shown.length === 1 ? ' set' : ' sets') + ' showing</h3>' +
-      '<div class="sheet-actions">' +
-      '<button type="button" class="btn-secondary" id="ba-select">Select sets</button></div>' +
-      '<div class="btn-row" style="margin-top:14px"><button class="btn-secondary" id="m-cancel" type="button">Cancel</button></div>');
-    $('modal').classList.add('sheet-dress'); /* gx: standard sheet dress for the bulk family */
-    $('m-cancel').onclick = function () { closeModal(); };
-    $('ba-select').onclick = function () { closeModal(); enterSelMode(); };
-    return;
-  }
-  var sets = bulkFilteredSets();
-  if (!sets.length) { renderBulkBar(); return; }
-  showModal('<h3>' + sets.length + ' sets selected</h3>' +
-    '<div class="sheet-actions">' +
-    '<button type="button" class="btn-secondary" id="ba-status">Change status</button>' +
-    '<button type="button" class="btn-secondary" id="ba-edit">Edit all</button>' +
-    '<button type="button" class="btn-secondary" id="ba-select">Select sets</button>' +
-    '<button type="button" class="btn-danger" id="ba-delete">Delete all</button></div>' +
-    '<div class="btn-row" style="margin-top:14px"><button class="btn-secondary" id="m-cancel" type="button">Cancel</button></div>');
-  $('modal').classList.add('sheet-dress'); /* gx: standard sheet dress for the bulk family */
-  $('m-cancel').onclick = function () { closeModal(); };
-  $('ba-status').onclick = function () { closeModal(); openBulkStatusPicker(); };
-  $('ba-edit').onclick = function () { closeModal(); openBulkEdit(); };
-  $('ba-select').onclick = function () { closeModal(); enterSelMode(); };
-  $('ba-delete').onclick = function () { closeModal(); openBulkDeleteConfirm(); };
-}
+/* hj (2026-11-19, Tanner): openBulkActions is REMOVED — the whole menu,
+   both branches. It was the intermediate prompt on the counts-bar
+   button's road: "N sets showing / Select sets / Cancel" with 2+
+   statuses on, and the classic bulk menu ("N sets selected": Change
+   status / Edit all / Select sets / Delete all) with one status on.
+   The button — renamed "Pick sets" — now enters selection mode
+   directly (see renderMapStatusFilters), and the three bulk
+   operations live in the selection bar's Actions sheet, aimed at the
+   picked sets through selLaunch. The flows themselves
+   (openBulkStatusPicker / openBulkEdit / openBulkDeleteConfirm,
+   below) are unchanged and still read bulkFlowSets(). */
 /* Q232: Edit all — one menu with ALL the shared fields, so the sets can all
    be changed to look the same in one pass. Options come from the app's own
    lists: set-type foundations (+ his remembered customs), all trap types
@@ -7607,7 +7668,13 @@ var licURLs = {};
        have no lineId and belong to the first line.
    Q52: landowner-notebook photos carry landownerId and never show here. */
 function isLicenseWalletPhoto(p, lid, firstId) {
-  if (!p || p.setId || p.logId || p.landownerId) return false;
+  /* hj (2026-11-19): tripId and markerId join the owner exclusions —
+     trip photos and sign/forage marker photos carry no lineId, so the
+     legacy fallback below routed them all into the FIRST line's
+     wallet. The wallet's taxonomy now matches the export and gallery
+     classifiers, which already test both fields. Display-side only:
+     no data is moved or rewritten. */
+  if (!p || p.setId || p.logId || p.landownerId || p.tripId || p.markerId) return false;
   return (p.lineId || firstId) === lid;
 }
 /* Tanner 2026-10-07: trips live on the Paperwork tab, not in a modal.
@@ -11020,11 +11087,14 @@ function showTripModal(lineId, tripId) {
       Store.data.trips.push(rec);
     }
     Store.save();
-    /* Q72: attach odometer photos if any — failures are swallowed, the trip is already saved. */
-    if (startPhoto) IDB.put('photos', { id: uid('p'), tripId: rec.id, kind: 'odo-start', blob: startPhoto, mime: startPhoto.type || 'image/jpeg', createdAt: Date.now() }).catch(function () {});
-    if (endPhoto) IDB.put('photos', { id: uid('p'), tripId: rec.id, kind: 'odo-end', blob: endPhoto, mime: endPhoto.type || 'image/jpeg', createdAt: Date.now() }).catch(function () {});
+    /* Q72: attach odometer photos if any — failures are swallowed, the trip is already saved.
+       hj (2026-11-19): each photo also carries the owning trip's lineId,
+       stamped at write time — line-less photo records were the root of
+       the License Wallet misfiling (see isLicenseWalletPhoto). */
+    if (startPhoto) IDB.put('photos', { id: uid('p'), tripId: rec.id, lineId: rec.lineId, kind: 'odo-start', blob: startPhoto, mime: startPhoto.type || 'image/jpeg', createdAt: Date.now() }).catch(function () {});
+    if (endPhoto) IDB.put('photos', { id: uid('p'), tripId: rec.id, lineId: rec.lineId, kind: 'odo-end', blob: endPhoto, mime: endPhoto.type || 'image/jpeg', createdAt: Date.now() }).catch(function () {});
     /* The route-map screenshot rides along the same way (directions link-out scrapped 2026-10-07). */
-    if (mapPhoto) IDB.put('photos', { id: uid('p'), tripId: rec.id, kind: 'map', blob: mapPhoto, mime: mapPhoto.type || 'image/jpeg', createdAt: Date.now() }).catch(function () {});
+    if (mapPhoto) IDB.put('photos', { id: uid('p'), tripId: rec.id, lineId: rec.lineId, kind: 'map', blob: mapPhoto, mime: mapPhoto.type || 'image/jpeg', createdAt: Date.now() }).catch(function () {});
     closeModal(); switchTab('licenses');
     toast(t ? 'Trip updated.' : 'Trip logged.');
   };
