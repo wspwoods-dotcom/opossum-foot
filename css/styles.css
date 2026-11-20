@@ -777,8 +777,13 @@ body.route-locked #tabbar { pointer-events: none; opacity: .35; }
    the landowner field tops a full-height pane card and never exhibited it.)
    hb (2026-11-18): the stuck bar now wears the Guide bar's solid footing
    (Q205: background var(--sheet)) — a proper header the results cannot
-   show through, instead of the bare field floating over the scroll. */
-#history-search, #seasons-search { position: sticky; top: 0; z-index: 6; background: var(--sheet); }
+   show through, instead of the bare field floating over the scroll.
+   hl (2026-11-20, Q244, Tanner): the brown footing comes OFF the fields
+   themselves — it was the one property breaking the field family. The
+   fields now compute to the standard input background (#10140c, fully
+   opaque, so the no-show-through purpose survives); in the Guide the
+   brown lives on a wrapper, never on the field. Nothing else changes. */
+#history-search, #seasons-search { position: sticky; top: 0; z-index: 6; }
 /* Q161 (2026-10-06): Tanner — a giant warnbox (e.g. the coyote county-rules
    alert in Log a Catch) made the sheet content taller than the sheet, and
    without min-height:0 the flex item refused to shrink, so the sheet never
@@ -927,7 +932,8 @@ body.route-locked #tabbar { pointer-events: none; opacity: .35; }
 .lic-item { position: relative; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--line); background: #000; aspect-ratio: 4/3; }
 .lic-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .lic-item button { position: absolute; top: 6px; right: 6px; width: 40px; height: 40px; min-height: 0; border-radius: 50%; background: rgba(0,0,0,.65); color: #fff; font-size: 18px; padding: 0; }
-.lic-link { position: absolute; left: 6px; bottom: 6px; background: rgba(0,0,0,.65); color: #fff; border-radius: 20px; padding: 4px 10px; font-size: 12px; pointer-events: none; }
+/* hl (2026-11-20, Q245): the .lic-link badge rule is gone with the
+   custom-link override it dressed. */
 
 /* ---------- memos / audio ---------- */
 .memo-card { padding: 8px 0; border-bottom: 1px solid var(--line); }
@@ -1411,14 +1417,28 @@ body.placing #route-back-chip { display: none; }
    and the gold button appears only when the filter is narrowed to one
    status. The old bottom bulk bar (.bulk-bar, Q229) is gone, and with it
    the bulk-on fab lift. */
-.show-pill { position: absolute; top: 8px; left: 50%; transform: translateX(-50%); z-index: 600; display: flex; align-items: center; gap: 10px; max-width: 92vw; background: rgba(18,22,14,.88); border: 3px solid #fff; border-radius: 999px; padding: 4px 8px 4px 16px; }
+.show-pill { position: absolute; top: 8px; left: 50%; transform: translateX(-50%); z-index: 600; display: flex; align-items: center; gap: 10px; width: max-content; max-width: 92vw; background: rgba(18,22,14,.88); border: 3px solid #fff; border-radius: 999px; padding: 4px 8px 4px 16px; }
 .show-btn { flex: 1 1 auto; min-width: 0; min-height: 0; background: none; border: none; padding: 0; font-size: 16px; font-weight: 700; color: #f5efdd; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 /* Q232 fix (2026-11-06): the label rides in a block span so a too-long label
    ellipsizes from the START — a bare <button> centers its text and clips
    both ends with no ellipsis, in Safari and in Chromium alike (Tanner's
    06:51 screenshot). The span shrink-to-fits and centers itself, so short
-   labels stay centered in the pill. */
-.show-label { display: block; width: fit-content; max-width: 100%; margin: 0 auto; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-align: left; }
+   labels stay centered in the pill.
+   hl (2026-11-20, Q242, Tanner): the ellipsis retires. The span now wraps —
+   each status is a .show-part that never breaks internally, so a list too
+   long for one line beside the Pick sets button folds BETWEEN statuses
+   into a second row and every toggled-on status reads whole (the same
+   two-row cure as build ec's status seg). One row whenever it fits,
+   exactly as before; rows center like the pill itself. Mechanism,
+   measured on the bench (not guessed): the span is a plain wrapping
+   block, and the pill takes width: max-content capped by its existing
+   max-width: 92vw — so the pill is exactly as wide as the one-line
+   label whenever that fits (hk's geometry, unchanged), and only at
+   the cap does the button get a definite width for the label to wrap
+   inside. Left to its old shrink-to-fit, the pill collapsed to the
+   widest single status and stacked all six on their own lines. */
+.show-label { display: block; margin: 0 auto; text-align: center; white-space: normal; }
+.show-part { white-space: nowrap; }
 .show-pill .bulk-btn { flex: 0 0 auto; background: var(--accent); color: var(--accent-ink); border: none; border-radius: 24px; padding: 4px 14px; min-height: 0; font-size: 16px; font-weight: 800; white-space: nowrap; }
 #btn-bulk[hidden] { display: none; }
 /* Q232: Edit-all sheet rows — label above a full-width select. */
