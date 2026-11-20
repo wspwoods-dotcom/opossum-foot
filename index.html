@@ -120,7 +120,7 @@
          the filter is narrowed to one status. The old bottom bulk bar is gone. -->
     <div id="show-pill" class="show-pill">
       <button type="button" id="btn-show" class="show-btn" aria-label="Choose what shows on the map">Show: All</button>
-      <button type="button" id="btn-bulk" class="bulk-btn" hidden>Select all</button>
+      <button type="button" id="btn-bulk" class="bulk-btn" hidden>Pick sets</button>
     </div>
     <button type="button" id="weather-chip" class="chip weather-chip" aria-label="Weather details">🌤️</button>
     <!-- Q8: way back to the mileage dialog while a route estimate is drawn -->
@@ -627,8 +627,12 @@
       <p class="dim" style="margin-top:10px">Tap a name to pick it. Tap it again to let it go.</p>
     </div>
     <!-- gy (2026-11-18): a plain Done at the foot — a pure close; picking
-         stays live on every tap, the X and the scrim keep working too. -->
+         stays live on every tap, the X and the scrim keep working too.
+         hj (2026-11-19): Clear joins the foot stack, same size, above
+         Done — it empties the picks and the list re-renders in place;
+         the sheet stays open and Done stays plain "Done". -->
     <div class="sheet-actions">
+      <button class="btn-secondary" id="btn-pick-clear" type="button">Clear</button>
       <button class="btn-primary" id="btn-pick-done" type="button">Done</button>
     </div>
   </div>
