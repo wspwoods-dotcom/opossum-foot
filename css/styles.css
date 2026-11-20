@@ -1431,6 +1431,10 @@ body.placing #route-back-chip { display: none; }
 .show-setcheck { flex: 0 0 auto; width: 22px; height: 22px; margin-right: 10px; border-radius: 50%; border: 2px solid var(--line); color: #1c1a12; font-size: 13px; font-weight: 800; line-height: 19px; text-align: center; box-sizing: border-box; }
 .show-setname-sel { background: #2c2413; color: #f5cf7a; }
 .show-setname-sel .show-setcheck { background: #E7C945; border-color: #E7C945; }
+/* hj (2026-11-19): the Pick list's per-status Select all / Clear all row —
+   a setname row's exact dress and size (the classes above); the label
+   carries weight so it reads as the group's control, not another set. */
+.show-pickall .show-setname-label { font-weight: 700; letter-spacing: .02em; }
 .show-noname { display: block; padding: 9px 4px; font-size: 15px; }
 .show-dot { flex: 0 0 auto; width: 15px; height: 15px; border-radius: 50%; border: 2px solid rgba(255,255,255,.55); }
 .show-name { flex: 1; }
