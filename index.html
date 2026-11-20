@@ -164,7 +164,10 @@
   <div id="pane-history" class="pane">
     <div class="pane-head"><h2>History</h2><p>Every catch, newest first.</p></div>
     <div class="scroll">
-      <button class="btn-secondary gal-open" id="btn-gallery" type="button"><img class="bi" src="assets/icons/camera.png" alt="">Photo gallery</button>
+      <!-- hl (2026-11-20, Q243, Tanner): the Photo gallery left History —
+           History opens straight into the season summary and filters.
+           The gallery button stands in Paperwork now, beside the License
+           Wallet (see pane-licenses below). -->
       <div id="hist-summary" class="hist-summary"></div>
       <div class="seg compact" id="hist-season-seg">
         <button type="button" data-season="this">This season</button>
@@ -220,12 +223,18 @@
         <div class="setsec-body" id="setsec-license-body" hidden>
           <!-- Tanner 2026-10-07: the add button sits below the photos and looks
                like the + Add landowner button. Title case on the label. -->
-          <p class="dim" style="margin:0 0 8px">Tap a photo to view it — or attach its website link, like the DNR page where you bought it.</p>
+          <p class="dim" style="margin:0 0 8px">Tap a photo to view it — pinch to zoom so the warden can read it, and the official state license site rides along.</p>
           <input type="file" id="license-input" class="hidden-file" accept="image/*" multiple>
           <div class="lic-grid" id="license-grid"></div>
           <button class="btn-secondary" id="btn-add-license" type="button">＋ Add Document</button>
         </div>
       </div>
+      <!-- hl (2026-11-20, Q243, Tanner): the Photo gallery stands here now,
+           beside the License Wallet — the app's two photo collections side
+           by side, in the tab whose charter is kept records. Same button,
+           same sheet (sheet-gallery); it lived at the top of History
+           until this build. -->
+      <button class="btn-secondary gal-open" id="btn-gallery" type="button"><img class="bi" src="assets/icons/camera.png" alt="">Photo gallery</button>
       <!-- gw (2026-11-18): My Tags — every tag record on the active line,
            gathered from the catches themselves (the records live on the
            catch; this is the show-the-warden view). Hidden entirely when

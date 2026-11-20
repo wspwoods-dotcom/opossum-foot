@@ -54,8 +54,7 @@ can change it any time in Settings.
 - **History** — Every catch and event you've logged. Flip between By date
   and By Trap Type, search the lot, filter by disposition, and switch
   between this season, last season, and all time. (Species counts live on
-  Totals now.) The **Photo gallery** button at the top gathers every photo
-  on the line in one place. (Reports and CSV exports live on the Data tab.)
+  Totals now.) (Reports and CSV exports live on the Data tab.)
 - **Totals** — Your season numbers in four cards: By Species, By Set, By
   Disposition, and By Month. Rows show the title and kept count only — tap
   one to see the details. Tap a card's header to fold it away or open it
@@ -64,7 +63,8 @@ can change it any time in Settings.
   species.
 - **Paperwork** — Your license photos plus the landowner notebook: names,
   phone numbers, permission slips, and boundary notes for every property
-  you run.
+  you run. The **Photo gallery** button sits beside the License Wallet
+  and gathers every photo on the line in one place.
 - **Settings** — the Toggles menus (features, tabs on the bottom bar,
   fields on the set form), Backup & Reports, and Erase Everything.
 
@@ -399,9 +399,9 @@ each pin on the map.
 
 ## Photos — the gallery, zoom, and sharing them
 
-The **Photo gallery** button at the top of History gathers the active
-line's photos in one grid, each labeled by what it belongs to — a set, a
-catch, or paperwork. Tap any photo anywhere in the app to open it full
+The **Photo gallery** button on the Paperwork tab, beside the License
+Wallet, gathers the active line's photos in one grid, each labeled by
+what it belongs to — a set, a catch, or paperwork. Tap any photo anywhere in the app to open it full
 screen, and pinch to zoom — zoom works on every photo, not just some.
 
 Every photo viewer has a **Save Photo** button. It hands the photo to your
