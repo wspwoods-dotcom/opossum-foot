@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-11-19hj';
+var APP_VERSION = 'beta 0.1 · build 2026-11-19hk';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -5932,7 +5932,15 @@ function selLaunch(fn) {
    map flight, no detail sheet, and the mode and its count wait behind
    the sheet untouched. The Sign families stay on the Show sheet — this
    list is for sets. */
-var pickExpandedStatus = null; /* which status group is expanded here (one at a time) */
+var pickExpandedStatuses = new Set(); /* which status groups are expanded here */
+/* hk (2026-11-19, Tanner): the groups stay open together now. hj's
+   one-at-a-time accordion (the hd note above) made "see them all"
+   impossible on a real line — opening Pulled folded Active shut — so
+   the single pickExpandedStatus became a set: tapping a header joins
+   or leaves the open set and every other group stays as it is. The
+   sheet still opens with every group closed, as hj did. The Show
+   sheet keeps its own one-at-a-time accordion (showExpandedStatus) —
+   untouched. */
 function renderPickList() {
   var host = $('pick-list'); if (!host) return;
   var statusCount = function (v) {
@@ -5955,7 +5963,7 @@ function renderPickList() {
     '<span class="show-setname-label">Select all shown</span></button>';
   host.innerHTML = topRow + STATUS_VALUES.map(function (v) {
     var c = pinSchemeById(pinSchemeId()).colors[v];
-    var open = pickExpandedStatus === v;
+    var open = pickExpandedStatuses.has(v);
     var row = '<div class="show-row"><span class="show-dot" style="background:' + c + '"></span>' +
       '<button type="button" class="show-name-btn" data-pick-expand="' + v + '" aria-expanded="' + open + '">' +
       '<span class="show-name">' + esc(STATUS_LABELS[v]) + statusCount(v) + '</span>' +
@@ -5990,7 +5998,7 @@ function renderPickList() {
   host.querySelectorAll('[data-pick-expand]').forEach(function (b) {
     b.addEventListener('click', function () {
       var v = this.getAttribute('data-pick-expand');
-      pickExpandedStatus = (pickExpandedStatus === v) ? null : v;
+      if (pickExpandedStatuses.has(v)) pickExpandedStatuses.delete(v); else pickExpandedStatuses.add(v);
       renderPickList();
     });
   });
@@ -6032,7 +6040,7 @@ function togglePickGroup(v) {
   renderSelBar();
 }
 function openSelPickList() {
-  pickExpandedStatus = null;
+  pickExpandedStatuses = new Set();
   renderPickList();
   /* gy (2026-11-18, Tanner's field report on hd — "there is no 'OK'
      button, you just have to X out"): the sheet carries a plain Done in
@@ -7341,6 +7349,7 @@ function renderSeasons(filter) {
   }
   renderSeasonsCompliance(d);
   renderSeasonsGap(d);
+  renderSeasonsDeadlines(d);
   renderSeasonsList(filter);
 }
 
@@ -7428,6 +7437,10 @@ function renderSeasonsCompliance(d) {
    harvest reporting (3) and sell-by deadlines (4) plus the nuisance
    operator note (8) render on the Paperwork tab; incidental-catch
    procedures (9) and sealing notes ride the post-catch confirmation.
+   hk (2026-11-19, Tanner): (2), (3), (4) and (8) moved to the Seasons
+   tab too — they stand there as the Deadlines & Permits card under
+   the Tags card (renderSeasonsDeadlines); Paperwork no longer
+   carries them. The sentence above is the gn record.
    Data: js/gap-data.js, generated from data/us-gap-categories.json by
    tools/build-gap-data.js. Reminder-grade reference only, like
    everything else on these tabs. */
@@ -7483,6 +7496,48 @@ function renderSeasonsGap(d) {
   box.hidden = false;
   $('gap-toggle').onclick = function () {
     var card = $('gap-card');
+    var body = card.querySelector('.setsec-body');
+    var open = !body.hasAttribute('hidden');
+    if (open) { body.setAttribute('hidden', ''); card.classList.remove('open'); }
+    else { body.removeAttribute('hidden'); card.classList.add('open'); }
+  };
+}
+/* hk (2026-11-19, Tanner): Deadlines & Permits moved here from the
+   Paperwork tab (gn's card, 2026-11-17) and stands as a Seasons
+   official item under the Tags card — same card markup, same toggle,
+   same yellow bar and dark panel as its two neighbours (the scoped
+   CSS covers #seasons-deadlines with them). The CONTENT is gn's
+   verbatim: pelt sealing (2), harvest reporting (3) and sell-by
+   deadlines (4) — live-verified entries only — plus the nuisance
+   operator note (8) where one exists, and the Reminder-only footer
+   inside the panel. The whole card hides when the state has none of
+   these, exactly as it did in Paperwork. No data changed. */
+function renderSeasonsDeadlines(d) {
+  var box = $('seasons-deadlines');
+  if (!box) return;
+  var code = activeStateCode();
+  var h = '';
+  [[2, GAP_CAT_LABELS[2]], [3, GAP_CAT_LABELS[3]], [4, GAP_CAT_LABELS[4]]].forEach(function (g) {
+    var list = gapEntries(code, g[0]);
+    if (!list.length) return;
+    h += '<p class="rules-sec">' + esc(g[1]) + '</p><ul class="rules-list">' + list.map(function (e) {
+      return '<li>' + (e.deadline ? '<strong>' + esc(e.deadline) + '</strong> — ' : '') + esc(e.rule) + '</li>';
+    }).join('') + '</ul>';
+  });
+  var nwco = gapEntries(code, 8);
+  if (nwco.length) {
+    h += '<p class="rules-sec">' + esc(GAP_CAT_LABELS[8]) + '</p><ul class="rules-list">' +
+      nwco.map(function (e) { return '<li>' + esc(e.rule) + '</li>'; }).join('') + '</ul>';
+  }
+  if (!h) { box.innerHTML = ''; box.hidden = true; return; }
+  box.innerHTML = '<div class="card setsec" id="deadlines-card">' +
+    '<button type="button" class="setsec-head" id="deadlines-toggle"><span>Deadlines &amp; Permits — ' + esc(d ? d.state_name : code) + '</span>' +
+    '<span class="setsec-chev">›</span></button>' +
+    '<div class="setsec-body" hidden>' + h +
+    '<p class="dim rules-src">' + esc(REMINDER_LINE) + '</p></div></div>';
+  box.hidden = false;
+  $('deadlines-toggle').onclick = function () {
+    var card = $('deadlines-card');
     var body = card.querySelector('.setsec-body');
     var open = !body.hasAttribute('hidden');
     if (open) { body.setAttribute('hidden', ''); card.classList.remove('open'); }
@@ -7957,36 +8012,10 @@ function renderPaperworkMileage() {
   }
   fillTripThumbs(box);
 }
-/* gn: Paperwork tab deadlines card — the active line's state pelt
-   sealing, harvest reporting, and sell-by deadlines (live-verified
-   entries only; the generator holds unverified ones out of the app),
-   plus the state's nuisance-operator note (Cat 8) where one exists.
-   The whole card hides when the state has none of these. */
-function renderPaperworkDeadlines() {
-  var card = $('setsec-deadlines');
-  var box = $('paperwork-deadlines');
-  if (!card || !box) return;
-  var code = activeStateCode();
-  var d = stateData();
-  var h = '';
-  [[2, GAP_CAT_LABELS[2]], [3, GAP_CAT_LABELS[3]], [4, GAP_CAT_LABELS[4]]].forEach(function (g) {
-    var list = gapEntries(code, g[0]);
-    if (!list.length) return;
-    h += '<p class="rules-sec">' + esc(g[1]) + '</p><ul class="rules-list">' + list.map(function (e) {
-      return '<li>' + (e.deadline ? '<strong>' + esc(e.deadline) + '</strong> — ' : '') + esc(e.rule) + '</li>';
-    }).join('') + '</ul>';
-  });
-  var nwco = gapEntries(code, 8);
-  if (nwco.length) {
-    h += '<p class="rules-sec">' + esc(GAP_CAT_LABELS[8]) + '</p><ul class="rules-list">' +
-      nwco.map(function (e) { return '<li>' + esc(e.rule) + '</li>'; }).join('') + '</ul>';
-  }
-  if (!h) { card.style.display = 'none'; box.innerHTML = ''; return; }
-  card.style.display = '';
-  var title = $('setsec-deadlines-title');
-  if (title) title.textContent = 'Deadlines & Permits — ' + (d ? d.state_name : code);
-  box.innerHTML = h + '<p class="dim rules-src">' + esc(REMINDER_LINE) + '</p>';
-}
+/* hk (2026-11-19): gn's Paperwork deadlines card (renderPaperworkDeadlines)
+   is gone from here — the section moved to the Seasons tab as
+   renderSeasonsDeadlines, content verbatim. Nothing in Paperwork
+   referenced it but its two render calls, both removed. */
 
 /* gw: Paperwork → My Tags — a view over the active line's catches, never
    a second store. Two groups, newest catch first in each: records on
@@ -9864,7 +9893,7 @@ function switchTab(name) {
   if (name === 'scorecard') renderScorecardTab();
   if (name === 'totals') renderTotals();
   if (name === 'seasons') renderSeasons($('seasons-search').value);
-  if (name === 'licenses') { renderLicenses(); renderLandowners(); renderPaperworkMileage(); renderPaperworkDeadlines(); renderMyTags(); }
+  if (name === 'licenses') { renderLicenses(); renderLandowners(); renderPaperworkMileage(); renderMyTags(); }
   if (name === 'lines') renderLines();
   reportViewport(); /* fj: keep the About diagnostic fresh, incl. bannerB while on the map */
 }
@@ -9888,7 +9917,6 @@ function refreshForLine() {
   renderLicenses();
   renderLandowners();
   renderPaperworkMileage(); /* df: mileage follows the active line */
-  renderPaperworkDeadlines(); /* gn: deadlines follow the active line's state too */
   renderMyTags(); /* gw: tag records follow the active line too */
   renderMapStatusFilters();
   buildStateSelect($('settings-state'), activeStateCode());
