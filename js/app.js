@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-11-19hk';
+var APP_VERSION = 'beta 0.1 · build 2026-11-20hl';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -5536,8 +5536,13 @@ function renderShowButton() {
   }
   else if (onStatus.length === 1) html = 'Show: ' + countOf(onStatus[0]) + ' ' + nameHtml(onStatus[0]) + (signOn ? ' · ' + signHtml : '');
   else {
-    var parts = onStatus.map(function (v) { return nameHtml(v) + ' <span style="color:#f5efdd">' + countOf(v) + '</span>'; });
-    if (signOn) parts.push(signHtml);
+    /* hl (2026-11-20, Q242, Tanner): each status rides in a .show-part
+       span that never breaks internally, so when the list outgrows one
+       line the label wraps BETWEEN statuses into a second row instead
+       of ellipsizing (his hk-check screenshot: "…Pulled 23 · Missi…",
+       with Prospect and Sign never showing at all). */
+    var parts = onStatus.map(function (v) { return '<span class="show-part">' + nameHtml(v) + ' <span style="color:#f5efdd">' + countOf(v) + '</span></span>'; });
+    if (signOn) parts.push('<span class="show-part">' + signHtml + '</span>');
     size = items <= 2 ? 16 : (items <= 4 ? 14 : 11);
     html = items <= 3 ? 'Show: ' + parts.join(' · ') : parts.join(' · ');
   }
@@ -8111,54 +8116,39 @@ function renderLicenses() {
         });
       };
       item.appendChild(img); item.appendChild(del);
-      if (p.link) {
-        var badge = document.createElement('span');
-        badge.className = 'lic-link';
-        badge.textContent = '🔗 site linked';
-        item.appendChild(badge);
-      }
+      /* hl (2026-11-20, Q245): the linked-photo badge is gone with the
+         custom-link override it marked. A stored p.link is simply
+         ignored now — the official state site governs. */
       grid.appendChild(item);
     });
   });
 }
 
-/* Tap a license photo: view it, open its linked site, or attach/change the link. */
+/* Tap a license photo: view it (zoomable — the warden reads it off the
+   phone) and open the official state license site. hl (2026-11-20, Q245,
+   Tanner, on Aron Arthur's word): the per-photo custom-link override is
+   retired — picture + zoom + the state site link is more than enough.
+   A previously saved p.link is simply ignored; no migration. */
 function openLicenseDetail(p) {
-  var link = p.link || '';
   var d = stateData();
-  /* Official state license vendor is automatic — no typing needed.
-     A per-photo custom link still overrides it when set. */
-  var officialUrl = (!link && d && d.license_url) ? d.license_url : '';
-  var btnUrl = link || officialUrl;
+  /* Official state license vendor is automatic — no typing needed. */
+  var officialUrl = (d && d.license_url) ? d.license_url : '';
   var html = '<img src="' + licURLs[p.id] + '" style="width:100%;border-radius:8px" alt="License photo">';
-  if (btnUrl) {
+  if (officialUrl) {
     /* Tanner 2026-10-01: title case on buttons and labels. */
-    var btnLabel = link ? 'Open License Site ↗'
-      : 'Official ' + esc(d.state_name) + ' License Site ↗';
     html += '<a class="btn-primary" style="display:block;text-align:center;margin-top:10px;text-decoration:none;border-radius:var(--radius)" href="' +
-      esc(btnUrl) + '" target="_blank" rel="noopener">' + btnLabel + '</a>';
-    if (!link && d.license_note) {
+      esc(officialUrl) + '" target="_blank" rel="noopener">' + 'Official ' + esc(d.state_name) + ' License Site ↗' + '</a>';
+    if (d.license_note) {
       html += '<p class="dim" style="margin-top:8px">' + esc(d.license_note) + '</p>';
     }
   }
-  html += '<label class="field" for="m-lic-link" style="margin-top:12px">Custom Link (Optional — Overrides the Official Site Above)</label>' +
-    '<input id="m-lic-link" type="url" inputmode="url" placeholder="https://…" value="' + esc(link) + '" autocomplete="off">' +
-    '<div class="btn-row btn-compact" style="margin-top:10px"><button class="btn-secondary" id="m-lic-save" type="button">Save Link</button>' +
+  html += '<div class="btn-row btn-compact" style="margin-top:10px">' +
     '<button class="btn-secondary" id="m-ph-save" type="button">Save Photo</button>' +
     '<button class="btn-secondary" id="m-close" type="button">Close</button></div>';
   showModal(html);
   wirePhotoZoom($('modal-card')); /* fy: the license photo zooms like every other photo */
   $('m-close').onclick = closeModal;
   $('m-ph-save').onclick = function () { sharePhotoFile(p.blob, 'opossum-foot-license'); };
-  $('m-lic-save').onclick = function () {
-    var v = $('m-lic-link').value.trim();
-    if (v && !/^[a-zA-Z][a-zA-Z0-9+.-]*:\/\//.test(v)) v = 'https://' + v;
-    p.link = v;
-    IDB.put('photos', p).then(function () {
-      closeModal(); renderLicenses();
-      toast(v ? 'License link saved.' : 'License link removed.');
-    });
-  };
 }
 
 /* ================= 11b. LANDOWNER NOTEBOOK (Q52) =================
@@ -8746,9 +8736,11 @@ function buildMediaEntries(photos, memos) {
       add('Forage & Finds', mk ? (mk.name || mk.label || mk.ref || 'Marker') : 'Marker',
         mk ? mk.lineId : firstLineId, p, p.blob, '');
     } else {
-      /* No set/log/trip/landowner/marker link: a license-wallet photo. */
+      /* No set/log/trip/landowner/marker link: a license-wallet photo.
+         hl (Q245): the old 'Linked site: …' index note is gone too — a
+         stored custom link is ignored everywhere now. */
       add('Licenses', p.name ? p.name.replace(/\.[A-Za-z0-9]+$/, '') : 'License',
-        p.lineId || firstLineId, p, p.blob, p.link ? 'Linked site: ' + p.link : '');
+        p.lineId || firstLineId, p, p.blob, '');
     }
   });
   memos.forEach(function (m) {
