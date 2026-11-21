@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-11-21ik';
+var APP_VERSION = 'beta 0.1 · build 2026-11-21il';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -7554,7 +7554,7 @@ function renderScorecardTab() {
       return '<option value="' + esc(n) + '"' + (sel === n ? ' selected' : '') + '>' + esc(n) + '</option>';
     }).join('');
   }
-  html += '<div class="card" style="margin-top:12px"><h3>Head-to-Head</h3>' +
+  html += '<div class="card" id="sc-h2h-card" style="margin-top:12px"><h3>Head-to-Head</h3>' +
     '<div class="btn-row"><div><label class="field" for="sc-h2h-a">First</label>' +
     '<select id="sc-h2h-a"><option value="">Pick one…</option>' + h2hOpts(u.h2hA) + '</select></div>' +
     '<div><label class="field" for="sc-h2h-b">Second</label>' +
@@ -7678,11 +7678,25 @@ function spCompare(id, product) {
      own category — not the company's headline product. */
   var nm = product || sp.product, sec = sp.section;
   (sp.products || []).forEach(function (p) { if (p.name === nm) sec = p.section; });
-  scoreUI.by = sec;
-  scoreUI.spCat = sec;
-  scoreUI.h2hA = nm;
-  scoreUI.h2hB = '';
+  /* il (2026-11-21, Q307, Tanner): Compare fills FIRST, then SECOND.
+     The ig form overwrote First and cleared Second on every tap, so a
+     pair could never form from the directory — and comparing two is
+     the whole purpose of the head-to-head. Head-to-head is one
+     category at a time (its lists and prompt are per-category), so a
+     tap from another category starts a fresh pair with that product
+     as First; a tap in the same category fills or replaces Second. */
+  var u = scoreUI;
+  var filledSecond = false;
+  if (u.h2hA === nm) { /* already First — nothing to do */ }
+  else if (!u.h2hA || sec !== u.by) { u.h2hA = nm; u.h2hB = ''; }
+  else if (u.h2hB !== nm) { u.h2hB = nm; filledSecond = true; }
+  u.by = sec;
+  u.spCat = sec;
   renderScorecardTab();
+  if (filledSecond) {
+    var card = document.getElementById('sc-h2h-card');
+    if (card && card.scrollIntoView) card.scrollIntoView({ block: 'start' });
+  }
 }
 /* Q5: one-tap backfill — when a set's attractants are filled in from blank,
    offer to stamp them onto that set's past unstamped catches. Q26: values
