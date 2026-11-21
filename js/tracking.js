@@ -254,6 +254,21 @@ var Tracking = (function () {
      Draws without a context (an unsaved just-tracked route) clear it,
      so the two buttons only ever ride a saved trip's route. */
   var savedCtx = null;
+  /* hn (2026-11-21, Q264): fitting the map to a route must never dive to
+     maximum zoom. A zero-length route's bounds are a single point, and the
+     uncapped fitBounds flew the map to max zoom and stranded the zoom-in
+     button at its limit (Tanner, 2026-11-21). Cap the fit at 18; a route
+     that is effectively one point just centers at the current zoom. */
+  function fitRouteBounds(latlngs) {
+    if (!mapRef || !latlngs.length) return;
+    var b = L.latLngBounds(latlngs);
+    var ne = b.getNorthEast(), sw = b.getSouthWest();
+    if (Math.abs(ne.lat - sw.lat) < 1e-5 && Math.abs(ne.lng - sw.lng) < 1e-5) {
+      mapRef.setView(b.getCenter(), mapRef.getZoom(), { animate: false });
+      return;
+    }
+    mapRef.fitBounds(b, { padding: [30, 30], maxZoom: 18 });
+  }
   function drawSaved(track, ctx) {
     if (!savedLayer || !track || !track.length) return;
     savedCtx = ctx || null;
@@ -267,7 +282,7 @@ var Tracking = (function () {
       (seg || []).forEach(function (p) { all.push(p); });
     });
     syncRouteBar();
-    if (mapRef && all.length) mapRef.fitBounds(L.latLngBounds(all.map(function (p) { return L.latLng(p[0], p[1]); })), { padding: [30, 30] });
+    if (mapRef && all.length) fitRouteBounds(all.map(function (p) { return L.latLng(p[0], p[1]); }));
   }
   /* Q200 (2026-10-18): Tanner — a drawn route had NO way off the map. The
      route bar's Hide button, a fresh track, and a discard all clear it. */
@@ -756,7 +771,7 @@ var Tracking = (function () {
     editorLock(true);
     fixDraw(); fixBar();
     if (mapRef && fixPts.length) {
-      mapRef.fitBounds(L.latLngBounds(fixPts.map(function (p) { return L.latLng(p.lat, p.lng); })), { padding: [30, 30] });
+      fitRouteBounds(fixPts.map(function (p) { return L.latLng(p.lat, p.lng); }));
     }
   }
   function endFix() {
