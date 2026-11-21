@@ -508,10 +508,10 @@ var Tracking = (function () {
       vis(cn, !!(fixRun && fixRun.tPt && fixRun.pts.length));
       vis(sp, !!fixRun);
       if (fixDrawMsg) { lb.textContent = fixDrawMsg; }
-      else if (!fixRun) lb.textContent = 'Draw — tap the first or last point of a stretch to start drawing from that end.';
-      else if (!fixRun.pts.length) lb.textContent = 'Drawing from that end — tap the map to lay points along the route.';
-      else if (!fixRun.tPt) lb.textContent = 'Tap the map to keep drawing, tap the end of another stretch to connect to it, or Stop here to leave the stretch open.';
-      else lb.textContent = 'Connect — the drawn stretch joins the two ends into one route again.';
+      else if (!fixRun) lb.textContent = 'Draw — tap any point to grow the route from it, or tap the map to start a stretch wherever you like.';
+      else if (!fixRun.pts.length) lb.textContent = fixRun.aPt ? 'Drawing from that point — tap the map to lay points along the route.' : 'Drawing a stretch of its own — tap the map to lay points along it.';
+      else if (!fixRun.tPt) lb.textContent = 'Tap the map to keep drawing, tap any point to connect to it, or Stop here to leave the stretch open.';
+      else lb.textContent = 'Connect — the drawn stretch runs to that point, and the route carries on from there.';
       return;
     }
     vis(db, true); vis(fc, true); vis(fd, true); vis(ct, false);
@@ -739,42 +739,44 @@ var Tracking = (function () {
   function fixDrawTapPoint(i) {
     if (!fixPts || i < 0 || i >= fixPts.length) return;
     var p = fixPts[i], run = fixRunOf(i);
-    var isEnd = !!run && (i === run.a || i === run.b);
     fixDrawMsg = null;
     if (!fixRun) {
-      if (!isEnd) {
-        fixDrawMsg = 'Draw starts from an end — tap the first or last point of a stretch.';
-        fixBar(); return;
-      }
+      /* hw (2026-11-21, Q285, Tanner): Draw grows from ANY point —
+         "you should be able to draw whatever you want." The old rule
+         (ends only) left him hunting for an end the edits had buried,
+         with nothing to show for a tap until he guessed right. A
+         stretch's first point still grows backward and its last
+         point forward, as before; a point in the middle grows
+         forward — the drawn points splice in right after it and the
+         route carries on to the point that used to come next. */
       var single = run.a === run.b;
       fixPushUndo(); /* hu (Q280): the whole drawn stretch is one step */
       fixRun = {
         aPt: p,
         oPt: single ? null : fixPts[i === run.a ? run.b : run.a],
-        end: single ? 'last' : (i === run.b ? 'last' : 'first'),
+        end: (!single && i === run.a) ? 'first' : 'last',
+        midAnchor: !single && i !== run.a && i !== run.b,
         pts: [], tPt: null
       };
       fixDraw(); fixBar();
       return;
     }
+    if (fixRun.pts.indexOf(p) >= 0) {
+      fixDrawMsg = 'That is a point you just drew — tap the map to keep drawing, or an existing point to connect to it.';
+      fixBar(); return;
+    }
     if (p === fixRun.aPt) {
-      if (!fixRun.pts.length) { fixRun = null; fixDrawMsg = 'Anchor cleared — tap an end point to start drawing.'; }
-      else fixDrawMsg = 'That is the end you started from — tap the map to keep drawing, or another end to connect.';
+      if (!fixRun.pts.length) { fixRun = null; fixDrawMsg = 'Anchor cleared — tap any point to start drawing from it, or tap the map to start a stretch of its own.'; }
+      else fixDrawMsg = 'That is the point you started from — tap the map to keep drawing, or another point to connect to.';
       fixDraw(); fixBar();
       return;
     }
-    /* a connect target is an END point: the anchor stretch's other
-       end (the loop close), or an end of any other stretch. Anything
-       else — a mid-stretch point, a point already drawn — is ignored
-       with the draw hint. */
-    var aRun = fixRunOf(fixPts.indexOf(fixRun.aPt));
-    var isTarget = isEnd && (p === fixRun.oPt || (aRun && run.seg !== aRun.seg));
-    if (!isTarget) {
-      fixDrawMsg = 'In Draw, points land on the map — tap the map to lay the next point, or an end point to connect.';
-      fixBar(); return;
-    }
+    /* hw (Q285): ANY other point is a connect target now, not just a
+       stretch end — fixDrawConnect decides how the bridge lands (a
+       clean merge at an end; a copy where the target sits
+       mid-stretch, so the target's own stretch is never rerouted). */
     if (!fixRun.pts.length) {
-      fixDrawMsg = 'Lay a point or two along the route first — joining two ends with nothing between them is Join’s work: Back, then tap the two points.';
+      fixDrawMsg = 'Lay a point or two along the route first — joining two points directly is Connect’s work: Back, then tap the two points.';
       fixBar(); return;
     }
     fixRun.tPt = p;
@@ -783,13 +785,21 @@ var Tracking = (function () {
   function fixDrawMapTap(latlng) {
     if (!fixPts) return;
     if (!fixRun) {
-      fixDrawMsg = 'Tap one end of a stretch first — drawing grows from an end.';
-      fixBar(); return;
+      /* hw (Q285): a bare map tap starts a stretch of its own — no
+         anchor, no hunting for an end. It lands at the end of the
+         route under its own segment number; Connect can tie it to
+         any point afterward, and Stop here leaves it standing on
+         its own, exactly as drawn. */
+      fixPushUndo(); /* hu (Q280): the whole drawn stretch is one step */
+      var mx = -1;
+      fixPts.forEach(function (q) { if (q.seg > mx) mx = q.seg; });
+      fixRun = { aPt: null, oPt: null, end: 'last', pts: [], tPt: null, seg: mx + 1 };
     }
-    var np = { lat: latlng.lat, lng: latlng.lng, seg: fixRun.aPt.seg, hand: 1 };
+    var np = { lat: latlng.lat, lng: latlng.lng, seg: fixRun.aPt ? fixRun.aPt.seg : fixRun.seg, hand: 1 };
     if (fixRun.end === 'last') {
       var ref = fixRun.pts.length ? fixRun.pts[fixRun.pts.length - 1] : fixRun.aPt;
-      fixPts.splice(fixPts.indexOf(ref) + 1, 0, np);
+      if (ref) fixPts.splice(fixPts.indexOf(ref) + 1, 0, np);
+      else fixPts.push(np);
     } else {
       /* growing backward off a first point: each new tap lies FARTHER
          out, so it goes before the first point laid — the stored
@@ -832,6 +842,27 @@ var Tracking = (function () {
      closing leg. */
   function fixDrawConnect() {
     if (!fixRun || !fixRun.tPt || !fixRun.pts.length) return;
+    /* hw (Q285): when the target sits mid-stretch — or the anchor
+       does, or the run is a free stretch with no anchor — a merge
+       would reroute points he never tapped. The bridge instead ends
+       on a copy of the target, landed right after the last drawn
+       point in the drawn points' own stretch: the route runs to the
+       target's spot and the target's own stretch carries on
+       untouched — the same overlap Connect (Q283) makes. */
+    var tIx = fixPts.indexOf(fixRun.tPt);
+    var tRun = tIx >= 0 ? fixRunOf(tIx) : null;
+    var targetMid = !!tRun && tIx !== tRun.a && tIx !== tRun.b;
+    if (!fixRun.aPt || fixRun.midAnchor || targetMid) {
+      var lastD = fixRun.pts[fixRun.pts.length - 1];
+      var cp = { lat: fixRun.tPt.lat, lng: fixRun.tPt.lng, seg: lastD.seg };
+      if (fixRun.tPt.hand) cp.hand = 1;
+      fixPts.splice(fixPts.indexOf(lastD) + 1, 0, cp);
+      fixRun = null; fixDrawMsg = null;
+      fixDrawMode = false;
+      fixDraw(); fixBar();
+      toast('Connected in the edit — Save keeps it, Cancel throws it away.');
+      return;
+    }
     var segs = fixSegs(fixPts), sA = -1, sB = -1, k;
     for (k = 0; k < segs.length; k++) {
       if (segs[k].indexOf(fixRun.aPt) >= 0) sA = k;
