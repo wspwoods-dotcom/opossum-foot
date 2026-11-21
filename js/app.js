@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-11-21hn';
+var APP_VERSION = 'beta 0.1 · build 2026-11-21ho';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -688,6 +688,14 @@ function speciesSeasonTotal(name, seasonYear) {
   return n;
 }
 
+/* ho (Q255): a season record's method + land label, e.g. "Trapping ·
+   Public land". Land "all" carries no tag — the season runs everywhere. */
+function seasonMethodLand(s) {
+  if (!s) return '';
+  var m = s.method === 'trapping' ? 'Trapping' : s.method === 'hunting' ? 'Hunting' : s.method === 'both' ? 'Trapping & hunting' : '';
+  var l = s.land_type === 'private' ? 'Private land' : s.land_type === 'public' ? 'Public land' : '';
+  return [m, l].filter(Boolean).join(' · ');
+}
 function limitText(limits) {
   if (!limits) return '';
   var parts = [];
@@ -1005,7 +1013,12 @@ function paintWeather(j, staleNote) {
       '<span>' + Math.round(j.hourly.temperature_2m[t]) + '°F</span><span class="dim">' + j.hourly.precipitation_probability[t] + '% precip</span></div>';
   }
   $('weather-hourly').innerHTML = rows || '<p class="dim">No hourly data.</p>';
-  wxOmStamp = staleNote || 'Updated just now · Open-Meteo';
+  /* ho (2026-11-21, Q257, Tanner): every freshness stamp names its own
+     provider — a bare "just now" riding beside another provider's stale
+     note read as a claim about the stale data ("53 hr ago · NWS just
+     now"). A stamp may only ever describe the data its own provider
+     fetched in this load. */
+  wxOmStamp = staleNote || 'Open-Meteo updated just now';
   paintWeatherUpdated();
 }
 function showCachedWeather(msg) {
@@ -1115,7 +1128,7 @@ function paintNWS(nws) {
 function noteNwsUpdated(cached) {
   wxNwsStamp = (cached && Store.data.weatherNwsCache)
     ? 'NWS cached ' + timeAgo(Store.data.weatherNwsCache.at)
-    : 'NWS just now';
+    : 'NWS updated just now'; /* ho (Q257): provider-scoped, like Open-Meteo's */
   paintWeatherUpdated();
 }
 function showCachedNWS() {
@@ -1467,6 +1480,16 @@ function toggleOtherWrap(sel) {
 function selVal(id) {
   var sel = $(id);
   if (!sel) return '';
+  /* ho (Q249): combo fields are INPUTs — the typed text IS the value.
+     Novel text (not among the field's current options) is remembered as
+     a custom option, the Q55 rule carried over; the maker's mixed-brands
+     label resolves to the '__mixed' sentinel the readers already know. */
+  if (sel.tagName === 'INPUT') {
+    var iv = sel.value.trim();
+    if (id === 'sf-maker' && iv === MIXED_MAKER_LABEL) return '__mixed';
+    if (iv && comboBaseCache[id] && comboBaseCache[id].indexOf(iv) === -1) rememberCustomOption(id, iv);
+    return iv;
+  }
   var v = sel.value;
   if (v === OTHER_VALUE || v === 'Other') {
     var t = $(id + '-othertext');
@@ -1656,6 +1679,119 @@ function attachSuggest(inputId, boxId, key, typeToFilter) {
     setTimeout(function () { box.className = 'suggest'; }, 160);
   });
 }
+/* ================= ho (2026-11-21, Q249 + Q248, Tanner) =================
+   TYPE-TO-FILTER COMBO FIELDS. Every list field on the set form is now a
+   text field with a suggestion box, on the pattern he ruled: tap the field
+   and the FULL list opens with the keyboard up; typing filters the list
+   live; tapping a row fills the field; text that matches nothing simply
+   IS the entry, and is remembered for next time (the Q55 custom-option
+   memory, now keyed by the field). The old <select> + "Other…" + "What is
+   it?" two-step is gone for these fields — typing replaced it. Notes are
+   the one exception (Q249): they stay plain writing boxes.
+   A pick dispatches a bubbling 'change', so every existing cascade that
+   listened for a select's change (maker → types → details, foundation →
+   variations, spring → sizes) fires exactly as before. The field also
+   carries the Q248 clear × (the Q236 .clear-wrap/.input-clear pattern).
+   getOptions() returns strings or {v, label} pairs and is read live on
+   every render, so cascades never need the box rebuilt. */
+var comboBaseCache = {}; /* id -> last option values, for selVal's remember-guard */
+var pendingCombos = [];  /* selHtml-built fields awaiting attachment */
+function comboAttach(inputId, boxId, getOptions, opts) {
+  var input = $(inputId), box = $(boxId);
+  if (!input || !box) return;
+  opts = opts || {};
+  if (!input._comboWired) {
+    input._comboWired = true;
+    var wrap = document.createElement('span');
+    wrap.className = 'clear-wrap';
+    input.parentNode.insertBefore(wrap, input);
+    wrap.appendChild(input);
+    var clearBtn = document.createElement('button');
+    clearBtn.type = 'button';
+    clearBtn.className = 'input-clear';
+    clearBtn.setAttribute('aria-label', 'Clear');
+    clearBtn.textContent = '×';
+    clearBtn.hidden = !input.value;
+    wrap.appendChild(clearBtn);
+    clearBtn.onclick = function (e) {
+      if (e && e.stopPropagation) e.stopPropagation();
+      input.value = '';
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+      input.focus();
+    };
+    input._comboClear = clearBtn;
+    input.addEventListener('input', function () { clearBtn.hidden = !input.value; renderCombo(false); });
+    input.addEventListener('focus', function () { renderCombo(true); });
+    input.addEventListener('blur', function () {
+      setTimeout(function () { box.className = 'suggest'; }, 160);
+    });
+  }
+  function renderCombo(showAll) {
+    var raw = getOptions() || [];
+    var values = raw.map(function (o) { return (o && typeof o === 'object') ? o.v : o; });
+    comboBaseCache[inputId] = values;
+    var q = showAll ? '' : input.value.trim().toLowerCase();
+    var rows = raw.filter(function (o) {
+      var lbl = ((o && typeof o === 'object') ? o.label : o) || '';
+      var v = (o && typeof o === 'object') ? o.v : o;
+      return !q || lbl.toLowerCase().indexOf(q) !== -1 || String(v).toLowerCase().indexOf(q) !== -1;
+    });
+    var html = '';
+    if (opts.noneLabel && (!q || opts.noneLabel.toLowerCase().indexOf(q) !== -1)) {
+      html += '<div class="suggest-row"><button type="button" class="suggest-item" data-v="">' + esc(opts.noneLabel) + '</button></div>';
+    }
+    html += rows.map(function (o) {
+      var v = (o && typeof o === 'object') ? o.v : o;
+      var lbl = (o && typeof o === 'object') ? o.label : o;
+      return '<div class="suggest-row"><button type="button" class="suggest-item" data-v="' + esc(v) + '">' + esc(lbl) + '</button></div>';
+    }).join('');
+    if (!html) { box.className = 'suggest'; box.innerHTML = ''; return; }
+    box.innerHTML = html;
+    box.className = 'suggest show';
+    box.querySelectorAll('.suggest-item').forEach(function (b) {
+      b.onclick = function () {
+        input.value = this.getAttribute('data-v');
+        if (input._comboClear) input._comboClear.hidden = !input.value;
+        box.className = 'suggest'; box.innerHTML = '';
+        input.dispatchEvent(new Event('input', { bubbles: true }));
+        input.dispatchEvent(new Event('change', { bubbles: true }));
+        if (opts.onPick) opts.onPick(input.value);
+      };
+    });
+  }
+  input._comboRender = renderCombo;
+}
+/* selHtml-built combo fields attach once their HTML lands in the DOM. */
+function drainCombos() {
+  var list = pendingCombos; pendingCombos = [];
+  list.forEach(function (c) {
+    comboAttach(c.id, c.id + '-suggest', function () { return c.options; }, { noneLabel: c.noneLabel });
+  });
+}
+/* Q248: the clear × for a plain typed field that has none (Set Name model). */
+function ensureClearInput(input) {
+  if (!input || input.closest('.clear-wrap') || input._clearWired) return;
+  input._clearWired = true;
+  var wrap = document.createElement('span');
+  wrap.className = 'clear-wrap';
+  input.parentNode.insertBefore(wrap, input);
+  wrap.appendChild(input);
+  var btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'input-clear';
+  btn.setAttribute('aria-label', 'Clear');
+  btn.textContent = '×';
+  btn.hidden = !input.value;
+  wrap.appendChild(btn);
+  btn.onclick = function (e) {
+    if (e && e.stopPropagation) e.stopPropagation();
+    input.value = '';
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+    input.focus();
+  };
+  input.addEventListener('input', function () { btn.hidden = !input.value; });
+}
+
 /* ---- gm (2026-11-17, Tanner): Set Name clear × + live suggestions ----
    The gl build made the Set Name field plain; Tanner reversed that on his
    phone: renaming a set meant backspacing the whole name by hand, and the
@@ -1894,18 +2030,16 @@ var SNARE_LOCKS = ['Cam', 'Relaxing', 'Washer'];
 var SNARE_LENS = ['30"', '48"', '60"', '84"'];
 
 function selHtml(id, label, options, val) {
-  /* Q55: the trapper's remembered customs ride with the base options, and
-     every dropdown grows an Other… escape hatch (unless it has one). */
-  var opts = mergeCustomOptions(id, options);
-  if (!hasOtherOption(opts)) opts = opts.concat([OTHER_VALUE]);
-  var h = '<label class="field" for="' + id + '">' + label + '</label>' +
-    '<select id="' + id + '" data-has-other="1">';
-  h += '<option value="">—</option>';
-  for (var i = 0; i < opts.length; i++) {
-    var ov = opts[i], ol = (ov === OTHER_VALUE) ? 'Other…' : ov;
-    h += '<option value="' + esc(ov) + '"' + (val === ov ? ' selected' : '') + '>' + esc(ol) + '</option>';
-  }
-  return h + '</select>' + otherWrapHtml(id);
+  /* ho (Q249): a combo field now, not a <select> — the trapper's
+     remembered customs ride with the base options (mergeCustomOptions),
+     typing filters them, and novel typed text is the entry (remembered
+     at read time by selVal). The Other… hatch is gone: typing is the
+     hatch. Attachment happens in drainCombos() once the HTML lands. */
+  var opts = mergeCustomOptions(id, options).filter(function (o) { return o !== OTHER_VALUE && o !== 'Other'; });
+  pendingCombos.push({ id: id, options: opts, noneLabel: '—' });
+  return '<label class="field" for="' + id + '">' + label + '</label>' +
+    '<input type="text" id="' + id + '" autocomplete="off" value="' + esc(val || '') + '">' +
+    '<div class="suggest" id="' + id + '-suggest"></div>';
 }
 /* ---- Q39: manufacturer-first trap picker ----
    Flow: Manufacturer -> trap type -> size/model. Picking "Not sure / mixed
@@ -1918,56 +2052,46 @@ function paintSelectHint(sel) {
 }
 /* Populate the manufacturer select once (options live in trap-catalog.js). */
 function renderMakerOptions() {
-  var sel = $('sf-maker');
-  if (!sel) return;
-  var cur = sel.value; /* Q55: rebuild keeps the trapper's pick */
-  var h = '<option value="">e.g. Bridger</option>';
-  /* gp (2026-11-17, Tanner): "None" pins the top of the brand list like
-     every other fillable box (the fg rule for the attractant boxes);
-     "Not sure / mixed brands" rides second. Picking None stores the
-     literal 'None' as the maker — the same value the bait/lure None
-     rows put in their fields — and reads back through the unfiltered
-     path, since TRAP_MAKERS has no 'None' entry. */
-  h += '<option value="None">None</option>';
-  h += '<option value="__mixed">' + esc(MIXED_MAKER_LABEL) + '</option>';
+  /* ho (Q249): the maker field is a combo input now — its options are
+     computed live by makerComboOptions() at render time, so there is no
+     option list to rebuild on form open. This stub stays for its caller. */
+  return;
+}
+function makerComboOptions() {
+  var out = [{ v: 'None', label: 'None' }, { v: MIXED_MAKER_LABEL, label: MIXED_MAKER_LABEL }];
+  var seen = { 'none': 1 };
+  seen[MIXED_MAKER_LABEL.toLowerCase()] = 1;
   MAKER_ORDER.forEach(function (m) {
-    var label = m + (TRAP_MAKERS[m].legacy ? ' (legacy)' : '');
-    h += '<option value="' + esc(m) + '">' + esc(label) + '</option>';
+    out.push({ v: m, label: m + (TRAP_MAKERS[m].legacy ? ' (legacy)' : '') });
+    seen[m.toLowerCase()] = 1;
   });
-  /* Q55: the trapper's custom makers + the Other… escape hatch. */
-  var seenMakers = { none: 1 }; /* gp: a typed custom "None" must not duplicate the pinned row */
-  MAKER_ORDER.forEach(function (m) { seenMakers[m.toLowerCase()] = 1; });
-  customOptionsFor('sf-maker').forEach(function (m) {
-    if (!seenMakers[m.toLowerCase()]) h += '<option value="' + esc(m) + '">' + esc(m) + '</option>';
+  customOptionsFor('sf-maker').forEach(function (t) {
+    if (!seen[t.toLowerCase()]) { out.push({ v: t, label: t }); seen[t.toLowerCase()] = 1; }
   });
-  h += '<option value="' + OTHER_VALUE + '">Other…</option>';
-  sel.innerHTML = h;
-  if (cur) sel.value = cur;
-  sel.innerHTML = h;
-  paintSelectHint(sel);
+  return out;
 }
 /* Type options for the picked maker. keepKey re-selects a picker type key
    when it exists in the new list. */
 function renderTrapTypeOptions(maker, keepKey) {
   var sel = $('sf-type');
+  if (maker === MIXED_MAKER_LABEL) maker = '__mixed'; /* ho: combo holds the label */
   var entry = maker && TRAP_MAKERS[maker];
   var keys = entry ? Object.keys(entry.types) : ALL_TRAP_TYPES.slice();
-  /* Q57-B: the cascade keeps its "Other" escape hatch — the unfiltered list
-     has one and no other dropdown loses options, so a picked maker must not
-     strand the trapper without an out. Not stored in the catalog. */
-  if (entry && keys.indexOf('Other') === -1) keys.push('Other');
-  /* Q55: the trapper's custom types ride along so a remembered value reselects. */
+  /* ho (Q249): no "Other" hatch in the combo list (Q57-B's escape hatch
+     is the typing itself now). The trapper's custom types ride along so
+     a remembered value reselects (Q55). The list is stashed for the
+     combo's live getOptions; the field's text is set, not rebuilt. */
+  keys = keys.filter(function (k) { return k !== 'Other'; });
   var seenTypes = {};
   keys.forEach(function (k) { seenTypes[k.toLowerCase()] = 1; });
   customOptionsFor('sf-type').forEach(function (t) {
     if (!seenTypes[t.toLowerCase()]) { keys.push(t); seenTypes[t.toLowerCase()] = 1; }
   });
+  window._sfTypeOpts = keys;
   var cur = sel.value;
-  var h = '<option value="">e.g. Foothold</option>';
-  keys.forEach(function (k) { h += '<option value="' + esc(k) + '">' + esc(k) + '</option>'; });
-  sel.innerHTML = h;
   if (keepKey && keys.indexOf(keepKey) >= 0) sel.value = keepKey;
   else if (keys.indexOf(cur) >= 0) sel.value = cur;
+  else sel.value = '';
   paintSelectHint(sel);
 }
 /* Maker switched: try to keep the same stored trap type across the switch. */
@@ -2000,7 +2124,9 @@ function onMakerChange() {
 function trapDetailValues() {
   var f = function (id) { var el = $(id); return el ? el.value : ''; };
   var modelSel = $('sf-trapmodel-select'), trapModel = '';
-  if (modelSel) trapModel = modelSel.value === MODEL_CUSTOM ? f('sf-trapmodel').trim() : modelSel.value;
+  /* ho (Q249): the maker-path model is a combo input now — its text is
+     the value, resolved (and remembered when novel) through selVal. */
+  if (modelSel) trapModel = selVal('sf-trapmodel-select');
   else trapModel = f('sf-trapmodel').trim();
   var mv = trapModValues();
   return {
@@ -2054,32 +2180,14 @@ function renderModsHtml(t, v, forceCheck) {
     '<div class="setsec-body" id="setform-modssec-body" hidden>' +
     '<div class="mods-hint">Work you did after buying the trap. Factory options are already in the model name above.</div>';
   if (t === 'Foothold') {
-    /* Q55: pan size is an Other-capable dropdown like the rest. */
+    /* ho (Q249): pan size is a combo field like the rest (was an
+       Other-capable dropdown under Q55; typing is the hatch now). */
     var pv = v.panSize || 'Stock';
-    var pans = mergeCustomOptions('sf-pansize', PAN_SIZES);
-    if (!hasOtherOption(pans)) pans = pans.concat([OTHER_VALUE]);
-    h += '<label class="field" for="sf-pansize">Pan size</label><select id="sf-pansize" data-has-other="1">';
-    pans.forEach(function (p) {
-      var pl = (p === OTHER_VALUE) ? 'Other…' : p;
-      h += '<option value="' + esc(p) + '"' + (pv === p ? ' selected' : '') + '>' + esc(pl) + '</option>';
-    });
-    h += '</select>' + otherWrapHtml('sf-pansize');
+    h += selHtml('sf-pansize', 'Pan size', PAN_SIZES, pv);
     /* Q102 (2026-10-01): Tanner — round jaw vs square jaw, footholds only. */
-    var jv = v.jawShape || '';
-    h += '<label class="field" for="sf-jawshape">Jaw shape</label><select id="sf-jawshape">';
-    h += '<option value="">Select…</option>';
-    ['Round jaw', 'Square jaw'].forEach(function (j) {
-      h += '<option value="' + j + '"' + (jv === j ? ' selected' : '') + '>' + j + '</option>';
-    });
-    h += '</select>';
+    h += selHtml('sf-jawshape', 'Jaw shape', ['Round jaw', 'Square jaw'], v.jawShape || '');
     /* Tanner 2026-10-01 — jaw closure: offset vs closed, footholds only. */
-    var jcv = v.jawClose || '';
-    h += '<label class="field" for="sf-jawclose">Jaw closure</label><select id="sf-jawclose">';
-    h += '<option value="">Select…</option>';
-    ['Offset', 'Closed'].forEach(function (j) {
-      h += '<option value="' + j + '"' + (jcv === j ? ' selected' : '') + '>' + j + '</option>';
-    });
-    h += '</select>';
+    h += selHtml('sf-jawclose', 'Jaw closure', ['Offset', 'Closed'], v.jawClose || '');
   }
   h += '<div class="checkgrid">';
   pre.forEach(function (m) { h += box(m); });
@@ -2111,6 +2219,7 @@ function bindModAdd() {
    forceCheck optionally checks just-added custom mods. */
 function renderTrapDetailFields(saved, forceCheck) {
   var maker = $('sf-maker') ? $('sf-maker').value : '';
+  if (maker === MIXED_MAKER_LABEL) maker = '__mixed'; /* ho: the combo holds the label; readers key on the sentinel */
   var pickerType = $('sf-type').value;
   var rt = resolvedTrapType();
   var v = saved || trapDetailValues();
@@ -2119,20 +2228,14 @@ function renderTrapDetailFields(saved, forceCheck) {
   var models = (entry && entry.types[pickerType]) || null;
   var h = '';
   if (models) {
-    /* Maker-filtered size/model list + an Other/custom escape hatch. */
+    /* ho (Q249): the maker-filtered size/model list is a combo field —
+       the saved model, or the list's first model as the select used to
+       preselect; anything typed past the list is the entry. */
     var mv = v.trapModel || '';
-    var inList = models.indexOf(mv) >= 0;
-    var selVal = mv ? (inList ? mv : MODEL_CUSTOM) : models[0];
-    h += '<label class="field" for="sf-trapmodel-select">Size / model</label><select id="sf-trapmodel-select">';
-    models.forEach(function (m) {
-      h += '<option value="' + esc(m) + '"' + (selVal === m ? ' selected' : '') + '>' + esc(m) + '</option>';
-    });
-    h += '<option value="' + MODEL_CUSTOM + '"' + (selVal === MODEL_CUSTOM ? ' selected' : '') + '>Other / custom&hellip;</option></select>';
-    var customText = inList ? '' : mv;
-    h += '<div id="trapmodel-customwrap"' + (selVal === MODEL_CUSTOM ? '' : ' style="display:none"') + '>' +
-      '<label class="field" for="sf-trapmodel">Custom size / model</label>' +
-      '<input type="text" id="sf-trapmodel" placeholder="Describe it" autocomplete="off" value="' + esc(customText) + '">'
-      + '<div class="suggest" id="sf-trapmodel-suggest"></div></div>';
+    pendingCombos.push({ id: 'sf-trapmodel-select', options: mergeCustomOptions('sf-trapmodel-select', models) });
+    h += '<label class="field" for="sf-trapmodel-select">Size / model</label>' +
+      '<input type="text" id="sf-trapmodel-select" autocomplete="off" value="' + esc(mv || models[0]) + '">' +
+      '<div class="suggest" id="sf-trapmodel-select-suggest"></div>';
   } else {
     /* Unfiltered path: today's generic detail fields for the trap type. */
     var cfg = TRAP_SUB[rt.t];
@@ -2172,13 +2275,9 @@ function renderTrapDetailFields(saved, forceCheck) {
   if (!modsFresh) { var mb = $('setform-modssec-body'); modsWasOpen = !!(mb && !mb.hidden); }
   modsRenderSeq = setFormOpenSeq;
   host.innerHTML = h;
+  drainCombos(); /* ho (Q249): wire the combo fields this render built */
   /* Q12: custom model text learns from use */
   if ($('sf-trapmodel')) attachSuggest('sf-trapmodel', 'sf-trapmodel-suggest', 'trapmodel');
-  var msel = $('sf-trapmodel-select');
-  if (msel) msel.onchange = function () {
-    var w = $('trapmodel-customwrap');
-    if (w) w.style.display = (msel.value === MODEL_CUSTOM) ? '' : 'none';
-  };
   var springEl = $('sf-trapspring');
   if (springEl) springEl.onchange = function () { renderTrapDetailFields(); };
   bindModAdd();
@@ -2529,6 +2628,17 @@ function cancelAllMapModes(except) {
   if (except !== 'home' && homePickMode) cancelHomePick();
   cancelPlacePin();
   if (window.Markers) Markers.cancelAll();
+  /* ho (2026-11-21, Q259, Tanner): the Mark sheet itself is part of the
+     Mark tap-mode — another mode starting closes it, so its sheet never
+     stacks over a live Measure/editor banner. Tracking is exempt by his
+     ruling: nothing here touches the recorder. */
+  if (except !== 'mark') {
+    var ms = $('sheet-marker-add');
+    if (ms && ms.classList.contains('show')) {
+      ms.classList.remove('show');
+      if (!document.querySelector('.sheet.show')) $('scrim').classList.remove('show');
+    }
+  }
 }
 
 function setDropPinMode(on) {
@@ -2705,12 +2815,20 @@ function startHomePick() {
   var l0 = activeLine();
   if (l0) { l0.homeAsked = true; Store.save(); } /* asked once per line — Settings re-opens it */
   cancelAllMapModes('home'); /* fw: one picking mode at a time */
+  /* ho (2026-11-21, Q266, Tanner): follow stands down while the picker
+     owns the map — its guard was dragging the map back to his physical
+     position within seconds of a ZIP/city jump, so the jump never held.
+     The established jump doctrine (Q246): follow pauses and stays paused
+     until the user taps the crosshair again. */
+  pauseFollow();
   homePickMode = true; homeMapLive = true;
+  document.body.classList.add('home-picking'); /* ho (Q265): map chrome steps back */
   /* Tanner 2026-10-01: no A/B choice — the GPS button duplicated the previous
      screen. Straight to pin drop: tap the map, drag the pin, tap OK. */
   $('home-bar').classList.add('show');
   $('home-bar-prompt').textContent = 'Tap the map to drop your home pin, then drag it onto the exact spot.';
   $('btn-home-ok').hidden = true;
+  var jr = $('home-jump-row'); if (jr) jr.style.display = ''; /* ho (Q265): the jump row returns for a fresh pick */
   setPlacingLock(true); /* B15: same modal lock as pin placement */
   /* B13: bar just changed the map height — re-measure before centering. */
   map.invalidateSize();
@@ -2724,6 +2842,7 @@ function startHomePick() {
 }
 function cancelHomePick() {
   homePickMode = false; homeMapLive = false;
+  document.body.classList.remove('home-picking'); /* ho (Q265) */
   if (homeMarker && map) { try { map.removeLayer(homeMarker); } catch (e) {} homeMarker = null; }
   var bar = $('home-bar'); if (bar) bar.classList.remove('show');
   setPlacingLock(false);
@@ -2797,6 +2916,7 @@ function placeHomePin(latlng) {
   homeMarker = L.marker(latlng, { draggable: true, icon: homeIcon() }).addTo(map);
   map.panTo(latlng);
   $('btn-home-ok').hidden = false;
+  var jr2 = $('home-jump-row'); if (jr2) jr2.style.display = 'none'; /* ho (Q265): the jump row's work is done once the pin is down */
 }
 function confirmHomePin() {
   if (!homeMarker) { toast('Drop the pin on your home ground first.'); return; }
@@ -3503,7 +3623,7 @@ function openSetForm(coords, setId) {
   $('sf-name').placeholder = s ? '' : 'e.g. Creek crossing';
   updateSetNameClear(); hideSetNameSuggest(); /* gm: the × mirrors the prefilled name; the suggestion box starts shut */
   renderMakerOptions();
-  $('sf-maker').value = s ? (s.trapMaker || '__mixed') : (tmpl ? (tmpl.trapMaker || '__mixed') : '');
+  $('sf-maker').value = s ? (s.trapMaker || MIXED_MAKER_LABEL) : (tmpl ? (tmpl.trapMaker || MIXED_MAKER_LABEL) : '');
   var pk = (s && s.trapMaker) ? pickerTypeFor(s.trapMaker, s.trapType, s.trapSpring, s.trapModel)
     : (s ? (s.trapType || '') : (tmpl ? pickerTypeFor(tmpl.trapMaker, tmpl.trapType, tmpl.trapSpring, tmpl.trapModel) : ''));
   renderTrapTypeOptions($('sf-maker').value, pk);
@@ -3519,9 +3639,9 @@ function openSetForm(coords, setId) {
   var svar = s ? (s.variation || '') : (tmpl ? (tmpl.variation || '') : '');
   if (!s && !setFieldOn('settype')) svar = ''; /* Q162/Q208: off means blank, carried template included */
   if (stv === 'Other') {
-    /* Q55: a legacy literal Other becomes the Other… escape hatch with the
-       "What is it?" box revealed, ready to be typed for real. */
-    $('sf-settype').value = OTHER_VALUE;
+    /* ho (Q249): a legacy literal Other opens on a blank foundation
+       field — the trapper types the real name (Q55's intent, one step). */
+    $('sf-settype').value = '';
     renderVariationOptions();
     setVariationFields('', svar);
   } else if (stv) {
@@ -4925,6 +5045,9 @@ function renderSetPhotos(list) {
     };
     box.appendChild(img);
   });
+  /* ho (Q251): photos land async — re-run the section's empty-state pass
+     so the Photos part (and the all-empty line) reflect what arrived. */
+  if (detailSetId) refreshNotesBox('setdetail-notessec', 'sd-notes', 'sd-memos', 'sd-photos');
 }
 /* Q28: "Save to camera roll" — a PWA can't write to the camera roll
    directly, so hand the photo to the OS share sheet (Web Share API with
@@ -6110,18 +6233,43 @@ function openSelActions() {
   if (selCount() === 0) return; /* hj: at 0 picked the bar button is inert; this is the same wall behind it */
   selHintDone = true; /* hf: opening Actions retires the hint for the session */
   renderSelBar();
-  var n = selCount();
-  showModal('<h3>' + n + ' selected</h3>' +
-    '<div class="sheet-actions">' +
-    '<button type="button" class="btn-secondary" id="sa-status">Change status</button>' +
-    '<button type="button" class="btn-secondary" id="sa-edit">Edit all</button>' +
-    '<button type="button" class="btn-danger" id="sa-delete">Delete all</button></div>' +
-    '<div class="btn-row" style="margin-top:14px"><button class="btn-secondary" id="m-cancel" type="button">Cancel</button></div>');
+  showModal('<div id="sa-body"></div>');
   $('modal').classList.add('sheet-dress'); /* gx: standard sheet dress for the bulk family */
+  renderSelActions();
+}
+/* ho (2026-11-21, Q253, Tanner): the Actions sheet names what is picked —
+   left-aligned under the count, scrollable when long — and tapping a name
+   UNPICKS that set: count, selection bar, map pin and the Pick-from-list
+   row all move together because every surface reads the one selIds state.
+   The list only subtracts; adding still happens solely through Pick from
+   list and the map. At 0 picked the action buttons go dim and inert (the
+   hj rule), with the sheet left open so the state is plain to see. */
+function renderSelActions() {
+  var host = $('sa-body'); if (!host) return;
+  var n = selCount();
+  var picked = activeSets().filter(function (s) { return !!selIds[s.id]; });
+  host.innerHTML = '<h3>' + n + ' selected</h3>' +
+    (picked.length ? '<div class="sel-names">' + picked.map(function (s) {
+      return '<button type="button" class="sel-name-row" data-unpick="' + s.id + '"><span>' + esc(s.name || 'Unnamed set') + '</span><span class="sel-name-x">✕</span></button>';
+    }).join('') + '</div>' : '<p class="dim">Nothing picked. Pick sets from the list or the map.</p>') +
+    '<div class="sheet-actions">' +
+    '<button type="button" class="btn-secondary" id="sa-status"' + (n ? '' : ' disabled') + '>Change status</button>' +
+    '<button type="button" class="btn-secondary" id="sa-edit"' + (n ? '' : ' disabled') + '>Edit all</button>' +
+    '<button type="button" class="btn-danger" id="sa-delete"' + (n ? '' : ' disabled') + '>Delete all</button></div>' +
+    '<div class="btn-row" style="margin-top:14px"><button class="btn-secondary" id="m-cancel" type="button">Cancel</button></div>';
+  host.querySelectorAll('[data-unpick]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      toggleSel(this.getAttribute('data-unpick'));
+      renderSelActions();
+      renderPickList(); /* the pick sheet behind reads the same state */
+    });
+  });
   $('m-cancel').onclick = function () { closeModal(); };
-  $('sa-status').onclick = function () { closeModal(); selLaunch(openBulkStatusPicker); };
-  $('sa-edit').onclick = function () { closeModal(); selLaunch(openBulkEdit); };
-  $('sa-delete').onclick = function () { closeModal(); selLaunch(openBulkDeleteConfirm); };
+  if (n) {
+    $('sa-status').onclick = function () { closeModal(); selLaunch(openBulkStatusPicker); };
+    $('sa-edit').onclick = function () { closeModal(); selLaunch(openBulkEdit); };
+    $('sa-delete').onclick = function () { closeModal(); selLaunch(openBulkDeleteConfirm); };
+  }
 }
 function wireSelBar() {
   var bar = $('sel-bar');
@@ -7715,11 +7863,23 @@ function showSpeciesDetail(name) {
   if (!sp) return;
   var info = speciesSeasonInfo(sp);
   var d = stateData();
-  var html = '<div style="display:flex;align-items:center;gap:12px">' + speciesIcon(name, 'sp-icon-lg') + '<h3 style="margin:0">' + esc(sp.common_name) + '</h3></div>';
-  if (sp.scientific_name) html += '<p class="dim" style="font-style:italic;margin-top:-8px">' + esc(sp.scientific_name) + '</p>';
-  html += '<p><span class="badge ' + info.badgeClass + '">' + info.badge + '</span></p>';
+  /* ho (2026-11-21, Q256, Tanner): the species header is one centered
+     stack — silhouette on top, common name under it, scientific name
+     under the name, status pill beneath — while the season cards below
+     stay left-aligned reading text. (Titles and pills center; lists and
+     reading text align left — the house rule with Q247/Q252.) */
+  var html = '<div class="sp-detail-head">' + speciesIcon(name, 'sp-icon-lg') + '<h3>' + esc(sp.common_name) + '</h3>';
+  if (sp.scientific_name) html += '<p class="dim sp-sci">' + esc(sp.scientific_name) + '</p>';
+  html += '<p><span class="badge ' + info.badgeClass + '">' + info.badge + '</span></p></div>';
   (sp.seasons || []).forEach(function (s) {
-    html += '<div class="card" style="margin:10px 0"><div class="dim">';
+    html += '<div class="card" style="margin:10px 0">';
+    /* ho (2026-11-21, Q255, Tanner): every season bubble carries its
+       method + land label — two records with identical dates and limits
+       (Iowa raccoon: trapping/public and hunting/public) were rendering
+       as the same bubble twice because neither was ever shown. */
+    var ml = seasonMethodLand(s);
+    if (ml) html += '<div class="sp-season-ml">' + esc(ml) + '</div>';
+    html += '<div class="dim">';
     if (s.continuous_open) html += 'Open continuously.';
     else if (s.open_date && s.close_date) html += esc(fmtDate(s.open_date)) + ' → ' + esc(fmtDate(s.close_date));
     else html += 'Dates not listed.';
@@ -10266,6 +10426,16 @@ function showView(id) {
 
 /* Q49: collapsible Settings sections. Every section below the trapping-state
    card toggles independently; all start collapsed. */
+/* ho (2026-11-21, Q254, Tanner): opening a collapsible card scrolls the
+   pane so the card's header lands at the top of the visible area, just
+   under the trap-line bar — the opened card is what he's looking at, so
+   it comes to him. Closing never yanks the scroll. */
+function scrollHeadIntoView(head) {
+  if (!head || !head.scrollIntoView) return;
+  requestAnimationFrame(function () {
+    try { head.scrollIntoView({ block: 'start', behavior: 'smooth' }); } catch (e) {}
+  });
+}
 function toggleSettingsSection(secId) {
   var sec = $(secId), body = $(secId + '-body'), head = $(secId + '-head');
   if (!sec || !body || !head) return false;
@@ -10274,6 +10444,7 @@ function toggleSettingsSection(secId) {
   else { sec.classList.remove('open'); body.hidden = true; }
   if (willOpen) reportViewport(); /* fj: refresh the About diagnostic when opened */
   head.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+  if (willOpen) scrollHeadIntoView(head); /* ho (Q254) */
   return willOpen;
 }
 /* Q99 (2026-10-01): Tanner — the notes/memos/photos stack on the set form,
@@ -10298,6 +10469,18 @@ function refreshNotesBox(secId, notesId, memosId, photosId) {
   var pb = photosId && $(photosId);
   var hasPhotos = !!(pb && pb.querySelector('img'));
   setSectionOpen(secId, hasNotes || hasMemos || hasPhotos);
+  if (secId === 'setdetail-notessec') refreshDetailNotes(hasNotes, hasMemos, hasPhotos);
+}
+/* ho (2026-11-21, Q251, Tanner): on the set detail's read view, a part of
+   Notes, Memos & Photos shows only when it has something in it — no bare
+   "Voice memos" label over nothing. When all three are empty the section
+   header stays and the opened body carries one quiet line instead. */
+function refreshDetailNotes(hasNotes, hasMemos, hasPhotos) {
+  var t = function (id, show) { var el = $(id); if (el) el.hidden = !show; };
+  t('sd-notes-head', hasNotes); t('sd-notes', hasNotes);
+  t('sd-memos-label', hasMemos); t('sd-memos', hasMemos);
+  t('sd-photos-label', hasPhotos); t('sd-photos', hasPhotos);
+  t('sd-notes-empty', !(hasNotes || hasMemos || hasPhotos));
 }
 
 function enterMain() {
@@ -10773,10 +10956,9 @@ function renderSetTypeOptions() {
   var seenST = {};
   fnds.forEach(function (t) { seenST[t.toLowerCase()] = 1; });
   var customs = customOptionsFor('sf-settype').filter(function (t) { return !seenST[t.toLowerCase()]; });
-  var html = '';
-  fnds.concat(customs).sort(byName).forEach(function (t) { html += '<option>' + esc(t) + '</option>'; });
-  html += '<option value="' + OTHER_VALUE + '">Other…</option>';
-  sel.innerHTML = html;
+  /* ho (Q249): the foundation field is a combo input — the A–Z list is
+     stashed for its live getOptions; no Other… row (typing is the hatch). */
+  window._sfSetTypeOpts = fnds.concat(customs).sort(byName);
   renderVariationOptions();
 }
 /* Q212: the Variation dropdown under the foundation picker — "— None —"
@@ -10785,8 +10967,9 @@ function renderSetTypeOptions() {
 function renderVariationOptions() {
   var sel = $('sf-setvariation');
   if (!sel) return;
-  var f = $('sf-settype') ? $('sf-settype').value : '';
-  if (f === OTHER_VALUE) { var ot = $('sf-settype-othertext'); f = ot ? ot.value.trim() : ''; }
+  /* ho (Q249): the foundation is the set-type field's text; the variation
+     list is stashed for the combo's live getOptions. */
+  var f = $('sf-settype') ? $('sf-settype').value.trim() : '';
   var names = (SET_VARIATIONS[f] || []).slice();
   /* gj (2026-11-16, Tanner): his remembered custom variations for this
      foundation ride after its family names — a variation typed once is a
@@ -10796,55 +10979,49 @@ function renderVariationOptions() {
   if (f) customOptionsFor('sf-setvariation:' + f).forEach(function (t) {
     if (!seenV[t.toLowerCase()]) { names.push(t); seenV[t.toLowerCase()] = 1; }
   });
-  var html = '<option value="">— None —</option>';
-  names.forEach(function (t) { html += '<option>' + esc(t) + '</option>'; });
-  sel.innerHTML = html;
+  window._sfVarOpts = names;
 }
 /* Open-time fill: a name in the foundation's list selects in the dropdown;
    any other name (a custom variation) rides in the free-text box instead,
    so an edit opens with every stored character still on the form. */
 function setVariationFields(foundation, name) {
-  var sel = $('sf-setvariation'), cust = $('sf-setvariation-custom');
-  if (cust) cust.value = '';
+  /* ho (Q249): one combo field now — the stored name, family or custom,
+     simply sits in the field as text. */
+  var sel = $('sf-setvariation');
   if (!sel) return;
-  sel.value = '';
-  if (!name) return;
-  /* gj: a family name OR a remembered custom selects in the dropdown —
-     try the option itself, not just the family list. */
-  sel.value = name;
-  if (sel.value === name) return;
-  sel.value = '';
-  if (cust) cust.value = name;
+  sel.value = name || '';
   /* A stored custom that predates remembering joins the list now, so it
-     opens as a plain option from here on. */
-  if (foundation) rememberCustomOption('sf-setvariation:' + foundation, name);
+     opens as a plain option from here on. (gj) */
+  if (name && foundation && (SET_VARIATIONS[foundation] || []).indexOf(name) === -1) {
+    rememberCustomOption('sf-setvariation:' + foundation, name);
+  }
 }
 /* The variation as it should be stored: a typed custom name wins over the
    dropdown pick; blank when neither is set. */
 function variationFieldValue() {
-  var cust = $('sf-setvariation-custom');
-  var typed = cust ? cust.value.trim() : '';
-  if (typed) return typed;
+  /* ho (Q249): the combo field's text is the variation. A name outside
+     the foundation's family is remembered under that foundation (gj's
+     rule, moved from the old Custom box's change listener to read time). */
   var sel = $('sf-setvariation');
-  return sel ? (sel.value || '') : '';
+  var v = sel ? sel.value.trim() : '';
+  if (v) {
+    var f = selVal('sf-settype');
+    if (f && (SET_VARIATIONS[f] || []).indexOf(v) === -1 &&
+        customOptionsFor('sf-setvariation:' + f).indexOf(v) === -1) {
+      rememberCustomOption('sf-setvariation:' + f, v);
+    }
+  }
+  return v;
 }
 /* Stored values with no foundation home ("Drowning set",
    "Trail / blind set") still open fine in the form: they ride along as a
    selected first option until the user picks a foundation value. (Q212:
    the 49 taxonomy names never reach here — foundationOf homes them.) */
 function ensureSetTypeOption(v) {
-  var sel = $('sf-settype');
-  if (!sel || !v || isKnownSetType(v)) return;
-  /* Q55: a remembered custom already rides in the rebuilt list — no dup. */
-  var opts = sel.options || [];
-  for (var i = 0; i < opts.length; i++) {
-    if (opts[i].value === v || opts[i].text === v) { sel.value = v; return; }
-  }
-  var cur = sel.innerHTML || '';
-  var tag = '<option selected>' + esc(v) + '</option>';
-  if (cur.indexOf(tag) !== 0) sel.innerHTML = tag + cur;
+  /* ho (Q249): the foundation field is a text combo now — any stored
+     name simply sits in the field; there is no option list to extend. */
+  return;
 }
-
 /* ================= Q8. MILEAGE PER TRAP LINE =================
    Per-line trip log with manual odometer entries, plus a straight-line
    route estimate (haversine sum in check order) drawn on the map with
@@ -11055,7 +11232,7 @@ function showTripModal(lineId, tripId) {
     /* hm (Q195): the notes row — Voice → notes + Add photo, the same
        pair the set and log notes sections carry. */
     '<div class="btn-row" style="margin-top:8px">' + tripVoiceBtn +
-    '<button class="btn-small btn-secondary" id="m-note-photo" type="button"><img class="bi" src="assets/icons/camera.png" alt="">Add photo</button></div>' +
+    '<button class="btn-small btn-secondary" id="m-note-photo" type="button"><img class="bi" src="assets/icons/camera.png" alt="">Add a photo</button></div>' +
     tripVoiceTip +
     '<div class="voice-preview" id="voice-tripnotes-preview"></div>' +
     '<div class="photo-strip" id="m-trip-note-photos" style="margin-top:8px"></div>' +
@@ -11652,6 +11829,7 @@ function wireUp() {
       var tbody = thead.parentNode.querySelector('.totals-card-body');
       if (tbody) { if (tco[skey]) tbody.setAttribute('hidden', ''); else tbody.removeAttribute('hidden'); }
       thead.setAttribute('aria-expanded', String(!tco[skey])); /* gw scope 5: the chevron rotates off aria-expanded; no glyph swap */
+      if (!tco[skey]) scrollHeadIntoView(thead); /* ho (Q254): an opened card comes to the top */
       return;
     }
     /* Tap a By Species / By Set row to expand/collapse its details. */
@@ -11937,6 +12115,26 @@ fitAppHeight(); /* set it at parse time too, before first paint */
 function boot() {
   fitAppHeight(); /* fh: pin the app to the true visible height (see below) */
   Store.load();
+  /* ho (Q249): the set form's static combo fields, wired once — their
+     option lists are computed live (maker catalog, the type cascade's
+     stash, the foundation/variation stashes). */
+  comboAttach('sf-maker', 'sf-maker-suggest', function () { return makerComboOptions(); }, {});
+  comboAttach('sf-type', 'sf-type-suggest', function () { return window._sfTypeOpts || ALL_TRAP_TYPES.slice(); }, {});
+  comboAttach('sf-settype', 'sf-settype-suggest', function () { return window._sfSetTypeOpts || []; }, {});
+  comboAttach('sf-setvariation', 'sf-setvariation-suggest', function () { return window._sfVarOpts || []; }, { noneLabel: '— None —' });
+  /* ho (Q248): every other manually typed field in the sheets and the
+     home bar gets the clear × (the Set Name model). Fields already
+     carrying one (suggest/combo fields wrap themselves) are skipped by
+     ensureClearInput; Notes are textareas and stay untouched. */
+  document.querySelectorAll('.sheet input[type="text"], #home-bar input[type="text"]').forEach(function (inp) {
+    /* sf-name and sf-missing-detail grow their own × in their own wiring
+       (gm / attachSuggest) — a second one here would double them up. The
+       home-bar jump fields are not entry fields (the city field carries
+       its own match list) and wrapping the ZIP would break the Q265
+       jump row's flex — they stay bare. */
+    if (inp.id === 'sf-name' || inp.id === 'sf-missing-detail' || inp.id === 'home-zip' || inp.id === 'home-city') return;
+    ensureClearInput(inp);
+  });
   /* Q55: one delegated listener reveals the "What is it?" box under any
      Other-capable dropdown, wherever it was rendered. */
   document.addEventListener('change', function (e) {
@@ -11947,8 +12145,10 @@ function boot() {
        a variation never outlives the foundation it belonged to. */
     if (t && t.id === 'sf-settype') {
       renderVariationOptions();
-      var cust = $('sf-setvariation-custom');
-      if (cust) cust.value = '';
+      /* ho (Q249): the variation is one combo field now — a foundation
+         change clears it, as the rebuilt dropdown used to. */
+      var vf = $('sf-setvariation');
+      if (vf) vf.value = '';
     }
   });
   /* gi (2026-11-16, Tanner): a name typed under Other… joins its list the
