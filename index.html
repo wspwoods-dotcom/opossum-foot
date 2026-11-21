@@ -90,7 +90,7 @@
   <div id="track-bar"><span id="track-dot" aria-hidden="true"></span><span>Tracking</span><span id="track-stats">0.0 mi · 0:00</span><button class="btn-small btn-secondary" id="btn-track-pause" type="button">Pause</button><button class="btn-small btn-primary" id="btn-track-stop" type="button">Stop</button></div>
   <!-- Q200: a drawn saved route gets a bar in the same family, with the one
        thing it never had — a way to turn it off. -->
-  <div id="route-bar"><span id="route-bar-label">Route on the map</span><button class="btn-small btn-primary" id="btn-route-save" type="button" style="display:none">Save route</button><button class="btn-small btn-secondary" id="btn-route-fix" type="button" style="display:none">Fix route</button><button class="btn-small btn-secondary" id="btn-route-back" type="button" style="display:none">Back</button><button class="btn-small btn-secondary" id="btn-route-hide" type="button">Hide route</button></div>
+  <div id="route-bar"><span id="route-bar-label">Route on the map</span><button class="btn-small btn-primary" id="btn-route-save" type="button" style="display:none">Save route</button><button class="btn-small btn-secondary" id="btn-route-discard" type="button" style="display:none">Discard</button><button class="btn-small btn-secondary" id="btn-route-fix" type="button" style="display:none">Fix route</button><button class="btn-small btn-secondary" id="btn-route-back" type="button" style="display:none">Back</button><button class="btn-small btn-secondary" id="btn-route-hide" type="button">Hide route</button></div>
   <!-- go: route-fix mode — the bar carries the instructions, what the
        cut will remove, and the way out (Done). Same bar family.
        gp: points are draggable handles now, the working trip's miles
@@ -109,7 +109,7 @@
 <div id="sel-hint">Tap sets on the map to pick them, or use Pick from list.</div>
   <div id="place-bar"><span>Drag the pin onto the exact spot.</span><button class="btn-small btn-primary" id="btn-place-ok" type="button"><img class="pb-ic" src="assets/icons/check.png" alt="">Looks right</button><button class="btn-small btn-ghost" id="btn-place-cancel" type="button" aria-label="Cancel"><img class="pb-ic" src="assets/icons/x.png" alt=""></button></div>
   <!-- B26: home-ground picker — two clear choices, not steps; cancel stays inline; tight bar -->
-  <div id="home-bar"><span id="home-bar-prompt">Where's your home ground?</span><div class="home-bar-actions"><input id="home-zip" class="zip-jump" type="text" inputmode="numeric" maxlength="5" placeholder="ZIP" aria-label="Jump to ZIP code" autocomplete="off"><button class="btn-small btn-secondary" id="btn-home-zip" type="button">Go</button><button class="btn-small btn-primary" id="btn-home-ok" type="button" hidden>Set home here</button><button class="btn-small btn-ghost" id="btn-home-cancel" type="button" aria-label="Cancel"><img class="pb-ic" src="assets/icons/x.png" alt=""></button></div><div class="home-city-row"><input id="home-city" class="city-jump" type="text" placeholder="Or type a city…" aria-label="Jump to a city" autocomplete="off"><div id="home-city-matches" class="city-matches" hidden></div></div></div>
+  <div id="home-bar"><span id="home-bar-prompt">Where's your home ground?</span><div class="home-bar-actions"><div class="home-jump-row" id="home-jump-row"><input id="home-zip" class="zip-jump" type="text" inputmode="numeric" maxlength="5" placeholder="ZIP" aria-label="Jump to ZIP code" autocomplete="off"><button class="btn-small btn-secondary" id="btn-home-zip" type="button">Go</button></div><button class="btn-small btn-primary" id="btn-home-ok" type="button" hidden>Set home here</button><button class="sheet-x" id="btn-home-cancel" type="button" aria-label="Cancel"><img class="pb-ic" src="assets/icons/x.png" alt=""></button></div><div class="home-city-row"><input id="home-city" class="city-jump" type="text" placeholder="Or type a city…" aria-label="Jump to a city" autocomplete="off"><div id="home-city-matches" class="city-matches" hidden></div></div></div>
   <div id="locate-hint">Finding you… tap the crosshair again to cancel.</div>
 
   <!-- MAP PANE -->
@@ -603,12 +603,11 @@
     <div class="sheet-head"><h2>Track finished</h2><button class="sheet-x" data-close type="button">×</button></div>
     <div class="sheet-body">
       <p id="track-done-stats" style="font-size:17px"></p>
-      <div class="card"><p id="track-done-cov" style="margin:0"></p></div>
       <p class="dim">Saving files this as a trip in Route and Mileage for the active line, with the route kept on the record.</p>
       <div class="sheet-actions" style="flex-direction:column;align-items:stretch;gap:10px">
-        <button class="btn-primary" id="btn-track-save" type="button">Save to mileage log</button>
+        <button class="btn-secondary" id="btn-track-save" type="button">Save to mileage log</button>
         <button class="btn-secondary" id="btn-track-show" type="button">Show the route on the map</button>
-        <button class="btn-ghost" id="btn-track-discard" type="button">Discard this track</button>
+        <button class="btn-secondary" id="btn-track-discard" type="button">Discard this track</button>
       </div>
     </div>
   </div>
@@ -675,14 +674,11 @@
     <div class="suggest" id="sf-name-suggest"></div>
     <div class="setfield" id="setfield-traptype">
     <label class="field" for="sf-maker">Trap Manufacturer</label>
-    <select id="sf-maker" data-has-other="1"></select>
-    <div class="other-wrap" id="sf-maker-otherwrap" hidden><label class="field" for="sf-maker-othertext">What is it?</label><input type="text" id="sf-maker-othertext" placeholder="Type the manufacturer" autocomplete="off"></div>
+    <input type="text" id="sf-maker" placeholder="e.g. Bridger" autocomplete="off">
+    <div class="suggest" id="sf-maker-suggest"></div>
     <label class="field" for="sf-type">Trap Type</label>
-    <select id="sf-type" data-has-other="1">
-      <option>Bodygrip / Conibear</option><option>Cage live trap</option><option>Colony trap</option>
-      <option>Dog-proof</option><option>Foothold</option><option>Snare</option><option>Other</option>
-    </select>
-    <div class="other-wrap" id="sf-type-otherwrap" hidden><label class="field" for="sf-type-othertext">What is it?</label><input type="text" id="sf-type-othertext" placeholder="Type the trap type" autocomplete="off"></div>
+    <input type="text" id="sf-type" placeholder="e.g. Foothold" autocomplete="off">
+    <div class="suggest" id="sf-type-suggest"></div>
     </div>
     <div class="setfield" id="setfield-trapdetail">
     <label class="field">Trap Details</label>
@@ -690,18 +686,15 @@
     </div>
     <div class="setfield" id="setfield-settype">
     <label class="field" for="sf-settype">Set Type</label>
-    <select id="sf-settype" data-has-other="1">
-      <!-- options built by renderSetTypeOptions() — Q29 researched taxonomy -->
-    </select>
-    <div class="other-wrap" id="sf-settype-otherwrap" hidden><label class="field" for="sf-settype-othertext">What is it?</label><input type="text" id="sf-settype-othertext" placeholder="Type the set type" autocomplete="off"></div>
+    <!-- ho (Q249): a type-to-filter combo now; the option list is computed
+         by renderSetTypeOptions() — Q29 researched taxonomy. -->
+    <input type="text" id="sf-settype" autocomplete="off">
+    <div class="suggest" id="sf-settype-suggest"></div>
     <!-- Q212: the foundation above is the structure; the variation is the
          dressing (T-bone, Bean Duff, your own name for it). -->
     <label class="field" for="sf-setvariation">Variation</label>
-    <select id="sf-setvariation">
-      <option value="">— None —</option>
-    </select>
-    <label class="field" for="sf-setvariation-custom">Custom variation</label>
-    <input type="text" id="sf-setvariation-custom" placeholder="Or type your own variation" autocomplete="off">
+    <input type="text" id="sf-setvariation" autocomplete="off">
+    <div class="suggest" id="sf-setvariation-suggest"></div>
     </div>
     <div class="setfield" id="setfield-bait">
     <label class="field">Bait</label>
@@ -803,7 +796,7 @@
     <div id="setform-photos">
     <label class="field">Photos</label>
     <div class="btn-row" style="margin-top:8px">
-      <button class="btn-small btn-secondary" id="btn-sf-photo" type="button"><img class="bi" src="assets/icons/camera.png" alt="">Take a photo</button>
+      <button class="btn-small btn-secondary" id="btn-sf-photo" type="button"><img class="bi" src="assets/icons/camera.png" alt="">Add a photo</button>
     </div>
     <!-- Q179: photos below the Take a photo button -->
     <div class="photo-strip" id="sf-photos" style="margin-top:8px"></div>
@@ -845,8 +838,9 @@
     <!-- Q177 (2026-10-08): Tanner — small field labels like the Edit form, not big subheadings -->
     <label class="field" style="margin-top:18px" id="sd-memos-label">Voice memos</label>
     <div id="sd-memos"></div>
-    <label class="field" style="margin-top:18px">Photos</label>
+    <label class="field" style="margin-top:18px" id="sd-photos-label">Photos</label>
     <div class="photo-strip" id="sd-photos"></div>
+    <p class="dim" id="sd-notes-empty" hidden>No notes, memos, or photos yet.</p>
     </div>
     </div>
     <!-- Q203 (2026-10-19): Tanner — the catches list folds up like the notes
@@ -953,7 +947,7 @@
     </div>
     <label class="field" for="btn-log-photo" style="margin-top:12px">Photos</label>
     <div class="btn-row" style="margin-top:8px">
-      <button class="btn-small btn-secondary" id="btn-log-photo" type="button"><img class="bi" src="assets/icons/camera.png" alt="">Add photo</button>
+      <button class="btn-small btn-secondary" id="btn-log-photo" type="button"><img class="bi" src="assets/icons/camera.png" alt="">Add a photo</button>
     </div>
     <!-- Q179: photos below the Add photo button -->
     <div class="photo-strip" id="log-photos" style="margin-top:8px"></div>
