@@ -1245,11 +1245,14 @@ body.editor-lock #btn-track { pointer-events: none; opacity: .45; }
 
 /* Q170: Sponsored Products directory on the Scorecard tab */
 #sc-sp-q { width: 100%; margin-top: 10px; }
-.sp-card { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; padding: 12px 14px; margin-top: 8px;
+.sp-card { display: flex; align-items: center; flex-wrap: nowrap; gap: 10px; padding: 12px 14px; margin-top: 8px;
   border: 1px solid var(--line); border-radius: 12px; cursor: pointer; }
 .sp-card:active { opacity: .75; }
 .sp-logo { width: 44px; height: 44px; border-radius: 10px; object-fit: cover; flex: 0 0 auto; }
-.sp-info { flex: 1 1 150px; min-width: 0; }
+.sp-info { flex: 1 1 auto; min-width: 0; }
+/* il (Q307): Compare keeps its standard size beside the product instead
+   of wrapping under the row and stretching full-width. */
+#sc-sp-list [data-sp-compare] { flex: 0 0 auto; width: auto; } /* width:auto beats the .btn base width:100% — that base width was crushing the info block to zero */
 /* ij (Q304): the Sponsored tag in the standard row dress — a small gold
    label in the row, not the one-off pill. */
 .sp-tag { display: inline-block; margin-top: 3px; color: #E7C945; font-size: 12px;
