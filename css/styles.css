@@ -344,6 +344,15 @@ select.select-hint { color: var(--faint); }
    the old always-green #btn-add-gps override was removed. */
 .leaflet-bar a { background: var(--green); color: #0e150a; border-bottom: 1px solid rgba(0,0,0,.25); }
 .leaflet-bar a:hover, .leaflet-bar a:focus { background: var(--green); color: #0e150a; }
+/* hn (2026-11-21, Q263): Leaflet's .leaflet-disabled paints the zoom half
+   pale grey at the zoom limit, so the pill wore two colors (Tanner,
+   2026-11-21). The pill stays green at every zoom; only the glyph dims. */
+.leaflet-bar a.leaflet-disabled { background: var(--green); color: rgba(14,21,10,.35); }
+/* hn (2026-11-21, Tanner): the attribution bar, quieter — smaller type on a
+   translucent ground instead of the solid white strip. The imagery credits
+   are required by the providers' terms and stay legible; only the volume
+   comes down. */
+.leaflet-control-attribution { font-size: 9px; line-height: 1.5; padding: 0 5px; background: rgba(255,255,255,.55); color: #222; }
 .leaflet-control-layers-toggle { background-color: var(--green); }
 
 /* set pins */
