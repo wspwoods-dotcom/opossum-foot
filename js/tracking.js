@@ -203,8 +203,10 @@ var Tracking = (function () {
     var miles = distM / 1609.344;
     pending = { miles: miles, elapsed: elapsedMs(), cov: cov, pts: pts.slice() };
     $('track-done-stats').innerHTML = '<strong>' + fmtDist(distM) + '</strong> on the line';
-    $('track-done-cov').innerHTML = cov.passed.length + ' of ' + (cov.passed.length + cov.missed.length) + ' active sets passed' +
-      (cov.missed.length ? '<br><span class="mk-safety">Missed: ' + cov.missed.map(function (n) { return esc(n); }).join(', ') + '</span>' : '<br>Every active set on this line got a visit.');
+    /* ho (2026-11-21, Q260, Tanner): the passed/missed panel comes off this
+       sheet entirely — no count, no names. Coverage still rides the saved
+       trip's note (pending.cov) as the record; it is simply not reported
+       here. */
     openSheet('sheet-track-done');
   }
   function discard() { pending = null; if (layer) layer.clearLayers(); endFix(); clearSaved(); closeSheets(); }
@@ -259,12 +261,16 @@ var Tracking = (function () {
      uncapped fitBounds flew the map to max zoom and stranded the zoom-in
      button at its limit (Tanner, 2026-11-21). Cap the fit at 18; a route
      that is effectively one point just centers at the current zoom. */
-  function fitRouteBounds(latlngs) {
+  function fitRouteBounds(latlngs, forEditor) {
     if (!mapRef || !latlngs.length) return;
     var b = L.latLngBounds(latlngs);
     var ne = b.getNorthEast(), sw = b.getSouthWest();
     if (Math.abs(ne.lat - sw.lat) < 1e-5 && Math.abs(ne.lng - sw.lng) < 1e-5) {
-      mapRef.setView(b.getCenter(), mapRef.getZoom(), { animate: false });
+      /* ho (2026-11-21, Q267, Tanner): the EDITOR is the opposite case from
+         showing — a man opening Fix route is there to work the points, so a
+         one-point route lands at a close working zoom (17) where he can see
+         it. The show path keeps hn's rule: center, never dive. */
+      mapRef.setView(b.getCenter(), forEditor ? 17 : mapRef.getZoom(), { animate: false });
       return;
     }
     mapRef.fitBounds(b, { padding: [30, 30], maxZoom: 18 });
@@ -771,7 +777,7 @@ var Tracking = (function () {
     editorLock(true);
     fixDraw(); fixBar();
     if (mapRef && fixPts.length) {
-      fitRouteBounds(fixPts.map(function (p) { return L.latLng(p.lat, p.lng); }));
+      fitRouteBounds(fixPts.map(function (p) { return L.latLng(p.lat, p.lng); }), true);
     }
   }
   function endFix() {
@@ -1003,6 +1009,10 @@ var Tracking = (function () {
     var drawn = !!(savedLayer && savedLayer.getLayers().length);
     bar.classList.toggle('show', drawn || !!pending);
     var sv = $('btn-route-save'); if (sv) sv.style.display = pending ? '' : 'none';
+    /* ho (2026-11-21, Q262, Tanner): an unsaved route's bar also carries a
+       Discard — deleting the track itself, distinct from Hide (display
+       only). It rides only while the route is unsaved. */
+    var dc = $('btn-route-discard'); if (dc) dc.style.display = pending ? '' : 'none';
     /* gr: Fix route + Back ride the bar only while a saved trip's
        route is drawn with its context (see drawSaved) — never on an
        unsaved route, whose bar carries Save instead. */
@@ -1063,6 +1073,15 @@ var Tracking = (function () {
     var d = $('btn-track-discard'); if (d) d.onclick = discard;
     var h = $('btn-route-hide'); if (h) h.onclick = hideRoute;
     var rs = $('btn-route-save'); if (rs) rs.onclick = function () { saveToMileage(); syncRouteBar(); };
+    /* ho (Q262): Discard on the unsaved-route bar — confirms, then the
+       track itself is gone (Hide, by contrast, only clears the drawing). */
+    var rd = $('btn-route-discard'); if (rd) rd.onclick = function () {
+      if (!pending) return;
+      if (!window.confirm('Discard this track? It has not been saved to the mileage log.')) return;
+      pending = null;
+      if (layer) layer.clearLayers();
+      clearSaved();
+    };
     var rf2 = $('btn-route-fix'); if (rf2) rf2.onclick = function () { if (savedCtx && savedCtx.fix) savedCtx.fix(); };
     var rb2 = $('btn-route-back'); if (rb2) rb2.onclick = function () { if (savedCtx && savedCtx.back) savedCtx.back(); };
     var fa = $('btn-fix-apply'); if (fa) fa.onclick = fixApply;
