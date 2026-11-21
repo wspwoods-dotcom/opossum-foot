@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-11-20hm';
+var APP_VERSION = 'beta 0.1 · build 2026-11-21hn';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -2263,6 +2263,10 @@ function initMap() {
     return;
   }
   map = L.map('map', { zoomControl: false, attributionControl: true, maxZoom: 22 }).setView([39.5, -98.35], 4);
+  /* hn (2026-11-21, Tanner): drop the Leaflet name-and-flag prefix from the
+     attribution bar. The imagery credits themselves (Mapbox / OpenStreetMap
+     / Maxar / USGS) are contractual and stay, legible — see styles.css. */
+  if (map.attributionControl) map.attributionControl.setPrefix(false);
   /* Q10 / gy (2026-11-18): Mapbox Satellite became the default aerial.
      The provider comparison (research_notes/map-provider-comparison-
      20261118) found it the freshest deep-zoom rural imagery feeding
