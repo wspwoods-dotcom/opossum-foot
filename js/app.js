@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-11-21hq';
+var APP_VERSION = 'beta 0.1 · build 2026-11-21hr';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -1575,6 +1575,45 @@ function sponsorSuggests(key, q) {
    products starting with C appear. A value already in the field stays put
    (auto-saved — no need to look it up again). Other suggest fields keep the
    old focus-pop behavior. */
+/* ---- hr (2026-11-21, Q273, Tanner): a typing field must sit where he can
+   see it AND its suggestion list. On his phone the form never scrolled:
+   tap a lure box low in the form, the keyboard rises, and the list opens
+   UNDER the field — straight behind the keyboard (his screenshot: the
+   "Cedar Creek Lures…" row sliced in half at the keyboard's top edge,
+   and the field itself riding low instead of centered). After any
+   suggest render that shows the box, pull the field up to about 30% of
+   the VISIBLE height (visualViewport — the part the keyboard does not
+   cover) inside its scroll container, leaving the list room beneath it.
+   Two passes: one quick (typing, keyboard already up) and one after the
+   keyboard finishes rising (focus); a pass no-ops when the field
+   already sits right or is no longer focused. */
+function comboReveal(input, box) {
+  if (!input || !box) return;
+  [60, 380].forEach(function (delay) {
+    setTimeout(function () {
+      if (!box.className || box.className.indexOf('show') === -1) return;
+      if (document.activeElement !== input) return;
+      var sc = input.closest ? input.closest('.scroll') : null;
+      if (!sc) {
+        var p = input.parentElement;
+        while (p && p !== document.body) {
+          var cs = getComputedStyle(p);
+          if ((cs.overflowY === 'auto' || cs.overflowY === 'scroll') && p.scrollHeight > p.clientHeight) { sc = p; break; }
+          p = p.parentElement;
+        }
+      }
+      var vv = window.visualViewport;
+      var visH = vv ? vv.height : window.innerHeight;
+      var ir = input.getBoundingClientRect();
+      var br = box.getBoundingClientRect();
+      var target = Math.max(10, visH * 0.30);
+      var listWanted = Math.min(br.height, 230);
+      if (ir.top >= 0 && ir.top <= target + 4 && ir.bottom + listWanted <= visH + 4) return;
+      if (sc) sc.scrollTop += ir.top - target;
+      else if (input.scrollIntoView) input.scrollIntoView(true);
+    }, delay);
+  });
+}
 function attachSuggest(inputId, boxId, key, typeToFilter) {
   var input = $(inputId), box = $(boxId);
   if (!input || !box || input._suggestWired) return;
@@ -1669,6 +1708,7 @@ function attachSuggest(inputId, boxId, key, typeToFilter) {
         openSponsorBio(this.getAttribute('data-sp'));
       };
     }
+    comboReveal(input, box); /* hr (Q273): keep the field + list above the keyboard */
   }
   input.addEventListener('input', render);
   input.addEventListener('input', updateClear); /* Q236: the × shows only while the field has text */
@@ -1758,6 +1798,7 @@ function comboAttach(inputId, boxId, getOptions, opts) {
         if (opts.onPick) opts.onPick(input.value);
       };
     });
+    comboReveal(input, box); /* hr (Q273) */
   }
   input._comboRender = renderCombo;
 }
@@ -1848,6 +1889,7 @@ function renderSetNameSuggest() {
       inp.dispatchEvent(new Event('input', { bubbles: true }));
     };
   }
+  comboReveal(inp, box); /* hr (Q273) */
 }
 function wireSetNameField() {
   var inp = $('sf-name'), box = $('sf-name-suggest');
