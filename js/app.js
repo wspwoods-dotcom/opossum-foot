@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-11-21ie';
+var APP_VERSION = 'beta 0.1 · build 2026-11-21if';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -8333,7 +8333,7 @@ function tripRowHTML(tr) {
       '<div class="trip-body">' +
       (det ? '<div class="dim" style="margin-bottom:8px">' + esc(det) + '</div>' : '') +
       '<div class="btn-row">' +
-      '<button type="button" class="btn-secondary" data-trip-show="' + esc(tr.id) + '">Show on map</button>' +
+      '<button type="button" class="btn-secondary" data-trip-show="' + esc(tr.id) + '">' + ((window.Tracking && Tracking.drawnTripId && Tracking.drawnTripId() === tr.id) ? 'Hide on map' : 'Show on map') + '</button>' +
       (tr.track && tr.track.length > 1 ? '<button type="button" class="btn-secondary" data-trip-fix="' + esc(tr.id) + '">Fix route</button>' : '') +
       '<button type="button" class="btn-ghost" data-trip-gdel="' + esc(tr.id) + '">Delete</button>' +
       '</div>' +
@@ -8398,6 +8398,7 @@ function deleteTripPhoto(photoId) {
    bar and leaves him on the map (the dismissal lives in tracking.js). */
 function tripMapCtx(tr) {
   return {
+    tripId: tr.id, /* if (Q298): the drawn route knows its trip, so the trip's own button can read Hide on map */
     fix: function () { openTripFix(tr); }
   };
 }
@@ -8533,7 +8534,13 @@ function renderPaperworkMileage() {
     (function (el) {
       el.onclick = function () {
         var tr = tripById(el.getAttribute('data-trip-show'));
-        if (tr && tr.track && tr.track.length > 1 && window.Tracking) { switchTab('map'); Tracking.drawSaved(tr.track, tripMapCtx(tr)); }
+        if (!tr || !window.Tracking) return;
+        /* if (2026-11-21, Q298, Tanner): the button names the state it
+           is in — a trip whose route is on the map reads Hide on map,
+           and tapping it takes the route off (the route bar's own Hide
+           route by another door), staying right here in Paperwork. */
+        if (Tracking.drawnTripId && Tracking.drawnTripId() === tr.id) { Tracking.clearSaved(); renderPaperworkMileage(); return; }
+        if (tr.track && tr.track.length > 1) { var ctx = tripMapCtx(tr); ctx.noBar = true; /* Q300: shown from Paperwork — no second menu on the map */ switchTab('map'); Tracking.drawSaved(tr.track, ctx); }
         else toast('No route is saved on that trip.');
       };
     })(shows[s2]);
