@@ -1606,8 +1606,6 @@ body.placing #route-back-chip { display: none; }
 .fix-pt { background: none; border: none; -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; }
 .fix-pt i { display: block; width: 14px; height: 14px; margin: 8px; border-radius: 50%; background: #e5484d; border: 2px solid #fff; box-shadow: 0 1px 4px rgba(0,0,0,.45); box-sizing: border-box; }
 .fix-pt-sel i { width: 20px; height: 20px; margin: 5px; background: #e7c945; }
-.fix-mid { background: none; border: none; -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; }
-.fix-mid i { display: block; width: 10px; height: 10px; margin: 10px; border-radius: 50%; background: rgba(231,201,69,.5); border: 2px solid rgba(255,255,255,.7); box-sizing: border-box; }
 /* gu: Draw a route points are the same handles in miniature — a 30px
    touch target with a ~12px red dot; gold and bigger while a point is
    picked for Remove / Close the loop. */
