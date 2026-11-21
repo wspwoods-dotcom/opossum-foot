@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-11-21hs';
+var APP_VERSION = 'beta 0.1 · build 2026-11-21ht';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -1693,7 +1693,6 @@ function attachSuggest(inputId, boxId, key, typeToFilter) {
   function fillFrom(btn) {
     input.value = btn.getAttribute('data-v');
     box.className = 'suggest'; box.innerHTML = '';
-    input.focus();
     /* ft: the input event below fires render — without this flag it would
        pop the box straight back up with matches for the value just picked. */
     input._justFilled = true;
@@ -1701,6 +1700,12 @@ function attachSuggest(inputId, boxId, key, typeToFilter) {
        "+ Add Another" button never appeared after tapping a suggestion.
        Dispatch it so the button (and the bait-rule check) update. */
     input.dispatchEvent(new Event('input', { bubbles: true }));
+    /* ht (2026-11-21, Q277, Tanner): a pick FINISHES the field — one
+       action, not two. This used to call input.focus() here, which left
+       him sitting in the filled box (value highlighted under hs's
+       select-all) with the keyboard's checkmark still to tap. Now the
+       pick fills, the highlight drops, and the keyboard goes away. */
+    input.blur();
   }
   function render(bagMode) {
     /* ft: a just-picked value closes the box and keeps it closed. */
@@ -1863,6 +1868,7 @@ function comboAttach(inputId, boxId, getOptions, opts) {
         input.dispatchEvent(new Event('input', { bubbles: true }));
         input.dispatchEvent(new Event('change', { bubbles: true }));
         if (opts.onPick) opts.onPick(input.value);
+        input.blur(); /* ht (Q277): a pick finishes the field */
       };
     });
     comboReveal(input, box); /* hr (Q273) */
@@ -1948,12 +1954,12 @@ function renderSetNameSuggest() {
       inp.value = this.getAttribute('data-v');
       hideSetNameSuggest();
       updateSetNameClear();
-      inp.focus();
-      /* Set AFTER focus() — the same order attachSuggest uses: refocusing
-         fires a focus render that would reopen the box, and the flag is
-         what the input render below consumes to keep it shut. */
+      /* The flag is what the input render below consumes to keep the box
+         shut over the value just picked. ht (Q277): no refocus — a pick
+         finishes the field, so blur instead of the old focus(). */
       inp._justFilled = true;
       inp.dispatchEvent(new Event('input', { bubbles: true }));
+      inp.blur();
     };
   }
   comboReveal(inp, box); /* hr (Q273) */
