@@ -450,11 +450,7 @@ body[data-pinscheme="pastel"] { --pin-active:#a9d6a5; --pin-sprung:#eacd7d; --pi
 .setfield { border-top: 1px solid var(--line); margin-top: 16px; padding-top: 12px; }
 /* Q11: saved-entry suggestions under the bait/lure/urine inputs */
 .suggest { display: none; margin-top: -2px; }
-/* ij (Q305): the list floats over the page, anchored under its field by
-   comboReveal — the page beneath never moves while he types. */
-.suggest.show { display: block; position: absolute; left: 0; right: 0; z-index: 60;
-  max-height: 234px; overflow-y: auto; border-radius: 10px;
-  box-shadow: 0 12px 28px rgba(0,0,0,.5); }
+.suggest.show { display: block; } /* ik (Q306): the ij overlay is reverted — the list sits in the page, as before */
 .suggest-item { display: block; width: 100%; text-align: left; font-size: 15px; color: var(--text);
   background: var(--card); border: 1px solid var(--line); border-top: none; padding: 9px 12px; cursor: pointer; }
 .suggest-item:first-child { border-top: 1px solid var(--line); border-radius: 10px 10px 0 0; }
