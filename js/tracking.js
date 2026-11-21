@@ -489,10 +489,13 @@ var Tracking = (function () {
     });
     if (fixSel && fixSel.a !== null && fixSel.b !== null) {
       /* ic (Q294): when one leg joins the pair (through a stack), the
-         gold rides THAT leg — the span the long way around is not
-         what he tapped. */
+         gold rides THAT leg. ie (Q297): otherwise the gold is the one
+         straight line between the two tapped dots — the line Connect
+         will draw. The old preview drew the whole index span between
+         the taps, a zigzag through points he never tapped, and he
+         read it as the route Connect meant to take. */
       var pairLeg = fixLegForPair(fixSel.a, fixSel.b);
-      var stretch = pairLeg >= 0 ? [fixPts[pairLeg], fixPts[pairLeg + 1]] : fixPts.slice(fixSel.a, fixSel.b + 1);
+      var stretch = pairLeg >= 0 ? [fixPts[pairLeg], fixPts[pairLeg + 1]] : [fixPts[fixSel.a], fixPts[fixSel.b]];
       L.polyline(stretch.map(function (p) { return [p.lat, p.lng]; }), { color: '#e7c945', weight: 6, opacity: 0.95 }).addTo(fixLines);
     }
     /* hx (2026-11-21, Q287, Tanner): the pending drawn run renders as
@@ -705,12 +708,12 @@ var Tracking = (function () {
         ap.textContent = 'Connect';
         ap.style.display = '';
       } else if (pb.seg === pa.seg) {
-        lb.textContent = 'Connect runs a straight line between these two points (' + fmtDist(hav(pa, pb)) + ' across) and every point stays — or Cut, and the ' + nBetween + ' point' + (nBetween === 1 ? '' : 's') + ' in between come out.';
+        lb.textContent = 'Connect runs a straight line between these two points (' + fmtDist(hav(pa, pb)) + ' across) and every point stays — the stretch in between stands on its own — or Cut, and the ' + nBetween + ' point' + (nBetween === 1 ? '' : 's') + ' in between come out.';
         ap.textContent = 'Connect';
         ap.style.display = '';
         vis(ct, true);
       } else {
-        lb.textContent = 'Connect these two points — a straight line joins them (' + fmtDist(hav(pa, pb)) + ' across), and every point stays.';
+        lb.textContent = 'Connect these two points — a straight line joins them (' + fmtDist(hav(pa, pb)) + ' across), and every point stays; the pieces in between stand as their own stretches.';
         ap.textContent = 'Connect';
         ap.style.display = '';
       }
@@ -797,17 +800,41 @@ var Tracking = (function () {
       toast('Connected in the edit — Save keeps it, Cancel throws it away.');
       return;
     }
-    /* hv (Q283): Connect with points between the taps — land a copy
-       of the first tapped dot just past the second. The leg from the
-       second dot to the copy is the straight line he tapped for;
-       every recorded dot stays; the route overlaps itself, as a real
-       track may. The copy carries the second dot's segment so the
-       new leg draws and counts. */
+    fixConnectSwap();
+  }
+  /* ie (2026-11-21, Q297, Tanner — four field reports in one
+     afternoon): Connect with points between the taps is THE PIECE
+     SWAP. The hv copy model landed a copy of the first dot past the
+     second, so the route ran from the second dot BACK to the first
+     dot's spot and carried on from there — "no matter what you do it
+     still wants to go back to that one point." His words: "We just
+     want a straight line from one dot to the other." So: the route
+     runs straight from the first dot to the second and carries on
+     through the second dot's own stretch; everything that sat
+     between the taps — the first stretch's tail, any whole stretches,
+     the second stretch's head — stands as its own stretch, every
+     point kept, every leg inside those pieces untouched. No copy is
+     created, no leg is drawn through a point he didn't tap, and the
+     two breaks where the in-between pieces detached are honest
+     breaks he can rejoin by tapping their own two dots. */
+  function fixConnectSwap() {
+    var a = fixSel.a, b = fixSel.b;
     fixPushUndo();
-    var src = fixPts[a];
-    var copy = { lat: src.lat, lng: src.lng, seg: segB };
-    if (src.hand) copy.hand = 1;
-    fixPts.splice(b + 1, 0, copy);
+    var starts = {};
+    fixRuns().forEach(function (r) { starts[r.a] = true; });
+    var runB = fixRunOf(b), bEnd = runB ? runB.b : b;
+    function piece(from, to, firstJoins) {
+      var out = [];
+      for (var i = from; i <= to; i++) out.push({ p: fixPts[i], boundary: (i === from) ? !firstJoins : !!starts[i] });
+      return out;
+    }
+    var items = piece(0, a, false)
+      .concat(piece(b, bEnd, true))
+      .concat(piece(a + 1, b - 1, false))
+      .concat(bEnd + 1 < fixPts.length ? piece(bEnd + 1, fixPts.length - 1, false) : []);
+    var seg = -1;
+    items.forEach(function (it) { if (it.boundary) seg++; it.p.seg = seg; });
+    fixPts = items.map(function (it) { return it.p; });
     fixSel = { a: null, b: null };
     fixDraw(); fixBar();
     toast('Connected in the edit — Save keeps it, Cancel throws it away.');
