@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-11-21ht';
+var APP_VERSION = 'beta 0.1 · build 2026-11-21hu';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -8390,14 +8390,15 @@ function deleteTripPhoto(photoId) {
 /* gr (2026-11-18, Tanner): the trip-map context. While a saved trip's
    route is drawn from this readout — Show on map, or the landing after
    a Fix route Done — the route bar carries Fix route for that same
-   trip and Back to this readout, so the route (and a repair just made
-   to it) can be checked right where it landed. Back is the Paperwork
-   tab itself; the drawn route stays on the map, as Show on map has
-   always left it. */
+   trip, so the route (and a repair just made to it) can be checked
+   right where it landed; the drawn route stays on the map, as Show on
+   map has always left it. hu (2026-11-21, Q278, Tanner): the bar's
+   third button is Done now, not Back — Back only jumped to the
+   Paperwork tab, which the tab bar already does; Done dismisses the
+   bar and leaves him on the map (the dismissal lives in tracking.js). */
 function tripMapCtx(tr) {
   return {
-    fix: function () { openTripFix(tr); },
-    back: function () { switchTab('licenses'); }
+    fix: function () { openTripFix(tr); }
   };
 }
 /* go/gp/gq: Fix route — Tracking owns the map work and the working
