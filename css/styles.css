@@ -450,7 +450,11 @@ body[data-pinscheme="pastel"] { --pin-active:#a9d6a5; --pin-sprung:#eacd7d; --pi
 .setfield { border-top: 1px solid var(--line); margin-top: 16px; padding-top: 12px; }
 /* Q11: saved-entry suggestions under the bait/lure/urine inputs */
 .suggest { display: none; margin-top: -2px; }
-.suggest.show { display: block; }
+/* ij (Q305): the list floats over the page, anchored under its field by
+   comboReveal — the page beneath never moves while he types. */
+.suggest.show { display: block; position: absolute; left: 0; right: 0; z-index: 60;
+  max-height: 234px; overflow-y: auto; border-radius: 10px;
+  box-shadow: 0 12px 28px rgba(0,0,0,.5); }
 .suggest-item { display: block; width: 100%; text-align: left; font-size: 15px; color: var(--text);
   background: var(--card); border: 1px solid var(--line); border-top: none; padding: 9px 12px; cursor: pointer; }
 .suggest-item:first-child { border-top: 1px solid var(--line); border-radius: 10px 10px 0 0; }
@@ -1245,11 +1249,15 @@ body.editor-lock #btn-track { pointer-events: none; opacity: .45; }
 
 /* Q170: Sponsored Products directory on the Scorecard tab */
 #sc-sp-q { width: 100%; margin-top: 10px; }
-.sp-card { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; padding: 10px; margin-top: 8px;
+.sp-card { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; padding: 12px 14px; margin-top: 8px;
   border: 1px solid var(--line); border-radius: 12px; cursor: pointer; }
 .sp-card:active { opacity: .75; }
 .sp-logo { width: 44px; height: 44px; border-radius: 10px; object-fit: cover; flex: 0 0 auto; }
 .sp-info { flex: 1 1 150px; min-width: 0; }
+/* ij (Q304): the Sponsored tag in the standard row dress — a small gold
+   label in the row, not the one-off pill. */
+.sp-tag { display: inline-block; margin-top: 3px; color: #E7C945; font-size: 12px;
+  font-weight: 700; letter-spacing: .07em; text-transform: uppercase; }
 /* ig (Q302): product names read whole — they wrap instead of cutting off at 'Ghost\u2026' */
 .sp-product { font-weight: 700; white-space: normal; }
 .sp-brand { font-size: 12px; }
