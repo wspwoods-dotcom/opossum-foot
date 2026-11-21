@@ -235,7 +235,15 @@
            by side, in the tab whose charter is kept records. Same button,
            same sheet (sheet-gallery); it lived at the top of History
            until this build. -->
-      <button class="btn-secondary gal-open" id="btn-gallery" type="button">Photo gallery</button>
+      <!-- if (2026-11-21, Q299, Tanner): the gallery button wears the
+           same dress as every other Paperwork section head — a card
+           box, the big bold left-aligned label, the chevron — because
+           a plain button centered its label and shrank its font no
+           matter what the stylesheet said. It still opens the same
+           gallery sheet (the btn-gallery binding is by id). -->
+      <div class="card setsec" id="setsec-gallery">
+        <button type="button" class="setsec-head" id="btn-gallery"><span>Photo Gallery</span><span class="setsec-chev" aria-hidden="true">›</span></button>
+      </div>
       <!-- gw (2026-11-18): My Tags — every tag record on the active line,
            gathered from the catches themselves (the records live on the
            catch; this is the show-the-warden view). Hidden entirely when
