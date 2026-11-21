@@ -355,6 +355,7 @@ var Tracking = (function () {
      from ever being read as a tap: fixLastDragIx is the ONE marker a
      trailing click may be swallowed for — its own. */
   var fixMids = [], fixLastDragIx = -1, fixLastDragMid = -1, fixCycleStart = null;
+  var fixMidDrag = null; /* hz: a midpoint handle mid-drag — the lines bend to it live */
   var fixMidSnap = null, fixMidFrom = null;
   function fixFlatten(track) {
     var out = [];
@@ -454,10 +455,21 @@ var Tracking = (function () {
     if (!fixLines) return;
     fixLines.clearLayers();
     if (!fixPts) return;
+    var gi = 0;
     fixSegs(fixPts).forEach(function (seg) {
       if (seg.length > 1) {
-        L.polyline(seg.map(function (p) { return [p.lat, p.lng]; }), { color: '#e5484d', weight: 4, opacity: 0.5 }).addTo(fixLines);
-      }
+        var lls = [];
+        seg.forEach(function (p) {
+          lls.push([p.lat, p.lng]);
+          /* hz (2026-11-21, Tanner): while a midpoint handle is being
+             dragged, the line bends to it — the dragged spot rides
+             inside the leg it will split, so he sees the new shape
+             before he lets go. */
+          if (fixMidDrag && gi === fixMidDrag.afterIx - 1) lls.push([fixMidDrag.lat, fixMidDrag.lng]);
+          gi++;
+        });
+        L.polyline(lls, { color: '#e5484d', weight: 4, opacity: 0.5 }).addTo(fixLines);
+      } else { gi += seg.length; }
     });
     if (fixSel && fixSel.a !== null && fixSel.b !== null) {
       var stretch = fixPts.slice(fixSel.a, fixSel.b + 1);
@@ -517,6 +529,16 @@ var Tracking = (function () {
         var ll = mk.getLatLng();
         p.lat = ll.lat; p.lng = ll.lng;
         fixDrawLines(); fixBar();
+        /* hz (2026-11-21, Tanner): the midpoint handles beside the
+           dragged point ride along with the line — a handle left
+           standing where its leg used to be reads as a stray point,
+           because on the map it is one. */
+        if (fixMids) fixMids.forEach(function (md) {
+          if (md._afterIx === i || md._afterIx === i + 1) {
+            var a2 = fixPts[md._afterIx - 1], b2 = fixPts[md._afterIx];
+            if (a2 && b2) md.setLatLng([(a2.lat + b2.lat) / 2, (a2.lng + b2.lng) / 2]);
+          }
+        });
       });
       mk.on('dragend', function () {
         fixDragEndAt = Date.now();
@@ -552,10 +574,16 @@ var Tracking = (function () {
             if (fixLastDragMid === afterIx && Date.now() - fixDragEndAt < 400) { fixLastDragMid = -1; return; }
             fixInsertMid(afterIx, null, false);
           });
+          mid._afterIx = afterIx;
           mid.on('dragstart', function () { fixMidSnap = fixSnapshot(); fixMidFrom = mid.getLatLng(); fixLastDragMid = -1; });
-          mid.on('drag', function () { fixDrawLines(); });
+          mid.on('drag', function () {
+            var ll = mid.getLatLng();
+            fixMidDrag = { afterIx: afterIx, lat: ll.lat, lng: ll.lng };
+            fixDrawLines();
+          });
           mid.on('dragend', function () {
             var ll = mid.getLatLng();
+            fixMidDrag = null;
             fixDragEndAt = Date.now(); fixLastDragMid = afterIx;
             if (fixMidFrom && (Math.abs(ll.lat - fixMidFrom.lat) > 1e-7 || Math.abs(ll.lng - fixMidFrom.lng) > 1e-7)) {
               fixInsertMid(afterIx, ll, true);
@@ -1443,5 +1471,5 @@ var Tracking = (function () {
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', wire);
   else wire();
-  return { attach: attach, start: start, syncFab: syncFab, active: function () { return state !== 'idle'; }, drawSaved: drawSaved, clearSaved: clearSaved, rescuePending: rescuePending, startFix: startFix, endFix: endFix, mapTap: mapTap, startDrawRoute: startDrawRoute, endDrawRoute: endDrawRoute, _test: { hav: hav, start: start, onPos: onPos, stop: stop, state: function () { return state; }, pts: function () { return pts; }, miles: function () { return distM / 1609.344; }, segs: function () { return segments(pts).length; }, downsample: downsample, wake: function () { return !!wakeSentinel; }, fixTap: fixTap, fixApply: fixApply, fixJoin: fixJoin, fixDone: fixDone, fixCancel: fixCancel, fixMarkers: function () { return fixMks; }, fixPoints: function () { return fixPts ? fixPts.map(function (p) { var o = { lat: p.lat, lng: p.lng, seg: p.seg }; if (p.hand) o.hand = 1; return o; }) : null; }, fixState: function () { return { active: !!fixPts, n: fixPts ? fixPts.length : 0, sel: fixSel, shape: fixPts ? fixShape(fixPts) : null, miles: fixPts ? fixMiles(fixPts) : null, locked: document.body.classList.contains('editor-lock'), undo: fixUndoStack.length }; }, fixDraw: function () { return { mode: fixDrawMode, anchored: !!fixRun, run: fixRun ? fixRun.pts.length : 0, target: !!(fixRun && fixRun.tPt), end: fixRun ? fixRun.end : null, label: ($('fix-bar-label') || {}).textContent || '' }; }, fixDrawEnter: fixDrawEnter, fixRemove: fixRemovePoint, fixInsertMid: fixInsertMid, fixMidCount: function () { return fixMids ? fixMids.length : 0; }, fixLabel: function () { return ($('fix-bar-label') || {}).textContent || ''; }, fixDrawExit: fixDrawExit, fixDrawTap: fixDrawTapPoint, fixDrawUndo: fixDrawUndo, fixDrawStop: fixDrawStop, fixDrawConnect: fixDrawConnect, mapTap: mapTap, startDrawRoute: startDrawRoute, endDrawRoute: endDrawRoute, drawRoute: function () { return { active: !!drawPts, n: drawPts ? drawPts.length : 0, miles: drawPts ? Math.round((drawMeters() / 1609.344) * 10) / 10 : 0, locked: document.body.classList.contains('editor-lock'), barShown: !!($('draw-bar') && $('draw-bar').classList.contains('show')), saveDisabled: !!($('btn-draw-save') && $('btn-draw-save').disabled), pts: drawPts ? drawPts.map(function (p) { return [p.lat, p.lng]; }) : [], closed: drawClosed, sel: drawSel, offer: drawOffer, label: ($('draw-bar-label') || {}).textContent || '', applyShown: !!($('btn-draw-apply') && $('btn-draw-apply').style.display !== 'none'), applyText: ($('btn-draw-apply') || {}).textContent || '', barMiles: ($('draw-bar-miles') || {}).textContent || '' }; }, drawMarkers: function () { return drawMks; }, drawTapPoint: drawTapPoint, drawApply: drawApply, routeBar: function () { var bar = $('route-bar'), fx = $('btn-route-fix'), dn = $('btn-route-done'); return { shown: !!(bar && bar.classList.contains('show')), fix: !!(fx && fx.style.display !== 'none'), done: !!(dn && dn.style.display !== 'none'), ctx: !!savedCtx, drawn: savedLayer ? savedLayer.getLayers().length : 0 }; } } };
+  return { attach: attach, start: start, syncFab: syncFab, active: function () { return state !== 'idle'; }, drawSaved: drawSaved, clearSaved: clearSaved, rescuePending: rescuePending, startFix: startFix, endFix: endFix, mapTap: mapTap, startDrawRoute: startDrawRoute, endDrawRoute: endDrawRoute, _test: { hav: hav, start: start, onPos: onPos, stop: stop, state: function () { return state; }, pts: function () { return pts; }, miles: function () { return distM / 1609.344; }, segs: function () { return segments(pts).length; }, downsample: downsample, wake: function () { return !!wakeSentinel; }, fixTap: fixTap, fixApply: fixApply, fixJoin: fixJoin, fixDone: fixDone, fixCancel: fixCancel, fixMarkers: function () { return fixMks; }, fixPoints: function () { return fixPts ? fixPts.map(function (p) { var o = { lat: p.lat, lng: p.lng, seg: p.seg }; if (p.hand) o.hand = 1; return o; }) : null; }, fixState: function () { return { active: !!fixPts, n: fixPts ? fixPts.length : 0, sel: fixSel, shape: fixPts ? fixShape(fixPts) : null, miles: fixPts ? fixMiles(fixPts) : null, locked: document.body.classList.contains('editor-lock'), undo: fixUndoStack.length }; }, fixDraw: function () { return { mode: fixDrawMode, anchored: !!fixRun, run: fixRun ? fixRun.pts.length : 0, target: !!(fixRun && fixRun.tPt), end: fixRun ? fixRun.end : null, label: ($('fix-bar-label') || {}).textContent || '' }; }, fixDrawEnter: fixDrawEnter, fixMkAt: function (ix) { return fixMks ? fixMks[ix] : null; }, fixMidLatLngs: function () { return (fixMids || []).map(function (m) { var ll = m.getLatLng(); return [ll.lat, ll.lng]; }); }, fixMidAt: function (k) { return fixMids ? fixMids[k] : null; }, fixLinePts: function () { var out = []; if (fixLines) fixLines.eachLayer(function (l) { if (l.getLatLngs) out.push(l.getLatLngs().map(function (ll) { return [ll.lat, ll.lng]; })); }); return out; }, fixRemove: fixRemovePoint, fixInsertMid: fixInsertMid, fixMidCount: function () { return fixMids ? fixMids.length : 0; }, fixLabel: function () { return ($('fix-bar-label') || {}).textContent || ''; }, fixDrawExit: fixDrawExit, fixDrawTap: fixDrawTapPoint, fixDrawUndo: fixDrawUndo, fixDrawStop: fixDrawStop, fixDrawConnect: fixDrawConnect, mapTap: mapTap, startDrawRoute: startDrawRoute, endDrawRoute: endDrawRoute, drawRoute: function () { return { active: !!drawPts, n: drawPts ? drawPts.length : 0, miles: drawPts ? Math.round((drawMeters() / 1609.344) * 10) / 10 : 0, locked: document.body.classList.contains('editor-lock'), barShown: !!($('draw-bar') && $('draw-bar').classList.contains('show')), saveDisabled: !!($('btn-draw-save') && $('btn-draw-save').disabled), pts: drawPts ? drawPts.map(function (p) { return [p.lat, p.lng]; }) : [], closed: drawClosed, sel: drawSel, offer: drawOffer, label: ($('draw-bar-label') || {}).textContent || '', applyShown: !!($('btn-draw-apply') && $('btn-draw-apply').style.display !== 'none'), applyText: ($('btn-draw-apply') || {}).textContent || '', barMiles: ($('draw-bar-miles') || {}).textContent || '' }; }, drawMarkers: function () { return drawMks; }, drawTapPoint: drawTapPoint, drawApply: drawApply, routeBar: function () { var bar = $('route-bar'), fx = $('btn-route-fix'), dn = $('btn-route-done'); return { shown: !!(bar && bar.classList.contains('show')), fix: !!(fx && fx.style.display !== 'none'), done: !!(dn && dn.style.display !== 'none'), ctx: !!savedCtx, drawn: savedLayer ? savedLayer.getLayers().length : 0 }; } } };
 })();
