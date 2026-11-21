@@ -442,6 +442,12 @@ body[data-pinscheme="pastel"] { --pin-active:#a9d6a5; --pin-sprung:#eacd7d; --pi
    pin-scheme colors. */
 .map-status-filters .chip.on,
 .map-status-filters .chip:not(.on) { border-color: #fff; }
+/* hr (2026-11-21, Q274, Tanner): the set form's sections ran together —
+   bait, lure, urine and the rest flowed as one long stack and he could
+   misjudge which section a box belonged to. A faint divider line and a
+   breath of space above every section (.setfield) so each one reads as
+   its own block. Same --line the suggestion boxes already wear. */
+.setfield { border-top: 1px solid var(--line); margin-top: 16px; padding-top: 12px; }
 /* Q11: saved-entry suggestions under the bait/lure/urine inputs */
 .suggest { display: none; margin-top: -2px; }
 .suggest.show { display: block; }
