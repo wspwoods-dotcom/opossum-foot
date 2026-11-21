@@ -1569,6 +1569,17 @@ body.placing #route-back-chip { display: none; }
 #draw-bar { flex: 0 0 auto; z-index: 500; display: none; align-items: center; justify-content: center; flex-wrap: wrap; gap: 10px; padding: 10px 14px; font-size: 15px; font-weight: 600; background: #1d2a12; color: #fff; border-bottom: 1px solid var(--line); }
 #draw-bar.show { display: flex; }
 #draw-bar-miles { font-variant-numeric: tabular-nums; opacity: .85; }
+/* hv (Q282, Tanner): the route-editing bars tidy — the label takes its
+   own full line, centered; the miles and the buttons share one even row
+   under it, every button the same width, so nothing wraps ragged or
+   hangs alone the way Done used to. The route bar and the selection bar
+   keep their single-row dress; these two bars carry too many buttons
+   for one row. */
+#fix-bar, #draw-bar { align-items: stretch; gap: 8px; }
+.bar-head { display: flex; align-items: flex-start; gap: 10px; flex: 0 0 100%; }
+#fix-bar-label, #draw-bar-label { flex: 1 1 auto; text-align: center; }
+#fix-bar-miles, #draw-bar-miles { flex: 0 0 auto; }
+#fix-bar button, #draw-bar button { flex: 1 1 0; min-width: 0; padding-left: 5px; padding-right: 5px; }
 /* gz: the set-selection bar — same bar family as track/fix/draw, but the
    panel dress follows the sheets (var(--sheet) over the sheet-dress 2px
    line), since the bulk family it launches wears that dress (gx). */
