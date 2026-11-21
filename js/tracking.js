@@ -495,7 +495,7 @@ var Tracking = (function () {
        readout (fmtMiles: tenths of a mile). */
     var mi = $('fix-bar-miles');
     if (mi) mi.textContent = 'Trip: ' + fmtMiles(fixMiles(fixPts));
-    var db = $('btn-fix-draw'), du = $('btn-fix-undo'), cn = $('btn-fix-connect'),
+    var db = $('btn-fix-draw'), du = $('btn-fix-undo'), cn = $('btn-fix-connect'), ct = $('btn-fix-cut'),
         sp = $('btn-fix-stop'), bk = $('btn-fix-back'),
         fc = $('btn-fix-cancel'), fd = $('btn-fix-done');
     function vis(el, on) { if (el) el.style.display = on ? '' : 'none'; }
@@ -503,7 +503,7 @@ var Tracking = (function () {
       /* gt: the bar belongs to Draw — the cut/join/done controls rest
          until Back returns to the normal fix bar. */
       ap.style.display = 'none';
-      vis(db, false); vis(fc, false); vis(fd, false); vis(bk, true);
+      vis(db, false); vis(fc, false); vis(fd, false); vis(bk, true); vis(ct, false);
       vis(du, !!(fixRun && fixRun.pts.length));
       vis(cn, !!(fixRun && fixRun.tPt && fixRun.pts.length));
       vis(sp, !!fixRun);
@@ -514,7 +514,7 @@ var Tracking = (function () {
       else lb.textContent = 'Connect — the drawn stretch joins the two ends into one route again.';
       return;
     }
-    vis(db, true); vis(fc, true); vis(fd, true);
+    vis(db, true); vis(fc, true); vis(fd, true); vis(ct, false);
     vis(du, fixUndoStack.length > 0); vis(cn, false); vis(sp, false); vis(bk, false); /* hu (Q280): Undo shows once a step exists */
     if (!fixSel || fixSel.a === null) {
       lb.textContent = 'Fix route — drag a point to move it, tap two points to connect them straight, or Draw to lay a stretch by hand. Undo backs out the last step.';
@@ -539,20 +539,17 @@ var Tracking = (function () {
         ap.style.display = '';
       }
     } else {
-      /* hu (2026-11-21, Q281, Tanner): ONE verb for every other pair —
-         Connect. Four field reports in one afternoon all said the same
-         thing: he taps two dots and wants the route to run between
-         THOSE two dots. The old segment arithmetic picked the verb for
-         him — Cut inside a stretch, Join across exactly one break, a
-         dead-end hint across more — and Join merged whole stretches,
-         so the line bent through dots he never tapped. Connect runs
-         the line straight between the two tapped dots: the points
-         between them in route order come out, and every break between
-         them closes at once. He blessed the reach himself: with Undo
-         in the bar, a wrong connect is one tap back. The one pair
-         that keeps the old verb is two dots already side by side in
-         the same stretch — nothing between them to connect across —
-         where Cut still splits the route, leaving a break. */
+      /* hv (2026-11-21, Q283, Tanner): Connect keeps every dot. His
+         words: a track "could overlap multiple times" — the route can
+         run right back through a point and head another direction.
+         So Connect lays ONE straight leg between the two tapped dots
+         by landing a copy of the first dot just past the second (the
+         loop-close trick Join the ends already uses): the leg from
+         the second dot to the copy IS the straight line he tapped
+         for, no dot comes out, and no leg bends through a dot he
+         didn't tap. Cut survives as its own button for the one job
+         it was always for — taking a bad stretch out — offered when
+         the pair sits in one stretch with points between them. */
       var pa = fixPts[fixSel.a], pb = fixPts[fixSel.b], nBetween = fixSel.b - fixSel.a - 1;
       if (nBetween === 0 && pb.seg === pa.seg) {
         lb.textContent = 'These two already connect — Cut here splits the route between them, leaving a break.';
@@ -562,8 +559,13 @@ var Tracking = (function () {
         lb.textContent = 'Connect these two points — the break closes, and ' + fmtDist(hav(pa, pb)) + ' of route comes back in.';
         ap.textContent = 'Connect';
         ap.style.display = '';
+      } else if (pb.seg === pa.seg) {
+        lb.textContent = 'Connect runs a straight line between these two points (' + fmtDist(hav(pa, pb)) + ' across) and every point stays — or Cut, and the ' + nBetween + ' point' + (nBetween === 1 ? '' : 's') + ' in between come out.';
+        ap.textContent = 'Connect';
+        ap.style.display = '';
+        vis(ct, true);
       } else {
-        lb.textContent = 'Connect these two points — the route runs straight between them (' + fmtDist(hav(pa, pb)) + ' across), and the ' + nBetween + ' point' + (nBetween === 1 ? '' : 's') + ' in between come out.';
+        lb.textContent = 'Connect these two points — a straight line joins them (' + fmtDist(hav(pa, pb)) + ' across), and every point stays.';
         ap.textContent = 'Connect';
         ap.style.display = '';
       }
@@ -596,40 +598,57 @@ var Tracking = (function () {
       return;
     }
     var a = fixSel.a, b = fixSel.b, segA = fixPts[a].seg, segB = fixPts[b].seg;
-    fixPushUndo(); /* hu (Q280): every Apply is one undoable step */
-    if (b - a - 1 === 0 && segB === segA) {
-      /* the split: two dots already side by side in one stretch — Cut
-         parts the route between them, leaving a break (the gp move,
-         kept whole). */
-      var cutSeg = segA, keptS = [];
-      fixPts.forEach(function (p, i) { if (i <= a || i >= b) keptS.push(p); });
-      keptS.forEach(function (p, i) { if (i > a && p.seg >= cutSeg) p.seg += 1; });
-      fixPts = keptS;
+    if (b - a - 1 === 0 && segB === segA) { fixSplitCut(); return; }
+    if (b - a - 1 === 0) {
+      /* the break's own two dots: folding the later stretch into the
+         earlier one draws the straight leg between them — there is
+         nothing between them to keep or cut. */
+      fixPushUndo();
+      var kept = fixPts.slice();
+      kept.forEach(function (p) {
+        if (p.seg === segB) p.seg = segA;
+        else if (p.seg > segB) p.seg -= (segB - segA);
+      });
+      fixPts = kept;
       fixSel = { a: null, b: null };
-      /* gp: the cut lands in the working copy only — nothing is
-         written to the trip until Done (see fixDone). */
       fixDraw(); fixBar();
-      toast('Cut made in the edit — Done saves it, Cancel throws it away.');
+      toast('Connected in the edit — Save keeps it, Cancel throws it away.');
       return;
     }
-    /* hu (Q281): Connect — the route runs straight from the first
-       tapped dot to the second. The points between them in route
-       order come out; the second dot's stretch folds back to the
-       first dot's segment number and everything after it renumbers,
-       so every break between the taps closes in this one move and
-       later breaks survive. One stretch, one break, many breaks —
-       the same move. fixJoin below is retired with the old rule
-       (nothing calls it now); the Draw-mode Connect is its own verb
-       and is untouched. */
-    var kept = fixPts.slice(0, a + 1).concat(fixPts.slice(b));
-    kept.forEach(function (p) {
-      if (p.seg === segB) p.seg = segA;
-      else if (p.seg > segB) p.seg -= (segB - segA);
-    });
-    fixPts = kept;
+    /* hv (Q283): Connect with points between the taps — land a copy
+       of the first tapped dot just past the second. The leg from the
+       second dot to the copy is the straight line he tapped for;
+       every recorded dot stays; the route overlaps itself, as a real
+       track may. The copy carries the second dot's segment so the
+       new leg draws and counts. */
+    fixPushUndo();
+    var src = fixPts[a];
+    var copy = { lat: src.lat, lng: src.lng, seg: segB };
+    if (src.hand) copy.hand = 1;
+    fixPts.splice(b + 1, 0, copy);
     fixSel = { a: null, b: null };
     fixDraw(); fixBar();
-    toast('Connected in the edit — Done saves it, Cancel throws it away.');
+    toast('Connected in the edit — Save keeps it, Cancel throws it away.');
+  }
+  /* hv: the Cut button's work — and the Apply button's, when the pair
+     is two dots already side by side in one stretch. The points
+     between the taps come out and the route splits at the cut: the
+     gp move, kept whole for the job it was always for, taking a bad
+     stretch out of the route. */
+  function fixSplitCut() {
+    if (!fixPts || !fixSel || fixSel.a === null || fixSel.b === null) return;
+    var a = fixSel.a, b = fixSel.b;
+    if (fixPts[a].seg !== fixPts[b].seg) return;
+    fixPushUndo(); /* hu (Q280): every Apply is one undoable step */
+    var cutSeg = fixPts[a].seg, keptS = [];
+    fixPts.forEach(function (p, i) { if (i <= a || i >= b) keptS.push(p); });
+    keptS.forEach(function (p, i) { if (i > a && p.seg >= cutSeg) p.seg += 1; });
+    fixPts = keptS;
+    fixSel = { a: null, b: null };
+    /* gp: the cut lands in the working copy only — nothing is written
+       to the trip until Save (see fixDone). */
+    fixDraw(); fixBar();
+    toast('Cut made in the edit — Save keeps it, Cancel throws it away.');
   }
   /* gq: Join — take the one boundary break between the two tapped
      segments out of the working copy. The later segment folds into
@@ -648,7 +667,7 @@ var Tracking = (function () {
     });
     fixSel = { a: null, b: null };
     fixDraw(); fixBar();
-    toast('Joined in the edit — Done saves it, Cancel throws it away.');
+    toast('Joined in the edit — Save keeps it, Cancel throws it away.');
   }
   /* gt: DRAW — the fourth verb. State: fixRun is the run in flight —
      aPt the anchor point object, oPt the anchor stretch's OTHER end
@@ -798,7 +817,7 @@ var Tracking = (function () {
      anchor stretch's new tail (or head). The run is over; draw mode
      stays up for another stretch if he wants one. */
   function fixDrawStop() {
-    if (fixRun && fixRun.pts.length) toast('Drawn stretch added in the edit — Done saves it, Cancel throws it away.');
+    if (fixRun && fixRun.pts.length) toast('Drawn stretch added in the edit — Save keeps it, Cancel throws it away.');
     fixRun = null; fixDrawMsg = null;
     fixDraw(); fixBar();
   }
@@ -844,7 +863,7 @@ var Tracking = (function () {
     fixRun = null; fixDrawMsg = null;
     fixDrawMode = false;
     fixDraw(); fixBar();
-    toast('Connected in the edit — Done saves it, Cancel throws it away.');
+    toast('Connected in the edit — Save keeps it, Cancel throws it away.');
   }
   /* gp: Done is the only door out that saves — it hands the working
      copy to the caller's callback (which writes the trip + Store.save)
@@ -1188,7 +1207,8 @@ var Tracking = (function () {
     var fd = $('btn-fix-done'); if (fd) fd.onclick = fixDone;
     var fc = $('btn-fix-cancel'); if (fc) fc.onclick = fixCancel;
     var fdw = $('btn-fix-draw'); if (fdw) fdw.onclick = fixDrawEnter;
-    var fu = $('btn-fix-undo'); if (fu) fu.onclick = function () { if (fixDrawMode) fixDrawUndo(); else fixUndoStep(); }; /* hu (Q280): Draw keeps its per-point undo; the normal bar steps the session back */
+    var fu = $('btn-fix-undo'); if (fu) fu.onclick = function () { if (fixDrawMode) fixDrawUndo(); else fixUndoStep(); };
+    var fct = $('btn-fix-cut'); if (fct) fct.onclick = fixSplitCut; /* hv (Q283) */ /* hu (Q280): Draw keeps its per-point undo; the normal bar steps the session back */
     var fcn = $('btn-fix-connect'); if (fcn) fcn.onclick = fixDrawConnect;
     var fst = $('btn-fix-stop'); if (fst) fst.onclick = fixDrawStop;
     var fbk = $('btn-fix-back'); if (fbk) fbk.onclick = fixDrawExit;
