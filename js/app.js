@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-11-21if';
+var APP_VERSION = 'beta 0.1 · build 2026-11-21ig';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -7462,7 +7462,10 @@ function renderScorecardTab() {
   function h2hNames() {
     var opts = names.slice();
     SPONSORS.forEach(function (sp) {
-      if (sp.section === u.by && opts.indexOf(sp.product) === -1) opts.push(sp.product);
+      /* ig (Q302): every product on the sponsor's list for this
+         category is a pick — not just the headline product. */
+      var prods = (sp.products && sp.products.length) ? sp.products : [{ name: sp.product, section: sp.section }];
+      prods.forEach(function (p) { if (p.section === u.by && opts.indexOf(p.name) === -1) opts.push(p.name); });
     });
     return opts;
   }
@@ -7590,7 +7593,7 @@ function renderScorecardTab() {
   var splist = $('sc-sp-list');
   if (splist) splist.addEventListener('click', function (e) {
     var cmp = e.target && e.target.closest ? e.target.closest('[data-sp-compare]') : null;
-    if (cmp) { e.stopPropagation(); spCompare(cmp.getAttribute('data-sp-compare')); return; }
+    if (cmp) { e.stopPropagation(); spCompare(cmp.getAttribute('data-sp-compare'), cmp.getAttribute('data-sp-product')); return; }
     var card = e.target && e.target.closest ? e.target.closest('[data-sp]') : null;
     if (card) openSponsorBio(card.getAttribute('data-sp'));
   });
@@ -7610,33 +7613,50 @@ function renderSpList() {
   var cat = u.spCat || u.by;
   var q = String(u.spQ || '').toLowerCase().trim();
   var PHRASE = { lure: 'lures', bait: 'baits', urine: 'urines', visual: 'visual attractants', audio: 'audio attractants', other: 'other attractants' };
-  var items = SPONSORS.filter(function (sp) {
-    if (sp.section !== cat) return false;
-    if (!q) return true;
-    return (String(sp.product) + ' ' + String(sp.name)).toLowerCase().indexOf(q) !== -1;
+  /* ig (2026-11-21, Q302, Tanner — "there's no other sponsored
+     products popping up there"): the directory filtered SPONSORS by
+     each company's HEADLINE section and showed its headline product
+     only, so Bait listed two products and every other category listed
+     none — the sponsors' full product lists (products[], loaded with
+     the Nov 10 catalogs) were never read here. The directory now
+     walks every sponsor's products and lists each one under its own
+     category, searchable by product or company. */
+  var items = [];
+  SPONSORS.forEach(function (sp) {
+    var prods = (sp.products && sp.products.length) ? sp.products : [{ name: sp.product, section: sp.section }];
+    prods.forEach(function (pr) {
+      if (pr.section !== cat) return;
+      if (q && (String(pr.name) + ' ' + String(sp.name)).toLowerCase().indexOf(q) === -1) return;
+      items.push({ sp: sp, product: pr.name });
+    });
   });
   if (!items.length) {
     list.innerHTML = '<p class="dim" style="margin:8px 0 0">No sponsored ' + esc(PHRASE[cat] || cat) + ' yet.</p>';
     return;
   }
-  list.innerHTML = items.map(function (sp) {
+  list.innerHTML = items.map(function (it) {
+    var sp = it.sp;
     var logo = sp.badge || sp.brandLogo || '';
     return '<div class="sp-card" data-sp="' + esc(sp.id) + '" role="button" tabindex="0" aria-label="About ' + esc(sp.name) + '">' +
       (logo ? '<img class="sp-logo" src="' + esc(logo) + '" alt="' + esc(sp.name) + ' logo">' : '') +
-      '<div class="sp-info"><div class="sp-product">' + esc(sp.product) + '</div>' +
+      '<div class="sp-info"><div class="sp-product">' + esc(it.product) + '</div>' +
       '<div class="sp-brand dim">' + esc(sp.name) + '</div></div>' +
       '<span class="pill">Sponsored</span>' +
-      '<button type="button" class="btn-small btn-secondary" data-sp-compare="' + esc(sp.id) + '">Compare</button></div>';
+      '<button type="button" class="btn-small btn-secondary" data-sp-compare="' + esc(sp.id) + '" data-sp-product="' + esc(it.product) + '">Compare</button></div>';
   }).join('');
 }
 /* Q170: drop a sponsored product into head-to-head — the scorecard switches
    to the product's section and it becomes the First pick. */
-function spCompare(id) {
+function spCompare(id, product) {
   var sp = sponsorById(id);
   if (!sp) return;
-  scoreUI.by = sp.section;
-  scoreUI.spCat = sp.section;
-  scoreUI.h2hA = sp.product;
+  /* ig (Q302): the tapped product is the pick — its own name and its
+     own category — not the company's headline product. */
+  var nm = product || sp.product, sec = sp.section;
+  (sp.products || []).forEach(function (p) { if (p.name === nm) sec = p.section; });
+  scoreUI.by = sec;
+  scoreUI.spCat = sec;
+  scoreUI.h2hA = nm;
   scoreUI.h2hB = '';
   renderScorecardTab();
 }
@@ -8415,7 +8435,12 @@ function openTripFix(tr) {
   Tracking.startFix(tr.track, function (res) {
     tr.track = res.track; tr.miles = res.miles;
     Store.save(); renderPaperworkMileage();
-    Tracking.drawSaved(tr.track, tripMapCtx(tr));
+    /* ig (2026-11-21, Q301, Tanner): the landing draws the fixed route
+       with NO bar — the landing's job is to look at the route; Fix and
+       Hide live in Paperwork. The bar survives only on a route that
+       has not been saved yet, where its Save/Discard are the only door. */
+    var fctx = tripMapCtx(tr); fctx.noBar = true;
+    Tracking.drawSaved(tr.track, fctx);
   });
 }
 /* gt (2026-11-18, Tanner): Draw a route — the standalone drawing
