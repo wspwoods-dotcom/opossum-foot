@@ -350,13 +350,14 @@ var Tracking = (function () {
      the work and bury it. */
   var fixLayer = null, fixPts = null, fixSel = null, fixCb = null;
   var fixMks = null, fixLines = null, fixDragEndAt = 0;
-  /* hy (2026-11-21, Q288, Tanner — the editor rebuild): midpoint
-     handles (fixMids), and the drag bookkeeping that keeps a drag
-     from ever being read as a tap: fixLastDragIx is the ONE marker a
-     trailing click may be swallowed for — its own. */
-  var fixMids = [], fixLastDragIx = -1, fixLastDragMid = -1, fixCycleStart = null;
-  var fixMidDrag = null; /* hz: a midpoint handle mid-drag — the lines bend to it live */
-  var fixMidSnap = null, fixMidFrom = null;
+  /* hy (2026-11-21, Q288, Tanner — the editor rebuild): the drag
+     bookkeeping that keeps a drag from ever being read as a tap:
+     fixLastDragIx is the ONE marker a trailing click may be
+     swallowed for — its own. (ia: the midpoint handles hy added are
+     GONE again the same day by Tanner's ruling — at field zoom their
+     tap targets sat where his finger aims for the real dots, and
+     every stray tap planted a point. Draw adds points now.) */
+  var fixLastDragIx = -1, fixCycleStart = null;
   function fixFlatten(track) {
     var out = [];
     if (!track || !track.length) return out;
@@ -446,30 +447,16 @@ var Tracking = (function () {
     if (p.hand) parts.push('laid by hand');
     return { text: parts.join(' · '), stack: fixStackAt(i) };
   }
-  function fixMidIcon() {
-    return L.divIcon({ className: 'fix-mid', html: '<i></i>', iconSize: [30, 30], iconAnchor: [15, 15] });
-  }
   /* gp: polylines live in their own group so a drag can redraw ONLY the
      lines — rebuilding the markers mid-drag would kill the drag. */
   function fixDrawLines() {
     if (!fixLines) return;
     fixLines.clearLayers();
     if (!fixPts) return;
-    var gi = 0;
     fixSegs(fixPts).forEach(function (seg) {
       if (seg.length > 1) {
-        var lls = [];
-        seg.forEach(function (p) {
-          lls.push([p.lat, p.lng]);
-          /* hz (2026-11-21, Tanner): while a midpoint handle is being
-             dragged, the line bends to it — the dragged spot rides
-             inside the leg it will split, so he sees the new shape
-             before he lets go. */
-          if (fixMidDrag && gi === fixMidDrag.afterIx - 1) lls.push([fixMidDrag.lat, fixMidDrag.lng]);
-          gi++;
-        });
-        L.polyline(lls, { color: '#e5484d', weight: 4, opacity: 0.5 }).addTo(fixLines);
-      } else { gi += seg.length; }
+        L.polyline(seg.map(function (p) { return [p.lat, p.lng]; }), { color: '#e5484d', weight: 4, opacity: 0.5 }).addTo(fixLines);
+      }
     });
     if (fixSel && fixSel.a !== null && fixSel.b !== null) {
       var stretch = fixPts.slice(fixSel.a, fixSel.b + 1);
@@ -529,16 +516,6 @@ var Tracking = (function () {
         var ll = mk.getLatLng();
         p.lat = ll.lat; p.lng = ll.lng;
         fixDrawLines(); fixBar();
-        /* hz (2026-11-21, Tanner): the midpoint handles beside the
-           dragged point ride along with the line — a handle left
-           standing where its leg used to be reads as a stray point,
-           because on the map it is one. */
-        if (fixMids) fixMids.forEach(function (md) {
-          if (md._afterIx === i || md._afterIx === i + 1) {
-            var a2 = fixPts[md._afterIx - 1], b2 = fixPts[md._afterIx];
-            if (a2 && b2) md.setLatLng([(a2.lat + b2.lat) / 2, (a2.lng + b2.lng) / 2]);
-          }
-        });
       });
       mk.on('dragend', function () {
         fixDragEndAt = Date.now();
@@ -555,66 +532,6 @@ var Tracking = (function () {
       mk.addTo(fixLayer);
       fixMks.push(mk);
     });
-    /* hy (Q288): midpoint handles — a small pale dot at the middle of
-       every leg of every stretch. Tap it and a real point lands
-       there; drag it and the point lands where he drops it. The
-       standard insert in every proven editor (Mapbox's midpoint
-       handles, Geoman's middle markers). Handles rebuild with the
-       markers, never during a drag, and rest in draw mode. */
-    fixMids = [];
-    if (!fixDrawMode) {
-      for (var j = 1; j < fixPts.length; j++) {
-        if (fixPts[j].seg !== fixPts[j - 1].seg) continue;
-        (function (afterIx) {
-          var a = fixPts[afterIx - 1], b = fixPts[afterIx];
-          var mid = L.marker([(a.lat + b.lat) / 2, (a.lng + b.lng) / 2], {
-            icon: fixMidIcon(), draggable: true, autoPan: false, keyboard: false
-          });
-          mid.on('click', function () {
-            if (fixLastDragMid === afterIx && Date.now() - fixDragEndAt < 400) { fixLastDragMid = -1; return; }
-            fixInsertMid(afterIx, null, false);
-          });
-          mid._afterIx = afterIx;
-          mid.on('dragstart', function () { fixMidSnap = fixSnapshot(); fixMidFrom = mid.getLatLng(); fixLastDragMid = -1; });
-          mid.on('drag', function () {
-            var ll = mid.getLatLng();
-            fixMidDrag = { afterIx: afterIx, lat: ll.lat, lng: ll.lng };
-            fixDrawLines();
-          });
-          mid.on('dragend', function () {
-            var ll = mid.getLatLng();
-            fixMidDrag = null;
-            fixDragEndAt = Date.now(); fixLastDragMid = afterIx;
-            if (fixMidFrom && (Math.abs(ll.lat - fixMidFrom.lat) > 1e-7 || Math.abs(ll.lng - fixMidFrom.lng) > 1e-7)) {
-              fixInsertMid(afterIx, ll, true);
-            } else { fixDraw(); }
-            fixMidSnap = null; fixMidFrom = null;
-          });
-          mid.addTo(fixLayer);
-          fixMids.push(mid);
-        })(j);
-      }
-    }
-  }
-  /* hy (Q288): land a midpoint handle as a real point. A tap plants
-     it at the leg's middle; a drag plants it at the drop. The new
-     point is laid by hand, carries the leg's segment, and is left
-     selected so he can drag it on or remove it. One Undo step. */
-  function fixInsertMid(afterIx, latlng, fromDrag) {
-    if (!fixPts || afterIx < 1 || afterIx > fixPts.length - 1) return;
-    var a = fixPts[afterIx - 1], b = fixPts[afterIx];
-    if (!a || !b || a.seg !== b.seg) return;
-    if (fromDrag && fixMidSnap) {
-      fixUndoStack.push(fixMidSnap);
-      if (fixUndoStack.length > 30) fixUndoStack.shift();
-    } else fixPushUndo();
-    var np = latlng
-      ? { lat: latlng.lat, lng: latlng.lng, seg: a.seg, hand: 1 }
-      : { lat: (a.lat + b.lat) / 2, lng: (a.lng + b.lng) / 2, seg: a.seg, hand: 1 };
-    fixPts.splice(afterIx, 0, np);
-    fixSel = { a: afterIx, b: null };
-    fixDraw(); fixBar();
-    toast('Point added in the edit — Save keeps it, Cancel throws it away.');
   }
   /* hy (Q288): take ONE point out — select-then-act, the delete
      pattern every proven editor uses on touch. The route's very last
@@ -672,7 +589,7 @@ var Tracking = (function () {
     vis(db, true); vis(fc, true); vis(fd, true); vis(ct, false); vis(rm, false);
     vis(du, fixUndoStack.length > 0); vis(cn, false); vis(sp, false); vis(bk, false); /* hu (Q280): Undo shows once a step exists */
     if (!fixSel || fixSel.a === null) {
-      lb.textContent = 'Fix route — drag a point to move it, tap a point to pick it, or Draw to lay a stretch by hand. The pale dots add a point mid-line. Undo backs out the last step.';
+      lb.textContent = 'Fix route — drag a point to move it, tap a point to pick it, or Draw to lay a stretch by hand. Undo backs out the last step.';
       ap.style.display = 'none';
     } else if (fixSel.b === null) {
       /* hy (Q288): the bar names the picked point — which one it is,
@@ -1471,5 +1388,5 @@ var Tracking = (function () {
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', wire);
   else wire();
-  return { attach: attach, start: start, syncFab: syncFab, active: function () { return state !== 'idle'; }, drawSaved: drawSaved, clearSaved: clearSaved, rescuePending: rescuePending, startFix: startFix, endFix: endFix, mapTap: mapTap, startDrawRoute: startDrawRoute, endDrawRoute: endDrawRoute, _test: { hav: hav, start: start, onPos: onPos, stop: stop, state: function () { return state; }, pts: function () { return pts; }, miles: function () { return distM / 1609.344; }, segs: function () { return segments(pts).length; }, downsample: downsample, wake: function () { return !!wakeSentinel; }, fixTap: fixTap, fixApply: fixApply, fixJoin: fixJoin, fixDone: fixDone, fixCancel: fixCancel, fixMarkers: function () { return fixMks; }, fixPoints: function () { return fixPts ? fixPts.map(function (p) { var o = { lat: p.lat, lng: p.lng, seg: p.seg }; if (p.hand) o.hand = 1; return o; }) : null; }, fixState: function () { return { active: !!fixPts, n: fixPts ? fixPts.length : 0, sel: fixSel, shape: fixPts ? fixShape(fixPts) : null, miles: fixPts ? fixMiles(fixPts) : null, locked: document.body.classList.contains('editor-lock'), undo: fixUndoStack.length }; }, fixDraw: function () { return { mode: fixDrawMode, anchored: !!fixRun, run: fixRun ? fixRun.pts.length : 0, target: !!(fixRun && fixRun.tPt), end: fixRun ? fixRun.end : null, label: ($('fix-bar-label') || {}).textContent || '' }; }, fixDrawEnter: fixDrawEnter, fixMkAt: function (ix) { return fixMks ? fixMks[ix] : null; }, fixMidLatLngs: function () { return (fixMids || []).map(function (m) { var ll = m.getLatLng(); return [ll.lat, ll.lng]; }); }, fixMidAt: function (k) { return fixMids ? fixMids[k] : null; }, fixLinePts: function () { var out = []; if (fixLines) fixLines.eachLayer(function (l) { if (l.getLatLngs) out.push(l.getLatLngs().map(function (ll) { return [ll.lat, ll.lng]; })); }); return out; }, fixRemove: fixRemovePoint, fixInsertMid: fixInsertMid, fixMidCount: function () { return fixMids ? fixMids.length : 0; }, fixLabel: function () { return ($('fix-bar-label') || {}).textContent || ''; }, fixDrawExit: fixDrawExit, fixDrawTap: fixDrawTapPoint, fixDrawUndo: fixDrawUndo, fixDrawStop: fixDrawStop, fixDrawConnect: fixDrawConnect, mapTap: mapTap, startDrawRoute: startDrawRoute, endDrawRoute: endDrawRoute, drawRoute: function () { return { active: !!drawPts, n: drawPts ? drawPts.length : 0, miles: drawPts ? Math.round((drawMeters() / 1609.344) * 10) / 10 : 0, locked: document.body.classList.contains('editor-lock'), barShown: !!($('draw-bar') && $('draw-bar').classList.contains('show')), saveDisabled: !!($('btn-draw-save') && $('btn-draw-save').disabled), pts: drawPts ? drawPts.map(function (p) { return [p.lat, p.lng]; }) : [], closed: drawClosed, sel: drawSel, offer: drawOffer, label: ($('draw-bar-label') || {}).textContent || '', applyShown: !!($('btn-draw-apply') && $('btn-draw-apply').style.display !== 'none'), applyText: ($('btn-draw-apply') || {}).textContent || '', barMiles: ($('draw-bar-miles') || {}).textContent || '' }; }, drawMarkers: function () { return drawMks; }, drawTapPoint: drawTapPoint, drawApply: drawApply, routeBar: function () { var bar = $('route-bar'), fx = $('btn-route-fix'), dn = $('btn-route-done'); return { shown: !!(bar && bar.classList.contains('show')), fix: !!(fx && fx.style.display !== 'none'), done: !!(dn && dn.style.display !== 'none'), ctx: !!savedCtx, drawn: savedLayer ? savedLayer.getLayers().length : 0 }; } } };
+  return { attach: attach, start: start, syncFab: syncFab, active: function () { return state !== 'idle'; }, drawSaved: drawSaved, clearSaved: clearSaved, rescuePending: rescuePending, startFix: startFix, endFix: endFix, mapTap: mapTap, startDrawRoute: startDrawRoute, endDrawRoute: endDrawRoute, _test: { hav: hav, start: start, onPos: onPos, stop: stop, state: function () { return state; }, pts: function () { return pts; }, miles: function () { return distM / 1609.344; }, segs: function () { return segments(pts).length; }, downsample: downsample, wake: function () { return !!wakeSentinel; }, fixTap: fixTap, fixApply: fixApply, fixJoin: fixJoin, fixDone: fixDone, fixCancel: fixCancel, fixMarkers: function () { return fixMks; }, fixPoints: function () { return fixPts ? fixPts.map(function (p) { var o = { lat: p.lat, lng: p.lng, seg: p.seg }; if (p.hand) o.hand = 1; return o; }) : null; }, fixState: function () { return { active: !!fixPts, n: fixPts ? fixPts.length : 0, sel: fixSel, shape: fixPts ? fixShape(fixPts) : null, miles: fixPts ? fixMiles(fixPts) : null, locked: document.body.classList.contains('editor-lock'), undo: fixUndoStack.length }; }, fixDraw: function () { return { mode: fixDrawMode, anchored: !!fixRun, run: fixRun ? fixRun.pts.length : 0, target: !!(fixRun && fixRun.tPt), end: fixRun ? fixRun.end : null, label: ($('fix-bar-label') || {}).textContent || '' }; }, fixDrawEnter: fixDrawEnter, fixMkAt: function (ix) { return fixMks ? fixMks[ix] : null; }, fixLinePts: function () { var out = []; if (fixLines) fixLines.eachLayer(function (l) { if (l.getLatLngs) out.push(l.getLatLngs().map(function (ll) { return [ll.lat, ll.lng]; })); }); return out; }, fixRemove: fixRemovePoint, fixLabel: function () { return ($('fix-bar-label') || {}).textContent || ''; }, fixDrawExit: fixDrawExit, fixDrawTap: fixDrawTapPoint, fixDrawUndo: fixDrawUndo, fixDrawStop: fixDrawStop, fixDrawConnect: fixDrawConnect, mapTap: mapTap, startDrawRoute: startDrawRoute, endDrawRoute: endDrawRoute, drawRoute: function () { return { active: !!drawPts, n: drawPts ? drawPts.length : 0, miles: drawPts ? Math.round((drawMeters() / 1609.344) * 10) / 10 : 0, locked: document.body.classList.contains('editor-lock'), barShown: !!($('draw-bar') && $('draw-bar').classList.contains('show')), saveDisabled: !!($('btn-draw-save') && $('btn-draw-save').disabled), pts: drawPts ? drawPts.map(function (p) { return [p.lat, p.lng]; }) : [], closed: drawClosed, sel: drawSel, offer: drawOffer, label: ($('draw-bar-label') || {}).textContent || '', applyShown: !!($('btn-draw-apply') && $('btn-draw-apply').style.display !== 'none'), applyText: ($('btn-draw-apply') || {}).textContent || '', barMiles: ($('draw-bar-miles') || {}).textContent || '' }; }, drawMarkers: function () { return drawMks; }, drawTapPoint: drawTapPoint, drawApply: drawApply, routeBar: function () { var bar = $('route-bar'), fx = $('btn-route-fix'), dn = $('btn-route-done'); return { shown: !!(bar && bar.classList.contains('show')), fix: !!(fx && fx.style.display !== 'none'), done: !!(dn && dn.style.display !== 'none'), ctx: !!savedCtx, drawn: savedLayer ? savedLayer.getLayers().length : 0 }; } } };
 })();
