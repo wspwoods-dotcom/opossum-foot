@@ -90,7 +90,7 @@
   <div id="track-bar"><span id="track-dot" aria-hidden="true"></span><span>Tracking</span><span id="track-stats">0.0 mi · 0:00</span><button class="btn-small btn-secondary" id="btn-track-pause" type="button">Pause</button><button class="btn-small btn-primary" id="btn-track-stop" type="button">Stop</button></div>
   <!-- Q200: a drawn saved route gets a bar in the same family, with the one
        thing it never had — a way to turn it off. -->
-  <div id="route-bar"><span id="route-bar-label">Route on the map</span><button class="btn-small btn-primary" id="btn-route-save" type="button" style="display:none">Save route</button><button class="btn-small btn-secondary" id="btn-route-discard" type="button" style="display:none">Discard</button><button class="btn-small btn-secondary" id="btn-route-fix" type="button" style="display:none">Fix route</button><button class="btn-small btn-primary" id="btn-route-done" type="button" style="display:none">Done</button><button class="btn-small btn-secondary" id="btn-route-hide" type="button">Hide route</button></div>
+  <div id="route-bar"><span id="route-bar-label">Route on the map</span><button class="btn-small btn-primary" id="btn-route-save" type="button" style="display:none">Save route</button><button class="btn-small btn-secondary" id="btn-route-discard" type="button" style="display:none">Discard</button><button class="btn-small btn-secondary" id="btn-route-fix" type="button" style="display:none">Fix route</button><button class="btn-small btn-secondary" id="btn-route-hide" type="button">Hide route</button><button class="btn-small btn-primary" id="btn-route-done" type="button" style="display:none">Done</button></div>
   <!-- go: route-fix mode — the bar carries the instructions, what the
        cut will remove, and the way out (Done). Same bar family.
        gp: points are draggable handles now, the working trip's miles
@@ -118,6 +118,7 @@
          carries the count ("Show: 18 Sprung", or each status with its count
          when two or more are on) and the Select all button, shown only when
          the filter is narrowed to one status. The old bottom bulk bar is gone. -->
+    <button id="btn-route-toggle" class="route-toggle" type="button" style="display:none">Hide route</button>
     <div id="show-pill" class="show-pill">
       <button type="button" id="btn-show" class="show-btn" aria-label="Choose what shows on the map">Show: All</button>
       <button type="button" id="btn-bulk" class="bulk-btn" hidden>Pick sets</button>
