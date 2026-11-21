@@ -350,6 +350,12 @@ var Tracking = (function () {
      the work and bury it. */
   var fixLayer = null, fixPts = null, fixSel = null, fixCb = null;
   var fixMks = null, fixLines = null, fixDragEndAt = 0;
+  /* hy (2026-11-21, Q288, Tanner — the editor rebuild): midpoint
+     handles (fixMids), and the drag bookkeeping that keeps a drag
+     from ever being read as a tap: fixLastDragIx is the ONE marker a
+     trailing click may be swallowed for — its own. */
+  var fixMids = [], fixLastDragIx = -1, fixLastDragMid = -1, fixCycleStart = null;
+  var fixMidSnap = null, fixMidFrom = null;
   function fixFlatten(track) {
     var out = [];
     if (!track || !track.length) return out;
@@ -422,6 +428,26 @@ var Tracking = (function () {
       html: '<i></i>', iconSize: [30, 30], iconAnchor: [15, 15]
     });
   }
+  /* hy (Q288): plain names for points, so the bar can say what he
+     tapped instead of leaving him to guess — and the stack of points
+     sharing a spot (within a step and a half), which a closed loop's
+     first point and its closing copy always form. */
+  function fixStackAt(i) {
+    var p = fixPts[i], out = [];
+    fixPts.forEach(function (q, j) { if (hav(p, q) < 1.5) out.push(j); });
+    return out;
+  }
+  function fixPointName(i) {
+    var p = fixPts[i], parts = [];
+    if (i === 0) parts.push("the route's first point");
+    else if (i === fixPts.length - 1) parts.push("the route's last point");
+    else parts.push('point ' + (i + 1) + ' of ' + fixPts.length);
+    if (p.hand) parts.push('laid by hand');
+    return { text: parts.join(' · '), stack: fixStackAt(i) };
+  }
+  function fixMidIcon() {
+    return L.divIcon({ className: 'fix-mid', html: '<i></i>', iconSize: [30, 30], iconAnchor: [15, 15] });
+  }
   /* gp: polylines live in their own group so a drag can redraw ONLY the
      lines — rebuilding the markers mid-drag would kill the drag. */
   function fixDrawLines() {
@@ -436,6 +462,22 @@ var Tracking = (function () {
     if (fixSel && fixSel.a !== null && fixSel.b !== null) {
       var stretch = fixPts.slice(fixSel.a, fixSel.b + 1);
       L.polyline(stretch.map(function (p) { return [p.lat, p.lng]; }), { color: '#e7c945', weight: 6, opacity: 0.95 }).addTo(fixLines);
+    }
+    /* hx (2026-11-21, Q287, Tanner): the pending drawn run renders as
+       its OWN line — anchor to each tap in tap order, and on to the
+       connect target when one is chosen. It is not part of fixPts
+       yet, so the route underneath stays exactly as it was until the
+       stretch lands at Stop or Connect: no leg ever leaps from the
+       drawing to a point he isn't drawing between. */
+    if (fixDrawMode && fixRun && fixRun.pts.length) {
+      var path = [];
+      if (fixRun.aPt) path.push([fixRun.aPt.lat, fixRun.aPt.lng]);
+      fixRun.pts.forEach(function (p) { path.push([p.lat, p.lng]); });
+      if (fixRun.tPt) path.push([fixRun.tPt.lat, fixRun.tPt.lng]);
+      if (path.length > 1) L.polyline(path, { color: '#e5484d', weight: 4, opacity: 0.95 }).addTo(fixLines);
+      fixRun.pts.forEach(function (p) {
+        L.circleMarker([p.lat, p.lng], { radius: 7, color: '#fff', weight: 2, fillColor: '#e5484d', fillOpacity: 1, interactive: false }).addTo(fixLines);
+      });
     }
   }
   function fixDraw() {
@@ -457,13 +499,19 @@ var Tracking = (function () {
       /* a drag ends with a click event on some browsers — that click is
          the drag finishing, not a cut tap, so it is ignored. */
       mk.on('click', function () {
-        if (Date.now() - fixDragEndAt < 250) return;
+        /* hy (Q288): a drag is never a tap. Leaflet can deliver a
+           click to the dragged marker as the finger lifts; that one
+           click — on that marker, right after its own drag — is the
+           drag finishing, and it is swallowed. A tap on any OTHER
+           point is a real tap no matter how soon it follows. */
+        if (i === fixLastDragIx && Date.now() - fixDragEndAt < 400) { fixLastDragIx = -1; return; }
         if (fixDrawMode) fixDrawTapPoint(i); else fixTap(i);
       });
       mk.on('dragstart', function () {
         /* hu (Q280): a drag that actually moves the point is one
            undoable step — the snapshot waits here for dragend. */
         fixDragSnap = fixSnapshot(); fixDragFrom = { lat: p.lat, lng: p.lng };
+        fixLastDragIx = -1; /* hy (Q288): a fresh gesture */
       });
       mk.on('drag', function () {
         var ll = mk.getLatLng();
@@ -472,6 +520,7 @@ var Tracking = (function () {
       });
       mk.on('dragend', function () {
         fixDragEndAt = Date.now();
+        fixLastDragIx = i; /* hy (Q288): only this marker's trailing click is the drag's */
         var ll = mk.getLatLng();
         p.lat = ll.lat; p.lng = ll.lng;
         if (fixDragSnap && fixDragFrom && hav(fixDragFrom, p) > 0.5) {
@@ -484,26 +533,104 @@ var Tracking = (function () {
       mk.addTo(fixLayer);
       fixMks.push(mk);
     });
+    /* hy (Q288): midpoint handles — a small pale dot at the middle of
+       every leg of every stretch. Tap it and a real point lands
+       there; drag it and the point lands where he drops it. The
+       standard insert in every proven editor (Mapbox's midpoint
+       handles, Geoman's middle markers). Handles rebuild with the
+       markers, never during a drag, and rest in draw mode. */
+    fixMids = [];
+    if (!fixDrawMode) {
+      for (var j = 1; j < fixPts.length; j++) {
+        if (fixPts[j].seg !== fixPts[j - 1].seg) continue;
+        (function (afterIx) {
+          var a = fixPts[afterIx - 1], b = fixPts[afterIx];
+          var mid = L.marker([(a.lat + b.lat) / 2, (a.lng + b.lng) / 2], {
+            icon: fixMidIcon(), draggable: true, autoPan: false, keyboard: false
+          });
+          mid.on('click', function () {
+            if (fixLastDragMid === afterIx && Date.now() - fixDragEndAt < 400) { fixLastDragMid = -1; return; }
+            fixInsertMid(afterIx, null, false);
+          });
+          mid.on('dragstart', function () { fixMidSnap = fixSnapshot(); fixMidFrom = mid.getLatLng(); fixLastDragMid = -1; });
+          mid.on('drag', function () { fixDrawLines(); });
+          mid.on('dragend', function () {
+            var ll = mid.getLatLng();
+            fixDragEndAt = Date.now(); fixLastDragMid = afterIx;
+            if (fixMidFrom && (Math.abs(ll.lat - fixMidFrom.lat) > 1e-7 || Math.abs(ll.lng - fixMidFrom.lng) > 1e-7)) {
+              fixInsertMid(afterIx, ll, true);
+            } else { fixDraw(); }
+            fixMidSnap = null; fixMidFrom = null;
+          });
+          mid.addTo(fixLayer);
+          fixMids.push(mid);
+        })(j);
+      }
+    }
+  }
+  /* hy (Q288): land a midpoint handle as a real point. A tap plants
+     it at the leg's middle; a drag plants it at the drop. The new
+     point is laid by hand, carries the leg's segment, and is left
+     selected so he can drag it on or remove it. One Undo step. */
+  function fixInsertMid(afterIx, latlng, fromDrag) {
+    if (!fixPts || afterIx < 1 || afterIx > fixPts.length - 1) return;
+    var a = fixPts[afterIx - 1], b = fixPts[afterIx];
+    if (!a || !b || a.seg !== b.seg) return;
+    if (fromDrag && fixMidSnap) {
+      fixUndoStack.push(fixMidSnap);
+      if (fixUndoStack.length > 30) fixUndoStack.shift();
+    } else fixPushUndo();
+    var np = latlng
+      ? { lat: latlng.lat, lng: latlng.lng, seg: a.seg, hand: 1 }
+      : { lat: (a.lat + b.lat) / 2, lng: (a.lng + b.lng) / 2, seg: a.seg, hand: 1 };
+    fixPts.splice(afterIx, 0, np);
+    fixSel = { a: afterIx, b: null };
+    fixDraw(); fixBar();
+    toast('Point added in the edit — Save keeps it, Cancel throws it away.');
+  }
+  /* hy (Q288): take ONE point out — select-then-act, the delete
+     pattern every proven editor uses on touch. The route's very last
+     point overall can't go (an empty route is nothing to save). One
+     Undo step, like every committed edit. */
+  function fixRemovePoint() {
+    if (!fixPts || !fixSel || fixSel.a === null || fixSel.b !== null) return;
+    if (fixPts.length <= 1) { toast("That is the route's only point — nothing to remove."); return; }
+    fixPushUndo();
+    fixPts.splice(fixSel.a, 1);
+    fixSel = { a: null, b: null };
+    fixDraw(); fixBar();
+    toast('Point removed in the edit — Save keeps it, Cancel throws it away.');
   }
   function fixBar() {
     var bar = $('fix-bar'), lb = $('fix-bar-label'), ap = $('btn-fix-apply');
     if (!bar || !lb || !ap) return;
     if (!fixPts) { bar.classList.remove('show'); return; }
     bar.classList.add('show');
+    /* hx (Q287): while a drawn run is pending, the bar's miles count
+       it too — the line he is laying is real route even before it
+       lands. (The shared miles line below runs first; this overrides
+       it for the draw branch only.) */
+    var fixPendingMi = 0;
+    if (fixDrawMode && fixRun && fixRun.pts.length) {
+      var prevP = fixRun.aPt || null;
+      fixRun.pts.forEach(function (p) { if (prevP) fixPendingMi += hav(prevP, p); prevP = p; });
+      if (fixRun.tPt && prevP) fixPendingMi += hav(prevP, fixRun.tPt);
+      fixPendingMi = fixPendingMi / 1609.344;
+    }
     /* gp: the working trip's miles ride the bar and move live as points
        are dragged or stretches are cut — same format as the Paperwork
        readout (fmtMiles: tenths of a mile). */
     var mi = $('fix-bar-miles');
-    if (mi) mi.textContent = 'Trip: ' + fmtMiles(fixMiles(fixPts));
+    if (mi) mi.textContent = 'Trip: ' + fmtMiles(fixMiles(fixPts) + fixPendingMi);
     var db = $('btn-fix-draw'), du = $('btn-fix-undo'), cn = $('btn-fix-connect'), ct = $('btn-fix-cut'),
-        sp = $('btn-fix-stop'), bk = $('btn-fix-back'),
+        sp = $('btn-fix-stop'), bk = $('btn-fix-back'), rm = $('btn-fix-remove'),
         fc = $('btn-fix-cancel'), fd = $('btn-fix-done');
     function vis(el, on) { if (el) el.style.display = on ? '' : 'none'; }
     if (fixDrawMode) {
       /* gt: the bar belongs to Draw — the cut/join/done controls rest
          until Back returns to the normal fix bar. */
       ap.style.display = 'none';
-      vis(db, false); vis(fc, false); vis(fd, false); vis(bk, true); vis(ct, false);
+      vis(db, false); vis(fc, false); vis(fd, false); vis(bk, true); vis(ct, false); vis(rm, false);
       vis(du, !!(fixRun && fixRun.pts.length));
       vis(cn, !!(fixRun && fixRun.tPt && fixRun.pts.length));
       vis(sp, !!fixRun);
@@ -514,14 +641,22 @@ var Tracking = (function () {
       else lb.textContent = 'Connect — the drawn stretch runs to that point, and the route carries on from there.';
       return;
     }
-    vis(db, true); vis(fc, true); vis(fd, true); vis(ct, false);
+    vis(db, true); vis(fc, true); vis(fd, true); vis(ct, false); vis(rm, false);
     vis(du, fixUndoStack.length > 0); vis(cn, false); vis(sp, false); vis(bk, false); /* hu (Q280): Undo shows once a step exists */
     if (!fixSel || fixSel.a === null) {
-      lb.textContent = 'Fix route — drag a point to move it, tap two points to connect them straight, or Draw to lay a stretch by hand. Undo backs out the last step.';
+      lb.textContent = 'Fix route — drag a point to move it, tap a point to pick it, or Draw to lay a stretch by hand. The pale dots add a point mid-line. Undo backs out the last step.';
       ap.style.display = 'none';
     } else if (fixSel.b === null) {
-      lb.textContent = 'Now tap the second point — the route runs straight from the first point to the one you tap.';
+      /* hy (Q288): the bar names the picked point — which one it is,
+         whether a hand laid it, and whether other points sit on the
+         same spot — and Remove point rides beside the invitation to
+         tap a second point. */
+      var nm = fixPointName(fixSel.a);
+      lb.textContent = 'You picked ' + nm.text + '.' +
+        (nm.stack.length > 1 ? ' ' + nm.stack.length + ' points sit on this spot — tap it again for the one underneath.' : '') +
+        ' Tap a second point to connect or cut — or Remove point takes this one out.';
       ap.style.display = 'none';
+      vis(rm, true);
     } else if (fixSel.a === 0 && fixSel.b === fixPts.length - 1 && fixPts.length > 2) {
       /* hu (2026-11-21, Q279, Tanner): the two taps are the route's very
          first and very last points. He selected the two yellow ends
@@ -531,7 +666,7 @@ var Tracking = (function () {
          ends (or say plainly that they already meet). */
       var gap = hav(fixPts[0], fixPts[fixPts.length - 1]);
       if (gap < 1) {
-        lb.textContent = 'The two ends already meet — this route is closed.';
+        lb.textContent = "Those two are the route's first and last points, and they already meet — this route is closed.";
         ap.style.display = 'none';
       } else {
         lb.textContent = 'Join the two ends — the route closes into a loop, and ' + fmtDist(gap) + ' of route comes back in.';
@@ -573,6 +708,37 @@ var Tracking = (function () {
   }
   function fixTap(i) {
     if (!fixPts || i < 0 || i >= fixPts.length) return;
+    /* hy (Q288): stacked points. When several points sit on one spot
+       (a closed loop's first point and its closing copy are the
+       everyday case), the tap always lands on the topmost marker —
+       so tapping the spot again walks the selection to the point
+       underneath, and the bar says there is a stack. No upstream
+       editor solves this; this small cycle is ours. */
+    var stack = fixStackAt(i);
+    if (stack.length > 1 && fixSel) {
+      if (fixSel.b === null && fixSel.a !== null && stack.indexOf(fixSel.a) >= 0) {
+        var nxt = stack[(stack.indexOf(fixSel.a) + 1) % stack.length];
+        if (fixCycleStart === null) fixCycleStart = fixSel.a;
+        if (nxt === fixCycleStart) {
+          /* he has tapped through the whole stack and come back
+             around — the pair is where the walk started and where
+             it stands (a closed loop's two ends, paired at last). */
+          var lo = Math.min(fixCycleStart, fixSel.a), hi = Math.max(fixCycleStart, fixSel.a);
+          fixCycleStart = null;
+          fixSel = { a: lo, b: hi };
+          fixDraw(); fixBar();
+          return;
+        }
+        fixSel = { a: nxt, b: null };
+        fixDraw(); fixBar();
+        return;
+      }
+      if (fixSel.b !== null && stack.indexOf(fixSel.b) >= 0) {
+        var nb = stack[(stack.indexOf(fixSel.b) + 1) % stack.length];
+        if (nb !== fixSel.a) { fixSel.b = nb; fixDraw(); fixBar(); return; }
+      }
+    }
+    fixCycleStart = null; /* any ordinary tap ends a stack walk */
     if (!fixSel || fixSel.a === null) { fixSel = { a: i, b: null }; }
     else if (fixSel.b === null) {
       if (i === fixSel.a) { fixSel = { a: null, b: null }; }
@@ -729,8 +895,9 @@ var Tracking = (function () {
     fixDrawMode = true;
     fixDraw(); fixBar();
   }
-  /* Leaving draw mode ends any run open — the drawn points stay in
-     the working copy, exactly as Stop here leaves them. */
+  /* Leaving draw mode drops any run still pending — drawn points
+     join the route only when they land, at Stop here or Connect
+     (hx, Q287). */
   function fixDrawExit() {
     fixRun = null; fixDrawMsg = null;
     fixDrawMode = false;
@@ -750,7 +917,6 @@ var Tracking = (function () {
          forward — the drawn points splice in right after it and the
          route carries on to the point that used to come next. */
       var single = run.a === run.b;
-      fixPushUndo(); /* hu (Q280): the whole drawn stretch is one step */
       fixRun = {
         aPt: p,
         oPt: single ? null : fixPts[i === run.a ? run.b : run.a],
@@ -785,29 +951,18 @@ var Tracking = (function () {
   function fixDrawMapTap(latlng) {
     if (!fixPts) return;
     if (!fixRun) {
-      /* hw (Q285): a bare map tap starts a stretch of its own — no
-         anchor, no hunting for an end. It lands at the end of the
-         route under its own segment number; Connect can tie it to
-         any point afterward, and Stop here leaves it standing on
-         its own, exactly as drawn. */
-      fixPushUndo(); /* hu (Q280): the whole drawn stretch is one step */
+      /* hx (Q287): a bare map tap starts a stretch of its own — no
+         anchor, no hunting for an end. Its points stay pending until
+         the stretch lands (fixLandRun), so the segment number is
+         claimed now and the points take it when they land. */
       var mx = -1;
       fixPts.forEach(function (q) { if (q.seg > mx) mx = q.seg; });
       fixRun = { aPt: null, oPt: null, end: 'last', pts: [], tPt: null, seg: mx + 1 };
     }
-    var np = { lat: latlng.lat, lng: latlng.lng, seg: fixRun.aPt ? fixRun.aPt.seg : fixRun.seg, hand: 1 };
-    if (fixRun.end === 'last') {
-      var ref = fixRun.pts.length ? fixRun.pts[fixRun.pts.length - 1] : fixRun.aPt;
-      if (ref) fixPts.splice(fixPts.indexOf(ref) + 1, 0, np);
-      else fixPts.push(np);
-    } else {
-      /* growing backward off a first point: each new tap lies FARTHER
-         out, so it goes before the first point laid — the stored
-         order stays the route's true order. */
-      var ref2 = fixRun.pts.length ? fixRun.pts[0] : fixRun.aPt;
-      fixPts.splice(fixPts.indexOf(ref2), 0, np);
-    }
-    fixRun.pts.push(np);
+    /* hx (Q287): a tap gives him a new point where his finger hit —
+       pending, joined only to the previous tap by the run's own
+       line. Nothing splices into the route here. */
+    fixRun.pts.push({ lat: latlng.lat, lng: latlng.lng, hand: 1 });
     fixDrawMsg = null;
     fixDraw(); fixBar();
   }
@@ -816,18 +971,43 @@ var Tracking = (function () {
       fixDrawMsg = 'Nothing to undo — tap the map to lay a point.';
       fixBar(); return;
     }
-    var last = fixRun.pts.pop();
-    var ix = fixPts.indexOf(last);
-    if (ix >= 0) fixPts.splice(ix, 1);
+    fixRun.pts.pop();
     if (!fixRun.pts.length) fixRun.tPt = null;
     fixDrawMsg = null;
     fixDraw(); fixBar();
   }
-  /* Stop here: the run ends open — the drawn points stay as the
-     anchor stretch's new tail (or head). The run is over; draw mode
-     stays up for another stretch if he wants one. */
+  /* hx (Q287): land the pending run into the working copy — the one
+     moment drawn points join the route. Anchored runs splice in at
+     the anchor (a backward-grown run lands in reverse tap order, so
+     the stored order stays the route's true order); free runs append
+     as a stretch of their own. The undo snapshot is taken here, so a
+     landed stretch is exactly one step. Returns the landed points in
+     route order, or null when there is nothing to land. */
+  function fixLandRun() {
+    if (!fixRun || !fixRun.pts.length) return null;
+    fixPushUndo(); /* hu (Q280): the whole drawn stretch is one step */
+    var landed;
+    if (!fixRun.aPt) {
+      var seg = fixRun.seg;
+      landed = fixRun.pts.map(function (p) { return { lat: p.lat, lng: p.lng, seg: seg, hand: 1 }; });
+      landed.forEach(function (p) { fixPts.push(p); });
+    } else {
+      var aIx = fixPts.indexOf(fixRun.aPt), aSeg = fixRun.aPt.seg;
+      var inOrder = fixRun.end === 'first' ? fixRun.pts.slice().reverse() : fixRun.pts.slice();
+      landed = inOrder.map(function (p) { return { lat: p.lat, lng: p.lng, seg: aSeg, hand: 1 }; });
+      var at = fixRun.end === 'first' ? aIx : aIx + 1;
+      landed.forEach(function (p, k) { fixPts.splice(at + k, 0, p); });
+    }
+    return landed;
+  }
+  /* Stop here: the run ends open — the drawn stretch lands where it
+     was aimed (at its anchor, or as a stretch of its own) and stays
+     in the working copy. Draw mode stays up for another stretch. */
   function fixDrawStop() {
-    if (fixRun && fixRun.pts.length) toast('Drawn stretch added in the edit — Save keeps it, Cancel throws it away.');
+    if (fixRun && fixRun.pts.length) {
+      fixLandRun();
+      toast('Drawn stretch added in the edit — Save keeps it, Cancel throws it away.');
+    }
     fixRun = null; fixDrawMsg = null;
     fixDraw(); fixBar();
   }
@@ -842,31 +1022,43 @@ var Tracking = (function () {
      closing leg. */
   function fixDrawConnect() {
     if (!fixRun || !fixRun.tPt || !fixRun.pts.length) return;
-    /* hw (Q285): when the target sits mid-stretch — or the anchor
-       does, or the run is a free stretch with no anchor — a merge
-       would reroute points he never tapped. The bridge instead ends
-       on a copy of the target, landed right after the last drawn
-       point in the drawn points' own stretch: the route runs to the
-       target's spot and the target's own stretch carries on
-       untouched — the same overlap Connect (Q283) makes. */
-    var tIx = fixPts.indexOf(fixRun.tPt);
-    var tRun = tIx >= 0 ? fixRunOf(tIx) : null;
-    var targetMid = !!tRun && tIx !== tRun.a && tIx !== tRun.b;
+    var tPt = fixRun.tPt;
+    /* hx (Q287): the copy decision is made on the pre-landing state —
+       when the target sits mid-stretch, or the anchor does, or the
+       run is a free stretch with no anchor, a merge would reroute
+       points he never tapped (hw, Q285). The run lands first
+       (fixLandRun), then the bridge ends on a copy of the target
+       landed at the run's far end: the route runs to the target's
+       spot and the target's own stretch carries on untouched — the
+       same overlap Connect (Q283) makes. */
+    var tIx0 = fixPts.indexOf(tPt);
+    var tRun0 = tIx0 >= 0 ? fixRunOf(tIx0) : null;
+    var targetMid = !!tRun0 && tIx0 !== tRun0.a && tIx0 !== tRun0.b;
     if (!fixRun.aPt || fixRun.midAnchor || targetMid) {
-      var lastD = fixRun.pts[fixRun.pts.length - 1];
-      var cp = { lat: fixRun.tPt.lat, lng: fixRun.tPt.lng, seg: lastD.seg };
-      if (fixRun.tPt.hand) cp.hand = 1;
-      fixPts.splice(fixPts.indexOf(lastD) + 1, 0, cp);
+      var firstGrowth = !!fixRun.aPt && fixRun.end === 'first';
+      var landed = fixLandRun();
+      if (!landed) { fixRun = null; fixDraw(); fixBar(); return; }
+      /* the run's far end in route order: for a backward-grown run
+         that is the first landed point (it sits at the block's
+         start); for every other run, the last. */
+      var far = firstGrowth ? landed[0] : landed[landed.length - 1];
+      var cp = { lat: tPt.lat, lng: tPt.lng, seg: far.seg };
+      if (tPt.hand) cp.hand = 1;
+      var atC = fixPts.indexOf(far);
+      fixPts.splice(firstGrowth ? atC : atC + 1, 0, cp);
       fixRun = null; fixDrawMsg = null;
       fixDrawMode = false;
       fixDraw(); fixBar();
       toast('Connected in the edit — Save keeps it, Cancel throws it away.');
       return;
     }
+    /* The clean merge: the run lands at its anchor, then the two end
+       stretches join into one, exactly as gt built it. */
+    fixLandRun();
     var segs = fixSegs(fixPts), sA = -1, sB = -1, k;
     for (k = 0; k < segs.length; k++) {
       if (segs[k].indexOf(fixRun.aPt) >= 0) sA = k;
-      if (segs[k].indexOf(fixRun.tPt) >= 0) sB = k;
+      if (segs[k].indexOf(tPt) >= 0) sB = k;
     }
     if (sA < 0 || sB < 0) { fixRun = null; fixDraw(); fixBar(); return; }
     if (sA === sB) {
@@ -876,7 +1068,7 @@ var Tracking = (function () {
       segs[sA].push(copy);
     } else {
       var A = segs[sA], B = segs[sB];
-      var targetFirst = fixRun.tPt === B[0];
+      var targetFirst = tPt === B[0];
       var merged;
       if (fixRun.end === 'last') {
         merged = A.concat(targetFirst ? B : B.slice().reverse());
@@ -1239,6 +1431,7 @@ var Tracking = (function () {
     var fc = $('btn-fix-cancel'); if (fc) fc.onclick = fixCancel;
     var fdw = $('btn-fix-draw'); if (fdw) fdw.onclick = fixDrawEnter;
     var fu = $('btn-fix-undo'); if (fu) fu.onclick = function () { if (fixDrawMode) fixDrawUndo(); else fixUndoStep(); };
+    var fr = $('btn-fix-remove'); if (fr) fr.onclick = function () { fixRemovePoint(); };
     var fct = $('btn-fix-cut'); if (fct) fct.onclick = fixSplitCut; /* hv (Q283) */ /* hu (Q280): Draw keeps its per-point undo; the normal bar steps the session back */
     var fcn = $('btn-fix-connect'); if (fcn) fcn.onclick = fixDrawConnect;
     var fst = $('btn-fix-stop'); if (fst) fst.onclick = fixDrawStop;
@@ -1250,5 +1443,5 @@ var Tracking = (function () {
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', wire);
   else wire();
-  return { attach: attach, start: start, syncFab: syncFab, active: function () { return state !== 'idle'; }, drawSaved: drawSaved, clearSaved: clearSaved, rescuePending: rescuePending, startFix: startFix, endFix: endFix, mapTap: mapTap, startDrawRoute: startDrawRoute, endDrawRoute: endDrawRoute, _test: { hav: hav, start: start, onPos: onPos, stop: stop, state: function () { return state; }, pts: function () { return pts; }, miles: function () { return distM / 1609.344; }, segs: function () { return segments(pts).length; }, downsample: downsample, wake: function () { return !!wakeSentinel; }, fixTap: fixTap, fixApply: fixApply, fixJoin: fixJoin, fixDone: fixDone, fixCancel: fixCancel, fixMarkers: function () { return fixMks; }, fixPoints: function () { return fixPts ? fixPts.map(function (p) { var o = { lat: p.lat, lng: p.lng, seg: p.seg }; if (p.hand) o.hand = 1; return o; }) : null; }, fixState: function () { return { active: !!fixPts, n: fixPts ? fixPts.length : 0, sel: fixSel, shape: fixPts ? fixShape(fixPts) : null, miles: fixPts ? fixMiles(fixPts) : null, locked: document.body.classList.contains('editor-lock'), undo: fixUndoStack.length }; }, fixDraw: function () { return { mode: fixDrawMode, anchored: !!fixRun, run: fixRun ? fixRun.pts.length : 0, target: !!(fixRun && fixRun.tPt), end: fixRun ? fixRun.end : null, label: ($('fix-bar-label') || {}).textContent || '' }; }, fixDrawEnter: fixDrawEnter, fixDrawExit: fixDrawExit, fixDrawTap: fixDrawTapPoint, fixDrawUndo: fixDrawUndo, fixDrawStop: fixDrawStop, fixDrawConnect: fixDrawConnect, mapTap: mapTap, startDrawRoute: startDrawRoute, endDrawRoute: endDrawRoute, drawRoute: function () { return { active: !!drawPts, n: drawPts ? drawPts.length : 0, miles: drawPts ? Math.round((drawMeters() / 1609.344) * 10) / 10 : 0, locked: document.body.classList.contains('editor-lock'), barShown: !!($('draw-bar') && $('draw-bar').classList.contains('show')), saveDisabled: !!($('btn-draw-save') && $('btn-draw-save').disabled), pts: drawPts ? drawPts.map(function (p) { return [p.lat, p.lng]; }) : [], closed: drawClosed, sel: drawSel, offer: drawOffer, label: ($('draw-bar-label') || {}).textContent || '', applyShown: !!($('btn-draw-apply') && $('btn-draw-apply').style.display !== 'none'), applyText: ($('btn-draw-apply') || {}).textContent || '', barMiles: ($('draw-bar-miles') || {}).textContent || '' }; }, drawMarkers: function () { return drawMks; }, drawTapPoint: drawTapPoint, drawApply: drawApply, routeBar: function () { var bar = $('route-bar'), fx = $('btn-route-fix'), dn = $('btn-route-done'); return { shown: !!(bar && bar.classList.contains('show')), fix: !!(fx && fx.style.display !== 'none'), done: !!(dn && dn.style.display !== 'none'), ctx: !!savedCtx, drawn: savedLayer ? savedLayer.getLayers().length : 0 }; } } };
+  return { attach: attach, start: start, syncFab: syncFab, active: function () { return state !== 'idle'; }, drawSaved: drawSaved, clearSaved: clearSaved, rescuePending: rescuePending, startFix: startFix, endFix: endFix, mapTap: mapTap, startDrawRoute: startDrawRoute, endDrawRoute: endDrawRoute, _test: { hav: hav, start: start, onPos: onPos, stop: stop, state: function () { return state; }, pts: function () { return pts; }, miles: function () { return distM / 1609.344; }, segs: function () { return segments(pts).length; }, downsample: downsample, wake: function () { return !!wakeSentinel; }, fixTap: fixTap, fixApply: fixApply, fixJoin: fixJoin, fixDone: fixDone, fixCancel: fixCancel, fixMarkers: function () { return fixMks; }, fixPoints: function () { return fixPts ? fixPts.map(function (p) { var o = { lat: p.lat, lng: p.lng, seg: p.seg }; if (p.hand) o.hand = 1; return o; }) : null; }, fixState: function () { return { active: !!fixPts, n: fixPts ? fixPts.length : 0, sel: fixSel, shape: fixPts ? fixShape(fixPts) : null, miles: fixPts ? fixMiles(fixPts) : null, locked: document.body.classList.contains('editor-lock'), undo: fixUndoStack.length }; }, fixDraw: function () { return { mode: fixDrawMode, anchored: !!fixRun, run: fixRun ? fixRun.pts.length : 0, target: !!(fixRun && fixRun.tPt), end: fixRun ? fixRun.end : null, label: ($('fix-bar-label') || {}).textContent || '' }; }, fixDrawEnter: fixDrawEnter, fixRemove: fixRemovePoint, fixInsertMid: fixInsertMid, fixMidCount: function () { return fixMids ? fixMids.length : 0; }, fixLabel: function () { return ($('fix-bar-label') || {}).textContent || ''; }, fixDrawExit: fixDrawExit, fixDrawTap: fixDrawTapPoint, fixDrawUndo: fixDrawUndo, fixDrawStop: fixDrawStop, fixDrawConnect: fixDrawConnect, mapTap: mapTap, startDrawRoute: startDrawRoute, endDrawRoute: endDrawRoute, drawRoute: function () { return { active: !!drawPts, n: drawPts ? drawPts.length : 0, miles: drawPts ? Math.round((drawMeters() / 1609.344) * 10) / 10 : 0, locked: document.body.classList.contains('editor-lock'), barShown: !!($('draw-bar') && $('draw-bar').classList.contains('show')), saveDisabled: !!($('btn-draw-save') && $('btn-draw-save').disabled), pts: drawPts ? drawPts.map(function (p) { return [p.lat, p.lng]; }) : [], closed: drawClosed, sel: drawSel, offer: drawOffer, label: ($('draw-bar-label') || {}).textContent || '', applyShown: !!($('btn-draw-apply') && $('btn-draw-apply').style.display !== 'none'), applyText: ($('btn-draw-apply') || {}).textContent || '', barMiles: ($('draw-bar-miles') || {}).textContent || '' }; }, drawMarkers: function () { return drawMks; }, drawTapPoint: drawTapPoint, drawApply: drawApply, routeBar: function () { var bar = $('route-bar'), fx = $('btn-route-fix'), dn = $('btn-route-done'); return { shown: !!(bar && bar.classList.contains('show')), fix: !!(fx && fx.style.display !== 'none'), done: !!(dn && dn.style.display !== 'none'), ctx: !!savedCtx, drawn: savedLayer ? savedLayer.getLayers().length : 0 }; } } };
 })();
