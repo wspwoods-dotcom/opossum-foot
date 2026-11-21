@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-11-21il';
+var APP_VERSION = 'beta 0.1 · build 2026-11-21im';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -7413,7 +7413,7 @@ function renderHistory() {
    attractants mid-season never rewrites past catches. Unstamped catches sit
    in an "Unspecified" bucket below the rankings: honest numbers, never
    competing in them. */
-var scoreUI = { season: 'this', by: 'lure', species: '', h2hA: '', h2hB: '', spCat: '', spQ: '' };
+var scoreUI = { season: 'this', by: 'lure', species: '', h2hA: '', h2hB: '' };
 function prevSeasonYear(sy) {
   var y = parseInt((sy || '').split('-')[0], 10) || 0;
   return (y - 1) + '-' + String(y).slice(2);
@@ -7480,17 +7480,14 @@ function renderScorecardTab() {
   if (u.species && !seen[u.species]) u.species = '';
   var data = scorecardGroups(u.by, u.season, u.species);
   var names = data.rows.map(function (r) { return r.name; });
-  /* Q170 (2026-10-08): head-to-head can also compare sponsored products, even
-     ones with no logged catches yet — sponsor names join the picker options. */
+  /* im (2026-11-21, Q308, Tanner): the head-to-head lists ONLY products
+     with results in this view — his ruling, superseding Q170's sponsor
+     append. A sponsored product joins the list the moment he has caught
+     with it, the same as any other product; one he has never used has
+     no results to compare and stays out ("comparing apples and
+     oranges"). Both picks therefore always have a results card. */
   function h2hNames() {
-    var opts = names.slice();
-    SPONSORS.forEach(function (sp) {
-      /* ig (Q302): every product on the sponsor's list for this
-         category is a pick — not just the headline product. */
-      var prods = (sp.products && sp.products.length) ? sp.products : [{ name: sp.product, section: sp.section }];
-      prods.forEach(function (p) { if (p.section === u.by && opts.indexOf(p.name) === -1) opts.push(p.name); });
-    });
-    return opts;
+    return names.slice();
   }
   var h2hAll = h2hNames();
   if (u.h2hA && h2hAll.indexOf(u.h2hA) === -1) u.h2hA = '';
@@ -7560,15 +7557,13 @@ function renderScorecardTab() {
     '<div><label class="field" for="sc-h2h-b">Second</label>' +
     '<select id="sc-h2h-b"><option value="">Pick one…</option>' + h2hOpts(u.h2hB) + '</select></div></div>' +
     h2h + '</div>';
-  /* Q170 (2026-10-08): Sponsored Products — a searchable, sponsor-only directory
-     sitting between head-to-head and the honesty line (which stays dead last).
-     One search box + category chips; every card wears the gold SPONSORED pill;
-     Compare drops the product into the head-to-head picker. */
-  var spCat = u.spCat || u.by;
-  html += '<div class="card" style="margin-top:12px"><h3>Sponsored Products</h3>' +
-    segBtns('sc-sp-seg', 'spcat', [['lure', 'Lures'], ['bait', 'Bait'], ['urine', 'Urine'], ['visual', 'Visual'], ['audio', 'Audio'], ['other', 'Other']]) +
-    '<input type="search" id="sc-sp-q" placeholder="Search sponsored products…" value="' + esc(u.spQ || '') + '" aria-label="Search sponsored products">' +
-    '<div id="sc-sp-list"></div></div>';
+  /* im (Q308, Tanner): the Sponsored Products directory is OUT of the
+     Scorecard — redundant, by his reasoning: a sponsored product he has
+     used already stands in the rankings above wearing its logo chip,
+     and one he has not used has no results and does not belong on a
+     results page. Sponsors keep the rankings chip (opens their bio),
+     the bait/lure lists, and the back of the app. The honesty line
+     stays dead last. */
   html += '<div class="scorecard-honesty"><strong>Scorecard rankings are earned from real catch data \u2014 never bought.</strong></div>';
   box.innerHTML = html;
   var sub = $('scorecard-sub');
@@ -7597,106 +7592,6 @@ function renderScorecardTab() {
   $('sc-species').onchange = function () { u.species = this.value; u.h2hA = ''; u.h2hB = ''; renderScorecardTab(); };
   $('sc-h2h-a').onchange = function () { u.h2hA = this.value; renderScorecardTab(); };
   $('sc-h2h-b').onchange = function () { u.h2hB = this.value; renderScorecardTab(); };
-  /* Q170: Sponsored Products wiring — chips re-render the tab, search filters
-     the list in place (no re-render, so the keyboard stays up). */
-  renderSpList();
-  (function () {
-    var seg = $('sc-sp-seg');
-    if (!seg) return;
-    var btns = seg.querySelectorAll('button');
-    for (var i = 0; i < btns.length; i++) {
-      btns[i].classList.toggle('selected', btns[i].getAttribute('data-spcat') === (u.spCat || u.by));
-      btns[i].onclick = (function (b) {
-        return function () { u.spCat = b.getAttribute('data-spcat'); renderScorecardTab(); };
-      })(btns[i]);
-    }
-  })();
-  var spq = $('sc-sp-q');
-  if (spq) { ensureClearInput(spq); /* ij (Q304): the search box carries the same clear × as every type-in box */
-    spq.oninput = function () { u.spQ = this.value; renderSpList(); }; }
-  var splist = $('sc-sp-list');
-  if (splist) splist.addEventListener('click', function (e) {
-    var cmp = e.target && e.target.closest ? e.target.closest('[data-sp-compare]') : null;
-    if (cmp) { e.stopPropagation(); spCompare(cmp.getAttribute('data-sp-compare'), cmp.getAttribute('data-sp-product')); return; }
-    var card = e.target && e.target.closest ? e.target.closest('[data-sp]') : null;
-    if (card) openSponsorBio(card.getAttribute('data-sp'));
-  });
-  if (splist) splist.addEventListener('keydown', function (e) {
-    if (e.key !== 'Enter' && e.key !== ' ') return;
-    if (e.target && e.target.closest && e.target.closest('[data-sp-compare]')) return;
-    var card = e.target && e.target.closest ? e.target.closest('[data-sp]') : null;
-    if (card) { e.preventDefault(); openSponsorBio(card.getAttribute('data-sp')); }
-  });
-}
-/* Q170 (2026-10-08): sponsor-only product list for the Scorecard tab.
-   Only real sponsors appear — typed-in/autofilled products never do. */
-function renderSpList() {
-  var list = $('sc-sp-list');
-  if (!list) return;
-  var u = scoreUI;
-  var cat = u.spCat || u.by;
-  var q = String(u.spQ || '').toLowerCase().trim();
-  var PHRASE = { lure: 'lures', bait: 'baits', urine: 'urines', visual: 'visual attractants', audio: 'audio attractants', other: 'other attractants' };
-  /* ig (2026-11-21, Q302, Tanner — "there's no other sponsored
-     products popping up there"): the directory filtered SPONSORS by
-     each company's HEADLINE section and showed its headline product
-     only, so Bait listed two products and every other category listed
-     none — the sponsors' full product lists (products[], loaded with
-     the Nov 10 catalogs) were never read here. The directory now
-     walks every sponsor's products and lists each one under its own
-     category, searchable by product or company. */
-  var items = [];
-  SPONSORS.forEach(function (sp) {
-    var prods = (sp.products && sp.products.length) ? sp.products : [{ name: sp.product, section: sp.section }];
-    prods.forEach(function (pr) {
-      if (pr.section !== cat) return;
-      if (q && (String(pr.name) + ' ' + String(sp.name)).toLowerCase().indexOf(q) === -1) return;
-      items.push({ sp: sp, product: pr.name });
-    });
-  });
-  if (!items.length) {
-    list.innerHTML = '<p class="dim" style="margin:8px 0 0">No sponsored ' + esc(PHRASE[cat] || cat) + ' yet.</p>';
-    return;
-  }
-  list.innerHTML = items.map(function (it) {
-    var sp = it.sp;
-    var logo = sp.badge || sp.brandLogo || '';
-    return '<div class="sp-card" data-sp="' + esc(sp.id) + '" role="button" tabindex="0" aria-label="About ' + esc(sp.name) + '">' +
-      (logo ? '<img class="sp-logo" src="' + esc(logo) + '" alt="' + esc(sp.name) + ' logo">' : '') +
-      '<div class="sp-info"><div class="sp-product">' + esc(it.product) + '</div>' +
-      '<div class="sp-brand dim">' + esc(sp.name) + '</div>' +
-      '<span class="sp-tag">Sponsored</span></div>' +
-      '<button type="button" class="btn-secondary" data-sp-compare="' + esc(sp.id) + '" data-sp-product="' + esc(it.product) + '">Compare</button></div>';
-  }).join('');
-}
-/* Q170: drop a sponsored product into head-to-head — the scorecard switches
-   to the product's section and it becomes the First pick. */
-function spCompare(id, product) {
-  var sp = sponsorById(id);
-  if (!sp) return;
-  /* ig (Q302): the tapped product is the pick — its own name and its
-     own category — not the company's headline product. */
-  var nm = product || sp.product, sec = sp.section;
-  (sp.products || []).forEach(function (p) { if (p.name === nm) sec = p.section; });
-  /* il (2026-11-21, Q307, Tanner): Compare fills FIRST, then SECOND.
-     The ig form overwrote First and cleared Second on every tap, so a
-     pair could never form from the directory — and comparing two is
-     the whole purpose of the head-to-head. Head-to-head is one
-     category at a time (its lists and prompt are per-category), so a
-     tap from another category starts a fresh pair with that product
-     as First; a tap in the same category fills or replaces Second. */
-  var u = scoreUI;
-  var filledSecond = false;
-  if (u.h2hA === nm) { /* already First — nothing to do */ }
-  else if (!u.h2hA || sec !== u.by) { u.h2hA = nm; u.h2hB = ''; }
-  else if (u.h2hB !== nm) { u.h2hB = nm; filledSecond = true; }
-  u.by = sec;
-  u.spCat = sec;
-  renderScorecardTab();
-  if (filledSecond) {
-    var card = document.getElementById('sc-h2h-card');
-    if (card && card.scrollIntoView) card.scrollIntoView({ block: 'start' });
-  }
 }
 /* Q5: one-tap backfill — when a set's attractants are filled in from blank,
    offer to stamp them onto that set's past unstamped catches. Q26: values
