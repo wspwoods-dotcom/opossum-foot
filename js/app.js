@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-11-21ih';
+var APP_VERSION = 'beta 0.1 · build 2026-11-21ij';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -463,6 +463,13 @@ function openSheet(id) {
      mid-scroll from where it was last closed. */
   var body = $(id).querySelector('.sheet-body');
   if (body) body.scrollTop = 0;
+  /* ij (2026-11-21, Q304, Tanner): the clear × is ONE rule for every
+     type-in box — it was added field by field (Q236, Q248, gm) and some
+     boxes never got one, which he kept tripping over. Every sheet sweeps
+     its full-width text boxes on open and wires any that lack the ×
+     (ensureClearInput no-ops on boxes already wrapped). Paired boxes in
+     a .btn-row keep their shared dress and are skipped. */
+  try { sweepClearInputs($(id)); } catch (e) {}
 }
 function closeSheets() {
   var sheets = document.querySelectorAll('.sheet.show');
@@ -1589,6 +1596,25 @@ function sponsorSuggests(key, q) {
    already sits right or is no longer focused. */
 function comboReveal(input, box) {
   if (!input || !box) return;
+  /* ij (2026-11-21, Q305, Tanner): the suggestion list FLOATS over the
+     page now (see .suggest.show in the CSS) — anchor it under its field
+     inside the field's own container. Placement runs on every render
+     (cheap, scroll-invariant); the scroll passes below it do not. */
+  try {
+    var host = box.parentElement;
+    if (host) {
+      if (getComputedStyle(host).position === 'static') host.style.position = 'relative';
+      var irB = input.getBoundingClientRect(), hrB = host.getBoundingClientRect();
+      box.style.top = Math.max(0, Math.round(irB.bottom - hrB.top - 2)) + 'px';
+    }
+  } catch (e) {}
+  /* ij (Q305): settle ONCE per focus. hr's reveal was re-run by every
+     render, so filtering the list mid-typing could yank the sheet again;
+     the field is pulled up when the box first opens for this focus and
+     then left alone until the field loses focus (the focusout hook by
+     attachSuggest clears the flag). */
+  if (box._wasShown) return;
+  box._wasShown = true;
   [60, 380].forEach(function (delay) {
     setTimeout(function () {
       if (!box.className || box.className.indexOf('show') === -1) return;
@@ -1661,9 +1687,26 @@ function sponsorEntryMatch(key, entry) {
   }
   return null;
 }
+/* ij (Q304): sweep a container's full-width type-in boxes and wire any
+   that lack the clear ×. Shared by sheets (on open) and panes (on tab
+   switch); idempotent — ensureClearInput no-ops on wrapped boxes. */
+function sweepClearInputs(root) {
+  if (!root || !root.querySelectorAll) return;
+  root.querySelectorAll('input[type="text"], input[type="search"], input:not([type])').forEach(function (inp) {
+    if (inp.classList.contains('hidden-file')) return;
+    if (inp.closest && inp.closest('.btn-row')) return;
+    ensureClearInput(inp);
+  });
+}
+/* ij (Q305): losing focus re-arms the one settle for the next visit. */
+document.addEventListener('focusout', function (e) {
+  var t = e.target;
+  if (t && t._suggestBox) t._suggestBox._wasShown = false;
+});
 function attachSuggest(inputId, boxId, key, typeToFilter) {
   var input = $(inputId), box = $(boxId);
   if (!input || !box || input._suggestWired) return;
+  input._suggestBox = box; /* ij (Q305) */
   input._suggestWired = true;
   /* Q236 (2026-11-07): an × that wipes the field in one tap — the manual
      entries auto-populate from the last thing used, and clearing them took
@@ -1810,6 +1853,7 @@ var comboBaseCache = {}; /* id -> last option values, for selVal's remember-guar
 var pendingCombos = [];  /* selHtml-built fields awaiting attachment */
 function comboAttach(inputId, boxId, getOptions, opts) {
   var input = $(inputId), box = $(boxId);
+  if (input && box) input._suggestBox = box; /* ij (Q305) */
   if (!input || !box) return;
   opts = opts || {};
   if (!input._comboWired) {
@@ -1966,6 +2010,7 @@ function renderSetNameSuggest() {
 }
 function wireSetNameField() {
   var inp = $('sf-name'), box = $('sf-name-suggest');
+  if (inp && box) inp._suggestBox = box; /* ij (Q305) */
   if (!inp || !box || inp._setNameWired) return;
   inp._setNameWired = true;
   var wrap = document.createElement('span');
@@ -7589,7 +7634,8 @@ function renderScorecardTab() {
     }
   })();
   var spq = $('sc-sp-q');
-  if (spq) spq.oninput = function () { u.spQ = this.value; renderSpList(); };
+  if (spq) { ensureClearInput(spq); /* ij (Q304): the search box carries the same clear × as every type-in box */
+    spq.oninput = function () { u.spQ = this.value; renderSpList(); }; }
   var splist = $('sc-sp-list');
   if (splist) splist.addEventListener('click', function (e) {
     var cmp = e.target && e.target.closest ? e.target.closest('[data-sp-compare]') : null;
@@ -7640,9 +7686,9 @@ function renderSpList() {
     return '<div class="sp-card" data-sp="' + esc(sp.id) + '" role="button" tabindex="0" aria-label="About ' + esc(sp.name) + '">' +
       (logo ? '<img class="sp-logo" src="' + esc(logo) + '" alt="' + esc(sp.name) + ' logo">' : '') +
       '<div class="sp-info"><div class="sp-product">' + esc(it.product) + '</div>' +
-      '<div class="sp-brand dim">' + esc(sp.name) + '</div></div>' +
-      '<span class="pill">Sponsored</span>' +
-      '<button type="button" class="btn-small btn-secondary" data-sp-compare="' + esc(sp.id) + '" data-sp-product="' + esc(it.product) + '">Compare</button></div>';
+      '<div class="sp-brand dim">' + esc(sp.name) + '</div>' +
+      '<span class="sp-tag">Sponsored</span></div>' +
+      '<button type="button" class="btn-secondary" data-sp-compare="' + esc(sp.id) + '" data-sp-product="' + esc(it.product) + '">Compare</button></div>';
   }).join('');
 }
 /* Q170: drop a sponsored product into head-to-head — the scorecard switches
@@ -10718,6 +10764,7 @@ function switchTab(name) {
   if (name === 'seasons') renderSeasons($('seasons-search').value);
   if (name === 'licenses') { renderLicenses(); renderLandowners(); renderPaperworkMileage(); renderMyTags(); }
   if (name === 'lines') renderLines();
+  try { sweepClearInputs($('pane-' + name)); } catch (e) {} /* ij (Q304): pane boxes carry the same clear × */
   reportViewport(); /* fj: keep the About diagnostic fresh, incl. bannerB while on the map */
 }
 
