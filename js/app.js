@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-11-21ho';
+var APP_VERSION = 'beta 0.1 · build 2026-11-21hp';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -3798,6 +3798,50 @@ function nextSetName() {
   }
   return 'Trap 1';
 }
+/* hp (Q270): the purge half of a set delete, without deleteSet's own
+   confirm and UI flow — used by Save over it, whose confirm is the
+   caller's. Same Q38 rule: the set, its catch logs (History included),
+   its photos and its voice memos all go, for good. */
+function purgeSetEverywhere(id) {
+  Store.data.sets = Store.data.sets.filter(function (x) { return x.id !== id; });
+  Store.data.logs = Store.data.logs.filter(function (l) { return l.setId !== id; });
+  IDB.all('photos').then(function (all) {
+    all.forEach(function (p) {
+      if (p.setId !== id) return;
+      if (photoURLs[p.id]) { URL.revokeObjectURL(photoURLs[p.id]); delete photoURLs[p.id]; }
+      delete photoById[p.id];
+      IDB.del('photos', p.id);
+    });
+  }).catch(function () { /* noop */ });
+  IDB.all('memos').then(function (all) {
+    all.forEach(function (m) {
+      if (m.setId !== id) return;
+      if (memoURLs[m.id]) { URL.revokeObjectURL(memoURLs[m.id]); delete memoURLs[m.id]; }
+      IDB.del('memos', m.id);
+    });
+  }).catch(function () { /* noop */ });
+  Store.save();
+}
+/* hp (Q270, Tanner 2026-11-21): Save over it — the second, explicit
+   warning before the name's current owner is deleted and the set being
+   saved takes its name. */
+function confirmSaveOverSet(ds) {
+  var line = lineById(Store.data, ds.lineId);
+  var lineName = line ? line.name : 'another line';
+  var nLogs = Store.data.logs.filter(function (l) { return l.setId === ds.id; }).length;
+  showModal('<h3>Save over &ldquo;' + esc(ds.name) + '&rdquo;?</h3>' +
+    '<p>The set named &ldquo;' + esc(ds.name) + '&rdquo; on the ' + esc(lineName) + ' line will be deleted' +
+    (nLogs ? ' with its ' + nLogs + ' catch log' + (nLogs > 1 ? 's' : '') : '') +
+    ', its photos and voice memos — gone for good, History included. The set you are saving takes the name.</p>' +
+    '<div class="btn-row"><button class="btn-secondary" id="m-cancel" type="button">Cancel</button>' +
+    '<button class="btn-primary" id="m-ok" type="button">Delete it and save mine</button></div>');
+  $('m-cancel').onclick = closeModal;
+  $('m-ok').onclick = function () {
+    purgeSetEverywhere(ds.id);
+    closeModal();
+    saveSetForm();
+  };
+}
 function saveSetForm() {
   var name = $('sf-name').value.trim();
   var status = $('sf-status').value;
@@ -3815,16 +3859,26 @@ function saveSetForm() {
      ambiguous. Compare trimmed, case-insensitive; the set being edited is
      allowed to keep its own name. The auto-numbered name from nextSetName
      passes through the same check. */
-  var dupName = null;
+  var dupSet = null;
   for (var di = 0; di < Store.data.sets.length; di++) {
     var ds = Store.data.sets[di];
     if (editingSetId && ds.id === editingSetId) continue;
-    if (String(ds.name || '').trim().toLowerCase() === name.toLowerCase()) { dupName = ds.name; break; }
+    if (String(ds.name || '').trim().toLowerCase() === name.toLowerCase()) { dupSet = ds; break; }
   }
-  if (dupName) {
-    showModal('<h3>That name is already taken</h3><p>There is already a set named &ldquo;' + esc(dupName) + '&rdquo;. Give this set a different name.</p>' +
-      '<div class="btn-row"><button class="btn-primary" id="m-ok" type="button">OK</button></div>');
+  if (dupSet) {
+    /* hp (Q270, Tanner 2026-11-21): the warning NAMES the line the
+       living set sits on — the old modal never said where it was, so a
+       name deleted on one line still blocked on another — and offers
+       Save over it beside OK: one more explicit warning
+       (confirmSaveOverSet), then the old set is purged (Q38) and this
+       save proceeds under the name. OK stays the rename-only path. */
+    var dupLine = lineById(Store.data, dupSet.lineId);
+    var dupLineName = dupLine ? dupLine.name : 'another line';
+    showModal('<h3>That name is already taken</h3><p>There is already a set named &ldquo;' + esc(dupSet.name) + '&rdquo; on the ' + esc(dupLineName) + ' line. Give this set a different name — or save over it, which deletes that set and puts this one in its place.</p>' +
+      '<div class="btn-row"><button class="btn-secondary" id="m-ok" type="button">OK</button>' +
+      '<button class="btn-primary" id="m-over" type="button">Save over it</button></div>');
     $('m-ok').onclick = closeModal;
+    $('m-over').onclick = function () { confirmSaveOverSet(dupSet); };
     return;
   }
   var td = trapDetailValues();
@@ -6094,20 +6148,12 @@ function renderPickList() {
     activeSets().forEach(function (s) { if (normStatus(s.status) === v) n++; });
     return ' <span class="show-count">' + n + (n === 1 ? ' set' : ' sets') + '</span>';
   };
-  /* hj (2026-11-19, Tanner): Select all shown rides at the TOP of this
-     sheet, above the status groups — it moved here from the Actions
-     sheet (picking lives with picking now; the Actions sheet only
-     acts). Its semantics are the old entry's exactly: selSelectAllShown
-     picks everything the Show filter is showing on this line, whatever
-     groups that spans. The row wears the group controls' dress; its
-     check fills when everything shown is already picked. */
-  showModel();
-  var shownSets = activeSets().filter(function (s) { return mapStatusFilter[normStatus(s.status)]; });
-  var shownPicked = shownSets.length > 0 && shownSets.every(function (s) { return !!selIds[s.id]; });
-  var topRow = '<button type="button" class="show-setname show-setname-pick show-pickall' + (shownPicked ? ' show-setname-sel' : '') + '" data-pick-allshown="1">' +
-    '<span class="show-setcheck">' + (shownPicked ? '✓' : '') + '</span>' +
-    '<span class="show-setname-label">Select all shown</span></button>';
-  host.innerHTML = topRow + STATUS_VALUES.map(function (v) {
+  /* hp (Q268, Tanner 2026-11-21): the "Select all shown" row that rode
+     at the TOP of this sheet since hj is REMOVED at his ruling — each
+     status group carries its own Select all / Clear all, and the
+     sheet's Clear empties the whole pick, so the cross-group row was
+     one control too many. Picking is group by group now. */
+  host.innerHTML = STATUS_VALUES.map(function (v) {
     var c = pinSchemeById(pinSchemeId()).colors[v];
     var open = pickExpandedStatuses.has(v);
     var row = '<div class="show-row"><span class="show-dot" style="background:' + c + '"></span>' +
@@ -6160,12 +6206,6 @@ function renderPickList() {
       renderPickList();
     });
   });
-  host.querySelectorAll('[data-pick-allshown]').forEach(function (b) {
-    b.addEventListener('click', function () {
-      selSelectAllShown();
-      renderPickList();
-    });
-  });
 }
 /* hj (2026-11-19, Tanner): the pick list's per-status Select all. It
    writes the same selIds the name taps and pin taps write — only the
@@ -6215,14 +6255,6 @@ function openSelPickList() {
    over the Cancel row. The 0-picked disablement moved to the bar's
    Actions button (renderSelBar), so the sheet can no longer open at
    0 picked and its rows no longer need the disabled dress. */
-function selSelectAllShown() {
-  /* Everything the current Show filter is showing on this line — the
-     same predicate refreshMarkers paints by. */
-  showModel();
-  activeSets().forEach(function (s) { if (mapStatusFilter[normStatus(s.status)]) selIds[s.id] = true; });
-  refreshMarkers();
-  renderSelBar();
-}
 function selClearSelection() {
   selIds = {};
   refreshMarkers();
@@ -6340,8 +6372,15 @@ function renderBulkBar() {
    lists: set-type foundations (+ his remembered customs), all trap types
    (+ customs), and his remembered attractant values (Q11). Only fields that
    are toggled on are offered (visual has no toggle — always on). Every
-   select starts at "(no change)": a field left alone keeps each set's own
-   value, never blanked. */
+   field starts at "(no change)": a field left alone keeps each set's own
+   value, never blanked.
+   hp (Q269, Tanner 2026-11-21): the fields are the SAME type-to-filter
+   combos as the normal set form — tap opens the full list, typing
+   filters, typed text becomes the value and is remembered. Attractant
+   lists are the normal form's lists too: the sponsor products plus his
+   remembered entries, not remembered entries alone. "(no change)" is
+   the pinned top row (empty value), exactly the bulk editor's standing
+   leave-alone rule. */
 function bulkEditOptions() {
   var out = [];
   if (setFieldOn('settype')) {
@@ -6367,11 +6406,29 @@ function bulkEditOptions() {
     });
     out.push({ field: 'trapType', label: 'Trap type', options: ttOpts });
   }
+  /* hp (Q269): attractant options = the normal form's lists — sponsor
+     products for the section plus his remembered entries, one A–Z run. */
+  var attrOptions = function (key) {
+    var seen = {}, list = [];
+    sponsorSuggests(key, '').forEach(function (p) {
+      var k = p.name.toLowerCase();
+      if (!seen[k]) { seen[k] = 1; list.push(p.name); }
+    });
+    savedEntries(key).forEach(function (v) {
+      var k = String(v).toLowerCase();
+      if (!seen[k]) { seen[k] = 1; list.push(v); }
+    });
+    list.sort(function (a, b) {
+      var al = String(a).toLowerCase(), bl = String(b).toLowerCase();
+      return al < bl ? -1 : (al > bl ? 1 : 0);
+    });
+    return list;
+  };
   [['bait', 'Bait'], ['lure', 'Lure'], ['urine', 'Urine']].forEach(function (pair) {
     if (!setFieldOn(pair[0])) return;
-    out.push({ field: pair[0], label: pair[1], options: savedEntries(pair[0]).slice() });
+    out.push({ field: pair[0], label: pair[1], options: attrOptions(pair[0]) });
   });
-  out.push({ field: 'visual', label: 'Visual', options: savedEntries('visual').slice() });
+  out.push({ field: 'visual', label: 'Visual', options: attrOptions('visual') });
   return out;
 }
 function openBulkEdit() {
@@ -6379,25 +6436,41 @@ function openBulkEdit() {
   if (!sets.length) { renderBulkBar(); return; }
   var fields = bulkEditOptions();
   var rows = fields.map(function (f) {
-    var opts = '<option value="">(no change)</option>' + f.options.map(function (o) {
-      return '<option value="' + esc(o) + '">' + esc(o) + '</option>';
-    }).join('');
+    /* hp (Q269): combo fields, built like the normal form's — an input
+       plus its suggestion box inside the row's label. */
     return '<label class="bulk-edit-row">' + esc(f.label) +
-      '<select id="be-' + f.field + '">' + opts + '</select></label>';
+      '<input type="text" id="be-' + f.field + '" autocomplete="off" placeholder="(no change)">' +
+      '<div class="suggest" id="be-' + f.field + '-suggest"></div></label>';
   }).join('');
   showModal('<h3>Edit all ' + sets.length + ' sets</h3>' +
-    '<p>Set as many fields as you want — fields you leave alone stay as they are on each set.</p>' + rows +
+    '<p>Set as many fields as you want — fields you leave alone stay as they are on each set. Bait, lure, urine and visual are added to what each set already has — never taken away.</p>' + rows +
     '<div class="btn-row" style="margin-top:14px"><button class="btn-secondary" id="m-cancel" type="button">Cancel</button>' +
     '<button class="btn-primary" id="m-ok" type="button">Review changes</button></div>');
   $('modal').classList.add('sheet-dress'); /* gx: standard sheet dress for the bulk family */
+  fields.forEach(function (f) {
+    comboAttach('be-' + f.field, 'be-' + f.field + '-suggest',
+      function () { return f.options; }, { noneLabel: '(no change)' });
+  });
   $('m-cancel').onclick = function () { closeModal(); };
   $('m-ok').onclick = function () {
     var changes = [];
     fields.forEach(function (f) {
-      var v = ($('be-' + f.field) || {}).value || '';
-      if (v) changes.push({ field: f.field, label: f.label, value: v });
+      var v = (($('be-' + f.field) || {}).value || '').trim();
+      if (v && v !== '(no change)') changes.push({ field: f.field, label: f.label, value: v });
     });
     if (!changes.length) { closeModal(); toast('Nothing to change.'); return; }
+    /* hp (Q269): a typed value is remembered exactly as the normal
+       form remembers it — attractants into their entry lists, novel
+       set/trap types into their custom lists. */
+    changes.forEach(function (c) {
+      if (c.field === 'setType') {
+        if (allFoundationNames().indexOf(c.value) === -1) rememberCustomOption('sf-settype', c.value);
+      } else if (c.field === 'trapType') {
+        if (ALL_TRAP_TYPES.indexOf(c.value) === -1) rememberCustomOption('sf-type', c.value);
+      } else {
+        rememberEntry(c.field, c.value);
+      }
+    });
     closeModal(); openBulkEditConfirm(changes);
   };
 }
@@ -6407,7 +6480,7 @@ function openBulkEditConfirm(changes) {
   var n = sets.length;
   var lines = changes.map(function (c) {
     var note = c.field === 'setType' ? ' (variations cleared)'
-      : (c.field === 'bait' || c.field === 'lure' || c.field === 'urine' || c.field === 'visual') ? ' (replaces what is there now)' : '';
+      : (c.field === 'bait' || c.field === 'lure' || c.field === 'urine' || c.field === 'visual') ? ' (added to what is there now)' : '';
     return '<p>' + esc(c.label) + ' → ' + esc(c.value) + note + '</p>';
   }).join('');
   showModal('<h3>Change ' + n + ' sets?</h3>' + lines +
@@ -6426,7 +6499,16 @@ function applyBulkEdit(changes) {
     changes.forEach(function (c) {
       if (c.field === 'setType') { s.setType = c.value; s.variation = ''; } /* the old variation belongs to the old foundation */
       else if (c.field === 'trapType') { s.trapType = c.value; } /* maker + trap details untouched */
-      else { s[c.field] = [c.value]; } /* attractants ride as arrays; bulk replaces the whole list */
+      else { /* hp (Q271, Tanner 2026-11-21): attractants ADD — the value
+               joins what the set already carries, exactly as adding a
+               row in the one-set form; never a duplicate, never a
+               replacement. Set type and trap type above still replace:
+               a set carries exactly one of each. */
+        var arr = toAttrArray(s[c.field]).slice();
+        var dupe = arr.some(function (x) { return String(x).toLowerCase() === c.value.toLowerCase(); });
+        if (!dupe) arr.push(c.value);
+        s[c.field] = arr;
+      }
     });
     touchSet(s); /* Q68: any edit restarts the check clock */
   });
