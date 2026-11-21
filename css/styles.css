@@ -1245,12 +1245,13 @@ body.editor-lock #btn-track { pointer-events: none; opacity: .45; }
 
 /* Q170: Sponsored Products directory on the Scorecard tab */
 #sc-sp-q { width: 100%; margin-top: 10px; }
-.sp-card { display: flex; align-items: center; gap: 10px; padding: 10px; margin-top: 8px;
+.sp-card { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; padding: 10px; margin-top: 8px;
   border: 1px solid var(--line); border-radius: 12px; cursor: pointer; }
 .sp-card:active { opacity: .75; }
 .sp-logo { width: 44px; height: 44px; border-radius: 10px; object-fit: cover; flex: 0 0 auto; }
-.sp-info { flex: 1 1 auto; min-width: 0; }
-.sp-product { font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sp-info { flex: 1 1 150px; min-width: 0; }
+/* ig (Q302): product names read whole — they wrap instead of cutting off at 'Ghost\u2026' */
+.sp-product { font-weight: 700; white-space: normal; }
 .sp-brand { font-size: 12px; }
 
 /* Q171: sponsor bio full-screen sheet (the demo design) */
