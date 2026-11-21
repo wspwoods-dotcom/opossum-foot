@@ -256,6 +256,7 @@ var Tracking = (function () {
      Draws without a context (an unsaved just-tracked route) clear it,
      so the two buttons only ever ride a saved trip's route. */
   var savedCtx = null;
+  var barDone = false; /* hu (Q278): Done on the route bar dismisses the bar — the route stays drawn */
   /* hn (2026-11-21, Q264): fitting the map to a route must never dive to
      maximum zoom. A zero-length route's bounds are a single point, and the
      uncapped fitBounds flew the map to max zoom and stranded the zoom-in
@@ -278,6 +279,7 @@ var Tracking = (function () {
   function drawSaved(track, ctx) {
     if (!savedLayer || !track || !track.length) return;
     savedCtx = ctx || null;
+    barDone = false;
     savedLayer.clearLayers();
     /* gk: a saved track is either the flat shape ([[lat,lng],...]) or,
        when the run had recording gaps, an array of segment arrays. */
@@ -294,6 +296,7 @@ var Tracking = (function () {
      route bar's Hide button, a fresh track, and a discard all clear it. */
   function clearSaved() {
     savedCtx = null;
+    barDone = false;
     if (savedLayer) savedLayer.clearLayers();
     syncRouteBar();
   }
@@ -457,6 +460,11 @@ var Tracking = (function () {
         if (Date.now() - fixDragEndAt < 250) return;
         if (fixDrawMode) fixDrawTapPoint(i); else fixTap(i);
       });
+      mk.on('dragstart', function () {
+        /* hu (Q280): a drag that actually moves the point is one
+           undoable step — the snapshot waits here for dragend. */
+        fixDragSnap = fixSnapshot(); fixDragFrom = { lat: p.lat, lng: p.lng };
+      });
       mk.on('drag', function () {
         var ll = mk.getLatLng();
         p.lat = ll.lat; p.lng = ll.lng;
@@ -466,6 +474,11 @@ var Tracking = (function () {
         fixDragEndAt = Date.now();
         var ll = mk.getLatLng();
         p.lat = ll.lat; p.lng = ll.lng;
+        if (fixDragSnap && fixDragFrom && hav(fixDragFrom, p) > 0.5) {
+          fixUndoStack.push(fixDragSnap);
+          if (fixUndoStack.length > 30) fixUndoStack.shift();
+        }
+        fixDragSnap = null; fixDragFrom = null;
         fixDrawLines(); fixBar();
       });
       mk.addTo(fixLayer);
@@ -502,29 +515,58 @@ var Tracking = (function () {
       return;
     }
     vis(db, true); vis(fc, true); vis(fd, true);
-    vis(du, false); vis(cn, false); vis(sp, false); vis(bk, false);
+    vis(du, fixUndoStack.length > 0); vis(cn, false); vis(sp, false); vis(bk, false); /* hu (Q280): Undo shows once a step exists */
     if (!fixSel || fixSel.a === null) {
-      lb.textContent = 'Fix route — drag a point to move it, tap two points to cut between them or join across a break, or Draw to lay a stretch by hand.';
+      lb.textContent = 'Fix route — drag a point to move it, tap two points to connect them straight, or Draw to lay a stretch by hand. Undo backs out the last step.';
       ap.style.display = 'none';
     } else if (fixSel.b === null) {
-      lb.textContent = 'Now tap the second point — the first good point past the bad stretch, or a point across the break to join.';
+      lb.textContent = 'Now tap the second point — the route runs straight from the first point to the one you tap.';
       ap.style.display = 'none';
-    } else if (fixPts[fixSel.b].seg === fixPts[fixSel.a].seg) {
-      var st = fixStretch();
-      lb.textContent = st.n > 0
-        ? 'Cut ' + st.n + ' point' + (st.n === 1 ? '' : 's') + ' — ' + fmtDist(st.m) + ' of route comes out.'
-        : 'Join these two points with a break — ' + fmtDist(st.m) + ' of route comes out.';
-      ap.textContent = 'Cut it';
-      ap.style.display = '';
-    } else if (fixPts[fixSel.b].seg === fixPts[fixSel.a].seg + 1) {
-      /* gq: exactly one break between the taps — the offer is Join */
-      lb.textContent = 'Join these two stretches — ' + fmtDist(fixJoinLeg()) + ' of route comes back in.';
-      ap.textContent = 'Join';
-      ap.style.display = '';
+    } else if (fixSel.a === 0 && fixSel.b === fixPts.length - 1 && fixPts.length > 2) {
+      /* hu (2026-11-21, Q279, Tanner): the two taps are the route's very
+         first and very last points. He selected the two yellow ends
+         expecting Join and got "Cut 3 points" — both ends carry the same
+         segment number, so the pair fell into the Cut branch below. The
+         ends are a loop waiting to close, never a cut: offer Join the
+         ends (or say plainly that they already meet). */
+      var gap = hav(fixPts[0], fixPts[fixPts.length - 1]);
+      if (gap < 1) {
+        lb.textContent = 'The two ends already meet — this route is closed.';
+        ap.style.display = 'none';
+      } else {
+        lb.textContent = 'Join the two ends — the route closes into a loop, and ' + fmtDist(gap) + ' of route comes back in.';
+        ap.textContent = 'Join the ends';
+        ap.style.display = '';
+      }
     } else {
-      /* gq: more than one break between the taps — a hint, no action */
-      lb.textContent = 'Those have more than one break between them — join one break at a time.';
-      ap.style.display = 'none';
+      /* hu (2026-11-21, Q281, Tanner): ONE verb for every other pair —
+         Connect. Four field reports in one afternoon all said the same
+         thing: he taps two dots and wants the route to run between
+         THOSE two dots. The old segment arithmetic picked the verb for
+         him — Cut inside a stretch, Join across exactly one break, a
+         dead-end hint across more — and Join merged whole stretches,
+         so the line bent through dots he never tapped. Connect runs
+         the line straight between the two tapped dots: the points
+         between them in route order come out, and every break between
+         them closes at once. He blessed the reach himself: with Undo
+         in the bar, a wrong connect is one tap back. The one pair
+         that keeps the old verb is two dots already side by side in
+         the same stretch — nothing between them to connect across —
+         where Cut still splits the route, leaving a break. */
+      var pa = fixPts[fixSel.a], pb = fixPts[fixSel.b], nBetween = fixSel.b - fixSel.a - 1;
+      if (nBetween === 0 && pb.seg === pa.seg) {
+        lb.textContent = 'These two already connect — Cut here splits the route between them, leaving a break.';
+        ap.textContent = 'Cut it';
+        ap.style.display = '';
+      } else if (nBetween === 0) {
+        lb.textContent = 'Connect these two points — the break closes, and ' + fmtDist(hav(pa, pb)) + ' of route comes back in.';
+        ap.textContent = 'Connect';
+        ap.style.display = '';
+      } else {
+        lb.textContent = 'Connect these two points — the route runs straight between them (' + fmtDist(hav(pa, pb)) + ' across), and the ' + nBetween + ' point' + (nBetween === 1 ? '' : 's') + ' in between come out.';
+        ap.textContent = 'Connect';
+        ap.style.display = '';
+      }
     }
   }
   function fixTap(i) {
@@ -539,26 +581,55 @@ var Tracking = (function () {
   }
   function fixApply() {
     if (!fixPts || !fixSel || fixSel.a === null || fixSel.b === null) return;
-    /* gq: the one button serves both verbs — the segment relationship
-       of the two taps decides. Across exactly one break it joins;
-       across more than one it does nothing (the bar already hinted). */
-    if (fixPts[fixSel.b].seg === fixPts[fixSel.a].seg + 1) { fixJoin(); return; }
-    if (fixPts[fixSel.b].seg !== fixPts[fixSel.a].seg) return;
-    var a = fixSel.a, b = fixSel.b, sameSeg = fixPts[a].seg === fixPts[b].seg, cutSeg = fixPts[a].seg;
-    var kept = [];
-    fixPts.forEach(function (p, i) { if (i <= a || i >= b) kept.push(p); });
-    if (sameSeg) {
-      /* the second kept point opens a new segment; everything from it
-         onward in its old segment (and later segments, harmlessly)
-         renumbers with it, so earlier breaks survive untouched */
-      kept.forEach(function (p, i) { if (i > a && p.seg >= cutSeg) p.seg += 1; });
+    /* hu (Q279): the two ends of the route — close the loop by landing a
+       copy of the first point at the end, in the last point's segment so
+       the closing leg draws and its distance counts. */
+    if (fixSel.a === 0 && fixSel.b === fixPts.length - 1 && fixPts.length > 2
+        && hav(fixPts[0], fixPts[fixPts.length - 1]) >= 1) {
+      var fp = fixPts[0], lp = fixPts[fixPts.length - 1];
+      var closePt = { lat: fp.lat, lng: fp.lng, seg: lp.seg };
+      if (fp.hand) closePt.hand = 1;
+      fixPushUndo(); /* hu (Q280): closing the loop is one undoable step */
+      fixPts.push(closePt);
+      fixSel = { a: null, b: null };
+      fixDraw(); fixBar();
+      return;
     }
+    var a = fixSel.a, b = fixSel.b, segA = fixPts[a].seg, segB = fixPts[b].seg;
+    fixPushUndo(); /* hu (Q280): every Apply is one undoable step */
+    if (b - a - 1 === 0 && segB === segA) {
+      /* the split: two dots already side by side in one stretch — Cut
+         parts the route between them, leaving a break (the gp move,
+         kept whole). */
+      var cutSeg = segA, keptS = [];
+      fixPts.forEach(function (p, i) { if (i <= a || i >= b) keptS.push(p); });
+      keptS.forEach(function (p, i) { if (i > a && p.seg >= cutSeg) p.seg += 1; });
+      fixPts = keptS;
+      fixSel = { a: null, b: null };
+      /* gp: the cut lands in the working copy only — nothing is
+         written to the trip until Done (see fixDone). */
+      fixDraw(); fixBar();
+      toast('Cut made in the edit — Done saves it, Cancel throws it away.');
+      return;
+    }
+    /* hu (Q281): Connect — the route runs straight from the first
+       tapped dot to the second. The points between them in route
+       order come out; the second dot's stretch folds back to the
+       first dot's segment number and everything after it renumbers,
+       so every break between the taps closes in this one move and
+       later breaks survive. One stretch, one break, many breaks —
+       the same move. fixJoin below is retired with the old rule
+       (nothing calls it now); the Draw-mode Connect is its own verb
+       and is untouched. */
+    var kept = fixPts.slice(0, a + 1).concat(fixPts.slice(b));
+    kept.forEach(function (p) {
+      if (p.seg === segB) p.seg = segA;
+      else if (p.seg > segB) p.seg -= (segB - segA);
+    });
     fixPts = kept;
     fixSel = { a: null, b: null };
-    /* gp: the cut lands in the working copy only — nothing is written
-       to the trip until Done (see fixDone). */
     fixDraw(); fixBar();
-    toast('Cut made in the edit — Done saves it, Cancel throws it away.');
+    toast('Connected in the edit — Done saves it, Cancel throws it away.');
   }
   /* gq: Join — take the one boundary break between the two tapped
      segments out of the working copy. The later segment folds into
@@ -588,6 +659,32 @@ var Tracking = (function () {
      the anchor's segment and hand: 1), so the lines and the bar miles
      follow them live and Stop here is simply "keep them". */
   var fixDrawMode = false, fixRun = null, fixDrawMsg = null;
+  /* hu (2026-11-21, Q280, Tanner): an Undo for the last step, so a
+     wrong connect or cut never means Done, re-enter, and retrace.
+     Every mutation of the working copy — an Apply (Connect, the
+     split, Join the ends), a point drag, a drawn stretch — first
+     lays a snapshot of the points on this stack; Undo pops one back.
+     The stack lives and dies with the fix session. */
+  var fixUndoStack = [], fixDragSnap = null, fixDragFrom = null;
+  function fixSnapshot() {
+    return fixPts.map(function (p) {
+      var o = { lat: p.lat, lng: p.lng, seg: p.seg };
+      if (p.hand) o.hand = 1;
+      return o;
+    });
+  }
+  function fixPushUndo() {
+    if (!fixPts) return;
+    fixUndoStack.push(fixSnapshot());
+    if (fixUndoStack.length > 30) fixUndoStack.shift();
+  }
+  function fixUndoStep() {
+    if (!fixPts || !fixUndoStack.length) return;
+    fixPts = fixUndoStack.pop();
+    fixSel = { a: null, b: null };
+    fixDraw(); fixBar();
+    toast('Undone — the last step is backed out.');
+  }
   /* the segment runs of the working copy: [{seg, a, b}] index spans */
   function fixRuns() {
     var runs = [];
@@ -631,6 +728,7 @@ var Tracking = (function () {
         fixBar(); return;
       }
       var single = run.a === run.b;
+      fixPushUndo(); /* hu (Q280): the whole drawn stretch is one step */
       fixRun = {
         aPt: p,
         oPt: single ? null : fixPts[i === run.a ? run.b : run.a],
@@ -773,6 +871,7 @@ var Tracking = (function () {
     fixDrawMode = false; fixRun = null; fixDrawMsg = null;
     fixPts = fixFlatten(track);
     fixSel = { a: null, b: null };
+    fixUndoStack = []; fixDragSnap = null; fixDragFrom = null; /* hu (Q280): a fresh session, an empty stack */
     fixCb = cb || null;
     editorLock(true);
     fixDraw(); fixBar();
@@ -782,6 +881,7 @@ var Tracking = (function () {
   }
   function endFix() {
     fixPts = null; fixSel = null; fixCb = null; fixMks = null; fixLines = null;
+    fixUndoStack = []; fixDragSnap = null; fixDragFrom = null; /* hu (Q280) */
     fixDrawMode = false; fixRun = null; fixDrawMsg = null;
     if (fixLayer) fixLayer.clearLayers();
     fixBar();
@@ -1007,7 +1107,7 @@ var Tracking = (function () {
   function syncRouteBar() {
     var bar = $('route-bar'); if (!bar) return;
     var drawn = !!(savedLayer && savedLayer.getLayers().length);
-    bar.classList.toggle('show', drawn || !!pending);
+    bar.classList.toggle('show', (drawn || !!pending) && !barDone);
     var sv = $('btn-route-save'); if (sv) sv.style.display = pending ? '' : 'none';
     /* ho (2026-11-21, Q262, Tanner): an unsaved route's bar also carries a
        Discard — deleting the track itself, distinct from Hide (display
@@ -1018,7 +1118,7 @@ var Tracking = (function () {
        unsaved route, whose bar carries Save instead. */
     var tripDrawn = drawn && !!savedCtx && !pending;
     var rf = $('btn-route-fix'); if (rf) rf.style.display = tripDrawn ? '' : 'none';
-    var rb = $('btn-route-back'); if (rb) rb.style.display = tripDrawn ? '' : 'none';
+    var dn = $('btn-route-done'); if (dn) dn.style.display = tripDrawn ? '' : 'none';
     var lb = $('route-bar-label'); if (lb) lb.textContent = pending ? 'Route — not saved yet' : 'Route on the map';
   }
   /* Q201: Hide while a route is still unsaved asks first — hiding is the
@@ -1083,12 +1183,12 @@ var Tracking = (function () {
       clearSaved();
     };
     var rf2 = $('btn-route-fix'); if (rf2) rf2.onclick = function () { if (savedCtx && savedCtx.fix) savedCtx.fix(); };
-    var rb2 = $('btn-route-back'); if (rb2) rb2.onclick = function () { if (savedCtx && savedCtx.back) savedCtx.back(); };
+    var dn2 = $('btn-route-done'); if (dn2) dn2.onclick = function () { barDone = true; syncRouteBar(); };
     var fa = $('btn-fix-apply'); if (fa) fa.onclick = fixApply;
     var fd = $('btn-fix-done'); if (fd) fd.onclick = fixDone;
     var fc = $('btn-fix-cancel'); if (fc) fc.onclick = fixCancel;
     var fdw = $('btn-fix-draw'); if (fdw) fdw.onclick = fixDrawEnter;
-    var fu = $('btn-fix-undo'); if (fu) fu.onclick = fixDrawUndo;
+    var fu = $('btn-fix-undo'); if (fu) fu.onclick = function () { if (fixDrawMode) fixDrawUndo(); else fixUndoStep(); }; /* hu (Q280): Draw keeps its per-point undo; the normal bar steps the session back */
     var fcn = $('btn-fix-connect'); if (fcn) fcn.onclick = fixDrawConnect;
     var fst = $('btn-fix-stop'); if (fst) fst.onclick = fixDrawStop;
     var fbk = $('btn-fix-back'); if (fbk) fbk.onclick = fixDrawExit;
@@ -1099,5 +1199,5 @@ var Tracking = (function () {
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', wire);
   else wire();
-  return { attach: attach, start: start, syncFab: syncFab, active: function () { return state !== 'idle'; }, drawSaved: drawSaved, clearSaved: clearSaved, rescuePending: rescuePending, startFix: startFix, endFix: endFix, mapTap: mapTap, startDrawRoute: startDrawRoute, endDrawRoute: endDrawRoute, _test: { hav: hav, start: start, onPos: onPos, stop: stop, state: function () { return state; }, pts: function () { return pts; }, miles: function () { return distM / 1609.344; }, segs: function () { return segments(pts).length; }, downsample: downsample, wake: function () { return !!wakeSentinel; }, fixTap: fixTap, fixApply: fixApply, fixJoin: fixJoin, fixDone: fixDone, fixCancel: fixCancel, fixMarkers: function () { return fixMks; }, fixPoints: function () { return fixPts ? fixPts.map(function (p) { var o = { lat: p.lat, lng: p.lng, seg: p.seg }; if (p.hand) o.hand = 1; return o; }) : null; }, fixState: function () { return { active: !!fixPts, n: fixPts ? fixPts.length : 0, sel: fixSel, shape: fixPts ? fixShape(fixPts) : null, miles: fixPts ? fixMiles(fixPts) : null, locked: document.body.classList.contains('editor-lock') }; }, fixDraw: function () { return { mode: fixDrawMode, anchored: !!fixRun, run: fixRun ? fixRun.pts.length : 0, target: !!(fixRun && fixRun.tPt), end: fixRun ? fixRun.end : null, label: ($('fix-bar-label') || {}).textContent || '' }; }, fixDrawEnter: fixDrawEnter, fixDrawExit: fixDrawExit, fixDrawTap: fixDrawTapPoint, fixDrawUndo: fixDrawUndo, fixDrawStop: fixDrawStop, fixDrawConnect: fixDrawConnect, mapTap: mapTap, startDrawRoute: startDrawRoute, endDrawRoute: endDrawRoute, drawRoute: function () { return { active: !!drawPts, n: drawPts ? drawPts.length : 0, miles: drawPts ? Math.round((drawMeters() / 1609.344) * 10) / 10 : 0, locked: document.body.classList.contains('editor-lock'), barShown: !!($('draw-bar') && $('draw-bar').classList.contains('show')), saveDisabled: !!($('btn-draw-save') && $('btn-draw-save').disabled), pts: drawPts ? drawPts.map(function (p) { return [p.lat, p.lng]; }) : [], closed: drawClosed, sel: drawSel, offer: drawOffer, label: ($('draw-bar-label') || {}).textContent || '', applyShown: !!($('btn-draw-apply') && $('btn-draw-apply').style.display !== 'none'), applyText: ($('btn-draw-apply') || {}).textContent || '', barMiles: ($('draw-bar-miles') || {}).textContent || '' }; }, drawMarkers: function () { return drawMks; }, drawTapPoint: drawTapPoint, drawApply: drawApply, routeBar: function () { var bar = $('route-bar'), fx = $('btn-route-fix'), bk = $('btn-route-back'); return { shown: !!(bar && bar.classList.contains('show')), fix: !!(fx && fx.style.display !== 'none'), back: !!(bk && bk.style.display !== 'none'), ctx: !!savedCtx, drawn: savedLayer ? savedLayer.getLayers().length : 0 }; } } };
+  return { attach: attach, start: start, syncFab: syncFab, active: function () { return state !== 'idle'; }, drawSaved: drawSaved, clearSaved: clearSaved, rescuePending: rescuePending, startFix: startFix, endFix: endFix, mapTap: mapTap, startDrawRoute: startDrawRoute, endDrawRoute: endDrawRoute, _test: { hav: hav, start: start, onPos: onPos, stop: stop, state: function () { return state; }, pts: function () { return pts; }, miles: function () { return distM / 1609.344; }, segs: function () { return segments(pts).length; }, downsample: downsample, wake: function () { return !!wakeSentinel; }, fixTap: fixTap, fixApply: fixApply, fixJoin: fixJoin, fixDone: fixDone, fixCancel: fixCancel, fixMarkers: function () { return fixMks; }, fixPoints: function () { return fixPts ? fixPts.map(function (p) { var o = { lat: p.lat, lng: p.lng, seg: p.seg }; if (p.hand) o.hand = 1; return o; }) : null; }, fixState: function () { return { active: !!fixPts, n: fixPts ? fixPts.length : 0, sel: fixSel, shape: fixPts ? fixShape(fixPts) : null, miles: fixPts ? fixMiles(fixPts) : null, locked: document.body.classList.contains('editor-lock'), undo: fixUndoStack.length }; }, fixDraw: function () { return { mode: fixDrawMode, anchored: !!fixRun, run: fixRun ? fixRun.pts.length : 0, target: !!(fixRun && fixRun.tPt), end: fixRun ? fixRun.end : null, label: ($('fix-bar-label') || {}).textContent || '' }; }, fixDrawEnter: fixDrawEnter, fixDrawExit: fixDrawExit, fixDrawTap: fixDrawTapPoint, fixDrawUndo: fixDrawUndo, fixDrawStop: fixDrawStop, fixDrawConnect: fixDrawConnect, mapTap: mapTap, startDrawRoute: startDrawRoute, endDrawRoute: endDrawRoute, drawRoute: function () { return { active: !!drawPts, n: drawPts ? drawPts.length : 0, miles: drawPts ? Math.round((drawMeters() / 1609.344) * 10) / 10 : 0, locked: document.body.classList.contains('editor-lock'), barShown: !!($('draw-bar') && $('draw-bar').classList.contains('show')), saveDisabled: !!($('btn-draw-save') && $('btn-draw-save').disabled), pts: drawPts ? drawPts.map(function (p) { return [p.lat, p.lng]; }) : [], closed: drawClosed, sel: drawSel, offer: drawOffer, label: ($('draw-bar-label') || {}).textContent || '', applyShown: !!($('btn-draw-apply') && $('btn-draw-apply').style.display !== 'none'), applyText: ($('btn-draw-apply') || {}).textContent || '', barMiles: ($('draw-bar-miles') || {}).textContent || '' }; }, drawMarkers: function () { return drawMks; }, drawTapPoint: drawTapPoint, drawApply: drawApply, routeBar: function () { var bar = $('route-bar'), fx = $('btn-route-fix'), dn = $('btn-route-done'); return { shown: !!(bar && bar.classList.contains('show')), fix: !!(fx && fx.style.display !== 'none'), done: !!(dn && dn.style.display !== 'none'), ctx: !!savedCtx, drawn: savedLayer ? savedLayer.getLayers().length : 0 }; } } };
 })();
