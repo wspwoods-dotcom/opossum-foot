@@ -427,7 +427,12 @@ var Markers = (function () {
   }
   function wire() {
     var fab = $('btn-mark');
-    if (fab) fab.onclick = function () { openSheet('sheet-marker-add'); };
+    if (fab) fab.onclick = function () {
+      /* ho (Q259, Tanner): opening Mark ends the other tap-modes first —
+         Measure's banner and measurement clear, so nothing stacks. */
+      if (window.cancelAllMapModes) window.cancelAllMapModes('mark');
+      openSheet('sheet-marker-add');
+    };
     $('btn-mk-add-pin').onclick = function () { closeSheets(); Markers.startPinPlace(); };
     $('btn-mk-add-area').onclick = function () { closeSheets(); Markers.startAreaPlace(); };
     $('btn-mk-place-ok').onclick = function () { Markers.finishPin(); };
