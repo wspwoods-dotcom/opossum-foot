@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-11-21hp';
+var APP_VERSION = 'beta 0.1 · build 2026-11-21hq';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -3805,6 +3805,7 @@ function nextSetName() {
 function purgeSetEverywhere(id) {
   Store.data.sets = Store.data.sets.filter(function (x) { return x.id !== id; });
   Store.data.logs = Store.data.logs.filter(function (l) { return l.setId !== id; });
+  if (Array.isArray(Store.data.activity)) Store.data.activity = Store.data.activity.filter(function (a) { return a.setId !== id; }); /* Q272 */
   IDB.all('photos').then(function (all) {
     all.forEach(function (p) {
       if (p.setId !== id) return;
@@ -3842,6 +3843,153 @@ function confirmSaveOverSet(ds) {
     saveSetForm();
   };
 }
+/* ================= Q272 (2026-11-21, Tanner): SET ACTIVITY TRAIL ======
+   Every edit, status change, pull, and bulk change writes a dated entry
+   on the set — what changed, old -> new — with the weather stamped the
+   way a catch stamps it. Entries live in Store.data.activity:
+   { id, setId, lineId, ts, kind, lines, weather }.
+   kind: 'created' | 'edit' | 'status' | 'bulk'.
+   Other events are NOT duplicated here: both readers union the set's
+   Other-event logs in directly, so a deleted log leaves no ghost and
+   the logs' own Q38 purge covers them. Deleting a set purges its
+   entries (deleteSet / purgeSetEverywhere). Forward-only — the trail
+   starts with this build; nothing backfills.
+   Surfaces (Tanner's ruling): the set detail sheet's Activity section
+   AND a History view beside By Date / By Trap Type. */
+function activityArr() {
+  if (!Store.data) return [];
+  if (!Array.isArray(Store.data.activity)) Store.data.activity = [];
+  return Store.data.activity;
+}
+function recordActivity(s, kind, lines) {
+  if (!s || !lines || !lines.length) return null;
+  var act = { id: uid('a'), setId: s.id, lineId: s.lineId || activeLineId(), ts: Date.now(), kind: kind, lines: lines.slice() };
+  activityArr().push(act);
+  Store.save();
+  stampLogWeather(s, act); /* async: fills act.weather + saves, like a catch */
+  return act;
+}
+function attrChangeLines(label, oldV, newV) {
+  var o = toAttrArray(oldV), n = toAttrArray(newV);
+  var oL = o.map(function (x) { return String(x).toLowerCase(); });
+  var nL = n.map(function (x) { return String(x).toLowerCase(); });
+  var out = [];
+  n.forEach(function (x) { if (oL.indexOf(String(x).toLowerCase()) === -1) out.push(label + ' added: ' + x); });
+  o.forEach(function (x) { if (nL.indexOf(String(x).toLowerCase()) === -1) out.push(label + ' removed: ' + x); });
+  return out;
+}
+function setSnapshot(s) {
+  return { name: s.name, status: normStatus(s.status), setType: s.setType || '', trapType: s.trapType || '',
+    bait: toAttrArray(s.bait), lure: toAttrArray(s.lure), urine: toAttrArray(s.urine),
+    visual: toAttrArray(s.visual), audio: toAttrArray(s.audio), other: toAttrArray(s.other) };
+}
+function snapshotDiffLines(before, s) {
+  var lines = [];
+  if (before.name !== s.name) lines.push('Renamed: ' + before.name + ' → ' + (s.name || ''));
+  if (before.status !== normStatus(s.status)) lines.push('Status: ' + statusLabel(before.status) + ' → ' + statusLabel(normStatus(s.status)));
+  if (before.setType !== (s.setType || '')) lines.push('Set type: ' + (before.setType || '—') + ' → ' + (s.setType || '—'));
+  if (before.trapType !== (s.trapType || '')) lines.push('Trap: ' + (before.trapType || '—') + ' → ' + (s.trapType || '—'));
+  lines = lines.concat(attrChangeLines('Bait', before.bait, s.bait));
+  lines = lines.concat(attrChangeLines('Lure', before.lure, s.lure));
+  lines = lines.concat(attrChangeLines('Urine', before.urine, s.urine));
+  lines = lines.concat(attrChangeLines('Visual', before.visual, s.visual));
+  lines = lines.concat(attrChangeLines('Audio', before.audio, s.audio));
+  lines = lines.concat(attrChangeLines('Other attractant', before.other, s.other));
+  return lines;
+}
+var ACTIVITY_KIND_TITLES = { created: 'Set created', edit: 'Edited', status: 'Status change', bulk: 'Edit all', event: 'Event' };
+function activityItemsForSet(s) {
+  var items = [];
+  activityArr().forEach(function (a) {
+    if (a.setId === s.id) items.push({ ts: a.ts || 0, kind: a.kind, title: ACTIVITY_KIND_TITLES[a.kind] || 'Activity', lines: a.lines || [], weather: a.weather || null });
+  });
+  (Store.data.logs || []).forEach(function (l) {
+    if (l.setId !== s.id || !l.otherType) return;
+    var t = OTHER_LABELS[l.otherType] || 'Other event';
+    var line = t + (l.species ? ' — ' + l.species : '') + (l.notes ? ' · ' + l.notes : '');
+    items.push({ ts: l.createdAt || 0, date: l.date || '', kind: 'event', title: t, lines: [line], weather: l.weather || null });
+  });
+  items.sort(function (a, b) { return (b.ts || 0) - (a.ts || 0); });
+  return items;
+}
+function activityDayOf(item) {
+  if (item.date) return item.date;
+  var d = new Date(item.ts || 0);
+  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+}
+function activityRowHtml(item, setName) {
+  var when = item.ts ? new Date(item.ts) : null;
+  var timeTxt = when ? when.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }) : '';
+  var html = '<div class="log-row"><div class="lr-top"><span class="lr-species">' + esc(item.title) + '</span>' +
+    (setName ? '<span class="dim">' + esc(setName) + '</span>' : '') + '</div>' +
+    '<div class="dim">' + esc(fmtDate(activityDayOf(item))) + (timeTxt ? ' · ' + esc(timeTxt) : '') + '</div>';
+  (item.lines || []).forEach(function (ln) { html += '<div>' + esc(ln) + '</div>'; });
+  if (item.weather) html += '<div class="dim">🌤 ' + esc(weatherText(item.weather)) + '</div>';
+  return html + '</div>';
+}
+function renderSetActivity(s) {
+  var box = $('sd-activity');
+  if (!box) return;
+  var items = activityItemsForSet(s);
+  var cnt = $('sd-activity-count');
+  if (cnt) cnt.textContent = items.length ? '· ' + items.length : '';
+  box.innerHTML = items.length ? items.map(function (it) { return activityRowHtml(it, null); }).join('')
+    : '<p class="dim">Nothing here yet — edits, status changes, and other events at this set will file here.</p>';
+}
+/* History's Activity view: the whole active line's trail — entries plus
+   Other-event logs (Empty check-ins included; History's catch views hide
+   them, the trail is their home). Season scope + search apply. */
+function renderHistActivity() {
+  var f = histUI, q = (f.q || '').toLowerCase();
+  var lineId = activeLineId();
+  var thisSY = seasonYearOf(todayISO()), lastSY = prevSeasonLabel(thisSY);
+  var items = [];
+  activityArr().forEach(function (a) {
+    if (a.lineId !== lineId) return;
+    var s = getSet(a.setId);
+    items.push({ ts: a.ts || 0, kind: a.kind, title: ACTIVITY_KIND_TITLES[a.kind] || 'Activity', lines: a.lines || [], weather: a.weather || null, setName: s ? s.name : '' });
+  });
+  (Store.data.logs || []).forEach(function (l) {
+    if (!l.otherType) return;
+    var s = getSet(l.setId);
+    if (!s || s.lineId !== lineId) return;
+    var t = OTHER_LABELS[l.otherType] || 'Other event';
+    var line = t + (l.species ? ' — ' + l.species : '') + (l.notes ? ' · ' + l.notes : '');
+    items.push({ ts: l.createdAt || 0, date: l.date || '', kind: 'event', title: t, lines: [line], weather: l.weather || null, setName: s.name });
+  });
+  items.sort(function (a, b) { return (b.ts || 0) - (a.ts || 0); });
+  items = items.filter(function (it) {
+    if (f.season === 'this' || f.season === 'last') {
+      var sy = seasonYearOf(activityDayOf(it));
+      if (sy && sy !== (f.season === 'this' ? thisSY : lastSY)) return false;
+    }
+    if (q) {
+      var hay = ((it.setName || '') + ' ' + (it.title || '') + ' ' + (it.lines || []).join(' ')).toLowerCase();
+      if (hay.indexOf(q) === -1) return false;
+    }
+    return true;
+  });
+  if (!items.length) return '<div class="empty"><div class="big"><img class="bi inv" src="assets/icons/logbook.png" alt=""></div>No activity yet.<br>Edits, status changes, and other events on this line will file here.</div>';
+  var html = '', lastSY2 = null, curDay = null;
+  items.forEach(function (it) {
+    var day = activityDayOf(it);
+    var sy = seasonYearOf(day);
+    if (sy !== lastSY2) {
+      if (curDay !== null) { html += '</div>'; curDay = null; }
+      html += '<div class="season-group-head">Season ' + esc(sy) + '</div>';
+      lastSY2 = sy;
+    }
+    if (day !== curDay) {
+      if (curDay !== null) html += '</div>';
+      html += '<div class="day-group"><div class="day-head">' + esc(dayLabel(day)) + '</div><div class="day-body">';
+      curDay = day;
+    }
+    html += activityRowHtml(it, it.setName);
+  });
+  if (curDay !== null) html += '</div>';
+  return html;
+}
+
 function saveSetForm() {
   var name = $('sf-name').value.trim();
   var status = $('sf-status').value;
@@ -3911,6 +4059,7 @@ function saveSetForm() {
   if (editingSetId) {
     var s = getSet(editingSetId);
     if (!s) { closeSheets(); return; }
+    var actBefore = setSnapshot(s); /* Q272: the trail diffs against this */
     s.name = name;
     s.trapType = rt.t;
     s.trapMaker = td.trapMaker;
@@ -3942,6 +4091,8 @@ function saveSetForm() {
     if (s.missingDetail) rememberEntry('missingdetail', s.missingDetail); /* Q12 */
     if (s.status === 'pulled' && !s.datePulled) s.datePulled = todayISO();
     if (s.status !== 'pulled' && s.datePulled) delete s.datePulled;
+    var actLines = snapshotDiffLines(actBefore, s); /* Q272 */
+    if (actLines.length) recordActivity(s, 'edit', actLines);
     touchSet(s); /* Q68: any edit restarts the check clock */
     Store.save(); refreshMarkers();
     /* Q71: photos added on the Edit Set form (plain or citation) attach here. */
@@ -3994,6 +4145,7 @@ function saveSetForm() {
     if (ns.status === 'pulled') ns.datePulled = ns.dateSet;
     ns.lineId = activeLineId();
     Store.data.sets.push(ns);
+    recordActivity(ns, 'created', ['Set created']); /* Q272: the trail's first entry */
     Store.save(); refreshMarkers(); closeSheets();
     if (ns.trapModel) rememberEntry('trapmodel', ns.trapModel); /* Q12 */
     if (ns.missingDetail) rememberEntry('missingdetail', ns.missingDetail); /* Q12 */
@@ -4138,7 +4290,9 @@ function openSetDetail(id) {
   /* Q178 (2026-10-08): view-only div, not a textarea. */
   renderSetNotes(s); /* ga: dated entries, newest first */
   refreshNotesBox('setdetail-notessec', 'sd-notes', 'sd-memos', 'sd-photos'); /* Q99 */
+  renderSetActivity(s); /* Q272: the set's activity trail */
   setSectionOpen('setdetail-catchessec', false); /* Q203: every open starts folded */
+  setSectionOpen('setdetail-activitysec', false); /* Q272: folded too */
   openSheet('sheet-setdetail');
 }
 /* ================= ga (2026-11-15): SET NOTES AS DATED ENTRIES ==============
@@ -4283,6 +4437,7 @@ function deleteSet(id) {
       'Delete', function () {
         Store.data.sets = Store.data.sets.filter(function (x) { return x.id !== id; });
         Store.data.logs = Store.data.logs.filter(function (l) { return l.setId !== id; });
+        if (Array.isArray(Store.data.activity)) Store.data.activity = Store.data.activity.filter(function (a) { return a.setId !== id; }); /* Q272: the trail dies with the set */
         IDB.all('photos').then(function (all) {
           all.forEach(function (p) {
             if (p.setId !== id) return;
@@ -6496,9 +6651,16 @@ function applyBulkEdit(changes) {
   if (!sets.length) { renderBulkBar(); return; }
   var n = sets.length;
   sets.forEach(function (s) {
+    var actLines = []; /* Q272: what Edit all actually changed on this set */
     changes.forEach(function (c) {
-      if (c.field === 'setType') { s.setType = c.value; s.variation = ''; } /* the old variation belongs to the old foundation */
-      else if (c.field === 'trapType') { s.trapType = c.value; } /* maker + trap details untouched */
+      if (c.field === 'setType') {
+        if ((s.setType || '') !== c.value) actLines.push('Set type: ' + (s.setType || '—') + ' → ' + c.value);
+        s.setType = c.value; s.variation = '';
+      } /* the old variation belongs to the old foundation */
+      else if (c.field === 'trapType') {
+        if ((s.trapType || '') !== c.value) actLines.push('Trap: ' + (s.trapType || '—') + ' → ' + c.value);
+        s.trapType = c.value;
+      } /* maker + trap details untouched */
       else { /* hp (Q271, Tanner 2026-11-21): attractants ADD — the value
                joins what the set already carries, exactly as adding a
                row in the one-set form; never a duplicate, never a
@@ -6506,10 +6668,11 @@ function applyBulkEdit(changes) {
                a set carries exactly one of each. */
         var arr = toAttrArray(s[c.field]).slice();
         var dupe = arr.some(function (x) { return String(x).toLowerCase() === c.value.toLowerCase(); });
-        if (!dupe) arr.push(c.value);
+        if (!dupe) { arr.push(c.value); actLines.push((c.label || c.field) + ' added: ' + c.value); }
         s[c.field] = arr;
       }
     });
+    if (actLines.length) recordActivity(s, 'bulk', actLines); /* Q272 */
     touchSet(s); /* Q68: any edit restarts the check clock */
   });
   Store.save();
@@ -6557,6 +6720,7 @@ function openBulkDeleteConfirm() {
 function applyBulkDelete(ids, n) {
   Store.data.sets = Store.data.sets.filter(function (x) { return !ids[x.id]; });
   Store.data.logs = Store.data.logs.filter(function (l) { return !ids[l.setId]; });
+  if (Array.isArray(Store.data.activity)) Store.data.activity = Store.data.activity.filter(function (a) { return !ids[a.setId]; }); /* Q272 */
   IDB.all('photos').then(function (all) {
     all.forEach(function (p) {
       if (!ids[p.setId]) return;
@@ -6690,6 +6854,7 @@ function applyBulkStatus(target) {
     if (target === 'pulled' && !s.datePulled) s.datePulled = today;
     if (target !== 'pulled' && s.datePulled) delete s.datePulled;
     if (st === 'missing') { s.missingReason = null; s.missingDetail = null; } /* Q229: leaving Missing clears the reason/detail, like the Edit save */
+    if (normStatus(st) !== normStatus(target)) recordActivity(s, 'status', ['Status: ' + statusLabel(st) + ' → ' + statusLabel(target)]); /* Q272 */
     touchSet(s); /* Q68: any edit restarts the check clock */
   });
   Store.save();
@@ -6725,6 +6890,7 @@ function applyBulkStatusSel(target) {
     if (target === 'pulled' && !s.datePulled) s.datePulled = today;
     if (target !== 'pulled' && s.datePulled) delete s.datePulled;
     if (from === 'missing') { s.missingReason = null; s.missingDetail = null; } /* Q229: leaving Missing clears the reason/detail */
+    if (from !== normStatus(target)) recordActivity(s, 'status', ['Status: ' + statusLabel(from) + ' → ' + statusLabel(target)]); /* Q272 */
     touchSet(s); /* Q68: any edit restarts the check clock */
   });
   Store.save();
@@ -7070,6 +7236,17 @@ function renderHistory() {
     for (var j = 0; j < sbtns.length; j++) {
       sbtns[j].classList.toggle('selected', sbtns[j].getAttribute('data-season') === histUI.season);
     }
+  }
+  /* Q272: the Activity view reads the trail, not the catch list — it
+     renders even on a line with no catches yet. The disposition chips
+     are catch furniture and hide here. */
+  var dispChips = $('hist-disp-chips');
+  if (dispChips) dispChips.style.display = (histUI.view === 'activity') ? 'none' : '';
+  if (histUI.view === 'activity') {
+    renderHistSummary(histFilteredLogs());
+    box.innerHTML = renderHistActivity();
+    holdListHeight(box, histFiltering);
+    return;
   }
   if (!logs.length) {
     renderHistSummary([]);
@@ -10354,6 +10531,7 @@ function deleteLine(id) {
       d.lines = d.lines.filter(function (x) { return x.id !== id; });
       d.sets = d.sets.filter(function (x) { return x.lineId !== id; });
       d.logs = d.logs.filter(function (l) { return !(l.lineId === id || deadSetIds[l.setId]); });
+      if (Array.isArray(d.activity)) d.activity = d.activity.filter(function (a) { return !(a.lineId === id || deadSetIds[a.setId]); }); /* Q272 */
       /* Q8: a line's trips go with it. */
       d.trips = (d.trips || []).filter(function (t) { return !t || t.lineId !== id; });
       /* photos + voice memos on the line's sets/logs go too (Q38: gone everywhere) */
