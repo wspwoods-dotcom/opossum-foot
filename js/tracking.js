@@ -443,6 +443,34 @@ var Tracking = (function () {
     fixPts.forEach(function (q, j) { if (hav(p, q) < 1.5) out.push(j); });
     return out;
   }
+  /* ic (2026-11-21, Q294, Tanner): does ONE leg of the route join
+     these two points — counting their stacks? A leg that runs into a
+     copy parked on a point joins the point itself, as far as the man
+     looking at the map is concerned: he tapped two dots with a line
+     between them. Returns the leg's index (the point before it), or
+     -1. Without this, the pair fell to index-span logic and Cut
+     offered to remove the points the long way around — the hu Q279
+     failure in a new coat. */
+  function fixLegForPair(a, b) {
+    if (!fixPts || a === b) return -1;
+    var sa = fixStackAt(a), sb = fixStackAt(b);
+    for (var i = 0; i + 1 < fixPts.length; i++) {
+      if (fixPts[i].seg !== fixPts[i + 1].seg) continue;
+      if ((sa.indexOf(i) >= 0 && sb.indexOf(i + 1) >= 0) || (sb.indexOf(i) >= 0 && sa.indexOf(i + 1) >= 0)) return i;
+    }
+    return -1;
+  }
+  /* ic (Q294): split the route at one leg — no point comes out; the
+     points after the leg take the next segment number, exactly the
+     renumber fixSplitCut does when nothing is removed. */
+  function fixSplitLeg(i) {
+    fixPushUndo();
+    var cutSeg = fixPts[i].seg;
+    fixPts.forEach(function (p, k) { if (k > i && p.seg >= cutSeg) p.seg += 1; });
+    fixSel = { a: null, b: null };
+    fixDraw(); fixBar();
+    toast('Cut made in the edit — Save keeps it, Cancel throws it away.');
+  }
   function fixPointName(i) {
     var p = fixPts[i], parts = [];
     if (i === 0) parts.push("the route's first point");
@@ -463,7 +491,11 @@ var Tracking = (function () {
       }
     });
     if (fixSel && fixSel.a !== null && fixSel.b !== null) {
-      var stretch = fixPts.slice(fixSel.a, fixSel.b + 1);
+      /* ic (Q294): when one leg joins the pair (through a stack), the
+         gold rides THAT leg — the span the long way around is not
+         what he tapped. */
+      var pairLeg = fixLegForPair(fixSel.a, fixSel.b);
+      var stretch = pairLeg >= 0 ? [fixPts[pairLeg], fixPts[pairLeg + 1]] : fixPts.slice(fixSel.a, fixSel.b + 1);
       L.polyline(stretch.map(function (p) { return [p.lat, p.lng]; }), { color: '#e7c945', weight: 6, opacity: 0.95 }).addTo(fixLines);
     }
     /* hx (2026-11-21, Q287, Tanner): the pending drawn run renders as
@@ -482,6 +514,17 @@ var Tracking = (function () {
         L.circleMarker([p.lat, p.lng], { radius: 7, color: '#fff', weight: 2, fillColor: '#e5484d', fillOpacity: 1, interactive: false }).addTo(fixLines);
       });
     }
+  }
+  /* ic (Q295): move a dragged point's whole stack by the drag's
+     delta — absolute from the members' start spots, so firing it on
+     every drag event and once more at dragend never doubles a move. */
+  function fixDragMove(ll) {
+    if (!fixDragStack || !fixDragFrom) return;
+    var dLa = ll.lat - fixDragFrom.lat, dLn = ll.lng - fixDragFrom.lng;
+    fixDragStack.forEach(function (m) {
+      fixPts[m.ix].lat = m.lat + dLa; fixPts[m.ix].lng = m.lng + dLn;
+      if (fixMks[m.ix]) fixMks[m.ix].setLatLng([m.lat + dLa, m.lng + dLn]);
+    });
   }
   function fixDraw() {
     if (!fixLayer) return;
@@ -515,10 +558,19 @@ var Tracking = (function () {
            undoable step — the snapshot waits here for dragend. */
         fixDragSnap = fixSnapshot(); fixDragFrom = { lat: p.lat, lng: p.lng };
         fixLastDragIx = -1; /* hy (Q288): a fresh gesture */
+        /* ic (2026-11-21, Q295, Tanner): points parked on this spot —
+           a closed loop's closing copy above all — are already
+           connected to it, so they ride along: the stack moves like
+           the one place it is, instead of a twin staying behind and
+           the line reading as disconnected. Their start spots are
+           kept so the move is a delta, applied absolute. */
+        fixDragStack = fixStackAt(i).filter(function (j) { return j !== i; }).map(function (j) { return { ix: j, lat: fixPts[j].lat, lng: fixPts[j].lng }; });
+        if (!fixDragStack.length) fixDragStack = null;
       });
       mk.on('drag', function () {
         var ll = mk.getLatLng();
         p.lat = ll.lat; p.lng = ll.lng;
+        fixDragMove(ll);
         fixDrawLines(); fixBar();
       });
       mk.on('dragend', function () {
@@ -526,11 +578,12 @@ var Tracking = (function () {
         fixLastDragIx = i; /* hy (Q288): only this marker's trailing click is the drag's */
         var ll = mk.getLatLng();
         p.lat = ll.lat; p.lng = ll.lng;
+        fixDragMove(ll);
         if (fixDragSnap && fixDragFrom && hav(fixDragFrom, p) > 0.5) {
           fixUndoStack.push(fixDragSnap);
           if (fixUndoStack.length > 30) fixUndoStack.shift();
         }
-        fixDragSnap = null; fixDragFrom = null;
+        fixDragSnap = null; fixDragFrom = null; fixDragStack = null;
         fixDrawLines(); fixBar();
       });
       mk.addTo(fixLayer);
@@ -614,6 +667,7 @@ var Tracking = (function () {
          segment number, so the pair fell into the Cut branch below. The
          ends are a loop waiting to close, never a cut: offer Join the
          ends (or say plainly that they already meet). */
+      vis(db, false); /* ic (Q293): a pair is picked — Draw is not an option until it clears */
       var gap = hav(fixPts[0], fixPts[fixPts.length - 1]);
       if (gap < 1) {
         lb.textContent = "Those two are the route's first and last points, and they already meet — this route is closed.";
@@ -635,8 +689,17 @@ var Tracking = (function () {
          didn't tap. Cut survives as its own button for the one job
          it was always for — taking a bad stretch out — offered when
          the pair sits in one stretch with points between them. */
+      vis(db, false); /* ic (Q293): same — the pair owns the bar until it clears */
       var pa = fixPts[fixSel.a], pb = fixPts[fixSel.b], nBetween = fixSel.b - fixSel.a - 1;
-      if (nBetween === 0 && pb.seg === pa.seg) {
+      var legIx = fixLegForPair(fixSel.a, fixSel.b);
+      if (legIx >= 0 && !(nBetween === 0 && pb.seg === pa.seg)) {
+        /* ic (Q294): one leg already joins them (through a stack) —
+           that leg is the thing he tapped; Cut splits IT, and no
+           point comes out. */
+        lb.textContent = 'These two already connect — Cut here splits the route between them, leaving a break.';
+        ap.textContent = 'Cut it';
+        ap.style.display = '';
+      } else if (nBetween === 0 && pb.seg === pa.seg) {
         lb.textContent = 'These two already connect — Cut here splits the route between them, leaving a break.';
         ap.textContent = 'Cut it';
         ap.style.display = '';
@@ -714,6 +777,12 @@ var Tracking = (function () {
       return;
     }
     var a = fixSel.a, b = fixSel.b, segA = fixPts[a].seg, segB = fixPts[b].seg;
+    /* ic (Q294): a pair joined by one leg through a stack splits at
+       THAT leg — never the span removal the index distance suggests. */
+    if (!(b - a - 1 === 0 && segB === segA)) {
+      var legIxA = fixLegForPair(a, b);
+      if (legIxA >= 0) { fixSplitLeg(legIxA); return; }
+    }
     if (b - a - 1 === 0 && segB === segA) { fixSplitCut(); return; }
     if (b - a - 1 === 0) {
       /* the break's own two dots: folding the later stretch into the
@@ -800,7 +869,7 @@ var Tracking = (function () {
      split, Join the ends), a point drag, a drawn stretch — first
      lays a snapshot of the points on this stack; Undo pops one back.
      The stack lives and dies with the fix session. */
-  var fixUndoStack = [], fixDragSnap = null, fixDragFrom = null;
+  var fixUndoStack = [], fixDragSnap = null, fixDragFrom = null, fixDragStack = null;
   function fixSnapshot() {
     return fixPts.map(function (p) {
       var o = { lat: p.lat, lng: p.lng, seg: p.seg };
