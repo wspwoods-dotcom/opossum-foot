@@ -257,7 +257,6 @@ var Tracking = (function () {
      so the two buttons only ever ride a saved trip's route. */
   var savedCtx = null;
   var barDone = false; /* hu (Q278): Done on the route bar dismisses the bar — the route stays drawn */
-  var routeHidden = false; /* ib (Q289): the bottom-of-map toggle's state — a left-on route, temporarily off the map */
   /* hn (2026-11-21, Q264): fitting the map to a route must never dive to
      maximum zoom. A zero-length route's bounds are a single point, and the
      uncapped fitBounds flew the map to max zoom and stranded the zoom-in
@@ -281,7 +280,6 @@ var Tracking = (function () {
     if (!savedLayer || !track || !track.length) return;
     savedCtx = ctx || null;
     barDone = false;
-    routeHidden = false; /* ib (Q289): a fresh drawing is a shown route */
     if (mapRef && !mapRef.hasLayer(savedLayer)) savedLayer.addTo(mapRef);
     savedLayer.clearLayers();
     /* gk: a saved track is either the flat shape ([[lat,lng],...]) or,
@@ -300,7 +298,6 @@ var Tracking = (function () {
   function clearSaved() {
     savedCtx = null;
     barDone = false;
-    routeHidden = false;
     if (savedLayer) savedLayer.clearLayers();
     syncRouteBar();
   }
@@ -1404,22 +1401,10 @@ var Tracking = (function () {
     var rf = $('btn-route-fix'); if (rf) rf.style.display = tripDrawn ? '' : 'none';
     var dn = $('btn-route-done'); if (dn) dn.style.display = tripDrawn ? '' : 'none';
     var lb = $('route-bar-label'); if (lb) lb.textContent = pending ? 'Route — not saved yet' : 'Route on the map';
-    /* ib (2026-11-21, Q289, Tanner): while a saved route is left on
-       the map, the toggle at the bottom of the map stands ready —
-       one tap takes the route off, the next brings it back, and
-       neither needs the trip back through Paperwork. */
-    var tg = $('btn-route-toggle');
-    if (tg) {
-      tg.style.display = tripDrawn ? '' : 'none';
-      tg.textContent = routeHidden ? 'Show route' : 'Hide route';
-    }
-  }
-  function toggleRoute() {
-    if (!savedLayer || !mapRef) return;
-    routeHidden = !routeHidden;
-    if (routeHidden) { if (mapRef.hasLayer(savedLayer)) mapRef.removeLayer(savedLayer); }
-    else if (!mapRef.hasLayer(savedLayer)) savedLayer.addTo(mapRef);
-    syncRouteBar();
+    /* id (2026-11-21, Q296, Tanner): the ib bottom-of-map Show/Hide
+       route pill is REMOVED at his word — it was built from a
+       misunderstood note and he changed his mind besides. The route
+       bar's own Hide route (Q200) remains the way a route comes off. */
   }
   /* Q201: Hide while a route is still unsaved asks first — hiding is the
      one tap that could throw the route away. */
@@ -1472,7 +1457,6 @@ var Tracking = (function () {
     var sh = $('btn-track-show'); if (sh) sh.onclick = showLastRoute;
     var d = $('btn-track-discard'); if (d) d.onclick = discard;
     var h = $('btn-route-hide'); if (h) h.onclick = hideRoute;
-    var tg2 = $('btn-route-toggle'); if (tg2) tg2.onclick = toggleRoute;
     var rs = $('btn-route-save'); if (rs) rs.onclick = function () { saveToMileage(); syncRouteBar(); };
     /* ho (Q262): Discard on the unsaved-route bar — confirms, then the
        track itself is gone (Hide, by contrast, only clears the drawing). */
@@ -1502,5 +1486,5 @@ var Tracking = (function () {
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', wire);
   else wire();
-  return { attach: attach, start: start, syncFab: syncFab, active: function () { return state !== 'idle'; }, drawSaved: drawSaved, clearSaved: clearSaved, rescuePending: rescuePending, startFix: startFix, endFix: endFix, mapTap: mapTap, startDrawRoute: startDrawRoute, endDrawRoute: endDrawRoute, _test: { hav: hav, start: start, onPos: onPos, stop: stop, state: function () { return state; }, pts: function () { return pts; }, miles: function () { return distM / 1609.344; }, segs: function () { return segments(pts).length; }, downsample: downsample, wake: function () { return !!wakeSentinel; }, fixTap: fixTap, fixApply: fixApply, fixJoin: fixJoin, fixDone: fixDone, fixCancel: fixCancel, fixMarkers: function () { return fixMks; }, fixPoints: function () { return fixPts ? fixPts.map(function (p) { var o = { lat: p.lat, lng: p.lng, seg: p.seg }; if (p.hand) o.hand = 1; return o; }) : null; }, fixState: function () { return { active: !!fixPts, n: fixPts ? fixPts.length : 0, sel: fixSel, shape: fixPts ? fixShape(fixPts) : null, miles: fixPts ? fixMiles(fixPts) : null, locked: document.body.classList.contains('editor-lock'), undo: fixUndoStack.length }; }, fixDraw: function () { return { mode: fixDrawMode, anchored: !!fixRun, run: fixRun ? fixRun.pts.length : 0, target: !!(fixRun && fixRun.tPt), end: fixRun ? fixRun.end : null, label: ($('fix-bar-label') || {}).textContent || '' }; }, fixDrawEnter: fixDrawEnter, fixMkAt: function (ix) { return fixMks ? fixMks[ix] : null; }, fixLinePts: function () { var out = []; if (fixLines) fixLines.eachLayer(function (l) { if (l.getLatLngs) out.push(l.getLatLngs().map(function (ll) { return [ll.lat, ll.lng]; })); }); return out; }, fixRemove: fixRemovePoint, fixLabel: function () { return ($('fix-bar-label') || {}).textContent || ''; }, fixDrawExit: fixDrawExit, fixDrawTap: fixDrawTapPoint, fixDrawUndo: fixDrawUndo, fixDrawStop: fixDrawStop, fixDrawConnect: fixDrawConnect, mapTap: mapTap, startDrawRoute: startDrawRoute, endDrawRoute: endDrawRoute, drawRoute: function () { return { active: !!drawPts, n: drawPts ? drawPts.length : 0, miles: drawPts ? Math.round((drawMeters() / 1609.344) * 10) / 10 : 0, locked: document.body.classList.contains('editor-lock'), barShown: !!($('draw-bar') && $('draw-bar').classList.contains('show')), saveDisabled: !!($('btn-draw-save') && $('btn-draw-save').disabled), pts: drawPts ? drawPts.map(function (p) { return [p.lat, p.lng]; }) : [], closed: drawClosed, sel: drawSel, offer: drawOffer, label: ($('draw-bar-label') || {}).textContent || '', applyShown: !!($('btn-draw-apply') && $('btn-draw-apply').style.display !== 'none'), applyText: ($('btn-draw-apply') || {}).textContent || '', barMiles: ($('draw-bar-miles') || {}).textContent || '' }; }, drawMarkers: function () { return drawMks; }, drawTapPoint: drawTapPoint, drawApply: drawApply, routeBar: function () { var bar = $('route-bar'), fx = $('btn-route-fix'), dn = $('btn-route-done'), tg = $('btn-route-toggle'); return { shown: !!(bar && bar.classList.contains('show')), fix: !!(fx && fx.style.display !== 'none'), done: !!(dn && dn.style.display !== 'none'), ctx: !!savedCtx, drawn: savedLayer ? savedLayer.getLayers().length : 0, toggle: !!(tg && tg.style.display !== 'none'), toggleText: tg ? tg.textContent : '', hidden: routeHidden, onMap: !!(mapRef && savedLayer && mapRef.hasLayer(savedLayer)) }; } } };
+  return { attach: attach, start: start, syncFab: syncFab, active: function () { return state !== 'idle'; }, drawSaved: drawSaved, clearSaved: clearSaved, rescuePending: rescuePending, startFix: startFix, endFix: endFix, mapTap: mapTap, startDrawRoute: startDrawRoute, endDrawRoute: endDrawRoute, _test: { hav: hav, start: start, onPos: onPos, stop: stop, state: function () { return state; }, pts: function () { return pts; }, miles: function () { return distM / 1609.344; }, segs: function () { return segments(pts).length; }, downsample: downsample, wake: function () { return !!wakeSentinel; }, fixTap: fixTap, fixApply: fixApply, fixJoin: fixJoin, fixDone: fixDone, fixCancel: fixCancel, fixMarkers: function () { return fixMks; }, fixPoints: function () { return fixPts ? fixPts.map(function (p) { var o = { lat: p.lat, lng: p.lng, seg: p.seg }; if (p.hand) o.hand = 1; return o; }) : null; }, fixState: function () { return { active: !!fixPts, n: fixPts ? fixPts.length : 0, sel: fixSel, shape: fixPts ? fixShape(fixPts) : null, miles: fixPts ? fixMiles(fixPts) : null, locked: document.body.classList.contains('editor-lock'), undo: fixUndoStack.length }; }, fixDraw: function () { return { mode: fixDrawMode, anchored: !!fixRun, run: fixRun ? fixRun.pts.length : 0, target: !!(fixRun && fixRun.tPt), end: fixRun ? fixRun.end : null, label: ($('fix-bar-label') || {}).textContent || '' }; }, fixDrawEnter: fixDrawEnter, fixMkAt: function (ix) { return fixMks ? fixMks[ix] : null; }, fixLinePts: function () { var out = []; if (fixLines) fixLines.eachLayer(function (l) { if (l.getLatLngs) out.push(l.getLatLngs().map(function (ll) { return [ll.lat, ll.lng]; })); }); return out; }, fixRemove: fixRemovePoint, fixLabel: function () { return ($('fix-bar-label') || {}).textContent || ''; }, fixDrawExit: fixDrawExit, fixDrawTap: fixDrawTapPoint, fixDrawUndo: fixDrawUndo, fixDrawStop: fixDrawStop, fixDrawConnect: fixDrawConnect, mapTap: mapTap, startDrawRoute: startDrawRoute, endDrawRoute: endDrawRoute, drawRoute: function () { return { active: !!drawPts, n: drawPts ? drawPts.length : 0, miles: drawPts ? Math.round((drawMeters() / 1609.344) * 10) / 10 : 0, locked: document.body.classList.contains('editor-lock'), barShown: !!($('draw-bar') && $('draw-bar').classList.contains('show')), saveDisabled: !!($('btn-draw-save') && $('btn-draw-save').disabled), pts: drawPts ? drawPts.map(function (p) { return [p.lat, p.lng]; }) : [], closed: drawClosed, sel: drawSel, offer: drawOffer, label: ($('draw-bar-label') || {}).textContent || '', applyShown: !!($('btn-draw-apply') && $('btn-draw-apply').style.display !== 'none'), applyText: ($('btn-draw-apply') || {}).textContent || '', barMiles: ($('draw-bar-miles') || {}).textContent || '' }; }, drawMarkers: function () { return drawMks; }, drawTapPoint: drawTapPoint, drawApply: drawApply, routeBar: function () { var bar = $('route-bar'), fx = $('btn-route-fix'), dn = $('btn-route-done'); return { shown: !!(bar && bar.classList.contains('show')), fix: !!(fx && fx.style.display !== 'none'), done: !!(dn && dn.style.display !== 'none'), ctx: !!savedCtx, drawn: savedLayer ? savedLayer.getLayers().length : 0, onMap: !!(mapRef && savedLayer && mapRef.hasLayer(savedLayer)) }; } } };
 })();
