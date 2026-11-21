@@ -1217,7 +1217,7 @@ body.editor-lock #btn-track { pointer-events: none; opacity: .45; }
 .photo-thumb.sm { width: 48px; height: 48px; border-radius: 8px; }
 .log-photos { display: flex; gap: 6px; margin-top: 6px; }
 /* fx (2026-11-15): photo gallery — grid of every photo on the line, labeled. */
-.gal-open { width: 100%; margin: 0 0 10px; }
+.gal-open { width: 100%; margin: 0 0 10px; text-align: left; }
 .gal-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
 .gal-tile { border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: var(--bg2); cursor: pointer; }
 .gal-tile img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; display: block; }
