@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-11-21ij';
+var APP_VERSION = 'beta 0.1 · build 2026-11-21ik';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -1596,25 +1596,11 @@ function sponsorSuggests(key, q) {
    already sits right or is no longer focused. */
 function comboReveal(input, box) {
   if (!input || !box) return;
-  /* ij (2026-11-21, Q305, Tanner): the suggestion list FLOATS over the
-     page now (see .suggest.show in the CSS) — anchor it under its field
-     inside the field's own container. Placement runs on every render
-     (cheap, scroll-invariant); the scroll passes below it do not. */
-  try {
-    var host = box.parentElement;
-    if (host) {
-      if (getComputedStyle(host).position === 'static') host.style.position = 'relative';
-      var irB = input.getBoundingClientRect(), hrB = host.getBoundingClientRect();
-      box.style.top = Math.max(0, Math.round(irB.bottom - hrB.top - 2)) + 'px';
-    }
-  } catch (e) {}
-  /* ij (Q305): settle ONCE per focus. hr's reveal was re-run by every
-     render, so filtering the list mid-typing could yank the sheet again;
-     the field is pulled up when the box first opens for this focus and
-     then left alone until the field loses focus (the focusout hook by
-     attachSuggest clears the flag). */
-  if (box._wasShown) return;
-  box._wasShown = true;
+  /* ik (2026-11-21, Q306, Tanner): the ij overlay experiment is REVERTED
+     in full — on his iPhone the floating list sprawled across the form,
+     its rows overlapping the fields below; he ruled the in-page list
+     better and the jumping acceptable. This function is back to its
+     ih form: hr's reveal, run after every show-render. */
   [60, 380].forEach(function (delay) {
     setTimeout(function () {
       if (!box.className || box.className.indexOf('show') === -1) return;
@@ -1698,15 +1684,9 @@ function sweepClearInputs(root) {
     ensureClearInput(inp);
   });
 }
-/* ij (Q305): losing focus re-arms the one settle for the next visit. */
-document.addEventListener('focusout', function (e) {
-  var t = e.target;
-  if (t && t._suggestBox) t._suggestBox._wasShown = false;
-});
 function attachSuggest(inputId, boxId, key, typeToFilter) {
   var input = $(inputId), box = $(boxId);
   if (!input || !box || input._suggestWired) return;
-  input._suggestBox = box; /* ij (Q305) */
   input._suggestWired = true;
   /* Q236 (2026-11-07): an × that wipes the field in one tap — the manual
      entries auto-populate from the last thing used, and clearing them took
@@ -1853,7 +1833,6 @@ var comboBaseCache = {}; /* id -> last option values, for selVal's remember-guar
 var pendingCombos = [];  /* selHtml-built fields awaiting attachment */
 function comboAttach(inputId, boxId, getOptions, opts) {
   var input = $(inputId), box = $(boxId);
-  if (input && box) input._suggestBox = box; /* ij (Q305) */
   if (!input || !box) return;
   opts = opts || {};
   if (!input._comboWired) {
@@ -2010,7 +1989,6 @@ function renderSetNameSuggest() {
 }
 function wireSetNameField() {
   var inp = $('sf-name'), box = $('sf-name-suggest');
-  if (inp && box) inp._suggestBox = box; /* ij (Q305) */
   if (!inp || !box || inp._setNameWired) return;
   inp._setNameWired = true;
   var wrap = document.createElement('span');
