@@ -1488,6 +1488,8 @@ body.placing #route-back-chip { display: none; }
 /* Q232: Edit-all sheet rows — label above a full-width select. */
 .bulk-edit-row { display: block; margin: 12px 0; font-size: 16px; font-weight: 700; color: var(--ink); }
 .bulk-edit-row select { display: block; width: 100%; margin-top: 6px; padding: 10px; font-size: 16px; border-radius: 10px; border: 1px solid var(--line); background: #10150c; color: #fff; }
+/* hp (Q269): the Edit-all fields are text combos now, like the set form's */
+.bulk-edit-row input[type="text"] { margin-top: 6px; }
 /* gx (2026-11-18): the bulk rows' old ghost treatment (background: none,
    hairline-only border — the .bulk-status-row rule that stood here) matched
    no other menu or sheet in the app; Tanner's order was the standard sheet
