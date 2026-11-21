@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-11-21hr';
+var APP_VERSION = 'beta 0.1 · build 2026-11-21hs';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -1614,6 +1614,53 @@ function comboReveal(input, box) {
     }, delay);
   });
 }
+/* ---- hs (2026-11-21, Q275, Tanner): tapping a filled box selects the
+   whole entry, so typing replaces it — the way most form boxes behave.
+   His report, with a screenshot: the cursor landed exactly where his
+   finger tapped, mid-word, and his typing went in there ("Not sure /
+   mixed brands" became "Notdu sure / mixed brands"). One delegated
+   focusin listener covers every fillable box in the app, including rows
+   built on the fly. His exception: Notes and memo boxes keep placing
+   the cursor — they are all <textarea>s, never touched here — and
+   date/time/pick fields are not text boxes. A second tap in an
+   already-focused box still places the cursor where he points: focus
+   does not refire, so nothing re-selects. The select is deferred a tick
+   because WebKit places the tap's caret after focus fires; selecting
+   after that placement is what makes it stick on his phone. */
+document.addEventListener('focusin', function (e) {
+  var el = e.target;
+  if (!el || el.tagName !== 'INPUT' || el.readOnly || el.disabled) return;
+  var t = (el.type || 'text').toLowerCase();
+  if (t !== 'text' && t !== 'search' && t !== 'number' && t !== 'tel' && t !== 'url' && t !== 'email') return;
+  if (!el.value) return;
+  setTimeout(function () {
+    if (document.activeElement !== el) return;
+    try { el.select(); } catch (err) { /* a type that refuses keeps its cursor */ }
+  }, 0);
+});
+/* hs (2026-11-21, Q276): is this saved entry one of the sponsors'
+   products for this section? His bag holds two shapes: the plain
+   product name (what picking a sponsor row fills) and the
+   "Sponsor - Product" string (what bulk edits and his own typing
+   leave). Compare alphanumerics-only so "Cavens - Terminator" and
+   "Caven's Terminator" are the same product. */
+function sponsorEntryMatch(key, entry) {
+  var norm = function (s) { return String(s || '').toLowerCase().replace(/[^a-z0-9]+/g, ''); };
+  var e = norm(entry);
+  if (!e) return null;
+  for (var i = 0; i < SPONSORS.length; i++) {
+    var sp = SPONSORS[i];
+    var products = sp.products || (sp.product ? [{ name: sp.product }] : []);
+    for (var j = 0; j < products.length; j++) {
+      var name = products[j] && products[j].name ? String(products[j].name) : '';
+      if (!name) continue;
+      var psec = (products[j] && products[j].section) || sp.section;
+      if (psec !== key) continue;
+      if (e === norm(name) || e === norm(sp.name + ' ' + name)) return { sp: sp, name: name };
+    }
+  }
+  return null;
+}
 function attachSuggest(inputId, boxId, key, typeToFilter) {
   var input = $(inputId), box = $(boxId);
   if (!input || !box || input._suggestWired) return;
@@ -1655,15 +1702,22 @@ function attachSuggest(inputId, boxId, key, typeToFilter) {
        Dispatch it so the button (and the bait-rule check) update. */
     input.dispatchEvent(new Event('input', { bubbles: true }));
   }
-  function render() {
-    /* ft: a just-picked value closes the box and keeps it closed; an empty
-       query on a type-to-filter field shows nothing at all. */
+  function render(bagMode) {
+    /* ft: a just-picked value closes the box and keeps it closed. */
     if (input._justFilled) { input._justFilled = false; box.className = 'suggest'; box.innerHTML = ''; return; }
     var q = input.value.trim().toLowerCase();
-    if (typeToFilter && !q) { box.className = 'suggest'; box.innerHTML = ''; return; }
-    var sps = sponsorSuggests(key, q);
+    /* hs (2026-11-21, Q276, Tanner — reversing the ft type-to-filter call
+       at his word; he named the back-and-forth himself): on an attractant
+       field, an empty box — tapped into, or typed back to empty — shows
+       HIS BAG: every entry he has put in this kind of box so far. Typing
+       takes over from there: the list filters by letter and the sponsor
+       products come in, as before. A bag entry that IS a sponsor product
+       carries its Sponsored pill + logo tag (see the items map below). */
+    var bag = typeToFilter && (bagMode === 'bag' || !q);
+    var sps = bag ? [] : sponsorSuggests(key, q);
     var items = savedEntries(key).filter(function (v) {
       var vl = v.toLowerCase();
+      if (bag) return true;
       return vl !== q && (!q || vl.indexOf(q) === 0); /* Q238: saved entries filter by prefix too */
     });
     /* fg: saved entries sort alphabetically in the suggestion list. */
@@ -1671,10 +1725,11 @@ function attachSuggest(inputId, boxId, key, typeToFilter) {
       var al = a.toLowerCase(), bl = b.toLowerCase();
       return al < bl ? -1 : (al > bl ? 1 : 0);
     });
-    items = items.slice(0, 6);
+    if (!bag) items = items.slice(0, 6); /* the bag shows whole — his word: "all of them" */
     /* fg: a "None" row tops every attractant suggestion box — shown
-       when the field is empty or the query matches "none" by prefix. */
-    var showNone = (!q || 'none'.indexOf(q) === 0) && q !== 'none';
+       when the field is empty or the query matches "none" by prefix.
+       hs: not in the bag view — the bag is his entries, nothing else. */
+    var showNone = !bag && (!q || 'none'.indexOf(q) === 0) && q !== 'none';
     if (!sps.length && !items.length && !showNone) { box.className = 'suggest'; box.innerHTML = ''; return; }
     var noneHtml = showNone
       ? '<div class="suggest-row"><button type="button" class="suggest-item" data-v="None">None</button></div>'
@@ -1685,6 +1740,17 @@ function attachSuggest(inputId, boxId, key, typeToFilter) {
       var del = isSeedEntry(key, v)
         ? ''
         : '<button type="button" class="suggest-del" data-v="' + esc(v) + '" aria-label="Remove from list">×</button>';
+      /* hs (Q276): a bag entry that is a sponsor product wears the tag —
+         the Sponsored pill and the sponsor's logo eye, same as its row
+         in the sponsor list below. */
+      var m = sponsorEntryMatch(key, v);
+      if (m) {
+        var mark = m.sp.badge
+          ? '<img class="sponsor-logo" src="' + esc(m.sp.badge) + '" alt="' + esc(m.sp.name) + ' logo">'
+          : '&#128065;';
+        return '<div class="suggest-row"><button type="button" class="suggest-item" data-v="' + esc(v) + '"><span class="suggest-name">' + esc(v) + '</span> <span class="pill">Sponsored</span></button>' +
+          '<button type="button" class="sponsor-eye" data-sp="' + esc(m.sp.id) + '" aria-label="About ' + esc(m.sp.name) + '">' + mark + '</button>' + del + '</div>';
+      }
       return '<div class="suggest-row"><button type="button" class="suggest-item" data-v="' + esc(v) + '">' + esc(v) + '</button>' + del + '</div>';
     }).join('') + sps.map(function (r) { return sponsorSuggestRowHtml(r.sp, r.name); }).join('');
     box.innerHTML = html;
@@ -1710,11 +1776,12 @@ function attachSuggest(inputId, boxId, key, typeToFilter) {
     }
     comboReveal(input, box); /* hr (Q273): keep the field + list above the keyboard */
   }
-  input.addEventListener('input', render);
+  input.addEventListener('input', function () { render(); });
   input.addEventListener('input', updateClear); /* Q236: the × shows only while the field has text */
-  /* ft: type-to-filter fields do NOT pop the box on focus — only typing
-     opens it. Every other suggest field keeps the old focus-pop. */
-  if (!typeToFilter) input.addEventListener('focus', render);
+  /* ft was: type-to-filter fields do NOT pop the box on focus. hs (Q276)
+     reverses that for attractant fields at Tanner's word: focus pops
+     HIS BAG. Every other suggest field keeps the old focus-pop. */
+  input.addEventListener('focus', function () { render(typeToFilter ? 'bag' : undefined); });
   input.addEventListener('blur', function () {
     setTimeout(function () { box.className = 'suggest'; }, 160);
   });
