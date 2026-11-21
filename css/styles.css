@@ -317,6 +317,18 @@ select.select-hint { color: var(--faint); }
 .mflow-close { margin-top: 2px; }
 .flow-steps { font-size: 13px; line-height: 1.55; margin-top: 0; }
 #home-bar .zip-jump { width: 76px; padding: 6px 8px; border-radius: 8px; border: 1px solid var(--line); background: #0f150a; color: #fff; font-size: 15px; text-align: center; }
+/* ho (2026-11-21, Q265, Tanner): the change-home panel composed — ZIP and
+   Go in ONE row at one height, the row the same width as the city field
+   under it, both rows aligned. The cancel × wears the standard close
+   treatment (the sheet ×: no border, no gold outline). */
+.home-jump-row { display: flex; gap: 8px; width: min(320px, 86vw); flex: 0 0 auto; }
+#home-bar .zip-jump { flex: 1; width: auto; height: var(--tap); box-sizing: border-box; }
+#home-bar #btn-home-zip { height: var(--tap); min-height: var(--tap); flex: 0 0 auto; }
+#home-bar #btn-home-cancel { position: absolute; right: 0; top: 50%; transform: translateY(-50%); }
+/* ho (Q265): while the home picker is open the map chrome steps back —
+   the Show pill and the selection bar hide instead of colliding with
+   the panel. */
+body.home-picking #show-pill, body.home-picking #sel-bar { visibility: hidden; }
 /* Q118b (2026-10-01): Tanner — the home pin was rendering at 30px because the
    later `.pin` rule (same specificity) beat `.pin-home`'s 52px. Doubling the
    class wins the cascade so the Q118 bigger-home-pin fix actually shows. */
@@ -348,6 +360,12 @@ select.select-hint { color: var(--faint); }
    pale grey at the zoom limit, so the pill wore two colors (Tanner,
    2026-11-21). The pill stays green at every zoom; only the glyph dims. */
 .leaflet-bar a.leaflet-disabled { background: var(--green); color: rgba(14,21,10,.35); }
+/* ho (2026-11-21, Q252, Tanner): on the set detail the status pill centers
+   under the (already centered) set name — name and pill read as one
+   centered stack. */
+#sd-badges { text-align: center; }
+/* ho (Q254): opened collapsible headers land just under the fixed bars. */
+.setsec-head, .totals-card-head { scroll-margin-top: 8px; }
 /* hn (2026-11-21, Tanner): the attribution bar, quieter — smaller type on a
    translucent ground instead of the solid white strip. The imagery credits
    are required by the providers' terms and stay legible; only the volume
@@ -543,7 +561,17 @@ body.route-locked #tabbar { pointer-events: none; opacity: .35; }
    green map buttons (weather chip, zoom +/-, layers), matching the
    right-side fab border treatment. Outline, not border, so sizing is
    untouched. */
-#weather-chip, .leaflet-bar, .leaflet-control-layers-toggle { outline: 2px solid #0d0d0d; }
+.leaflet-bar, .leaflet-control-layers-toggle { outline: 2px solid #0d0d0d; }
+/* ho (2026-11-21, Q258, Tanner): the chip's black ring kept VANISHING on
+   his iPhone while the zoom/layers rings beside it (same outline rule)
+   stayed — present in some screenshots, gone in others, and computed
+   correct in Chromium. The difference: the chip's CONTENT changes size
+   as the temperature lands, and WebKit intermittently fails to repaint
+   an outline after such a layout change. The chip therefore wears its
+   ring as a box-shadow (0 0 0 2px), which repaints with the element's
+   own layer, over the same drop shadow the leaflet bars carry. His
+   phone is the verdict, as ever. */
+#weather-chip { box-shadow: 0 0 0 2px #0d0d0d, 0 4px 14px rgba(0,0,0,.5); }
 
 /* set-detail status control (changed manually at check time) */
 .status-row { display: flex; align-items: center; gap: 10px; margin: 10px 0 4px; }
@@ -742,6 +770,13 @@ body.route-locked #tabbar { pointer-events: none; opacity: .35; }
 /* Species silhouettes are black-on-transparent; invert to light-on-dark theme. */
 .sp-icon { width: 40px; height: 40px; object-fit: contain; flex: none; filter: invert(1); }
 .sp-icon-lg { width: 56px; height: 56px; object-fit: contain; flex: none; filter: invert(1); }
+/* ho (2026-11-21, Q256 + Q255): the species detail header as one centered
+   stack, and the method + land label atop each season card. */
+.sp-detail-head { text-align: center; }
+.sp-detail-head .sp-icon-lg { display: block; margin: 0 auto; }
+.sp-detail-head h3 { margin: 6px 0 0; }
+.sp-detail-head .sp-sci { font-style: italic; margin: 2px 0 0; }
+.sp-season-ml { font-weight: 700; font-size: 13px; letter-spacing: .04em; text-transform: uppercase; color: var(--accent); margin-bottom: 4px; }
 .sp-icon.sp-help { display: inline-flex; align-items: center; justify-content: center; filter: none; border: 2px solid currentColor; border-radius: 50%; font-weight: 700; font-size: 22px; line-height: 1; cursor: pointer; }
 
 .stepper { display: flex; align-items: center; gap: 14px; margin: 8px 0; }
@@ -1491,6 +1526,22 @@ body.placing #route-back-chip { display: none; }
 .show-pickall .show-setname-label { font-weight: 700; letter-spacing: .02em; }
 .show-noname { display: block; padding: 9px 4px; font-size: 15px; }
 .show-dot { flex: 0 0 auto; width: 15px; height: 15px; border-radius: 50%; border: 2px solid rgba(255,255,255,.55); }
+/* ho (2026-11-21, Q247, Tanner): in the Pick list every row's circle sits
+   at ONE left margin — the top Select-all-shown row, each group's Select
+   all, and every set — in a straight column under the group header's
+   status dot. The 30px names indent belongs to the Show (jump) list,
+   whose rows carry no circle; the pick rows drop it. */
+#pick-list .show-names { padding-left: 0; }
+/* The global button rule centers a button's content as a group
+   (justify-content: center) — on the pick rows that centered the
+   circle+name unit, so the circles wandered with name length. The pick
+   rows start at the left, always. */
+.show-setname-pick { justify-content: flex-start; }
+/* ho (2026-11-21, Q253): the selection Actions sheet's picked-names list —
+   left-aligned, scrolls when long; a tap on a name unpicks that set. */
+.sel-names { max-height: 36vh; overflow-y: auto; margin: 10px 0 2px; border-top: 1px solid var(--line); }
+.sel-name-row { display: flex; align-items: center; justify-content: flex-start; width: 100%; text-align: left; background: none; border: none; border-bottom: 1px solid var(--line); color: inherit; font: inherit; font-size: 16px; padding: 9px 4px; cursor: pointer; }
+.sel-name-row .sel-name-x { margin-left: auto; color: var(--accent); font-weight: 700; padding-left: 12px; }
 .show-name { flex: 1; }
 .show-count { opacity: .6; font-size: 13.5px; }
 .show-fam { padding-left: 30px; font-size: 15.5px; }
@@ -1546,9 +1597,9 @@ body.placing #route-back-chip { display: none; }
 #track-stats { font-variant-numeric: tabular-nums; }
 
 /* ===== Q186/Q187 (2026-10-18): city jump + locating state ===== */
-.home-city-row { width: 100%; position: relative; display: flex; justify-content: center; }
-.city-jump { width: min(320px, 86vw); padding: 7px 11px; font-size: 15px; border-radius: 9px; border: 1px solid var(--line); background: #10150c; color: #fff; }
-.city-matches { position: absolute; top: calc(100% + 4px); left: 50%; transform: translateX(-50%); width: min(320px, 86vw); background: #10150c; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; z-index: 700; box-shadow: 0 8px 22px rgba(0,0,0,.5); }
+.home-city-row { width: min(320px, 86vw); margin: 0 auto; position: relative; display: flex; justify-content: center; }
+.city-jump { width: 100%; height: var(--tap); box-sizing: border-box; padding: 7px 11px; font-size: 15px; border-radius: 9px; border: 1px solid var(--line); background: #10150c; color: #fff; }
+.city-matches { position: absolute; top: calc(100% + 4px); left: 0; width: 100%; background: #10150c; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; z-index: 700; box-shadow: 0 8px 22px rgba(0,0,0,.5); }
 .city-match { display: block; width: 100%; text-align: left; padding: 10px 12px; font-size: 15.5px; background: none; border: none; border-bottom: 1px solid rgba(255,255,255,.08); color: #fff; cursor: pointer; }
 .city-match:last-child { border-bottom: none; }
 #locate-hint { background: var(--accent); color: var(--accent-ink); display: none; flex: 0 0 auto; z-index: 500; padding: 9px 14px; font-size: 14.5px; font-weight: 600; text-align: center; }
