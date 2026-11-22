@@ -61,7 +61,7 @@ var STATES = [
   { code: "WY", name: "Wyoming", file: "wyoming-2026-27.json", provisional: false }
 ];
 var REMINDER_LINE = 'Reminder only — always verify with your state agency and local ordinances.';
-var APP_VERSION = 'beta 0.1 · build 2026-11-21im';
+var APP_VERSION = 'beta 0.1 · build 2026-11-21in';
 /* Demo mode (?demo=1): seeds fictional data on a FRESH install only, for
    screenshots and in-person demos. Never touches existing data. */
 var DEMO = /[?&]demo=1\b/.test(location.search);
@@ -1447,6 +1447,7 @@ function customOptionsFor(id) {
 function rememberCustomOption(id, v) {
   v = (v || '').trim();
   if (!v) return;
+  if (v.toLowerCase() === 'none') return; /* in (Q309): None is a face, never a learned custom */
   if (!Store.data || typeof Store.data !== 'object') Store.data = {};
   var arr = customOptionsFor(id), li = -1;
   for (var i = 0; i < arr.length; i++) {
@@ -1493,6 +1494,7 @@ function selVal(id) {
      label resolves to the '__mixed' sentinel the readers already know. */
   if (sel.tagName === 'INPUT') {
     var iv = sel.value.trim();
+    if (iv === 'None' && sel._noneFace) return ''; /* in (Q309): the face reads back as empty */
     if (id === 'sf-maker' && iv === MIXED_MAKER_LABEL) return '__mixed';
     if (iv && comboBaseCache[id] && comboBaseCache[id].indexOf(iv) === -1) rememberCustomOption(id, iv);
     return iv;
@@ -1684,10 +1686,12 @@ function sweepClearInputs(root) {
     ensureClearInput(inp);
   });
 }
-function attachSuggest(inputId, boxId, key, typeToFilter) {
+function attachSuggest(inputId, boxId, key, typeToFilter, noneFace) {
   var input = $(inputId), box = $(boxId);
   if (!input || !box || input._suggestWired) return;
   input._suggestWired = true;
+  /* in (Q309): noneFace boxes open wearing None when they hold nothing. */
+  if (noneFace) { input._noneFace = true; if (!input.value) input.value = 'None'; }
   /* Q236 (2026-11-07): an × that wipes the field in one tap — the manual
      entries auto-populate from the last thing used, and clearing them took
      deleting every letter. The button rides inside the input's right edge
@@ -1708,11 +1712,11 @@ function attachSuggest(inputId, boxId, key, typeToFilter) {
   wrap.appendChild(clearBtn);
   clearBtn.onclick = function (e) {
     if (e && e.stopPropagation) e.stopPropagation();
-    input.value = '';
+    input.value = noneFace ? 'None' : '';
     input.dispatchEvent(new Event('input', { bubbles: true }));
     input.focus();
   };
-  function updateClear() { clearBtn.hidden = !input.value; }
+  function updateClear() { clearBtn.hidden = !input.value || (noneFace && input.value === 'None'); }
   function fillFrom(btn) {
     input.value = btn.getAttribute('data-v');
     box.className = 'suggest'; box.innerHTML = '';
@@ -1733,7 +1737,7 @@ function attachSuggest(inputId, boxId, key, typeToFilter) {
   function render(bagMode) {
     /* ft: a just-picked value closes the box and keeps it closed. */
     if (input._justFilled) { input._justFilled = false; box.className = 'suggest'; box.innerHTML = ''; return; }
-    var q = input.value.trim().toLowerCase();
+    var q = (noneFace && input.value.trim() === 'None') ? '' : input.value.trim().toLowerCase(); /* in (Q309): the face reads as empty, so the bag + pin render */
     /* hs (2026-11-21, Q276, Tanner — reversing the ft type-to-filter call
        at his word; he named the back-and-forth himself): on an attractant
        field, an empty box — tapped into, or typed back to empty — shows
@@ -1745,6 +1749,7 @@ function attachSuggest(inputId, boxId, key, typeToFilter) {
     var sps = bag ? [] : sponsorSuggests(key, q);
     var items = savedEntries(key).filter(function (v) {
       var vl = v.toLowerCase();
+      if (input._noneFace && vl === 'none') return false; /* in (Q309): the pinned row covers it */
       if (bag) return true;
       return vl !== q && (!q || vl.indexOf(q) === 0); /* Q238: saved entries filter by prefix too */
     });
@@ -1756,8 +1761,10 @@ function attachSuggest(inputId, boxId, key, typeToFilter) {
     if (!bag) items = items.slice(0, 6); /* the bag shows whole — his word: "all of them" */
     /* fg: a "None" row tops every attractant suggestion box — shown
        when the field is empty or the query matches "none" by prefix.
-       hs: not in the bag view — the bag is his entries, nothing else. */
-    var showNone = !bag && (!q || 'none'.indexOf(q) === 0) && q !== 'none';
+       hs: not in the bag view — the bag is his entries, nothing else.
+       in (Q309, Tanner's remedy, superseding the hs exclusion): None
+       leads EVERY view of a noneFace box, the bag included. */
+    var showNone = !!input._noneFace && (!q || 'none'.indexOf(q) === 0) && q !== 'none';
     if (!sps.length && !items.length && !showNone) { box.className = 'suggest'; box.innerHTML = ''; return; }
     var noneHtml = showNone
       ? '<div class="suggest-row"><button type="button" class="suggest-item" data-v="None">None</button></div>'
@@ -1835,6 +1842,13 @@ function comboAttach(inputId, boxId, getOptions, opts) {
   var input = $(inputId), box = $(boxId);
   if (!input || !box) return;
   opts = opts || {};
+  /* in (Q309, Tanner's remedy): a combo whose none label is exactly
+     'None' wears None as the FACE of empty — the box opens reading
+     None, the None row leads the menu, clearing returns to None, and
+     the readers (selVal) translate the face back to empty. Bulk-edit's
+     '(no change)' is a different job and stays untouched. */
+  var noneFace = (opts.noneLabel === 'None');
+  if (noneFace) input._noneFace = true;
   if (!input._comboWired) {
     input._comboWired = true;
     var wrap = document.createElement('span');
@@ -1846,16 +1860,16 @@ function comboAttach(inputId, boxId, getOptions, opts) {
     clearBtn.className = 'input-clear';
     clearBtn.setAttribute('aria-label', 'Clear');
     clearBtn.textContent = '×';
-    clearBtn.hidden = !input.value;
+    clearBtn.hidden = !input.value || (noneFace && input.value === 'None');
     wrap.appendChild(clearBtn);
     clearBtn.onclick = function (e) {
       if (e && e.stopPropagation) e.stopPropagation();
-      input.value = '';
+      input.value = noneFace ? 'None' : '';
       input.dispatchEvent(new Event('input', { bubbles: true }));
       input.focus();
     };
     input._comboClear = clearBtn;
-    input.addEventListener('input', function () { clearBtn.hidden = !input.value; renderCombo(false); });
+    input.addEventListener('input', function () { clearBtn.hidden = !input.value || (noneFace && input.value === 'None'); renderCombo(false); });
     input.addEventListener('focus', function () { renderCombo(true); });
     input.addEventListener('blur', function () {
       setTimeout(function () { box.className = 'suggest'; }, 160);
@@ -1865,7 +1879,7 @@ function comboAttach(inputId, boxId, getOptions, opts) {
     var raw = getOptions() || [];
     var values = raw.map(function (o) { return (o && typeof o === 'object') ? o.v : o; });
     comboBaseCache[inputId] = values;
-    var q = showAll ? '' : input.value.trim().toLowerCase();
+    var q = showAll ? '' : ((noneFace && input.value.trim() === 'None') ? '' : input.value.trim().toLowerCase()); /* in (Q309): the face filters as empty */
     var rows = raw.filter(function (o) {
       var lbl = ((o && typeof o === 'object') ? o.label : o) || '';
       var v = (o && typeof o === 'object') ? o.v : o;
@@ -1873,7 +1887,7 @@ function comboAttach(inputId, boxId, getOptions, opts) {
     });
     var html = '';
     if (opts.noneLabel && (!q || opts.noneLabel.toLowerCase().indexOf(q) !== -1)) {
-      html += '<div class="suggest-row"><button type="button" class="suggest-item" data-v="">' + esc(opts.noneLabel) + '</button></div>';
+      html += '<div class="suggest-row"><button type="button" class="suggest-item" data-v="' + (noneFace ? 'None' : '') + '">' + esc(opts.noneLabel) + '</button></div>';
     }
     html += rows.map(function (o) {
       var v = (o && typeof o === 'object') ? o.v : o;
@@ -1886,7 +1900,7 @@ function comboAttach(inputId, boxId, getOptions, opts) {
     box.querySelectorAll('.suggest-item').forEach(function (b) {
       b.onclick = function () {
         input.value = this.getAttribute('data-v');
-        if (input._comboClear) input._comboClear.hidden = !input.value;
+        if (input._comboClear) input._comboClear.hidden = !input.value || (noneFace && input.value === 'None');
         box.className = 'suggest'; box.innerHTML = '';
         input.dispatchEvent(new Event('input', { bubbles: true }));
         input.dispatchEvent(new Event('change', { bubbles: true }));
@@ -2040,7 +2054,8 @@ function updateAttrAdd(field) {
   if (host) {
     var inputs = host.querySelectorAll('.attr-row-input');
     for (var i = 0; i < inputs.length; i++) {
-      if ((inputs[i].value || '').trim()) { filled = true; break; }
+      var iv98 = (inputs[i].value || '').trim();
+      if (iv98 && iv98 !== 'None') { filled = true; break; } /* in (Q309): the face is not a fill */
     }
   }
   if (filled) add.removeAttribute('hidden'); else add.setAttribute('hidden', '');
@@ -2062,7 +2077,7 @@ function renderAttrRows(field, values, minRows) {
   host.innerHTML = html;
   for (var j = 0; j < vals.length; j++) {
     /* ft: the product rows are type-to-filter — nothing pops until typing. */
-    attachSuggest('sf-' + field + '-row-' + j, 'sf-' + field + '-row-' + j + '-suggest', field, true);
+    attachSuggest('sf-' + field + '-row-' + j, 'sf-' + field + '-row-' + j + '-suggest', field, true, true); /* in (Q309): noneFace */
   }
   /* Q30: refresh the bait-rule warning whenever bait rows re-render. */
   if (field === 'bait' && typeof updateBaitWarn === 'function') updateBaitWarn();
@@ -2130,6 +2145,9 @@ function collectAttrRows(field) {
     seen[lk] = true;
     out.push(v);
   }
+  /* in (Q309): a 'None' row among real entries is just the empty face
+     showing — it drops out; a lone 'None' is the stated none. */
+  if (out.length > 1) out = out.filter(function (v) { return v.toLowerCase() !== 'none'; });
   return out;
 }
 function applySetFieldToggles() {
@@ -2174,7 +2192,7 @@ function selHtml(id, label, options, val) {
      at read time by selVal). The Other… hatch is gone: typing is the
      hatch. Attachment happens in drainCombos() once the HTML lands. */
   var opts = mergeCustomOptions(id, options).filter(function (o) { return o !== OTHER_VALUE && o !== 'Other'; });
-  pendingCombos.push({ id: id, options: opts, noneLabel: '—' });
+  pendingCombos.push({ id: id, options: opts, noneLabel: 'None' });
   return '<label class="field" for="' + id + '">' + label + '</label>' +
     '<input type="text" id="' + id + '" autocomplete="off" value="' + esc(val || '') + '">' +
     '<div class="suggest" id="' + id + '-suggest"></div>';
@@ -2238,6 +2256,7 @@ function resolvedTrapType() {
      blank Other → blank, never the literal "Other". */
   var sel = $('sf-type');
   var raw = sel ? sel.value : '';
+  if (raw === 'None') raw = ''; /* in (Q309): the face is not a type */
   if (raw === 'Other' || raw === OTHER_VALUE) return { t: selVal('sf-type'), spring: '' };
   return resolveTrapType(raw);
 }
@@ -2265,7 +2284,7 @@ function trapDetailValues() {
   /* ho (Q249): the maker-path model is a combo input now — its text is
      the value, resolved (and remembered when novel) through selVal. */
   if (modelSel) trapModel = selVal('sf-trapmodel-select');
-  else trapModel = f('sf-trapmodel').trim();
+  else { var tm0 = f('sf-trapmodel').trim(); trapModel = (tm0 === 'None') ? '' : tm0; } /* in (Q309) */
   var mv = trapModValues();
   return {
     /* Q55: Other-capable dropdowns resolve through selVal — typed customs
@@ -2415,7 +2434,7 @@ function renderTrapDetailFields(saved, forceCheck) {
   host.innerHTML = h;
   drainCombos(); /* ho (Q249): wire the combo fields this render built */
   /* Q12: custom model text learns from use */
-  if ($('sf-trapmodel')) attachSuggest('sf-trapmodel', 'sf-trapmodel-suggest', 'trapmodel');
+  if ($('sf-trapmodel')) attachSuggest('sf-trapmodel', 'sf-trapmodel-suggest', 'trapmodel', false, true); /* in (Q309): noneFace */
   var springEl = $('sf-trapspring');
   if (springEl) springEl.onchange = function () { renderTrapDetailFields(); };
   bindModAdd();
@@ -3858,7 +3877,21 @@ function openSetForm(coords, setId) {
   var fc = s ? { lat: s.lat, lng: s.lng } : pendingCoords;
   wireCoordsBottom('setform-coords-bottom', showCoords() &&
     (fc && isFinite(+fc.lat) && isFinite(+fc.lng)) ? fmtCoords(fc.lat, fc.lng) : '');
+  applyNoneFaces(); /* in (Q309) */
   openSheet('sheet-setform');
+}
+
+/* in (Q309): None is the face of empty. After a form's values land,
+   every noneFace box still blank puts its face on; the readers turn
+   the face back into empty at save, so records, reports and exports
+   never see it. The maker box joins by id — its 'None' is a catalog
+   value the readers already treat as no maker. */
+function applyNoneFaces() {
+  document.querySelectorAll('input').forEach(function (el) {
+    if (el._noneFace && !el.value.trim()) el.value = 'None';
+  });
+  var mk = $('sf-maker');
+  if (mk && !mk.value.trim()) mk.value = 'None';
 }
 
 function getSet(id) {
@@ -11592,6 +11625,7 @@ function variationFieldValue() {
      rule, moved from the old Custom box's change listener to read time). */
   var sel = $('sf-setvariation');
   var v = sel ? sel.value.trim() : '';
+  if (v === 'None') return ''; /* in (Q309): the face is not a variation */
   if (v) {
     var f = selVal('sf-settype');
     if (f && (SET_VARIATIONS[f] || []).indexOf(v) === -1 &&
@@ -12707,9 +12741,9 @@ function boot() {
      option lists are computed live (maker catalog, the type cascade's
      stash, the foundation/variation stashes). */
   comboAttach('sf-maker', 'sf-maker-suggest', function () { return makerComboOptions(); }, {});
-  comboAttach('sf-type', 'sf-type-suggest', function () { return window._sfTypeOpts || ALL_TRAP_TYPES.slice(); }, {});
-  comboAttach('sf-settype', 'sf-settype-suggest', function () { return window._sfSetTypeOpts || []; }, {});
-  comboAttach('sf-setvariation', 'sf-setvariation-suggest', function () { return window._sfVarOpts || []; }, { noneLabel: '— None —' });
+  comboAttach('sf-type', 'sf-type-suggest', function () { return window._sfTypeOpts || ALL_TRAP_TYPES.slice(); }, { noneLabel: 'None' });
+  comboAttach('sf-settype', 'sf-settype-suggest', function () { return window._sfSetTypeOpts || []; }, { noneLabel: 'None' });
+  comboAttach('sf-setvariation', 'sf-setvariation-suggest', function () { return window._sfVarOpts || []; }, { noneLabel: 'None' });
   /* ho (Q248): every other manually typed field in the sheets and the
      home bar gets the clear × (the Set Name model). Fields already
      carrying one (suggest/combo fields wrap themselves) are skipped by
